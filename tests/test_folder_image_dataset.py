@@ -14,7 +14,7 @@ class FolderImageDatasetTest(unittest.TestCase):
 
         os.makedirs(dirname, exist_ok=True)
         for i in range(num):
-            cv2.imwrite(f'{dirname}/{i}.png', np.random.randint(0, 255, shape))
+            cv2.imwrite(os.path.join(dirname, f'{i}.png'), np.random.randint(0, 255, shape))
 
         # Check correct creation
         ds = FolderImageDataset(dirname)
@@ -39,7 +39,7 @@ class FolderImageDatasetTest(unittest.TestCase):
 
         os.makedirs(dirname, exist_ok=True)
         for i in range(num):
-            cv2.imwrite(f'{dirname}/{i}.png', img)
+            cv2.imwrite(os.path.join(dirname, f'{i}.png'), img)
 
         # Check correctness of the item
         ds = FolderImageDataset(dirname)
