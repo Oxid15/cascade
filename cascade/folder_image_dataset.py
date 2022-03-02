@@ -1,4 +1,5 @@
-from . import Dataset, os, cv2
+import cv2
+from . import Dataset, os
 from .dataset import T
 
 

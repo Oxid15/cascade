@@ -1,10 +1,10 @@
 import os
+from tqdm import tqdm
 from typing import Generic, TypeVar
 
-import cv2
-
-from .dataset import Dataset
+from .dataset import Dataset, Modifier
 from .model import Model
 
 from .folder_image_dataset import FolderImageDataset
-from .cacher import Cacher
+from .bruteforce_cacher import Cacher
+from .concatenator import Concatenator
