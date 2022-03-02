@@ -2,11 +2,11 @@ import os
 import cv2
 import numpy as np
 import unittest
+from cascade import FolderImageDataset
 
 
 class FolderImageDatasetTest(unittest.TestCase):
     def test_length(self):
-        from cascade import FolderImageDataset
         # Create dummy folder dataset
         dirname = 'dummy'
         num = 3
@@ -26,8 +26,7 @@ class FolderImageDatasetTest(unittest.TestCase):
             os.remove(f'{dirname}/{i}.png')
         os.rmdir(dirname)
 
-    def test_get_and_rgb(self):
-        from cascade import FolderImageDataset
+    def test_get(self):
         # Create dummy folder dataset
         dirname = 'dummy'
         num = 3
@@ -43,12 +42,8 @@ class FolderImageDatasetTest(unittest.TestCase):
 
         # Check correctness of the item
         ds = FolderImageDataset(dirname)
-
-        # Check for RGB order and NOT BGR
         self.assertIsNotNone(ds[0])
         self.assertEqual(ds[0][0][0][0], 255)
-        self.assertEqual(ds[0][0][0][1], 0)
-        self.assertEqual(ds[0][0][0][2], 0)
 
         # Remove dummy folder dataset
         for i in range(num):
