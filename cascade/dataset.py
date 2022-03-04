@@ -18,3 +18,12 @@ class Modifier(Dataset):
 
     def __len__(self):
         return len(self._dataset)
+
+
+class Sampler(Modifier):
+    def __init__(self, dataset, num_samples):
+        super(Sampler, self).__init__(dataset)
+        self.num_samples = num_samples
+
+    def __len__(self):
+        return self.num_samples

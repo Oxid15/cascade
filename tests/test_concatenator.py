@@ -1,20 +1,11 @@
 import unittest
 from unittest import TestCase
-from cascade import Dataset, Concatenator
+from cascade import Concatenator
+from number_dataset import NumberDataset
 
 
 class TestConcatenator(TestCase):
     def test_concatenation(self):
-        class NumberDataset(Dataset):
-            def __init__(self, arr):
-                self.numbers = arr
-
-            def __getitem__(self, index):
-                return self.numbers[index]
-
-            def __len__(self):
-                return len(self.numbers)
-
         n1 = NumberDataset([0, 1])
         n2 = NumberDataset([2, 3, 4, 5])
         n3 = NumberDataset([6, 7, 8])
