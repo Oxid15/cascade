@@ -31,10 +31,7 @@ class FolderImageDatasetTest(unittest.TestCase):
         dirname = 'dummy'
         num = 3
         shape = (256, 256)
-        r = np.full(shape, 255)
-        g = np.full(shape, 0)
-        b = np.full(shape, 0)
-        img = np.dstack((r, g, b))
+        img = np.zeros((*shape, 3), dtype=np.uint8)
 
         os.makedirs(dirname, exist_ok=True)
         for i in range(num):
@@ -43,7 +40,7 @@ class FolderImageDatasetTest(unittest.TestCase):
         # Check correctness of the item
         ds = FolderImageDataset(dirname)
         self.assertIsNotNone(ds[0])
-        self.assertEqual(ds[0][0][0][0], 255)
+        self.assertEqual(ds[0][0][0][0], 0)
 
         # Remove dummy folder dataset
         for i in range(num):
