@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 import unittest
-from cascade import FolderImageDataset
+from data import FolderImageDataset
 
 
 class FolderImageDatasetTest(unittest.TestCase):

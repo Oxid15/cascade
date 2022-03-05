@@ -1,6 +1,6 @@
+import os
 import cv2
-from . import Dataset, os
-from .dataset import T
+from . import Dataset, T
 
 
 class FolderImageDataset(Dataset):

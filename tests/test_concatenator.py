@@ -1,6 +1,6 @@
 import unittest
 from unittest import TestCase
-from cascade import Concatenator
+from data import Concatenator
 from number_dataset import NumberDataset
 
 

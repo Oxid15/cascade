@@ -1,5 +1,5 @@
 from unittest import TestCase
-from cascade import CyclicSampler
+from data import CyclicSampler
 from number_dataset import NumberDataset
 
 

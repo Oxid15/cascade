@@ -1,4 +1,5 @@
-from . import Modifier, tqdm
+from tqdm import tqdm
+from . import Modifier
 
 
 class BruteforceCacher(Modifier):

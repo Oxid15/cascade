@@ -1,4 +1,4 @@
-from cascade import Dataset
+from data import Dataset
 
 
 class NumberDataset(Dataset):
