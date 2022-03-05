@@ -12,9 +12,20 @@ class Dataset(Generic[T]):
 class Modifier(Dataset):
     def __init__(self, dataset):
         self._dataset = dataset
+        self._index = -1
 
     def __getitem__(self, index):
         return self._dataset[index]
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._index < len(self) - 1:
+            self._index += 1
+            return self[self._index]
+        else:
+            raise StopIteration()
 
     def __len__(self):
         return len(self._dataset)

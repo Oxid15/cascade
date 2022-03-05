@@ -10,3 +10,6 @@ class TestCyclicSampler(TestCase):
 
         self.assertEqual([ds[i] for i in range(len(ds))],
                          [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0])
+
+        self.assertEqual([item for item in ds],
+                         [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0])
