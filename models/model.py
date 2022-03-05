@@ -1,10 +1,10 @@
-import datetime
+from datetime import datetime
 
 
 class Model:
     def __init__(self):
         self.metrics = {}
-        self.created_at = datetime.datetime.now()
+        self.created_at = datetime.now()
 
     def fit(self, *args, **kwargs):
         raise NotImplementedError()
