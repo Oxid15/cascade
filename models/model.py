@@ -1,11 +1,18 @@
-class Model():
-    def fit(self, x, y):
+import datetime
+
+
+class Model:
+    def __init__(self):
+        self.metrics = {}
+        self.created_at = datetime.datetime.now()
+
+    def fit(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def predict(self, x):
+    def predict(self, *args, **kwargs):
         raise NotImplementedError()
     
-    def evaluate(self, x, y):
+    def evaluate(self, *args, **kwargs):
         raise NotImplementedError()
 
     def load(self, filepath):
