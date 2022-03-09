@@ -1,40 +1,80 @@
 import os
 import datetime
 import json
+import glob
 from json import JSONEncoder
 from typing import Any
+
+import numpy as np
 
 from .model import Model
 
 
-class DateTimeEncoder(json.JSONEncoder):
+class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
             return obj.isoformat()
         elif isinstance(obj, datetime.timedelta):
             return (datetime.datetime.min + obj).time().isoformat()
-        return super(DateTimeEncoder, self).default(obj)
+        
+        elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
+                            np.int16, np.int32, np.int64, np.uint8,
+                            np.uint16, np.uint32, np.uint64)):
+
+            return int(obj)
+
+        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
+            return float(obj)
+        
+        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):
+            return {'real': obj.real, 'imag': obj.imag}
+        
+        elif isinstance(obj, (np.ndarray,)):
+            return obj.tolist()
+    
+        elif isinstance(obj, (np.bool_)):
+            return bool(obj)
+
+        elif isinstance(obj, (np.void)): 
+            return None
+
+        return super(CustomEncoder, self).default(obj)
 
 
 class ModelRepo:
-    def __init__(self, folder):
+    def __init__(self, folder, model_csl=Model):
+        self.model_csl = model_csl
         self.root = folder
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
-            raise NotImplementedError('Folder startup is not impl')
+            self.models = {i: name for i, name in enumerate(os.listdir(self.root)) if not name.endswith('.json')}
+            print(f'Found {len(self.models)}' + 'models' if len(self.models) != 1 else 'Found first model')
         else:
             os.mkdir(self.root)
             self.models = {}
 
-    def save(self, model: Model):
+    def load(self, which='latest') -> Model:
+        if which == 'latest':
+            idx = -1
+        elif which == 'best':
+            raise NotImplementedError()
+        elif isinstance(which, int):
+            idx = which
+        model = self.model_csl()
+        model.load(os.path.join(self.root, self.models[idx]))
+        return model
+
+
+    def save(self, model: Model) -> None:
         idx = len(self.models)
         self.models[idx] = {}
         self.models[idx]['model'] = model
         self.models[idx]['meta'] = {
             'created_at': model.created_at,
-            'saved_at': datetime.datetime.now()
+            'saved_at': datetime.datetime.now(),
+            'metrics': model.metrics
         }
-        model.save(os.path.join(self.root, f'{len(self.models):0>5d}'))
-        with open(os.path.join(self.root, f'{len(self.models):0>5d}.json'), 'w') as json_meta:
-            enc = DateTimeEncoder()
+        model.save(os.path.join(self.root, f'{idx:0>5d}'))
+        with open(os.path.join(self.root, f'{idx:0>5d}.json'), 'w') as json_meta:
+            enc = CustomEncoder()
             json.dump(enc.encode(self.models[idx]['meta']), json_meta)
