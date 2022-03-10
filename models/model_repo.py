@@ -87,17 +87,9 @@ class ModelLine:
             os.mkdir(self.root)
             self.models = {}
 
-    def __getitem__(self, key) -> Model:
-        if key == 'latest':
-            idx = -1
-        elif key == 'best':
-            raise NotImplementedError()
-        elif isinstance(key, int):
-            idx = key
-        else:
-            idx = -1
+    def __getitem__(self, name) -> Model:
         model = self.model_csl()
-        model.load(os.path.join(self.root, self.models[idx]))
+        model.load(os.path.join(self.root, self.models[name]))
         return model
 
     def save(self, model: Model) -> None:
