@@ -16,7 +16,7 @@ class CustomEncoder(json.JSONEncoder):
             return obj.isoformat()
         elif isinstance(obj, datetime.timedelta):
             return (datetime.datetime.min + obj).time().isoformat()
-        
+
         elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
                             np.int16, np.int32, np.int64, np.uint8,
                             np.uint16, np.uint32, np.uint64)):
@@ -43,12 +43,40 @@ class CustomEncoder(json.JSONEncoder):
 
 class ModelRepo:
     def __init__(self, folder, model_csl=Model):
+        self.root = folder
+        self.model_cls = model_csl
+        if os.path.exists(self.root):
+            assert os.path.isdir(folder)
+            self.lines = [ModelLine(name, model_csl=model_csl)
+                          for name in os.listdir(self.root) if os.path.isdir(name)]
+            print(f'Found {len(self.lines)}' + ' lines')
+        else:
+            os.mkdir(self.root)
+            self.lines = []
+
+    def new_line(self, name=None):
+        if name is None:
+            name = f'{len(self.lines):05d}'
+        folder = os.path.join(self.root, name)
+        line = ModelLine(folder, self.model_cls)
+        self.lines.append(line)
+        return self[-1]
+
+    def __getitem__(self, index):
+        return self.lines[index]
+
+    def __len__(self):
+        return len(self.lines)
+
+
+class ModelLine:
+    def __init__(self, folder, model_csl=Model):
         self.model_csl = model_csl
         self.root = folder
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
             self.models = {i: name for i, name in enumerate(os.listdir(self.root)) if not name.endswith('.json')}
-            print(f'Found {len(self.models)}' + 'models' if len(self.models) != 1 else 'Found first model')
+            print(f'Found {len(self.models)}' + ' models')
         else:
             os.mkdir(self.root)
             self.models = {}
@@ -60,10 +88,11 @@ class ModelRepo:
             raise NotImplementedError()
         elif isinstance(which, int):
             idx = which
+        else:
+            idx = -1
         model = self.model_csl()
         model.load(os.path.join(self.root, self.models[idx]))
         return model
-
 
     def save(self, model: Model) -> None:
         idx = len(self.models)
