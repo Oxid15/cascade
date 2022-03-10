@@ -81,13 +81,13 @@ class ModelLine:
             os.mkdir(self.root)
             self.models = {}
 
-    def load(self, which='latest') -> Model:
-        if which == 'latest':
+    def __getitem__(self, key) -> Model:
+        if key == 'latest':
             idx = -1
-        elif which == 'best':
+        elif key == 'best':
             raise NotImplementedError()
-        elif isinstance(which, int):
-            idx = which
+        elif isinstance(key, int):
+            idx = key
         else:
             idx = -1
         model = self.model_csl()
