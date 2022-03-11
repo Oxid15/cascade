@@ -4,6 +4,7 @@ import json
 import glob
 from json import JSONEncoder
 from typing import Any
+from hashlib import md5
 
 import numpy as np
 
@@ -94,16 +95,26 @@ class ModelLine:
         model.load(os.path.join(self.root, self.models[idx]))
         return model
 
+    def __len__(self):
+        return len(self.models)
+
     def save(self, model: Model) -> None:
         idx = len(self.models)
-        self.models[idx] = {}
-        self.models[idx]['model'] = model
-        self.models[idx]['meta'] = {
+        name = os.path.join(self.root, f'{idx:0>5d}')
+        self.models[idx] = name
+        model.save(name)
+
+        exact_filename = glob.glob(f'{name}*')[0]
+        with open(exact_filename, 'rb') as f:
+            md5sum = md5(f.read()).hexdigest()
+
+        meta = {
+            'md5sum': md5sum,
             'created_at': model.created_at,
             'saved_at': datetime.datetime.now(),
             'metrics': model.metrics
         }
-        model.save(os.path.join(self.root, f'{idx:0>5d}'))
+
         with open(os.path.join(self.root, f'{idx:0>5d}.json'), 'w') as json_meta:
             enc = CustomEncoder()
-            json.dump(enc.encode(self.models[idx]['meta']), json_meta)
+            json.dump(enc.encode(meta), json_meta)
