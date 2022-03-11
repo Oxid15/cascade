@@ -4,7 +4,7 @@ The general idea is to give abstract Dataset and Model classes (much like pytorc
   
 For example general workflow with datasets could look like this:
 ```python
-from cascade.data import Dataset
+from cascade.data import Dataset, Modifier
 
 
 # We have some very basic abstract dataset
@@ -16,7 +16,7 @@ class NumberDataset(Dataset):
 
 # Then we need to perform some preprocess and
 # we implement it with another dataset now as a modifier
-class MultiplyModifier(Dataset):
+class MultiplyModifier(Modifier):
     def __getitem__(self, index):
         return self._data[index] * 2
 
