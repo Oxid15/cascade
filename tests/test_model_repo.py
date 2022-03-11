@@ -8,11 +8,9 @@ import shutil
 class TestModelRepo(TestCase):
     def test_repo(self):
         repo = ModelRepo('./models', DummyModel)
-        repo.new_line('dummy_1')
-        repo.new_line()
 
-        model_line = repo[0]
-        model_line = repo[1]
+        line1 = repo['dummy_1']
+        line2 = repo['00001']
 
         self.assertTrue(os.path.exists('./models/dummy_1'))
         self.assertTrue(os.path.exists('./models/00001'))
