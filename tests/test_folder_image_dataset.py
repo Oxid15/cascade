@@ -42,6 +42,10 @@ class FolderImageDatasetTest(unittest.TestCase):
         self.assertIsNotNone(ds[0])
         self.assertEqual(ds[0][0][0][0], 0)
 
+        m = ds.get_meta('test')
+        self.assertEqual(m['md5sums'][0], m['md5sums'][1])
+        self.assertEqual(m['md5sums'][1], m['md5sums'][2])
+
         # Remove dummy folder dataset
         for i in range(num):
             os.remove(f'{dirname}/{i}.png')

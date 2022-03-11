@@ -8,6 +8,9 @@ class Dataset(Generic[T]):
     def __getitem__(self, index) -> T:
         raise NotImplementedError
 
+    def get_meta(self, *args, **kwargs) -> dict:
+        raise NotImplementedError()
+
 
 class Modifier(Dataset):
     def __init__(self, dataset):
