@@ -20,3 +20,10 @@ class Model:
 
     def save(self, filepath):
         raise NotImplementedError()
+
+    def get_meta(self) -> dict:
+        meta = {
+            'created_at': self.created_at,
+            'metrics': self.metrics
+        }
+        return meta

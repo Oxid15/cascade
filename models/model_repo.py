@@ -105,12 +105,10 @@ class ModelLine:
         with open(exact_filename, 'rb') as f:
             md5sum = md5(f.read()).hexdigest()
 
-        meta = {
-            'md5sum': md5sum,
-            'created_at': model.created_at,
-            'saved_at': datetime.datetime.now(),
-            'metrics': model.metrics
-        }
+        meta = model.get_meta()
+        meta['name'] = exact_filename
+        meta['md5sum'] = md5sum
+        meta['saved_at'] = datetime.datetime.now()
 
         with open(os.path.join(self.root, f'{idx:0>5d}.json'), 'w') as json_meta:
             enc = CustomEncoder()
