@@ -3,7 +3,6 @@ import datetime
 import json
 import glob
 from json import JSONEncoder
-from typing import Any
 from hashlib import md5
 
 import numpy as np
@@ -11,7 +10,7 @@ import numpy as np
 from .model import Model
 
 
-class CustomEncoder(json.JSONEncoder):
+class CustomEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
             return obj.isoformat()
