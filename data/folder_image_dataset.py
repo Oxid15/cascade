@@ -29,7 +29,11 @@ class FolderImageDataset(Dataset):
         return len(self.image_names)
 
     def get_meta(self, name: str) -> dict:
-        meta = {'name': name, 'paths': self.image_names, 'md5sums': []}
+        meta = super().get_meta()
+        meta['name'] = name
+        meta['paths'] = self.image_names
+        meta['md5sums'] = []
+
         for name in self.image_names:
             with open(os.path.join(self.root, name), 'rb') as f:
                 meta['md5sums'].append(md5(f.read()).hexdigest())

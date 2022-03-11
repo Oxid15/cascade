@@ -9,7 +9,7 @@ class Dataset(Generic[T]):
         raise NotImplementedError
 
     def get_meta(self, *args, **kwargs) -> dict:
-        raise NotImplementedError()
+        return {}
 
 
 class Modifier(Dataset):
