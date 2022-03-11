@@ -48,23 +48,29 @@ class ModelRepo:
         self.model_cls = model_csl
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
-            self.lines = [ModelLine(name, model_csl=model_csl)
-                          for name in os.listdir(self.root) if os.path.isdir(name)]
+            self.lines = {name: ModelLine(os.path.join(self.root, name), model_csl=model_csl)
+                          for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
             print(f'Found {len(self.lines)}' + ' lines')
         else:
             os.mkdir(self.root)
-            self.lines = []
+            self.lines = dict()
 
-    def new_line(self, name=None):
+    def _new_line(self, name=None):
         if name is None:
             name = f'{len(self.lines):05d}'
+        else:
+            name = str(name)
+
         folder = os.path.join(self.root, name)
         line = ModelLine(folder, self.model_cls)
-        self.lines.append(line)
-        return self[-1]
+        self.lines[name] = line
+        return line
 
-    def __getitem__(self, index):
-        return self.lines[index]
+    def __getitem__(self, key):
+        if key in self.lines:
+            return self.lines[key]
+        else:
+            return self._new_line(key)
 
     def __len__(self):
         return len(self.lines)
@@ -82,17 +88,9 @@ class ModelLine:
             os.mkdir(self.root)
             self.models = {}
 
-    def __getitem__(self, key) -> Model:
-        if key == 'latest':
-            idx = -1
-        elif key == 'best':
-            raise NotImplementedError()
-        elif isinstance(key, int):
-            idx = key
-        else:
-            idx = -1
+    def __getitem__(self, name) -> Model:
         model = self.model_csl()
-        model.load(os.path.join(self.root, self.models[idx]))
+        model.load(os.path.join(self.root, self.models[name]))
         return model
 
     def __len__(self):
