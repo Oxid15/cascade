@@ -1,4 +1,4 @@
-# Cascade
+![header](docs/imgs/header.png)
 ML Engineering framework with the aim to standardize the work with data and models, make it object-oriented.  
 The general idea is to give abstract Dataset and Model classes (much like pytorch base classes Dataset and Module, but more high-level) and then use them to build more specific tools.
   
