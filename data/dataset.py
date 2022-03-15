@@ -28,6 +28,7 @@ class Modifier(Dataset):
             self._index += 1
             return self[self._index]
         else:
+            self._index = -1
             raise StopIteration()
 
     def __len__(self):
