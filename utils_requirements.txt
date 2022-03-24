@@ -1,0 +1,3 @@
+opencv-python
+pandas
+scikit-learn
