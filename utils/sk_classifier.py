@@ -23,7 +23,7 @@ class SkClassifier(Model):
 
     def evaluate(self, x, y, metrics_dict):
         preds = self.predict(x)
-        self.metrics = {key: metrics_dict[key](preds, y) for key in metrics_dict}
+        self.metrics.update({key: metrics_dict[key](preds, y) for key in metrics_dict})
 
     def load(self, path_w_ext):
         with open(path_w_ext, 'rb') as f:
