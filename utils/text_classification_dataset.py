@@ -1,6 +1,6 @@
 import os
 
-from data import Dataset
+from ..data import Dataset
 
 
 class TextClassificationDataset(Dataset):

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from data import Dataset
+from ..data import Dataset
 
 
 class TableDataset(Dataset):

@@ -2,7 +2,7 @@ import os
 from hashlib import md5
 
 import cv2
-from data import Dataset, T
+from ..data import Dataset, T
 
 
 class FolderImageDataset(Dataset):

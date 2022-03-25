@@ -1,7 +1,7 @@
 import pickle
 from sklearn.pipeline import Pipeline
 
-from models import Model
+from ..models import Model
 
 
 class SkClassifier(Model):
