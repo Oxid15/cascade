@@ -1,7 +1,12 @@
+import numpy as np
 from models import Model
 
 
 class DummyModel(Model):
+    def __init__(self):
+        super().__init__()
+        self.model = b'model'
+
     def fit(self, *args, **kwargs):
         pass
 
@@ -9,11 +14,11 @@ class DummyModel(Model):
         pass
 
     def evaluate(self, *args, **kwargs):
-        pass
+        self.metrics.update({'acc': np.random.random()})
 
     def load(self, path_wo_ext):
         with open(f'{path_wo_ext}.bin', 'rb') as f:
-            return str(f.readlines())
+            self.model = str(f.read())
 
     def save(self, path_wo_ext):
         with open(f'{path_wo_ext}.bin', 'wb') as f:
