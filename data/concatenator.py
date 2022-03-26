@@ -21,7 +21,7 @@ class Concatenator(Dataset):
 
     def __repr__(self) -> str:
         rp = super().__repr__()
-        return f'{rp} of {", ".join(repr(ds) for ds in self._datasets)}'
+        return f'{rp} of\n' + '\n'.join(repr(ds) for ds in self._datasets)
 
     def get_meta(self) -> dict:
         meta = {str(uuid1()): repr(self)}

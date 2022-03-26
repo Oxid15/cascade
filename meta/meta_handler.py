@@ -54,6 +54,26 @@ class MetaViewer:
     def __len__(self):
         return len(self.metas)
 
+    def __repr__(self):
+        def pretty(d, indent=0, sep=' '):
+            out = ''
+            for key, value in d.items():
+                out += sep * indent + str(key) + ':'
+                if isinstance(value, dict):
+                    out += pretty(value, indent + 1)
+                else:
+                    out += sep * (indent + 1) + str(value) + sep
+                out += '\n'
+            return out
+
+        out = f'MetaViewer at {self.root}:\n'
+        for i, meta in enumerate(self.metas):
+            out += '-' * 20 + '\n'
+            out += f'  Meta {i}:\n'
+            out += '-' * 20 + '\n'
+            out += pretty(meta, 4)
+        return out
+
     def write(self, name, obj):
         self.metas.append(obj)
         self.mh.write(name, obj)
