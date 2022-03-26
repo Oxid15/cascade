@@ -48,6 +48,12 @@ class MetaViewer:
         for name in names:
             self.metas.append(self.mh.read(os.path.join(self.root, name)))
 
+    def __getitem__(self, index):
+        return self.metas[index]
+
+    def __len__(self):
+        return len(self.metas)
+
     def write(self, name, obj):
         self.metas.append(obj)
         self.mh.write(name, obj)
@@ -64,7 +70,10 @@ class MetaHandler:
             path += '.json'
 
         with open(path, 'r') as meta_file:
-            return json.load(meta_file)
+            meta = json.load(meta_file)
+            if isinstance(meta, str):
+                meta = json.loads(meta)
+            return meta
 
     def write(self, name, obj) -> None:
         with open(name, 'w') as json_meta:
