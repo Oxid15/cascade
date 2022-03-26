@@ -1,44 +1,10 @@
 import os
 import datetime
-import json
 import glob
-from json import JSONEncoder
 from hashlib import md5
 
-import numpy as np
-
 from .model import Model
-
-
-class CustomEncoder(JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
-            return obj.isoformat()
-        elif isinstance(obj, datetime.timedelta):
-            return (datetime.datetime.min + obj).time().isoformat()
-
-        elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
-                            np.int16, np.int32, np.int64, np.uint8,
-                            np.uint16, np.uint32, np.uint64)):
-
-            return int(obj)
-
-        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
-            return float(obj)
-        
-        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):
-            return {'real': obj.real, 'imag': obj.imag}
-        
-        elif isinstance(obj, (np.ndarray,)):
-            return obj.tolist()
-    
-        elif isinstance(obj, (np.bool_)):
-            return bool(obj)
-
-        elif isinstance(obj, (np.void)): 
-            return None
-
-        return super(CustomEncoder, self).default(obj)
+from ..meta import MetaHandler
 
 
 class ModelRepo:
@@ -118,6 +84,5 @@ class ModelLine:
         meta['md5sum'] = md5sum
         meta['saved_at'] = datetime.datetime.now()
 
-        with open(os.path.join(self.root, f'{idx:0>5d}.json'), 'w') as json_meta:
-            enc = CustomEncoder()
-            json.dump(enc.encode(meta), json_meta)
+        mh = MetaHandler()
+        mh.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta)
