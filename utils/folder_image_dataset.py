@@ -1,5 +1,6 @@
 import os
 from hashlib import md5
+from uuid import uuid1
 
 import cv2
 from ..data import Dataset, T
@@ -13,7 +14,7 @@ class FolderImageDataset(Dataset):
     """
     def __init__(self, root):
         self.root = os.path.abspath(root)
-        assert(os.path.exists(self.root))
+        assert os.path.exists(self.root)
         self.image_names = sorted(os.listdir(self.root))
 
     def __getitem__(self, index) -> T:
@@ -28,13 +29,18 @@ class FolderImageDataset(Dataset):
     def __len__(self):
         return len(self.image_names)
 
-    def get_meta(self, name: str) -> dict:
-        meta = super().get_meta()
-        meta['name'] = name
-        meta['paths'] = self.image_names
-        meta['md5sums'] = []
+    def get_meta(self) -> dict:
+        key = str(uuid1())
+        meta = {
+            key: {
+                'name': self.__repr__(),
+                'size': len(self),
+                'paths': self.image_names,
+                'md5sums': []
+            }
+        }
 
         for name in self.image_names:
             with open(os.path.join(self.root, name), 'rb') as f:
-                meta['md5sums'].append(md5(f.read()).hexdigest())
+                meta[key]['md5sums'].append(md5(f.read()).hexdigest())
         return meta
