@@ -1,5 +1,6 @@
 import os
-
+from uuid import uuid1
+import numpy as np
 from ..data import Dataset
 
 
@@ -25,3 +26,15 @@ class TextClassificationDataset(Dataset):
 
     def __len__(self):
         return len(self.paths)
+
+    def get_meta(self) -> dict:
+        key = str(uuid1())
+        meta = {
+            key: {
+                'name': self.__repr__(),
+                'size': len(self),
+                'root': self.root,
+                'labels': np.unique(self.labels).tolist()
+            }
+        }
+        return meta

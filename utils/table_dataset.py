@@ -1,3 +1,4 @@
+from uuid import uuid1
 import pandas as pd
 
 from ..data import Dataset
@@ -16,10 +17,22 @@ class TableDataset(Dataset):
         return self._table.iloc[index]
 
     def __repr__(self):
-        return self._table.__repr__()
+        rp = super().__repr__()
+        return rp + '\n' + self._table.__repr__()
 
     def __len__(self):
         return len(self._table)
+
+    def get_meta(self) -> dict:
+        key = str(uuid1())
+        meta = {
+            key: {
+                'name': self.__repr__(),
+                'size': len(self),
+                'info': self._table.describe()
+            }
+        }
+        return meta
 
 
 class CSVDataset(TableDataset):
