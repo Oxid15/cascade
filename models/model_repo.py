@@ -4,7 +4,7 @@ import glob
 from hashlib import md5
 
 from .model import Model
-from ..meta import MetaHandler
+from ..meta import MetaViewer
 
 
 class ModelRepo:
@@ -58,6 +58,7 @@ class ModelLine:
         else:
             os.mkdir(self.root)
             self.models = {}
+        self.meta_viewer = MetaViewer(self.root)
 
     def __getitem__(self, name) -> Model:
         model = self.model_csl()
@@ -84,5 +85,4 @@ class ModelLine:
         meta['md5sum'] = md5sum
         meta['saved_at'] = datetime.datetime.now()
 
-        mh = MetaHandler()
-        mh.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta)
+        self.meta_viewer.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta)

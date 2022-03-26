@@ -37,6 +37,25 @@ class CustomEncoder(JSONEncoder):
         return super(CustomEncoder, self).default(obj)
 
 
+class MetaViewer:
+    def __init__(self, root) -> None:
+        assert os.path.exists(root)
+        self.root = root
+        self.mh = MetaHandler()
+
+        names = [name for name in os.listdir(self.root) if os.path.splitext(name)[-1] == '.json']
+        self.metas = []
+        for name in names:
+            self.metas.append(self.mh.read(os.path.join(self.root, name)))
+
+    def write(self, name, obj):
+        self.metas.append(obj)
+        self.mh.write(name, obj)
+
+    def read(self, path):
+        return self.mh.read(path)
+
+
 class MetaHandler:
     def read(self, path) -> dict:
         assert os.path.exists(path)
