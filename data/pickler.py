@@ -4,7 +4,7 @@ from . import Modifier
 
 
 class Pickler(Modifier):
-    def __init__(self, path, dataset=None):
+    def __init__(self, path, dataset=None) -> None:
         super().__init__(dataset)
         self.path = path
 
@@ -14,10 +14,10 @@ class Pickler(Modifier):
         else:
             self._dump()
 
-    def _dump(self):
+    def _dump(self) -> None:
         with open(self.path, 'wb') as f:
             pickle.dump(self._dataset, f)
 
-    def _load(self):
+    def _load(self) -> None:
         with open(self.path, 'rb') as f:
             self._dataset = pickle.load(f)

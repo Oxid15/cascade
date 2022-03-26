@@ -33,7 +33,7 @@ class FolderImageDataset(Dataset):
         key = str(uuid1())
         meta = {
             key: {
-                'name': self.__repr__(),
+                'name': repr(self),
                 'size': len(self),
                 'paths': self.image_names,
                 'md5sums': []

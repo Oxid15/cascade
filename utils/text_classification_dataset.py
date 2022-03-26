@@ -31,7 +31,7 @@ class TextClassificationDataset(Dataset):
         key = str(uuid1())
         meta = {
             key: {
-                'name': self.__repr__(),
+                'name': repr(self),
                 'size': len(self),
                 'root': self.root,
                 'labels': np.unique(self.labels).tolist()

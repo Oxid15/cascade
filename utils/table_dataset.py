@@ -17,8 +17,7 @@ class TableDataset(Dataset):
         return self._table.iloc[index]
 
     def __repr__(self):
-        rp = super().__repr__()
-        return rp + '\n' + self._table.__repr__()
+        return f'{super().__repr__()} {repr(self._table)}'
 
     def __len__(self):
         return len(self._table)
@@ -27,7 +26,7 @@ class TableDataset(Dataset):
         key = str(uuid1())
         meta = {
             key: {
-                'name': self.__repr__(),
+                'name': repr(self),
                 'size': len(self),
                 'info': self._table.describe()
             }

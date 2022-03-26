@@ -9,7 +9,7 @@ class Dataset(Generic[T]):
         raise NotImplementedError
 
     def get_meta(self) -> dict:
-        return {str(uuid1()): self.__repr__()}
+        return {str(uuid1()): repr(self)}
 
 
 class Modifier(Dataset):
