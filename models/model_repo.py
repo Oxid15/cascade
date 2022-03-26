@@ -42,12 +42,16 @@ class CustomEncoder(JSONEncoder):
 
 
 class ModelRepo:
-    def __init__(self, folder, model_csl=Model):
+    def __init__(self, folder, model_csl=Model, meta_prefix=None):
+        self.meta_prefix = meta_prefix if meta_prefix is not None else {}
+
         self.root = folder
         self.model_cls = model_csl
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
-            self.lines = {name: ModelLine(os.path.join(self.root, name), model_csl=model_csl)
+            self.lines = {name: ModelLine(os.path.join(self.root, name),
+                                          model_csl=model_csl,
+                                          meta_prefix=self.meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
             print(f'Found {len(self.lines)}' + ' lines')
         else:
@@ -61,7 +65,7 @@ class ModelRepo:
             name = str(name)
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, self.model_cls)
+        line = ModelLine(folder, self.model_cls, meta_prefix=self.meta_prefix)
         self.lines[name] = line
         return line
 
@@ -76,7 +80,9 @@ class ModelRepo:
 
 
 class ModelLine:
-    def __init__(self, folder, model_csl=Model):
+    def __init__(self, folder, model_csl=Model, meta_prefix=None):
+        self.meta_prefix = meta_prefix if meta_prefix is not None else {}
+
         self.model_csl = model_csl
         self.root = folder
         if os.path.exists(self.root):
@@ -106,6 +112,8 @@ class ModelLine:
             md5sum = md5(f.read()).hexdigest()
 
         meta = model.get_meta()
+
+        meta.update(self.meta_prefix)
         meta['name'] = exact_filename
         meta['md5sum'] = md5sum
         meta['saved_at'] = datetime.datetime.now()
