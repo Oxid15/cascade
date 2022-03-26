@@ -43,7 +43,11 @@ class Modifier(Dataset):
 class Sampler(Modifier):
     def __init__(self, dataset, num_samples) -> None:
         super(Sampler, self).__init__(dataset)
-        self.num_samples = num_samples
+        self._num_samples = num_samples
 
     def __len__(self) -> int:
-        return self.num_samples
+        return self._num_samples
+
+    def __repr__(self):
+        rp = super().__repr__()
+        return f'{rp} num_samples: {self._num_samples}'
