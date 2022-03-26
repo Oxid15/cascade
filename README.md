@@ -12,6 +12,9 @@ from cascade.data import Dataset, Modifier
 class NumberDataset(Dataset):
     def __init__(self, data):
         self._data = data
+    
+    def __getitem__(self, index):
+        return self._data[index]
 
 
 # Then we need to perform some preprocess and
