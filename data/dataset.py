@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import Generic, Iterable, TypeVar
 from uuid import uuid1
 
 T = TypeVar('T')
@@ -10,6 +10,18 @@ class Dataset(Generic[T]):
 
     def get_meta(self) -> dict:
         return {str(uuid1()): repr(self)}
+
+
+class Wrapper(Dataset):
+    def __init__(self, obj) -> None:
+        self._data = obj
+
+    def __getitem__(self, index) -> T:
+        return self._data[index]
+    
+    def __len__(self) -> int:
+        return len(self._data)
+
 
 
 class Modifier(Dataset):
@@ -48,6 +60,6 @@ class Sampler(Modifier):
     def __len__(self) -> int:
         return self._num_samples
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         rp = super().__repr__()
         return f'{rp} num_samples: {self._num_samples}'

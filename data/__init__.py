@@ -1,4 +1,4 @@
-from .dataset import Dataset, Modifier, Sampler, T
+from .dataset import Dataset, Modifier, Sampler, T, Wrapper
 
 from .bruteforce_cacher import BruteforceCacher
 from .concatenator import Concatenator
