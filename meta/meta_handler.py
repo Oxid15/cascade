@@ -58,7 +58,7 @@ class MetaViewer:
         def pretty(d, indent=0, sep=' '):
             out = ''
             for key, value in d.items():
-                out += sep * indent + str(key) + ':'
+                out += sep * indent + str(key) + ':\n'
                 if isinstance(value, dict):
                     out += pretty(value, indent + 1)
                 else:
