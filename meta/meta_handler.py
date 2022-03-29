@@ -43,7 +43,7 @@ class MetaViewer:
         self.root = root
         self.mh = MetaHandler()
 
-        names = [name for name in os.listdir(self.root) if os.path.splitext(name)[-1] == '.json']
+        names = [name for name in sorted(os.listdir(self.root)) if os.path.splitext(name)[-1] == '.json']
         self.metas = []
         for name in names:
             self.metas.append(self.mh.read(os.path.join(self.root, name)))

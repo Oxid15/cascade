@@ -53,25 +53,25 @@ class ModelLine:
         self.root = folder
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
-            self.models = {i: name for i, name in enumerate(os.listdir(self.root)) if not name.endswith('.json')}
-            print(f'Found {len(self.models)}' + ' models')
+            self.model_names = [name for i, name in enumerate(sorted(os.listdir(self.root))) if not name.endswith('.json')]
+            print(f'Found {len(self.model_names)}' + ' models')
         else:
             os.mkdir(self.root)
-            self.models = {}
+            self.model_names = []
         self.meta_viewer = MetaViewer(self.root)
 
-    def __getitem__(self, name) -> Model:
+    def __getitem__(self, num) -> Model:
         model = self.model_csl()
-        model.load(os.path.join(self.root, self.models[name]))
+        model.load(os.path.join(self.root, self.model_names[num]))
         return model
 
     def __len__(self):
-        return len(self.models)
+        return len(self.model_names)
 
     def save(self, model: Model) -> None:
-        idx = len(self.models)
+        idx = len(self.model_names)
         name = os.path.join(self.root, f'{idx:0>5d}')
-        self.models[idx] = name
+        self.model_names.append(name)
         model.save(name)
 
         exact_filename = glob.glob(f'{name}*')[0]
