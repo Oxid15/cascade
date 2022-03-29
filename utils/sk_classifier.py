@@ -7,8 +7,7 @@ from ..models import Model
 class SkClassifier(Model):
     def __init__(self, name=None, blocks=[]):
         super().__init__()
-        if name is not None:
-            self.name = name
+        self.name = name
         if len(blocks):
             self.pipeline = self.construct_pipeline(blocks)
 
@@ -32,3 +31,11 @@ class SkClassifier(Model):
     def save(self, path_wo_ext):
         with open(f'{path_wo_ext}.pkl', 'wb') as f:
             pickle.dump(self.pipeline, f)
+
+    def get_meta(self):
+        meta = super().get_meta()
+        meta.update({
+            'name': self.name if self.name is not None else None,
+            'pipeline': repr(self.pipeline)
+        })
+        return meta
