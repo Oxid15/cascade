@@ -45,6 +45,10 @@ class Modifier(Dataset):
 
     def __len__(self) -> int:
         return len(self._dataset)
+    
+    def __repr__(self) -> str:
+        rp = super().__repr__()
+        return f'{rp} of size: {len(self)}'
 
     def get_meta(self) -> dict:
         meta = super().get_meta()
