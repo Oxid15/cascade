@@ -1,5 +1,6 @@
 from uuid import uuid1
 import pandas as pd
+from dask import dataframe as dd
 
 from ..data import Dataset
 
@@ -28,16 +29,10 @@ class TableDataset(Dataset):
             key: {
                 'name': repr(self),
                 'size': len(self),
-                'info': self._table.describe()
+                'info': repr(self._table.describe())
             }
         }
         return meta
-
-
-class CSVDataset(TableDataset):
-    def __init__(self, csv_file_path, **kwargs):
-        t = pd.read_csv(csv_file_path, **kwargs)
-        super().__init__(t)
 
 
 class TableFilter(TableDataset):
@@ -47,3 +42,15 @@ class TableFilter(TableDataset):
 
         self._table = self._table[mask]
         print(f'Length before filtering: {init_len}, length after: {len(self._table)}')
+
+
+class CSVDataset(TableDataset):
+    def __init__(self, csv_file_path, **kwargs):
+        t = pd.read_csv(csv_file_path, **kwargs)
+        super().__init__(t)
+
+
+class LargeCSVDataset(CSVDataset):
+    def __init__(self, csv_file_path, **kwargs):
+        t = dd.read_csv(csv_file_path, **kwargs)
+        super().__init__(t)
