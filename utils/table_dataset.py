@@ -3,7 +3,7 @@ import pandas as pd
 from dask import dataframe as dd
 from numpy import ceil
 
-from ..data import Dataset, SequentialCacher
+from ..data import Dataset, Wrapper, SequentialCacher
 
 
 class TableDataset(Dataset):
@@ -60,3 +60,20 @@ class PartedTableLoader(Dataset):
     
     def __len__(self):
         return self._table.npartitions
+
+
+class LargeCSVDataset(SequentialCacher):
+    def __init__(self, csv_file_path, **kwargs):
+        self._dataset = PartedTableLoader(csv_file_path, **kwargs)
+        self.len = len(self._dataset._table)
+        self.num_batches = self._dataset._table.npartitions
+        self.bs = self.len // self.num_batches
+        self.index = -1
+        self.batch = None
+
+    def _load(self, index):
+        del self.batch
+        self.batch = TableDataset(self._dataset[index])
+
+    def __len__(self):
+        return self.len
