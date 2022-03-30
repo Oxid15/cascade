@@ -1,8 +1,9 @@
 from uuid import uuid1
 import pandas as pd
 from dask import dataframe as dd
+from numpy import ceil
 
-from ..data import Dataset
+from ..data import Dataset, SequentialCacher
 
 
 class TableDataset(Dataset):
@@ -50,7 +51,12 @@ class CSVDataset(TableDataset):
         super().__init__(t)
 
 
-class LargeCSVDataset(CSVDataset):
+class PartedTableLoader(Dataset):
     def __init__(self, csv_file_path, **kwargs):
-        t = dd.read_csv(csv_file_path, **kwargs)
-        super().__init__(t)
+        self._table = dd.read_csv(csv_file_path, **kwargs)
+
+    def __getitem__(self, index):
+        return self._table.get_partition(index).compute()
+    
+    def __len__(self):
+        return self._table.npartitions
