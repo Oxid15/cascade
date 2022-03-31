@@ -3,7 +3,7 @@ from . import Modifier, Wrapper, T
 
 
 class BruteforceCacher(Modifier):
-    def __init__(self, dataset):
+    def __init__(self, dataset) -> None:
         super(BruteforceCacher, self).__init__(dataset)
         self._data = [item for item in tqdm(self._dataset)] # forcibly calling all previous lazy loads
 

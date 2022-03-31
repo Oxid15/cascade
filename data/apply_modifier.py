@@ -10,5 +10,5 @@ class ApplyModifier(Modifier):
         item = self._dataset(index)
         return self.func(item)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'{repr(self)}, {repr(self.func)}'

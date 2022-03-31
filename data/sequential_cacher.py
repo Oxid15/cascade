@@ -10,7 +10,7 @@ class SequentialCacher(Modifier):
         self.index = -1
         self.batch = None
 
-    def _load(self, index):
+    def _load(self, index) -> None:
         del self.batch
         self.batch = []
 
