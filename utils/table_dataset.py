@@ -1,9 +1,11 @@
+import csv
+from turtle import back
 from uuid import uuid1
 import pandas as pd
 from dask import dataframe as dd
 from numpy import ceil
 
-from ..data import Dataset, Wrapper, SequentialCacher
+from ..data import Dataset, Iterator, SequentialCacher
 
 
 class TableDataset(Dataset):
@@ -62,14 +64,23 @@ class PartedTableLoader(Dataset):
         return self._table.npartitions
 
 
+class TableIterator(Iterator):
+    def __init__(self, csv_file_path, chunk_size=1000, **kwargs):
+        self.chunk_size = chunk_size
+        super().__init__(pd.read_csv(csv_file_path, iterator=True, **kwargs))
+    
+    def __next__(self):
+        return self._data.get_chunk(self.chunk_size)
+
+
 class LargeCSVDataset(SequentialCacher):
     def __init__(self, csv_file_path, **kwargs):
-        self._dataset = PartedTableLoader(csv_file_path, **kwargs)
-        self.len = len(self._dataset._table)
-        self.num_batches = self._dataset._table.npartitions
+        dataset = PartedTableLoader(csv_file_path, **kwargs)
+        self.num_batches = dataset._table.npartitions
         self.bs = self.len // self.num_batches
-        self.index = -1
-        self.batch = None
+
+        super().__init__(dataset, self.bs)
+        self.len = len(dataset._table)
 
     def _load(self, index):
         del self.batch

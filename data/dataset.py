@@ -23,6 +23,16 @@ class Wrapper(Dataset):
         return len(self._data)
 
 
+class Iterator(Dataset):
+    def __init__(self, data: Iterable):
+        self._data = data
+
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> T:
+        return next(self._data)
+
 
 class Modifier(Dataset):
     def __init__(self, dataset) -> None:
