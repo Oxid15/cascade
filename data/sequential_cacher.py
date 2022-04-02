@@ -16,10 +16,10 @@ class SequentialCacher(Modifier):
 
         start = index * self.bs
         end = min(start + self.bs, len(self._dataset))
-        
+
         for i in range(start, end):
             self.batch.append(self._dataset[i])
-        
+
         self.index += 1
 
     def __getitem__(self, index) -> T:

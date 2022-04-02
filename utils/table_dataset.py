@@ -54,7 +54,7 @@ class PartedTableLoader(Dataset):
 
     def __getitem__(self, index):
         return self._table.get_partition(index).compute()
-    
+
     def __len__(self):
         return self._table.npartitions
 
@@ -63,7 +63,7 @@ class TableIterator(Iterator):
     def __init__(self, csv_file_path, chunk_size=1000, **kwargs):
         self.chunk_size = chunk_size
         super().__init__(pd.read_csv(csv_file_path, iterator=True, **kwargs))
-    
+
     def __next__(self):
         return self._data.get_chunk(self.chunk_size)
 

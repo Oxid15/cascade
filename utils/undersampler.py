@@ -21,10 +21,9 @@ class UnderSampler(Sampler):
                 self.rem_indices.append(k)
         print(f'Original length was {len(self._dataset)} and new is {len(self)}')
 
-
     def __getitem__(self, index):
         idx = self.rem_indices[index]
         return self._dataset[idx]
-    
+
     def __len__(self):
         return len(self.rem_indices)

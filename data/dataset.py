@@ -28,7 +28,7 @@ class Wrapper(Dataset):
 
     def __getitem__(self, index) -> T:
         return self._data[index]
-    
+
     def __len__(self) -> int:
         return len(self._data)
 
@@ -54,7 +54,7 @@ class Modifier(Dataset):
 
     def __len__(self) -> int:
         return len(self._dataset)
-    
+
     def __repr__(self) -> str:
         rp = super().__repr__()
         return f'{rp} of size: {len(self)}'

@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List, Dict
 
+
 class Model:
     def __init__(self):
         self.metrics = {}
@@ -11,7 +12,7 @@ class Model:
 
     def predict(self, *args, **kwargs):
         raise NotImplementedError()
-    
+
     def evaluate(self, *args, **kwargs):
         raise NotImplementedError()
 

@@ -1,5 +1,5 @@
 from tqdm import tqdm, trange
-from . import Modifier, Wrapper, T
+from . import Modifier, T
 
 
 class BruteforceCacher(Modifier):
@@ -9,9 +9,9 @@ class BruteforceCacher(Modifier):
         if hasattr(self._dataset, '__len__'):
             self._data = [self._dataset[i] for i in trange(len(self._dataset))]
         elif hasattr(self._dataset, '__next__'):
-            self._data = [item for item in self._dataset]
+            self._data = [item for item in tqdm(self._dataset)]
         else:
-            raise AttributeError(f'Input dataset must provide Listlike or Iterable interface')
+            raise AttributeError('Input dataset must provide Listlike or Iterable interface')
 
     def __getitem__(self, index) -> T:
         return self._data[index]

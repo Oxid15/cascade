@@ -17,7 +17,8 @@ class TextClassificationDataset(Dataset):
             self.paths += [os.path.join(self.root, folder, f) for f in files]
             self.labels += [i for _ in range(len(files))]
 
-        print(f'Found {len(folders)} classes: {[(folder, len(os.listdir(os.path.join(self.root, folder)))) for folder in folders]}')
+        print(f'Found {len(folders)} classes: \
+            {[(folder, len(os.listdir(os.path.join(self.root, folder)))) for folder in folders]}')
 
     def __getitem__(self, index):
         with open(self.paths[index], 'r', encoding=self.encoding) as f:

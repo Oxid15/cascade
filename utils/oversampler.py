@@ -21,13 +21,12 @@ class OverSampler(Sampler):
                 self.add_indices.append(k)
         print(f'Original length was {len(self._dataset)} and new is {len(self)}')
 
-
     def __getitem__(self, index):
         if index < len(self._dataset):
             return self._dataset[index]
         else:
             idx = self.add_indices[index - len(self._dataset)]
             return self._dataset[idx]
-    
+
     def __len__(self):
         return len(self._dataset) + len(self.add_indices)
