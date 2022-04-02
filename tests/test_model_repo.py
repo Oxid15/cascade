@@ -3,7 +3,9 @@ import sys
 import unittest
 from unittest import TestCase
 
-sys.path.append(os.path.abspath('../..'))
+MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
 from cascade.models import ModelRepo
 from cascade.tests.dummy_model import DummyModel
 
