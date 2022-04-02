@@ -3,9 +3,9 @@ import sys
 import unittest
 from unittest import TestCase
 
-sys.path.append(os.path.abspath('..'))
-from dummy_model import DummyModel
-from models.model_repo import ModelLine
+sys.path.append(os.path.abspath('../..'))
+from cascade.tests.dummy_model import DummyModel
+from cascade.models.model_repo import ModelLine
 
 
 class TestModelLine(TestCase):
