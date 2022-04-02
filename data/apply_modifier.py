@@ -11,4 +11,5 @@ class ApplyModifier(Modifier):
         return self.func(item)
 
     def __repr__(self) -> str:
-        return f'{repr(self)}, {repr(self.func)}'
+        rp = super().__repr__()
+        return f'{rp}, {repr(self.func)}'

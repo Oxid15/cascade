@@ -1,4 +1,3 @@
-from uuid import uuid1
 import numpy as np
 from .dataset import Dataset, T
 
@@ -24,7 +23,7 @@ class Concatenator(Dataset):
         return f'{rp} of\n' + '\n'.join(repr(ds) for ds in self._datasets)
 
     def get_meta(self) -> dict:
-        meta = {str(uuid1()): repr(self)}
-        meta_others = {str(uuid1()): ds.get_meta() for ds in self._datasets}
-        meta.update(meta_others)
+        meta = super().get_meta()
+        for ds in self._datasets:
+            meta += ds.get_meta()
         return meta
