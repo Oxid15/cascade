@@ -1,12 +1,17 @@
+import os
+import sys
+import unittest
 from unittest import TestCase
+
+sys.path.append(os.path.abspath('..'))
 from models import ModelRepo
 from dummy_model import DummyModel
-import os
-import shutil
 
 
 class TestModelRepo(TestCase):
     def test_repo(self):
+        import shutil
+
         repo = ModelRepo('./models', DummyModel)
 
         line1 = repo['dummy_1']
@@ -17,3 +22,7 @@ class TestModelRepo(TestCase):
 
         shutil.rmtree('./models')
         self.assertEqual(2, len(repo))
+
+
+if __name__ == '__main__':
+    unittest.main()

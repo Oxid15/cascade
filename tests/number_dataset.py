@@ -1,3 +1,7 @@
+import os
+import sys
+
+sys.path.append(os.path.abspath('..'))
 from data import Dataset
 
 

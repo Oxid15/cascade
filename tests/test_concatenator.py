@@ -1,7 +1,11 @@
+import os
+import sys
 import unittest
 from unittest import TestCase
-from data import Concatenator
+
+sys.path.append(os.path.abspath('..'))
 from number_dataset import NumberDataset
+from data import Concatenator
 
 
 class TestConcatenator(TestCase):
@@ -14,3 +18,7 @@ class TestConcatenator(TestCase):
         c = Concatenator([n1, n2, n4, n3, n4])
         self.assertEqual([c[i] for i in range(len(c))],
                          [0, 1, 2, 3, 4, 5, 1, 6, 7, 8, 1])
+
+
+if __name__ == '__main__':
+    unittest.main()

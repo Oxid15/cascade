@@ -1,4 +1,9 @@
+import os
+import sys
+import unittest
 from unittest import TestCase
+
+sys.path.append(os.path.abspath('..'))
 from data import CyclicSampler
 from number_dataset import NumberDataset
 
@@ -13,3 +18,7 @@ class TestCyclicSampler(TestCase):
 
         self.assertEqual([item for item in ds],
                          [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0])
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,4 +1,9 @@
+import os
+import sys
+import unittest
 from unittest import TestCase
+
+sys.path.append(os.path.abspath('..'))
 from data import Modifier
 from number_dataset import NumberDataset
 
@@ -18,3 +23,7 @@ class TestModifier(TestCase):
 
         self.assertEqual([1, 2, 3, 4, 5], result1)
         self.assertEqual([1, 2, 3, 4, 5], result2)
+
+
+if __name__ == '__main__':
+    unittest.main()
