@@ -1,9 +1,6 @@
 import csv
-from turtle import back
-from uuid import uuid1
 import pandas as pd
 from dask import dataframe as dd
-from numpy import ceil
 
 from ..data import Dataset, Iterator, SequentialCacher
 
@@ -27,14 +24,12 @@ class TableDataset(Dataset):
         return len(self._table)
 
     def get_meta(self) -> dict:
-        key = str(uuid1())
-        meta = {
-            key: {
+        meta = super().get_meta()
+        meta[0].update({
                 'name': repr(self),
                 'size': len(self),
                 'info': repr(self._table.describe())
-            }
-        }
+            })
         return meta
 
 

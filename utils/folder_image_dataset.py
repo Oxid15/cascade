@@ -30,17 +30,15 @@ class FolderImageDataset(Dataset):
         return len(self.image_names)
 
     def get_meta(self) -> dict:
-        key = str(uuid1())
-        meta = {
-            key: {
+        meta = super().get_meta()
+        meta[0].update({
                 'name': repr(self),
                 'size': len(self),
                 'paths': self.image_names,
                 'md5sums': []
-            }
-        }
+        })
 
         for name in self.image_names:
             with open(os.path.join(self.root, name), 'rb') as f:
-                meta[key]['md5sums'].append(md5(f.read()).hexdigest())
+                meta[0]['md5sums'].append(md5(f.read()).hexdigest())
         return meta
