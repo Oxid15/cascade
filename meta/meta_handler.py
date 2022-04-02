@@ -57,13 +57,17 @@ class MetaViewer:
     def __repr__(self):
         def pretty(d, indent=0, sep=' '):
             out = ''
-            for key, value in d.items():
-                out += sep * indent + str(key) + ':\n'
-                if isinstance(value, dict):
+            for key in d:
+                if isinstance(d, dict):
+                    value = d[key]
+                    out += sep * indent + str(key) + ':\n'
+                else:
+                    value = key
+                if isinstance(value, dict) or isinstance(value, list):
                     out += pretty(value, indent + 1)
                 else:
                     out += sep * (indent + 1) + str(value) + sep
-                out += '\n'
+                    out += '\n'
             return out
 
         out = f'MetaViewer at {self.root}:\n'
