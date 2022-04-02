@@ -1,5 +1,6 @@
 import os
 from hashlib import md5
+from typing import List, Dict
 
 import cv2
 from ..data import Dataset, T
@@ -28,7 +29,7 @@ class FolderImageDataset(Dataset):
     def __len__(self):
         return len(self.image_names)
 
-    def get_meta(self) -> dict:
+    def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
                 'name': repr(self),

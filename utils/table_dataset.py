@@ -1,4 +1,4 @@
-import csv
+from typing import List, Dict
 import pandas as pd
 from dask import dataframe as dd
 
@@ -23,7 +23,7 @@ class TableDataset(Dataset):
     def __len__(self):
         return len(self._table)
 
-    def get_meta(self) -> dict:
+    def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
                 'name': repr(self),

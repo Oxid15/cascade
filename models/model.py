@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from typing import List, Dict
 
 class Model:
     def __init__(self):
@@ -21,7 +21,7 @@ class Model:
     def save(self, filepath):
         raise NotImplementedError()
 
-    def get_meta(self) -> dict:
+    def get_meta(self) -> List[Dict]:
         meta = {
             'created_at': self.created_at,
             'metrics': self.metrics

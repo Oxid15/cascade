@@ -1,4 +1,6 @@
 import os
+from typing import List, Dict
+
 import numpy as np
 from ..data import Dataset
 
@@ -26,7 +28,7 @@ class TextClassificationDataset(Dataset):
     def __len__(self):
         return len(self.paths)
 
-    def get_meta(self) -> dict:
+    def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
                 'name': repr(self),

@@ -1,3 +1,5 @@
+from typing import List, Dict
+
 import numpy as np
 from .dataset import Dataset, T
 
@@ -22,7 +24,7 @@ class Concatenator(Dataset):
         rp = super().__repr__()
         return f'{rp} of\n' + '\n'.join(repr(ds) for ds in self._datasets)
 
-    def get_meta(self) -> dict:
+    def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         for ds in self._datasets:
             meta += ds.get_meta()
