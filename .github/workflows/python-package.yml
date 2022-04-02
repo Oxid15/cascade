@@ -38,7 +38,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest
+        python -m pytest
     - name: Python Linter
       # You may pin to the exact commit or the version.
       # uses: sunnysid3up/python-linter@93076bd8f740f062069291d738fc70c1b4171c1d
