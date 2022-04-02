@@ -41,4 +41,4 @@ jobs:
         pwd
         ls
         python --version
-        python -m unittest discover .
+        python -m unittest discover ./tests
