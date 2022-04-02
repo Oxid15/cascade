@@ -11,6 +11,17 @@ class Dataset(Generic[T]):
         return [{'name': repr(self)}]
 
 
+class Iterator(Generic[T]):
+    def __init__(self, data: Iterable):
+        self._data = data
+
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> T:
+        return next(self._data)
+
+
 class Wrapper(Dataset):
     def __init__(self, obj) -> None:
         self._data = obj
@@ -20,17 +31,6 @@ class Wrapper(Dataset):
     
     def __len__(self) -> int:
         return len(self._data)
-
-
-class Iterator(Dataset):
-    def __init__(self, data: Iterable):
-        self._data = data
-
-    def __iter__(self):
-        return self
-
-    def __next__(self) -> T:
-        return next(self._data)
 
 
 class Modifier(Dataset):
