@@ -1,6 +1,5 @@
 import os
 from hashlib import md5
-from uuid import uuid1
 
 import cv2
 from ..data import Dataset, T

@@ -1,5 +1,4 @@
 from typing import Dict, Generic, Iterable, List, TypeVar
-from uuid import uuid1
 
 T = TypeVar('T')
 
