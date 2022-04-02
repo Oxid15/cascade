@@ -3,9 +3,9 @@ import sys
 import unittest
 from unittest import TestCase
 
-sys.path.append(os.path.abspath('..'))
-from data import CyclicSampler
-from number_dataset import NumberDataset
+sys.path.append(os.path.abspath('../..'))
+from cascade.data import CyclicSampler
+from cascade.tests.number_dataset import NumberDataset
 
 
 class TestCyclicSampler(TestCase):

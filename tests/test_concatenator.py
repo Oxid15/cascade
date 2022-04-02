@@ -3,9 +3,9 @@ import sys
 import unittest
 from unittest import TestCase
 
-sys.path.append(os.path.abspath('..'))
-from number_dataset import NumberDataset
-from data import Concatenator
+sys.path.append(os.path.abspath('../..'))
+from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Concatenator
 
 
 class TestConcatenator(TestCase):
