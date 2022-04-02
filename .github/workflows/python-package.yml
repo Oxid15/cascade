@@ -36,15 +36,6 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Python Linter
-      # You may pin to the exact commit or the version.
-      # uses: sunnysid3up/python-linter@93076bd8f740f062069291d738fc70c1b4171c1d
-      uses: sunnysid3up/python-linter@v0.1-beta.7
-      with:
-        # Source file or directory
-        source: . # optional, default is .
-        # Set strictness for lint [low, medium, high]
-        strict: medium # optional, default is medium
     - name: Test
       run: |
         pwd
