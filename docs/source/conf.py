@@ -12,7 +12,6 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../../..'))
 
 import cascade
@@ -34,7 +33,10 @@ release = cascade.__version__
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon'
 ]
+
+napoleon_include_special_with_doc = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
