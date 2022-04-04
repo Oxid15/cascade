@@ -1,5 +1,4 @@
-.. image:: https://github.com/Oxid15/cascade/blob/main/docs/imgs/header.png
-==========================================
+.. image:: ../imgs/header.png 
 
 .. toctree::
    :maxdepth: 2
