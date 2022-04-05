@@ -1,10 +1,6 @@
-.. image:: ../imgs/header.png 
+Welcome to Cascade documentation!
+================================= 
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-      cascade.data
-      cascade.models
-      cascade.meta
-
+All methods in:
+--------------- 
 * :ref:`genindex`
