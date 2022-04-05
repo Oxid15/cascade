@@ -10,7 +10,7 @@ from cascade.tests.number_dataset import NumberDataset
 from cascade.data import ApplyModifier
 
 
-class TestApplyModifier(unittest.TestCase):
+class TestApplyModifier(TestCase):
     def test(self):
         ds = NumberDataset([1, 2, 3, 4, 5])
         ds = ApplyModifier(ds, lambda x: x * 2)

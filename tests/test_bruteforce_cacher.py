@@ -11,7 +11,7 @@ from cascade.tests.number_iterator import NumberIterator
 from cascade.data import BruteforceCacher
 
 
-class TestBruteforceCacher(unittest.TestCase):
+class TestBruteforceCacher(TestCase):
     def test(self):
         ds = NumberDataset([1, 2, 3, 4, 5])
         ds = BruteforceCacher(ds)

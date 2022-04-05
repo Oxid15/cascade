@@ -5,9 +5,9 @@ T = TypeVar('T')
 
 class Dataset(Generic[T]):
     """
-    Base class of any module that constitues a data-pipeline. 
-    In its basic idea is similar to torch.utils.data.Dataset. 
-    It does not define `__len__` for similar reasons. 
+    Base class of any module that constitues a data-pipeline.
+    In its basic idea is similar to torch.utils.data.Dataset.
+    It does not define `__len__` for similar reasons.
     See `pytorch/torch/utils/data/sampler.py` note on this topic.
     """
     def __getitem__(self, index) -> T:
