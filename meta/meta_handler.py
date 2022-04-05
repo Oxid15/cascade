@@ -1,8 +1,8 @@
 import os
 import json
 import datetime
-
 from json import JSONEncoder
+
 import numpy as np
 
 
@@ -38,7 +38,21 @@ class CustomEncoder(JSONEncoder):
 
 
 class MetaViewer:
+    """
+    The class to read and write meta data.
+    """
     def __init__(self, root) -> None:
+        """
+        Parameters:
+        -----------
+        root:
+            path to the folder containing meta files in .json format
+            to dump and load .json files MetaHandler is used
+        See also:
+        ---------
+        cascade.meta.ModelRepo
+        cascade.meta.MetaHandler
+        """
         assert os.path.exists(root)
         self.root = root
         self.mh = MetaHandler()
@@ -48,13 +62,19 @@ class MetaViewer:
         for name in names:
             self.metas.append(self.mh.read(os.path.join(self.root, name)))
 
-    def __getitem__(self, index):
+    def __getitem__(self, index) -> dict:
+        """
+        Returns:
+        --------
+        meta: dict
+            object containing meta
+        """
         return self.metas[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.metas)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         def pretty(d, indent=0, sep=' '):
             out = ''
             for key in d:
@@ -78,16 +98,33 @@ class MetaViewer:
             out += pretty(meta, 4)
         return out
 
-    def write(self, name, obj):
+    def write(self, name, obj: dict) -> None:
+        """
+        Dumps obj to name
+        """
         self.metas.append(obj)
         self.mh.write(name, obj)
 
-    def read(self, path):
+    def read(self, path) -> dict:
+        """
+        Loads object from path
+        """
         return self.mh.read(path)
 
 
 class MetaHandler:
+    """
+    Handles the logic of dumping and loading json files
+    """
     def read(self, path) -> dict:
+        """
+        Reads json from path
+
+        Parameters:
+        -----------
+        path:
+            Path to the file. If no extension provided, then .json assumed
+        """
         assert os.path.exists(path)
         _, ext = os.path.splitext(path)
         if ext == '':
@@ -100,6 +137,9 @@ class MetaHandler:
             return meta
 
     def write(self, name, obj) -> None:
+        """
+        Writes json to path using custom encoder
+        """
         with open(name, 'w') as json_meta:
             enc = CustomEncoder()
             json.dump(enc.encode(obj), json_meta)

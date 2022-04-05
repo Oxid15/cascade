@@ -1,11 +1,23 @@
 import os
 import pandas as pd
 
+from ..models import ModelRepo
 from . import MetaViewer
 
 
 class MetricViewer:
-    def __init__(self, repo):
+    """
+    Interface for viewing metrics in model meta files
+    uses ModelRepo to extract metrics of all models if any
+    constructs a `pd.DataFrame` of metrics internally, which is showed in `__repr__`
+    """
+    def __init__(self, repo: ModelRepo):
+        """
+        Parameters:
+        -----------
+        repo: ModelRepo
+            ModelRepo object to extract metrics from
+        """
         self.repo = repo
 
         self.metrics = []
