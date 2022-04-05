@@ -1,4 +1,4 @@
-from . import Modifier, T
+from . import Dataset, Modifier, T
 from numpy import ceil
 
 
