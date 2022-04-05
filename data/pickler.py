@@ -4,7 +4,23 @@ from . import Modifier
 
 
 class Pickler(Modifier):
+    """
+    Pickles an input dataset or unpickles one
+    """
     def __init__(self, path, dataset=None) -> None:
+        """
+        Loads pickled dataset or dumps one depending on parameters passed
+
+        If only path is passed - loads dataset from path provided if path exists
+        if path provided with a dataset dumps dataset to the path
+
+        Parameters:
+        -----------
+        path:
+            path to the pickled dataset
+        dataset: Dataset, optional
+            a dataset to be pickled
+        """
         super().__init__(dataset)
         self.path = path
 
