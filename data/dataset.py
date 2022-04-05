@@ -35,10 +35,8 @@ class Iterator(Generic[T]):
         self._data = data
 
     def __iter__(self):
-        return self
-
-    def __next__(self) -> T:
-        return next(self._data)
+        for item in self._data:
+            yield item
 
 
 class Wrapper(Dataset):
@@ -82,6 +80,7 @@ class Modifier(Dataset):
         return self._dataset[index]
 
     def __iter__(self):
+        self._index = -1
         return self
 
     def __next__(self) -> T:
