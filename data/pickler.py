@@ -30,8 +30,8 @@ class Pickler(Modifier):
         If only path is passed - loads dataset from path provided if path exists
         if path provided with a dataset dumps dataset to the path
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         path:
             path to the pickled dataset
         dataset: Dataset, optional

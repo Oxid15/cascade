@@ -24,8 +24,8 @@ class ApplyModifier(Modifier):
     """
     def __init__(self, dataset: Dataset, func: Callable) -> None:
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         dataset: Dataset
             a dataset to modify
         func: Callable

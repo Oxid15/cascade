@@ -130,8 +130,8 @@ class Sampler(Modifier):
     Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number of
     items in dataset. It can constitute a batch sampler or random sampler or sample in cycling manner.
 
-    See also:
-    ---------
+    See also
+    --------
     cascade.data.CyclicSampler
     """
     def __init__(self, dataset: Dataset, num_samples: int) -> None:

@@ -21,8 +21,8 @@ class CyclicSampler(Sampler):
     """
     A Sampler that iterates `num_samples` times through an input Dataset in cyclic manner
 
-    Example:
-    --------
+    Example
+    -------
     >>> from cascade.data import CyclicSampler
     >>> from cascade.tests.number_dataset import NumberDataset
     >>> ds = NumberDataset([1,2,3])

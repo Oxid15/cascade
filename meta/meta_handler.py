@@ -59,13 +59,13 @@ class MetaViewer:
     """
     def __init__(self, root) -> None:
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         root:
             path to the folder containing meta files in .json format
             to dump and load .json files MetaHandler is used
-        See also:
-        ---------
+        See also
+        --------
         cascade.meta.ModelRepo
         cascade.meta.MetaHandler
         """
@@ -80,8 +80,8 @@ class MetaViewer:
 
     def __getitem__(self, index) -> dict:
         """
-        Returns:
-        --------
+        Returns
+        -------
         meta: dict
             object containing meta
         """
@@ -136,8 +136,8 @@ class MetaHandler:
         """
         Reads json from path
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         path:
             Path to the file. If no extension provided, then .json assumed
         """

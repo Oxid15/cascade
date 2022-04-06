@@ -28,8 +28,8 @@ class Concatenator(Dataset):
         """
         Creates concatenated dataset from the list of datasets provided
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         datasets: Iterable[Dataset]
             a list or tuple of datasets to concatenate
         """

@@ -28,8 +28,8 @@ class MetricViewer:
     """
     def __init__(self, repo):
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         repo: ModelRepo
             ModelRepo object to extract metrics from
         """

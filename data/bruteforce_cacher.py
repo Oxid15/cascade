@@ -22,6 +22,10 @@ class BruteforceCacher(Modifier):
     """
     Unusual modifier which loads everything in memory in initialization phase
     and then returns values from cache
+
+    See also
+    --------
+    Cascade.data.SequentialCacher
     """
     def __init__(self, dataset: Dataset) -> None:
         super().__init__(dataset)

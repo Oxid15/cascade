@@ -25,14 +25,14 @@ class SequentialCacher(Modifier):
     On first `__getitem__` call loads a batch of length `batch_size` and until indices are in the same batch doesn't
     load anything. When index misses a cached batch, then a new one is loaded.
 
-    See also:
-    ---------
+    See also
+    --------
     BruteforceCacher
     """
     def __init__(self, dataset: Dataset, batch_size=2) -> None:
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
         dataset: Dataset
             dataset to cache sequentially
         batch_size: int, default: 2

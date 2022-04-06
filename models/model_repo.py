@@ -33,8 +33,8 @@ class ModelLine:
         """
         All models in line should be instances of the same class.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         folder:
             Path to a folder where ModelLine will be created or already was created
             if folder does not exist, creates it
@@ -43,8 +43,8 @@ class ModelLine:
         meta_prefix:
             a dict that is used to update resulting meta before saving
 
-        See also:
-        ---------
+        See also
+        --------
         cascade.models.ModelRepo
         """
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
@@ -65,7 +65,8 @@ class ModelLine:
         """
         Creates a model of `model_cls` and loads it using Model's `load` method.
 
-        Returns:
+        Returns
+        -------
             model: Model
                 a loaded model
         """
@@ -75,8 +76,8 @@ class ModelLine:
 
     def __len__(self):
         """
-        Returns:
-        --------
+        Returns
+        -------
         A number of models in line
         """
         return len(self.model_names)
@@ -118,8 +119,8 @@ class ModelRepo:
         """
         All models in repo should be instances of the same class.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         folder:
             Path to a folder where ModelRepo needs to be created or already was created
             if folder does not exist, creates it
@@ -128,8 +129,8 @@ class ModelRepo:
         meta_prefix:
             a dict that is used to update resulting meta before saving
 
-        See also:
-        ---------
+        See also
+        --------
         cascade.models.ModelLine
         """
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
@@ -160,8 +161,8 @@ class ModelRepo:
 
     def __getitem__(self, key) -> ModelLine:
         """
-        Returns:
-        --------
+        Returns
+        -------
         line: ModelLine
             new line if no line with this name exist OR existing line of the name passed in `key`
         """
@@ -172,6 +173,9 @@ class ModelRepo:
 
     def __len__(self):
         """
-        Return a number of lines
+        Returns
+        -------
+        num: int
+            a number of lines
         """
         return len(self.lines)
