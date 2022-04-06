@@ -3,7 +3,9 @@ ML Engineering framework with the aim to standardize the work with data and mode
 ML development more fast.  
 The general idea is to make abstract `Dataset` and `Model` classes with very basic interfaces 
 (much like pytorch base classes Dataset and Module, but with different meaning) 
-and then use them to build more specific tools.
+and then use them to build more specific tools.  
+This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for 
+workflow, a set of templates for typical tasks.
 
 ## Basic structure
 Cascade is divided into three main modules namely: `data`, `models` and `meta`  
