@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 
-from ..models import ModelRepo
 from . import MetaViewer
 
 
@@ -11,7 +10,7 @@ class MetricViewer:
     uses ModelRepo to extract metrics of all models if any
     constructs a `pd.DataFrame` of metrics internally, which is showed in `__repr__`
     """
-    def __init__(self, repo: ModelRepo):
+    def __init__(self, repo):
         """
         Parameters:
         -----------
