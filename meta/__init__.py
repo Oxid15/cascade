@@ -17,3 +17,4 @@ limitations under the License.
 from .meta_handler import MetaHandler
 from .meta_viewer import MetaViewer
 from .metric_viewer import MetricViewer
+from .validator import AggregateValidator, PredicateValidator
