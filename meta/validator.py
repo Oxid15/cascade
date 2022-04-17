@@ -51,7 +51,3 @@ class PredicateValidator(Validator):
             raise DataValidationException(f'Items {bad_items} are not valid')
         else:
             print('OK!')
-
-
-# class MetaValidator(Validator):
-#     pass
