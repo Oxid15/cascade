@@ -45,6 +45,21 @@ class TestTimeSeriesDataset(TestCase):
         data = np.array([1, 2, 3])
         ts = TimeSeriesDataset(time, data)
 
+    def test_unsorted_time(self):
+        # Unsorted datetime
+        time = [datetime(2000, 1, 2),
+                datetime(2000, 1, 1),
+                datetime(2000, 1, 3)]
+        data = np.array([2, 1, 3])
+        ts = TimeSeriesDataset(time, data)
+
+        time, data = ts.get_data()
+
+        self.assertTrue(np.all(data == np.array([1, 2, 3])))
+        self.assertTrue(np.all(time == np.array([datetime(2000, 1, 1),
+                                                 datetime(2000, 1, 2),
+                                                 datetime(2000, 1, 3)])))
+
     def test_timestamp(self):
         time = [d for d in pd.date_range(datetime(2000, 1, 1), datetime(2001, 1, 1), freq='1M')]
         data = [i for i in range(len(time))]

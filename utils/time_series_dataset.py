@@ -32,6 +32,12 @@ class TimeSeriesDataset(Dataset):
         assert all([type(t) == datetime for t in time]), \
             'time elements should be of type datetime.datetime'
 
+        # Time can be non-monotonic (don't increase or decrease on every step)
+        # check for monotonicity seems to be more expensive than sort
+        index = np.argsort(time)
+        time = time[index]
+        data = data[index]
+
         self.time = time
         self.num_idx = [i for i in range(len(data))]
         index = pd.MultiIndex.from_frame(pd.DataFrame(self.time, self.num_idx))
