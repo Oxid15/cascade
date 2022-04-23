@@ -30,7 +30,9 @@ from cascade.tests.dummy_model import DummyModel
 
 class TestMetricViewer(TestCase):
     def test(self):
-        repo = ModelRepo('test_mtv', DummyModel)
+        repo = ModelRepo('test_mtv')
+        repo.add_line(DummyModel, '0')
+
         m = DummyModel()
         m.evaluate()
         repo['0'].save(m)
