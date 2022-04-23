@@ -28,8 +28,11 @@ class Model:
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
         All additional arguments should have defaults.
+        Successors should pass all of their parameters to superclass for it to be able to
+        log them in meta
         """
         self.metrics = {}
+        self.params = kwargs
         self.created_at = datetime.now()
 
     def fit(self, *args, **kwargs):
@@ -68,6 +71,7 @@ class Model:
     def get_meta(self) -> List[Dict]:
         meta = [{
             'created_at': self.created_at,
-            'metrics': self.metrics
+            'metrics': self.metrics,
+            'params': self.params
         }]
         return meta
