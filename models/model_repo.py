@@ -91,11 +91,12 @@ class ModelLine:
         assign extension and save its state.
         """
         idx = len(self.model_names)
-        name = os.path.join(self.root, f'{idx:0>5d}')
-        self.model_names.append(name)
-        model.save(name)
+        only_name = f'{idx:0>5d}'
+        full_path = os.path.join(self.root, only_name)
+        self.model_names.append(only_name)
+        model.save(full_path)
 
-        exact_filename = glob.glob(f'{name}*')[0]
+        exact_filename = glob.glob(f'{full_path}*')[0]
         with open(exact_filename, 'rb') as f:
             md5sum = md5(f.read()).hexdigest()
 
@@ -115,7 +116,7 @@ class ModelRepo:
     An interface to manage experiments with several lines of models. When created, initializes an empty folder
     constituting a repository of model lines.
     """
-    def __init__(self, folder, model_cls=Model, meta_prefix=None):
+    def __init__(self, folder, meta_prefix=None):
         """
         All models in repo should be instances of the same class.
 
@@ -124,8 +125,6 @@ class ModelRepo:
         folder:
             Path to a folder where ModelRepo needs to be created or already was created
             if folder does not exist, creates it
-        model_cls:
-            A class of models in repo. ModelRepo uses this class to reconstruct a model
         meta_prefix:
             a dict that is used to update resulting meta before saving
 
@@ -136,11 +135,9 @@ class ModelRepo:
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
 
         self.root = folder
-        self.model_cls = model_cls
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
             self.lines = {name: ModelLine(os.path.join(self.root, name),
-                                          model_cls=model_cls,
                                           meta_prefix=self.meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
             print(f'Found {len(self.lines)}' + ' lines')
@@ -148,14 +145,24 @@ class ModelRepo:
             os.mkdir(self.root)
             self.lines = dict()
 
-    def _new_line(self, name=None):
+    def add_line(self, model_cls, name=None):
+        """
+        Adds new line to repo if doesn't exist and returns it
+
+        Parameters
+        ----------
+        model_cls:
+            A class of models in line. ModelLine uses this class to reconstruct a model
+        name:
+            Line's name - optional, if None assigns line_index:05d e.g. 00000, 00001, ...
+       """
         if name is None:
             name = f'{len(self.lines):05d}'
         else:
             name = str(name)
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, self.model_cls, meta_prefix=self.meta_prefix)
+        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)
         self.lines[name] = line
         return line
 
@@ -164,12 +171,9 @@ class ModelRepo:
         Returns
         -------
         line: ModelLine
-            new line if no line with this name exist OR existing line of the name passed in `key`
+           existing line of the name passed in `key`
         """
-        if key in self.lines:
-            return self.lines[key]
-        else:
-            return self._new_line(key)
+        return self.lines[key]
 
     def __len__(self):
         """

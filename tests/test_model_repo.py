@@ -30,10 +30,9 @@ class TestModelRepo(TestCase):
     def test_repo(self):
         import shutil
 
-        repo = ModelRepo('./test_models', DummyModel)
-
-        line1 = repo['dummy_1']
-        line2 = repo['00001']
+        repo = ModelRepo('./test_models')
+        repo.add_line(DummyModel, 'dummy_1')
+        repo.add_line(DummyModel, '00001')
 
         self.assertTrue(os.path.exists('./test_models/dummy_1'))
         self.assertTrue(os.path.exists('./test_models/00001'))
