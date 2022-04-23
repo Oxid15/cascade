@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+import shutil
 import unittest
 from unittest import TestCase
 
@@ -23,22 +24,25 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.models import ModelRepo
+from cascade.meta import MetricViewer
 from cascade.tests.dummy_model import DummyModel
 
 
-class TestModelRepo(TestCase):
-    def test_repo(self):
-        import shutil
+class TestMetricViewer(TestCase):
+    def test(self):
+        repo = ModelRepo('test_mtv')
+        repo.add_line(DummyModel, '0')
 
-        repo = ModelRepo('./test_models')
-        repo.add_line(DummyModel, 'dummy_1')
-        repo.add_line(DummyModel, '00001')
+        m = DummyModel()
+        m.evaluate()
+        repo['0'].save(m)
 
-        self.assertTrue(os.path.exists('./test_models/dummy_1'))
-        self.assertTrue(os.path.exists('./test_models/00001'))
+        mtv = MetricViewer(repo)
+        t = mtv.table
 
-        shutil.rmtree('./test_models')
-        self.assertEqual(2, len(repo))
+        shutil.rmtree('test_mtv')
+
+        self.assertTrue(all(t.columns == ['line', 'num', 'acc']))
 
 
 if __name__ == '__main__':

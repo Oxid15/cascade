@@ -22,23 +22,18 @@ from unittest import TestCase
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.models import ModelRepo
-from cascade.tests.dummy_model import DummyModel
+from cascade.data import SequentialCacher
+from cascade.tests.number_dataset import NumberDataset
 
 
-class TestModelRepo(TestCase):
-    def test_repo(self):
-        import shutil
-
-        repo = ModelRepo('./test_models')
-        repo.add_line(DummyModel, 'dummy_1')
-        repo.add_line(DummyModel, '00001')
-
-        self.assertTrue(os.path.exists('./test_models/dummy_1'))
-        self.assertTrue(os.path.exists('./test_models/00001'))
-
-        shutil.rmtree('./test_models')
-        self.assertEqual(2, len(repo))
+class TestSequentialCacher(TestCase):
+    def test(self):
+        ds = NumberDataset([1, 2, 3])
+        ds = SequentialCacher(ds, 2)
+        res = []
+        for i in range(len(ds)):
+            res.append(ds[i])
+        self.assertEqual(res, [1, 2, 3])
 
 
 if __name__ == '__main__':

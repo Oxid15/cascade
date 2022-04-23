@@ -16,29 +16,31 @@ limitations under the License.
 
 import os
 import sys
+import json
+import shutil
 import unittest
 from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.models import ModelRepo
-from cascade.tests.dummy_model import DummyModel
+from cascade.tests.number_dataset import NumberDataset
+from cascade.meta import MetaValidator, DataValidationException
 
 
-class TestModelRepo(TestCase):
-    def test_repo(self):
-        import shutil
+class TestMetaValidator(TestCase):
+    def pipeline_run(self, arr):
+        ds = NumberDataset(arr)
+        ds = MetaValidator(ds)
 
-        repo = ModelRepo('./test_models')
-        repo.add_line(DummyModel, 'dummy_1')
-        repo.add_line(DummyModel, '00001')
+    def test_true(self):
+        self.pipeline_run([1, 2, 3, 4, 5])
+        self.pipeline_run([1, 2, 3, 4, 5])
 
-        self.assertTrue(os.path.exists('./test_models/dummy_1'))
-        self.assertTrue(os.path.exists('./test_models/00001'))
-
-        shutil.rmtree('./test_models')
-        self.assertEqual(2, len(repo))
+    def test_raise(self):
+        self.pipeline_run([1, 2, 3, 4, 5])
+        with self.assertRaises(DataValidationException):
+            self.pipeline_run([1, 2, 3, 4, 5, 6])
 
 
 if __name__ == '__main__':
