@@ -1,4 +1,4 @@
 opencv-python
 pandas
 scikit-learn
-dask
+dask[dataframe]
