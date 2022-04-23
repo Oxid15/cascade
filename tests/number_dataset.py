@@ -30,8 +30,3 @@ class NumberDataset(Dataset):
 
     def __len__(self):
         return len(self.numbers)
-
-    def get_meta(self):
-        meta = super().get_meta()
-        meta[0]['len'] = len(self)
-        return meta

@@ -44,19 +44,6 @@ class Dataset(Generic[T]):
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
         return [{'name': repr(self)}]
-    
-    def __repr__(self):
-        """
-        Returns:
-        --------
-        string representation of a Dataset. This repr used as a name for get_meta() method
-
-        See also:
-        ---------
-        cascade.data.Dataset.get_meta()
-        """
-        rp = super().__repr__()
-        return rp[1:].split()[0]
 
 
 class Iterator(Generic[T]):
@@ -123,6 +110,10 @@ class Modifier(Dataset):
     def __len__(self) -> int:
         return len(self._dataset)
 
+    def __repr__(self) -> str:
+        rp = super().__repr__()
+        return f'{rp} of size: {len(self)}'
+
     def get_meta(self) -> List[Dict]:
         """
         Overrides base method enabling cascade-like calls to previous datasets.
@@ -130,7 +121,6 @@ class Modifier(Dataset):
         obtained with `get_meta` of the last block.
         """
         self_meta = super().get_meta()
-        self_meta[0]['len'] = len(self)
         self_meta += self._dataset.get_meta()
         return self_meta
 
@@ -151,3 +141,7 @@ class Sampler(Modifier):
 
     def __len__(self) -> int:
         return self._num_samples
+
+    def __repr__(self) -> str:
+        rp = super().__repr__()
+        return f'{rp} num_samples: {self._num_samples}'

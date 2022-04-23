@@ -1,4 +1,3 @@
 tqdm
 numpy
 pandas
-deepdiff
