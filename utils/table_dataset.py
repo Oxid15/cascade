@@ -48,6 +48,9 @@ class TableDataset(Dataset):
             })
         return meta
 
+    def to_csv(self, path, **kwargs):
+        self._table.to_csv(path, **kwargs)
+
 
 class TableFilter(TableDataset):
     def __init__(self, dataset, mask):
