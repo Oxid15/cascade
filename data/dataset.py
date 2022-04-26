@@ -21,11 +21,16 @@ T = TypeVar('T')
 
 class Dataset(Generic[T]):
     """
-    Base class of any module that constitues a data-pipeline.
+    Base class of any module that constitutes a data-pipeline.
     In its basic idea is similar to torch.utils.data.Dataset.
     It does not define `__len__` for similar reasons.
     See `pytorch/torch/utils/data/sampler.py` note on this topic.
     """
+    def __init__(self, meta_prefix=None):
+        if meta_prefix is None:
+            meta_prefix = {}
+        self.meta_prefix = meta_prefix
+
     def __getitem__(self, index) -> T:
         """
         Abstract method - should be defined in every successor
@@ -43,14 +48,16 @@ class Dataset(Generic[T]):
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
-        return [{'name': repr(self)}]
-    
+        meta = {'name': repr(self)}
+        meta.update(self.meta_prefix)
+        return [meta]
+
     def __repr__(self):
         """
         Returns:
         --------
         string representation of a Dataset. This repr used as a name for get_meta() method
-
+        by default gives the name of class from basic repr
         See also:
         ---------
         cascade.data.Dataset.get_meta()
@@ -72,8 +79,9 @@ class Wrapper(Dataset):
     """
     Wraps Dataset around any list-like object.
     """
-    def __init__(self, obj) -> None:
+    def __init__(self, obj, meta_prefix=None) -> None:
         self._data = obj
+        super().__init__(meta_prefix=meta_prefix)
 
     def __getitem__(self, index) -> T:
         return self._data[index]
@@ -93,7 +101,7 @@ class Modifier(Dataset):
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
     """
-    def __init__(self, dataset: Dataset) -> None:
+    def __init__(self, dataset: Dataset, meta_prefix=None) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
 
@@ -104,6 +112,7 @@ class Modifier(Dataset):
         """
         self._dataset = dataset
         self._index = -1
+        super().__init__(meta_prefix=meta_prefix)
 
     def __getitem__(self, index) -> T:
         return self._dataset[index]
@@ -144,9 +153,9 @@ class Sampler(Modifier):
     --------
     cascade.data.CyclicSampler
     """
-    def __init__(self, dataset: Dataset, num_samples: int) -> None:
+    def __init__(self, dataset: Dataset, num_samples: int, meta_prefix=None) -> None:
         assert num_samples > 0
-        super(Sampler, self).__init__(dataset)
+        super().__init__(dataset, meta_prefix=meta_prefix)
         self._num_samples = num_samples
 
     def __len__(self) -> int:

@@ -24,6 +24,7 @@ from cascade.data import Dataset
 class NumberDataset(Dataset):
     def __init__(self, arr):
         self.numbers = arr
+        super().__init__()
 
     def __getitem__(self, index):
         return self.numbers[index]

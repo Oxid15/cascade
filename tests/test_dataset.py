@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-
+import datetime
 import os
 import sys
 import unittest
@@ -33,12 +33,14 @@ class TestDataset(TestCase):
             ds[0]
 
     def test_meta(self):
-        ds = Dataset()
+        now = datetime.datetime.now()
+        ds = Dataset(meta_prefix={'time': now})
         meta = ds.get_meta()
 
         self.assertEqual(type(meta), list)
         self.assertEqual(len(meta), 1)
         self.assertEqual(type(meta[0]), dict)
+        self.assertEqual(meta[0]['time'], now)
         self.assert_('name' in meta[0])
 
 
