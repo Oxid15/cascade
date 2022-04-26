@@ -55,7 +55,6 @@ class ModelLine:
             assert os.path.isdir(folder)
             self.model_names = [name for i, name in enumerate(sorted(os.listdir(self.root)))
                                 if not name.endswith('.json')]
-            print(f'Found {len(self.model_names)}' + ' models')
         else:
             os.mkdir(self.root)
             self.model_names = []
@@ -110,6 +109,9 @@ class ModelLine:
         # TODO: save meta using another naming rule (the problem when model also uses .json)
         self.meta_viewer.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta[0])
 
+    def __repr__(self):
+        return f'ModelLine of {len(self)} models'
+
 
 class ModelRepo:
     """
@@ -140,7 +142,6 @@ class ModelRepo:
             self.lines = {name: ModelLine(os.path.join(self.root, name),
                                           meta_prefix=self.meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
-            print(f'Found {len(self.lines)}' + ' lines')
         else:
             os.mkdir(self.root)
             self.lines = dict()
@@ -183,3 +184,7 @@ class ModelRepo:
             a number of lines
         """
         return len(self.lines)
+
+    def __repr__(self):
+        rp = f'ModelRepo in {self.root} of {len(self)} lines'
+        return '\n'.join([rp] + [repr(line) for line in self.lines])
