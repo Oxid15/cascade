@@ -110,7 +110,7 @@ class ModelLine:
         self.meta_viewer.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta[0])
 
     def __repr__(self):
-        return f'ModelLine of {len(self)} models'
+        return f'ModelLine of {len(self)} models of {self.model_cls}'
 
 
 class ModelRepo:
@@ -187,4 +187,4 @@ class ModelRepo:
 
     def __repr__(self):
         rp = f'ModelRepo in {self.root} of {len(self)} lines'
-        return '\n'.join([rp] + [repr(line) for line in self.lines])
+        return ', '.join([rp] + [repr(line) for line in self.lines])
