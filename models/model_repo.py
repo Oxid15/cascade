@@ -18,6 +18,7 @@ import os
 import datetime
 import glob
 from hashlib import md5
+import shutil
 
 from .model import Model
 from ..meta import MetaViewer
@@ -55,7 +56,6 @@ class ModelLine:
             assert os.path.isdir(folder)
             self.model_names = [name for i, name in enumerate(sorted(os.listdir(self.root)))
                                 if not name.endswith('.json')]
-            print(f'Found {len(self.model_names)}' + ' models')
         else:
             os.mkdir(self.root)
             self.model_names = []
@@ -110,13 +110,16 @@ class ModelLine:
         # TODO: save meta using another naming rule (the problem when model also uses .json)
         self.meta_viewer.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta[0])
 
+    def __repr__(self):
+        return f'ModelLine of {len(self)} models of {self.model_cls}'
+
 
 class ModelRepo:
     """
     An interface to manage experiments with several lines of models. When created, initializes an empty folder
     constituting a repository of model lines.
     """
-    def __init__(self, folder, meta_prefix=None):
+    def __init__(self, folder, meta_prefix=None, overwrite=False):
         """
         All models in repo should be instances of the same class.
 
@@ -127,7 +130,9 @@ class ModelRepo:
             if folder does not exist, creates it
         meta_prefix:
             a dict that is used to update resulting meta before saving
-
+        overwrite:
+            if True will remove folder that is passed in first argument and start a new repo
+            in that place
         See also
         --------
         cascade.models.ModelLine
@@ -135,12 +140,15 @@ class ModelRepo:
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
 
         self.root = folder
+
+        if overwrite and os.path.exists(self.root):
+            shutil.rmtree(folder)
+
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
             self.lines = {name: ModelLine(os.path.join(self.root, name),
                                           meta_prefix=self.meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
-            print(f'Found {len(self.lines)}' + ' lines')
         else:
             os.mkdir(self.root)
             self.lines = dict()
@@ -183,3 +191,7 @@ class ModelRepo:
             a number of lines
         """
         return len(self.lines)
+
+    def __repr__(self):
+        rp = f'ModelRepo in {self.root} of {len(self)} lines'
+        return ', '.join([rp] + [repr(line) for line in self.lines])

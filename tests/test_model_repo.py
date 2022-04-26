@@ -40,6 +40,21 @@ class TestModelRepo(TestCase):
         shutil.rmtree('./test_models')
         self.assertEqual(2, len(repo))
 
+    def test_overwrite(self):
+        import shutil
+
+        # If no overwrite repo will have 4 models
+        repo = ModelRepo('./test_overwrite', overwrite=True)
+        repo.add_line(DummyModel)
+        repo.add_line(DummyModel)
+
+        repo = ModelRepo('./test_overwrite', overwrite=True)
+        repo.add_line(DummyModel)
+        repo.add_line(DummyModel)
+
+        shutil.rmtree('./test_overwrite')
+        self.assertEqual(2, len(repo))
+
 
 if __name__ == '__main__':
     unittest.main()
