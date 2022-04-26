@@ -23,7 +23,7 @@ class Model:
     Base class for any model.
     Used to provide unified interface to any model, store metadata including metrics.
     """
-    def __init__(self,  **kwargs) -> None:
+    def __init__(self, meta_prefix=None, **kwargs) -> None:
         """
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
@@ -31,6 +31,9 @@ class Model:
         Successors should pass all of their parameters to superclass for it to be able to
         log them in meta
         """
+        if meta_prefix is None:
+            meta_prefix = {}
+        self.meta_prefix = meta_prefix
         self.metrics = {}
         self.params = kwargs
         self.created_at = datetime.now()
@@ -69,9 +72,10 @@ class Model:
         raise NotImplementedError()
 
     def get_meta(self) -> List[Dict]:
-        meta = [{
+        meta = {
             'created_at': self.created_at,
             'metrics': self.metrics,
             'params': self.params
-        }]
-        return meta
+        }
+        meta.update(self.meta_prefix)
+        return [meta]
