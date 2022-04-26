@@ -5,9 +5,12 @@ from . import Validator, MetaHandler, DataValidationException
 
 
 class MetaValidator(Validator):
-    def __init__(self, dataset, root='./'):
+    def __init__(self, dataset, root=None):
         super().__init__(dataset, lambda x: True)
         self.mh = MetaHandler()
+        if root is None:
+            root = './.cascade'
+            os.makedirs(root, exist_ok=True)
         self.root = root
 
         meta = self._dataset.get_meta()
