@@ -30,7 +30,7 @@ class HistoryViewer:
     def __init__(self, repo):
         self.repo = repo
 
-        self.metas = []
+        metas = []
         self.params = []
         for name in self.repo.lines:
             # TODO: validate fields used
@@ -39,19 +39,18 @@ class HistoryViewer:
 
             for i in range(len(view)):
                 meta = {'line': name, 'num': i}
+                # recursively unfold every nested dict to form plain table
                 self._add(view[i], meta)
-                self.metas.append(meta)
+                metas.append(meta)
 
-                if 'params' in view[i]:
-                    params = {
-                        'line': name, 
-                        'num': i, 
-                        'time': np.datetime64(pendulum.parse(view[i]['saved_at'])).astype('long')}
-                    params.update(view[i]['params'])
-                    self.params.append(params)
+                params = {
+                    'line': name,
+                }
+                params.update(view[i]['params'])
+                self.params.append(params)
 
-        self.table = pd.DataFrame(self.metas)
-        self.params = pd.DataFrame(self.params)
+        self.table = pd.DataFrame(metas)
+        self.table = self.table.sort_values('saved_at')
 
     def _add(self, elem, meta):
         for key in elem:
@@ -60,18 +59,30 @@ class HistoryViewer:
             else:
                 self._add(elem[key], meta)
 
+    def _diff(self, p1, params):
+        diff = [DeepDiff(p1, p2) for p2 in params]
+        changed = [len(diff[i]['values_changed']) if len(diff[i]) else 0 for i in range(len(diff))]
+        return changed
+
+    def _specific_argmin(self, arr, self_index):
+        arg_min = 0
+        for i in range(len(arr)):
+            if arr[i] <= arr[arg_min] and i != self_index:
+                arg_min = i
+        return arg_min
+
     def plot(self, metric):
         # TODO: check all used columns in data
         assert metric in self.table
-        table = self.table.sort_values('saved_at')
 
         # turn time into evenly spaced intervals
         time = [i for i in range(len(table))]
         lines = table['line'].unique()
-        line_cols = {line: px.colors.qualitative.G10[i] for i, line in enumerate(lines)}
+        line_cols = {line: px.colors.qualitative.Plotly[i] for i, line in enumerate(lines)}
 
         table['time'] = time
         table['color'] = [line_cols[line] for line in table['line']]
+        table = table.fillna('')
 
         # plot each model against metric
         # with all metadata on hover
@@ -80,30 +91,28 @@ class HistoryViewer:
             table,
             x='time',
             y=metric,
-            color='color',
-            hover_data=[name for name in self.params.columns]
+            hover_data=[name for name in pd.DataFrame(self.params).columns],
+            color='line'
         )
 
         # determine connections between models
         # plot each one with respected color
 
         for line in lines:
-            t = table.loc[table['line'] == line]
-            t_np = self.params[self.params['line'] == line].to_numpy()[:, 2:]
-            mask = ~np.isnan(t_np.astype(np.float32))
+            params = [p for p in self.params if p['line'] == line]
             edges = []
-            for i, params in enumerate(t_np):
+            for i in range(len(params)):
                 if i == 0:
                     edges.append(0)
                     continue
                 else:
-                    d = np.array([hamming(params, t_np[k], w=mask[i] + mask[k]) for k in range(i)])
-                    w = np.array([1 - k / len(d) for k in range(len(d))])
-                    edges.append(np.argmin(d*w))
+                    diff = self._diff(params[i], params[:i])
+                    edges.append(self._specific_argmin(diff, i))
 
             xs = []
             ys = []
             for i, e in enumerate(edges):
+                t = table.loc[table['line'] == line]
                 xs += [t['time'].iloc[i], t['time'].iloc[e], None]
                 ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
