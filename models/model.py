@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from datetime import datetime
+import pendulum
 from typing import List, Dict
 
 
@@ -36,7 +36,7 @@ class Model:
         self.meta_prefix = meta_prefix
         self.metrics = {}
         self.params = kwargs
-        self.created_at = datetime.now()
+        self.created_at = pendulum.now(tz='UTC')
 
     def fit(self, *args, **kwargs):
         """

@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-import datetime
+import pendulum
 import glob
 from hashlib import md5
 import shutil
@@ -105,7 +105,7 @@ class ModelLine:
         meta[0].update(self.meta_prefix)
         meta[0]['name'] = exact_filename
         meta[0]['md5sum'] = md5sum
-        meta[0]['saved_at'] = datetime.datetime.now()
+        meta[0]['saved_at'] = pendulum.now(tz='UTC')
 
         # TODO: save meta using another naming rule (the problem when model also uses .json)
         self.meta_viewer.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta[0])
