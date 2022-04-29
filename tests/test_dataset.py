@@ -41,7 +41,7 @@ class TestDataset(TestCase):
         self.assertEqual(len(meta), 1)
         self.assertEqual(type(meta[0]), dict)
         self.assertEqual(meta[0]['time'], now)
-        self.assert_('name' in meta[0])
+        self.assertTrue('name' in meta[0])
 
 
 class TestIterator(TestCase):

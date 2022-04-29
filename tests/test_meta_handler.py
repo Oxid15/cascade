@@ -36,7 +36,7 @@ class TestMetaHandler(TestCase):
 
         os.remove('test.json')
 
-        self.assert_('name' in obj)
+        self.assertTrue('name' in obj)
         self.assertEqual(obj['name'], 'test')
 
 
@@ -53,7 +53,7 @@ class TestMetaViewer(TestCase):
         shutil.rmtree(root)
 
         self.assertEqual(len(mv), 1)
-        self.assert_('name' in obj)
+        self.assertTrue('name' in obj)
         self.assertEqual(obj['name'], 'test')
 
 
