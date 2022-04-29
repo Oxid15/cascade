@@ -15,13 +15,12 @@ limitations under the License.
 """
 
 import os
+
 import pendulum
 import pandas as pd
-import numpy as np
+from deepdiff import DeepDiff
 from plotly import express as px
 from plotly import graph_objects as go
-from scipy.spatial.distance import hamming 
-
 
 from . import MetaViewer
 
@@ -61,7 +60,14 @@ class HistoryViewer:
 
     def _diff(self, p1, params):
         diff = [DeepDiff(p1, p2) for p2 in params]
-        changed = [len(diff[i]['values_changed']) if len(diff[i]) else 0 for i in range(len(diff))]
+        changed = [0 for _ in range(len(params))]
+        for i in range(len(changed)):
+            if 'values_changed' in diff[i]:
+                changed[i] += len(diff[i]['values_changed'])
+            if 'dictionary_item_added' in diff[i]:
+                changed[i] += len(diff[i]['dictionary_item_added'])
+            if 'dictionary_item_removed' in diff[i]:
+                changed[i] += len(diff[i]['dictionary_item_removed'])
         return changed
 
     def _specific_argmin(self, arr, self_index):
