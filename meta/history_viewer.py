@@ -82,13 +82,13 @@ class HistoryViewer:
         assert metric in self.table
 
         # turn time into evenly spaced intervals
-        time = [i for i in range(len(table))]
-        lines = table['line'].unique()
+        time = [i for i in range(len(self.table))]
+        lines = self.table['line'].unique()
         line_cols = {line: px.colors.qualitative.Plotly[i] for i, line in enumerate(lines)}
 
-        table['time'] = time
-        table['color'] = [line_cols[line] for line in table['line']]
-        table = table.fillna('')
+        self.table['time'] = time
+        self.table['color'] = [line_cols[line] for line in self.table['line']]
+        table = self.table.fillna('')
 
         # plot each model against metric
         # with all metadata on hover
@@ -126,7 +126,7 @@ class HistoryViewer:
                 x=xs, 
                 y=ys, 
                 mode='lines', 
-                marker={'color': t['color'].iloc[0]},
+                marker={'color': table['color'].iloc[0]},
                 name=line,
                 hoverinfo='none'
             ))
@@ -138,8 +138,9 @@ class HistoryViewer:
 
         fig.update_layout(
             hovermode='x',
-            xaxis = dict(tickmode = 'array',
-                tickvals = [i for i in range(len(time))],
-                ticktext = time_text
+            xaxis=dict(
+                tickmode='array',
+                tickvals=[i for i in range(len(time))],
+                ticktext=time_text
             ))
         fig.show()
