@@ -29,8 +29,8 @@ from cascade.meta import HistoryViewer
 
 
 class TestHistoryViewer(TestCase):
-    def simple_test(self):
-        repo = ModelRepo('./test_history_viewer')
+    def test_run(self):
+        repo = ModelRepo('./test_hv')
 
         line0 = repo.add_line('0', DummyModel)
 
@@ -41,7 +41,23 @@ class TestHistoryViewer(TestCase):
 
         hv = HistoryViewer(repo)
         hv.plot('acc')
-        shutil.rmtree('./test_history_viewer')
+        shutil.rmtree('./test_hv')
+
+    def test_no_metric(self):
+        repo = ModelRepo('./test_hv_no_metric')
+
+        line0 = repo.add_line('0', DummyModel)
+
+        model = DummyModel()
+        # model.evaluate()
+
+        line0.save(model)
+
+        hv = HistoryViewer(repo)
+        with self.assertRaises(AssertionError):
+            hv.plot('acc')
+
+        shutil.rmtree('./test_hv_no_metric')
 
 
 if __name__ == '__main__':
