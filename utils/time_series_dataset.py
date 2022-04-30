@@ -104,3 +104,35 @@ class TimeSeriesDataset(Dataset):
 
     def __len__(self):
         return len(self.num_idx)
+
+
+class Average(TimeSeriesDataset, Modifier):
+    def __init__(self, dataset: TimeSeriesDataset, unit='years', amount=1, **kwargs):
+        time, data = dataset.get_data()
+        reg_time = [d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)]
+        reg_data = self._avg(data, time, reg_time)
+        assert len(reg_data) > 1, 'Please, provide unit that would get more than one period'
+        super().__init__(dataset, time=reg_time, data=reg_data, **kwargs)
+
+    def _avg(self, arr, arr_dates, dates):
+        new_p = np.zeros(len(dates))
+        for i in range(len(dates) - 1):
+            data = arr[(arr_dates >= dates[i]) & (arr_dates < dates[i + 1])]
+            mean = np.nanmean(data)
+            new_p[i] = mean
+        if len(new_p) > 1:
+            new_p[i + 1] = arr[(arr_dates >= dates[i + 1])].mean()  # last one
+        return new_p
+
+
+class Interpolate(TimeSeriesDataset, Modifier):
+    def __init__(self, dataset, method='linear', limit_direction='both', **kwargs):
+        t = dataset.table
+        t.index = pd.Index(dataset.time)
+        t = t[0].interpolate(method=method, limit_direction=limit_direction)
+        super().__init__(dataset, time=dataset.time, data=t.to_numpy(), **kwargs)
+
+
+class Align(TimeSeriesDataset, Modifier):
+    def __init__(self, dataset, time, **kwargs):
+        super().__init__(dataset, time=time, data=dataset[time], **kwargs)

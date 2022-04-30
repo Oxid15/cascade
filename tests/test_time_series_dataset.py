@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import sys
 from datetime import datetime
+import pendulum
 import unittest
 from unittest import TestCase
 
@@ -26,7 +27,7 @@ import numpy as np
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils import TimeSeriesDataset
+from cascade.utils import TimeSeriesDataset, Average, Interpolate, Align
 from cascade.tests.number_dataset import NumberDataset
 
 
@@ -176,6 +177,45 @@ class TestTimeSeriesDataset(TestCase):
         for i in range(len(sl)):
             items.append(sl[i])
         self.assertEqual(items, [2, 3, 5])
+
+
+class TestAverage(TestCase):
+    def test_offset_aware(self):
+        time = np.array([pendulum.datetime(2001, 1, 1),
+                         pendulum.datetime(2001, 1, 2),
+                         pendulum.datetime(2001, 1, 3),
+                         pendulum.datetime(2002, 1, 1),
+                         pendulum.datetime(2002, 1, 2),
+                         pendulum.datetime(2002, 1, 3)])
+        data = np.array([1, 2, 3, 3, 2, 1])
+        ts = TimeSeriesDataset(time=time, data=data)
+        ts = Average(ts)
+
+        self.assertEqual([ts[i] for i in range(len(ts))], [2, 2])
+
+
+class TestInterpolate(TestCase):
+    def test(self):
+        time = np.array([pendulum.datetime(2001, 1, 1),
+                         pendulum.datetime(2001, 1, 2),
+                         pendulum.datetime(2001, 1, 3)])
+        data = np.array([1., np.nan, 3.])
+        ts = TimeSeriesDataset(time=time, data=data)
+        ts = Interpolate(ts)
+
+        self.assertEqual([ts[i] for i in range(len(ts))], [1, 2, 3])
+
+
+class TestAlign(TestCase):
+    def test(self):
+        time = np.array([pendulum.datetime(2001, 1, 1),
+                         pendulum.datetime(2001, 1, 2),
+                         pendulum.datetime(2001, 1, 3)])
+        data = np.array([1., np.nan, 3.])
+        ts = TimeSeriesDataset(time=time, data=data)
+        ts = Align(ts, [pendulum.datetime(2001, 1, 1), pendulum.datetime(2001, 1, 3)])
+
+        self.assertEqual([ts[i] for i in range(len(ts))], [1, 3])
 
 
 if __name__ == '__main__':
