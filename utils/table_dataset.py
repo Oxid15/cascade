@@ -37,7 +37,7 @@ class TableDataset(Dataset):
         return self._table.iloc[index]
 
     def __repr__(self):
-        return f'{super().__repr__()} {repr(self._table)}'
+        return f'{super().__repr__()}\n {repr(self._table)}'
 
     def __len__(self):
         return len(self._table)
