@@ -60,11 +60,11 @@ class TestTimeSeriesDataset(TestCase):
                                                  datetime(2000, 1, 2),
                                                  datetime(2000, 1, 3)])))
 
-    def test_timestamp(self):
-        time = [d for d in pd.date_range(datetime(2000, 1, 1), datetime(2001, 1, 1), freq='1M')]
+    def test_no_datetime(self):
+        time = [i for i in range(10)]
         data = [i for i in range(len(time))]
 
-        # Timestamps are not allowed, only datetimes
+        # Only datetime instances in time
         with self.assertRaises(AssertionError):
             ts = TimeSeriesDataset(time=time, data=data)
 
