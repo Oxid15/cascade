@@ -35,7 +35,7 @@ class TestTimeSeriesDataset(TestCase):
         # Lists of datetime
         time = [d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')]
         data = [i for i in range(len(time))]
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
     def test_create_arrays(self):
         # Arrays of datetime
@@ -43,7 +43,7 @@ class TestTimeSeriesDataset(TestCase):
                          datetime(2000, 1, 2),
                          datetime(2000, 1, 3)])
         data = np.array([1, 2, 3])
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
     def test_unsorted_time(self):
         # Unsorted datetime
@@ -51,7 +51,7 @@ class TestTimeSeriesDataset(TestCase):
                 datetime(2000, 1, 1),
                 datetime(2000, 1, 3)]
         data = np.array([2, 1, 3])
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
         time, data = ts.get_data()
 
@@ -66,7 +66,7 @@ class TestTimeSeriesDataset(TestCase):
 
         # Timestamps are not allowed, only datetimes
         with self.assertRaises(AssertionError):
-            ts = TimeSeriesDataset(time, data)
+            ts = TimeSeriesDataset(time=time, data=data)
 
     def test_length_check(self):
         time = np.array([datetime(2000, 1, 1),
@@ -74,7 +74,7 @@ class TestTimeSeriesDataset(TestCase):
                          datetime(2000, 1, 3)])
         data = np.array([1, 2])
         with self.assertRaises(AssertionError):
-            ts = TimeSeriesDataset(time, data)
+            ts = TimeSeriesDataset(time=time, data=data)
 
     def test_shape_check(self):
         time = np.array([datetime(2000, 1, 1),
@@ -82,14 +82,14 @@ class TestTimeSeriesDataset(TestCase):
                          datetime(2000, 1, 3)])
         data = np.array([[1, 2], [1, 2], [1, 2]])
         with self.assertRaises(AssertionError):
-            ts = TimeSeriesDataset(time, data)
+            ts = TimeSeriesDataset(time=time, data=data)
 
     def test_get_int(self):
         time = np.array([datetime(2001, 1, 1),
                          datetime(2002, 2, 2),
                          datetime(2003, 3, 3)])
         data = np.array([1, 2, 3])
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
         items = []
         for i in range(len(ts)):
@@ -101,7 +101,7 @@ class TestTimeSeriesDataset(TestCase):
                          datetime(2002, 2, 2),
                          datetime(2003, 3, 3)])
         data = np.array([1, 2, 3])
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
         items = []
         for t in [datetime(2001, 1, 1), datetime(2002, 2, 2), datetime(2003, 3, 3)]:
@@ -115,7 +115,7 @@ class TestTimeSeriesDataset(TestCase):
                          datetime(2001, 1, 4),
                          datetime(2001, 1, 5)])
         data = np.array([1, 2, 3, 4, 5])
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
         sl = ts[1:4]
         items = []
@@ -142,7 +142,7 @@ class TestTimeSeriesDataset(TestCase):
                          datetime(2001, 1, 4),
                          datetime(2001, 1, 5)])
         data = np.array([1, 2, 3, 4, 5])
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
         sl = ts[datetime(2001, 1, 2): datetime(2001, 1, 4)]
         items = []
@@ -169,7 +169,7 @@ class TestTimeSeriesDataset(TestCase):
                          datetime(2001, 1, 4),
                          datetime(2001, 1, 5)])
         data = np.array([1, 2, 3, 4, 5])
-        ts = TimeSeriesDataset(time, data)
+        ts = TimeSeriesDataset(time=time, data=data)
 
         sl = ts[[1, 2, 4]]
         items = []
