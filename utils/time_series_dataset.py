@@ -29,7 +29,7 @@ class TimeSeriesDataset(Dataset):
 
         assert len(data) == len(time)
         assert len(data.shape) == 1, f'series must be 1d, got shape {data.shape}'
-        assert all([type(t) == datetime for t in time]), \
+        assert all([isinstance(t, datetime) for t in time]), \
             'time elements should be of type datetime.datetime'
 
         # Time can be non-monotonic (don't increase or decrease on every step)
