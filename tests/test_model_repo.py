@@ -31,8 +31,8 @@ class TestModelRepo(TestCase):
         import shutil
 
         repo = ModelRepo('./test_models')
-        repo.add_line(DummyModel, 'dummy_1')
-        repo.add_line(DummyModel, '00001')
+        repo.add_line('dummy_1', DummyModel)
+        repo.add_line('00001', DummyModel)
 
         self.assertTrue(os.path.exists('./test_models/dummy_1'))
         self.assertTrue(os.path.exists('./test_models/00001'))
@@ -45,15 +45,20 @@ class TestModelRepo(TestCase):
 
         # If no overwrite repo will have 4 models
         repo = ModelRepo('./test_overwrite', overwrite=True)
-        repo.add_line(DummyModel)
-        repo.add_line(DummyModel)
+        repo.add_line('vgg16', DummyModel)
+        repo.add_line('resnet', DummyModel)
 
         repo = ModelRepo('./test_overwrite', overwrite=True)
-        repo.add_line(DummyModel)
-        repo.add_line(DummyModel)
+        repo.add_line('densenet', DummyModel)
+        repo.add_line('efficientnet', DummyModel)
 
         shutil.rmtree('./test_overwrite')
         self.assertEqual(2, len(repo))
+
+    def test_add_line(self):
+        repo = ModelRepo('./test_overwrite', overwrite=True)
+        with self.assertRaises(AssertionError):
+            repo.add_line(DummyModel, 'vgg16')
 
 
 if __name__ == '__main__':

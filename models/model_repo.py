@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-import datetime
+import pendulum
 import glob
 from hashlib import md5
 import shutil
@@ -105,7 +105,7 @@ class ModelLine:
         meta[0].update(self.meta_prefix)
         meta[0]['name'] = exact_filename
         meta[0]['md5sum'] = md5sum
-        meta[0]['saved_at'] = datetime.datetime.now()
+        meta[0]['saved_at'] = pendulum.now(tz='UTC')
 
         # TODO: save meta using another naming rule (the problem when model also uses .json)
         self.meta_viewer.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta[0])
@@ -153,7 +153,7 @@ class ModelRepo:
             os.mkdir(self.root)
             self.lines = dict()
 
-    def add_line(self, model_cls, name=None):
+    def add_line(self, name, model_cls):
         """
         Adds new line to repo if doesn't exist and returns it
 
@@ -162,12 +162,9 @@ class ModelRepo:
         model_cls:
             A class of models in line. ModelLine uses this class to reconstruct a model
         name:
-            Line's name - optional, if None assigns line_index:05d e.g. 00000, 00001, ...
+            Line's name
        """
-        if name is None:
-            name = f'{len(self.lines):05d}'
-        else:
-            name = str(name)
+        assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
 
         folder = os.path.join(self.root, name)
         line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)

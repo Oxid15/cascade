@@ -19,3 +19,4 @@ from .meta_viewer import MetaViewer
 from .metric_viewer import MetricViewer
 from .validator import DataValidationException, Validator, AggregateValidator, PredicateValidator
 from .meta_validator import MetaValidator
+from .history_viewer import HistoryViewer

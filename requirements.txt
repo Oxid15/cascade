@@ -2,3 +2,5 @@ tqdm
 numpy
 pandas
 deepdiff
+pendulum
+plotly
