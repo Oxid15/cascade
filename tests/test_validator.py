@@ -34,6 +34,7 @@ class TestValidator(TestCase):
         ds = Validator(ds, lambda x: True)
         self.assertEqual([1, 2, 3, 4, 5], [item for item in ds])
 
+
 class TestAggregateValidator(TestCase):
     def test_true(self):
         ds = NumberDataset([1, 2, 3, 4, 5])
@@ -54,6 +55,7 @@ class TestPredicateValidator(TestCase):
         ds = NumberDataset([1, 2, 3, 4, 5])
         with self.assertRaises(DataValidationException):
             ds = PredicateValidator(ds, lambda x: x > 3)
+
 
 if __name__ == '__main__':
     unittest.main()
