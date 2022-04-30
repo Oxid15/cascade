@@ -26,7 +26,7 @@ class Dataset(Generic[T]):
     It does not define `__len__` for similar reasons.
     See `pytorch/torch/utils/data/sampler.py` note on this topic.
     """
-    def __init__(self, meta_prefix=None):
+    def __init__(self, *args, meta_prefix=None, **kwargs):
         if meta_prefix is None:
             meta_prefix = {}
         self.meta_prefix = meta_prefix

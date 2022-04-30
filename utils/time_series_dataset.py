@@ -15,17 +15,22 @@ limitations under the License.
 """
 
 from typing import Iterable
+import pendulum
 from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from ..data import Dataset, T
+from ..data import Dataset, Modifier
 
 
 class TimeSeriesDataset(Dataset):
-    def __init__(self, time, data):
-        data = np.asarray(data)
-        time = np.asarray(time)
+    def __init__(self, *args, time=None, data=None, **kwargs):
+        if time is not None and data is not None:
+            data = np.asarray(data)
+            time = np.asarray(time)
+        else:
+            data = np.array([])
+            time = np.array([])
 
         assert len(data) == len(time)
         assert len(data.shape) == 1, f'series must be 1d, got shape {data.shape}'
@@ -42,6 +47,7 @@ class TimeSeriesDataset(Dataset):
         self.num_idx = [i for i in range(len(data))]
         index = pd.MultiIndex.from_frame(pd.DataFrame(self.time, self.num_idx))
         self.table = pd.DataFrame(data, index=index)
+        super().__init__(*args, **kwargs)
 
     def to_numpy(self):
         return self.table.to_numpy().T[0]
@@ -66,7 +72,7 @@ class TimeSeriesDataset(Dataset):
             time = self.time[index]
             data = self.table.iloc[index].to_numpy().T[0]
 
-        return TimeSeriesDataset(time, data)
+        return TimeSeriesDataset(time=time, data=data)
 
     def _get_where(self, index):
         if isinstance(index[0], slice):
@@ -80,7 +86,7 @@ class TimeSeriesDataset(Dataset):
         new_data = np.zeros(len(index))
         for k, i in enumerate(index):
             new_data[k] = self[i]
-        return TimeSeriesDataset(new_time, new_data)
+        return TimeSeriesDataset(time=new_time, data=new_data)
 
     def __getitem__(self, index):
         if isinstance(index, slice):
