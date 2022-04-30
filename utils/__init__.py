@@ -20,4 +20,4 @@ from .table_dataset import TableDataset, TableFilter, CSVDataset, PartedTableLoa
 from .text_classification_dataset import TextClassificationDataset
 from .oversampler import OverSampler
 from .undersampler import UnderSampler
-from .time_series_dataset import TimeSeriesDataset
+from .time_series_dataset import TimeSeriesDataset, Average, Interpolate, Align

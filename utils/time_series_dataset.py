@@ -15,17 +15,22 @@ limitations under the License.
 """
 
 from typing import Iterable
+import pendulum
 from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from ..data import Dataset, T
+from ..data import Dataset, Modifier
 
 
 class TimeSeriesDataset(Dataset):
-    def __init__(self, time, data):
-        data = np.asarray(data)
-        time = np.asarray(time)
+    def __init__(self, *args, time=None, data=None, **kwargs):
+        if time is not None and data is not None:
+            data = np.asarray(data)
+            time = np.asarray(time)
+        else:
+            data = np.array([])
+            time = np.array([])
 
         assert len(data) == len(time)
         assert len(data.shape) == 1, f'series must be 1d, got shape {data.shape}'
@@ -42,6 +47,7 @@ class TimeSeriesDataset(Dataset):
         self.num_idx = [i for i in range(len(data))]
         index = pd.MultiIndex.from_frame(pd.DataFrame(self.time, self.num_idx))
         self.table = pd.DataFrame(data, index=index)
+        super().__init__(*args, **kwargs)
 
     def to_numpy(self):
         return self.table.to_numpy().T[0]
@@ -66,7 +72,7 @@ class TimeSeriesDataset(Dataset):
             time = self.time[index]
             data = self.table.iloc[index].to_numpy().T[0]
 
-        return TimeSeriesDataset(time, data)
+        return TimeSeriesDataset(time=time, data=data)
 
     def _get_where(self, index):
         if isinstance(index[0], slice):
@@ -80,7 +86,7 @@ class TimeSeriesDataset(Dataset):
         new_data = np.zeros(len(index))
         for k, i in enumerate(index):
             new_data[k] = self[i]
-        return TimeSeriesDataset(new_time, new_data)
+        return TimeSeriesDataset(time=new_time, data=new_data)
 
     def __getitem__(self, index):
         if isinstance(index, slice):
@@ -98,3 +104,35 @@ class TimeSeriesDataset(Dataset):
 
     def __len__(self):
         return len(self.num_idx)
+
+
+class Average(TimeSeriesDataset, Modifier):
+    def __init__(self, dataset: TimeSeriesDataset, unit='years', amount=1, **kwargs):
+        time, data = dataset.get_data()
+        reg_time = [d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)]
+        reg_data = self._avg(data, time, reg_time)
+        assert len(reg_data) > 1, 'Please, provide unit that would get more than one period'
+        super().__init__(dataset, time=reg_time, data=reg_data, **kwargs)
+
+    def _avg(self, arr, arr_dates, dates):
+        new_p = np.zeros(len(dates))
+        for i in range(len(dates) - 1):
+            data = arr[(arr_dates >= dates[i]) & (arr_dates < dates[i + 1])]
+            mean = np.nanmean(data)
+            new_p[i] = mean
+        if len(new_p) > 1:
+            new_p[i + 1] = arr[(arr_dates >= dates[i + 1])].mean()  # last one
+        return new_p
+
+
+class Interpolate(TimeSeriesDataset, Modifier):
+    def __init__(self, dataset, method='linear', limit_direction='both', **kwargs):
+        t = dataset.table
+        t.index = pd.Index(dataset.time)
+        t = t[0].interpolate(method=method, limit_direction=limit_direction)
+        super().__init__(dataset, time=dataset.time, data=t.to_numpy(), **kwargs)
+
+
+class Align(TimeSeriesDataset, Modifier):
+    def __init__(self, dataset, time, **kwargs):
+        super().__init__(dataset, time=time, data=dataset[time], **kwargs)
