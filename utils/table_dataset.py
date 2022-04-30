@@ -18,15 +18,18 @@ from typing import List, Dict
 import pandas as pd
 from dask import dataframe as dd
 
-from ..data import Dataset, Iterator, SequentialCacher
+from ..data import Dataset, Modifier, Iterator, SequentialCacher
 
 
 class TableDataset(Dataset):
-    def __init__(self, t):
+    def __init__(self, *args, t=None, **kwargs):
+        super().__init__(*args, **kwargs)
         if isinstance(t, pd.DataFrame):
             self._table = t
         elif isinstance(t, TableDataset):
             self._table = t._table
+        elif t is None:
+            self._table = pd.Dataframe()
         else:
             raise TypeError('Input table is not a pandas.DataFrame nor TableDataset')
 
@@ -52,9 +55,9 @@ class TableDataset(Dataset):
         self._table.to_csv(path, **kwargs)
 
 
-class TableFilter(TableDataset):
-    def __init__(self, dataset, mask):
-        super().__init__(dataset)
+class TableFilter(TableDataset, Modifier):
+    def __init__(self, dataset, mask, **kwargs):
+        super().__init__(dataset, t=dataset._table, **kwargs)
         init_len = len(dataset)
 
         self._table = self._table[mask]
@@ -64,11 +67,12 @@ class TableFilter(TableDataset):
 class CSVDataset(TableDataset):
     def __init__(self, csv_file_path, **kwargs):
         t = pd.read_csv(csv_file_path, **kwargs)
-        super().__init__(t)
+        super().__init__(t=t, **kwargs)
 
 
 class PartedTableLoader(Dataset):
     def __init__(self, csv_file_path, **kwargs):
+        super().__init__(**kwargs)
         self._table = dd.read_csv(csv_file_path, **kwargs)
 
     def __getitem__(self, index):
