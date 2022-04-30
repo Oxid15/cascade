@@ -32,7 +32,6 @@ class HistoryViewer:
         metas = []
         self.params = []
         for name in self.repo.lines:
-            # TODO: validate fields used
             viewer_root = os.path.join(self.repo.root, name)
             view = MetaViewer(viewer_root)
 
@@ -45,11 +44,13 @@ class HistoryViewer:
                 params = {
                     'line': name,
                 }
-                params.update(view[i]['params'])
+                if 'params' in view[i]:
+                    params.update(view[i]['params'])
                 self.params.append(params)
 
         self.table = pd.DataFrame(metas)
-        self.table = self.table.sort_values('saved_at')
+        if 'saved_at' in self.table:
+            self.table = self.table.sort_values('saved_at')
 
     def _add(self, elem, meta):
         for key in elem:
@@ -78,7 +79,6 @@ class HistoryViewer:
         return arg_min
 
     def plot(self, metric):
-        # TODO: check all used columns in data
         assert metric in self.table
 
         # turn time into evenly spaced intervals
@@ -117,8 +117,8 @@ class HistoryViewer:
 
             xs = []
             ys = []
-            for i, e in enumerate(edges):
-                t = table.loc[table['line'] == line]
+            t = table.loc[table['line'] == line]
+            for i, e in enumerate(edges):  
                 xs += [t['time'].iloc[i], t['time'].iloc[e], None]
                 ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
@@ -126,7 +126,7 @@ class HistoryViewer:
                 x=xs, 
                 y=ys, 
                 mode='lines', 
-                marker={'color': table['color'].iloc[0]},
+                marker={'color': t['color'].iloc[0]},
                 name=line,
                 hoverinfo='none'
             ))
