@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+import numpy as np
 import shutil
 import unittest
 from unittest import TestCase
@@ -58,6 +59,45 @@ class TestHistoryViewer(TestCase):
             hv.plot('acc')
 
         shutil.rmtree('./test_hv_no_metric')
+
+    def test_params(self):
+        repo = ModelRepo('./test_hv_params')
+
+        line0 = repo.add_line('0', DummyModel)
+
+        model0 = DummyModel(a=0)
+        model0.evaluate()
+
+        model1 = DummyModel(a=0, b=0)
+        model1.evaluate()
+
+        line0.save(model0)
+        line0.save(model1)
+
+        hv = HistoryViewer(repo)
+        hv.plot('acc')
+
+        shutil.rmtree('./test_hv_params')
+
+    def test_empty_model(self):
+        class EmptyModel(DummyModel):
+            def __init__(self):
+                self.metrics = {'acc': np.random.random()}
+
+        repo = ModelRepo('./test_empty')
+
+        line0 = repo.add_line('0', EmptyModel)
+
+        model0 = EmptyModel()
+        model1 = EmptyModel()
+
+        line0.save(model0)
+        line0.save(model1)
+
+        hv = HistoryViewer(repo)
+        hv.plot('acc')
+
+        shutil.rmtree('./test_empty')
 
 
 if __name__ == '__main__':

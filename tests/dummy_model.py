@@ -23,8 +23,8 @@ from cascade.models import Model
 
 
 class DummyModel(Model):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.model = b'model'
 
     def fit(self, *args, **kwargs):

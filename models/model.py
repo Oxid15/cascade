@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import pendulum
+import warnings
 from typing import List, Dict
+import pendulum
 
 
 class Model:
@@ -72,10 +73,28 @@ class Model:
         raise NotImplementedError()
 
     def get_meta(self) -> List[Dict]:
-        meta = {
-            'created_at': self.created_at,
-            'metrics': self.metrics,
-            'params': self.params
-        }
-        meta.update(self.meta_prefix)
+        # Successors may not call super().__init__
+        # they may not have these default fields
+
+        meta = {}
+
+        all_default_exist = True
+        if hasattr(self, 'created_at'):
+            meta['created_at'] = self.created_at
+            all_default_exist = False
+
+        if hasattr(self, 'metrics'):
+            meta['metrics'] = self.metrics
+            all_default_exist = False
+
+        if hasattr(self, 'params'):
+            meta['params'] = self.params
+            all_default_exist = False
+
+        if hasattr(self, 'meta_prefix'):
+            meta.update(self.meta_prefix)
+            all_default_exist = False
+
+        if not all_default_exist:
+            warnings.warn('Model\'s meta is incomplete, maybe you haven\'t call super().__init__ in subclass?')
         return [meta]
