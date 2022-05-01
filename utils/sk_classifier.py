@@ -14,15 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
+import glob
+from hashlib import md5
 import pickle
 from sklearn.pipeline import Pipeline
 
+from ..meta import MetaHandler
 from ..models import Model
 
 
 class SkClassifier(Model):
-    def __init__(self, name=None, blocks=[]):
-        super().__init__()
+    def __init__(self, name=None, blocks=[], **kwargs):
+        super().__init__(name=name, **kwargs)
         self.name = name
         if len(blocks):
             self.pipeline = self.construct_pipeline(blocks)
@@ -40,8 +44,28 @@ class SkClassifier(Model):
         preds = self.predict(x)
         self.metrics.update({key: metrics_dict[key](preds, y) for key in metrics_dict})
 
-    def load(self, path_w_ext):
+    def _check_models_hash(self, meta, path_w_ext):
         with open(path_w_ext, 'rb') as f:
+            file_hash = md5(f.read()).hexdigest()
+        if file_hash == meta['md5sum']:
+            return
+        else:
+            raise RuntimeError(f'.pkl model hash check failed\n \
+                 it may be that model\'s .pkl file was corrupted\n \
+                 hash from meta: {meta["md5sum"]}\n \
+                 hash from .pkl: {file_hash}')
+
+    def load(self, path):
+        if os.path.splitext(path)[-1] != '.pkl':
+            path += '.pkl'
+        root = os.path.dirname(path)
+        names = glob.glob(os.path.join(f'{root}', 'meta.json'))
+        if len(names):
+            meta = MetaHandler().read(names[0])
+            if 'md5sum' in meta:
+                self._check_models_hash(meta, path)
+
+        with open(path, 'rb') as f:
             self.pipeline = pickle.load(f)
 
     def save(self, path_wo_ext):
@@ -50,7 +74,7 @@ class SkClassifier(Model):
 
     def get_meta(self):
         meta = super().get_meta()
-        meta.update({
+        meta[0].update({
             'name': self.name if self.name is not None else None,
             'pipeline': repr(self.pipeline)
         })
