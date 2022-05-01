@@ -118,14 +118,14 @@ class HistoryViewer:
             xs = []
             ys = []
             t = table.loc[table['line'] == line]
-            for i, e in enumerate(edges):  
+            for i, e in enumerate(edges):
                 xs += [t['time'].iloc[i], t['time'].iloc[e], None]
                 ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
             fig.add_trace(go.Scatter(
-                x=xs, 
-                y=ys, 
-                mode='lines', 
+                x=xs,
+                y=ys,
+                mode='lines',
                 marker={'color': t['color'].iloc[0]},
                 name=line,
                 hoverinfo='none'

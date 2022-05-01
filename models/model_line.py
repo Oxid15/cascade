@@ -18,7 +18,6 @@ import os
 import pendulum
 import glob
 from hashlib import md5
-import shutil
 
 from .model import Model
 from ..meta import MetaViewer
@@ -58,9 +57,9 @@ class ModelLine:
             for root, dirs, files in os.walk(self.root):
                 model_dir = os.path.split(root)[-1]
                 self.model_names \
-                += [os.path.join(model_dir, name) \
-                    for name in files 
-                    if os.path.splitext(name)[0] == 'model']
+                    += [os.path.join(model_dir, name)
+                        for name in files
+                        if os.path.splitext(name)[0] == 'model']
         else:
             os.mkdir(self.root)
         self.meta_viewer = MetaViewer(self.root)
