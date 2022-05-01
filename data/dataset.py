@@ -66,9 +66,13 @@ class Dataset(Generic[T]):
         return rp[1:].split()[0]
 
 
-class Iterator(Generic[T]):
-    def __init__(self, data: Iterable):
+class Iterator(Dataset):
+    def __init__(self, data: Iterable, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._data = data
+
+    def __getitem__(self, item):
+        raise NotImplementedError()
 
     def __iter__(self):
         for item in self._data:
