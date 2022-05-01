@@ -44,17 +44,23 @@ class TestMetaViewer(TestCase):
     def test(self):
         root = 'metas'
         os.mkdir(root)
+        os.mkdir(os.path.join(root, 'model'))
+
         with open(f'{root}/test.json', 'w') as f:
             json.dump({'name': 'test'}, f)
 
+        with open(f'{root}/model/test.json', 'w') as f:
+            json.dump({'name': 'test'}, f)
+
         mv = MetaViewer(root)
-        obj = mv[0]
 
         shutil.rmtree(root)
 
-        self.assertEqual(len(mv), 1)
-        self.assertTrue('name' in obj)
-        self.assertEqual(obj['name'], 'test')
+        self.assertEqual(len(mv), 2)
+        self.assertTrue('name' in mv[0])
+        self.assertTrue('name' in mv[1])
+        self.assertEqual(mv[0]['name'], 'test')
+        self.assertEqual(mv[1]['name'], 'test')
 
 
 if __name__ == '__main__':
