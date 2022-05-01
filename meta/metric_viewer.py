@@ -46,6 +46,9 @@ class MetricViewer:
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
 
+                if 'params' in meta:
+                    metric.update(meta['params'])
+
                 self.metrics.append(metric)
         self.table = pd.DataFrame(self.metrics)
 

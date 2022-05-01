@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from datetime import datetime
+import warnings
 from typing import List, Dict
+import pendulum
 
 
 class Model:
@@ -23,14 +24,20 @@ class Model:
     Base class for any model.
     Used to provide unified interface to any model, store metadata including metrics.
     """
-    def __init__(self,  **kwargs) -> None:
+    def __init__(self, meta_prefix=None, **kwargs) -> None:
         """
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
         All additional arguments should have defaults.
+        Successors should pass all of their parameters to superclass for it to be able to
+        log them in meta
         """
+        if meta_prefix is None:
+            meta_prefix = {}
+        self.meta_prefix = meta_prefix
         self.metrics = {}
-        self.created_at = datetime.now()
+        self.params = kwargs
+        self.created_at = pendulum.now(tz='UTC')
 
     def fit(self, *args, **kwargs):
         """
@@ -66,8 +73,28 @@ class Model:
         raise NotImplementedError()
 
     def get_meta(self) -> List[Dict]:
-        meta = [{
-            'created_at': self.created_at,
-            'metrics': self.metrics
-        }]
-        return meta
+        # Successors may not call super().__init__
+        # they may not have these default fields
+
+        meta = {}
+
+        all_default_exist = True
+        if hasattr(self, 'created_at'):
+            meta['created_at'] = self.created_at
+            all_default_exist = False
+
+        if hasattr(self, 'metrics'):
+            meta['metrics'] = self.metrics
+            all_default_exist = False
+
+        if hasattr(self, 'params'):
+            meta['params'] = self.params
+            all_default_exist = False
+
+        if hasattr(self, 'meta_prefix'):
+            meta.update(self.meta_prefix)
+            all_default_exist = False
+
+        if not all_default_exist:
+            warnings.warn('Model\'s meta is incomplete, maybe you haven\'t call super().__init__ in subclass?')
+        return [meta]
