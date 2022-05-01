@@ -15,4 +15,5 @@ limitations under the License.
 """
 
 from .model import Model
-from .model_repo import ModelLine, ModelRepo
+from .model_repo import ModelRepo
+from .model_line import ModelLine
