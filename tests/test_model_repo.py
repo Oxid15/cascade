@@ -58,7 +58,23 @@ class TestModelRepo(TestCase):
     def test_add_line(self):
         repo = ModelRepo('./test_overwrite', overwrite=True)
         with self.assertRaises(AssertionError):
-            repo.add_line(DummyModel, 'vgg16')
+            repo.add_line(DummyModel, 'vgg16')  # wrong argument order
+
+    def test_reusage(self):
+        repo = ModelRepo('./test_reusage')
+
+        repo.add_line('vgg16', DummyModel)
+
+        model = DummyModel()
+        repo['vgg16'].save(model)
+
+        # some time...
+
+        repo = ModelRepo('./test_reusage')
+        repo.add_line('vgg16', DummyModel)
+
+        shutil.rmtree('./test_reusage')
+        self.assertEqual(len(repo['vgg16']), 1)
 
 
 if __name__ == '__main__':

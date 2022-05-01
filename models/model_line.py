@@ -52,13 +52,17 @@ class ModelLine:
 
         self.model_cls = model_cls
         self.root = folder
+        self.model_names = []
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
-            self.model_names = [name for i, name in enumerate(sorted(os.listdir(self.root)))
-                                if not name.endswith('.json')]
+            for root, dirs, files in os.walk(self.root):
+                model_dir = os.path.split(root)[-1]
+                self.model_names \
+                += [os.path.join(model_dir, name) \
+                    for name in files 
+                    if os.path.splitext(name)[0] == 'model']
         else:
             os.mkdir(self.root)
-            self.model_names = []
         self.meta_viewer = MetaViewer(self.root)
 
     def __getitem__(self, num) -> Model:

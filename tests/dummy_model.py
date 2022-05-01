@@ -36,10 +36,14 @@ class DummyModel(Model):
     def evaluate(self, *args, **kwargs):
         self.metrics.update({'acc': np.random.random()})
 
-    def load(self, path_wo_ext):
-        with open(f'{path_wo_ext}.bin', 'rb') as f:
+    def load(self, path):
+        if os.path.splitext(path)[-1] != '.bin':
+            path += '.bin'
+        with open(path, 'rb') as f:
             self.model = str(f.read())
 
-    def save(self, path_wo_ext):
-        with open(f'{path_wo_ext}.bin', 'wb') as f:
+    def save(self, path):
+        if os.path.splitext(path)[-1] != '.bin':
+            path += '.bin'
+        with open(path, 'wb') as f:
             f.write(b'model')

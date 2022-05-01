@@ -27,16 +27,21 @@ from cascade.models.model_repo import ModelLine
 
 
 class TestModelLine(TestCase):
-    def test_save(self):
+    def test_save_load(self):
         import shutil
 
-        m = DummyModel()
         line = ModelLine('./line', DummyModel)
+
+        m = DummyModel()
+
         line.save(m)
+
+        model = line[0]
 
         shutil.rmtree('./line')  # Cleanup
 
         self.assertEqual(len(line), 1)
+        self.assertTrue(model.model == "b'model'")
 
 
 if __name__ == '__main__':
