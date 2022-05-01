@@ -1,12 +1,9 @@
 """
 Copyright 2022 Ilia Moiseev
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
    http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,23 +13,25 @@ limitations under the License.
 
 import os
 import sys
+import unittest
+from unittest import TestCase
 
-sys.path.append(os.path.abspath('../..'))
-from cascade.data import Dataset
+MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade.data import SequentialCacher
+from cascade.tests.number_dataset import NumberDataset
 
 
-class NumberDataset(Dataset):
-    def __init__(self, arr):
-        self.numbers = arr
-        super().__init__()
+class TestSequentialCacher(TestCase):
+    def test(self):
+        ds = NumberDataset([1, 2, 3])
+        ds = SequentialCacher(ds, 2)
+        res = []
+        for i in range(len(ds)):
+            res.append(ds[i])
+        self.assertEqual(res, [1, 2, 3])
 
-    def __getitem__(self, index):
-        return self.numbers[index]
 
-    def __len__(self):
-        return len(self.numbers)
-
-    def get_meta(self):
-        meta = super().get_meta()
-        meta[0]['len'] = len(self)
-        return meta
+if __name__ == '__main__':
+    unittest.main()

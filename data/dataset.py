@@ -1,12 +1,9 @@
 """
 Copyright 2022 Ilia Moiseev
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
    http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +37,6 @@ class Dataset(Generic[T]):
     def get_meta(self) -> List[Dict]:
         """
         Base method that should be called using super() in every successor.
-
         Returns
         -------
         meta: List[Dict]
@@ -105,7 +101,6 @@ class Modifier(Dataset):
     of Sampler or Modifier.
     This structure enables a workflow, when we have a data pipeline which consists of uniform blocks
     each of them has a reference to the previous one in its `_dataset` field. See get_meta method for example.
-
     Basically Modifier defines an arbitrary transformation on every dataset's item that is applied
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
@@ -113,7 +108,6 @@ class Modifier(Dataset):
     def __init__(self, dataset: Dataset, meta_prefix=None) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
-
         Parameters
         ----------
         dataset: Dataset
@@ -141,10 +135,6 @@ class Modifier(Dataset):
     def __len__(self) -> int:
         return len(self._dataset)
 
-    def __repr__(self) -> str:
-        rp = super().__repr__()
-        return f'{rp} of size: {len(self)}'
-
     def get_meta(self) -> List[Dict]:
         """
         Overrides base method enabling cascade-like calls to previous datasets.
@@ -152,6 +142,7 @@ class Modifier(Dataset):
         obtained with `get_meta` of the last block.
         """
         self_meta = super().get_meta()
+        self_meta[0]['len'] = len(self)
         self_meta += self._dataset.get_meta()
         return self_meta
 
@@ -160,7 +151,6 @@ class Sampler(Modifier):
     """
     Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number of
     items in dataset. It can constitute a batch sampler or random sampler or sample in cycling manner.
-
     See also
     --------
     cascade.data.CyclicSampler
@@ -172,7 +162,3 @@ class Sampler(Modifier):
 
     def __len__(self) -> int:
         return self._num_samples
-
-    def __repr__(self) -> str:
-        rp = super().__repr__()
-        return f'{rp} num_samples: {self._num_samples}'

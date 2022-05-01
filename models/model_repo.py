@@ -1,12 +1,9 @@
 """
 Copyright 2022 Ilia Moiseev
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
    http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +30,6 @@ class ModelRepo:
     def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
         """
         All models in repo should be instances of the same class.
-
         Parameters
         ----------
         folder:
@@ -73,7 +69,6 @@ class ModelRepo:
     def add_line(self, name, model_cls):
         """
         Adds new line to repo if doesn't exist and returns it
-
         Parameters
         ----------
         model_cls:
@@ -84,7 +79,7 @@ class ModelRepo:
         assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, model_cls, meta_prefix=self.meta_prefix)
+        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)
         self.lines[name] = line
         return line
 
@@ -93,12 +88,9 @@ class ModelRepo:
         Returns
         -------
         line: ModelLine
-            new line if no line with this name exist OR existing line of the name passed in `key`
+           existing line of the name passed in `key`
         """
-        if key in self.lines:
-            return self.lines[key]
-        else:
-            return self._new_line(key)
+        return self.lines[key]
 
     def __len__(self):
         """
