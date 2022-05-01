@@ -91,24 +91,26 @@ class ModelLine:
         assign extension and save its state.
         """
         idx = len(self.model_names)
-        only_name = f'{idx:0>5d}'
-        full_path = os.path.join(self.root, only_name)
-        self.model_names.append(only_name)
+        folder_name = f'{idx:0>5d}'
+        full_path = os.path.join(self.root, folder_name, 'model')
+        self.model_names.append(os.path.join(folder_name, 'model'))
+
+        os.makedirs(os.path.join(self.root, folder_name), exist_ok=True)
         model.save(full_path)
 
+        # Find anything that matches /path/model_folder/model*
         exact_filename = glob.glob(f'{full_path}*')[0]
         with open(exact_filename, 'rb') as f:
             md5sum = md5(f.read()).hexdigest()
 
-        meta = model.get_meta()
+        meta = model.get_meta()[0]
 
-        meta[0].update(self.meta_prefix)
-        meta[0]['name'] = exact_filename
-        meta[0]['md5sum'] = md5sum
-        meta[0]['saved_at'] = pendulum.now(tz='UTC')
+        meta.update(self.meta_prefix)
+        meta['name'] = exact_filename
+        meta['md5sum'] = md5sum
+        meta['saved_at'] = pendulum.now(tz='UTC')
 
-        # TODO: save meta using another naming rule (the problem when model also uses .json)
-        self.meta_viewer.write(os.path.join(self.root, f'{idx:0>5d}.json'), meta[0])
+        self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta.json'), meta)
 
     def __repr__(self):
         return f'ModelLine of {len(self)} models of {self.model_cls}'
