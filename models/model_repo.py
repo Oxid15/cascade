@@ -60,7 +60,6 @@ class ModelRepo:
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
             self.lines = {name: ModelLine(os.path.join(self.root, name),
-                                          model_cls=model_cls,
                                           meta_prefix=self.meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
         else:
@@ -85,7 +84,7 @@ class ModelRepo:
         assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, self.model_cls, meta_prefix=self.meta_prefix)
+        line = ModelLine(folder, model_cls, meta_prefix=self.meta_prefix)
         self.lines[name] = line
         return line
 
