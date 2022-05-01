@@ -22,3 +22,4 @@ from .sequential_cacher import SequentialCacher
 from .concatenator import Concatenator
 from .cyclic_sampler import CyclicSampler
 from .pickler import Pickler
+from .folder_dataset import FolderDataset
