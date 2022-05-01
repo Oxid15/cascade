@@ -30,7 +30,7 @@ class ModelRepo:
     An interface to manage experiments with several lines of models. When created, initializes an empty folder
     constituting a repository of model lines.
     """
-    def __init__(self, folder, meta_prefix=None, overwrite=False):
+    def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
         """
         All models in repo should be instances of the same class.
 
@@ -39,9 +39,11 @@ class ModelRepo:
         folder:
             Path to a folder where ModelRepo needs to be created or already was created
             if folder does not exist, creates it
-        meta_prefix:
+        lines: List[Dict]
+            A list with parameters of model lines to add at creation
+        meta_prefix: Dict
             a dict that is used to update resulting meta before saving
-        overwrite:
+        overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
         See also
@@ -63,6 +65,10 @@ class ModelRepo:
         else:
             os.mkdir(self.root)
             self.lines = dict()
+
+        if lines is not None:
+            for line in lines:
+                self.add_line(line['name'], line['cls'])
 
     def add_line(self, name, model_cls):
         """

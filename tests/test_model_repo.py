@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+import shutil
 import unittest
 from unittest import TestCase
 
@@ -74,6 +75,25 @@ class TestModelRepo(TestCase):
         repo.add_line('vgg16', DummyModel)
 
         shutil.rmtree('./test_reusage')
+        self.assertEqual(len(repo['vgg16']), 1)
+
+    def test_reusage_init_alias(self):
+        repo = ModelRepo('./test_reusage_init_alias')
+
+        repo.add_line('vgg16', DummyModel)
+
+        model = DummyModel()
+        repo['vgg16'].save(model)
+
+        # some time...
+
+        repo = ModelRepo('./test_reusage_init_alias',
+                         lines=[dict(
+                             name='vgg16',
+                             cls=DummyModel
+                         )])
+
+        shutil.rmtree('./test_reusage_init_alias')
         self.assertEqual(len(repo['vgg16']), 1)
 
 
