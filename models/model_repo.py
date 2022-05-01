@@ -19,19 +19,37 @@ from .model_line import ModelLine
 
 class ModelRepo:
     """
-    An interface to manage experiments with several lines of models. When created, initializes an empty folder
-    constituting a repository of model lines.
+    An interface to manage experiments with several lines of models.
+    When created, initializes an empty folder constituting a repository of model lines.
+
+    Examples
+    --------
+    ```python
+    >>> from cascade.models import ModelRepo
+    >>> repo = ModelRepo('repo')
+    >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
+    >>> vgg16 = VGG16Model()
+    >>> vgg16.fit()
+    >>> vgg16_line.save(vgg16)
+    ```
+
+    ```python
+    >>> from cascade.models import ModelRepo
+    >>> repo = ModelRepo('repo', lines=[dict(name='vgg16', cls=VGGModel)])
+    >>> vgg16 = VGG16Model()
+    >>> vgg16.fit()
+    >>> repo['vgg16'].save(vgg16)
+    ```
     """
     def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
         """
-        All models in repo should be instances of the same class.
         Parameters
         ----------
         folder:
             Path to a folder where ModelRepo needs to be created or already was created
             if folder does not exist, creates it
         lines: List[Dict]
-            A list with parameters of model lines to add at creation
+            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
         meta_prefix: Dict
             a dict that is used to update resulting meta before saving
         overwrite: bool
@@ -63,7 +81,8 @@ class ModelRepo:
 
     def add_line(self, name, model_cls):
         """
-        Adds new line to repo if doesn't exist and returns it
+        Adds new line to repo if it doesn't exist and returns it
+        If line exists, defines it in repo
         Parameters
         ----------
         model_cls:
@@ -87,7 +106,7 @@ class ModelRepo:
         """
         return self.lines[key]
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         Returns
         -------
@@ -96,6 +115,6 @@ class ModelRepo:
         """
         return len(self.lines)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         rp = f'ModelRepo in {self.root} of {len(self)} lines'
         return ', '.join([rp] + [repr(line) for line in self.lines])

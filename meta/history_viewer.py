@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-
+from typing import List
 import pendulum
 import pandas as pd
 from deepdiff import DeepDiff
@@ -26,7 +26,12 @@ from . import MetaViewer
 
 
 class HistoryViewer:
-    def __init__(self, repo):
+    """
+    The tool which allows user to visualize training history of model versions.
+    Uses plotly to show how metrics of models changed in time and how
+    models with different hyperparameters depend on each other
+    """
+    def __init__(self, repo) -> None:
         self.repo = repo
 
         metas = []
@@ -52,14 +57,14 @@ class HistoryViewer:
         if 'saved_at' in self.table:
             self.table = self.table.sort_values('saved_at')
 
-    def _add(self, elem, meta):
+    def _add(self, elem, meta) -> None:
         for key in elem:
             if type(elem[key]) != dict:
                 meta[key] = elem[key]
             else:
                 self._add(elem[key], meta)
 
-    def _diff(self, p1, params):
+    def _diff(self, p1, params) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
         changed = [0 for _ in range(len(params))]
         for i in range(len(changed)):
@@ -71,14 +76,22 @@ class HistoryViewer:
                 changed[i] += len(diff[i]['dictionary_item_removed'])
         return changed
 
-    def _specific_argmin(self, arr, self_index):
+    def _specific_argmin(self, arr, self_index) -> int:
         arg_min = 0
         for i in range(len(arr)):
             if arr[i] <= arr[arg_min] and i != self_index:
                 arg_min = i
         return arg_min
 
-    def plot(self, metric):
+    def plot(self, metric: str) -> None:
+        """
+        Plots training history of model versions using plotly.
+
+        Parameters
+        ----------
+        metric: str
+            Metric should be present in meta of at least one model in repo
+        """
         assert metric in self.table
 
         # turn time into evenly spaced intervals
