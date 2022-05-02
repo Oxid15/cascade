@@ -33,7 +33,12 @@ release = cascade.__version__
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.extlinks",
+    "sphinx_copybutton",
 ]
 
 napoleon_include_special_with_doc = True
@@ -53,7 +58,7 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'insegel'
+html_theme = 'furo'
 html_logo = "../imgs/100x100_logo.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
