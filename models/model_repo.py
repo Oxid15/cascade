@@ -22,24 +22,22 @@ class ModelRepo:
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
 
-    Examples
-    --------
-    ```python
+    Example
+    -------
     >>> from cascade.models import ModelRepo
     >>> repo = ModelRepo('repo')
     >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
     >>> vgg16_line.save(vgg16)
-    ```
 
-    ```python
+
     >>> from cascade.models import ModelRepo
     >>> repo = ModelRepo('repo', lines=[dict(name='vgg16', cls=VGGModel)])
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
-    ```
+
     """
     def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
         """

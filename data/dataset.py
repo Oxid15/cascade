@@ -37,6 +37,7 @@ class Dataset(Generic[T]):
     def get_meta(self) -> List[Dict]:
         """
         Base method that should be called using super() in every successor.
+
         Returns
         -------
         meta: List[Dict]
@@ -50,12 +51,13 @@ class Dataset(Generic[T]):
 
     def __repr__(self):
         """
-        Returns:
-        --------
+        Returns
+        -------
         string representation of a Dataset. This repr used as a name for get_meta() method
         by default gives the name of class from basic repr
-        See also:
-        ---------
+
+        See also
+        --------
         cascade.data.Dataset.get_meta()
         """
         rp = super().__repr__()
@@ -151,6 +153,7 @@ class Sampler(Modifier):
     """
     Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number of
     items in dataset. It can constitute a batch sampler or random sampler or sample in cycling manner.
+
     See also
     --------
     cascade.data.CyclicSampler
