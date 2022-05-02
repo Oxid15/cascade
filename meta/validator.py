@@ -22,12 +22,24 @@ class DataValidationException(Exception):
 
 
 class Validator(Modifier):
+    """
+    Base class for validators. Defines basic `__init__` structure
+    """
     def __init__(self, dataset: Dataset, func: Callable[[Any], bool]) -> None:
         super().__init__(dataset)
         self.func = func
 
 
 class AggregateValidator(Validator):
+    """
+    This validator accepts an aggregate function that accepts a `Dataset` and return `True` of `False`
+
+    Example
+    -------
+    >>> from cascade.tests.number_dataset import NumberDataset 
+    >>> ds = NumberDataset([1, 2, 3, 4, 5])
+    >>> ds = AggregateValidator(ds, lambda x: len(x) == 5)
+    """
     def __init__(self, dataset: Dataset, func: Callable[[Dataset], bool]) -> None:
         super().__init__(dataset, func)
 
@@ -38,6 +50,15 @@ class AggregateValidator(Validator):
 
 
 class PredicateValidator(Validator):
+    """
+    This validator accepts function that is applied to each item in dataset and return `True` or `False`
+
+    Example
+    -------
+    >>> from cascade.tests.number_dataset import NumberDataset 
+    >>> ds = NumberDataset([1, 2, 3, 4, 5])
+    >>> ds = PredicateValidator(ds, lambda x: x < 6)
+    """
     def __init__(self, dataset: Dataset, func: Callable[[T], bool]) -> None:
         super().__init__(dataset, func)
         bad_items = []
