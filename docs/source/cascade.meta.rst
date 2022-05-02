@@ -1,6 +1,24 @@
 cascade.meta
 ============ 
+.. autoclass:: cascade.meta.HistoryViewer
+   :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.meta.MetaHandler
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.MetaValidator
    :members:
 
 |
@@ -19,6 +37,33 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.MetricViewer
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.Validator
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.AggregateValidator
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.PredicateValidator
    :members:
 
 |
