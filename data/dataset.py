@@ -1,12 +1,9 @@
 """
 Copyright 2022 Ilia Moiseev
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
    http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,11 +18,16 @@ T = TypeVar('T')
 
 class Dataset(Generic[T]):
     """
-    Base class of any module that constitues a data-pipeline.
+    Base class of any module that constitutes a data-pipeline.
     In its basic idea is similar to torch.utils.data.Dataset.
     It does not define `__len__` for similar reasons.
     See `pytorch/torch/utils/data/sampler.py` note on this topic.
     """
+    def __init__(self, *args, meta_prefix=None, **kwargs):
+        if meta_prefix is None:
+            meta_prefix = {}
+        self.meta_prefix = meta_prefix
+
     def __getitem__(self, index) -> T:
         """
         Abstract method - should be defined in every successor
@@ -43,12 +45,32 @@ class Dataset(Generic[T]):
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
-        return [{'name': repr(self)}]
+        meta = {'name': repr(self)}
+        meta.update(self.meta_prefix)
+        return [meta]
+
+    def __repr__(self):
+        """
+        Returns
+        -------
+        string representation of a Dataset. This repr used as a name for get_meta() method
+        by default gives the name of class from basic repr
+
+        See also
+        --------
+        cascade.data.Dataset.get_meta()
+        """
+        rp = super().__repr__()
+        return rp[1:].split()[0]
 
 
-class Iterator(Generic[T]):
-    def __init__(self, data: Iterable):
+class Iterator(Dataset):
+    def __init__(self, data: Iterable, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._data = data
+
+    def __getitem__(self, item):
+        raise NotImplementedError()
 
     def __iter__(self):
         for item in self._data:
@@ -59,14 +81,20 @@ class Wrapper(Dataset):
     """
     Wraps Dataset around any list-like object.
     """
-    def __init__(self, obj) -> None:
+    def __init__(self, obj, meta_prefix=None) -> None:
         self._data = obj
+        super().__init__(meta_prefix=meta_prefix)
 
     def __getitem__(self, index) -> T:
         return self._data[index]
 
     def __len__(self) -> int:
         return len(self._data)
+
+    def get_meta(self):
+        meta = super().get_meta()
+        meta[0]['len'] = len(self)
+        meta[0]['type'] = type(self.obj)
 
 
 class Modifier(Dataset):
@@ -75,15 +103,13 @@ class Modifier(Dataset):
     of Sampler or Modifier.
     This structure enables a workflow, when we have a data pipeline which consists of uniform blocks
     each of them has a reference to the previous one in its `_dataset` field. See get_meta method for example.
-
     Basically Modifier defines an arbitrary transformation on every dataset's item that is applied
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
     """
-    def __init__(self, dataset: Dataset) -> None:
+    def __init__(self, dataset: Dataset, meta_prefix=None) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
-
         Parameters
         ----------
         dataset: Dataset
@@ -91,6 +117,7 @@ class Modifier(Dataset):
         """
         self._dataset = dataset
         self._index = -1
+        super().__init__(meta_prefix=meta_prefix)
 
     def __getitem__(self, index) -> T:
         return self._dataset[index]
@@ -110,10 +137,6 @@ class Modifier(Dataset):
     def __len__(self) -> int:
         return len(self._dataset)
 
-    def __repr__(self) -> str:
-        rp = super().__repr__()
-        return f'{rp} of size: {len(self)}'
-
     def get_meta(self) -> List[Dict]:
         """
         Overrides base method enabling cascade-like calls to previous datasets.
@@ -121,6 +144,7 @@ class Modifier(Dataset):
         obtained with `get_meta` of the last block.
         """
         self_meta = super().get_meta()
+        self_meta[0]['len'] = len(self)
         self_meta += self._dataset.get_meta()
         return self_meta
 
@@ -134,14 +158,10 @@ class Sampler(Modifier):
     --------
     cascade.data.CyclicSampler
     """
-    def __init__(self, dataset: Dataset, num_samples: int) -> None:
+    def __init__(self, dataset: Dataset, num_samples: int, meta_prefix=None) -> None:
         assert num_samples > 0
-        super(Sampler, self).__init__(dataset)
+        super().__init__(dataset, meta_prefix=meta_prefix)
         self._num_samples = num_samples
 
     def __len__(self) -> int:
         return self._num_samples
-
-    def __repr__(self) -> str:
-        rp = super().__repr__()
-        return f'{rp} num_samples: {self._num_samples}'

@@ -26,7 +26,7 @@ class MetricViewer:
     uses ModelRepo to extract metrics of all models if any
     constructs a `pd.DataFrame` of metrics internally, which is showed in `__repr__`
     """
-    def __init__(self, repo):
+    def __init__(self, repo) -> None:
         """
         Parameters
         ----------
@@ -46,8 +46,11 @@ class MetricViewer:
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
 
+                if 'params' in meta:
+                    metric.update(meta['params'])
+
                 self.metrics.append(metric)
         self.table = pd.DataFrame(self.metrics)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return repr(self.table)

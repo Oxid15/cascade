@@ -16,32 +16,33 @@ limitations under the License.
 
 import os
 import sys
+import shutil
 import unittest
 from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.models import ModelRepo
+from cascade.meta import MetricViewer
 from cascade.tests.dummy_model import DummyModel
-from cascade.models.model_repo import ModelLine
 
 
-class TestModelLine(TestCase):
-    def test_save_load(self):
-        import shutil
-
-        line = ModelLine('./line', DummyModel)
+class TestMetricViewer(TestCase):
+    def test(self):
+        repo = ModelRepo('test_mtv')
+        repo.add_line('0', DummyModel)
 
         m = DummyModel()
+        m.evaluate()
+        repo['0'].save(m)
 
-        line.save(m)
+        mtv = MetricViewer(repo)
+        t = mtv.table
 
-        model = line[0]
+        shutil.rmtree('test_mtv')
 
-        shutil.rmtree('./line')  # Cleanup
-
-        self.assertEqual(len(line), 1)
-        self.assertTrue(model.model == "b'model'")
+        self.assertTrue(all(t.columns == ['line', 'num', 'acc']))
 
 
 if __name__ == '__main__':

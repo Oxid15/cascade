@@ -17,31 +17,34 @@ limitations under the License.
 import os
 import sys
 import unittest
+import shutil
 from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.dummy_model import DummyModel
-from cascade.models.model_repo import ModelLine
+from cascade.data import FolderDataset
 
 
-class TestModelLine(TestCase):
-    def test_save_load(self):
-        import shutil
+class TestFolderDataset(TestCase):
+    def test(self):
+        folder = './folder_dataset'
+        os.mkdir(folder)
+        with open('./folder_dataset/0.txt', 'w') as w:
+            w.write('hello')
 
-        line = ModelLine('./line', DummyModel)
+        ds = FolderDataset(folder)
+        meta = ds.get_meta()[0]
 
-        m = DummyModel()
+        shutil.rmtree('./folder_dataset')
 
-        line.save(m)
-
-        model = line[0]
-
-        shutil.rmtree('./line')  # Cleanup
-
-        self.assertEqual(len(line), 1)
-        self.assertTrue(model.model == "b'model'")
+        self.assertEqual(len(ds), 1)
+        self.assertTrue('name' in meta)
+        self.assertTrue('len' in meta)
+        self.assertTrue('paths' in meta)
+        self.assertTrue('md5sums' in meta)
+        self.assertEqual(len(meta['paths']), 1)
+        self.assertEqual(len(meta['md5sums']), 1)
 
 
 if __name__ == '__main__':
