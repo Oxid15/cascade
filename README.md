@@ -35,16 +35,16 @@ The simplest use-case is pipeline building.
 import os
 import sys
 
-import torch
-from torch.utils.data import DataLoader
 import cv2
 
 # Assume cascade resides in the root folder ../cascade
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from cascade.data import Modifier, FolderDataset
 
-
+# Define Dataset - an entity responsible for fetching data from source
 class SpecificImageDataset(FolderDataset):
+    # Since everything is held in FolderDataset and Dataset classes
+    # we need to only define __geiitem__
     def __getitem__(self, index):
         name = self.names[index]
         img = cv2.imread(name)
@@ -52,6 +52,7 @@ class SpecificImageDataset(FolderDataset):
 
 
 class PreprocessModifier(Modifier):
+    # Same with Modifier - only __getitem__
     def __getitem__(self, index):
         img = super().__getitem__(index)
         img = torch.Tensor(img)
@@ -61,10 +62,7 @@ class PreprocessModifier(Modifier):
 ds = SpecificImageDataset('./images')
 ds = PreprocessModifier(ds)
 
-dl = DataLoader(ds)
-
-# Train your model
-        
+# Pass images further to train your model
 ```
 
 ## Contributing
