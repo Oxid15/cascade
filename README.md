@@ -5,9 +5,7 @@
 
 ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible,
 ML development more fast.  
-The general idea is to make abstract `Dataset` and `Model` classes with very basic interfaces 
-(much like pytorch base classes Dataset and Module, but with different meaning) 
-and then use them to build more specific tools.  
+  
 This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for 
 workflow, a set of templates for typical tasks.
 
@@ -27,9 +25,10 @@ pip install -r utils_requirements.txt
 
 ## Usage
 
-Since there's no pip-installable package (yet), you need to update your `sys.path` if you place cascade anywhere.
+Since there's no pip-installable package nor setup tools (yet), you need to update your `sys.path` if you place Cascade anywhere.
   
 The simplest use-case is pipeline building.
+For more details and use-cases proceed to [documentation](#documentation).
 
 ```python
 import os
@@ -37,7 +36,7 @@ import sys
 
 import cv2
 
-# Assume cascade resides in the root folder ../cascade
+# Assume Cascade resides in the root folder ../cascade
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from cascade.data import Modifier, FolderDataset
 
@@ -63,7 +62,48 @@ ds = SpecificImageDataset('./images')
 ds = PreprocessModifier(ds)
 
 # Pass images further to train your model
-```
+``` 
+## Why Cascade
+
+Cascade emerged as an attempt to bring order into messy and fast-paced ML-engineering workflow.  
+As a part of small AI-team I encountered typical problems for those who run a lot of fast experiments on datasets and models with no strict system, which are:
+ * Growing number of different versions of data pipeline
+ * Growing number of different versions of models
+ * Folders with hundreds of models as binary artifacts with no info about what is inside
+ * History of model's metrics is not present
+ * Data pipelines and model trainloops are difficult to reuse
+ * New data coming to the training stage passes without verification 
+
+This project aims to address this kind of issues by:
+ * Making data pipelines modular, traceable and verifiable with little or no additional code
+ * Making models more than black-box binary artifacts
+ * Introducing tools for storing and accessing meta data, parameters and metrics
+
+## Why not other solutions
+For ML-Engineering teams there are a number of tools available, which are:
+ * [mlflow](https://mlflow.org/)
+ * [DVC](https://dvc.org/)
+ * [neptune.ai](https://neptune.ai/)
+  
+These are great tools for their own purposes, however with their own weaknesses.
+ * A lot of imperative meta-code
+ * The need to restructure your pipelines to fit in the system
+ * No support for tracing data-pipelines
+ * No focus on what is inside training or data processing python scripts
+ * Difficult to manage quick experiments, prototypes
+
+## Who could find Cascade useful
+Small and fast-prototyping AI-teams could use it as a tradeoff between total missingness of any ML-Engineering framework and demanding enterprise solutions.
+
+## Principles
+The key principles of Cascade are:
+ * **Elegancy** - ML-pipelines code should be about ML
+ * **Modularity** - operations should be atomic, extinsible, take responsibility on themselves
+ * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
+ * **Traceability** - everything should have meta-data
+
+<!-- ## Concepts -->
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -71,13 +111,8 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests and docs as appropriate.
 
 ## Documentation
-Docs are available online: [cascade docs](https://oxid15.github.io/cascade/)
-
-## License
-[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/) 
-
-
-## Basic structure
+Docs are available online:  
+[Go to Cascade documentation](https://oxid15.github.io/cascade/)
 
 Cascade is divided into three main modules namely: `data`, `models` and `meta`  
 
@@ -85,7 +120,10 @@ Cascade is divided into three main modules namely: `data`, `models` and `meta`
 - `models` provides standardized way of dealing with ML-models, train, evaluate, save, load, etc...
 - `meta` ensures that all relevant meta info about data and models is stored anbd can be easily viewed
 
-There is also `utils` which is a collection of useful Datasets and Models, but are too specific to add them to the core.
+There is also `utils` which is a collection of useful Datasets and Models which are too specific to add them to the core.
+
+## License
+[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/) 
 
 ## Versions
 
