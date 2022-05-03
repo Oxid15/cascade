@@ -1,12 +1,9 @@
 """
 Copyright 2022 Ilia Moiseev
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
    http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,12 +51,13 @@ class Dataset(Generic[T]):
 
     def __repr__(self):
         """
-        Returns:
-        --------
+        Returns
+        -------
         string representation of a Dataset. This repr used as a name for get_meta() method
         by default gives the name of class from basic repr
-        See also:
-        ---------
+
+        See also
+        --------
         cascade.data.Dataset.get_meta()
         """
         rp = super().__repr__()
@@ -105,7 +103,6 @@ class Modifier(Dataset):
     of Sampler or Modifier.
     This structure enables a workflow, when we have a data pipeline which consists of uniform blocks
     each of them has a reference to the previous one in its `_dataset` field. See get_meta method for example.
-
     Basically Modifier defines an arbitrary transformation on every dataset's item that is applied
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
@@ -113,7 +110,6 @@ class Modifier(Dataset):
     def __init__(self, dataset: Dataset, meta_prefix=None) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
-
         Parameters
         ----------
         dataset: Dataset

@@ -18,7 +18,6 @@ import os
 import pendulum
 import glob
 from hashlib import md5
-import shutil
 
 from .model import Model
 from ..meta import MetaViewer
@@ -30,7 +29,7 @@ class ModelLine:
     A line of models is typically a models with the same hyperparameters and architecture,
     but different epochs or using different data.
     """
-    def __init__(self, folder, model_cls=Model, meta_prefix=None):
+    def __init__(self, folder, model_cls=Model, meta_prefix=None) -> None:
         """
         All models in line should be instances of the same class.
 
@@ -58,9 +57,9 @@ class ModelLine:
             for root, dirs, files in os.walk(self.root):
                 model_dir = os.path.split(root)[-1]
                 self.model_names \
-                += [os.path.join(model_dir, name) \
-                    for name in files 
-                    if os.path.splitext(name)[0] == 'model']
+                    += [os.path.join(model_dir, name)
+                        for name in files
+                        if os.path.splitext(name)[0] == 'model']
         else:
             os.mkdir(self.root)
         self.meta_viewer = MetaViewer(self.root)
@@ -78,7 +77,7 @@ class ModelLine:
         model.load(os.path.join(self.root, self.model_names[num]))
         return model
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         Returns
         -------
@@ -90,9 +89,10 @@ class ModelLine:
         """
         Saves a model and its meta data to a line folder.
         Model is automatically assigned a number and a model is saved
-        using Model's method `save`. Name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
-        The name passed to model's save is without extension. It is Model's responsibility to correctly
-        assign extension and save its state.
+        using Model's method `save` in its own folder.
+        Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
+        The name passed to model's save is just "model" without extension.
+        It is Model's responsibility to correctly  assign extension and save its own state.
         """
         idx = len(self.model_names)
         folder_name = f'{idx:0>5d}'
@@ -116,5 +116,5 @@ class ModelLine:
 
         self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta.json'), meta)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self.model_cls}'
