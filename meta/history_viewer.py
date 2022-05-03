@@ -97,7 +97,10 @@ class HistoryViewer:
         # turn time into evenly spaced intervals
         time = [i for i in range(len(self.table))]
         lines = self.table['line'].unique()
-        line_cols = {line: px.colors.qualitative.Plotly[i] for i, line in enumerate(lines)}
+
+        cmap = px.colors.qualitative.Plotly
+        cmap_len = len(px.colors.qualitative.Plotly)
+        line_cols = {line: cmap[i % cmap_len] for i, line in enumerate(lines)}
 
         self.table['time'] = time
         self.table['color'] = [line_cols[line] for line in self.table['line']]

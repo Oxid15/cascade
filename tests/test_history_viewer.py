@@ -99,6 +99,27 @@ class TestHistoryViewer(TestCase):
 
         shutil.rmtree('./test_empty')
 
+    def test_many_lines(self):
+        repo = ModelRepo('./test_many_lines',
+            lines=[dict(
+                name=str(num),
+                cls=DummyModel) for num in range(50)
+                ])
+
+        model0 = DummyModel(a=0)
+        model0.evaluate()
+
+        model1 = DummyModel(a=0, b=0)
+        model1.evaluate()
+
+        repo['0'].save(model0)
+        repo['1'].save(model1)
+
+        hv = HistoryViewer(repo)
+        hv.plot('acc')
+
+        shutil.rmtree('./test_many_lines')
+
 
 if __name__ == '__main__':
     unittest.main()

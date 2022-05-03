@@ -46,7 +46,8 @@ class Dataset(Generic[T]):
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
         meta = {'name': repr(self)}
-        meta.update(self.meta_prefix)
+        if self.meta_prefix is not None:
+            meta.update(self.meta_prefix)
         return [meta]
 
     def __repr__(self):

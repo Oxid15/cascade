@@ -29,7 +29,7 @@ class TableDataset(Dataset):
         elif isinstance(t, TableDataset):
             self._table = t._table
         elif t is None:
-            self._table = pd.Dataframe()
+            self._table = pd.DataFrame()
         else:
             raise TypeError('Input table is not a pandas.DataFrame nor TableDataset')
 
