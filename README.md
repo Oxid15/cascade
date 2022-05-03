@@ -9,8 +9,6 @@ ML development more fast.
 This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for 
 workflow, a set of templates for typical tasks.
 
-
-
 ## Installation
 
 ```bash
@@ -21,13 +19,11 @@ pip install -r requirements.txt
 pip install -r utils_requirements.txt
 ```
 
-
-
 ## Usage
 
 Since there's no pip-installable package nor setup tools (yet), you need to update your `sys.path` if you place Cascade anywhere.
   
-The simplest use-case is pipeline building.
+The simplest use-case is **pipeline building**.
 For more details and use-cases proceed to [documentation](#documentation).
 
 ```python
@@ -66,7 +62,7 @@ ds = PreprocessModifier(ds)
 ## Why Cascade
 
 Cascade emerged as an attempt to bring order into messy and fast-paced ML-engineering workflow.  
-As a part of small AI-team I encountered typical problems for those who run a lot of fast experiments on datasets and models with no strict system, which are:
+As a part of small AI-team I encountered *typical problems* for those who run a lot of fast experiments on datasets and models with no strict system, which are:
  * Growing number of different versions of data pipeline
  * Growing number of different versions of models
  * Folders with hundreds of models as binary artifacts with no info about what is inside
@@ -74,7 +70,7 @@ As a part of small AI-team I encountered typical problems for those who run a lo
  * Data pipelines and model trainloops are difficult to reuse
  * New data coming to the training stage passes without verification 
 
-This project aims to address this kind of issues by:
+### This project aims to address this kind of issues by:
  * Making data pipelines modular, traceable and verifiable with little or no additional code
  * Making models more than black-box binary artifacts
  * Introducing tools for storing and accessing meta data, parameters and metrics
@@ -85,7 +81,7 @@ For ML-Engineering teams there are a number of tools available, which are:
  * [DVC](https://dvc.org/)
  * [neptune.ai](https://neptune.ai/)
   
-These are great tools for their own purposes, however with their own weaknesses.
+These are great tools for their own purposes, however with their own weaknesses
  * A lot of imperative meta-code
  * The need to restructure your pipelines to fit in the system
  * No support for tracing data-pipelines
@@ -102,8 +98,7 @@ The key principles of Cascade are:
  * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
  * **Traceability** - everything should have meta-data
 
-<!-- ## Concepts -->
-
+The logo of the project is a depiction of these principles: it symbolizes modularity, standartization, information flow and is cascade-like :)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -130,4 +125,3 @@ There is also `utils` which is a collection of useful Datasets and Models which 
 This project uses Semantic Versioning - https://semver.org/
 
 ![footer](docs/imgs/footer.png)
-
