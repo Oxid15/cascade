@@ -1,5 +1,6 @@
 ![header](docs/imgs/header.png)
 
+![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
 ![build](https://github.com/oxid15/cascade/actions/workflows/python-package.yml/badge.svg)
 
 ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible,
