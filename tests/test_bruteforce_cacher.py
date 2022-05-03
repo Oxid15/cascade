@@ -37,6 +37,13 @@ class TestBruteforceCacher(TestCase):
         ds = BruteforceCacher(ds)
         self.assertEqual([0, 1, 2, 3, 4, 5], [item for item in ds])
 
+    def test_meta(self):
+        ds = NumberDataset([1, 2, 3, 4, 5])
+        ds = BruteforceCacher(ds)
+        meta = ds.get_meta()
+
+        self.assertEqual(len(meta), 2)
+
 
 if __name__ == '__main__':
     unittest.main()
