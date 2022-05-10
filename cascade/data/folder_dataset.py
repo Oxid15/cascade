@@ -18,7 +18,7 @@ class FolderDataset(Dataset):
         super().__init__(*args, **kwargs)
         self.root = os.path.abspath(root)
         assert os.path.exists(self.root)
-        self.names = [name for name in sorted(os.listdir(self.root)) if not os.path.isdir(name)]
+        self.names = [os.path.join(self.root, name) for name in sorted(os.listdir(self.root)) if not os.path.isdir(name)]
 
     def __getitem__(self, item) -> T:
         raise NotImplementedError()
