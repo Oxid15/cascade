@@ -3,8 +3,7 @@
 ![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
 ![build](https://github.com/oxid15/cascade/actions/workflows/python-package.yml/badge.svg)
 
-ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible,
-ML development more fast.  
+Small ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.  
   
 This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for 
 workflow, a set of templates for typical tasks.
@@ -80,12 +79,13 @@ For ML-Engineering teams there are a number of tools available, which are:
  * [mlflow](https://mlflow.org/)
  * [DVC](https://dvc.org/)
  * [neptune.ai](https://neptune.ai/)
+ * [zenml](https://github.com/zenml-io/zenml)
   
 These are great tools for their own purposes, however with their own weaknesses
  * A lot of imperative meta-code
  * The need to restructure your pipelines to fit in the system
  * No support for tracing data-pipelines
- * No focus on what is inside training or data processing python scripts
+ * No focus on what is inside data processing scripts, only on MLOps meta-code
  * Difficult to manage quick experiments, prototypes
 
 ## Who could find Cascade useful
@@ -94,14 +94,14 @@ Small and fast-prototyping AI-teams could use it as a tradeoff between total mis
 ## Principles
 The key principles of Cascade are:
  * **Elegancy** - ML-pipelines code should be about ML
- * **Modularity** - operations should be atomic, extinsible, take responsibility on themselves
+ * **Agility** - it should be easy to build new prototypes and wrap old ones into framework
  * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
  * **Traceability** - everything should have meta-data
 
 The logo of the project is a depiction of these principles: it symbolizes modularity, standartization, information flow and is cascade-like :)
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests and issues are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests and docs as appropriate.
 
