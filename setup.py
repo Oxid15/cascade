@@ -25,9 +25,9 @@ setuptools.setup(
             'Intended Audience :: Developers',
             'Intended Audience :: Science/Research'
     ],
-    package_dir={"": "."},
-    packages=setuptools.find_packages(where="."),
-    python_requires=">=3.6",
+    package_dir={"cascade": "./cascade"}, # , 'cascade_utils': './cascade/utils'
+    packages=['cascade'], # , 'cascade_utils'
+    python_requires=">=3.8",
     install_requires=[
         'tqdm',
         'numpy',
