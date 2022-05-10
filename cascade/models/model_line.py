@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import sys
 import pendulum
 import glob
 from hashlib import md5

@@ -10,29 +10,19 @@ workflow, a set of templates for typical tasks.
 
 ## Installation
 
+Install latest version from main branch
 ```bash
-git clone https://github.com/Oxid15/cascade.git
-cd cascade
-pip install -r requirements.txt
-# optionally install requirements for utils
-pip install -r utils_requirements.txt
+python -m pip install git+https://github.com/oxid15/cascade.git@main
 ```
 
 ## Usage
-
-Since there's no pip-installable package nor setup tools (yet), you need to update your `sys.path` if you place Cascade anywhere.
-  
-The simplest use-case is **pipeline building**.
-For more details and use-cases proceed to [documentation](#documentation).
+The simplest use-case is pipeline building.
 
 ```python
-import os
-import sys
-
+import torch
+from torch.utils.data import DataLoader
 import cv2
 
-# Assume Cascade resides in the root folder ../cascade
-sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 from cascade.data import Modifier, FolderDataset
 
 # Define Dataset - an entity responsible for fetching data from source
