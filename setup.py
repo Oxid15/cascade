@@ -1,23 +1,14 @@
-import os
-import sys
 import setuptools
-
-SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
-BASE_DIR = os.path.dirname(SCRIPT_DIR)
-
-sys.path.append(BASE_DIR)
-
-import cascade
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="cascade-oxid15",
-    version=cascade.__version__,
-    author=cascade.__author__,
-    author_email=cascade.__author_email__,
+    name="cascade",
+    version='0.2.1',
+    author='Ilia Moiseev',
+    author_email='ilia.moiseev.5@yandex.ru',
     description="Small ML-Engineering framework",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -33,4 +24,12 @@ setuptools.setup(
     package_dir={"": "."},
     packages=setuptools.find_packages(where="."),
     python_requires=">=3.6",
+    install_requires=[
+        'tqdm',
+        'numpy',
+        'pandas',
+        'deepdiff',
+        'pendulum',
+        'plotly'
+    ]
 )
