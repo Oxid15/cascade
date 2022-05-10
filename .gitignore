@@ -2,3 +2,6 @@
 __pycache__/
 docs/build
 .cascade/
+dist/
+build/
+*.egg-info/
