@@ -26,7 +26,7 @@ setuptools.setup(
             'Intended Audience :: Science/Research'
     ],
     package_dir={"cascade": "./cascade"}, # , 'cascade_utils': './cascade/utils'
-    packages=['cascade'], # , 'cascade_utils'
+    packages=setuptools.find_packages(), # , 'cascade_utils'
     python_requires=">=3.8",
     install_requires=[
         'tqdm',
