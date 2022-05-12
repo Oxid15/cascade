@@ -22,11 +22,12 @@ setuptools.setup(
         "License :: Apache License 2.0",
         "Operating System :: OS Independent",
         'Topic :: Software Development :: Libraries :: Python Modules'
-            'Intended Audience :: Developers',
-            'Intended Audience :: Science/Research'
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research'
     ],
-    package_dir={"cascade": "./cascade"}, # , 'cascade_utils': './cascade/utils'
-    packages=setuptools.find_packages(), # , 'cascade_utils'
+    package_dir={"cascade": "./cascade",
+                 'cascade_utils': './cascade/utils'},
+    packages=setuptools.find_packages(),
     python_requires=">=3.8",
     install_requires=[
         'tqdm',
