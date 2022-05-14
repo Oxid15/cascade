@@ -117,7 +117,7 @@ class ModelRepo:
         rp = f'ModelRepo in {self.root} of {len(self)} lines'
         return ', '.join([rp] + [repr(line) for line in self.lines])
 
-    def get_meta(self):
+    def get_meta(self) -> List[Dict]:
         meta = {
             'name': repr(self),
             'root': self.root,
@@ -125,4 +125,4 @@ class ModelRepo:
             'updated_at': pendulum.now(tz='UTC')
         }
         meta.update(self.meta_prefix)
-        return meta
+        return [meta]
