@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 from typing import Iterable
+
 import pendulum
 from datetime import datetime
 import numpy as np
@@ -29,13 +30,15 @@ class TimeSeriesDataset(Dataset):
             data = np.asarray(data)
             time = np.asarray(time)
         else:
+            # The case of multiple inheritance
+            # time and data can be omitted to match with general signature of Dataset
             data = np.array([])
             time = np.array([])
 
         assert len(data) == len(time)
         assert len(data.shape) == 1, f'series must be 1d, got shape {data.shape}'
         assert all([isinstance(t, datetime) for t in time]), \
-            'time elements should be of type datetime.datetime'
+            'time elements should be instances of datetime.datetime'
 
         # Time can be non-monotonic (don't increase or decrease on every step)
         # check for monotonicity seems to be more expensive than sort
@@ -51,6 +54,9 @@ class TimeSeriesDataset(Dataset):
 
     def to_numpy(self):
         return self.table.to_numpy().T[0]
+
+    def to_pandas(self):
+        return pd.DataFrame(self.to_numpy(), index=self.time)
 
     def get_data(self):
         return self.time, self.to_numpy()
