@@ -44,7 +44,7 @@ class SkModel(Model):
         preds = self.predict(x)
         self.metrics.update({key: metrics_dict[key](preds, y) for key in metrics_dict})
 
-    def _check_models_hash(self, meta, path_w_ext):
+    def _check_model_hash(self, meta, path_w_ext):
         with open(path_w_ext, 'rb') as f:
             file_hash = md5(f.read()).hexdigest()
         if file_hash == meta['md5sum']:
@@ -63,13 +63,15 @@ class SkModel(Model):
         if len(names):
             meta = MetaHandler().read(names[0])
             if 'md5sum' in meta:
-                self._check_models_hash(meta, path)
+                self._check_model_hash(meta, path)
 
         with open(path, 'rb') as f:
             self.pipeline = pickle.load(f)
 
-    def save(self, path_wo_ext):
-        with open(f'{path_wo_ext}.pkl', 'wb') as f:
+    def save(self, path):
+        if os.path.splitext(path)[-1] != '.pkl':
+            path += '.pkl'
+        with open(f'{path}', 'wb') as f:
             pickle.dump(self.pipeline, f)
 
     def get_meta(self):
