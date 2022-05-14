@@ -42,7 +42,7 @@ class ModelLine:
         model_cls:
             A class of models in repo. ModelLine uses this class to reconstruct a model
         meta_prefix:
-            a dict that is used to update resulting meta before saving
+            a dict that is used to update resulting model line's meta before saving
 
         See also
         --------
@@ -110,12 +110,26 @@ class ModelLine:
 
         meta = model.get_meta()[0]
 
-        meta.update(self.meta_prefix)
         meta['name'] = exact_filename
         meta['md5sum'] = md5sum
         meta['saved_at'] = pendulum.now(tz='UTC')
 
+        # Save model's meta
         self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta.json'), meta)
+
+        # Save updated line's meta
+        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
 
     def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self.model_cls}'
+
+    def get_meta(self) -> dict:
+        meta = {
+            'name': repr(self),
+            'root': self.root,
+            'model_cls': repr(self.model_cls),
+            'len': len(self),
+            'updated_at': pendulum.now(tz='UTC')
+        }
+        meta.update(self.meta_prefix())
+        return meta
