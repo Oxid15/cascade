@@ -1,4 +1,4 @@
-![header](docs/imgs/header.png)
+![header](cascade/docs/imgs/header.png)
 
 ![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
 ![build](https://github.com/oxid15/cascade/actions/workflows/python-package.yml/badge.svg)
@@ -114,4 +114,4 @@ There is also `utils` which is a collection of useful Datasets and Models which 
 
 This project uses Semantic Versioning - https://semver.org/
 
-![footer](docs/imgs/footer.png)
+![footer](cascade/docs/imgs/footer.png)
