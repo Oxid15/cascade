@@ -13,6 +13,7 @@ limitations under the License.
 
 import os
 import shutil
+import pendulum
 
 from .model_line import ModelLine
 
@@ -37,7 +38,6 @@ class ModelRepo:
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
-
     """
     def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
         """
@@ -49,7 +49,7 @@ class ModelRepo:
         lines: List[Dict]
             A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
         meta_prefix: Dict
-            a dict that is used to update resulting meta before saving
+            a dict that is used to update resulting repo's meta before saving
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
@@ -116,3 +116,13 @@ class ModelRepo:
     def __repr__(self) -> str:
         rp = f'ModelRepo in {self.root} of {len(self)} lines'
         return ', '.join([rp] + [repr(line) for line in self.lines])
+
+    def get_meta(self):
+        meta = {
+            'name': repr(self),
+            'root': self.root,
+            'len': len(self),
+            'updated_at': pendulum.now(tz='UTC')
+        }
+        meta.update(self.meta_prefix)
+        return meta
