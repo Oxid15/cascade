@@ -17,6 +17,7 @@ import shutil
 import pendulum
 
 from .model_line import ModelLine
+from ..meta import MetaViewer
 
 
 class ModelRepo:
@@ -59,8 +60,8 @@ class ModelRepo:
         cascade.models.ModelLine
         """
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
-
         self.root = folder
+        self.meta_viewer = MetaViewer(self.root)
 
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(folder)
@@ -78,10 +79,14 @@ class ModelRepo:
             for line in lines:
                 self.add_line(line['name'], line['cls'])
 
+        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
+
     def add_line(self, name, model_cls):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
+
+        Additionally, updates repo's meta on disk
         Parameters
         ----------
         model_cls:
@@ -94,6 +99,8 @@ class ModelRepo:
         folder = os.path.join(self.root, name)
         line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)
         self.lines[name] = line
+
+        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
         return line
 
     def __getitem__(self, key) -> ModelLine:
