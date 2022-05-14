@@ -1,5 +1,5 @@
 Cascade modules reference
----------------
+-------------------------
 
 .. toctree::
     cascade.data
