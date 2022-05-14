@@ -12,9 +12,12 @@ limitations under the License.
 """
 
 import os
+from typing import List, Dict
 import shutil
+import pendulum
 
 from .model_line import ModelLine
+from ..meta import MetaViewer
 
 
 class ModelRepo:
@@ -25,7 +28,7 @@ class ModelRepo:
     Example
     -------
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo')
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is VGG16 model from the example.'})
     >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
@@ -37,7 +40,6 @@ class ModelRepo:
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
-
     """
     def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
         """
@@ -49,7 +51,7 @@ class ModelRepo:
         lines: List[Dict]
             A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
         meta_prefix: Dict
-            a dict that is used to update resulting meta before saving
+            a dict that is used to update resulting repo's meta before saving
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
@@ -58,8 +60,8 @@ class ModelRepo:
         cascade.models.ModelLine
         """
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
-
         self.root = folder
+        self.meta_viewer = MetaViewer(self.root)
 
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(folder)
@@ -77,10 +79,14 @@ class ModelRepo:
             for line in lines:
                 self.add_line(line['name'], line['cls'])
 
+        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
+
     def add_line(self, name, model_cls):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
+
+        Additionally, updates repo's meta on disk
         Parameters
         ----------
         model_cls:
@@ -93,6 +99,8 @@ class ModelRepo:
         folder = os.path.join(self.root, name)
         line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)
         self.lines[name] = line
+
+        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
         return line
 
     def __getitem__(self, key) -> ModelLine:
@@ -116,3 +124,13 @@ class ModelRepo:
     def __repr__(self) -> str:
         rp = f'ModelRepo in {self.root} of {len(self)} lines'
         return ', '.join([rp] + [repr(line) for line in self.lines])
+
+    def get_meta(self) -> List[Dict]:
+        meta = {
+            'name': repr(self),
+            'root': self.root,
+            'len': len(self),
+            'updated_at': pendulum.now(tz='UTC')
+        }
+        meta.update(self.meta_prefix)
+        return [meta]

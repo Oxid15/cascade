@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import sys
 import unittest
+import shutil
 from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -28,8 +29,6 @@ from cascade.models.model_repo import ModelLine
 
 class TestModelLine(TestCase):
     def test_save_load(self):
-        import shutil
-
         line = ModelLine('./line', DummyModel)
 
         m = DummyModel()
@@ -42,6 +41,19 @@ class TestModelLine(TestCase):
 
         self.assertEqual(len(line), 1)
         self.assertTrue(model.model == "b'model'")
+
+    def test_meta(self):
+        line = ModelLine('line_meta', DummyModel)
+
+        m = DummyModel()
+
+        line.save(m)
+
+        shutil.rmtree('./line_meta')  # Cleanup
+
+        meta = line.get_meta()
+        self.assertEqual(meta[0]['model_cls'], repr(DummyModel))
+        self.assertEqual(meta[0]['len'], 1)
 
 
 if __name__ == '__main__':

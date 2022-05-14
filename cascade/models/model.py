@@ -81,18 +81,22 @@ class Model:
         all_default_exist = True
         if hasattr(self, 'created_at'):
             meta['created_at'] = self.created_at
+        else:
             all_default_exist = False
 
         if hasattr(self, 'metrics'):
             meta['metrics'] = self.metrics
+        else:
             all_default_exist = False
 
         if hasattr(self, 'params'):
             meta['params'] = self.params
+        else:
             all_default_exist = False
 
         if hasattr(self, 'meta_prefix'):
             meta.update(self.meta_prefix)
+        else:
             all_default_exist = False
 
         if not all_default_exist:
