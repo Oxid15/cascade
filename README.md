@@ -83,7 +83,7 @@ Small and fast-prototyping AI-teams could use it as a tradeoff between total mis
 
 ## Principles
 The key principles of Cascade are:
- * **Elegancy** - ML-pipelines code should be about ML
+ * **Elegancy** - ML-pipelines code should be about ML with minimum meta-code
  * **Agility** - it should be easy to build new prototypes and wrap old ones into framework
  * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
  * **Traceability** - everything should have meta-data

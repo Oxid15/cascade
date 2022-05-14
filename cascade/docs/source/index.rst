@@ -12,7 +12,7 @@ Small and fast-prototyping AI-teams (or even single AI developers) could use it 
 
 Key Principles
 --------------
-* **Elegancy** - ML-pipelines code should be about ML
+* **Elegancy** - ML-pipelines code should be about ML with minimum meta-code
 * **Agility** - it should be easy to build new prototypes and wrap old ones into framework
 * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
 * **Traceability** - everything should have meta-data
