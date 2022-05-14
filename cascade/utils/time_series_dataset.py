@@ -55,6 +55,9 @@ class TimeSeriesDataset(Dataset):
     def to_numpy(self):
         return self.table.to_numpy().T[0]
 
+    def to_pandas(self):
+        return pd.DataFrame(self.to_numpy(), index=self.time)
+
     def get_data(self):
         return self.time, self.to_numpy()
 
