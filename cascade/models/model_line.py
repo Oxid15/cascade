@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-import sys
+from typing import List, Dict
 import pendulum
 import glob
 from hashlib import md5
@@ -43,7 +43,6 @@ class ModelLine:
             A class of models in repo. ModelLine uses this class to reconstruct a model
         meta_prefix:
             a dict that is used to update resulting model line's meta before saving
-
         See also
         --------
         cascade.models.ModelRepo
@@ -94,6 +93,8 @@ class ModelLine:
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
         The name passed to model's save is just "model" without extension.
         It is Model's responsibility to correctly  assign extension and save its own state.
+
+        Additionally, saves ModelLine's meta to the Line's root
         """
         idx = len(self.model_names)
         folder_name = f'{idx:0>5d}'
@@ -123,7 +124,7 @@ class ModelLine:
     def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self.model_cls}'
 
-    def get_meta(self) -> dict:
+    def get_meta(self) -> List[Dict]:
         meta = {
             'name': repr(self),
             'root': self.root,
@@ -131,5 +132,5 @@ class ModelLine:
             'len': len(self),
             'updated_at': pendulum.now(tz='UTC')
         }
-        meta.update(self.meta_prefix())
-        return meta
+        meta.update(self.meta_prefix)
+        return [meta]
