@@ -28,7 +28,7 @@ class ModelRepo:
     Example
     -------
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo')
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is VGG16 model from the example.'})
     >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
