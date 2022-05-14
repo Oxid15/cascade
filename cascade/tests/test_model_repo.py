@@ -26,8 +26,6 @@ from cascade.tests.dummy_model import DummyModel
 
 class TestModelRepo(TestCase):
     def test_repo(self):
-        import shutil
-
         repo = ModelRepo('./test_models')
         repo.add_line('dummy_1', DummyModel)
         repo.add_line('00001', DummyModel)
@@ -39,8 +37,6 @@ class TestModelRepo(TestCase):
         self.assertEqual(2, len(repo))
 
     def test_overwrite(self):
-        import shutil
-
         # If no overwrite repo will have 4 models
         repo = ModelRepo('./test_overwrite', overwrite=True)
         repo.add_line('vgg16', DummyModel)
@@ -92,6 +88,16 @@ class TestModelRepo(TestCase):
 
         shutil.rmtree('./test_reusage_init_alias')
         self.assertEqual(len(repo['vgg16']), 1)
+
+    def test_meta(self):
+        repo = ModelRepo('./test_repo_meta')
+        repo.add_line('00000', DummyModel)
+        repo.add_line('00001', DummyModel)
+
+        shutil.rmtree('./test_repo_meta')  # Cleanup
+
+        meta = repo.get_meta()
+        self.assertEqual(meta[0]['len'], 2)
 
 
 if __name__ == '__main__':
