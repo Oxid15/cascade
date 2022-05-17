@@ -14,10 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .folder_image_dataset import FolderImageDataset
-from .sk_classifier import SkClassifier
-from .table_dataset import TableDataset, TableFilter, CSVDataset, PartedTableLoader, TableIterator, LargeCSVDataset
-from .text_classification_dataset import TextClassificationDataset
-from .oversampler import OverSampler
-from .undersampler import UnderSampler
-from .time_series_dataset import TimeSeriesDataset, Average, Interpolate, Align
+import warnings
+from .sk_model import SkModel
+
+
+class SkClassifier(SkModel):
+    """
+    Alias for cascade.utils.SkModel remained for compatibility
+    """
+    def __init__(self, name=None, blocks=..., **kwargs):
+        warnings.warn('SkClassifier is an alias of SkModel and doesn\'t have any additional capabilities')
+        super().__init__(name, blocks, **kwargs)

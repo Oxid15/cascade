@@ -37,21 +37,25 @@ class HistoryViewer:
         metas = []
         self.params = []
         for name in self.repo.lines:
-            viewer_root = os.path.join(self.repo.root, name)
-            view = MetaViewer(viewer_root)
+            line = self.repo[name]
 
-            for i in range(len(view)):
-                meta = {'line': name, 'num': i}
+            i = 0
+            for path in line.model_names:
+                # Open the view of Model's meta - only one meta in View
+                view = MetaViewer(os.path.join(self.repo.root, name, os.path.dirname(path)))[0]
+
+                new_meta = {'line': name, 'num': i}
                 # recursively unfold every nested dict to form plain table
-                self._add(view[i], meta)
-                metas.append(meta)
+                self._add(view[-1], new_meta)
+                metas.append(new_meta)
 
                 params = {
                     'line': name,
                 }
-                if 'params' in view[i]:
-                    params.update(view[i]['params'])
+                if 'params' in view[-1]:
+                    params.update(view[-1]['params'])
                 self.params.append(params)
+                i += 1
 
         self.table = pd.DataFrame(metas)
         if 'saved_at' in self.table:

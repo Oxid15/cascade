@@ -1,4 +1,4 @@
 opencv-python
 pandas
 scikit-learn
-dask[dataframe]
+dask[dataframe]<2022.5.0
