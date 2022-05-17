@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .folder_image_dataset import FolderImageDataset
-from .sk_classifier import SkModel, SkClassifier
-from .table_dataset import TableDataset, TableFilter, CSVDataset, PartedTableLoader, TableIterator, LargeCSVDataset
-from .text_classification_dataset import TextClassificationDataset
-from .oversampler import OverSampler
-from .undersampler import UnderSampler
-from .time_series_dataset import TimeSeriesDataset, Average, Interpolate, Align
-from .numpy_wrapper import NumpyWrapper
+import numpy as np
+from ..data import Wrapper
+
+
+class NumpyWrapper(Wrapper):
+    def __init__(self, path):
+        self._data = np.load(path)
