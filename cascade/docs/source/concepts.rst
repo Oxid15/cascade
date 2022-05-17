@@ -27,27 +27,42 @@ Modifier
 ~~~~~~~~
 :py:class:`cascade.data.Modifier`
 
-
-
-Sampler
-~~~~~~~
-:py:class:`cascade.data.Sampler`
-
+Modifier - is a dataset that performs transformations on the dataset it accepts. 
+It stores a reference to the previous dataset and is responsible for handling not only its own
+meta-data, but previous dataset's also. This mechanism allows to form and trace a pipeline.
 
 Models
 ------
+Models are second part of two-fold Cascade concept scheme. They allow to wrap all models in
+the same interface an treat models from different frameworks the same. It also brings the
+order in the model-writing workflow since it forces you implement all abstract methods,
+which include evaluation, saving and loading that are usually being omitted and forgotten.
 
 Model
 ~~~~~
 :py:class:`cascade.models.Model`
+Descendants of Model are wrappers around some inference and intended to use only in training context.
+It is responsible for handling its own state - saving and loading it exactly as it is. It also should
+perform evaluation and fill up its metrics and log parameters.  
+
+All this responsibilities form self-sufficient and independent model, which can be managed in more
+abstract way.
 
 ModelLine
 ~~~~~~~~~
 :py:class:`cascade.models.ModelLine`
 
+.. important::
+    This section is WIP, will be filled in following releases, see the documentation for details
+    about this concept!
+
 ModelRepo
 ~~~~~~~~~
 :py:class:`cascade.models.ModelRepo`
+
+.. important::
+    This section is WIP, will be filled in following releases, see the documentation for details
+    about this concept!
 
 Meta
 ----
@@ -56,10 +71,22 @@ Validator
 ~~~~~~~~~
 :py:class:`cascade.meta.Validator`
 
+.. important::
+    This section is WIP, will be filled in following releases, see the documentation for details
+    about this concept!
+
 Viewers
 ~~~~~~~
 :py:class:`cascade.meta.MetaViewer`
 
+.. important::
+    This section is WIP, will be filled in following releases, see the documentation for details
+    about this concept!
+
 Handler
 ~~~~~~~
 :py:class:`cascade.meta.MetaHandler`
+
+.. important::
+    This section is WIP, will be filled in following releases, see the documentation for details
+    about this concept!
