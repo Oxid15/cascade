@@ -14,14 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import warnings
-from .sk_model import SkModel
+import numpy as np
+from ..data import Wrapper
 
 
-class SkClassifier(SkModel):
-    """
-    Alias for cascade.utils.SkModel remained for compatibility
-    """
-    def __init__(self, name=None, blocks=..., **kwargs):
-        warnings.warn('SkClassifier is an alias of SkModel and doesn\'t have any additional capabilities')
-        super().__init__(name, blocks, **kwargs)
+class NumpyWrapper(Wrapper):
+    def __init__(self, path):
+        self._data = np.load(path)
