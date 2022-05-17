@@ -21,5 +21,5 @@ The logo of the project is a depiction of these principles: it symbolizes modula
 
 .. toctree::
 --------------- 
-* :ref:`genindex`
+    concepts
     modules
