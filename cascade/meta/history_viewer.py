@@ -42,18 +42,18 @@ class HistoryViewer:
             i = 0
             for path in line.model_names:
                 # Open the view of Model's meta - only one meta in View
-                view = MetaViewer(os.path.join(self.repo.root, name, os.path.dirname(path)))
+                view = MetaViewer(os.path.join(self.repo.root, name, os.path.dirname(path)))[0]
 
                 new_meta = {'line': name, 'num': i}
                 # recursively unfold every nested dict to form plain table
-                self._add(view[0], new_meta)
+                self._add(view[-1], new_meta)
                 metas.append(new_meta)
 
                 params = {
                     'line': name,
                 }
-                if 'params' in view[0]:
-                    params.update(view[0]['params'])
+                if 'params' in view[-1]:
+                    params.update(view[-1]['params'])
                 self.params.append(params)
                 i += 1
 
