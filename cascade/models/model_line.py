@@ -105,15 +105,21 @@ class ModelLine:
         model.save(full_path)
 
         # Find anything that matches /path/model_folder/model*
-        exact_filename = glob.glob(f'{full_path}*')[0]
+        exact_filename = glob.glob(f'{full_path}*')
+
+        assert len(exact_filename) > 0, 'Model file was\'nt found.\n \
+            It may be that Model didn\'t save itself, or the name of the file \
+                didn\'t match "model*"'
+
+        exact_filename = exact_filename[0]
         with open(exact_filename, 'rb') as f:
             md5sum = md5(f.read()).hexdigest()
 
-        meta = model.get_meta()[0]
+        meta = model.get_meta()
 
-        meta['name'] = exact_filename
-        meta['md5sum'] = md5sum
-        meta['saved_at'] = pendulum.now(tz='UTC')
+        meta[-1]['name'] = exact_filename
+        meta[-1]['md5sum'] = md5sum
+        meta[-1]['saved_at'] = pendulum.now(tz='UTC')
 
         # Save model's meta
         self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta.json'), meta)

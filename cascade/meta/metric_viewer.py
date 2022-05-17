@@ -37,15 +37,16 @@ class MetricViewer:
 
         self.metrics = []
         for name in self.repo.lines:
+            line = self.repo[name]
             viewer_root = os.path.join(self.repo.root, name)
-            view = MetaViewer(viewer_root)
 
-            for i in range(len(view)):
+            for i, model_name in enumerate(line.model_names):
+                view = MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))
                 metric = {'line': name, 'num': i}
-                meta = view[i]
+                meta = view[0][-1]
+
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
-
                 if 'params' in meta:
                     metric.update(meta['params'])
 

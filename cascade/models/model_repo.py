@@ -61,18 +61,21 @@ class ModelRepo:
         """
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
         self.root = folder
-        self.meta_viewer = MetaViewer(self.root)
 
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(folder)
 
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
+            # Can create MV only if path already exists
+            self.meta_viewer = MetaViewer(self.root)
             self.lines = {name: ModelLine(os.path.join(self.root, name),
                                           meta_prefix=self.meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
         else:
             os.mkdir(self.root)
+            # Here the same with MV
+            self.meta_viewer = MetaViewer(self.root)
             self.lines = dict()
 
         if lines is not None:
