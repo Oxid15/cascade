@@ -7,7 +7,7 @@ Install latest version using pip directly from git branch
 
 .. code-block:: bash
 
-    python -m pip install git+https://github.com/oxid15/cascade.git@main
+    python -m pip install git+https://github.com/oxid15/cascade.git@v0.3.0
 
 .. note::
     cascade.utils is installed also, but cannot be used directly. If you want to use it
