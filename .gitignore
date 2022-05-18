@@ -1,4 +1,17 @@
-.idea/
+#python
 __pycache__/
 # docs/build
+
+#cascade
 .cascade/
+
+# Pycharm
+.idea/
+
+# Setuptools
+dist/
+build/
+*.egg-info/
+
+# Sphinx
+docs/build
