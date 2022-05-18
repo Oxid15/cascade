@@ -2,10 +2,11 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade 0.2.0 documentation</title>
+        <title>cascade 0.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -123,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">cascade 0.2.0 documentation</div></a>
+      <a href="#"><div class="brand">cascade 0.3.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -143,10 +144,12 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
+      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="#">
   
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
+  </div>
   
-  <span class="sidebar-brand-text">cascade 0.2.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -154,7 +157,17 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+</ul>
+</li>
+</ul>
+
 </div>
 </div>
 
@@ -185,22 +198,81 @@
           </label>
         </div>
         <article role="main">
-          <div class="section" id="welcome-to-cascade-documentation">
-<h1>Welcome to Cascade documentation!<a class="headerlink" href="#welcome-to-cascade-documentation" title="Permalink to this headline">#</a></h1>
-<div class="section" id="all-methods-in">
-<h2>All methods in:<a class="headerlink" href="#all-methods-in" title="Permalink to this headline">#</a></h2>
+          <section id="what-is-it">
+<h1>What is it<a class="headerlink" href="#what-is-it" title="Permalink to this headline">#</a></h1>
+<p>Small ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.</p>
+<p>This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for
+workflow, a set of templates for typical tasks.</p>
+</section>
+<section id="who-could-find-it-useful">
+<h1>Who could find it useful<a class="headerlink" href="#who-could-find-it-useful" title="Permalink to this headline">#</a></h1>
+<p>Small and fast-prototyping AI-teams (or even single AI developers) could use it as a tradeoff between total missingness of any ML-Engineering framework and demanding enterprise solutions.</p>
+</section>
+<section id="key-principles">
+<h1>Key Principles<a class="headerlink" href="#key-principles" title="Permalink to this headline">#</a></h1>
 <ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><strong>Elegancy</strong> - ML-pipelines code should be about ML with minimum meta-code</p></li>
+<li><p><strong>Agility</strong> - it should be easy to build new prototypes and wrap old ones into framework</p></li>
+<li><p><strong>Reusability</strong> - code should have an ability to be reused in similar projects with little or no effort</p></li>
+<li><p><strong>Traceability</strong> - everything should have meta-data</p></li>
+</ul>
+<p>The logo of the project is a depiction of these principles: it symbolizes modularity, standartization, information flow and is cascade-like :)</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#use-cases">Use cases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#build-a-pipeline">Build a pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#train-models">Train models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#feature-selection">Feature selection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#data">Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#dataset">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#modifier">Modifier</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#model">Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#modelline">ModelLine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#modelrepo">ModelRepo</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="concepts.html#meta">Meta</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#validator">Validator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#viewers">Viewers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="concepts.html#handler">Handler</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Cascade modules reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+</ul>
+</li>
 </ul>
 </div>
-</div>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
+          <a class="next-page" href="quickstart.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Quickstart</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
           
         </div>
         <div class="bottom-of-page">
@@ -234,10 +306,9 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Welcome to Cascade documentation!</a><ul>
-<li><a class="reference internal" href="#all-methods-in">All methods in:</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">What is it</a></li>
+<li><a class="reference internal" href="#who-could-find-it-useful">Who could find it useful</a></li>
+<li><a class="reference internal" href="#key-principles">Key Principles</a></li>
 </ul>
 
           </div>

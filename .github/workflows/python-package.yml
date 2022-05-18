@@ -38,5 +38,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test
       run: |
+        pwd
+        ls
         python --version
-        python -m unittest discover ./tests
+        python -m unittest discover ./cascade/tests
