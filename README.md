@@ -12,7 +12,7 @@ workflow, a set of templates for typical tasks.
 
 Install latest version from main branch
 ```bash
-python -m pip install git+https://github.com/oxid15/cascade.git@main
+python -m pip install git+https://github.com/oxid15/cascade.git@v0.3.0
 ```
 
 ## Usage
