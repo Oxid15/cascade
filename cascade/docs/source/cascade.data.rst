@@ -1,5 +1,50 @@
 cascade.data
 ============ 
+.. autoclass:: cascade.data.Dataset
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.data.Iterator
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.data.Wrapper
+   :members:
+
+|
+
+|
+
+| 
+
+.. autoclass:: cascade.data.Modifier
+   :members:
+
+|
+
+|
+
+| 
+
+.. autoclass:: cascade.data.Sampler
+   :members:
+
+|
+
+|
+
+| 
+
 .. autoclass:: cascade.data.ApplyModifier
    :members:
 
@@ -28,62 +73,6 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.CyclicSampler
-   :members:
-
-|
-
-|
-
-| 
-
-.. autoclass:: cascade.data.Dataset
-   :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.data.Iterator
-   :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.data.Wrapper
-   :members:
-
-|
-
-|
-
-| 
-
-
-.. autoclass:: cascade.data.Modifier
-   :members:
-
-|
-
-|
-
-| 
-
-.. autoclass:: cascade.data.Sampler
-   :members:
-
-|
-
-|
-
-| 
-
-
-.. autoclass:: cascade.data.FolderDataset
    :members:
 
 |
