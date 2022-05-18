@@ -33,14 +33,19 @@ release = cascade.__version__
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.extlinks",
+    "sphinx_copybutton",
 ]
 
 napoleon_include_special_with_doc = True
 # napoleon_use_admonition_for_notes = True
 
 # Add any paths that contain templates here, relative to this directory.
-# templates_path = ['_templates']
+templates_path = ['_templates']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -53,10 +58,14 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-# html_theme = 'insegel'
-# html_logo = "../imgs/100x100_logo.png"
+html_theme = 'furo'
+html_logo = "../imgs/logo.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['./']
+html_static_path = ['_static']
+
+html_theme_options = {
+    "sidebar_hide_name": True,
+}

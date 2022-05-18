@@ -2,10 +2,11 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.meta" href="cascade.meta.html" /><link rel="prev" title="cascade.data" href="cascade.data.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.models - cascade 0.2.0 documentation</title>
+        <title>cascade.models - cascade 0.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -123,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.2.0 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.3.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -143,10 +144,12 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="index.html">
   
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
+  </div>
   
-  <span class="sidebar-brand-text">cascade 0.2.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -154,7 +157,17 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">cascade.models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+</ul>
+</li>
+</ul>
+
 </div>
 </div>
 
@@ -185,7 +198,7 @@
           </label>
         </div>
         <article role="main">
-          <div class="section" id="cascade-models">
+          <section id="cascade-models">
 <h1>cascade.models<a class="headerlink" href="#cascade-models" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.models.Model">
@@ -267,6 +280,7 @@ using Model’s method <cite>save</cite> in its own folder.
 Folder’s name is assigned using f’{idx:0&gt;5d}’. For example: 00001 or 00042.
 The name passed to model’s save is just “model” without extension.
 It is Model’s responsibility to correctly  assign extension and save its own state.</p>
+<p>Additionally, saves ModelLine’s meta to the Line’s root</p>
 </dd></dl>
 </dd></dl>
 <div class="line-block">
@@ -285,7 +299,7 @@ It is Model’s responsibility to correctly  assign extension and save its own s
 When created, initializes an empty folder constituting a repository of model lines.</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">ModelRepo</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">'repo'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">'repo'</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="o">=</span><span class="p">{</span><span class="s1">'description'</span><span class="p">:</span> <span class="s1">'This is VGG16 model from the example.'</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16_line</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s1">'vgg16'</span><span class="p">,</span> <span class="n">VGG16Model</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span> <span class="o">=</span> <span class="n">VGG16Model</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
@@ -327,7 +341,8 @@ When created, initializes an empty folder constituting a repository of model lin
 <dt class="sig sig-object py" id="cascade.models.ModelRepo.add_line">
 <span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.add_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.add_line" title="Permalink to this definition">#</a></dt>
 <dd><p>Adds new line to repo if it doesn’t exist and returns it
-If line exists, defines it in repo
+If line exists, defines it in repo</p>
+<p>Additionally, updates repo’s meta on disk
 :param model_cls: A class of models in line. ModelLine uses this class to reconstruct a model
 :param name: Line’s name</p>
 </dd></dl>
@@ -341,15 +356,33 @@ If line exists, defines it in repo
 <div class="line-block">
 <div class="line"><br/></div>
 </div>
-</div>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="cascade.meta.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">cascade.meta</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="cascade.data.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">cascade.data</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">

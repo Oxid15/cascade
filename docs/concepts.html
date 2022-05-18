@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Cascade modules reference" href="modules.html" /><link rel="prev" title="Quickstart" href="quickstart.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade 0.3.0 documentation</title>
+        <title>Concepts - cascade 0.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">cascade 0.3.0 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.3.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -144,7 +144,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="#">
+      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
@@ -157,9 +157,9 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Concepts</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
@@ -198,65 +198,101 @@
           </label>
         </div>
         <article role="main">
-          <section id="what-is-it">
-<h1>What is it<a class="headerlink" href="#what-is-it" title="Permalink to this headline">#</a></h1>
-<p>Small ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.</p>
-<p>This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for
-workflow, a set of templates for typical tasks.</p>
-</section>
-<section id="who-could-find-it-useful">
-<h1>Who could find it useful<a class="headerlink" href="#who-could-find-it-useful" title="Permalink to this headline">#</a></h1>
-<p>Small and fast-prototyping AI-teams (or even single AI developers) could use it as a tradeoff between total missingness of any ML-Engineering framework and demanding enterprise solutions.</p>
-</section>
-<section id="key-principles">
-<h1>Key Principles<a class="headerlink" href="#key-principles" title="Permalink to this headline">#</a></h1>
-<ul class="simple">
-<li><p><strong>Elegancy</strong> - ML-pipelines code should be about ML with minimum meta-code</p></li>
-<li><p><strong>Agility</strong> - it should be easy to build new prototypes and wrap old ones into framework</p></li>
-<li><p><strong>Reusability</strong> - code should have an ability to be reused in similar projects with little or no effort</p></li>
-<li><p><strong>Traceability</strong> - everything should have meta-data</p></li>
-</ul>
-<p>The logo of the project is a depiction of these principles: it symbolizes modularity, standartization, information flow and is cascade-like :)</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#use-cases">Use cases</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="quickstart.html#build-a-pipeline">Build a pipeline</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart.html#train-models">Train models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="quickstart.html#feature-selection">Feature selection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concepts.html#data">Data</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#dataset">Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#modifier">Modifier</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="concepts.html#models">Models</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#model">Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#modelline">ModelLine</a></li>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#modelrepo">ModelRepo</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="concepts.html#meta">Meta</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#validator">Validator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#viewers">Viewers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="concepts.html#handler">Handler</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">Cascade modules reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
-</ul>
-</li>
-</ul>
+          <section id="concepts">
+<h1>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">#</a></h1>
+<p>Here basic concepts of Cascade will be described.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section is close to the description of abstract classes,
+but is not the documentation of particular code implementations,
+rather the statement of key concepts and how things should be.</p>
 </div>
+<section id="data">
+<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">#</a></h2>
+<p>The main focus of Cascade are data pipelines. It allows to construct them from many
+interchangeable blocks, which are self-sufficient in terms of logging their own meta-data.</p>
+<section id="dataset">
+<h3>Dataset<a class="headerlink" href="#dataset" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.data.Dataset</span></code></a></p>
+<p>Dataset - or its direct successor defines a data source. For example in computer vision
+pipeline it can be a folder of images or it can constitute different folders in case of
+classification task.
+It should be able to describe itself and should do it in more details than
+any other pipeline block should. It can describe all files in it and aggregate info about them.
+Manually written documentation for Dataset is the best thing that can be done and should be enforced.</p>
+</section>
+<section id="modifier">
+<h3>Modifier<a class="headerlink" href="#modifier" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="cascade.data.html#cascade.data.Modifier" title="cascade.data.Modifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.data.Modifier</span></code></a></p>
+<p>Modifier - is a dataset that performs transformations on the dataset it accepts.
+It stores a reference to the previous dataset and is responsible for handling not only its own
+meta-data, but previous dataset’s also. This mechanism allows to form and trace a pipeline.</p>
+</section>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">#</a></h2>
+<p>Models are second part of two-fold Cascade concept scheme. They allow to wrap all models in
+the same interface an treat models from different frameworks the same. It also brings the
+order in the model-writing workflow since it forces you implement all abstract methods,
+which include evaluation, saving and loading that are usually being omitted and forgotten.</p>
+<section id="model">
+<h3>Model<a class="headerlink" href="#model" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="cascade.models.html#cascade.models.Model" title="cascade.models.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.models.Model</span></code></a>
+Descendants of Model are wrappers around some inference and intended to use only in training context.
+It is responsible for handling its own state - saving and loading it exactly as it is. It also should
+perform evaluation and fill up its metrics and log parameters.</p>
+<p>All this responsibilities form self-sufficient and independent model, which can be managed in more
+abstract way.</p>
+</section>
+<section id="modelline">
+<h3>ModelLine<a class="headerlink" href="#modelline" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine" title="cascade.models.ModelLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.models.ModelLine</span></code></a></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This section is WIP, will be filled in following releases, see the documentation for details
+about this concept!</p>
+</div>
+</section>
+<section id="modelrepo">
+<h3>ModelRepo<a class="headerlink" href="#modelrepo" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo" title="cascade.models.ModelRepo"><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.models.ModelRepo</span></code></a></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This section is WIP, will be filled in following releases, see the documentation for details
+about this concept!</p>
+</div>
+</section>
+</section>
+<section id="meta">
+<h2>Meta<a class="headerlink" href="#meta" title="Permalink to this headline">#</a></h2>
+<section id="validator">
+<h3>Validator<a class="headerlink" href="#validator" title="Permalink to this headline">#</a></h3>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.meta.Validator</span></code></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This section is WIP, will be filled in following releases, see the documentation for details
+about this concept!</p>
+</div>
+</section>
+<section id="viewers">
+<h3>Viewers<a class="headerlink" href="#viewers" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer" title="cascade.meta.MetaViewer"><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.meta.MetaViewer</span></code></a></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This section is WIP, will be filled in following releases, see the documentation for details
+about this concept!</p>
+</div>
+</section>
+<section id="handler">
+<h3>Handler<a class="headerlink" href="#handler" title="Permalink to this headline">#</a></h3>
+<p><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaHandler" title="cascade.meta.MetaHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">cascade.meta.MetaHandler</span></code></a></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This section is WIP, will be filled in following releases, see the documentation for details
+about this concept!</p>
+</div>
+</section>
+</section>
 </section>
 
         </article>
@@ -264,16 +300,26 @@ workflow, a set of templates for typical tasks.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="quickstart.html">
+          <a class="next-page" href="modules.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Quickstart</div>
+                <div class="title">Cascade modules reference</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          
+          <a class="prev-page" href="quickstart.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Quickstart</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -306,9 +352,26 @@ workflow, a set of templates for typical tasks.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">What is it</a></li>
-<li><a class="reference internal" href="#who-could-find-it-useful">Who could find it useful</a></li>
-<li><a class="reference internal" href="#key-principles">Key Principles</a></li>
+<li><a class="reference internal" href="#">Concepts</a><ul>
+<li><a class="reference internal" href="#data">Data</a><ul>
+<li><a class="reference internal" href="#dataset">Dataset</a></li>
+<li><a class="reference internal" href="#modifier">Modifier</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#models">Models</a><ul>
+<li><a class="reference internal" href="#model">Model</a></li>
+<li><a class="reference internal" href="#modelline">ModelLine</a></li>
+<li><a class="reference internal" href="#modelrepo">ModelRepo</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#meta">Meta</a><ul>
+<li><a class="reference internal" href="#validator">Validator</a></li>
+<li><a class="reference internal" href="#viewers">Viewers</a></li>
+<li><a class="reference internal" href="#handler">Handler</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
           </div>
