@@ -51,10 +51,10 @@ class ModelAggregate(Model):
         for model in self.models:
             metas += model.get_meta()
         meta_table = pd.DataFrame(metas)
-        
+
         agg_meta = {}
 
-        # Very application-specific ugly code that just works... 
+        # Very application-specific ugly code that just works...
         # TODO: refactor this
         for col in meta_table.columns:
             col_type = type(meta_table[col].iloc[0])
@@ -70,7 +70,7 @@ class ModelAggregate(Model):
                         agg_meta[col][key] = pd.DataFrame.from_dict(meta_table[col].to_list()).agg(self.agg_func).to_dict()
             elif col_type == pd.Timestamp:
                 agg_meta[col] = pd.DataFrame.from_dict(meta_table[col].apply(lambda x: x.to_pydatetime()).to_list()).agg(self.agg_func).to_dict()
-            else: 
+            else:
                 raise NotImplementedError()
 
         return [agg_meta]

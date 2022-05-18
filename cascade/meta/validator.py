@@ -36,7 +36,7 @@ class AggregateValidator(Validator):
 
     Example
     -------
-    >>> from cascade.tests.number_dataset import NumberDataset 
+    >>> from cascade.tests.number_dataset import NumberDataset
     >>> ds = NumberDataset([1, 2, 3, 4, 5])
     >>> ds = AggregateValidator(ds, lambda x: len(x) == 5)
     """
@@ -55,7 +55,7 @@ class PredicateValidator(Validator):
 
     Example
     -------
-    >>> from cascade.tests.number_dataset import NumberDataset 
+    >>> from cascade.tests.number_dataset import NumberDataset
     >>> ds = NumberDataset([1, 2, 3, 4, 5])
     >>> ds = PredicateValidator(ds, lambda x: x < 6)
     """
