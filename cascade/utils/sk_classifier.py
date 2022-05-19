@@ -22,6 +22,6 @@ class SkClassifier(SkModel):
     """
     Alias for cascade.utils.SkModel remained for compatibility
     """
-    def __init__(self, name=None, blocks=..., **kwargs):
+    def __init__(self, name=None, blocks=[], **kwargs):
         warnings.warn('SkClassifier is an alias of SkModel and doesn\'t have any additional capabilities')
-        super().__init__(name, blocks, **kwargs)
+        super().__init__(name=name, blocks=blocks, **kwargs)
