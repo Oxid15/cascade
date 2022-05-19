@@ -27,7 +27,7 @@ class FolderImageDataset(FolderDataset):
     """
 
     def __getitem__(self, index):
-        name = self.image_names[index]
+        name = self.names[index]
         img = cv2.imread(f'{name}')
         if img is not None:
             return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
