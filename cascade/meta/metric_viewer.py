@@ -15,7 +15,12 @@ limitations under the License.
 """
 
 import os
+from plotly import graph_objects as go
 import pandas as pd
+
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 
 from . import MetaViewer
 
@@ -55,3 +60,16 @@ class MetricViewer:
 
     def __repr__(self) -> str:
         return repr(self.table)
+
+    def plot_table(self, show=False) -> None:
+        fig = go.Figure(data=[
+            go.Table(
+                header=dict(values=list(self.table.columns),
+                            fill_color='#f4c9c7',
+                            align='left'),
+                cells=dict(values=[self.table[col] for col in self.table.columns],
+                           fill_color='#bcced4',
+                           align='left'))
+        ])
+        if show:
+            fig.show()
