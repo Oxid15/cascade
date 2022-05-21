@@ -73,3 +73,4 @@ class MetricViewer:
         ])
         if show:
             fig.show()
+        return fig
