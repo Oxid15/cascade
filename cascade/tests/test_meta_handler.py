@@ -30,13 +30,18 @@ from cascade.meta import MetaHandler
 class TestMetaHandler(TestCase):
     def test(self):
         mh = MetaHandler()
-        mh.write('test.json', {'name': 'test'})
+        mh.write('test.json', 
+        {
+            'name': 'test',
+            'array': np.zeros(4),
+            'none': None,
+            'date': pendulum.now(tz='UTC')
+        })
 
         obj = mh.read('test.json')
 
         os.remove('test.json')
 
-        self.assertTrue('name' in obj)
         self.assertEqual(obj['name'], 'test')
         self.assertTrue(all(obj['array'] == np.zeros(4)))
         self.assertTrue(obj['none'] is None)
