@@ -21,6 +21,7 @@ import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash import Input, Output
 
 from . import MetaViewer
 
@@ -74,3 +75,55 @@ class MetricViewer:
         if show:
             fig.show()
         return fig
+
+    def serve(self):
+        df = self.table
+
+        app = dash.Dash()
+        dep_fig = go.Figure()
+
+        app.layout = html.Div([
+            html.H1(
+                children=f'MetricViewer in {self.repo.root}',
+                style={
+                    'textAlign': 'center',
+                    'color': '#084c61',
+                    'font-family': 'Montserrat'
+                }
+            ),
+            dcc.Dropdown(
+                    list(df.columns),
+                    id='dropdown-x',
+                    multi=False),
+            dcc.Dropdown(
+                    list(df.columns),
+                    id='dropdown-y',
+                    multi=False),
+            dcc.Graph(
+                id='dependence-figure',
+                figure=dep_fig),
+            dcc.Graph(
+                id='table',
+                figure=self.plot_table(show=False)
+            )
+        ])
+
+        @app.callback(
+            Output(component_id='dependence-figure', component_property='figure'),
+            Input(component_id='dropdown-x', component_property='value'),
+            Input(component_id='dropdown-y', component_property='value')
+        )
+        def _update_graph(x, y):
+            fig = go.Figure()
+            if x is not None and y is not None:
+                fig.add_trace(
+                    go.Scatter(
+                        x=df[x],
+                        y=df[y],
+                        mode='markers'
+                    )
+                )
+                fig.update_layout(title=f'{x} to {y} relation')
+            return fig
+
+        app.run_server(use_reloader=False, debug=True)
