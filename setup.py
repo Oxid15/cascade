@@ -35,6 +35,7 @@ setuptools.setup(
         'pandas',
         'deepdiff',
         'pendulum',
-        'plotly'
+        'plotly',
+        'dash'
     ]
 )
