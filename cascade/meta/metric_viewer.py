@@ -124,4 +124,4 @@ class MetricViewer:
                 fig.update_layout(title=f'{x} to {y} relation')
             return fig
 
-        app.run_server(use_reloader=False, debug=True)
+        app.run_server(use_reloader=False)
