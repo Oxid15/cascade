@@ -17,7 +17,6 @@ limitations under the License.
 import os
 from plotly import graph_objects as go
 import pandas as pd
-
 import dash
 from dash import Input, Output, html, dcc
 
@@ -90,13 +89,13 @@ class MetricViewer:
                 }
             ),
             dcc.Dropdown(
-                    list(df.columns),
-                    id='dropdown-x',
-                    multi=False),
+                list(df.columns),
+                id='dropdown-x',
+                multi=False),
             dcc.Dropdown(
-                    list(df.columns),
-                    id='dropdown-y',
-                    multi=False),
+                list(df.columns),
+                id='dropdown-y',
+                multi=False),
             dcc.Graph(
                 id='dependence-figure',
                 figure=dep_fig),
