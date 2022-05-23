@@ -10,10 +10,17 @@ workflow, a set of templates for typical tasks.
 
 ## Installation
 
-Install latest version from main branch
+Install latest version using pip
 ```bash
-python -m pip install git+https://github.com/oxid15/cascade.git@v0.3.1
+pip install cascade-ml
 ```
+If you experience errors using installation from PyPI, you can install latest version from git directly  
+```bash
+pip install git+https://github.com/oxid15/cascade.git@main
+```
+More info on installation can be found in [docs](https://oxid15.github.io/cascade/quickstart.html#installation)
+
+
 
 ## Usage
 The simplest use-case is pipeline building.

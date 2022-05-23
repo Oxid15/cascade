@@ -16,35 +16,38 @@ limitations under the License.
 
 import os
 import sys
-import pendulum
-import numpy as np
+import json
+import shutil
 import unittest
 from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.meta import MetaHandler
+from cascade.meta import MetaViewer
 
 
-class TestMetaHandler(TestCase):
+class TestMetaViewer(TestCase):
     def test(self):
-        mh = MetaHandler()
-        mh.write('test.json', 
-        {
-            'name': 'test',
-            'array': np.zeros(4),
-            'none': None,
-            'date': pendulum.now(tz='UTC')
-        })
+        root = 'metas'
+        os.mkdir(root)
+        os.mkdir(os.path.join(root, 'model'))
 
-        obj = mh.read('test.json')
+        with open(f'{root}/test.json', 'w') as f:
+            json.dump({'name': 'test'}, f)
 
-        os.remove('test.json')
+        with open(f'{root}/model/test.json', 'w') as f:
+            json.dump({'name': 'test'}, f)
 
-        self.assertEqual(obj['name'], 'test')
-        self.assertTrue(all(obj['array'] == np.zeros(4)))
-        self.assertTrue(obj['none'] is None)
+        mv = MetaViewer(root)
+
+        shutil.rmtree(root)
+
+        self.assertEqual(len(mv), 2)
+        self.assertTrue('name' in mv[0])
+        self.assertTrue('name' in mv[1])
+        self.assertEqual(mv[0]['name'], 'test')
+        self.assertEqual(mv[1]['name'], 'test')
 
 
 if __name__ == '__main__':
