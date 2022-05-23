@@ -9,17 +9,11 @@ This project is an attempt to build such bundle of tools for ML-Engineer, certai
 workflow, a set of templates for typical tasks.
 
 ## Installation
-
-Install latest version using pip (from test pypi)
-```bash
-pip install -i https://test.pypi.org/simple/ cascade-ml
-```
-If you experience errors using installation from PyPI, you can install latest version from git directly  
+Install latest version using pip 
 ```bash
 pip install git+https://github.com/oxid15/cascade.git@main
 ```
 More info on installation can be found in [docs](https://oxid15.github.io/cascade/quickstart.html#installation)
-
 
 
 ## Usage
