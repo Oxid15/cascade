@@ -5,8 +5,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="cascade",
-    version='0.3.1',
+    name="cascade-ml",
+    version='0.3.2',
     author='Ilia Moiseev',
     author_email='ilia.moiseev.5@yandex.ru',
     license='Apache License 2.0',
@@ -19,11 +19,7 @@ setuptools.setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: Apache License 2.0",
-        "Operating System :: OS Independent",
-        'Topic :: Software Development :: Libraries :: Python Modules'
-        'Intended Audience :: Developers',
-        'Intended Audience :: Science/Research'
+        "Operating System :: OS Independent"
     ],
     package_dir={"cascade": "./cascade",
                  'cascade_utils': './cascade/utils'},

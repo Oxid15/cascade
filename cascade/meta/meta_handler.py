@@ -82,5 +82,5 @@ class MetaHandler:
         Writes json to path using custom encoder
         """
         with open(name, 'w') as json_meta:
-            enc = CustomEncoder()
-            json.dump(enc.encode(obj), json_meta)
+            # enc = CustomEncoder()
+            json.dump(obj, json_meta, cls=CustomEncoder)
