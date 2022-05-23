@@ -10,11 +10,7 @@ workflow, a set of templates for typical tasks.
 
 ## Installation
 
-Install latest version using pip
-```bash
-pip install cascade-ml
-```
-If you experience errors using installation from PyPI, you can install latest version from git directly  
+Install latest version using pip 
 ```bash
 pip install git+https://github.com/oxid15/cascade.git@main
 ```
