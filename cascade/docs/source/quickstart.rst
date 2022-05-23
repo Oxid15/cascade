@@ -3,15 +3,20 @@ Quickstart
 
 Installation
 ------------
-Install latest version using pip directly from git branch
+Install latest version using pip
 
 .. code-block:: bash
+    pip install cascade-ml
 
-    python -m pip install git+https://github.com/oxid15/cascade.git@v0.3.0
+If you experience errors using installation from PyPI, you can use
+
+.. code-block:: bash
+    pip install git+https://github.com/oxid15/cascade.git@main
+
+to install latest version from git directly 
 
 .. note::
-    cascade.utils is installed also, but cannot be used directly. If you want to use it
-    import it from cascade first using `from cascade import utils`.
+    `cascade.utils` is installed also, but its requirements are optional and listed in the file `utils_requirements.txt`
 
 Use cases
 ---------
