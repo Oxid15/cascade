@@ -77,10 +77,13 @@ class MetaHandler:
                 meta = json.loads(meta)
             return meta
 
-    def write(self, name, obj) -> None:
+    def write(self, name, obj, overwrite=True) -> None:
         """
         Writes json to path using custom encoder
         """
+
+        if not overwrite and os.path.exists(name):
+            return
+
         with open(name, 'w') as json_meta:
-            # enc = CustomEncoder()
             json.dump(obj, json_meta, cls=CustomEncoder)
