@@ -15,6 +15,7 @@ Install latest version using pip directly from git branch
     If you want to use `cascade.utils`, install utils_requirements by cloning the repo or directly
 
     .. code-block:: bash
+
         pip install -r https://raw.githubusercontent.com/oxid15/cascade/main/utils_requirements.txt
 
 
