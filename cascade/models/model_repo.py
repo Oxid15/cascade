@@ -82,7 +82,7 @@ class ModelRepo:
             for line in lines:
                 self.add_line(line['name'], line['cls'])
 
-        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
+        self._update_meta()
 
     def add_line(self, name, model_cls):
         """
@@ -103,7 +103,7 @@ class ModelRepo:
         line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)
         self.lines[name] = line
 
-        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
+        self._update_meta()
         return line
 
     def __getitem__(self, key) -> ModelLine:
@@ -127,6 +127,18 @@ class ModelRepo:
     def __repr__(self) -> str:
         rp = f'ModelRepo in {self.root} of {len(self)} lines'
         return ', '.join([rp] + [repr(line) for line in self.lines])
+
+    def _update_meta(self):
+        # Reads meta if exists and updates it with new values
+        # writes back to disk
+        meta_path = os.path.join(self.root, 'meta.json')
+
+        meta = {}
+        if os.path.exists(meta_path):
+            meta = self.meta_viewer.read(meta_path)[0]
+
+        meta.update(self.get_meta()[0])
+        self.meta_viewer.write(meta_path, meta)
 
     def get_meta(self) -> List[Dict]:
         meta = {
