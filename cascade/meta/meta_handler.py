@@ -86,4 +86,4 @@ class MetaHandler:
             return
 
         with open(name, 'w') as json_meta:
-            json.dump(obj, json_meta, cls=CustomEncoder)
+            json.dump(obj, json_meta, cls=CustomEncoder, indent=4)
