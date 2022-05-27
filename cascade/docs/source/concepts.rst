@@ -60,10 +60,10 @@ It manages the saving and loading of models and their meta.
 ModelRepo
 ~~~~~~~~~
 :py:class:`cascade.models.ModelRepo`
-
-.. important::
-    This section is WIP, will be filled in following releases, see the documentation for details
-    about this concept!
+ModelRepo constitutes a collection of ModelLines. A collection of experiments with its lines of models.
+Its meta can contain the information about the experiments in general and about things that are
+applicable to all of the models. For example feature set, information about dataset (can be its meta)
+or validation procedure.
 
 Meta
 ----
