@@ -43,7 +43,7 @@ Model
 :py:class:`cascade.models.Model`
 Descendants of Model are wrappers around some inference and intended to use only in training context.
 It is responsible for handling its own state - saving and loading it exactly as it is. It also should
-perform evaluation and fill up its metrics and log parameters.  
+perform evaluation and fill up its metrics.  
 
 All this responsibilities form self-sufficient and independent model, which can be managed in more
 abstract way.
