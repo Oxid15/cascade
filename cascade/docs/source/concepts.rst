@@ -51,10 +51,11 @@ abstract way.
 ModelLine
 ~~~~~~~~~
 :py:class:`cascade.models.ModelLine`
+ModelLine is the entity that helps to track one model's progress in metrics and parameters.
+This is a collection of models of the same class, which has its own meta, that describes the
+collection as a whole.  
 
-.. important::
-    This section is WIP, will be filled in following releases, see the documentation for details
-    about this concept!
+It manages the saving and loading of models and their meta.
 
 ModelRepo
 ~~~~~~~~~
