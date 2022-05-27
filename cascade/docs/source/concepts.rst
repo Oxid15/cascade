@@ -67,18 +67,27 @@ or validation procedure.
 
 Meta
 ----
+Meta data is the heart of Cascade and a part of its key principles. As the development continues
+the set of instruments for working with meta data should extend.
 
 Validator
 ~~~~~~~~~
 :py:class:`cascade.meta.Validator`
+Validator is a special kind of Modifier that performs checks on data. It can check each item in a dataset
+or perform checks on the dataset as a whole. For implementation of these cases see 
+:py:class:`cascade.meta.PredicateValidator` and :py:class:`cascade.meta.AggregateValidator`.
 
-.. important::
-    This section is WIP, will be filled in following releases, see the documentation for details
-    about this concept!
+You can subclass any of these classes to write your own data-validation unit to check 
+some assumptions about dataset. Testing of data is crucial to speed up finding issues in it,
+ensure quality of data hence quality of models.  
+
+If you want some properties of your dataset to stay constant, you can add them in its meta and
+check consistency automatically using mechanism of MetaValidator.
+See it in :py:class:`cascade.meta.MetaValidator`.
 
 Viewers
 ~~~~~~~
-:py:class:`cascade.meta.MetaViewer`
+:py:class:`cascade.meta.MetaViewer`, :py:class:`cascade.meta.MetricViewer`
 
 .. important::
     This section is WIP, will be filled in following releases, see the documentation for details
