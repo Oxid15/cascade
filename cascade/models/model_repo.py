@@ -138,7 +138,7 @@ class ModelRepo:
             meta = self.meta_viewer.read(meta_path)[0]
 
         meta.update(self.get_meta()[0])
-        self.meta_viewer.write(meta_path, meta)
+        self.meta_viewer.write(meta_path, [meta])
 
     def get_meta(self) -> List[Dict]:
         meta = {
