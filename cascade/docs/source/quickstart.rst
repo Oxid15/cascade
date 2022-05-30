@@ -3,11 +3,11 @@ Quickstart
 
 Installation
 ------------
-Install latest version using pip directly from git branch
+Install latest version using pip directly from main branch
 
 .. code-block:: bash
 
-    python -m pip install git+https://github.com/oxid15/cascade.git@v0.3.0
+    pip install git+https://github.com/oxid15/cascade.git@main
 
 .. note::
     `cascade.utils` is also installed, but its requirements are optional and listed in the file `utils_requirements.txt`
