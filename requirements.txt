@@ -5,3 +5,4 @@ deepdiff
 pendulum
 plotly
 dash
+pandera[io]
