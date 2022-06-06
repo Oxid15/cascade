@@ -52,6 +52,7 @@ class AggregateValidator(Validator):
 class PredicateValidator(Validator):
     """
     This validator accepts function that is applied to each item in dataset and return `True` or `False`
+    Calls all previous lazy datasets in __init__
 
     Example
     -------
