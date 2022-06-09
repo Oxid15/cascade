@@ -18,6 +18,7 @@ from typing import List, Dict
 import pandas as pd
 from dask import dataframe as dd
 
+from ..meta import AggregateValidator
 from ..data import Dataset, Modifier, Iterator, SequentialCacher
 
 
@@ -106,3 +107,8 @@ class LargeCSVDataset(SequentialCacher):
 
     def __len__(self):
         return self.len
+
+
+class NullValidator(AggregateValidator):
+    def __init__(self, dataset, **kwargs) -> None:
+        super().__init__(dataset, lambda x: ~x._table.isnull().values.any(), **kwargs)
