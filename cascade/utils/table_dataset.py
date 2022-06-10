@@ -47,8 +47,9 @@ class TableDataset(Dataset):
         meta = super().get_meta()
         meta[0].update({
                 'name': repr(self),
+                'columns': str(self._table.columns),
                 'size': len(self),
-                'info': repr(self._table.describe())
+                'info': str(self._table.describe())
             })
         return meta
 
