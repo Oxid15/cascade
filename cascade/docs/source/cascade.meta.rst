@@ -26,3 +26,30 @@ cascade.meta
 |
 
 |
+
+.. autoclass:: cascade.meta.Validator
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.AggregateValidator
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.PredicateValidator
+   :members:
+
+|
+
+|
+
+|
