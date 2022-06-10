@@ -16,7 +16,9 @@ limitations under the License.
 
 from .folder_image_dataset import FolderImageDataset
 from .sk_classifier import SkModel, SkClassifier
-from .table_dataset import TableDataset, TableFilter, CSVDataset, PartedTableLoader, TableIterator, LargeCSVDataset
+from .table_dataset import (TableDataset, 
+   TableFilter, CSVDataset, PartedTableLoader, TableIterator, LargeCSVDataset,
+   NullValidator)
 from .text_classification_dataset import TextClassificationDataset
 from .oversampler import OverSampler
 from .undersampler import UnderSampler

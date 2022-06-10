@@ -94,10 +94,16 @@ class TestModelRepo(TestCase):
         repo.add_line('00000', DummyModel)
         repo.add_line('00001', DummyModel)
 
-        shutil.rmtree('./test_repo_meta')  # Cleanup
-
         meta = repo.get_meta()
         self.assertEqual(meta[0]['len'], 2)
+
+        repo = ModelRepo('./test_repo_meta')
+        repo.add_line('00002', DummyModel)
+
+        meta = repo.get_meta()
+        self.assertEqual(meta[0]['len'], 3)
+
+        shutil.rmtree('./test_repo_meta')  # Cleanup
 
 
 if __name__ == '__main__':

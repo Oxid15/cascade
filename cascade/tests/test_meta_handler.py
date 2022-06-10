@@ -45,6 +45,24 @@ class TestMetaHandler(TestCase):
         self.assertEqual(obj['name'], 'test')
         self.assertTrue(all(obj['array'] == np.zeros(4)))
         self.assertTrue(obj['none'] is None)
+    
+    def test_overwrite(self):
+        mh = MetaHandler()
+        mh.write(
+            'test_ow.json', 
+            {'name': 'first'},
+            overwrite=False)
+        
+        mh.write(
+            'test_ow.json', 
+            {'name': 'second'},
+            overwrite=False)
+
+        obj = mh.read('test_ow.json')
+
+        os.remove('test_ow.json')
+
+        self.assertEqual(obj['name'], 'first')
 
 
 if __name__ == '__main__':
