@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Concepts" href="concepts.html" /><link rel="prev" title="What is it" href="index.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>Quickstart - cascade 0.3.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
-    <link rel="stylesheet" type="text/css" href="copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+        <title>Quickstart - cascade 0.4.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.3.0 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.4.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand centered" href="index.html">
   
   <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="logo.png" alt="Logo"/>
+    <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
   </div>
   
   
@@ -202,14 +202,17 @@
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">#</a></h1>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h2>
-<p>Install latest version using pip directly from git branch</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m pip install git+https://github.com/oxid15/cascade.git@v0.3.0
+<p>Install latest version using pip directly from main branch</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/oxid15/cascade.git@main
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>cascade.utils is installed also, but cannot be used directly. If you want to use it
-import it from cascade first using <cite>from cascade import utils</cite>.</p>
+<p><cite>cascade.utils</cite> is also installed, but its requirements are optional and listed in the file <cite>utils_requirements.txt</cite></p>
+<p>If you want to use <cite>cascade.utils</cite>, install utils_requirements by cloning the repo or directly</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -r https://raw.githubusercontent.com/oxid15/cascade/main/utils_requirements.txt
+</pre></div>
+</div>
 </div>
 </section>
 <section id="use-cases">
@@ -314,12 +317,12 @@ import it from cascade first using <cite>from cascade import utils</cite>.</p>
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
-    <script src="jquery.js"></script>
-    <script src="underscore.js"></script>
-    <script src="doctools.js"></script>
-    <script src="scripts/furo.js"></script>
-    <script src="clipboard.min.js"></script>
-    <script src="copybutton.js"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
     </body>
 </html>
