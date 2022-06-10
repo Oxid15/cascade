@@ -27,10 +27,6 @@ Build a pipeline
 .. important::
     This section is WIP, will be filled in following releases!
 
-.. .. literalinclude:: test.ipynb
-..     :linenos:
-..     :language: python
-
 Train models
 ~~~~~~~~~~~~
 
