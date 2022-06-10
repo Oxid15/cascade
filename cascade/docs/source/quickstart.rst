@@ -6,7 +6,6 @@ Installation
 Install latest version using pip directly from main branch
 
 .. code-block:: bash
-    pip install git+https://github.com/oxid15/cascade.git@main
 
     pip install git+https://github.com/oxid15/cascade.git@main
 
