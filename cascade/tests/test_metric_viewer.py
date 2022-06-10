@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import sys
 import shutil
+import numpy as np
 import unittest
 from unittest import TestCase
 
@@ -43,6 +44,32 @@ class TestMetricViewer(TestCase):
         shutil.rmtree('test_mtv')
 
         self.assertTrue(all(t.columns == ['line', 'num', 'acc']))
+
+    def test_show_table(self):
+        repo = ModelRepo('test_mtv_show_table')
+        repo.add_line('0', DummyModel)
+
+        for _ in range(50):
+            m = DummyModel()
+            m.evaluate()
+            repo['0'].save(m)
+
+        mtv = MetricViewer(repo)
+        shutil.rmtree('test_mtv_show_table')
+        mtv.plot_table(show=True)
+
+    # def test_serve(self):
+    #     repo = ModelRepo('test_mtv_serve')
+    #     repo.add_line('0', DummyModel)
+
+    #     for _ in range(50):
+    #         m = DummyModel(a=np.random.randint(0, 255), b=int(np.random.normal()))
+    #         m.evaluate()
+    #         repo['0'].save(m)
+
+    #     mtv = MetricViewer(repo)
+    #     shutil.rmtree('test_mtv_serve')
+    #     mtv.serve()
 
 
 if __name__ == '__main__':

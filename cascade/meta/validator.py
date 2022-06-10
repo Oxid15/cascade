@@ -25,7 +25,7 @@ class Validator(Modifier):
     """
     Base class for validators. Defines basic `__init__` structure
     """
-    def __init__(self, dataset: Dataset, func: Callable[[Any], bool]) -> None:
+    def __init__(self, dataset: Dataset, func: Callable[[Any], bool]) -> None:  #TODO: add **kwargs everywhere
         super().__init__(dataset)
         self.func = func
 
@@ -52,6 +52,7 @@ class AggregateValidator(Validator):
 class PredicateValidator(Validator):
     """
     This validator accepts function that is applied to each item in dataset and return `True` or `False`
+    Calls all previous lazy datasets in __init__
 
     Example
     -------

@@ -16,51 +16,53 @@ limitations under the License.
 
 import os
 import sys
-import json
-import shutil
+import pendulum
+import numpy as np
 import unittest
 from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.meta import MetaHandler, MetaViewer
+from cascade.meta import MetaHandler
 
 
 class TestMetaHandler(TestCase):
     def test(self):
         mh = MetaHandler()
-        mh.write('test.json', {'name': 'test'})
+        mh.write('test.json', 
+        {
+            'name': 'test',
+            'array': np.zeros(4),
+            'none': None,
+            'date': pendulum.now(tz='UTC')
+        })
 
         obj = mh.read('test.json')
 
         os.remove('test.json')
 
-        self.assertTrue('name' in obj)
         self.assertEqual(obj['name'], 'test')
+        self.assertTrue(all(obj['array'] == np.zeros(4)))
+        self.assertTrue(obj['none'] is None)
+    
+    def test_overwrite(self):
+        mh = MetaHandler()
+        mh.write(
+            'test_ow.json', 
+            {'name': 'first'},
+            overwrite=False)
+        
+        mh.write(
+            'test_ow.json', 
+            {'name': 'second'},
+            overwrite=False)
 
+        obj = mh.read('test_ow.json')
 
-class TestMetaViewer(TestCase):
-    def test(self):
-        root = 'metas'
-        os.mkdir(root)
-        os.mkdir(os.path.join(root, 'model'))
+        os.remove('test_ow.json')
 
-        with open(f'{root}/test.json', 'w') as f:
-            json.dump({'name': 'test'}, f)
-
-        with open(f'{root}/model/test.json', 'w') as f:
-            json.dump({'name': 'test'}, f)
-
-        mv = MetaViewer(root)
-
-        shutil.rmtree(root)
-
-        self.assertEqual(len(mv), 2)
-        self.assertTrue('name' in mv[0])
-        self.assertTrue('name' in mv[1])
-        self.assertEqual(mv[0]['name'], 'test')
-        self.assertEqual(mv[1]['name'], 'test')
+        self.assertEqual(obj['name'], 'first')
 
 
 if __name__ == '__main__':

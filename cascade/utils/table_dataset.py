@@ -18,6 +18,7 @@ from typing import List, Dict
 import pandas as pd
 from dask import dataframe as dd
 
+from ..meta import AggregateValidator, DataValidationException
 from ..data import Dataset, Modifier, Iterator, SequentialCacher
 
 
@@ -46,8 +47,9 @@ class TableDataset(Dataset):
         meta = super().get_meta()
         meta[0].update({
                 'name': repr(self),
+                'columns': str(self._table.columns),
                 'size': len(self),
-                'info': repr(self._table.describe())
+                'info': str(self._table.describe())
             })
         return meta
 
@@ -106,3 +108,23 @@ class LargeCSVDataset(SequentialCacher):
 
     def __len__(self):
         return self.len
+
+
+class NullValidator(TableDataset, AggregateValidator):
+    def __init__(self, dataset, **kwargs) -> None:
+        super().__init__(dataset, self.check_nulls, t=dataset._table, **kwargs)
+
+    def check_nulls(self, x):
+        mask = x._table.isnull().values
+        if ~(mask.any()):
+            return True
+        else:
+            total = mask.sum()
+            by_columns = mask.sum(axis=0)
+            missing = pd.DataFrame(by_columns.reshape(1, len(by_columns)), columns=x._table.columns)
+            raise DataValidationException(
+                f'There were NaN-values in {repr(self._dataset)}\n'\
+                f'Total count: {total}\n'\
+                f'By columns:\n'\
+                f'{missing}'
+            )

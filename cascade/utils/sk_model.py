@@ -77,7 +77,6 @@ class SkModel(Model):
     def get_meta(self):
         meta = super().get_meta()
         meta[0].update({
-            'name': self.name if self.name is not None else None,
             'pipeline': repr(self.pipeline)
         })
         return meta
