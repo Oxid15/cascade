@@ -27,6 +27,15 @@ cascade.meta
 
 |
 
+.. autoclass:: cascade.meta.HistoryViewer
+   :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.meta.Validator
    :members:
 
