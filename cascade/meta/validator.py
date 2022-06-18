@@ -25,8 +25,8 @@ class Validator(Modifier):
     """
     Base class for validators. Defines basic `__init__` structure
     """
-    def __init__(self, dataset: Dataset, func: Callable[[Any], bool]) -> None:  #TODO: add **kwargs everywhere
-        super().__init__(dataset)
+    def __init__(self, dataset: Dataset, func: Callable[[Any], bool], **kwargs) -> None:  #TODO: add **kwargs everywhere
+        super().__init__(dataset, **kwargs)
         self.func = func
 
 
@@ -40,8 +40,8 @@ class AggregateValidator(Validator):
     >>> ds = NumberDataset([1, 2, 3, 4, 5])
     >>> ds = AggregateValidator(ds, lambda x: len(x) == 5)
     """
-    def __init__(self, dataset: Dataset, func: Callable[[Dataset], bool]) -> None:
-        super().__init__(dataset, func)
+    def __init__(self, dataset: Dataset, func: Callable[[Dataset], bool], **kwargs) -> None:
+        super().__init__(dataset, func, **kwargs)
 
         if not self.func(self._dataset):
             raise DataValidationException(f'{repr(self._dataset)} fails on {repr(self.func)}')
@@ -60,8 +60,8 @@ class PredicateValidator(Validator):
     >>> ds = NumberDataset([1, 2, 3, 4, 5])
     >>> ds = PredicateValidator(ds, lambda x: x < 6)
     """
-    def __init__(self, dataset: Dataset, func: Callable[[T], bool]) -> None:
-        super().__init__(dataset, func)
+    def __init__(self, dataset: Dataset, func: Callable[[T], bool], **kwargs) -> None:
+        super().__init__(dataset, func, **kwargs)
         bad_items = []
         for i, item in tqdm(enumerate(self._dataset), desc='Checking', leave=False):
             if not self.func(item):

@@ -27,6 +27,13 @@ from cascade.data import Concatenator
 
 
 class TestConcatenator(TestCase):
+    def test_meta(self):
+        n1 = NumberDataset([0, 1])
+        n2 = NumberDataset([2, 3, 4, 5])
+
+        c = Concatenator([n1, n2], meta_prefix={'num': 1})
+        self.assertEqual(c.get_meta()[0]['num'], 1)
+
     def test_concatenation(self):
         n1 = NumberDataset([0, 1])
         n2 = NumberDataset([2, 3, 4, 5])
