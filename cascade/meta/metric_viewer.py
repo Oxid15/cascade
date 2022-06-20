@@ -75,12 +75,12 @@ class MetricViewer:
         # Conditional import
         try:
             import dash
-        except ImportError:
-            raise ImportError('''
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
             Cannot import dash. It is conditional 
             dependency you can install it with 
             `pip install dash`''')
-        finally:
+        else:
             from dash import Input, Output, html, dcc
 
         df = self.table
