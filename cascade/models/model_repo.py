@@ -12,10 +12,12 @@ limitations under the License.
 """
 
 import os
+import json
 from typing import List, Dict
 import shutil
-import pendulum
 
+import pendulum
+from deepdiff.diff import DeepDiff
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
@@ -132,13 +134,20 @@ class ModelRepo:
         # Reads meta if exists and updates it with new values
         # writes back to disk
         meta_path = os.path.join(self.root, 'meta.json')
+        hist_path = os.path.join(self.root, 'history.json')
 
         meta = {}
         if os.path.exists(meta_path):
             meta = self.meta_viewer.read(meta_path)[0]
 
+        history = []
+        if os.path.exists(hist_path):
+            history = self.meta_viewer.read(hist_path)
+
+        history.append(str(DeepDiff(meta, self.get_meta()[0]).to_dict()))
         meta.update(self.get_meta()[0])
         self.meta_viewer.write(meta_path, [meta])
+        self.meta_viewer.write(hist_path, history)
 
     def get_meta(self) -> List[Dict]:
         meta = {
