@@ -17,8 +17,6 @@ limitations under the License.
 import os
 from plotly import graph_objects as go
 import pandas as pd
-import dash
-from dash import Input, Output, html, dcc
 
 from . import MetaViewer
 
@@ -74,6 +72,17 @@ class MetricViewer:
         return fig
 
     def serve(self):
+        # Conditional import
+        try:
+            import dash
+        except ImportError:
+            raise ImportError('''
+            Cannot import dash. It is conditional 
+            dependency you can install it with 
+            `pip install dash`''')
+        finally:
+            from dash import Input, Output, html, dcc
+
         df = self.table
 
         app = dash.Dash()
