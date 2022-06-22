@@ -24,7 +24,7 @@ class Concatenator(Dataset):
     """
     Unifies several Datasets under one, calling them sequentially in the provided order.
     """
-    def __init__(self, datasets: Iterable[Dataset], **kwargs) -> None:
+    def __init__(self, datasets: Iterable[Dataset], *args, **kwargs) -> None:
         """
         Creates concatenated dataset from the list of datasets provided
 
@@ -36,7 +36,7 @@ class Concatenator(Dataset):
         self._datasets = datasets
         lengths = [len(ds) for ds in self._datasets]
         self.shifts = np.cumsum([0] + lengths)
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
     def __getitem__(self, index) -> T:
         ds_index = 0

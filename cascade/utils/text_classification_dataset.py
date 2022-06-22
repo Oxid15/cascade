@@ -22,7 +22,7 @@ from ..data import Dataset
 
 
 class TextClassificationDataset(Dataset):
-    def __init__(self, path, encoding='utf-8', **kwargs):
+    def __init__(self, path, encoding='utf-8', *args, **kwargs):
         super().__init__(**kwargs)
         self.encoding = encoding
         self.root = os.path.abspath(path)
