@@ -23,7 +23,7 @@ class Dataset(Generic[T]):
     It does not define `__len__` for similar reasons.
     See `pytorch/torch/utils/data/sampler.py` note on this topic.
     """
-    def __init__(self, *args, meta_prefix=None, **kwargs):
+    def __init__(self, *args, meta_prefix=None):
         if meta_prefix is None:
             meta_prefix = {}
         self.meta_prefix = meta_prefix
@@ -82,9 +82,9 @@ class Wrapper(Dataset):
     """
     Wraps Dataset around any list-like object.
     """
-    def __init__(self, obj, meta_prefix=None) -> None:
+    def __init__(self, obj, *args, **kwargs) -> None:
         self._data = obj
-        super().__init__(meta_prefix=meta_prefix)
+        super().__init__(*args, **kwargs)
 
     def __getitem__(self, index) -> T:
         return self._data[index]
@@ -109,7 +109,7 @@ class Modifier(Dataset):
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
     """
-    def __init__(self, dataset: Dataset, meta_prefix=None) -> None:
+    def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
         Parameters
@@ -119,7 +119,7 @@ class Modifier(Dataset):
         """
         self._dataset = dataset
         self._index = -1
-        super().__init__(meta_prefix=meta_prefix)
+        super().__init__(*args, **kwargs)
 
     def __getitem__(self, index) -> T:
         return self._dataset[index]
@@ -160,9 +160,9 @@ class Sampler(Modifier):
     --------
     cascade.data.CyclicSampler
     """
-    def __init__(self, dataset: Dataset, num_samples: int, meta_prefix=None) -> None:
+    def __init__(self, dataset: Dataset, num_samples: int, *args, **kwargs) -> None:
         assert num_samples > 0
-        super().__init__(dataset, meta_prefix=meta_prefix)
+        super().__init__(dataset, *args, **kwargs)
         self._num_samples = num_samples
 
     def __len__(self) -> int:

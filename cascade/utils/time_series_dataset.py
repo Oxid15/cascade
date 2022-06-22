@@ -113,12 +113,12 @@ class TimeSeriesDataset(Dataset):
 
 
 class Average(TimeSeriesDataset, Modifier):
-    def __init__(self, dataset: TimeSeriesDataset, unit='years', amount=1, **kwargs):
+    def __init__(self, dataset: TimeSeriesDataset, unit='years', amount=1, *args, **kwargs):
         time, data = dataset.get_data()
         reg_time = [d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)]
         reg_data = self._avg(data, time, reg_time)
         assert len(reg_data) > 1, 'Please, provide unit that would get more than one period'
-        super().__init__(dataset, time=reg_time, data=reg_data, **kwargs)
+        super().__init__(dataset, time=reg_time, data=reg_data, *args, **kwargs)
 
     def _avg(self, arr, arr_dates, dates):
         new_p = np.zeros(len(dates))
@@ -140,5 +140,5 @@ class Interpolate(TimeSeriesDataset, Modifier):
 
 
 class Align(TimeSeriesDataset, Modifier):
-    def __init__(self, dataset, time, **kwargs):
-        super().__init__(dataset, time=time, data=dataset[time], **kwargs)
+    def __init__(self, dataset, time, *args, **kwargs):
+        super().__init__(dataset, time=time, data=dataset[time], *args, **kwargs)

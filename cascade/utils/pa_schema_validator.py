@@ -4,8 +4,8 @@ from ..meta import AggregateValidator, DataValidationException
 
 
 class PaSchemaValidator(AggregateValidator):
-    def __init__(self, dataset, schema, **kwargs) -> None:
-        super().__init__(dataset, func=lambda x: self._validate(x, schema), **kwargs)
+    def __init__(self, dataset, schema, *args, **kwargs) -> None:
+        super().__init__(dataset, func=lambda x: self._validate(x, schema), *args, **kwargs)
 
     def _validate(self, ds, schema) -> bool:
         try:
