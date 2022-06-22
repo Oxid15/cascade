@@ -35,6 +35,7 @@ class OverSampler(Sampler):
                 self.add_indices.append(k)
         ln = len(dataset) + len(self.add_indices)
         print(f'Original length was {len(dataset)} and new is {ln}')
+
         super().__init__(dataset, num_samples=ln, *args, **kwargs)
 
     def __getitem__(self, index):

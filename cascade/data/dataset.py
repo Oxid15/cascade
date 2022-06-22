@@ -95,7 +95,8 @@ class Wrapper(Dataset):
     def get_meta(self):
         meta = super().get_meta()
         meta[0]['len'] = len(self)
-        meta[0]['type'] = type(self.obj)
+        meta[0]['type'] = type(self._data)
+        return meta
 
 
 class Modifier(Dataset):
