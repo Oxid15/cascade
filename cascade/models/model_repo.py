@@ -12,7 +12,7 @@ limitations under the License.
 """
 
 import os
-import json
+import logging
 from typing import List, Dict
 import shutil
 
@@ -63,6 +63,12 @@ class ModelRepo:
         """
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
         self.root = folder
+
+        self.logger = logging.getLogger(folder)
+        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
+        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
+        self.logger.addHandler(hdlr)
+        self.logger.setLevel('DEBUG')
 
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(folder)
@@ -140,14 +146,13 @@ class ModelRepo:
         if os.path.exists(meta_path):
             meta = self.meta_viewer.read(meta_path)[0]
 
-        history = []
-        if os.path.exists(hist_path):
-            history = self.meta_viewer.read(hist_path)
+        self.logger.info(DeepDiff(
+            meta,
+            self.meta_viewer.obj_to_dict(self.get_meta()[0])).pretty()
+        )
 
-        history.append(str(DeepDiff(meta, self.get_meta()[0]).to_dict()))
         meta.update(self.get_meta()[0])
         self.meta_viewer.write(meta_path, [meta])
-        self.meta_viewer.write(hist_path, history)
 
     def get_meta(self) -> List[Dict]:
         meta = {
