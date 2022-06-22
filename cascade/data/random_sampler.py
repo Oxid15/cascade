@@ -14,13 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .dataset import Dataset, Modifier, Sampler, T, Wrapper, Iterator
+from numpy.random import shuffle
+from . import Dataset, Sampler
 
-from .apply_modifier import ApplyModifier
-from .bruteforce_cacher import BruteforceCacher
-from .sequential_cacher import SequentialCacher
-from .concatenator import Concatenator
-from .cyclic_sampler import CyclicSampler
-from .random_sampler import RandomSampler
-from .pickler import Pickler
-from .folder_dataset import FolderDataset
+
+class RandomSampler(Sampler):
+    def __init__(self, dataset: Dataset, num_samples=None, **kwargs) -> None:
+        if num_samples is None:
+            num_samples = len(dataset)
+        super().__init__(dataset, num_samples, **kwargs)
+        self.indices = [i for i in range(len(dataset))][:num_samples]
+        shuffle(self.indices)
+    
+    def __getitem__(self, index):
+        return super().__getitem__(self.indices[index])
