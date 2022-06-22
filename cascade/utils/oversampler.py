@@ -21,9 +21,7 @@ from tqdm import trange
 
 class OverSampler(Sampler):
     def __init__(self, dataset):
-        super().__init__(dataset, None)
-
-        labels = [int(self._dataset[i][1]) for i in trange(len(self._dataset))]
+        labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels = np.unique(labels)
         label_nums, _ = np.histogram(labels, bins=len(ulabels))
         add_nums = np.max(label_nums) - label_nums
@@ -35,7 +33,9 @@ class OverSampler(Sampler):
                 while labels[k] != label:
                     k += 1
                 self.add_indices.append(k)
-        print(f'Original length was {len(self._dataset)} and new is {len(self)}')
+        ln = len(dataset) + len(self.add_indices)
+        print(f'Original length was {len(dataset)} and new is {ln}')
+        super().__init__(dataset, ln)
 
     def __getitem__(self, index):
         if index < len(self._dataset):
