@@ -67,6 +67,7 @@ class Concatenator(Dataset):
         Concatenator calls `get_meta()` of all its datasets and appends to its own meta
         """
         meta = super().get_meta()
+        meta[0]['data'] = []
         for ds in self._datasets:
-            meta += ds.get_meta()
+            meta[0]['data'] += ds.get_meta()
         return meta
