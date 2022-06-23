@@ -85,7 +85,7 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(self):
+    def serve(self, **kwargs) -> None:
         df = self.table
 
         app = dash.Dash()
@@ -135,4 +135,4 @@ class MetricViewer:
                 fig.update_layout(title=f'{x} to {y} relation')
             return fig
 
-        app.run_server(use_reloader=False)
+        app.run_server(use_reloader=False, **kwargs)
