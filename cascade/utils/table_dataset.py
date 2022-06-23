@@ -49,7 +49,7 @@ class TableDataset(Dataset):
                 'name': repr(self),
                 'columns': list(self._table.columns),
                 'len': len(self),
-                'info': str(self._table.describe())
+                'info': self._table.describe().to_dict()
             })
         return meta
 
