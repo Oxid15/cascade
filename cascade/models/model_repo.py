@@ -145,7 +145,8 @@ class ModelRepo:
             'name': repr(self),
             'root': self.root,
             'len': len(self),
-            'updated_at': pendulum.now(tz='UTC')
+            'updated_at': pendulum.now(tz='UTC'),
+            'type': 'repo'
         }
         meta.update(self.meta_prefix)
         return [meta]
