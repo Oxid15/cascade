@@ -26,11 +26,14 @@ class ModelRepo:
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
+    
+    Stores meta-data in file meta.json in the root folder. With every run if the repo was already
+    created earlier, updates its meta and logs changes in human-readable format in file history.log
 
     Example
     -------
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is VGG16 model from the example.'})
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})
     >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
