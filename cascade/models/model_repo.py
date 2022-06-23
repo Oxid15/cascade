@@ -64,12 +64,6 @@ class ModelRepo:
         self.meta_prefix = meta_prefix if meta_prefix is not None else {}
         self.root = folder
 
-        self.logger = logging.getLogger(folder)
-        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
-        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
-        self.logger.addHandler(hdlr)
-        self.logger.setLevel('DEBUG')
-
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(folder)
 
@@ -89,6 +83,12 @@ class ModelRepo:
         if lines is not None:
             for line in lines:
                 self.add_line(line['name'], line['cls'])
+
+        self.logger = logging.getLogger(folder)
+        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
+        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
+        self.logger.addHandler(hdlr)
+        self.logger.setLevel('DEBUG')
 
         self._update_meta()
 
