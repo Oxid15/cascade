@@ -42,7 +42,7 @@ class SkModel(Model):
 
     def evaluate(self, x, y, metrics_dict):
         preds = self.predict(x)
-        self.metrics.update({key: metrics_dict[key](preds, y) for key in metrics_dict})
+        self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
 
     def _check_model_hash(self, meta, path_w_ext):
         with open(path_w_ext, 'rb') as f:
