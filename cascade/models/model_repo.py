@@ -12,10 +12,12 @@ limitations under the License.
 """
 
 import os
+import logging
 from typing import List, Dict
 import shutil
-import pendulum
 
+import pendulum
+from deepdiff.diff import DeepDiff
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
@@ -24,11 +26,14 @@ class ModelRepo:
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
+    
+    Stores meta-data in file meta.json in the root folder. With every run if the repo was already
+    created earlier, updates its meta and logs changes in human-readable format in file history.log
 
     Example
     -------
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is VGG16 model from the example.'})
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})
     >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
@@ -82,6 +87,12 @@ class ModelRepo:
             for line in lines:
                 self.add_line(line['name'], line['cls'])
 
+        self.logger = logging.getLogger(folder)
+        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
+        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
+        self.logger.addHandler(hdlr)
+        self.logger.setLevel('DEBUG')
+
         self._update_meta()
 
     def add_line(self, name, model_cls):
@@ -132,10 +143,16 @@ class ModelRepo:
         # Reads meta if exists and updates it with new values
         # writes back to disk
         meta_path = os.path.join(self.root, 'meta.json')
+        hist_path = os.path.join(self.root, 'history.json')
 
         meta = {}
         if os.path.exists(meta_path):
             meta = self.meta_viewer.read(meta_path)[0]
+
+        self.logger.info(DeepDiff(
+            meta,
+            self.meta_viewer.obj_to_dict(self.get_meta()[0])).pretty()
+        )
 
         meta.update(self.get_meta()[0])
         self.meta_viewer.write(meta_path, [meta])
