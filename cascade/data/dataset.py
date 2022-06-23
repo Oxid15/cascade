@@ -45,7 +45,10 @@ class Dataset(Generic[T]):
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
-        meta = {'name': repr(self)}
+        meta = {
+            'name': repr(self), 
+            'type': 'dataset'
+        }
         if self.meta_prefix is not None:
             meta.update(self.meta_prefix)
         return [meta]
@@ -95,7 +98,7 @@ class Wrapper(Dataset):
     def get_meta(self):
         meta = super().get_meta()
         meta[0]['len'] = len(self)
-        meta[0]['type'] = type(self.obj)
+        meta[0]['obj_type'] = type(self.obj)
 
 
 class Modifier(Dataset):
