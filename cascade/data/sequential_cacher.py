@@ -29,7 +29,7 @@ class SequentialCacher(Modifier):
     --------
     BruteforceCacher
     """
-    def __init__(self, dataset: Dataset, batch_size=2) -> None:
+    def __init__(self, dataset: Dataset, batch_size=2, *args, **kwargs) -> None:
         """
         Parameters
         ----------
@@ -40,7 +40,7 @@ class SequentialCacher(Modifier):
         """
         # TODO: make something to release this assert
         assert hasattr(dataset, '__len__'), 'Dataset should have __len__'
-        super().__init__(dataset)
+        super().__init__(dataset, *args, **kwargs)
         self.bs = batch_size
         self.num_batches = int(ceil(len(self._dataset) / self.bs))
         self.index = -1

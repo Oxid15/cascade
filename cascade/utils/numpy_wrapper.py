@@ -19,5 +19,5 @@ from ..data import Wrapper
 
 
 class NumpyWrapper(Wrapper):
-    def __init__(self, path):
-        self._data = np.load(path)
+    def __init__(self, path, *args, **kwargs):
+        super().__init__(np.load(path), *args, **kwargs)
