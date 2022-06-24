@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import pendulum
 from plotly import graph_objects as go
 import pandas as pd
 
@@ -43,8 +44,19 @@ class MetricViewer:
 
             for i, model_name in enumerate(line.model_names):
                 view = MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))
-                metric = {'line': name, 'num': i}
-                meta = view[0][-1]
+                meta = view[0][-1]  # Takes last model from meta
+                metric = {
+                    'line': name, 
+                    'num': i
+                }
+
+                if 'created_at' in meta:
+                    metric['created_at'] = \
+                        pendulum.parse(meta['created_at']).format('DD-MM-YYYY hh:mm:ss')
+                if 'saved_at' in meta:
+                    metric['saved'] = \
+                        pendulum.parse(meta['saved_at'])\
+                            .diff_for_humans(pendulum.parse(meta['created_at']))
 
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
@@ -71,7 +83,7 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(self):
+    def serve(self, **kwargs) -> None:
         # Conditional import
         try:
             import dash
@@ -81,7 +93,7 @@ class MetricViewer:
             dependency you can install it with 
             `pip install dash`''')
         else:
-            from dash import Input, Output, html, dcc
+            from dash import Input, Output, html, dcc, dash_table
 
         df = self.table
 
@@ -108,9 +120,19 @@ class MetricViewer:
             dcc.Graph(
                 id='dependence-figure',
                 figure=dep_fig),
-            dcc.Graph(
-                id='table',
-                figure=self.plot_table(show=False)
+            dash_table.DataTable(
+                columns=[
+                    {'name': col, 'id': col, 'selectable': True} for col in df.columns
+                ],
+                data=df.to_dict('records'),
+                filter_action="native",
+                sort_action="native",
+                sort_mode="multi",
+                selected_columns=[],
+                selected_rows=[],
+                page_action="native",
+                page_current= 0,
+                page_size= 10,
             )
         ])
 
@@ -132,4 +154,4 @@ class MetricViewer:
                 fig.update_layout(title=f'{x} to {y} relation')
             return fig
 
-        app.run_server(use_reloader=False)
+        app.run_server(use_reloader=False, **kwargs)
