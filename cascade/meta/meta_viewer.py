@@ -102,7 +102,7 @@ class MetaViewer:
         meta = meta[-1]  # Takes last meta
         for key in self.filt:
             if key not in meta:
-                raise KeyError(f'{key} not in\n{meta}')
+                raise KeyError(f"'{key}' key is not in\n{meta}")
             
             if self.filt[key] != meta[key]:
                 return False
