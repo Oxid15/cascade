@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import pendulum
+from flatten_json import flatten
 from plotly import graph_objects as go
 import pandas as pd
 
@@ -70,15 +71,17 @@ class MetricViewer:
         return repr(self.table)
 
     def plot_table(self, show=False) -> None:
+        data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
-                header=dict(values=list(self.table.columns),
+                header=dict(values=list(data.columns),
                             fill_color='#f4c9c7',
                             align='left'),
-                cells=dict(values=[self.table[col] for col in self.table.columns],
+                cells=dict(values=[data[col] for col in data.columns],
                            fill_color='#bcced4',
-                           align='left'))
-        ])
+                           align='left')
+                )
+            ])
         if show:
             fig.show()
         return fig
@@ -96,6 +99,7 @@ class MetricViewer:
             from dash import Input, Output, html, dcc, dash_table
 
         df = self.table
+        df_flatten = pd.DataFrame(map(flatten, self.table.to_dict('records')))
 
         app = dash.Dash()
         dep_fig = go.Figure()
@@ -122,9 +126,9 @@ class MetricViewer:
                 figure=dep_fig),
             dash_table.DataTable(
                 columns=[
-                    {'name': col, 'id': col, 'selectable': True} for col in df.columns
+                    {'name': col, 'id': col, 'selectable': True} for col in df_flatten.columns
                 ],
-                data=df.to_dict('records'),
+                data=df_flatten.to_dict('records'),
                 filter_action="native",
                 sort_action="native",
                 sort_mode="multi",
