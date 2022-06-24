@@ -58,8 +58,6 @@ class HistoryViewer:
 
             for i in range(len(line.model_names)):
                 new_meta = {'line': name, 'num': i}
-                # recursively unfold every nested dict to form plain table
-                # self._add(view[i][-1], new_meta)
                 new_meta.update(flatten(view[i][-1]))
                 metas.append(new_meta)
 
@@ -74,13 +72,6 @@ class HistoryViewer:
         self.table = pd.DataFrame(metas)
         if 'saved_at' in self.table:
             self.table = self.table.sort_values('saved_at')
-
-    # def _add(self, elem, meta) -> None:
-    #     for key in elem:
-    #         if type(elem[key]) != dict:
-    #             meta[key] = elem[key]
-    #         else:
-    #             self._add(elem[key], meta)
 
     def _diff(self, p1, params) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
