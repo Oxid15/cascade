@@ -15,12 +15,14 @@ limitations under the License.
 """
 
 import os
+import warnings
 from plotly import graph_objects as go
 import pandas as pd
 import dash
 from dash import Input, Output, html, dcc
 
 from . import MetaViewer
+from .. import __version__
 
 
 class MetricViewer:
@@ -43,10 +45,20 @@ class MetricViewer:
             line = self.repo[name]
             viewer_root = os.path.join(self.repo.root, name)
 
-            for i, model_name in enumerate(line.model_names):
-                view = MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))
+            # Try to use viewer only on models using type key
+            try:
+                view = MetaViewer(viewer_root, filt={'type': 'model'})
+            except KeyError:
+                view = [MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name))) 
+                    for model_name in line.model_names]
+
+                warnings.warn('''You use cascade {__version__} with the repo generated in version <= 0.4.1 without "type": "repo" key in meta.
+                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
+                In the following versions it will be deprecated.''', FutureWarning)
+
+            for i in range(len(line.model_names)):
                 metric = {'line': name, 'num': i}
-                meta = view[0][-1]
+                meta = view[i][-1]
 
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
