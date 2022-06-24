@@ -47,9 +47,9 @@ class TableDataset(Dataset):
         meta = super().get_meta()
         meta[0].update({
                 'name': repr(self),
-                'columns': str(self._table.columns),
-                'size': len(self),
-                'info': str(self._table.describe())
+                'columns': list(self._table.columns),
+                'len': len(self),
+                'info': self._table.describe().to_dict()
             })
         return meta
 
@@ -58,8 +58,8 @@ class TableDataset(Dataset):
 
 
 class TableFilter(TableDataset, Modifier):
-    def __init__(self, dataset, mask, **kwargs):
-        super().__init__(dataset, t=dataset._table, **kwargs)
+    def __init__(self, dataset, mask, *args, **kwargs):
+        super().__init__(dataset, t=dataset._table, *args, **kwargs)
         init_len = len(dataset)
 
         self._table = self._table[mask]
@@ -67,15 +67,15 @@ class TableFilter(TableDataset, Modifier):
 
 
 class CSVDataset(TableDataset):
-    def __init__(self, csv_file_path, **kwargs):
-        t = pd.read_csv(csv_file_path, **kwargs)
+    def __init__(self, csv_file_path, *args, **kwargs):
+        t = pd.read_csv(csv_file_path, *args, **kwargs)
         super().__init__(t=t, **kwargs)
 
 
 class PartedTableLoader(Dataset):
-    def __init__(self, csv_file_path, **kwargs):
+    def __init__(self, csv_file_path, *args, **kwargs):
         super().__init__(**kwargs)
-        self._table = dd.read_csv(csv_file_path, **kwargs)
+        self._table = dd.read_csv(csv_file_path, *args, **kwargs)
 
     def __getitem__(self, index):
         return self._table.get_partition(index).compute()
@@ -85,17 +85,17 @@ class PartedTableLoader(Dataset):
 
 
 class TableIterator(Iterator):
-    def __init__(self, csv_file_path, chunk_size=1000, **kwargs):
+    def __init__(self, csv_file_path, *args, chunk_size=1000, **kwargs):
         self.chunk_size = chunk_size
-        super().__init__(pd.read_csv(csv_file_path, iterator=True, **kwargs))
+        super().__init__(pd.read_csv(csv_file_path, iterator=True, *args, **kwargs))
 
     def __next__(self):
         return self._data.get_chunk(self.chunk_size)
 
 
 class LargeCSVDataset(SequentialCacher):
-    def __init__(self, csv_file_path, **kwargs):
-        dataset = PartedTableLoader(csv_file_path, **kwargs)
+    def __init__(self, csv_file_path, *args, **kwargs):
+        dataset = PartedTableLoader(csv_file_path, *args, **kwargs)
         self.num_batches = dataset._table.npartitions
         self.bs = self.len // self.num_batches
 
@@ -111,8 +111,8 @@ class LargeCSVDataset(SequentialCacher):
 
 
 class NullValidator(TableDataset, AggregateValidator):
-    def __init__(self, dataset, **kwargs) -> None:
-        super().__init__(dataset, self.check_nulls, t=dataset._table, **kwargs)
+    def __init__(self, dataset, *args, **kwargs) -> None:
+        super().__init__(dataset, self.check_nulls, *args, t=dataset._table, **kwargs)
 
     def check_nulls(self, x):
         mask = x._table.isnull().values

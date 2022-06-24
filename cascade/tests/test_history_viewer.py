@@ -42,7 +42,6 @@ class TestHistoryViewer(TestCase):
 
         hv = HistoryViewer(repo)
         hv.plot('acc')
-        shutil.rmtree('./test_hv')
 
     def test_no_metric(self):
         repo = ModelRepo('./test_hv_no_metric')
@@ -57,8 +56,6 @@ class TestHistoryViewer(TestCase):
         hv = HistoryViewer(repo)
         with self.assertRaises(AssertionError):
             hv.plot('acc')
-
-        shutil.rmtree('./test_hv_no_metric')
 
     def test_params(self):
         repo = ModelRepo('./test_hv_params')
@@ -76,8 +73,6 @@ class TestHistoryViewer(TestCase):
 
         hv = HistoryViewer(repo)
         hv.plot('acc')
-
-        shutil.rmtree('./test_hv_params')
 
     def test_empty_model(self):
         class EmptyModel(DummyModel):
@@ -97,8 +92,6 @@ class TestHistoryViewer(TestCase):
         hv = HistoryViewer(repo)
         hv.plot('acc')
 
-        shutil.rmtree('./test_empty')
-
     def test_many_lines(self):
         repo = ModelRepo('./test_many_lines', lines=[
             dict(
@@ -117,8 +110,6 @@ class TestHistoryViewer(TestCase):
 
         hv = HistoryViewer(repo)
         hv.plot('acc')
-
-        shutil.rmtree('./test_many_lines')
 
 
 if __name__ == '__main__':

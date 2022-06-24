@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import json
 from . import MetaHandler
 
 
@@ -107,3 +108,6 @@ class MetaViewer:
             if self.filt[key] != meta[key]:
                 return False
         return True
+
+    def obj_to_dict(self, obj):
+        return json.loads(self.mh.encode(obj))

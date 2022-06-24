@@ -4,4 +4,4 @@ pandas
 deepdiff
 pendulum
 plotly
-dash
+flatten_json
