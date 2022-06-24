@@ -41,7 +41,7 @@ class TestMetricViewer(TestCase):
         mtv = MetricViewer(repo)
         t = mtv.table
 
-        self.assertTrue(all(t.columns == ['line', 'num', 'acc']))
+        self.assertTrue(all(t.columns == ['line', 'num', 'acc', 'updated_at', 'saved']))
 
     def test_show_table(self):
         repo = ModelRepo('test_mtv_show_table')
