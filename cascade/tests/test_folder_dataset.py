@@ -36,8 +36,6 @@ class TestFolderDataset(TestCase):
         ds = FolderDataset(folder)
         meta = ds.get_meta()[0]
 
-        shutil.rmtree('./folder_dataset')
-
         self.assertEqual(len(ds), 1)
         self.assertTrue('name' in meta)
         self.assertTrue('len' in meta)
