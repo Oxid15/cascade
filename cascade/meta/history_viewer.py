@@ -19,6 +19,7 @@ import warnings
 from typing import List
 import pendulum
 import pandas as pd
+from flatten_json import flatten
 from deepdiff import DeepDiff
 from plotly import express as px
 from plotly import graph_objects as go
@@ -57,27 +58,20 @@ class HistoryViewer:
 
             for i in range(len(line.model_names)):
                 new_meta = {'line': name, 'num': i}
-                # recursively unfold every nested dict to form plain table
-                self._add(view[i][-1], new_meta)
+                new_meta.update(flatten(view[i][-1]))
                 metas.append(new_meta)
 
                 params = {
                     'line': name,
                 }
-                if 'params' in view[-1]:
-                    params.update(view[-1]['params'])
+                if 'params' in view[i][-1]:
+                    if len(view[i][-1]['params']) > 0:
+                        params.update(flatten({'params': view[i][-1]['params']}))
                 self.params.append(params)
 
         self.table = pd.DataFrame(metas)
         if 'saved_at' in self.table:
             self.table = self.table.sort_values('saved_at')
-
-    def _add(self, elem, meta) -> None:
-        for key in elem:
-            if type(elem[key]) != dict:
-                meta[key] = elem[key]
-            else:
-                self._add(elem[key], meta)
 
     def _diff(self, p1, params) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
@@ -107,6 +101,10 @@ class HistoryViewer:
         metric: str
             Metric should be present in meta of at least one model in repo
         """
+
+        # After flatten 'metrics_' will be added to the metric name
+        if not metric.startswith('metrics_'):
+            metric = 'metrics_' + metric
         assert metric in self.table
 
         # turn time into evenly spaced intervals
