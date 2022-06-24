@@ -83,15 +83,15 @@ class ModelRepo:
             self.meta_viewer = MetaViewer(self.root)
             self.lines = dict()
 
-        if lines is not None:
-            for line in lines:
-                self.add_line(line['name'], line['cls'])
-
         self.logger = logging.getLogger(folder)
         hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
         hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
         self.logger.addHandler(hdlr)
         self.logger.setLevel('DEBUG')
+
+        if lines is not None:
+            for line in lines:
+                self.add_line(line['name'], line['cls'])
 
         self._update_meta()
 
