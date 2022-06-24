@@ -27,8 +27,8 @@ class BruteforceCacher(Modifier):
     --------
     Cascade.data.SequentialCacher
     """
-    def __init__(self, dataset: Dataset) -> None:
-        super().__init__(dataset)
+    def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
+        super().__init__(dataset, *args, **kwargs)
         # forcibly calling all previous datasets in the init
         if hasattr(self._dataset, '__len__') and hasattr(self._dataset, '__getitem__'):
             self._data = [self._dataset[i] for i in trange(len(self._dataset))]

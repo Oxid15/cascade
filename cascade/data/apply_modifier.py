@@ -22,7 +22,7 @@ class ApplyModifier(Modifier):
     """
     Modifier that maps a function to previous dataset's elements in a lazy way.
     """
-    def __init__(self, dataset: Dataset, func: Callable) -> None:
+    def __init__(self, dataset: Dataset, func: Callable, *args, **kwargs) -> None:
         """
         Parameters
         ----------
@@ -32,7 +32,7 @@ class ApplyModifier(Modifier):
             a function to be applied to every item of a dataset -
             each `__getitem__` would call `func` on an item obtained from a previous dataset
         """
-        super().__init__(dataset)
+        super().__init__(dataset, *args, **kwargs)
         self.func = func
 
     def __getitem__(self, index: int) -> T:

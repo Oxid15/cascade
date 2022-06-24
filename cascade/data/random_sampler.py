@@ -14,18 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-__version__ = '0.4.2'
-__author__ = 'Ilia Moiseev'
-__author_email__ = 'ilia.moiseev.5@yandex.ru'
+from numpy.random import shuffle
+from . import Dataset, Sampler
 
-from . import data
-from . import models
-from . import meta
 
-from . import tests
-
-# cascade does not have
-# `from . import utils`
-# because it will bring additional dependencies that may not be needed by the user
-# if you need to use cascade.utils, you can install utils_requirements.txt and then 
-# import as any other cascade module
+class RandomSampler(Sampler):
+    def __init__(self, dataset: Dataset, num_samples=None, **kwargs) -> None:
+        if num_samples is None:
+            num_samples = len(dataset)
+        super().__init__(dataset, num_samples, **kwargs)
+        self.indices = [i for i in range(len(dataset))][:num_samples]
+        shuffle(self.indices)
+    
+    def __getitem__(self, index):
+        return super().__getitem__(self.indices[index])

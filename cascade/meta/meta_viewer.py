@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import json
 from . import MetaHandler
 
 
@@ -94,3 +95,6 @@ class MetaViewer:
         Loads object from path
         """
         return self.mh.read(path)
+
+    def obj_to_dict(self, obj):
+        return json.loads(self.mh.encode(obj))

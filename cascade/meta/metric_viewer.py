@@ -18,8 +18,6 @@ import os
 import pendulum
 from plotly import graph_objects as go
 import pandas as pd
-import dash
-from dash import Input, Output, html, dcc, dash_table
 
 from . import MetaViewer
 
@@ -86,6 +84,17 @@ class MetricViewer:
         return fig
 
     def serve(self, **kwargs) -> None:
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+            Cannot import dash. It is conditional 
+            dependency you can install it with 
+            `pip install dash`''')
+        else:
+            from dash import Input, Output, html, dcc, dash_table
+
         df = self.table
 
         app = dash.Dash()

@@ -23,7 +23,7 @@ class Pickler(Modifier):
     """
     Pickles an input dataset or unpickles one
     """
-    def __init__(self, path, dataset=None) -> None:
+    def __init__(self, path, dataset=None, *args, **kwargs) -> None:
         """
         Loads pickled dataset or dumps one depending on parameters passed
 
@@ -37,7 +37,7 @@ class Pickler(Modifier):
         dataset: Dataset, optional
             a dataset to be pickled
         """
-        super().__init__(dataset)
+        super().__init__(dataset, *args, **kwargs)
         self.path = path
 
         if self._dataset is None:

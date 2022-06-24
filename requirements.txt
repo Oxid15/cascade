@@ -4,4 +4,3 @@ pandas
 deepdiff
 pendulum
 plotly
-dash
