@@ -31,6 +31,7 @@ setuptools.setup(
         'pandas',
         'deepdiff',
         'pendulum',
-        'plotly'
+        'plotly',
+        'flatten_json'
     ]
 )
