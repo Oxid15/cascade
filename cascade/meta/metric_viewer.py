@@ -15,12 +15,9 @@ limitations under the License.
 """
 
 import os
-<<<<<<< HEAD
 import warnings
-=======
 import pendulum
 from flatten_json import flatten
->>>>>>> develop
 from plotly import graph_objects as go
 import pandas as pd
 
