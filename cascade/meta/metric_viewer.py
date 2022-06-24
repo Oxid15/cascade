@@ -52,7 +52,7 @@ class MetricViewer:
                 view = [MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name))) 
                     for model_name in line.model_names]
 
-                warnings.warn('''You use cascade {__version__} with the repo generated in version <= 0.4.1 without "type": "repo" key in meta.
+                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 

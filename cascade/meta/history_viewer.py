@@ -24,6 +24,7 @@ from plotly import express as px
 from plotly import graph_objects as go
 
 from . import MetaViewer
+from .. import __version__
 
 
 class HistoryViewer:
@@ -50,7 +51,7 @@ class HistoryViewer:
                     os.path.dirname(model_name)))[0] 
                     for model_name in line.model_names]
 
-                warnings.warn('''You use cascade {__version__} with the repo generated in version <= 0.4.1 without "type": "repo" key in meta.
+                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
