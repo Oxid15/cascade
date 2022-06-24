@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import List
 import pendulum
 import pandas as pd
@@ -39,14 +40,24 @@ class HistoryViewer:
         for name in self.repo.lines:
             line = self.repo[name]
 
-            i = 0
-            for path in line.model_names:
-                # Open the view of Model's meta - only one meta in View
-                view = MetaViewer(os.path.join(self.repo.root, name, os.path.dirname(path)))[0]
+            # Try to use viewer only on models using type key
+            try:
+                view = MetaViewer(self.repo.root, filt={'type': 'model'})
+            except KeyError:
+                view = [MetaViewer(os.path.join(
+                    self.repo.root, 
+                    name,
+                    os.path.dirname(model_name)))[0] 
+                    for model_name in line.model_names]
 
+                warnings.warn('''You use cascade {__version__} with the repo generated in version <= 0.4.1 without "type": "repo" key in meta.
+                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
+                In the following versions it will be deprecated.''', FutureWarning)
+
+            for i in range(len(line.model_names)):
                 new_meta = {'line': name, 'num': i}
                 # recursively unfold every nested dict to form plain table
-                self._add(view[-1], new_meta)
+                self._add(view[i][-1], new_meta)
                 metas.append(new_meta)
 
                 params = {
@@ -55,7 +66,6 @@ class HistoryViewer:
                 if 'params' in view[-1]:
                     params.update(view[-1]['params'])
                 self.params.append(params)
-                i += 1
 
         self.table = pd.DataFrame(metas)
         if 'saved_at' in self.table:

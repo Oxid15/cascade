@@ -23,7 +23,7 @@ class MetaViewer:
     """
     The class to read and write meta data.
     """
-    def __init__(self, root) -> None:
+    def __init__(self, root, filt=None) -> None:
         """
         Parameters
         ----------
@@ -37,6 +37,7 @@ class MetaViewer:
         """
         assert os.path.exists(root)
         self.root = root
+        self.filt = filt
         self.mh = MetaHandler()
 
         names = []
@@ -46,6 +47,8 @@ class MetaViewer:
         self.metas = []
         for name in names:
             self.metas.append(self.mh.read(name))
+        if filt is not None:
+            self.metas = list(filter(self._filter, self.metas))
 
     def __getitem__(self, index) -> dict:
         """
@@ -95,6 +98,16 @@ class MetaViewer:
         Loads object from path
         """
         return self.mh.read(path)
+
+    def _filter(self, meta):
+        meta = meta[-1]  # Takes last meta
+        for key in self.filt:
+            if key not in meta:
+                raise KeyError(f"'{key}' key is not in\n{meta}")
+            
+            if self.filt[key] != meta[key]:
+                return False
+        return True
 
     def obj_to_dict(self, obj):
         return json.loads(self.mh.encode(obj))

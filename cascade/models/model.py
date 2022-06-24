@@ -101,4 +101,6 @@ class Model:
 
         if not all_default_exist:
             warnings.warn('Model\'s meta is incomplete, maybe you haven\'t call super().__init__ in subclass?')
+        
+        meta['type'] = 'model'
         return [meta]

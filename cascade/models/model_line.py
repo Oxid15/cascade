@@ -136,7 +136,8 @@ class ModelLine:
             'root': self.root,
             'model_cls': repr(self.model_cls),
             'len': len(self),
-            'updated_at': pendulum.now(tz='UTC')
+            'updated_at': pendulum.now(tz='UTC'),
+            'type': 'line'
         }
         meta.update(self.meta_prefix)
         return [meta]
