@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .meta_handler import MetaHandler
 from .meta_viewer import MetaViewer
 from .metric_viewer import MetricViewer
 from .validator import DataValidationException, Validator, AggregateValidator, PredicateValidator
