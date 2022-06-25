@@ -87,3 +87,6 @@ class MetaHandler:
 
         with open(name, 'w') as json_meta:
             json.dump(obj, json_meta, cls=CustomEncoder, indent=4)
+
+    def encode(self, obj):
+        return CustomEncoder().encode(obj)

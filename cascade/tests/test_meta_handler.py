@@ -24,7 +24,7 @@ from unittest import TestCase
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.meta import MetaHandler
+from cascade.base import MetaHandler
 
 
 class TestMetaHandler(TestCase):

@@ -41,9 +41,7 @@ class TestMetricViewer(TestCase):
         mtv = MetricViewer(repo)
         t = mtv.table
 
-        shutil.rmtree('test_mtv')
-
-        self.assertTrue(all(t.columns == ['line', 'num', 'acc']))
+        self.assertListEqual(list(t.columns), ['line', 'num', 'created_at', 'saved', 'acc'])
 
     def test_show_table(self):
         repo = ModelRepo('test_mtv_show_table')
@@ -55,7 +53,6 @@ class TestMetricViewer(TestCase):
             repo['0'].save(m)
 
         mtv = MetricViewer(repo)
-        shutil.rmtree('test_mtv_show_table')
         mtv.plot_table(show=True)
 
     # def test_serve(self):
@@ -68,7 +65,6 @@ class TestMetricViewer(TestCase):
     #         repo['0'].save(m)
 
     #     mtv = MetricViewer(repo)
-    #     shutil.rmtree('test_mtv_serve')
     #     mtv.serve()
 
 

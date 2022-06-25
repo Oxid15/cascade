@@ -12,23 +12,30 @@ limitations under the License.
 """
 
 import os
+import logging
 from typing import List, Dict
 import shutil
-import pendulum
 
+import pendulum
+from deepdiff.diff import DeepDiff
+
+from ..base import Traceable
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
 
-class ModelRepo:
+class ModelRepo(Traceable):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
+    
+    Stores meta-data in file meta.json in the root folder. With every run if the repo was already
+    created earlier, updates its meta and logs changes in human-readable format in file history.log
 
     Example
     -------
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is VGG16 model from the example.'})
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})
     >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
@@ -41,7 +48,7 @@ class ModelRepo:
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
     """
-    def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
+    def __init__(self, folder, lines=None, overwrite=False, **kwargs):
         """
         Parameters
         ----------
@@ -50,8 +57,6 @@ class ModelRepo:
             if folder does not exist, creates it
         lines: List[Dict]
             A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
-        meta_prefix: Dict
-            a dict that is used to update resulting repo's meta before saving
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
@@ -59,7 +64,7 @@ class ModelRepo:
         --------
         cascade.models.ModelLine
         """
-        self.meta_prefix = meta_prefix if meta_prefix is not None else {}
+        super().__init__(**kwargs)
         self.root = folder
 
         if overwrite and os.path.exists(self.root):
@@ -77,6 +82,12 @@ class ModelRepo:
             # Here the same with MV
             self.meta_viewer = MetaViewer(self.root)
             self.lines = dict()
+
+        self.logger = logging.getLogger(folder)
+        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
+        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
+        self.logger.addHandler(hdlr)
+        self.logger.setLevel('DEBUG')
 
         if lines is not None:
             for line in lines:
@@ -132,20 +143,26 @@ class ModelRepo:
         # Reads meta if exists and updates it with new values
         # writes back to disk
         meta_path = os.path.join(self.root, 'meta.json')
+        hist_path = os.path.join(self.root, 'history.json')
 
         meta = {}
         if os.path.exists(meta_path):
             meta = self.meta_viewer.read(meta_path)[0]
 
+        self.logger.info(DeepDiff(
+            meta,
+            self.meta_viewer.obj_to_dict(self.get_meta()[0])).pretty()
+        )
+
         meta.update(self.get_meta()[0])
         self.meta_viewer.write(meta_path, [meta])
 
     def get_meta(self) -> List[Dict]:
-        meta = {
-            'name': repr(self),
+        meta = super().get_meta()
+        meta[0].update({
             'root': self.root,
             'len': len(self),
-            'updated_at': pendulum.now(tz='UTC')
-        }
-        meta.update(self.meta_prefix)
-        return [meta]
+            'updated_at': pendulum.now(tz='UTC'),
+            'type': 'repo'
+        })
+        return meta

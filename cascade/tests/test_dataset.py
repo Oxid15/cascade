@@ -15,6 +15,7 @@ limitations under the License.
 """
 import datetime
 import os
+import json
 import sys
 import unittest
 from unittest import TestCase
@@ -42,6 +43,24 @@ class TestDataset(TestCase):
         self.assertEqual(type(meta[0]), dict)
         self.assertEqual(meta[0]['time'], now)
         self.assertTrue('name' in meta[0])
+
+    def test_update_meta(self):
+        ds = Dataset(meta_prefix={'a': 1, 'b': 2})
+        ds.update_meta({'b': 3})
+        meta = ds.get_meta()
+
+        self.assertEqual(meta[0]['a'], 1)
+        self.assertEqual(meta[0]['b'], 3)
+
+    def test_meta_from_file(self):
+        with open('test_meta_from_file.json', 'w') as f:
+            json.dump({'a': 1}, f)
+
+        ds = Dataset(meta_prefix='test_meta_from_file.json')
+        meta = ds.get_meta()
+
+        self.assertTrue('a' in meta[0])
+        self.assertEqual(meta[0]['a'], 1)
 
 
 class TestIterator(TestCase):

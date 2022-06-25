@@ -12,21 +12,24 @@ limitations under the License.
 """
 
 from typing import Dict, Generic, Iterable, List, TypeVar
+from ..base import Traceable
 
 T = TypeVar('T')
 
 
-class Dataset(Generic[T]):
+class Dataset(Generic[T], Traceable):
     """
     Base class of any module that constitutes a data-pipeline.
     In its basic idea is similar to torch.utils.data.Dataset.
     It does not define `__len__` for similar reasons.
     See `pytorch/torch/utils/data/sampler.py` note on this topic.
+
+    See also
+    --------
+    cascade.base.Traceable
     """
-    def __init__(self, *args, meta_prefix=None, **kwargs):
-        if meta_prefix is None:
-            meta_prefix = {}
-        self.meta_prefix = meta_prefix
+    def __init__(self, *args, **kwargs):
+        super().__init__(**kwargs)
 
     def __getitem__(self, index) -> T:
         """
@@ -36,19 +39,16 @@ class Dataset(Generic[T]):
 
     def get_meta(self) -> List[Dict]:
         """
-        Base method that should be called using super() in every successor.
-
         Returns
         -------
         meta: List[Dict]
-            A list with one element, which is this dataset's metadata.
+            A list where last element is this dataset's metadata.
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
-        meta = {'name': repr(self)}
-        if self.meta_prefix is not None:
-            meta.update(self.meta_prefix)
-        return [meta]
+        meta = super().get_meta()
+        meta[0]['type'] = 'dataset'
+        return meta
 
     def __repr__(self):
         """
@@ -82,9 +82,9 @@ class Wrapper(Dataset):
     """
     Wraps Dataset around any list-like object.
     """
-    def __init__(self, obj, meta_prefix=None) -> None:
+    def __init__(self, obj, *args, **kwargs) -> None:
         self._data = obj
-        super().__init__(meta_prefix=meta_prefix)
+        super().__init__(*args, **kwargs)
 
     def __getitem__(self, index) -> T:
         return self._data[index]
@@ -95,7 +95,8 @@ class Wrapper(Dataset):
     def get_meta(self):
         meta = super().get_meta()
         meta[0]['len'] = len(self)
-        meta[0]['type'] = type(self.obj)
+        meta[0]['obj_type'] = type(self._data)
+        return meta
 
 
 class Modifier(Dataset):
@@ -108,7 +109,7 @@ class Modifier(Dataset):
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
     """
-    def __init__(self, dataset: Dataset, meta_prefix=None) -> None:
+    def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
         Parameters
@@ -118,7 +119,7 @@ class Modifier(Dataset):
         """
         self._dataset = dataset
         self._index = -1
-        super().__init__(meta_prefix=meta_prefix)
+        super().__init__(*args, **kwargs)
 
     def __getitem__(self, index) -> T:
         return self._dataset[index]
@@ -159,9 +160,9 @@ class Sampler(Modifier):
     --------
     cascade.data.CyclicSampler
     """
-    def __init__(self, dataset: Dataset, num_samples: int, meta_prefix=None) -> None:
+    def __init__(self, dataset: Dataset, num_samples: int, *args, **kwargs) -> None:
         assert num_samples > 0
-        super().__init__(dataset, meta_prefix=meta_prefix)
+        super().__init__(dataset, *args, **kwargs)
         self._num_samples = num_samples
 
     def __len__(self) -> int:

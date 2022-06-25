@@ -15,14 +15,17 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import List
 import pendulum
 import pandas as pd
+from flatten_json import flatten
 from deepdiff import DeepDiff
 from plotly import express as px
 from plotly import graph_objects as go
 
 from . import MetaViewer
+from .. import __version__
 
 
 class HistoryViewer:
@@ -39,34 +42,36 @@ class HistoryViewer:
         for name in self.repo.lines:
             line = self.repo[name]
 
-            i = 0
-            for path in line.model_names:
-                # Open the view of Model's meta - only one meta in View
-                view = MetaViewer(os.path.join(self.repo.root, name, os.path.dirname(path)))[0]
+            # Try to use viewer only on models using type key
+            try:
+                view = MetaViewer(self.repo.root, filt={'type': 'model'})
+            except KeyError:
+                view = [MetaViewer(os.path.join(
+                    self.repo.root, 
+                    name,
+                    os.path.dirname(model_name)))[0] 
+                    for model_name in line.model_names]
 
+                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
+                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
+                In the following versions it will be deprecated.''', FutureWarning)
+
+            for i in range(len(line.model_names)):
                 new_meta = {'line': name, 'num': i}
-                # recursively unfold every nested dict to form plain table
-                self._add(view[-1], new_meta)
+                new_meta.update(flatten(view[i][-1]))
                 metas.append(new_meta)
 
                 params = {
                     'line': name,
                 }
-                if 'params' in view[-1]:
-                    params.update(view[-1]['params'])
+                if 'params' in view[i][-1]:
+                    if len(view[i][-1]['params']) > 0:
+                        params.update(flatten({'params': view[i][-1]['params']}))
                 self.params.append(params)
-                i += 1
 
         self.table = pd.DataFrame(metas)
         if 'saved_at' in self.table:
             self.table = self.table.sort_values('saved_at')
-
-    def _add(self, elem, meta) -> None:
-        for key in elem:
-            if type(elem[key]) != dict:
-                meta[key] = elem[key]
-            else:
-                self._add(elem[key], meta)
 
     def _diff(self, p1, params) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
@@ -96,6 +101,10 @@ class HistoryViewer:
         metric: str
             Metric should be present in meta of at least one model in repo
         """
+
+        # After flatten 'metrics_' will be added to the metric name
+        if not metric.startswith('metrics_'):
+            metric = 'metrics_' + metric
         assert metric in self.table
 
         # turn time into evenly spaced intervals
