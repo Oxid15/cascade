@@ -1,8 +1,9 @@
 import os
 from hashlib import md5
 from deepdiff import DeepDiff
-from . import Validator, MetaHandler, DataValidationException
+from . import Validator, DataValidationException
 from ..data import Dataset
+from ..base import MetaHandler
 
 
 class MetaValidator(Validator):

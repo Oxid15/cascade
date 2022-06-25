@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import json
-from . import MetaHandler
+from ..base import MetaHandler
 
 
 class MetaViewer:

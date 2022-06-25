@@ -4,7 +4,13 @@ from typing import List, Dict
 
 class Traceable:
     def __init__(self, *args, meta_prefix=None, **kwargs) -> None:
-        self.meta_prefix = meta_prefix if meta_prefix is not None else {}
+        if meta_prefix is None:
+            meta_prefix = {}
+        if isinstance(meta_prefix, str):
+            from . import MetaHandler
+
+            meta_prefix = MetaHandler().read(meta_prefix)
+        self.meta_prefix = meta_prefix
 
     def get_meta(self) -> List[Dict]:
         """
