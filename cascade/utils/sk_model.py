@@ -20,7 +20,7 @@ from hashlib import md5
 import pickle
 from sklearn.pipeline import Pipeline
 
-from ..meta import MetaHandler
+from ..base import MetaHandler
 from ..models import Model
 
 
