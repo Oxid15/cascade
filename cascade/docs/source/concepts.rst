@@ -88,7 +88,7 @@ See it in :py:class:`cascade.meta.MetaValidator`.
 
 Handler
 ~~~~~~~
-:py:class:`cascade.meta.MetaHandler`
+:py:class:`cascade.base.MetaHandler`
 MetaHandler is the lower-level abstraction layer for reading and writing meta. 
 It accepts meta-objects and writes them to disk encapsulating all the details inside.
 
