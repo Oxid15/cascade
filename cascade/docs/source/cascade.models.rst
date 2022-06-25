@@ -1,6 +1,16 @@
 cascade.models
 ============== 
+
 .. autoclass:: cascade.models.Model
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.ModelModifier
    :members:
 
 |
