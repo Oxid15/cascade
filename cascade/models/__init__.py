@@ -14,6 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .model import Model
+from .model import Model, ModelModifier
 from .model_repo import ModelRepo
 from .model_line import ModelLine
