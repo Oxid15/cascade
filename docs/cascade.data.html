@@ -3,14 +3,14 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.models" href="cascade.models.html" /><link rel="prev" title="Cascade modules reference" href="modules.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.models" href="cascade.models.html" /><link rel="prev" title="cascade.base" href="cascade.base.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.data - cascade 0.4.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
-    <link rel="stylesheet" type="text/css" href="copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+        <title>cascade.data - cascade 0.5.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.4.0 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.5.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand centered" href="index.html">
   
   <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="logo.png" alt="Logo"/>
+    <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
   </div>
   
   
@@ -161,6 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">cascade.data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
@@ -202,11 +203,15 @@
 <h1>cascade.data<a class="headerlink" href="#cascade-data" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.Dataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Dataset" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Dataset" title="Permalink to this definition">#</a></dt>
 <dd><p>Base class of any module that constitutes a data-pipeline.
 In its basic idea is similar to torch.utils.data.Dataset.
 It does not define <cite>__len__</cite> for similar reasons.
 See <cite>pytorch/torch/utils/data/sampler.py</cite> note on this topic.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="cascade.base.html#cascade.base.Traceable" title="cascade.base.Traceable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.base.Traceable</span></code></a></p>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.data.Dataset.__getitem__">
 <span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">cascade.data.dataset.T</span></span></span><a class="reference internal" href="_modules/cascade/data/dataset.html#Dataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Dataset.__getitem__" title="Permalink to this definition">#</a></dt>
@@ -232,10 +237,9 @@ See <cite>pytorch/torch/utils/data/sampler.py</cite> note on this topic.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.data.Dataset.get_meta">
 <span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/data/dataset.html#Dataset.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Dataset.get_meta" title="Permalink to this definition">#</a></dt>
-<dd><p>Base method that should be called using super() in every successor.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>meta</strong> – A list with one element, which is this dataset’s metadata.
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this dataset’s metadata.
 Meta can be anything that is worth to document about the dataset and its data.
 This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
 </dd>
@@ -269,15 +273,14 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.Wrapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Wrapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Wrapper" title="Permalink to this definition">#</a></dt>
 <dd><p>Wraps Dataset around any list-like object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.data.Wrapper.get_meta">
 <span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Wrapper.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Wrapper.get_meta" title="Permalink to this definition">#</a></dt>
-<dd><p>Base method that should be called using super() in every successor.</p>
-<dl class="field-list simple">
+<dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>meta</strong> – A list with one element, which is this dataset’s metadata.
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this dataset’s metadata.
 Meta can be anything that is worth to document about the dataset and its data.
 This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
 </dd>
@@ -298,7 +301,7 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.Modifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Modifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Modifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Modifier" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Modifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Modifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Modifier" title="Permalink to this definition">#</a></dt>
 <dd><p>Basic pipeline building block in Cascade. Every block which is not a data source should be a successor
 of Sampler or Modifier.
 This structure enables a workflow, when we have a data pipeline which consists of uniform blocks
@@ -325,7 +328,7 @@ obtained with <cite>get_meta</cite> of the last block.</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.Sampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Sampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Sampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Sampler" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Sampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/dataset.html#Sampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Sampler" title="Permalink to this definition">#</a></dt>
 <dd><p>Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number of
 items in dataset. It can constitute a batch sampler or random sampler or sample in cycling manner.</p>
 <div class="admonition seealso">
@@ -344,7 +347,7 @@ items in dataset. It can constitute a batch sampler or random sampler or sample 
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.ApplyModifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">ApplyModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/apply_modifier.html#ApplyModifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.ApplyModifier" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">ApplyModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/apply_modifier.html#ApplyModifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.ApplyModifier" title="Permalink to this definition">#</a></dt>
 <dd><p>Modifier that maps a function to previous dataset’s elements in a lazy way.</p>
 </dd></dl>
 <div class="line-block">
@@ -358,7 +361,7 @@ items in dataset. It can constitute a batch sampler or random sampler or sample 
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.BruteforceCacher">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">BruteforceCacher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/bruteforce_cacher.html#BruteforceCacher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.BruteforceCacher" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">BruteforceCacher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/bruteforce_cacher.html#BruteforceCacher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.BruteforceCacher" title="Permalink to this definition">#</a></dt>
 <dd><p>Unusual modifier which loads everything in memory in initialization phase
 and then returns values from cache</p>
 <div class="admonition seealso">
@@ -377,7 +380,7 @@ and then returns values from cache</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.Concatenator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Concatenator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/concatenator.html#Concatenator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Concatenator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Concatenator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/concatenator.html#Concatenator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Concatenator" title="Permalink to this definition">#</a></dt>
 <dd><p>Unifies several Datasets under one, calling them sequentially in the provided order.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.data.Concatenator.__len__">
@@ -410,7 +413,7 @@ Dataset2
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.CyclicSampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">CyclicSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/cyclic_sampler.html#CyclicSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.CyclicSampler" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">CyclicSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/cyclic_sampler.html#CyclicSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.CyclicSampler" title="Permalink to this definition">#</a></dt>
 <dd><p>A Sampler that iterates <cite>num_samples</cite> times through an input Dataset in cyclic manner</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.data</span> <span class="kn">import</span> <span class="n">CyclicSampler</span>
@@ -438,8 +441,41 @@ Dataset2
 <div class="line"><br/></div>
 </div>
 <dl class="py class">
+<dt class="sig sig-object py" id="cascade.data.FolderDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">FolderDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/folder_dataset.html#FolderDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.FolderDataset" title="Permalink to this definition">#</a></dt>
+<dd><p>Basic “folder of files” dataset. Accepts root folder in which considers all files.
+Is abstract - getitem is not defined, since it is specific for each file type</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.utils.FolderImageDataset</span></code></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.data.FolderDataset.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/data/folder_dataset.html#FolderDataset.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.FolderDataset.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this dataset’s metadata.
+Meta can be anything that is worth to document about the dataset and its data.
+This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.Pickler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Pickler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/pickler.html#Pickler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Pickler" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">Pickler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/pickler.html#Pickler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Pickler" title="Permalink to this definition">#</a></dt>
 <dd><p>Pickles an input dataset or unpickles one</p>
 </dd></dl>
 <div class="line-block">
@@ -452,8 +488,21 @@ Dataset2
 <div class="line"><br/></div>
 </div>
 <dl class="py class">
+<dt class="sig sig-object py" id="cascade.data.RandomSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">RandomSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/random_sampler.html#RandomSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.RandomSampler" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<dl class="py class">
 <dt class="sig sig-object py" id="cascade.data.SequentialCacher">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">SequentialCacher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/sequential_cacher.html#SequentialCacher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.SequentialCacher" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">SequentialCacher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/sequential_cacher.html#SequentialCacher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.SequentialCacher" title="Permalink to this definition">#</a></dt>
 <dd><p>A batched version of BruteforceCacher class.</p>
 <p>On first <cite>__getitem__</cite> call loads a batch of length <cite>batch_size</cite> and until indices are in the same batch doesn’t
 load anything. When index misses a cached batch, then a new one is loaded.</p>
@@ -487,14 +536,14 @@ load anything. When index misses a cached batch, then a new one is loaded.</p>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="modules.html">
+          <a class="prev-page" href="cascade.base.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Cascade modules reference</div>
+                <div class="title">cascade.base</div>
                 
               </div>
             </a>
@@ -524,12 +573,12 @@ load anything. When index misses a cached batch, then a new one is loaded.</p>
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
-    <script src="jquery.js"></script>
-    <script src="underscore.js"></script>
-    <script src="doctools.js"></script>
-    <script src="scripts/furo.js"></script>
-    <script src="clipboard.min.js"></script>
-    <script src="copybutton.js"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
     </body>
 </html>

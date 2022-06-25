@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.meta" href="cascade.meta.html" /><link rel="prev" title="cascade.data" href="cascade.data.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.models - cascade 0.4.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
-    <link rel="stylesheet" type="text/css" href="copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+        <title>cascade.models - cascade 0.5.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
 
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.4.0 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.5.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -147,7 +147,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand centered" href="index.html">
   
   <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="logo.png" alt="Logo"/>
+    <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
   </div>
   
   
@@ -161,6 +161,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">cascade.models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
@@ -202,7 +203,7 @@
 <h1>cascade.models<a class="headerlink" href="#cascade-models" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.models.Model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model" title="Permalink to this definition">#</a></dt>
 <dd><p>Base class for any model.
 Used to provide unified interface to any model, store metadata including metrics.</p>
 <dl class="py method">
@@ -215,6 +216,20 @@ Used to provide unified interface to any model, store metadata including metrics
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#Model.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Method to encapsulate training loops.
 May be provided with any training-related arguments.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about the object and its properties.
+This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.Model.load">
@@ -244,8 +259,35 @@ May include preprocessing steps to make model self-sufficient.</p>
 <div class="line"><br/></div>
 </div>
 <dl class="py class">
+<dt class="sig sig-object py" id="cascade.models.ModelModifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">cascade.models.model.Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelModifier.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about the object and its properties.
+This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<div class="line-block">
+<div class="line"><br/></div>
+</div>
+<dl class="py class">
 <dt class="sig sig-object py" id="cascade.models.ModelLine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cls=&lt;class</span> <span class="pre">'cascade.models.model.Model'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cls=&lt;class</span> <span class="pre">'cascade.models.model.Model'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine" title="Permalink to this definition">#</a></dt>
 <dd><p>A manager for a line of models. Used by ModelRepo for access to models on disk.
 A line of models is typically a models with the same hyperparameters and architecture,
 but different epochs or using different data.</p>
@@ -272,6 +314,20 @@ but different epochs or using different data.</p>
 </dl>
 </dd></dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelLine.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about the object and its properties.
+This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.ModelLine.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">cascade.models.model.Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine.save" title="Permalink to this definition">#</a></dt>
 <dd><p>Saves a model and its meta data to a line folder.
@@ -294,12 +350,14 @@ It is Model’s responsibility to correctly  assign extension and save its own s
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.models.ModelRepo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelRepo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelRepo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo" title="Permalink to this definition">#</a></dt>
 <dd><p>An interface to manage experiments with several lines of models.
 When created, initializes an empty folder constituting a repository of model lines.</p>
+<p>Stores meta-data in file meta.json in the root folder. With every run if the repo was already
+created earlier, updates its meta and logs changes in human-readable format in file history.log</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">ModelRepo</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">'repo'</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="o">=</span><span class="p">{</span><span class="s1">'description'</span><span class="p">:</span> <span class="s1">'This is VGG16 model from the example.'</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">'repo'</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="o">=</span><span class="p">{</span><span class="s1">'description'</span><span class="p">:</span> <span class="s1">'This is a repo with one VGG16 line for the example.'</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16_line</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s1">'vgg16'</span><span class="p">,</span> <span class="n">VGG16Model</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span> <span class="o">=</span> <span class="n">VGG16Model</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
@@ -345,6 +403,20 @@ If line exists, defines it in repo</p>
 <p>Additionally, updates repo’s meta on disk
 :param model_cls: A class of models in line. ModelLine uses this class to reconstruct a model
 :param name: Line’s name</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about the object and its properties.
+This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
 </dd></dl>
 </dd></dl>
 <div class="line-block">
@@ -409,12 +481,12 @@ If line exists, defines it in repo</p>
       
     </aside>
   </div>
-</div><script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
-    <script src="jquery.js"></script>
-    <script src="underscore.js"></script>
-    <script src="doctools.js"></script>
-    <script src="scripts/furo.js"></script>
-    <script src="clipboard.min.js"></script>
-    <script src="copybutton.js"></script>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
     </body>
 </html>
