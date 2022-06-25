@@ -43,6 +43,14 @@ class TestDataset(TestCase):
         self.assertEqual(meta[0]['time'], now)
         self.assertTrue('name' in meta[0])
 
+    def test_update_meta(self):
+        ds = Dataset(meta_prefix={'a': 1, 'b': 2})
+        ds.update_meta({'b': 3})
+        meta = ds.get_meta()
+
+        self.assertEqual(meta[0]['a'], 1)
+        self.assertEqual(meta[0]['b'], 3)
+
 
 class TestIterator(TestCase):
     def test(self):

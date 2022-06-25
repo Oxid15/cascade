@@ -67,6 +67,12 @@ class Dataset(Generic[T]):
         rp = super().__repr__()
         return rp[1:].split()[0]
 
+    def update_meta(self, obj: Dict) -> None:
+        """
+        Updates meta_prefix, which is then updates dataset's meta when get_meta() is called
+        """
+        self.meta_prefix.update(obj)
+
 
 class Iterator(Dataset):
     def __init__(self, data: Iterable, *args, **kwargs):
