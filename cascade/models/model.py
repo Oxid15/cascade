@@ -99,3 +99,13 @@ class Model(Traceable):
         
         meta[0]['type'] = 'model'
         return meta
+
+
+class ModelModifier(Model):
+    def __init__(self, model: Model, **kwargs):
+        self._model = model
+        super().__init__(**kwargs)
+
+    def get_meta(self) -> List[Dict]:
+        prev_meta = self._model.get_meta()
+        return super().get_meta() + prev_meta
