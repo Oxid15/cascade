@@ -15,12 +15,14 @@ limitations under the License.
 """
 
 import os
+import warnings
+import pendulum
+from flatten_json import flatten
 from plotly import graph_objects as go
 import pandas as pd
-import dash
-from dash import Input, Output, html, dcc
 
 from . import MetaViewer
+from .. import __version__
 
 
 class MetricViewer:
@@ -43,10 +45,34 @@ class MetricViewer:
             line = self.repo[name]
             viewer_root = os.path.join(self.repo.root, name)
 
-            for i, model_name in enumerate(line.model_names):
-                view = MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))
+            # Try to use viewer only on models using type key
+            try:
+                view = MetaViewer(viewer_root, filt={'type': 'model'})
+            except KeyError:
+                view = [MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name))) 
+                    for model_name in line.model_names]
+
+                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
+                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
+                In the following versions it will be deprecated.''', FutureWarning)
+
+            for i in range(len(line.model_names)):
                 metric = {'line': name, 'num': i}
-                meta = view[0][-1]
+                meta = view[i][-1]
+
+                meta = view[0][-1]  # Takes last model from meta
+                metric = {
+                    'line': name, 
+                    'num': i
+                }
+
+                if 'created_at' in meta:
+                    metric['created_at'] = \
+                        pendulum.parse(meta['created_at']).format('DD-MM-YYYY hh:mm:ss')
+                if 'saved_at' in meta:
+                    metric['saved'] = \
+                        pendulum.parse(meta['saved_at'])\
+                            .diff_for_humans(pendulum.parse(meta['created_at']))
 
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
@@ -60,21 +86,35 @@ class MetricViewer:
         return repr(self.table)
 
     def plot_table(self, show=False) -> None:
+        data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
-                header=dict(values=list(self.table.columns),
+                header=dict(values=list(data.columns),
                             fill_color='#f4c9c7',
                             align='left'),
-                cells=dict(values=[self.table[col] for col in self.table.columns],
+                cells=dict(values=[data[col] for col in data.columns],
                            fill_color='#bcced4',
-                           align='left'))
-        ])
+                           align='left')
+                )
+            ])
         if show:
             fig.show()
         return fig
 
-    def serve(self):
+    def serve(self, **kwargs) -> None:
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+            Cannot import dash. It is conditional 
+            dependency you can install it with 
+            `pip install dash`''')
+        else:
+            from dash import Input, Output, html, dcc, dash_table
+
         df = self.table
+        df_flatten = pd.DataFrame(map(flatten, self.table.to_dict('records')))
 
         app = dash.Dash()
         dep_fig = go.Figure()
@@ -99,9 +139,19 @@ class MetricViewer:
             dcc.Graph(
                 id='dependence-figure',
                 figure=dep_fig),
-            dcc.Graph(
-                id='table',
-                figure=self.plot_table(show=False)
+            dash_table.DataTable(
+                columns=[
+                    {'name': col, 'id': col, 'selectable': True} for col in df_flatten.columns
+                ],
+                data=df_flatten.to_dict('records'),
+                filter_action="native",
+                sort_action="native",
+                sort_mode="multi",
+                selected_columns=[],
+                selected_rows=[],
+                page_action="native",
+                page_current= 0,
+                page_size= 10,
             )
         ])
 
@@ -123,4 +173,4 @@ class MetricViewer:
                 fig.update_layout(title=f'{x} to {y} relation')
             return fig
 
-        app.run_server(use_reloader=False)
+        app.run_server(use_reloader=False, **kwargs)

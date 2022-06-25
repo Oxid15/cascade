@@ -37,8 +37,6 @@ class TestModelLine(TestCase):
 
         model = line[0]
 
-        shutil.rmtree('./line')  # Cleanup
-
         self.assertEqual(len(line), 1)
         self.assertTrue(model.model == "b'model'")
 
@@ -48,8 +46,6 @@ class TestModelLine(TestCase):
         m = DummyModel()
 
         line.save(m)
-
-        shutil.rmtree('./line_meta')  # Cleanup
 
         meta = line.get_meta()
         self.assertEqual(meta[0]['model_cls'], repr(DummyModel))

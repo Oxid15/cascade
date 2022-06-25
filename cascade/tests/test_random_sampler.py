@@ -17,32 +17,23 @@ limitations under the License.
 import os
 import sys
 import unittest
-import shutil
 from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import FolderDataset
+from cascade.data import RandomSampler
+from cascade.tests.number_dataset import NumberDataset
 
 
-class TestFolderDataset(TestCase):
+class TestRandomSampler(TestCase):
     def test(self):
-        folder = './folder_dataset'
-        os.mkdir(folder)
-        with open('./folder_dataset/0.txt', 'w') as w:
-            w.write('hello')
+        ds = NumberDataset([0, 1, 2, 3, 4])
+        ds = RandomSampler(ds)
 
-        ds = FolderDataset(folder)
-        meta = ds.get_meta()[0]
-
-        self.assertEqual(len(ds), 1)
-        self.assertTrue('name' in meta)
-        self.assertTrue('len' in meta)
-        self.assertTrue('paths' in meta)
-        self.assertTrue('md5sums' in meta)
-        self.assertEqual(len(meta['paths']), 1)
-        self.assertEqual(len(meta['md5sums']), 1)
+        self.assertNotEqual(
+            [ds[i] for i in range(len(ds))],
+            [0, 1, 2, 3, 4])
 
 
 if __name__ == '__main__':

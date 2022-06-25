@@ -32,8 +32,6 @@ class TestModelRepo(TestCase):
 
         self.assertTrue(os.path.exists('./test_models/dummy_1'))
         self.assertTrue(os.path.exists('./test_models/00001'))
-
-        shutil.rmtree('./test_models')
         self.assertEqual(2, len(repo))
 
     def test_overwrite(self):
@@ -45,8 +43,6 @@ class TestModelRepo(TestCase):
         repo = ModelRepo('./test_overwrite', overwrite=True)
         repo.add_line('densenet', DummyModel)
         repo.add_line('efficientnet', DummyModel)
-
-        shutil.rmtree('./test_overwrite')
         self.assertEqual(2, len(repo))
 
     def test_add_line(self):
@@ -66,8 +62,6 @@ class TestModelRepo(TestCase):
 
         repo = ModelRepo('./test_reusage')
         repo.add_line('vgg16', DummyModel)
-
-        shutil.rmtree('./test_reusage')
         self.assertEqual(len(repo['vgg16']), 1)
 
     def test_reusage_init_alias(self):
@@ -85,8 +79,6 @@ class TestModelRepo(TestCase):
                              name='vgg16',
                              cls=DummyModel
                          )])
-
-        shutil.rmtree('./test_reusage_init_alias')
         self.assertEqual(len(repo['vgg16']), 1)
 
     def test_meta(self):
@@ -102,8 +94,6 @@ class TestModelRepo(TestCase):
 
         meta = repo.get_meta()
         self.assertEqual(meta[0]['len'], 3)
-
-        shutil.rmtree('./test_repo_meta')  # Cleanup
 
 
 if __name__ == '__main__':
