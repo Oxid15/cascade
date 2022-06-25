@@ -20,17 +20,18 @@ import pendulum
 import glob
 from hashlib import md5
 
+from ..base import Traceable
 from .model import Model
 from ..meta import MetaViewer
 
 
-class ModelLine:
+class ModelLine(Traceable):
     """
     A manager for a line of models. Used by ModelRepo for access to models on disk.
     A line of models is typically a models with the same hyperparameters and architecture,
     but different epochs or using different data.
     """
-    def __init__(self, folder, model_cls=Model, meta_prefix=None) -> None:
+    def __init__(self, folder, model_cls=Model, **kwargs) -> None:
         """
         All models in line should be instances of the same class.
 
@@ -41,13 +42,11 @@ class ModelLine:
             if folder does not exist, creates it
         model_cls:
             A class of models in repo. ModelLine uses this class to reconstruct a model
-        meta_prefix:
-            a dict that is used to update resulting model line's meta before saving
         See also
         --------
         cascade.models.ModelRepo
         """
-        self.meta_prefix = meta_prefix if meta_prefix is not None else {}
+        super().__init__(**kwargs)
 
         self.model_cls = model_cls
         self.root = folder
@@ -131,13 +130,12 @@ class ModelLine:
         return f'ModelLine of {len(self)} models of {self.model_cls}'
 
     def get_meta(self) -> List[Dict]:
-        meta = {
-            'name': repr(self),
+        meta = super().get_meta()
+        meta[0].update({
             'root': self.root,
             'model_cls': repr(self.model_cls),
             'len': len(self),
             'updated_at': pendulum.now(tz='UTC'),
             'type': 'line'
-        }
-        meta.update(self.meta_prefix)
-        return [meta]
+        })
+        return meta

@@ -18,11 +18,13 @@ import shutil
 
 import pendulum
 from deepdiff.diff import DeepDiff
+
+from ..base import Traceable
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
 
-class ModelRepo:
+class ModelRepo(Traceable):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
@@ -46,7 +48,7 @@ class ModelRepo:
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
     """
-    def __init__(self, folder, lines=None, meta_prefix=None, overwrite=False):
+    def __init__(self, folder, lines=None, overwrite=False, **kwargs):
         """
         Parameters
         ----------
@@ -55,8 +57,6 @@ class ModelRepo:
             if folder does not exist, creates it
         lines: List[Dict]
             A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
-        meta_prefix: Dict
-            a dict that is used to update resulting repo's meta before saving
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
@@ -64,7 +64,7 @@ class ModelRepo:
         --------
         cascade.models.ModelLine
         """
-        self.meta_prefix = meta_prefix if meta_prefix is not None else {}
+        super().__init__(**kwargs)
         self.root = folder
 
         if overwrite and os.path.exists(self.root):
@@ -158,12 +158,11 @@ class ModelRepo:
         self.meta_viewer.write(meta_path, [meta])
 
     def get_meta(self) -> List[Dict]:
-        meta = {
-            'name': repr(self),
+        meta = super().get_meta()
+        meta[0].update({
             'root': self.root,
             'len': len(self),
             'updated_at': pendulum.now(tz='UTC'),
             'type': 'repo'
-        }
-        meta.update(self.meta_prefix)
-        return [meta]
+        })
+        return meta

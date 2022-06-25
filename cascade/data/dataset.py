@@ -12,21 +12,24 @@ limitations under the License.
 """
 
 from typing import Dict, Generic, Iterable, List, TypeVar
+from ..base import Traceable
 
 T = TypeVar('T')
 
 
-class Dataset(Generic[T]):
+class Dataset(Generic[T], Traceable):
     """
     Base class of any module that constitutes a data-pipeline.
     In its basic idea is similar to torch.utils.data.Dataset.
     It does not define `__len__` for similar reasons.
     See `pytorch/torch/utils/data/sampler.py` note on this topic.
+
+    See also
+    --------
+    cascade.base.Traceable
     """
-    def __init__(self, *args, meta_prefix=None):
-        if meta_prefix is None:
-            meta_prefix = {}
-        self.meta_prefix = meta_prefix
+    def __init__(self, *args, **kwargs):
+        super().__init__(**kwargs)
 
     def __getitem__(self, index) -> T:
         """
@@ -36,22 +39,16 @@ class Dataset(Generic[T]):
 
     def get_meta(self) -> List[Dict]:
         """
-        Base method that should be called using super() in every successor.
-
         Returns
         -------
         meta: List[Dict]
-            A list with one element, which is this dataset's metadata.
+            A list where last element is this dataset's metadata.
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
-        meta = {
-            'name': repr(self), 
-            'type': 'dataset'
-        }
-        if self.meta_prefix is not None:
-            meta.update(self.meta_prefix)
-        return [meta]
+        meta = super().get_meta()
+        meta[0]['type'] = 'dataset'
+        return meta
 
     def __repr__(self):
         """
