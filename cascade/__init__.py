@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-__version__ = '0.4.2'
+__version__ = '0.5.0'
 __author__ = 'Ilia Moiseev'
 __author_email__ = 'ilia.moiseev.5@yandex.ru'
 
