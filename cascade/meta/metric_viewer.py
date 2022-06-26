@@ -49,7 +49,7 @@ class MetricViewer:
             try:
                 view = MetaViewer(viewer_root, filt={'type': 'model'})
             except KeyError:
-                view = [MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name))) 
+                view = [MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))[0]
                     for model_name in line.model_names]
 
                 warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
@@ -58,9 +58,7 @@ class MetricViewer:
 
             for i in range(len(line.model_names)):
                 metric = {'line': name, 'num': i}
-                meta = view[i][-1]
-
-                meta = view[0][-1]  # Takes last model from meta
+                meta = view[i][-1]  # Takes last model from meta
                 metric = {
                     'line': name, 
                     'num': i
