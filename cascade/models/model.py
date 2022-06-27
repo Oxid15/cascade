@@ -26,7 +26,7 @@ class Model(Traceable):
     Base class for any model.
     Used to provide unified interface to any model, store metadata including metrics.
     """
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, meta_prefix=None, **kwargs) -> None:
         """
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
@@ -34,10 +34,11 @@ class Model(Traceable):
         Successors should pass all of their parameters to superclass for it to be able to
         log them in meta
         """
+        # Model accepts meta_prefix explicitly to not to record it in 'params'
         self.metrics = {}
         self.params = kwargs
         self.created_at = pendulum.now(tz='UTC')
-        super().__init__(**kwargs)
+        super().__init__(meta_prefix=meta_prefix, **kwargs)
 
     def fit(self, *args, **kwargs):
         """
