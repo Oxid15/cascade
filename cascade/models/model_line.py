@@ -59,6 +59,7 @@ class ModelLine(Traceable):
                     += [os.path.join(model_dir, name)
                         for name in files
                         if os.path.splitext(name)[0] == 'model']
+                self.model_names = sorted(self.model_names)
         else:
             os.mkdir(self.root)
         self.meta_viewer = MetaViewer(self.root)
