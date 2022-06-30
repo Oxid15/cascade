@@ -66,11 +66,11 @@ class MetricViewer:
 
                 if 'created_at' in meta:
                     metric['created_at'] = \
-                        pendulum.parse(meta['created_at']).format('DD-MM-YYYY hh:mm:ss')
-                if 'saved_at' in meta:
-                    metric['saved'] = \
-                        pendulum.parse(meta['saved_at'])\
-                            .diff_for_humans(pendulum.parse(meta['created_at']))
+                        pendulum.parse(meta['created_at'])
+                    if 'saved_at' in meta:
+                        metric['saved'] = \
+                            pendulum.parse(meta['saved_at'])\
+                                .diff_for_humans(metric['created_at'])
 
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
