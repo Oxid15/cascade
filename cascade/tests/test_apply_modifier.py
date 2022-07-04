@@ -16,22 +16,23 @@ limitations under the License.
 
 import os
 import sys
-import unittest
-from unittest import TestCase
-
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
-sys.path.append(os.path.dirname(MODULE_PATH))
-
-from cascade.tests.number_dataset import NumberDataset
+import pytest
 from cascade.data import ApplyModifier
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-class TestApplyModifier(TestCase):
-    def test(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        ds = ApplyModifier(ds, lambda x: x * 2)
-        self.assertEqual([2, 4, 6, 8, 10], [item for item in ds])
+from cascade.tests.number_dataset import NumberDataset
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.parametrize(
+    'arr, func', [
+        ([1, 2, 3, 4, 5], lambda x: x * 2),
+        ([1, 2, 3, 4, 5], lambda x: x ** 2),
+        ([1, 2, 3, 4, 5], lambda x: x)
+    ]
+)
+def test_apply_modifier(arr, func):
+    ds = NumberDataset(arr)
+    ds = ApplyModifier(ds, func)
+    assert(list(map(func, arr)) == [item for item in ds])
