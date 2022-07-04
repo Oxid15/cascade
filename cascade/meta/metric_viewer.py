@@ -99,7 +99,7 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(self, **kwargs) -> None:
+    def serve(self, page_size=50, **kwargs) -> None:
         # Conditional import
         try:
             import dash
@@ -149,7 +149,7 @@ class MetricViewer:
                 selected_rows=[],
                 page_action="native",
                 page_current= 0,
-                page_size= 10,
+                page_size=page_size,
             )
         ])
 
