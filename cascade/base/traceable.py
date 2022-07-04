@@ -1,16 +1,18 @@
 import warnings
-from typing import List, Dict
+from typing import List, Dict, Union
 
 
 class Traceable:
     def __init__(self, *args, meta_prefix=None, **kwargs) -> None:
         if meta_prefix is None:
             meta_prefix = {}
-        if isinstance(meta_prefix, str):
-            from . import MetaHandler
-
-            meta_prefix = MetaHandler().read(meta_prefix)
+        elif isinstance(meta_prefix, str):
+            meta_prefix = self._read_meta_from_file(meta_prefix)
         self.meta_prefix = meta_prefix
+
+    def _read_meta_from_file(self, path: str) -> Union[List[Dict], Dict]:
+            from . import MetaHandler
+            return MetaHandler().read(path)
 
     def get_meta(self) -> List[Dict]:
         """
@@ -30,10 +32,13 @@ class Traceable:
             self._warn_no_prefix()
         return [meta]
 
-    def update_meta(self, obj: Dict) -> None:
+    def update_meta(self, obj: Union[Dict, str]) -> None:
         """
         Updates meta_prefix, which is then updates dataset's meta when get_meta() is called
         """
+        if isinstance(obj, str):
+            obj = self._read_meta_from_file(obj)
+
         if hasattr(self, 'meta_prefix'):
             self.meta_prefix.update(obj)
         else:
