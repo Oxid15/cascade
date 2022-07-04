@@ -46,7 +46,7 @@ class TestModelRepo(TestCase):
         self.assertEqual(2, len(repo))
 
     def test_add_line(self):
-        repo = ModelRepo('./test_overwrite', overwrite=True)
+        repo = ModelRepo('./test_add_line')
         with self.assertRaises(AssertionError):
             repo.add_line(DummyModel, 'vgg16')  # wrong argument order
 
