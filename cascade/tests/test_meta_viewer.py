@@ -31,8 +31,9 @@ def test(tmp_path):
     with open(os.path.join(tmp_path, 'test.json'), 'w') as f:
         json.dump({'name': 'test0'}, f)
 
-    with open(os.path.join(tmp_path, 'model', 'test.json'), 'w') as f:
-        json.dump({'name': 'test1'}, f)
+    # Write also using mv
+    mv = MetaViewer()
+    mv.write(os.path.join(tmp_path, 'model', 'test.json'), {'name': 'test1'})    
 
     mv = MetaViewer(tmp_path)
 
