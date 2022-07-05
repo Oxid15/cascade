@@ -16,16 +16,22 @@ limitations under the License.
 
 import os
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import RandomSampler
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import RandomSampler, Wrapper
 
+@pytest.mark.parametrize(
+    'arr', [
+        ([1, 2, 3, 4, 5],),
+        ([1, 5],),
+        ([1, 2, -3],)
+    ]
+)
+def test(arr):
+   ds = Wrapper(arr)
+   ds = RandomSampler(ds)
 
-def test():
-    ds = NumberDataset([0, 1, 2, 3, 4])
-    ds = RandomSampler(ds)
-
-    assert([ds[i] for i in range(len(ds))] != [0, 1, 2, 3, 4])
+   assert([ds[i] for i in range(len(ds))] != arr)

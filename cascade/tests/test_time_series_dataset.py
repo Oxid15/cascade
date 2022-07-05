@@ -26,39 +26,55 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.utils import TimeSeriesDataset, Average, Interpolate, Align
-from cascade.tests.number_dataset import NumberDataset
 
-
-def test_create_lists():
+@pytest.mark.parametrize(
+    'arr',[
+        [d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')],
+        [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],
+        [datetime(1922, 1, 2)]
+    ]
+)
+def test_create_lists(arr):
     # Lists of datetime
-    time = [d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')]
+    time = arr
     data = [i for i in range(len(time))]
     ts = TimeSeriesDataset(time=time, data=data)
 
-
-def test_create_arrays():
+@pytest.mark.parametrize(
+    'arr',[
+        np.array([d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')]),
+        np.array([datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)]),
+        np.array([datetime(1922, 1, 2)])
+    ]
+)
+def test_create_arrays(arr):
     # Arrays of datetime
-    time = np.array([datetime(2000, 1, 1),
-                     datetime(2000, 1, 2),
-                     datetime(2000, 1, 3)])
-    data = np.array([1, 2, 3])
+    time = arr
+    data = np.array([i for i in range(len(arr))])
     ts = TimeSeriesDataset(time=time, data=data)
 
 
-def test_unsorted_time():
+@pytest.mark.parametrize(
+    'arr',[
+        [d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')],
+        [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],
+        [datetime(1922, 1, 2)]
+    ]
+)
+def test_unsorted_time(arr):
     # Unsorted datetime
-    time = [datetime(2000, 1, 2),
-            datetime(2000, 1, 1),
-            datetime(2000, 1, 3)]
-    data = np.array([2, 1, 3])
+    time = arr
+    data = np.array([i for i in range(len(time))])
+    indices = np.array([i for i in range(len(time))])
+    np.random.shuffle(indices)
+    data = data[indices]
+    time = np.array(time)[indices]
+
     ts = TimeSeriesDataset(time=time, data=data)
+    t, d = ts.get_data()
 
-    time, data = ts.get_data()
-
-    assert(np.all(data == np.array([1, 2, 3])))
-    assert(np.all(time == np.array([datetime(2000, 1, 1),
-                                    datetime(2000, 1, 2),
-                                    datetime(2000, 1, 3)])))
+    assert(d.tolist() == sorted(data))
+    assert(t.tolist() == sorted(time))
 
 
 def test_no_datetime():
@@ -181,7 +197,6 @@ def test_where_datetime():
     for i in range(len(sl)):
         items.append(sl[i])
     assert(items == [2, 3, 5])
-
 
 
 def test_avg_offset_aware():

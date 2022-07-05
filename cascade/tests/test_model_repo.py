@@ -17,38 +17,47 @@ import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
-
 from cascade.models import ModelRepo
-from cascade.tests.dummy_model import DummyModel
+from cascade.tests.conftest import DummyModel
 
 
-def test_repo():
-    repo = ModelRepo('./test_models')
+def test_repo(tmp_path):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path)
     repo.add_line('dummy_1', DummyModel)
     repo.add_line('00001', DummyModel)
 
-    assert(os.path.exists('./test_models/dummy_1'))
-    assert(os.path.exists('./test_models/00001'))
+    assert(os.path.exists(os.path.join(tmp_path, 'dummy_1')))
+    assert(os.path.exists(os.path.join(tmp_path, '00001')))
     assert(2 == len(repo))
 
-def test_overwrite():
+
+def test_overwrite(tmp_path):
+    tmp_path = str(tmp_path)
     # If no overwrite repo will have 4 models
-    repo = ModelRepo('./test_overwrite', overwrite=True)
+    repo = ModelRepo(tmp_path, overwrite=True)
     repo.add_line('vgg16', DummyModel)
     repo.add_line('resnet', DummyModel)
 
-    repo = ModelRepo('./test_overwrite', overwrite=True)
+    # should delete repo to release loggers and be able to remove folder
+    del repo
+
+    repo = ModelRepo(tmp_path, overwrite=True)
     repo.add_line('densenet', DummyModel)
     repo.add_line('efficientnet', DummyModel)
     assert(2 == len(repo))
 
-def test_add_line():
-    repo = ModelRepo('./test_add_line')
+
+def test_add_line(tmp_path):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path)
     with pytest.raises(AssertionError):
         repo.add_line(DummyModel, 'vgg16')  # wrong argument order
 
-def test_reusage():
-    repo = ModelRepo('./test_reusage')
+
+def test_reusage(tmp_path):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path)
     repo.add_line('vgg16', DummyModel)
 
     model = DummyModel()
@@ -56,12 +65,14 @@ def test_reusage():
 
     # some time...
 
-    repo = ModelRepo('./test_reusage')
+    repo = ModelRepo(tmp_path)
     repo.add_line('vgg16', DummyModel)
     assert(len(repo['vgg16']) == 1)
 
-def test_reusage_init_alias():
-    repo = ModelRepo('./test_reusage_init_alias')
+
+def test_reusage_init_alias(tmp_path):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path)
 
     repo.add_line('vgg16', DummyModel)
 
@@ -70,22 +81,24 @@ def test_reusage_init_alias():
 
     # some time...
 
-    repo = ModelRepo('./test_reusage_init_alias',
+    repo = ModelRepo(tmp_path,
                         lines=[dict(
                             name='vgg16',
                             cls=DummyModel
                         )])
     assert(len(repo['vgg16']) == 1)
 
-def test_meta():
-    repo = ModelRepo('./test_repo_meta')
+
+def test_meta(tmp_path):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path)
     repo.add_line('00000', DummyModel)
     repo.add_line('00001', DummyModel)
 
     meta = repo.get_meta()
     assert(meta[0]['len'] == 2)
 
-    repo = ModelRepo('./test_repo_meta')
+    repo = ModelRepo(tmp_path)
     repo.add_line('00002', DummyModel)
 
     meta = repo.get_meta()

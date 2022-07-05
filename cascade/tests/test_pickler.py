@@ -13,21 +13,32 @@ limitations under the License.
 
 import os
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Pickler
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Pickler, Wrapper, Modifier, Sampler
 
 
-def test():
-    ds1 = NumberDataset([1, 2, 3])
-    ds1 = Pickler('ds.pkl', ds1)
+@pytest.mark.parametrize(
+    'ds',
+    [
+        Wrapper([1, 2, 3, 4, 5]),
+        Wrapper([1]),
+        Sampler(Modifier(Wrapper([1])), 1)
+    ]
+)
+def test(ds, tmp_path):
+    ds1 = Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
+    ds2 = Pickler(os.path.join(tmp_path, 'ds.pkl'))
 
-    ds2 = Pickler('ds.pkl')
+    true = []
+    for i in range(len(ds)):
+        true.append(ds[i])
+
     res = []
     for i in range(len(ds2)):
         res.append(ds2[i])
 
-    assert(res == [1, 2, 3])
+    assert(res == true)

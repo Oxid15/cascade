@@ -20,12 +20,11 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Modifier
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Modifier, Wrapper
 
 
 def test_iter():
-    d = NumberDataset([1, 2, 3, 4, 5])
+    d = Wrapper([1, 2, 3, 4, 5])
     m = Modifier(d)
 
     result1 = []

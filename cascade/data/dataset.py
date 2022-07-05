@@ -76,6 +76,11 @@ class Iterator(Dataset):
     def __iter__(self):
         for item in self._data:
             yield item
+    
+    def get_meta(self):
+        meta = super().get_meta()
+        meta[0]['obj_type'] = str(type(self._data))
+        return meta
 
 
 class Wrapper(Dataset):
@@ -95,7 +100,7 @@ class Wrapper(Dataset):
     def get_meta(self):
         meta = super().get_meta()
         meta[0]['len'] = len(self)
-        meta[0]['obj_type'] = type(self._data)
+        meta[0]['obj_type'] = str(type(self._data))
         return meta
 
 

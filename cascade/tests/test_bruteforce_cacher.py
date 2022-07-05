@@ -20,25 +20,23 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.number_dataset import NumberDataset
-from cascade.tests.number_iterator import NumberIterator
-from cascade.data import BruteforceCacher
+from cascade.data import BruteforceCacher, Wrapper
 
 
-def test_ds():
-    ds = NumberDataset([1, 2, 3, 4, 5])
-    ds = BruteforceCacher(ds)
-    assert([1, 2, 3, 4, 5] == [item for item in ds])
+def test_ds(number_dataset):
+    ds = BruteforceCacher(number_dataset)
+    assert([number_dataset[i] for i in range(len(number_dataset))] \
+        == [item for item in ds])
 
 
-def test_it():
-    ds = NumberIterator(6)
-    ds = BruteforceCacher(ds)
-    assert([0, 1, 2, 3, 4, 5] == [item for item in ds])
+def test_it(number_iterator):
+    ds = BruteforceCacher(number_iterator)
+    assert([item for item in number_iterator] \
+        == [item for item in ds])
 
 
 def test_meta():
-    ds = NumberDataset([1, 2, 3, 4, 5])
+    ds = Wrapper([1, 2, 3, 4, 5])
     ds = BruteforceCacher(ds)
     meta = ds.get_meta()
 

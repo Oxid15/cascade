@@ -21,33 +21,28 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Wrapper
 from cascade.meta import DataValidationException, Validator, AggregateValidator, PredicateValidator
 
 
-def test_modifier_interface():
-    ds = NumberDataset([1, 2, 3, 4, 5])
-    ds = Validator(ds, lambda x: True)
-    assert([1, 2, 3, 4, 5] == [item for item in ds])
+def test_modifier_interface(number_dataset):
+    ds = Validator(number_dataset, lambda x: True)
+    assert(number_dataset._data == [item for item in ds])
 
 
-def test_aggregate_positive():
-    ds = NumberDataset([1, 2, 3, 4, 5])
-    ds = AggregateValidator(ds, lambda d: len(d) == 5)
+def test_aggregate_positive(number_dataset):
+    ds = AggregateValidator(number_dataset, lambda d: len(d) == len(number_dataset))
 
 
-def test_aggregate_negative():
-    ds = NumberDataset([1, 2, 3, 4, 5])
+def test_aggregate_negative(number_dataset):
     with pytest.raises(DataValidationException):
-        ds = AggregateValidator(ds, lambda d: len(d) != 5)
+        ds = AggregateValidator(number_dataset, lambda d: len(d) != len(number_dataset))
 
 
-def test_predicate_positive():
-    ds = NumberDataset([1, 2, 3, 4, 5])
-    ds = PredicateValidator(ds, lambda x: x < 6)
+def test_predicate_positive(number_dataset):
+    ds = PredicateValidator(number_dataset, lambda x: x < float('inf'))
 
 
-def test_predicate_negative():
-    ds = NumberDataset([1, 2, 3, 4, 5])
+def test_predicate_negative(number_dataset):
     with pytest.raises(DataValidationException):
-        ds = PredicateValidator(ds, lambda x: x > 3)
+        ds = PredicateValidator(number_dataset, lambda x: x > float('inf'))

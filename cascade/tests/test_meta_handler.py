@@ -18,7 +18,6 @@ import os
 import sys
 import pendulum
 import numpy as np
-import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -26,9 +25,10 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.base import MetaHandler
 
 
-def test():
+def test(tmp_path):
+    tmp_path = str(tmp_path)
     mh = MetaHandler()
-    mh.write('test_mh.json', 
+    mh.write(os.path.join(tmp_path, 'meta.json'), 
     {
         'name': 'test_mh',
         'array': np.zeros(4),
@@ -36,23 +36,26 @@ def test():
         'date': pendulum.now(tz='UTC')
     })
 
-    obj = mh.read('test_mh.json')
+    obj = mh.read(os.path.join(tmp_path, 'meta.json'))
 
     assert(obj['name'] == 'test_mh')
     assert(all(obj['array'] == np.zeros(4)))
     assert(obj['none'] is None)
 
-def test_overwrite():
+
+def test_overwrite(tmp_path):
+    tmp_path = os.path.join(str(tmp_path), 'test_mh_ow.json')
+
     mh = MetaHandler()
     mh.write(
-        'test_mh_ow.json', 
+        tmp_path, 
         {'name': 'first'},
         overwrite=False)
     
     mh.write(
-        'test_mh_ow.json', 
+        tmp_path, 
         {'name': 'second'},
         overwrite=False)
 
-    obj = mh.read('test_mh_ow.json')
+    obj = mh.read(tmp_path)
     assert(obj['name'] == 'first')

@@ -21,11 +21,11 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import CyclicSampler
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Wrapper
 
 
 def test_cycle():
-    ds = NumberDataset([0, 1, 2, 3, 4])
+    ds = Wrapper([0, 1, 2, 3, 4])
     ds = CyclicSampler(ds, 16)
 
     assert([ds[i] for i in range(len(ds))] ==

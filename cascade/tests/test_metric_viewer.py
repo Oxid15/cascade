@@ -24,45 +24,31 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.models import ModelRepo
 from cascade.meta import MetricViewer
-from cascade.tests.dummy_model import DummyModel
 
 
-def test():
-    repo = ModelRepo('test_mtv')
-    repo.add_line('0', DummyModel)
-
-    m = DummyModel()
+def test(model_repo, dummy_model):
+    m = dummy_model
     m.evaluate()
-    repo['0'].save(m)
+    model_repo['0'].save(m)
 
-    mtv = MetricViewer(repo)
+    mtv = MetricViewer(model_repo)
     t = mtv.table
 
-    assert(list(t.columns) == ['line', 'num', 'created_at', 'saved', 'acc'])
+    for item in ['line', 'num', 'created_at', 'saved', 'acc']:
+        assert(item in list(t.columns))
 
 
-def test_show_table():
-    repo = ModelRepo('test_mtv_show_table')
-    repo.add_line('0', DummyModel)
-
-    for _ in range(50):
-        m = DummyModel()
+def test_show_table(model_repo, dummy_model):
+    for _ in range(len(model_repo)):
+        m = dummy_model
         m.evaluate()
-        repo['0'].save(m)
+        model_repo['0'].save(m)
 
-    mtv = MetricViewer(repo)
+    mtv = MetricViewer(model_repo)
     mtv.plot_table(show=True)
 
 
 @pytest.mark.skip
-def test_serve():
-    repo = ModelRepo('test_mtv_serve')
-    repo.add_line('0', DummyModel)
-
-    for _ in range(50):
-        m = DummyModel(a=np.random.randint(0, 255), b=int(np.random.normal()))
-        m.evaluate()
-        repo['0'].save(m)
-
-    mtv = MetricViewer(repo)
+def test_serve(model_repo):
+    mtv = MetricViewer(model_repo)
     mtv.serve()

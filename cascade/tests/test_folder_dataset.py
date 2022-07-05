@@ -23,13 +23,12 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import FolderDataset
 
 
-def test():
-    folder = './folder_dataset'
-    os.mkdir(folder)
-    with open('./folder_dataset/0.txt', 'w') as w:
+def test(tmp_path):
+    tmp_path = str(tmp_path)
+    with open(os.path.join(tmp_path, '0.txt'), 'w') as w:
         w.write('hello')
 
-    ds = FolderDataset(folder)
+    ds = FolderDataset(tmp_path)
     meta = ds.get_meta()[0]
 
     assert(len(ds) == 1)
