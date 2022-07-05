@@ -22,15 +22,16 @@ from cascade.data import Wrapper
 from cascade.meta import MetaValidator, DataValidationException
 
 
-def pipeline_run(arr):
-    ds = Wrapper(arr)
-    ds = MetaValidator(ds)
+def pipeline_run(ds, root):
+    MetaValidator(ds, root=root)
 
-def test_true():
-    pipeline_run([1, 2, 3, 4, 5])
-    pipeline_run([1, 2, 3, 4, 5])
 
-def test_raise():
-    pipeline_run([1, 2, 3, 4, 5])
+def test_true(number_dataset, tmp_path):
+    pipeline_run(number_dataset, str(tmp_path))
+    pipeline_run(number_dataset, str(tmp_path))
+
+
+def test_raise(tmp_path):
+    pipeline_run(Wrapper([1, 2, 3, 4, 5]), str(tmp_path))
     with pytest.raises(DataValidationException):
-        pipeline_run([1, 2, 3, 4, 5, 6])
+        pipeline_run(Wrapper([1, 2, 3, 4, 5, 6]), str(tmp_path))
