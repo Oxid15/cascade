@@ -20,12 +20,11 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import RandomSampler
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import RandomSampler, Wrapper
 
 
 def test():
-    ds = NumberDataset([0, 1, 2, 3, 4])
+    ds = Wrapper([0, 1, 2, 3, 4])
     ds = RandomSampler(ds)
 
     assert([ds[i] for i in range(len(ds))] != [0, 1, 2, 3, 4])

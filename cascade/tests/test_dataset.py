@@ -23,7 +23,6 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Dataset, Iterator, Wrapper, Modifier, Sampler
-from cascade.tests.number_dataset import NumberDataset
 
 
 def test_getitem():
@@ -81,7 +80,7 @@ def test_wrapper():
 
 
 def test_modifier():
-    ds = NumberDataset([1, 2, 3, 4])
+    ds = Wrapper([1, 2, 3, 4])
     ds = Modifier(ds)
 
     res = []
@@ -96,7 +95,7 @@ def test_modifier():
 
 
 def test_modifier_meta():
-    ds = NumberDataset([1, 2, 3, 4])
+    ds = Wrapper([1, 2, 3, 4])
     ds = Modifier(ds)
 
     meta = ds.get_meta()
@@ -105,5 +104,5 @@ def test_modifier_meta():
 
 
 def test_sampler():
-    ds = NumberDataset([1, 2, 3, 4])
+    ds = Wrapper([1, 2, 3, 4])
     ds = Sampler(ds, 10)

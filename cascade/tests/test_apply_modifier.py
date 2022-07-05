@@ -22,7 +22,7 @@ from cascade.data import ApplyModifier
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Wrapper
 
 
 @pytest.mark.parametrize(
@@ -33,6 +33,6 @@ from cascade.tests.number_dataset import NumberDataset
     ]
 )
 def test_apply_modifier(arr, func):
-    ds = NumberDataset(arr)
+    ds = Wrapper(arr)
     ds = ApplyModifier(ds, func)
     assert(list(map(func, arr)) == [item for item in ds])

@@ -16,26 +16,36 @@ limitations under the License.
 
 import os
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Wrapper
 from cascade.data import Concatenator
 
 
 def test_meta():
-    n1 = NumberDataset([0, 1])
-    n2 = NumberDataset([2, 3, 4, 5])
+    n1 = Wrapper([0, 1])
+    n2 = Wrapper([2, 3, 4, 5])
 
     c = Concatenator([n1, n2], meta_prefix={'num': 1})
     assert(c.get_meta()[0]['num'] == 1)
 
-def test_concatenation():
-    n1 = NumberDataset([0, 1])
-    n2 = NumberDataset([2, 3, 4, 5])
-    n3 = NumberDataset([6, 7, 8])
-    n4 = NumberDataset([1])
 
-    c = Concatenator([n1, n2, n4, n3, n4])
-    assert([c[i] for i in range(len(c))] == [0, 1, 2, 3, 4, 5, 1, 6, 7, 8, 1])
+@pytest.mark.parametrize(
+    'arrs', [
+        ([0],[0],[0]),
+        ([1,2,3,4], [11]),
+        ([1],)
+        # ([1,2,3,4], [])
+    ]
+)
+def test_concatenation(arrs):
+    c = Concatenator([*arrs])
+
+    res = []
+    for arr in arrs:
+        res += arr
+
+    assert([c[i] for i in range(len(c))] == res)
