@@ -17,76 +17,92 @@ import datetime
 import os
 import json
 import sys
-import unittest
-from unittest import TestCase
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Dataset, Iterator, Wrapper, Modifier, Sampler
-from cascade.tests.number_dataset import NumberDataset
 
 
-class TestDataset(TestCase):
-    def test_getitem(self):
-        ds = Dataset()
-        with self.assertRaises(NotImplementedError):
-            ds[0]
-    
-    def test_meta(self):
-        ds = Dataset()
-        meta = ds.get_meta()
-
-        self.assertEqual(meta[-1]['type'], 'dataset')
+def test_getitem():
+    ds = Dataset()
+    with pytest.raises(NotImplementedError):
+        ds[0]
 
 
-class TestIterator(TestCase):
-    def test(self):
-        it = Iterator([1, 2, 3, 4])
-        res = []
-        for item in it:
-            res.append(item)
-        self.assertEqual([1, 2, 3, 4], res)
+def test_meta():
+    now = datetime.datetime.now()
+    ds = Dataset(meta_prefix={'time': now})
+    meta = ds.get_meta()
+
+    assert(type(meta) == list)
+    assert(len(meta) == 1)
+    assert(type(meta[0]) == dict)
+    assert(meta[0]['time'] == now)
+    assert('name' in meta[0])
 
 
-class TestWrapper(TestCase):
-    def test(self):
-        wr = Wrapper([1, 2, 3, 4])
-        res = []
-        for i in range(len(wr)):
-            res.append(wr[i])
-        self.assertEqual([1, 2, 3, 4], res)
+def test_update_meta():
+    ds = Dataset(meta_prefix={'a': 1, 'b': 2})
+    ds.update_meta({'b': 3})
+    meta = ds.get_meta()
+
+    assert(meta[0]['a'] == 1)
+    assert(meta[0]['b'] == 3)
 
 
-class TestModifier(TestCase):
-    def test(self):
-        ds = NumberDataset([1, 2, 3, 4])
-        ds = Modifier(ds)
+def test_meta_from_file(tmp_path):
+    with open(os.path.join(tmp_path, 'test_meta_from_file.json'), 'w') as f:
+        json.dump({'a': 1}, f)
 
-        res = []
-        for i in range(len(ds)):
-            res.append(ds[i])
-        self.assertEqual([1, 2, 3, 4], res)
+    ds = Dataset(meta_prefix=os.path.join(tmp_path, 'test_meta_from_file.json'))
+    meta = ds.get_meta()
 
-        res = []
-        for it in ds:
-            res.append(it)
-        self.assertEqual([1, 2, 3, 4], res)
-
-    def test_meta(self):
-        ds = NumberDataset([1, 2, 3, 4])
-        ds = Modifier(ds)
-
-        meta = ds.get_meta()
-        self.assertEqual(type(meta), list)
-        self.assertEqual(len(meta), 2)
+    assert('a' in meta[0])
+    assert(meta[0]['a'] == 1)
 
 
-class TestSampler(TestCase):
-    def test(self):
-        ds = NumberDataset([1, 2, 3, 4])
-        ds = Sampler(ds, 10)
+def test_iterator():
+    it = Iterator([1, 2, 3, 4])
+    res = []
+    for item in it:
+        res.append(item)
+    assert([1, 2, 3, 4] == res)
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_wrapper():
+    wr = Wrapper([1, 2, 3, 4])
+    res = []
+    for i in range(len(wr)):
+        res.append(wr[i])
+    assert([1, 2, 3, 4] == res)
+
+
+def test_modifier():
+    ds = Wrapper([1, 2, 3, 4])
+    ds = Modifier(ds)
+
+    res = []
+    for i in range(len(ds)):
+        res.append(ds[i])
+    assert([1, 2, 3, 4] == res)
+
+    res = []
+    for it in ds:
+        res.append(it)
+    assert([1, 2, 3, 4] == res)
+
+
+def test_modifier_meta():
+    ds = Wrapper([1, 2, 3, 4])
+    ds = Modifier(ds)
+
+    meta = ds.get_meta()
+    assert(type(meta) == list)
+    assert(len(meta) == 2)
+
+
+def test_sampler():
+    ds = Wrapper([1, 2, 3, 4])
+    ds = Sampler(ds, 10)

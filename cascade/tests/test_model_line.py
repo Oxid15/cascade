@@ -16,41 +16,31 @@ limitations under the License.
 
 import os
 import sys
-import unittest
-import shutil
-from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.dummy_model import DummyModel
+from cascade.tests.conftest import DummyModel
 from cascade.models.model_repo import ModelLine
 
 
-class TestModelLine(TestCase):
-    def test_save_load(self):
-        line = ModelLine('./line', DummyModel)
+def test_save_load(tmp_path):
+    tmp_path = str(tmp_path)
+    line = ModelLine(tmp_path, DummyModel)
+    m = DummyModel()
+    line.save(m)
+    model = line[0]
 
-        m = DummyModel()
-
-        line.save(m)
-
-        model = line[0]
-
-        self.assertEqual(len(line), 1)
-        self.assertTrue(model.model == "b'model'")
-
-    def test_meta(self):
-        line = ModelLine('line_meta', DummyModel)
-
-        m = DummyModel()
-
-        line.save(m)
-
-        meta = line.get_meta()
-        self.assertEqual(meta[0]['model_cls'], repr(DummyModel))
-        self.assertEqual(meta[0]['len'], 1)
+    assert(len(line) == 1)
+    assert(model.model == "b'model'")
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_meta(tmp_path):
+    tmp_path = str(tmp_path)
+    line = ModelLine(tmp_path, DummyModel)
+    m = DummyModel()
+    line.save(m)
+    meta = line.get_meta()
+
+    assert(meta[0]['model_cls'] == repr(DummyModel))
+    assert(meta[0]['len'] == 1)

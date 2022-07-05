@@ -166,3 +166,9 @@ class ModelRepo(Traceable):
             'type': 'repo'
         })
         return meta
+
+    def __del__(self):
+        # Release all files on desctruction
+        for handler in self.logger.handlers:
+            handler.close()
+            self.logger.removeHandler(handler)

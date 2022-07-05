@@ -17,9 +17,6 @@ limitations under the License.
 import os
 import sys
 import json
-import shutil
-import unittest
-from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -27,28 +24,20 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.meta import MetaViewer
 
 
-class TestMetaViewer(TestCase):
-    def test(self):
-        root = 'metas'
-        os.mkdir(root)
-        os.mkdir(os.path.join(root, 'model'))
+def test(tmp_path):
+    tmp_path = str(tmp_path)
+    os.mkdir(os.path.join(tmp_path, 'model'))
 
-        with open(f'{root}/test.json', 'w') as f:
-            json.dump({'name': 'test'}, f)
+    with open(os.path.join(tmp_path, 'test.json'), 'w') as f:
+        json.dump({'name': 'test0'}, f)
 
-        with open(f'{root}/model/test.json', 'w') as f:
-            json.dump({'name': 'test'}, f)
+    with open(os.path.join(tmp_path, 'model', 'test.json'), 'w') as f:
+        json.dump({'name': 'test1'}, f)
 
-        mv = MetaViewer(root)
+    mv = MetaViewer(tmp_path)
 
-        shutil.rmtree(root)
-
-        self.assertEqual(len(mv), 2)
-        self.assertTrue('name' in mv[0])
-        self.assertTrue('name' in mv[1])
-        self.assertEqual(mv[0]['name'], 'test')
-        self.assertEqual(mv[1]['name'], 'test')
-
-
-if __name__ == '__main__':
-    unittest.main()
+    assert(len(mv) == 2)
+    assert('name' in mv[0])
+    assert('name' in mv[1])
+    assert(mv[0]['name'] == 'test0')
+    assert(mv[1]['name'] == 'test1')

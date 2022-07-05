@@ -13,25 +13,16 @@ limitations under the License.
 
 import os
 import sys
-import unittest
-from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import SequentialCacher
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import SequentialCacher, Wrapper
 
 
-class TestSequentialCacher(TestCase):
-    def test(self):
-        ds = NumberDataset([1, 2, 3])
-        ds = SequentialCacher(ds, 2)
-        res = []
-        for i in range(len(ds)):
-            res.append(ds[i])
-        self.assertEqual(res, [1, 2, 3])
-
-
-if __name__ == '__main__':
-    unittest.main()
+def test(number_dataset):
+    ds = SequentialCacher(number_dataset, 2)
+    res = []
+    for i in range(len(ds)):
+        res.append(ds[i])
+    assert(res == number_dataset._data)

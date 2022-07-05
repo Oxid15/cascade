@@ -14,12 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+
 import os
 import sys
+import random
+import shutil
 import numpy as np
+import pytest
 
-sys.path.append(os.path.abspath('../..'))
-from cascade.models import Model
+MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade.data import Wrapper, Iterator
+from cascade.models import Model, ModelRepo
 
 
 class DummyModel(Model):
@@ -47,3 +54,52 @@ class DummyModel(Model):
             path += '.bin'
         with open(path, 'wb') as f:
             f.write(b'model')
+
+
+class EmptyModel(DummyModel):
+   def __init__(self):
+      pass
+
+
+@pytest.fixture(params=[
+        [1, 2, 3, 4, 5],
+        [0],
+        [0, 0, 0, 0],
+        [-i for i in range(0, 100)]
+   ])
+def number_dataset(request):
+   return Wrapper(request.param)
+
+
+@pytest.fixture(params=[
+        [1, 2, 3, 4, 5],
+        [0],
+        [0, 0, 0, 0],
+        [-i for i in range(100, 0)]
+   ])
+def number_iterator(request):
+   return Iterator(request.param)
+
+
+@pytest.fixture(params=[
+   {'a': 0},
+   {'b': 1},
+   {'a': 0, 'b': 'alala'},
+   {'c': np.array([1, 2]), 'd': {'a': 0}}])
+def dummy_model(request):
+   return DummyModel(**request.param)
+
+
+@pytest.fixture
+def empty_model():
+   return EmptyModel()
+
+
+@pytest.fixture
+def model_repo(tmp_path):
+    repo = ModelRepo(str(tmp_path), lines=[
+        dict(
+            name=str(num),
+            cls=DummyModel) for num in range(10)
+        ])
+    yield repo
