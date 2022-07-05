@@ -13,9 +13,7 @@ limitations under the License.
 
 import os
 import sys
-import shutil
-import unittest
-from unittest import TestCase
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -24,77 +22,71 @@ from cascade.models import ModelRepo
 from cascade.tests.dummy_model import DummyModel
 
 
-class TestModelRepo(TestCase):
-    def test_repo(self):
-        repo = ModelRepo('./test_models')
-        repo.add_line('dummy_1', DummyModel)
-        repo.add_line('00001', DummyModel)
+def test_repo():
+    repo = ModelRepo('./test_models')
+    repo.add_line('dummy_1', DummyModel)
+    repo.add_line('00001', DummyModel)
 
-        self.assertTrue(os.path.exists('./test_models/dummy_1'))
-        self.assertTrue(os.path.exists('./test_models/00001'))
-        self.assertEqual(2, len(repo))
+    assert(os.path.exists('./test_models/dummy_1'))
+    assert(os.path.exists('./test_models/00001'))
+    assert(2 == len(repo))
 
-    def test_overwrite(self):
-        # If no overwrite repo will have 4 models
-        repo = ModelRepo('./test_overwrite', overwrite=True)
-        repo.add_line('vgg16', DummyModel)
-        repo.add_line('resnet', DummyModel)
+def test_overwrite():
+    # If no overwrite repo will have 4 models
+    repo = ModelRepo('./test_overwrite', overwrite=True)
+    repo.add_line('vgg16', DummyModel)
+    repo.add_line('resnet', DummyModel)
 
-        repo = ModelRepo('./test_overwrite', overwrite=True)
-        repo.add_line('densenet', DummyModel)
-        repo.add_line('efficientnet', DummyModel)
-        self.assertEqual(2, len(repo))
+    repo = ModelRepo('./test_overwrite', overwrite=True)
+    repo.add_line('densenet', DummyModel)
+    repo.add_line('efficientnet', DummyModel)
+    assert(2 == len(repo))
 
-    def test_add_line(self):
-        repo = ModelRepo('./test_add_line')
-        with self.assertRaises(AssertionError):
-            repo.add_line(DummyModel, 'vgg16')  # wrong argument order
+def test_add_line():
+    repo = ModelRepo('./test_add_line')
+    with pytest.raises(AssertionError):
+        repo.add_line(DummyModel, 'vgg16')  # wrong argument order
 
-    def test_reusage(self):
-        repo = ModelRepo('./test_reusage')
+def test_reusage():
+    repo = ModelRepo('./test_reusage')
+    repo.add_line('vgg16', DummyModel)
 
-        repo.add_line('vgg16', DummyModel)
+    model = DummyModel()
+    repo['vgg16'].save(model)
 
-        model = DummyModel()
-        repo['vgg16'].save(model)
+    # some time...
 
-        # some time...
+    repo = ModelRepo('./test_reusage')
+    repo.add_line('vgg16', DummyModel)
+    assert(len(repo['vgg16']) == 1)
 
-        repo = ModelRepo('./test_reusage')
-        repo.add_line('vgg16', DummyModel)
-        self.assertEqual(len(repo['vgg16']), 1)
+def test_reusage_init_alias():
+    repo = ModelRepo('./test_reusage_init_alias')
 
-    def test_reusage_init_alias(self):
-        repo = ModelRepo('./test_reusage_init_alias')
+    repo.add_line('vgg16', DummyModel)
 
-        repo.add_line('vgg16', DummyModel)
+    model = DummyModel()
+    repo['vgg16'].save(model)
 
-        model = DummyModel()
-        repo['vgg16'].save(model)
+    # some time...
 
-        # some time...
+    repo = ModelRepo('./test_reusage_init_alias',
+                        lines=[dict(
+                            name='vgg16',
+                            cls=DummyModel
+                        )])
+    assert(len(repo['vgg16']) == 1)
 
-        repo = ModelRepo('./test_reusage_init_alias',
-                         lines=[dict(
-                             name='vgg16',
-                             cls=DummyModel
-                         )])
-        self.assertEqual(len(repo['vgg16']), 1)
+def test_meta():
+    repo = ModelRepo('./test_repo_meta')
+    repo.add_line('00000', DummyModel)
+    repo.add_line('00001', DummyModel)
 
-    def test_meta(self):
-        repo = ModelRepo('./test_repo_meta')
-        repo.add_line('00000', DummyModel)
-        repo.add_line('00001', DummyModel)
+    meta = repo.get_meta()
+    assert(meta[0]['len'] == 2)
 
-        meta = repo.get_meta()
-        self.assertEqual(meta[0]['len'], 2)
+    repo = ModelRepo('./test_repo_meta')
+    repo.add_line('00002', DummyModel)
 
-        repo = ModelRepo('./test_repo_meta')
-        repo.add_line('00002', DummyModel)
-
-        meta = repo.get_meta()
-        self.assertEqual(meta[0]['len'], 3)
-
-
-if __name__ == '__main__':
-    unittest.main()
+    meta = repo.get_meta()
+    assert(meta[0]['len'] == 3)

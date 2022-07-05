@@ -16,8 +16,6 @@ limitations under the License.
 
 import os
 import sys
-import unittest
-from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -26,24 +24,18 @@ from cascade.tests.number_dataset import NumberDataset
 from cascade.data import Concatenator
 
 
-class TestConcatenator(TestCase):
-    def test_meta(self):
-        n1 = NumberDataset([0, 1])
-        n2 = NumberDataset([2, 3, 4, 5])
+def test_meta():
+    n1 = NumberDataset([0, 1])
+    n2 = NumberDataset([2, 3, 4, 5])
 
-        c = Concatenator([n1, n2], meta_prefix={'num': 1})
-        self.assertEqual(c.get_meta()[0]['num'], 1)
+    c = Concatenator([n1, n2], meta_prefix={'num': 1})
+    assert(c.get_meta()[0]['num'] == 1)
 
-    def test_concatenation(self):
-        n1 = NumberDataset([0, 1])
-        n2 = NumberDataset([2, 3, 4, 5])
-        n3 = NumberDataset([6, 7, 8])
-        n4 = NumberDataset([1])
+def test_concatenation():
+    n1 = NumberDataset([0, 1])
+    n2 = NumberDataset([2, 3, 4, 5])
+    n3 = NumberDataset([6, 7, 8])
+    n4 = NumberDataset([1])
 
-        c = Concatenator([n1, n2, n4, n3, n4])
-        self.assertEqual([c[i] for i in range(len(c))],
-                         [0, 1, 2, 3, 4, 5, 1, 6, 7, 8, 1])
-
-
-if __name__ == '__main__':
-    unittest.main()
+    c = Concatenator([n1, n2, n4, n3, n4])
+    assert([c[i] for i in range(len(c))] == [0, 1, 2, 3, 4, 5, 1, 6, 7, 8, 1])

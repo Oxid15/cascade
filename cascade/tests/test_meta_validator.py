@@ -13,10 +13,7 @@ limitations under the License.
 
 import os
 import sys
-import json
-import shutil
-import unittest
-from unittest import TestCase
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -25,20 +22,15 @@ from cascade.tests.number_dataset import NumberDataset
 from cascade.meta import MetaValidator, DataValidationException
 
 
-class TestMetaValidator(TestCase):
-    def pipeline_run(self, arr):
-        ds = NumberDataset(arr)
-        ds = MetaValidator(ds)
+def pipeline_run(arr):
+    ds = NumberDataset(arr)
+    ds = MetaValidator(ds)
 
-    def test_true(self):
-        self.pipeline_run([1, 2, 3, 4, 5])
-        self.pipeline_run([1, 2, 3, 4, 5])
+def test_true():
+    pipeline_run([1, 2, 3, 4, 5])
+    pipeline_run([1, 2, 3, 4, 5])
 
-    def test_raise(self):
-        self.pipeline_run([1, 2, 3, 4, 5])
-        with self.assertRaises(DataValidationException):
-            self.pipeline_run([1, 2, 3, 4, 5, 6])
-
-
-if __name__ == '__main__':
-    unittest.main()
+def test_raise():
+    pipeline_run([1, 2, 3, 4, 5])
+    with pytest.raises(DataValidationException):
+        pipeline_run([1, 2, 3, 4, 5, 6])

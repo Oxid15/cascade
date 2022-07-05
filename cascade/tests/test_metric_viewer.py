@@ -16,10 +16,8 @@ limitations under the License.
 
 import os
 import sys
-import shutil
 import numpy as np
-import unittest
-from unittest import TestCase
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -29,44 +27,42 @@ from cascade.meta import MetricViewer
 from cascade.tests.dummy_model import DummyModel
 
 
-class TestMetricViewer(TestCase):
-    def test(self):
-        repo = ModelRepo('test_mtv')
-        repo.add_line('0', DummyModel)
+def test():
+    repo = ModelRepo('test_mtv')
+    repo.add_line('0', DummyModel)
 
+    m = DummyModel()
+    m.evaluate()
+    repo['0'].save(m)
+
+    mtv = MetricViewer(repo)
+    t = mtv.table
+
+    assert(list(t.columns) == ['line', 'num', 'created_at', 'saved', 'acc'])
+
+
+def test_show_table():
+    repo = ModelRepo('test_mtv_show_table')
+    repo.add_line('0', DummyModel)
+
+    for _ in range(50):
         m = DummyModel()
         m.evaluate()
         repo['0'].save(m)
 
-        mtv = MetricViewer(repo)
-        t = mtv.table
-
-        self.assertListEqual(list(t.columns), ['line', 'num', 'created_at', 'saved', 'acc'])
-
-    def test_show_table(self):
-        repo = ModelRepo('test_mtv_show_table')
-        repo.add_line('0', DummyModel)
-
-        for _ in range(50):
-            m = DummyModel()
-            m.evaluate()
-            repo['0'].save(m)
-
-        mtv = MetricViewer(repo)
-        mtv.plot_table(show=True)
-
-    # def test_serve(self):
-    #     repo = ModelRepo('test_mtv_serve')
-    #     repo.add_line('0', DummyModel)
-
-    #     for _ in range(50):
-    #         m = DummyModel(a=np.random.randint(0, 255), b=int(np.random.normal()))
-    #         m.evaluate()
-    #         repo['0'].save(m)
-
-    #     mtv = MetricViewer(repo)
-    #     mtv.serve()
+    mtv = MetricViewer(repo)
+    mtv.plot_table(show=True)
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.skip
+def test_serve():
+    repo = ModelRepo('test_mtv_serve')
+    repo.add_line('0', DummyModel)
+
+    for _ in range(50):
+        m = DummyModel(a=np.random.randint(0, 255), b=int(np.random.normal()))
+        m.evaluate()
+        repo['0'].save(m)
+
+    mtv = MetricViewer(repo)
+    mtv.serve()

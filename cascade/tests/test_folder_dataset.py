@@ -16,9 +16,6 @@ limitations under the License.
 
 import os
 import sys
-import unittest
-import shutil
-from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -26,24 +23,19 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import FolderDataset
 
 
-class TestFolderDataset(TestCase):
-    def test(self):
-        folder = './folder_dataset'
-        os.mkdir(folder)
-        with open('./folder_dataset/0.txt', 'w') as w:
-            w.write('hello')
+def test():
+    folder = './folder_dataset'
+    os.mkdir(folder)
+    with open('./folder_dataset/0.txt', 'w') as w:
+        w.write('hello')
 
-        ds = FolderDataset(folder)
-        meta = ds.get_meta()[0]
+    ds = FolderDataset(folder)
+    meta = ds.get_meta()[0]
 
-        self.assertEqual(len(ds), 1)
-        self.assertTrue('name' in meta)
-        self.assertTrue('len' in meta)
-        self.assertTrue('paths' in meta)
-        self.assertTrue('md5sums' in meta)
-        self.assertEqual(len(meta['paths']), 1)
-        self.assertEqual(len(meta['md5sums']), 1)
-
-
-if __name__ == '__main__':
-    unittest.main()
+    assert(len(ds) == 1)
+    assert('name' in meta)
+    assert('len' in meta)
+    assert('paths' in meta)
+    assert('md5sums' in meta)
+    assert(len(meta['paths']) == 1)
+    assert(len(meta['md5sums']) == 1)

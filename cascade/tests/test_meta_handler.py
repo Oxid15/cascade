@@ -18,8 +18,7 @@ import os
 import sys
 import pendulum
 import numpy as np
-import unittest
-from unittest import TestCase
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -27,43 +26,33 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.base import MetaHandler
 
 
-class TestMetaHandler(TestCase):
-    def test(self):
-        mh = MetaHandler()
-        mh.write('test.json', 
-        {
-            'name': 'test',
-            'array': np.zeros(4),
-            'none': None,
-            'date': pendulum.now(tz='UTC')
-        })
+def test():
+    mh = MetaHandler()
+    mh.write('test_mh.json', 
+    {
+        'name': 'test_mh',
+        'array': np.zeros(4),
+        'none': None,
+        'date': pendulum.now(tz='UTC')
+    })
 
-        obj = mh.read('test.json')
+    obj = mh.read('test_mh.json')
 
-        os.remove('test.json')
+    assert(obj['name'] == 'test_mh')
+    assert(all(obj['array'] == np.zeros(4)))
+    assert(obj['none'] is None)
 
-        self.assertEqual(obj['name'], 'test')
-        self.assertTrue(all(obj['array'] == np.zeros(4)))
-        self.assertTrue(obj['none'] is None)
+def test_overwrite():
+    mh = MetaHandler()
+    mh.write(
+        'test_mh_ow.json', 
+        {'name': 'first'},
+        overwrite=False)
     
-    def test_overwrite(self):
-        mh = MetaHandler()
-        mh.write(
-            'test_ow.json', 
-            {'name': 'first'},
-            overwrite=False)
-        
-        mh.write(
-            'test_ow.json', 
-            {'name': 'second'},
-            overwrite=False)
+    mh.write(
+        'test_mh_ow.json', 
+        {'name': 'second'},
+        overwrite=False)
 
-        obj = mh.read('test_ow.json')
-
-        os.remove('test_ow.json')
-
-        self.assertEqual(obj['name'], 'first')
-
-
-if __name__ == '__main__':
-    unittest.main()
+    obj = mh.read('test_mh_ow.json')
+    assert(obj['name'] == 'first')
