@@ -25,6 +25,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.data import Wrapper, Iterator
 from cascade.models import Model, ModelRepo
 
 
@@ -58,6 +59,27 @@ class DummyModel(Model):
 class EmptyModel(DummyModel):
    def __init__(self):
       pass
+
+
+@pytest.fixture(params=[
+        [1, 2, 3, 4, 5],
+        [0],
+        [0, 0, 0, 0],
+        [-i for i in range(100, 0)]
+   ])
+def number_dataset(request):
+   return Wrapper(request.param)
+
+
+@pytest.fixture(params=[
+        [1, 2, 3, 4, 5],
+        [0],
+        [0, 0, 0, 0],
+        [-i for i in range(100, 0)]
+   ])
+def number_iterator(request):
+   return Iterator(request.param)
+
 
 @pytest.fixture(params=[
    {'a': 0},
