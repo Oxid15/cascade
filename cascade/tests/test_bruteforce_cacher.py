@@ -31,7 +31,7 @@ def test_ds(number_dataset):
 
 def test_it(number_iterator):
     ds = BruteforceCacher(number_iterator)
-    assert([number_iterator[i] for i in range(len(number_iterator))] \
+    assert([item for item in number_iterator] \
         == [item for item in ds])
 
 
