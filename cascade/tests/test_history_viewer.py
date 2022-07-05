@@ -21,6 +21,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.tests.conftest import EmptyModel
 from cascade.meta import HistoryViewer
 
 
@@ -40,25 +41,10 @@ def test_no_metric(model_repo, dummy_model):
         hv.plot('acc')
 
 
-def test_params(model_repo, dummy_model):
-    model0 = dummy_model
-    model1 = dummy_model
-
-    model_repo['0'].save(model0)
-    model_repo['1'].save(model1)
-
-    hv = HistoryViewer(model_repo)
-    hv.plot('acc')
-
-
 def test_empty_model(model_repo, empty_model):
-    model_repo.add_line('test', empty_model)
-
-    model0 = empty_model
-    model1 = empty_model
-
-    model_repo['test'].save(model0)
-    model_repo['test'].save(model1)
+    model_repo.add_line('test', EmptyModel)
+    empty_model.metrics = {'acc': 0.9}
+    model_repo['test'].save(empty_model)
 
     hv = HistoryViewer(model_repo)
     hv.plot('acc')
