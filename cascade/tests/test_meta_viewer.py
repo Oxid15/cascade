@@ -24,21 +24,20 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.meta import MetaViewer
 
 
-def test():
-    root = 'test_meta_viewer'
-    os.mkdir(root)
-    os.mkdir(os.path.join(root, 'model'))
+def test(tmp_path):
+    tmp_path = str(tmp_path)
+    os.mkdir(os.path.join(tmp_path, 'model'))
 
-    with open(f'{root}/test.json', 'w') as f:
-        json.dump({'name': 'test'}, f)
+    with open(os.path.join(tmp_path, 'test.json'), 'w') as f:
+        json.dump({'name': 'test0'}, f)
 
-    with open(f'{root}/model/test.json', 'w') as f:
-        json.dump({'name': 'test'}, f)
+    with open(os.path.join(tmp_path, 'model', 'test.json'), 'w') as f:
+        json.dump({'name': 'test1'}, f)
 
-    mv = MetaViewer(root)
+    mv = MetaViewer(tmp_path)
 
     assert(len(mv) == 2)
     assert('name' in mv[0])
     assert('name' in mv[1])
-    assert(mv[0]['name'] == 'test')
-    assert(mv[1]['name'] == 'test')
+    assert(mv[0]['name'] == 'test0')
+    assert(mv[1]['name'] == 'test1')

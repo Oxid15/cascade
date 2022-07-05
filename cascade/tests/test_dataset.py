@@ -52,11 +52,11 @@ def test_update_meta():
     assert(meta[0]['b'] == 3)
 
 
-def test_meta_from_file():
-    with open('test_meta_from_file.json', 'w') as f:
+def test_meta_from_file(tmp_path):
+    with open(os.path.join(tmp_path, 'test_meta_from_file.json'), 'w') as f:
         json.dump({'a': 1}, f)
 
-    ds = Dataset(meta_prefix='test_meta_from_file.json')
+    ds = Dataset(meta_prefix=os.path.join(tmp_path, 'test_meta_from_file.json'))
     meta = ds.get_meta()
 
     assert('a' in meta[0])
