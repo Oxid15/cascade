@@ -57,7 +57,7 @@ class DummyModel(Model):
 
 class EmptyModel(DummyModel):
    def __init__(self):
-      self.metrics = {'acc': np.random.random()}
+      pass
 
 @pytest.fixture(params=[
    {'a': 0},
