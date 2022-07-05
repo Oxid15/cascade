@@ -34,7 +34,8 @@ def test(model_repo, dummy_model):
     mtv = MetricViewer(model_repo)
     t = mtv.table
 
-    assert(list(t.columns) == ['line', 'num', 'created_at', 'saved', 'acc'])
+    for item in ['line', 'num', 'created_at', 'saved', 'acc']:
+        assert(item in list(t.columns))
 
 
 def test_show_table(model_repo, dummy_model):
