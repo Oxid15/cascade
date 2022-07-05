@@ -16,97 +16,63 @@ limitations under the License.
 
 import os
 import sys
-import numpy as np
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.dummy_model import DummyModel
-from cascade.models import ModelRepo
 from cascade.meta import HistoryViewer
 
 
-def test_run():
-    repo = ModelRepo('./test_hv')
+def test_run(model_repo, dummy_model):
+    dummy_model.evaluate()
+    model_repo['0'].save(dummy_model)
 
-    line0 = repo.add_line('0', DummyModel)
-
-    model = DummyModel()
-    model.evaluate()
-
-    line0.save(model)
-
-    hv = HistoryViewer(repo)
+    hv = HistoryViewer(model_repo)
     hv.plot('acc')
 
 
-def test_no_metric():
-    repo = ModelRepo('./test_hv_no_metric')
+def test_no_metric(model_repo, dummy_model):
+    model_repo['0'].save(dummy_model)
 
-    line0 = repo.add_line('0', DummyModel)
-
-    model = DummyModel()
-    # model.evaluate()
-
-    line0.save(model)
-
-    hv = HistoryViewer(repo)
+    hv = HistoryViewer(model_repo)
     with pytest.raises(AssertionError):
         hv.plot('acc')
 
 
-def test_params():
-    repo = ModelRepo('./test_hv_params')
+def test_params(model_repo, dummy_model):
+    model0 = dummy_model
+    model1 = dummy_model
 
-    line0 = repo.add_line('0', DummyModel)
+    model_repo['0'].save(model0)
+    model_repo['1'].save(model1)
 
-    model0 = DummyModel(a=0)
-    model0.evaluate()
-
-    model1 = DummyModel(a=0, b=0)
-    model1.evaluate()
-
-    line0.save(model0)
-    line0.save(model1)
-
-    hv = HistoryViewer(repo)
+    hv = HistoryViewer(model_repo)
     hv.plot('acc')
 
 
-def test_empty_model():
-    class EmptyModel(DummyModel):
-        def __init__(self):
-            self.metrics = {'acc': np.random.random()}
+def test_empty_model(model_repo, empty_model):
+    model_repo.add_line('test', empty_model)
 
-    repo = ModelRepo('./test_empty')
+    model0 = empty_model
+    model1 = empty_model
 
-    line0 = repo.add_line('0', EmptyModel)
+    model_repo['test'].save(model0)
+    model_repo['test'].save(model1)
 
-    model0 = EmptyModel()
-    model1 = EmptyModel()
-
-    line0.save(model0)
-    line0.save(model1)
-
-    hv = HistoryViewer(repo)
+    hv = HistoryViewer(model_repo)
     hv.plot('acc')
 
-def test_many_lines():
-    repo = ModelRepo('./test_many_lines', lines=[
-        dict(
-            name=str(num),
-            cls=DummyModel) for num in range(50)
-        ])
 
-    model0 = DummyModel(a=0)
+def test_many_lines(model_repo, dummy_model):
+    model0 = dummy_model
     model0.evaluate()
 
-    model1 = DummyModel(a=0, b=0)
+    model1 = dummy_model
     model1.evaluate()
 
-    repo['0'].save(model0)
-    repo['1'].save(model1)
+    model_repo['0'].save(model0)
+    model_repo['1'].save(model1)
 
-    hv = HistoryViewer(repo)
+    hv = HistoryViewer(model_repo)
     hv.plot('acc')

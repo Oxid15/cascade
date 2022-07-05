@@ -20,7 +20,7 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.dummy_model import DummyModel
+from cascade.tests.conftest import DummyModel
 from cascade.models.model_repo import ModelLine
 
 
