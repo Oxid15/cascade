@@ -65,7 +65,7 @@ class EmptyModel(DummyModel):
         [1, 2, 3, 4, 5],
         [0],
         [0, 0, 0, 0],
-        [-i for i in range(100, 0)]
+        [-i for i in range(0, 100)]
    ])
 def number_dataset(request):
    return Wrapper(request.param)
