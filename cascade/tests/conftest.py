@@ -74,10 +74,10 @@ def empty_model():
 
 
 @pytest.fixture
-def model_repo():
-   yield ModelRepo('repo', lines=[
+def model_repo(tmp_path):
+    repo = ModelRepo(str(tmp_path), lines=[
         dict(
             name=str(num),
             cls=DummyModel) for num in range(10)
         ])
-   shutil.rmtree('repo')
+    yield repo
