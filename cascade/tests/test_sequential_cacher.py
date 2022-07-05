@@ -20,10 +20,9 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import SequentialCacher, Wrapper
 
 
-def test():
-    ds = Wrapper([1, 2, 3])
-    ds = SequentialCacher(ds, 2)
+def test(number_dataset):
+    ds = SequentialCacher(number_dataset, 2)
     res = []
     for i in range(len(ds)):
         res.append(ds[i])
-    assert(res == [1, 2, 3])
+    assert(res == number_dataset._data)
