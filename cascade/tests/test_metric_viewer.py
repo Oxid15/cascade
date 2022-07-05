@@ -48,14 +48,6 @@ def test_show_table(model_repo, dummy_model):
 
 
 @pytest.mark.skip
-def test_serve():
-    repo = ModelRepo('test_mtv_serve')
-    repo.add_line('0', DummyModel)
-
-    for _ in range(50):
-        m = DummyModel(a=np.random.randint(0, 255), b=int(np.random.normal()))
-        m.evaluate()
-        repo['0'].save(m)
-
-    mtv = MetricViewer(repo)
+def test_serve(model_repo):
+    mtv = MetricViewer(model_repo)
     mtv.serve()
