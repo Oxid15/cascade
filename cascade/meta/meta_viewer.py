@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import json
-from ..base import MetaHandler
+from ..base import MetaHandler, JSONEncoder
 
 
 class MetaViewer:
@@ -110,4 +110,4 @@ class MetaViewer:
         return True
 
     def obj_to_dict(self, obj):
-        return json.loads(self.mh.encode(obj))
+        return json.loads(JSONEncoder().encode(obj))

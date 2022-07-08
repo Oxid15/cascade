@@ -53,7 +53,18 @@ class CustomEncoder(JSONEncoder):
         return super(CustomEncoder, self).default(obj)
 
 
-class MetaHandler:
+class BaseHandler:
+    def read(self, path) -> dict:
+        raise NotImplementedError()
+
+    def write(self, path, obj, overwrite=True) -> None:
+        raise NotImplementedError()
+
+    def encode(self, obj) -> None:
+        raise NotImplementedError()
+
+
+class JSONHandler(BaseHandler):
     """
     Handles the logic of dumping and loading json files
     """
@@ -88,5 +99,15 @@ class MetaHandler:
         with open(name, 'w') as json_meta:
             json.dump(obj, json_meta, cls=CustomEncoder, indent=4)
 
-    def encode(self, obj):
-        return CustomEncoder().encode(obj)
+
+class MetaHandler:
+    def read(self, path) -> dict:
+        handler = self._get_handler(path)
+        return handler.read(path)
+
+    def write(self, path, obj, overwrite=True) -> None:
+        handler = self._get_handler(path)
+        return handler.write(path, obj, overwrite=overwrite)
+
+    def _get_handler(self, path) -> BaseHandler:
+        return JSONHandler()
