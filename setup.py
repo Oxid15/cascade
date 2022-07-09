@@ -32,6 +32,7 @@ setuptools.setup(
         'deepdiff',
         'pendulum',
         'plotly',
-        'flatten_json'
+        'flatten_json',
+        'pyyaml'
     ]
 )

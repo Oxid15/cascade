@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import json
+import yaml
 import datetime
 from json import JSONEncoder
 
@@ -81,9 +82,8 @@ class JSONHandler(BaseHandler):
         Parameters
         ----------
         path:
-            Path to the file. If no extension provided, then .json assumed
+            Path to the file. If no extension provided, then .json will be added
         """
-        assert os.path.exists(path)
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.json'
@@ -98,12 +98,38 @@ class JSONHandler(BaseHandler):
         """
         Writes json to path using custom encoder
         """
-
         if not overwrite and os.path.exists(name):
             return
 
-        with open(name, 'w') as json_meta:
-            json.dump(obj, json_meta, cls=CustomJSONEncoder, indent=4)
+        with open(name, 'w') as f:
+            json.dump(obj, f, cls=CustomJSONEncoder, indent=4)
+
+
+class YAMLHandler(BaseHandler):
+    def read(self, path) -> str:
+        """
+        Reads yaml from path
+
+        Parameters
+        ----------
+        path:
+            Path to the file. If no extension provided, then .yml will be added
+        """
+        _, ext = os.path.splitext(path)
+        if ext == '':
+            path += '.yml'
+
+        with open(path, 'r') as meta_file:
+            meta = yaml.safe_load(meta_file)
+            return meta
+
+    def write(self, path, obj, overwrite=True) -> None:
+        if not overwrite and os.path.exists(path):
+            return
+
+        obj = prepare_object_for_serialization(obj)
+        with open(path, 'w') as f:
+            yaml.dump(obj, f)
 
 
 class MetaHandler:
@@ -116,4 +142,11 @@ class MetaHandler:
         return handler.write(path, obj, overwrite=overwrite)
 
     def _get_handler(self, path) -> BaseHandler:
-        return JSONHandler()
+        ext = os.path.splitext(path)[-1]
+        if ext == '.json':
+            return JSONHandler()
+        elif ext == '.yml':
+            return YAMLHandler()
+        else:
+            raise NotImplementedError()
+            # return TextHandler()
