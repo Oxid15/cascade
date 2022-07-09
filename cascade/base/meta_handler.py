@@ -22,7 +22,7 @@ from json import JSONEncoder
 import numpy as np
 
 
-class CustomEncoder(JSONEncoder):
+class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
             return obj.isoformat()
@@ -50,7 +50,7 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, (np.void)):
             return None
 
-        return super(CustomEncoder, self).default(obj)
+        return super(CustomJSONEncoder, self).default(obj)
 
 
 class BaseHandler:
@@ -58,9 +58,6 @@ class BaseHandler:
         raise NotImplementedError()
 
     def write(self, path, obj, overwrite=True) -> None:
-        raise NotImplementedError()
-
-    def encode(self, obj) -> None:
         raise NotImplementedError()
 
 
@@ -97,7 +94,7 @@ class JSONHandler(BaseHandler):
             return
 
         with open(name, 'w') as json_meta:
-            json.dump(obj, json_meta, cls=CustomEncoder, indent=4)
+            json.dump(obj, json_meta, cls=CustomJSONEncoder, indent=4)
 
 
 class MetaHandler:
