@@ -17,8 +17,9 @@ limitations under the License.
 
 import os
 import sys
-import random
-import shutil
+import datetime
+import pendulum
+from dateutil import tz
 import numpy as np
 import pytest
 
@@ -85,7 +86,9 @@ def number_iterator(request):
    {'a': 0},
    {'b': 1},
    {'a': 0, 'b': 'alala'},
-   {'c': np.array([1, 2]), 'd': {'a': 0}}])
+   {'c': np.array([1, 2]), 'd': {'a': 0}},
+   {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
+   {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')}])
 def dummy_model(request):
    return DummyModel(**request.param)
 
