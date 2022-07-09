@@ -18,17 +18,23 @@ import os
 import sys
 import pendulum
 import numpy as np
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler
 
-
-def test(tmp_path):
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test(tmp_path, ext):
     tmp_path = str(tmp_path)
     mh = MetaHandler()
-    mh.write(os.path.join(tmp_path, 'meta.json'), 
+    mh.write(os.path.join(tmp_path, 'meta' + ext),
     {
         'name': 'test_mh',
         'array': np.zeros(4),
@@ -36,22 +42,28 @@ def test(tmp_path):
         'date': pendulum.now(tz='UTC')
     })
 
-    obj = mh.read(os.path.join(tmp_path, 'meta.json'))
+    obj = mh.read(os.path.join(tmp_path, 'meta' + ext))
 
     assert(obj['name'] == 'test_mh')
-    assert(all(obj['array'] == np.zeros(4)))
+    assert(obj['array'] == [0, 0, 0, 0])
     assert(obj['none'] is None)
 
 
-def test_overwrite(tmp_path):
-    tmp_path = os.path.join(str(tmp_path), 'test_mh_ow.json')
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_overwrite(tmp_path, ext):
+    tmp_path = os.path.join(str(tmp_path), 'test_mh_ow' + ext)
 
     mh = MetaHandler()
     mh.write(
         tmp_path, 
         {'name': 'first'},
         overwrite=False)
-    
+
     mh.write(
         tmp_path, 
         {'name': 'second'},
