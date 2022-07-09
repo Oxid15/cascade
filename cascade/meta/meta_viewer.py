@@ -110,4 +110,4 @@ class MetaViewer:
         return True
 
     def obj_to_dict(self, obj):
-        return json.loads(JSONEncoder().encode(obj))
+        return JSONEncoder().obj_to_dict(obj)
