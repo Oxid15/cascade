@@ -25,7 +25,6 @@ from cascade.tests.conftest import EmptyModel
 from cascade.meta import HistoryViewer
 
 
-@pytest.mark.slow
 def test_run(model_repo, dummy_model):
     dummy_model.evaluate()
     model_repo['0'].save(dummy_model)
@@ -34,7 +33,6 @@ def test_run(model_repo, dummy_model):
     hv.plot('acc')
 
 
-@pytest.mark.slow
 def test_no_metric(model_repo, dummy_model):
     model_repo['0'].save(dummy_model)
 
@@ -43,7 +41,6 @@ def test_no_metric(model_repo, dummy_model):
         hv.plot('acc')
 
 
-@pytest.mark.slow
 def test_empty_model(model_repo, empty_model):
     model_repo.add_line('test', EmptyModel)
     empty_model.metrics = {'acc': 0.9}
@@ -53,7 +50,6 @@ def test_empty_model(model_repo, empty_model):
     hv.plot('acc')
 
 
-@pytest.mark.slow
 def test_many_lines(model_repo, dummy_model):
     model0 = dummy_model
     model0.evaluate()
