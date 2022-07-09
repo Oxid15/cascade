@@ -22,35 +22,44 @@ from json import JSONEncoder
 import numpy as np
 
 
+def prepare_object_for_serialization(obj):
+    if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
+        return obj.isoformat()
+
+    elif isinstance(obj, datetime.timedelta):
+        return (datetime.datetime.min + obj).time().isoformat()
+
+    elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
+                          np.int16, np.int32, np.int64, np.uint8,
+                          np.uint16, np.uint32, np.uint64)):
+        return int(obj)
+
+    elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
+        return float(obj)
+
+    elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):
+        return {'real': obj.real, 'imag': obj.imag}
+
+    elif isinstance(obj, (np.ndarray,)):
+        return obj.tolist()
+
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
+
+    elif isinstance(obj, np.void):
+        return None
+    else:
+        raise RuntimeError()
+
+
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
-            return obj.isoformat()
-        elif isinstance(obj, datetime.timedelta):
-            return (datetime.datetime.min + obj).time().isoformat()
-
-        elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
-                              np.int16, np.int32, np.int64, np.uint8,
-                              np.uint16, np.uint32, np.uint64)):
-
-            return int(obj)
-
-        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
-            return float(obj)
-
-        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):
-            return {'real': obj.real, 'imag': obj.imag}
-
-        elif isinstance(obj, (np.ndarray,)):
-            return obj.tolist()
-
-        elif isinstance(obj, (np.bool_)):
-            return bool(obj)
-
-        elif isinstance(obj, (np.void)):
-            return None
-
-        return super(CustomJSONEncoder, self).default(obj)
+        try:
+            obj = prepare_object_for_serialization(obj)
+        except RuntimeError:
+            obj = super(CustomJSONEncoder, self).default(obj)
+        finally:
+            return obj
 
 
 class BaseHandler:
