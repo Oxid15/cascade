@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import json
-import yaml
+from typing import Union, Dict, List
 import datetime
 from json import JSONEncoder
 
@@ -124,6 +124,25 @@ class YAMLHandler(BaseHandler):
         obj = CustomEncoder().obj_to_dict(obj)
         with open(path, 'w') as f:
             yaml.safe_dump(obj, f)
+
+
+class TextHandler(BaseHandler):
+    def read(self, path) -> Dict:
+        """
+        Reads text file from path and returns dict in the form {path: 'text from file'}
+
+        Parameters
+        ----------
+        path:
+            Path to the file
+        """
+
+        with open(path, 'r') as meta_file:
+            meta = {path: ''.join(meta_file.readlines())}
+            return meta
+
+    def write(self, path, obj, overwrite=True) -> None:
+        raise NotImplementedError('MetaHandler does not write text files, only reads')       
 
 
 class MetaHandler:

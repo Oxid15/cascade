@@ -25,6 +25,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler
 
+
 @pytest.mark.parametrize(
     'ext', [
         '.json',
@@ -71,3 +72,22 @@ def test_overwrite(tmp_path, ext):
 
     obj = mh.read(tmp_path)
     assert(obj['name'] == 'first')
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.txt',
+        '.md'
+    ]
+)
+def test_text(tmp_path, ext):
+    tmp_path = str(os.path.join(tmp_path, 'meta' + ext))
+    mh = MetaHandler()
+
+    info = '#Meta\n\n\n this is object for testing text files'
+    with open(tmp_path, 'w') as f:
+        f.write(info)
+
+    obj = mh.read(tmp_path)
+
+    assert(obj[tmp_path] == info)
