@@ -27,7 +27,7 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper, Iterator
-from cascade.models import Model, ModelRepo
+from cascade.models import Model, ModelLine, ModelRepo
 
 
 class DummyModel(Model):
@@ -90,12 +90,26 @@ def number_iterator(request):
    {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
    {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')}])
 def dummy_model(request):
-   return DummyModel(**request.param)
+    return DummyModel(**request.param)
 
 
 @pytest.fixture
 def empty_model():
-   return EmptyModel()
+    return EmptyModel()
+
+
+@pytest.fixture(params=[
+    {
+        'model_cls': DummyModel,
+        'meta_fmt': '.json'
+    },
+    {
+        'model_cls': DummyModel,
+        'meta_fmt': '.yml'
+    }])
+def model_line(request, tmp_path):
+    line = ModelLine(str(tmp_path), **request.param)
+    return line
 
 
 @pytest.fixture

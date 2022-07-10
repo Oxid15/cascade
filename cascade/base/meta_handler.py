@@ -18,6 +18,7 @@ import os
 import json
 from typing import Union, Dict, List
 import datetime
+from typing import List, Dict
 from json import JSONEncoder
 
 import yaml
@@ -59,7 +60,7 @@ class CustomEncoder(JSONEncoder):
 
 
 class BaseHandler:
-    def read(self, path) -> dict:
+    def read(self, path) -> List[Dict]:
         raise NotImplementedError()
 
     def write(self, path, obj, overwrite=True) -> None:
@@ -89,7 +90,7 @@ class JSONHandler(BaseHandler):
                 meta = json.loads(meta)
             return meta
 
-    def write(self, name, obj, overwrite=True) -> None:
+    def write(self, name, obj:List[Dict], overwrite=True) -> None:
         """
         Writes json to path using custom encoder
         """
@@ -147,7 +148,7 @@ class TextHandler(BaseHandler):
 
 
 class MetaHandler:
-    def read(self, path) -> dict:
+    def read(self, path) -> List[Dict]:
         handler = self._get_handler(path)
         return handler.read(path)
 
