@@ -20,6 +20,7 @@ from typing import Union, Dict, List
 import datetime
 from json import JSONEncoder
 
+import yaml
 import numpy as np
 
 
@@ -69,7 +70,7 @@ class JSONHandler(BaseHandler):
     """
     Handles the logic of dumping and loading json files
     """
-    def read(self, path) -> dict:
+    def read(self, path) -> Union[Dict, List[Dict]]:
         """
         Reads json from path
 
@@ -100,7 +101,7 @@ class JSONHandler(BaseHandler):
 
 
 class YAMLHandler(BaseHandler):
-    def read(self, path) -> str:
+    def read(self, path) -> Union[Dict, List[Dict]]:
         """
         Reads yaml from path
 
@@ -161,5 +162,4 @@ class MetaHandler:
         elif ext == '.yml':
             return YAMLHandler()
         else:
-            raise NotImplementedError()
-            # return TextHandler()
+            return TextHandler()
