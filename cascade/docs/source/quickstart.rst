@@ -22,23 +22,12 @@ Install latest version using pip directly from main branch
 Use cases
 ---------
 
-Build a pipeline
-~~~~~~~~~~~~~~~~
-.. important::
-    This section is WIP, will be filled in following releases!
+Below are examples of usage of cascade for some typical tasks. You can use them, or Jupyter Notebook versions from 
+https://github.com/Oxid15/cascade/tree/main/cascade/docs/source/examples
 
-.. .. literalinclude:: test.ipynb
-..     :linenos:
-..     :language: python
-
-Train models
-~~~~~~~~~~~~
-
-.. important::
-    This section is WIP, will be filled in following releases!
-
-Feature selection
-~~~~~~~~~~~~~~~~~
+.. toctree::
+    
+    examples/pipeline_building.ipynb
 
 .. important::
     This section is WIP, will be filled in following releases!
