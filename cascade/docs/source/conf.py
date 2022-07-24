@@ -39,6 +39,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
+    'nbsphinx'
 ]
 
 napoleon_include_special_with_doc = True
