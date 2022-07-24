@@ -95,7 +95,7 @@ class ModelRepo(Traceable):
 
         self._update_meta()
 
-    def add_line(self, name, model_cls):
+    def add_line(self, name, model_cls, **kwargs):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
@@ -111,7 +111,7 @@ class ModelRepo(Traceable):
         assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)
+        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix, **kwargs)
         self.lines[name] = line
 
         self._update_meta()

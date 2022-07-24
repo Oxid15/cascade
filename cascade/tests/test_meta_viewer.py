@@ -32,7 +32,7 @@ def test(tmp_path):
         json.dump({'name': 'test0'}, f)
 
     # Write also using mv
-    mv = MetaViewer()
+    mv = MetaViewer(tmp_path)
     mv.write(os.path.join(tmp_path, 'model', 'test.json'), {'name': 'test1'})    
 
     mv = MetaViewer(tmp_path)

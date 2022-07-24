@@ -24,23 +24,17 @@ from cascade.tests.conftest import DummyModel
 from cascade.models.model_repo import ModelLine
 
 
-def test_save_load(tmp_path):
-    tmp_path = str(tmp_path)
-    line = ModelLine(tmp_path, DummyModel)
-    m = DummyModel()
-    line.save(m)
-    model = line[0]
+def test_save_load(model_line, dummy_model):
+    model_line.save(dummy_model)
+    model = model_line[0]
 
-    assert(len(line) == 1)
+    assert(len(model_line) == 1)
     assert(model.model == "b'model'")
 
 
-def test_meta(tmp_path):
-    tmp_path = str(tmp_path)
-    line = ModelLine(tmp_path, DummyModel)
-    m = DummyModel()
-    line.save(m)
-    meta = line.get_meta()
+def test_meta(model_line, dummy_model):
+    model_line.save(dummy_model)
+    meta = model_line.get_meta()
 
     assert(meta[0]['model_cls'] == repr(DummyModel))
     assert(meta[0]['len'] == 1)

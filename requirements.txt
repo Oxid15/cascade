@@ -5,3 +5,4 @@ deepdiff
 pendulum
 plotly
 flatten_json
+pyyaml

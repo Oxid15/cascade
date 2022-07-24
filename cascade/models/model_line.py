@@ -31,7 +31,7 @@ class ModelLine(Traceable):
     A line of models is typically a models with the same hyperparameters and architecture,
     but different epochs or using different data.
     """
-    def __init__(self, folder, model_cls=Model, **kwargs) -> None:
+    def __init__(self, folder, model_cls=Model, meta_fmt='.json', **kwargs) -> None:
         """
         All models in line should be instances of the same class.
 
@@ -42,12 +42,16 @@ class ModelLine(Traceable):
             if folder does not exist, creates it
         model_cls:
             A class of models in repo. ModelLine uses this class to reconstruct a model
+        meta_fmt:
+            Format in which to store meta data. '.json', '.yml' are supported. .json is default.
         See also
         --------
         cascade.models.ModelRepo
         """
         super().__init__(**kwargs)
 
+        assert meta_fmt in ['.json', '.yml'], 'Only .json or .yml are supported formats'
+        self.meta_fmt = meta_fmt
         self.model_cls = model_cls
         self.root = folder
         self.model_names = []
@@ -122,10 +126,10 @@ class ModelLine(Traceable):
         meta[-1]['saved_at'] = pendulum.now(tz='UTC')
 
         # Save model's meta
-        self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta.json'), meta)
+        self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta' + self.meta_fmt), meta)
 
         # Save updated line's meta
-        self.meta_viewer.write(os.path.join(self.root, 'meta.json'), self.get_meta())
+        self.meta_viewer.write(os.path.join(self.root, 'meta' + self.meta_fmt), self.get_meta())
 
     def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self.model_cls}'
