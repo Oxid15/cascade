@@ -9,24 +9,6 @@ cascade.meta
 
 |
 
-.. autoclass:: cascade.meta.MetaHandler
-   :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.meta.MetaValidator
-   :members:
-
-|
-
-|
-
-|
-
 .. autoclass:: cascade.meta.MetaViewer
    :members:
 
