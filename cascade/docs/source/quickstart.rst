@@ -26,8 +26,9 @@ Below are examples of usage of cascade for some typical tasks. You can use them,
 https://github.com/Oxid15/cascade/tree/main/cascade/docs/source/examples
 
 .. toctree::
-    
+
     examples/pipeline_building.ipynb
+    examples/model_training.ipynb
 
 .. important::
     This section is WIP, will be filled in following releases!
