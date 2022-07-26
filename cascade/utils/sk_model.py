@@ -52,7 +52,7 @@ class SkModel(BasicModel):
     def predict_proba(self, x, *args, **kwargs):
         return self.pipeline.predict_proba(x, *args, **kwargs)
 
-    # Will be added again when thorougly tested
+    # Will be added again when thoroughly tested
     # def _check_model_hash(self, meta, path_w_ext) -> None:
     #     with open(path_w_ext, 'rb') as f:
     #         file_hash = md5(f.read()).hexdigest()
