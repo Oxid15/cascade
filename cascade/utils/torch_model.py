@@ -24,6 +24,9 @@ class TorchModel(Model):
         self._model = model_class(*args, **kwargs)
         super().__init__(*args, **kwargs)
 
+    def predict(self, *args, **kwargs):
+        return self._model(*args, **kwargs)
+
     def save(self, path, *args, **kwargs) -> None:
         with open(path, 'wb') as f:
             torch.save(self._model, f)

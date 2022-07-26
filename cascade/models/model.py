@@ -26,7 +26,7 @@ class Model(Traceable):
     Base class for any model.
     Used to provide unified interface to any model, store metadata including metrics.
     """
-    def __init__(self, meta_prefix=None, **kwargs) -> None:
+    def __init__(self, *args, meta_prefix=None, **kwargs) -> None:
         """
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
