@@ -60,14 +60,14 @@ class Model(Traceable):
         """
         raise NotImplementedError()
 
-    def load(self, filepath) -> None:
+    def load(self, filepath, *args, **kwargs) -> None:
         """
         Loads model from provided filepath. May be unpickling process or reading json configs.
         Does not return any model, just restores internal state.
         """
         raise NotImplementedError()
 
-    def save(self, filepath) -> None:
+    def save(self, filepath, *args, **kwargs) -> None:
         """
         Saves model's state using provided filepath.
         """
