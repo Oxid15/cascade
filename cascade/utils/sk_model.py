@@ -67,8 +67,8 @@ class SkModel(BasicModel):
     def load(self, path) -> None:
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
-        root = os.path.dirname(path)
-        names = glob.glob(os.path.join(f'{root}', 'meta.json'))
+        # root = os.path.dirname(path)
+        # names = glob.glob(os.path.join(f'{root}', 'meta.json'))
         # if len(names):
         #     meta = MetaHandler().read(names[0])
         #     if 'md5sum' in meta:
