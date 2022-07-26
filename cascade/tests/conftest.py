@@ -26,7 +26,7 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper, Iterator
-from cascade.models import Model, ModelRepo
+from cascade.models import Model, ModelRepo, BasicModel
 
 
 class DummyModel(Model):
@@ -61,6 +61,20 @@ class EmptyModel(DummyModel):
       pass
 
 
+class OnesModel(BasicModel):
+    def predict(self, x, *args, **kwargs):
+        return np.array([1 for _ in range(len(x))])
+
+    def load(self, filepath) -> None:
+        pass
+
+    def save(self, filepath) -> None:
+        pass
+
+    def fit(self, x, y, *args, **kwargs) -> None:
+        pass
+
+
 @pytest.fixture(params=[
         [1, 2, 3, 4, 5],
         [0],
@@ -93,6 +107,11 @@ def dummy_model(request):
 @pytest.fixture
 def empty_model():
    return EmptyModel()
+
+
+@pytest.fixture
+def ones_model():
+   return OnesModel()
 
 
 @pytest.fixture

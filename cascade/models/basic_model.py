@@ -16,7 +16,7 @@ limitations under the License.
 
 
 from typing import Dict, Callable, AnyStr
-from .model import Model
+from .model import Model, ModelModifier
 
 
 class BasicModel(Model):
@@ -45,3 +45,7 @@ class BasicModel(Model):
 
     def fit(self, x, y, *args, **kwargs) -> None:
         raise NotImplementedError()
+
+
+class BasicModelModifier(ModelModifier, BasicModel):
+    pass

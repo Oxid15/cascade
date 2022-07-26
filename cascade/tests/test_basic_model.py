@@ -22,23 +22,10 @@ import numpy as np
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.models import BasicModel
+from cascade.models import BasicModelModifier
 
 
-def test_basic_model_with_concrete_case():
-    class OnesModel(BasicModel):
-        def predict(self, x, *args, **kwargs):
-            return np.array([1 for _ in range(len(x))])
-
-        def load(self, filepath) -> None:
-            pass
-
-        def save(self, filepath) -> None:
-            pass
-
-        def fit(self, x, y, *args, **kwargs) -> None:
-            pass
-
+def test_basic_model_with_concrete_case(ones_model):
     def precision(gt, pred):
         pos_gt = gt[gt == 1]
         what_pred = pred[gt == 1]
@@ -54,7 +41,7 @@ def test_basic_model_with_concrete_case():
 
         return tp / pos_gt.sum()
 
-    model = OnesModel()
+    model = ones_model
     model.evaluate(
         [random.randint(0, 255) for _ in range(3)],
         np.array([0, 1, 1]),
@@ -65,3 +52,27 @@ def test_basic_model_with_concrete_case():
 
     assert model.metrics['precision'] == 2 / 3
     assert model.metrics['recall'] == 1
+
+
+def test_modifier(ones_model):
+    class DoubleModifier(BasicModelModifier):
+        def load(self, filepath) -> None:
+            pass
+
+        def save(self, filepath) -> None:
+            pass
+
+        def predict(self, x, *args, **kwargs):
+            return self._model.predict(x) * 2
+
+        def fit(self, x, y, *args, **kwargs) -> None:
+            pass
+
+    model = ones_model
+    model = DoubleModifier(model)
+
+    y = model.predict([random.randint(0, 255) for _ in range(3)])
+    meta = model.get_meta()
+
+    assert all(y == [2, 2, 2])
+    assert len(meta) == 2
