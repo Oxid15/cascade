@@ -26,10 +26,6 @@ from sklearn.pipeline import Pipeline
 from ..models import BasicModel
 
 
-def _construct_pipeline(blocks: List[Any]) -> Pipeline:
-    return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
-
-
 class SkModel(BasicModel):
     def __init__(self, name=None, blocks=None, **kwargs) -> None:
         if name is not None:
@@ -41,7 +37,11 @@ class SkModel(BasicModel):
             super().__init__(**kwargs)
 
         if blocks is not None:
-            self.pipeline = _construct_pipeline(blocks)
+            self.pipeline = self._construct_pipeline(blocks)
+
+    @staticmethod
+    def _construct_pipeline(blocks: List[Any]) -> Pipeline:
+        return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
 
     def fit(self, x, y, *args, **kwargs) -> None:
         self.pipeline.fit(x, y, *args, **kwargs)
