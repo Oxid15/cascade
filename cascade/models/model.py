@@ -31,8 +31,9 @@ class Model(Traceable):
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
         All additional arguments should have defaults - to be able to create model and then load.
-        Successors should pass all of their parameters to superclass for it to be able to
-        log them in meta
+        Successors may pass all of their parameters to superclass for it to be able to
+        log them in meta. Everything that is worth to document about model and data it was trained on can be
+        either in params or meta_prefix.
         """
         # Model accepts meta_prefix explicitly to not to record it in 'params'
         self.metrics = {}
