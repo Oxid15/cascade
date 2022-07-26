@@ -22,8 +22,7 @@ Install latest version using pip directly from main branch
 Use cases
 ---------
 
-Below are examples of usage of cascade for some typical tasks. You can use them, or Jupyter Notebook versions from 
-https://github.com/Oxid15/cascade/tree/main/cascade/docs/source/examples
+Below are examples of usage of Cascade for some typical tasks.
 
 .. toctree::
 
