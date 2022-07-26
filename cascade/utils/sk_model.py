@@ -26,7 +26,11 @@ from sklearn.pipeline import Pipeline
 from ..models import BasicModel
 
 
-class SkModel(Model):
+def _construct_pipeline(blocks: List[Any]) -> Pipeline:
+    return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
+
+
+class SkModel(BasicModel):
     def __init__(self, name=None, blocks=None, **kwargs) -> None:
         if name is not None:
             warnings.warn('''You passed not required argument name. 
@@ -37,10 +41,7 @@ class SkModel(Model):
             super().__init__(**kwargs)
 
         if blocks is not None:
-            self.pipeline = self._construct_pipeline(blocks)
-
-    def _construct_pipeline(self, blocks: List[Any]) -> Pipeline:
-        return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
+            self.pipeline = _construct_pipeline(blocks)
 
     def fit(self, x, y, *args, **kwargs) -> None:
         self.pipeline.fit(x, y, *args, **kwargs)
