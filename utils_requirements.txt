@@ -3,3 +3,4 @@ pandas
 scikit-learn
 dask[dataframe]<2022.5.0
 pandera[io]
+torch
