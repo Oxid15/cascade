@@ -23,7 +23,7 @@ import warnings
 from sklearn.pipeline import Pipeline
 
 # from ..base import MetaHandler
-from ..models import Model
+from ..models import BasicModel
 
 
 class SkModel(Model):
@@ -50,10 +50,6 @@ class SkModel(Model):
     
     def predict_proba(self, x, *args, **kwargs):
         return self.pipeline.predict_proba(x, *args, **kwargs)
-
-    def evaluate(self, x, y, metrics_dict, *args, **kwargs) -> None:
-        preds = self.predict(x, *args, **kwargs)
-        self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
 
     # Will be added again when thorougly tested
     # def _check_model_hash(self, meta, path_w_ext) -> None:
