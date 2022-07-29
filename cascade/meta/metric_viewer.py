@@ -99,15 +99,15 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(self, **kwargs) -> None:
+    def serve(self, page_size=50, **kwargs) -> None:
         # Conditional import
         try:
             import dash
         except ModuleNotFoundError:
             raise ModuleNotFoundError('''
             Cannot import dash. It is conditional 
-            dependency you can install it with 
-            `pip install dash`''')
+            dependency you can install it 
+            using the instructions from https://dash.plotly.com/installation''')
         else:
             from dash import Input, Output, html, dcc, dash_table
 
@@ -149,7 +149,7 @@ class MetricViewer:
                 selected_rows=[],
                 page_action="native",
                 page_current= 0,
-                page_size= 10,
+                page_size=page_size,
             )
         ])
 
