@@ -24,7 +24,18 @@ from .model_line import ModelLine
 from ..meta import MetaViewer
 
 
-class ModelRepo(Traceable):
+class Repo(Traceable):
+    def add_line(*args, **kwargs):
+        raise NotImplementedError()
+
+    def __getitem__(self, key):
+        raise NotImplementedError()
+    
+    def __len__(self):
+        raise NotImplementedError()
+
+
+class ModelRepo(Repo):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
