@@ -9,24 +9,6 @@ cascade.meta
 
 |
 
-.. autoclass:: cascade.meta.MetaHandler
-   :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.meta.MetaValidator
-   :members:
-
-|
-
-|
-
-|
-
 .. autoclass:: cascade.meta.MetaViewer
    :members:
 
@@ -45,15 +27,6 @@ cascade.meta
 
 |
 
-.. autoclass:: cascade.meta.Validator
-   :members:
-
-|
-
-|
-
-|
-
 .. autoclass:: cascade.meta.AggregateValidator
    :members:
 
@@ -64,6 +37,15 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.PredicateValidator
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.MetaValidator
    :members:
 
 |
