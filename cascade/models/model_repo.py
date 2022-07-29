@@ -91,7 +91,7 @@ class ModelRepo(Traceable):
 
         if lines is not None:
             for line in lines:
-                self.add_line(line['name'], line['cls'])
+                self.add_line(**line)
 
         self._update_meta()
 
