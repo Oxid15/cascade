@@ -106,8 +106,8 @@ class MetricViewer:
         except ModuleNotFoundError:
             raise ModuleNotFoundError('''
             Cannot import dash. It is conditional 
-            dependency you can install it with 
-            `pip install dash`''')
+            dependency you can install it 
+            using the instructions from https://dash.plotly.com/installation''')
         else:
             from dash import Input, Output, html, dcc, dash_table
 
