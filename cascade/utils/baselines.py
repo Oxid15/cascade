@@ -24,7 +24,7 @@ class ConstantBaseline(BasicModel):
     any classification task. It returns only one class 
     (for example it can be majority class)
     """
-    def __init__(self, constant, **kwargs) -> None:
+    def __init__(self, constant=None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.constant = constant
 
