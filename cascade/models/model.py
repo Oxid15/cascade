@@ -26,7 +26,7 @@ class Model(Traceable):
     Base class for any model.
     Used to provide unified interface to any model, store metadata including metrics.
     """
-    def __init__(self, meta_prefix=None, **kwargs) -> None:
+    def __init__(self, *args, meta_prefix=None, **kwargs) -> None:
         """
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
@@ -61,14 +61,14 @@ class Model(Traceable):
         """
         raise NotImplementedError()
 
-    def load(self, filepath) -> None:
+    def load(self, filepath, *args, **kwargs) -> None:
         """
         Loads model from provided filepath. May be unpickling process or reading json configs.
         Does not return any model, just restores internal state.
         """
         raise NotImplementedError()
 
-    def save(self, filepath) -> None:
+    def save(self, filepath, *args, **kwargs) -> None:
         """
         Saves model's state using provided filepath.
         """
