@@ -1,6 +1,7 @@
 cascade.models
 ============== 
-.. autoclass:: cascade.models.ModelLine
+
+.. autoclass:: cascade.models.Model
    :members:
 
 |
@@ -10,6 +11,16 @@ cascade.models
 |
 
 .. autoclass:: cascade.models.ModelRepo
+.. autoclass:: cascade.models.ModelModifier
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.ModelLine
    :members:
 
 |

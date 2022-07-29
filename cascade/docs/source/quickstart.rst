@@ -6,7 +6,6 @@ Installation
 Install latest version using pip directly from main branch
 
 .. code-block:: bash
-    pip install git+https://github.com/oxid15/cascade.git@main
 
     pip install git+https://github.com/oxid15/cascade.git@main
 
@@ -23,23 +22,12 @@ Install latest version using pip directly from main branch
 Use cases
 ---------
 
-Build a pipeline
-~~~~~~~~~~~~~~~~
-.. important::
-    This section is WIP, will be filled in following releases!
+Below are examples of usage of Cascade for some typical tasks.
 
-.. .. literalinclude:: test.ipynb
-..     :linenos:
-..     :language: python
+.. toctree::
 
-Train models
-~~~~~~~~~~~~
-
-.. important::
-    This section is WIP, will be filled in following releases!
-
-Feature selection
-~~~~~~~~~~~~~~~~~
+    examples/pipeline_building.ipynb
+    examples/model_training.ipynb
 
 .. important::
     This section is WIP, will be filled in following releases!

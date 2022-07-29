@@ -27,6 +27,8 @@ import numpy as np
 
 class CustomEncoder(JSONEncoder):
     def default(self, obj):
+        if isinstance(obj, type):
+            return str(obj)
         if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
             return obj.isoformat()
 
