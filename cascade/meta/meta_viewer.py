@@ -41,8 +41,9 @@ class MetaViewer:
         self.mh = MetaHandler()
 
         names = []
-        for root, dirs, files in os.walk(self.root):
-            names += [os.path.join(root, name) for name in sorted(files) if os.path.splitext(name)[-1] == '.json']
+        for root, _, files in os.walk(self.root):
+            names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == '.json']
+        names = sorted(names)
 
         self.metas = []
         for name in names:
