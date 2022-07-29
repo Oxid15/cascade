@@ -23,10 +23,10 @@ import warnings
 from sklearn.pipeline import Pipeline
 
 # from ..base import MetaHandler
-from ..models import Model
+from ..models import BasicModel
 
 
-class SkModel(Model):
+class SkModel(BasicModel):
     def __init__(self, name=None, blocks=None, **kwargs) -> None:
         if name is not None:
             warnings.warn('''You passed not required argument name. 
@@ -39,7 +39,8 @@ class SkModel(Model):
         if blocks is not None:
             self.pipeline = self._construct_pipeline(blocks)
 
-    def _construct_pipeline(self, blocks: List[Any]) -> Pipeline:
+    @staticmethod
+    def _construct_pipeline(blocks: List[Any]) -> Pipeline:
         return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
 
     def fit(self, x, y, *args, **kwargs) -> None:
@@ -51,11 +52,7 @@ class SkModel(Model):
     def predict_proba(self, x, *args, **kwargs):
         return self.pipeline.predict_proba(x, *args, **kwargs)
 
-    def evaluate(self, x, y, metrics_dict, *args, **kwargs) -> None:
-        preds = self.predict(x, *args, **kwargs)
-        self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
-
-    # Will be added again when thorougly tested
+    # Will be added again when thoroughly tested
     # def _check_model_hash(self, meta, path_w_ext) -> None:
     #     with open(path_w_ext, 'rb') as f:
     #         file_hash = md5(f.read()).hexdigest()
@@ -70,8 +67,8 @@ class SkModel(Model):
     def load(self, path) -> None:
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
-        root = os.path.dirname(path)
-        names = glob.glob(os.path.join(f'{root}', 'meta.json'))
+        # root = os.path.dirname(path)
+        # names = glob.glob(os.path.join(f'{root}', 'meta.json'))
         # if len(names):
         #     meta = MetaHandler().read(names[0])
         #     if 'md5sum' in meta:

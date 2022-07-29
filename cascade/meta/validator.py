@@ -25,7 +25,7 @@ class Validator(Modifier):
     """
     Base class for validators. Defines basic `__init__` structure
     """
-    def __init__(self, dataset: Dataset, func: Callable[[Any], bool], **kwargs) -> None:  #TODO: add **kwargs everywhere
+    def __init__(self, dataset: Dataset, func: Callable[[Any], bool], **kwargs) -> None:
         super().__init__(dataset, **kwargs)
         self.func = func
 
