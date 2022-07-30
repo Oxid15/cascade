@@ -41,9 +41,8 @@ class MetricViewer:
         self.repo = repo
 
         self.metrics = []
-        for name in self.repo.lines:
-            line = self.repo[name]
-            viewer_root = os.path.join(self.repo.root, name)
+        for line in self.repo:
+            viewer_root = line.root
 
             # Try to use viewer only on models using type key
             try:
@@ -57,10 +56,10 @@ class MetricViewer:
                 In the following versions it will be deprecated.''', FutureWarning)
 
             for i in range(len(line.model_names)):
-                metric = {'line': name, 'num': i}
+                metric = {'line': viewer_root, 'num': i}
                 meta = view[i][-1]  # Takes last model from meta
                 metric = {
-                    'line': name, 
+                    'line': viewer_root, 
                     'num': i
                 }
 
