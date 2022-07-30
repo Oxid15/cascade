@@ -81,10 +81,9 @@ def test_reusage_init_alias(tmp_path):
 
     # some time...
 
-    repo = ModelRepo(tmp_path,
-                        lines=[dict(
+    repo = ModelRepo(tmp_path, lines=[dict(
                             name='vgg16',
-                            cls=DummyModel
+                            model_cls=DummyModel
                         )])
     assert(len(repo['vgg16']) == 1)
 
