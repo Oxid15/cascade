@@ -103,3 +103,22 @@ def test_meta(tmp_path):
 
     meta = repo.get_meta()
     assert(meta[0]['len'] == 3)
+
+
+def test_add(tmp_path):
+    tmp_path = str(tmp_path)
+
+    repo_1 = ModelRepo(os.path.join(tmp_path, 'repo_1'))
+    repo_1.add_line('line_1', DummyModel)
+
+    repo_2 = ModelRepo(os.path.join(tmp_path, 'repo_1'))
+    repo_2.add_line('line_1', DummyModel)
+    repo_2.add_line('line_2', DummyModel)
+
+    repo = repo_1 + repo_2
+
+    assert len(repo) == 3
+
+    repo = repo + repo_2
+
+    assert len(repo) == 5
