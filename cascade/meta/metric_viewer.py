@@ -114,6 +114,7 @@ class MetricViewer:
 
         df = self.table
         df_flatten = pd.DataFrame(map(flatten, self.table.to_dict('records')))
+        df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
 
         app = dash.Dash()
         dep_fig = go.Figure()
@@ -128,11 +129,11 @@ class MetricViewer:
                 }
             ),
             dcc.Dropdown(
-                list(df.columns),
+                list(df_flatten.columns),
                 id='dropdown-x',
                 multi=False),
             dcc.Dropdown(
-                list(df.columns),
+                list(df_flatten.columns),
                 id='dropdown-y',
                 multi=False),
             dcc.Graph(
