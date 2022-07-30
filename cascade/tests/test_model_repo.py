@@ -110,10 +110,12 @@ def test_add(tmp_path):
 
     repo_1 = ModelRepo(os.path.join(tmp_path, 'repo_1'))
     repo_1.add_line('line_1', DummyModel)
+    repo_1['line_1'].save(DummyModel())
 
-    repo_2 = ModelRepo(os.path.join(tmp_path, 'repo_1'))
+    repo_2 = ModelRepo(os.path.join(tmp_path, 'repo_2'))
     repo_2.add_line('line_1', DummyModel)
     repo_2.add_line('line_2', DummyModel)
+    # repo_2['line_2'].save(DummyModel())
 
     repo = repo_1 + repo_2
 
@@ -122,3 +124,19 @@ def test_add(tmp_path):
     repo = repo + repo_2
 
     assert len(repo) == 5
+
+    line_names = [
+        '0_0_line_1',
+        '0_1_line_1',
+        '0_1_line_2',
+        '1_line_1',
+        '1_line_2'
+    ]
+
+    line_lens = [
+        1, 0, 0, 0, 0
+    ]
+
+    for name, length in zip(line_names, line_lens):
+        line = repo[name]
+        assert len(line) == length

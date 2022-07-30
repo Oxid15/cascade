@@ -206,10 +206,10 @@ class ModelRepoConcatenator(Repo):
             raise KeyError(f'Key {key} is not in required format \
             `<repo_idx>_<line_name>`. \
             Please, use the key in this format. For example `0_line_1`')
-        idx, line_name = pair[:1]
+        idx, line_name = pair[0], '_'.join(pair[1:])
         idx = int(idx)
 
-        return self.repos[idx][line_name]
+        return self._repos[idx][line_name]
 
     def __len__(self):
         return sum([len(repo) for repo in self._repos])
