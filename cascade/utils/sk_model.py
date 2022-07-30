@@ -27,7 +27,20 @@ from ..models import BasicModel
 
 
 class SkModel(BasicModel):
+    """
+    Wrapper for sklearn models.
+    Accepts the name and block to form pipeline. 
+    Can fit, evaluate, predict save and load out of the box.
+    """
     def __init__(self, name=None, blocks=None, **kwargs) -> None:
+        """
+        Parameters
+        ----------
+        name: str, optional
+            Name of the model
+        blocks: list
+            List of sklearn transformers to make a pipeline from
+        """
         if name is not None:
             warnings.warn('''You passed not required argument name. 
             It is deprecated and will be removed in following versions''', FutureWarning)
@@ -44,12 +57,21 @@ class SkModel(BasicModel):
         return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
 
     def fit(self, x, y, *args, **kwargs) -> None:
+        """
+        Wrapper for pipeline.fit
+        """
         self.pipeline.fit(x, y, *args, **kwargs)
 
     def predict(self, x, *args, **kwargs):
+        """
+        Wrapper for pipeline.predict
+        """
         return self.pipeline.predict(x, *args, **kwargs)
     
     def predict_proba(self, x, *args, **kwargs):
+        """
+        Wrapper for pipeline.predict_proba
+        """
         return self.pipeline.predict_proba(x, *args, **kwargs)
 
     # Will be added again when thoroughly tested
@@ -65,6 +87,9 @@ class SkModel(BasicModel):
     #              hash from .pkl: {file_hash}')
 
     def load(self, path) -> None:
+        """
+        Loads the model from path provided. If no extension, .pkl is added.
+        """
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
         # root = os.path.dirname(path)
@@ -78,6 +103,10 @@ class SkModel(BasicModel):
             self.pipeline = pickle.load(f)
 
     def save(self, path) -> None:
+        """
+        Saves model to the path provided. 
+        If no extension, then .pkl is added.
+        """
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
         with open(f'{path}', 'wb') as f:
