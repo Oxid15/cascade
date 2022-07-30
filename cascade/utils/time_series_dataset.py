@@ -25,7 +25,21 @@ from ..data import Dataset, Modifier
 
 
 class TimeSeriesDataset(Dataset):
+    """
+    Dataset to simplify the work with time series.
+    Manages the time and data. Reflects the list API
+    and implements access by index and by datetime also.
+    More than that, slices with indices and with datetimes can also be used.
+    """
     def __init__(self, *args, time=None, data=None, **kwargs):
+        """
+        Parameters
+        ----------
+        time: Iterable[datetime]
+            The time dimension. Should be represented subclasses of datetime
+        data: Iterable
+            The data dimension. Should be 1D array or list.
+        """
         if time is not None and data is not None:
             data = np.asarray(data)
             time = np.asarray(time)
@@ -35,7 +49,8 @@ class TimeSeriesDataset(Dataset):
             data = np.array([])
             time = np.array([])
 
-        assert len(data) == len(time)
+        assert len(time) == len(data), f'Time and data should have same length,\
+            got {len(time)} and {len(data)}'
         assert len(data.shape) == 1, f'series must be 1d, got shape {data.shape}'
         assert all([isinstance(t, datetime) for t in time]), \
             'time elements should be instances of datetime.datetime'
@@ -53,12 +68,30 @@ class TimeSeriesDataset(Dataset):
         super().__init__(*args, **kwargs)
 
     def to_numpy(self):
+        """
+        Returns
+        -------
+        data: np.ndarray
+            np.array of data.
+        """
         return self.table.to_numpy().T[0]
 
     def to_pandas(self):
+        """
+        Returns
+        -------
+        data: pd.DataFrame
+            table with time as index
+        """
         return pd.DataFrame(self.to_numpy(), index=self.time)
 
     def get_data(self):
+        """
+        Returns
+        -------
+        data: tuple(time, data)
+            (time as it is and data as np.array)
+        """
         return self.time, self.to_numpy()
 
     def _get_slice(self, index):

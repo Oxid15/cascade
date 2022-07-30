@@ -19,6 +19,9 @@ from ..data import Wrapper
 
 
 class NumpyWrapper(Wrapper):
+    """
+    A wrapper around .npy files. Loads file on `__init__`.
+    """
     def __init__(self, path, *args, **kwargs):
         self.path = path
         super().__init__(np.load(path), *args, **kwargs)

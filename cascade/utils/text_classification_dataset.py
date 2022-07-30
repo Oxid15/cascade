@@ -22,7 +22,18 @@ from ..data import Dataset
 
 
 class TextClassificationDataset(Dataset):
+    """
+    Dataset to simplify loading of data for text classification.
+    Texts of different classes should be placed in different folders.
+    """
     def __init__(self, path, encoding='utf-8', *args, **kwargs):
+        """
+        Parameters
+        ----------
+        path:
+            Path to the folder with folders of text files.
+            In each folder should be only one class of texts.
+        """
         super().__init__(**kwargs)
         self.encoding = encoding
         self.root = os.path.abspath(path)
