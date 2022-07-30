@@ -23,7 +23,16 @@ from ..data import Dataset, Modifier, Iterator, SequentialCacher
 
 
 class TableDataset(Dataset):
+    """
+    Wrapper for `pd.DataFrame`s
+    """
     def __init__(self, *args, t=None, **kwargs):
+        """
+        Parameters
+        ----------
+        t:
+            pd.DataFrame or TableDataset to be set as table
+        """
         super().__init__(*args, **kwargs)
         if isinstance(t, pd.DataFrame):
             self._table = t
@@ -35,12 +44,18 @@ class TableDataset(Dataset):
             raise TypeError('Input table is not a pandas.DataFrame nor TableDataset')
 
     def __getitem__(self, index):
+        """
+        Returns row from table by index
+        """
         return self._table.iloc[index]
 
     def __repr__(self):
         return f'{super().__repr__()}\n {repr(self._table)}'
 
     def __len__(self):
+        """
+        Return len of the table
+        """
         return len(self._table)
 
     def get_meta(self) -> List[Dict]:
@@ -54,11 +69,25 @@ class TableDataset(Dataset):
         return meta
 
     def to_csv(self, path, **kwargs):
+        """
+        Saves the table to .csv
+        """
         self._table.to_csv(path, **kwargs)
 
 
 class TableFilter(TableDataset, Modifier):
+    """
+    Filter for table values
+    """
     def __init__(self, dataset, mask, *args, **kwargs):
+        """
+        Parameters
+        ----------
+        dataset: TableDataset
+            Dataset to be filtered
+        mask: Iterable[bool]
+            Binary mask to select values from table
+        """
         super().__init__(dataset, t=dataset._table, *args, **kwargs)
         init_len = len(dataset)
 
@@ -67,25 +96,58 @@ class TableFilter(TableDataset, Modifier):
 
 
 class CSVDataset(TableDataset):
+    """
+    Wrapper for .csv files.
+    """
     def __init__(self, csv_file_path, *args, **kwargs):
+        """
+        Passes all args and kwargs to the read_csv
+
+        Parameters
+        ----------
+        csv_file_path:
+            path to the .csv file
+        """
         t = pd.read_csv(csv_file_path, *args, **kwargs)
         super().__init__(t=t, **kwargs)
 
 
 class PartedTableLoader(Dataset):
+    """
+    Works like CSVDataset, but uses dask to load tables 
+    and returns partitions on __getitem__
+    """
     def __init__(self, csv_file_path, *args, **kwargs):
         super().__init__(**kwargs)
         self._table = dd.read_csv(csv_file_path, *args, **kwargs)
 
     def __getitem__(self, index):
+        """
+        Returns partition under the index
+        """
         return self._table.get_partition(index).compute()
 
     def __len__(self):
+        """
+        The number of partitions
+        """
         return self._table.npartitions
 
 
 class TableIterator(Iterator):
+    """
+    Iterates over the table from path by the chunks.
+    """
     def __init__(self, csv_file_path, *args, chunk_size=1000, **kwargs):
+        """
+        Parameters
+        ----------
+        csv_file_path:
+            path to the .csv file
+
+        chunk_size: int
+            number of rows to return in one __next__
+        """
         self.chunk_size = chunk_size
         super().__init__(pd.read_csv(csv_file_path, iterator=True, *args, **kwargs))
 
@@ -94,6 +156,10 @@ class TableIterator(Iterator):
 
 
 class LargeCSVDataset(SequentialCacher):
+    """
+    SequentialCacher over large .csv file. 
+    Loads table by partitions.
+    """
     def __init__(self, csv_file_path, *args, **kwargs):
         dataset = PartedTableLoader(csv_file_path, *args, **kwargs)
         self.num_batches = dataset._table.npartitions
@@ -111,7 +177,10 @@ class LargeCSVDataset(SequentialCacher):
 
 
 class NullValidator(TableDataset, AggregateValidator):
-    def __init__(self, dataset, *args, **kwargs) -> None:
+    """
+    Checks there are no null values in the table.
+    """
+    def __init__(self, dataset: TableDataset, *args, **kwargs) -> None:
         super().__init__(dataset, self.check_nulls, *args, t=dataset._table, **kwargs)
 
     def check_nulls(self, x):

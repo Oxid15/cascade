@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import warnings
 from typing import List, Dict
 import pickle
 import pandas as pd
@@ -22,6 +23,7 @@ from ..models import Model
 
 class ModelAggregate(Model):
     def __init__(self, models=None, agg_func='mean', **kwargs):
+        warnings.warn('ModelAggregate will be removed in following versions', FutureWarning)
         super().__init__(**kwargs)
         self.agg_func = agg_func
         if models is None:

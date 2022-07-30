@@ -14,18 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import numpy as np
-from ..data import Wrapper
+import os
+import sys
+import pandas as pd
+import pytest
+
+MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade.utils import TableDataset
 
 
-class NumpyWrapper(Wrapper):
-    """
-    A wrapper around .npy files. Loads file on `__init__`.
-    """
-    def __init__(self, path, *args, **kwargs):
-        self.path = path
-        super().__init__(np.load(path), *args, **kwargs)
+def test_create(tmp_path):
+    ds = TableDataset(t=pd.DataFrame())
+    assert len(ds) == 0
 
-    def get_meta(self):
-        meta = super().get_meta()
-        meta[-1]['root'] = self.path
+    ds = TableDataset(t=ds)
+    assert len(ds) == 0
+
+    with pytest.raises(TypeError):
+        ds = TableDataset(t='Hello')

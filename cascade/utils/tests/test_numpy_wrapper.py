@@ -14,18 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
+import sys
 import numpy as np
-from ..data import Wrapper
+
+MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade.data import Wrapper
+from cascade.utils import NumpyWrapper
 
 
-class NumpyWrapper(Wrapper):
-    """
-    A wrapper around .npy files. Loads file on `__init__`.
-    """
-    def __init__(self, path, *args, **kwargs):
-        self.path = path
-        super().__init__(np.load(path), *args, **kwargs)
+def test(tmp_path):
+    arr = np.array([1, 2, 3, 4, 5])
+    path = os.path.join(tmp_path, 'arr.npy')
+    np.save(path, arr)
 
-    def get_meta(self):
-        meta = super().get_meta()
-        meta[-1]['root'] = self.path
+    ds = NumpyWrapper(path)
+    assert(arr.tolist() == [item for item in ds])
