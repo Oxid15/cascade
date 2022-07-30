@@ -34,3 +34,8 @@ class TorchModel(Model):
     def load(self, path, *args, **kwargs) -> None:
         with open(path, 'rb') as f:
             self._model = torch.load(f)
+
+    def get_meta(self):
+        meta = super().get_meta()
+        meta[-1]['module'] = repr(self._model)
+        return meta
