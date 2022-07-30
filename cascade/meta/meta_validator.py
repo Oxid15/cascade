@@ -55,6 +55,15 @@ class MetaValidator(Validator):
     cascade.data.Modifier
     """
     def __init__(self, dataset: Dataset, root=None) -> None:
+        """
+        Parameters
+        ----------
+        dataset: Dataset
+            dataset to validate
+        root: str
+            path to the folder in which to store meta
+            default is './.cascade'
+        """
         super().__init__(dataset, lambda x: True)
         self.mh = MetaHandler()
         if root is None:

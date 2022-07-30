@@ -54,4 +54,7 @@ class BasicModel(Model):
 
 
 class BasicModelModifier(ModelModifier, BasicModel):
+    """
+    Interface to unify BasicModel and ModelModifier.
+    """
     pass

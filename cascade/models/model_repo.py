@@ -26,6 +26,13 @@ from ..meta import MetaViewer
 
 
 class Repo(Traceable):
+    """
+    Base interface for repos of models.
+
+    See also
+    --------
+    cascade.models.ModelRepo
+    """
     root = None
 
     def add_line(*args, **kwargs):
@@ -196,6 +203,11 @@ class ModelRepo(Repo):
 
 
 class ModelRepoConcatenator(Repo):
+    """
+    The class to concatenate different Repos. 
+    For the ease of use please, don't use it directly.
+    Just do repo = repo_1 + repo_2 to unify repos.
+    """
     def __init__(self, repos: Iterable[Repo], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._repos = repos

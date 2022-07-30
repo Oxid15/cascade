@@ -100,6 +100,18 @@ class MetricViewer:
         return fig
 
     def serve(self, page_size=50, include=None, exclude=None, **kwargs) -> None:
+        """
+        Runs dash-based server with interactive table of metrics and parameters.
+
+        Parameters
+        ----------
+        page_size:
+            Size of the table in rows on one page
+        include List[str], optional:
+            List of parameters or metrics to be added. Only them will be present along with some default.
+        exclude List[str], optional:
+            List of parameters or metrics to be excluded from table.
+        """
         # Conditional import
         try:
             import dash

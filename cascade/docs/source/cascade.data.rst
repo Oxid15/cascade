@@ -82,16 +82,6 @@ cascade.data
 
 | 
 
-
-.. autoclass:: cascade.data.FolderDataset
-   :members:
-
-|
-
-|
-
-| 
-
 .. autoclass:: cascade.data.FolderDataset
    :members:
 

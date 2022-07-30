@@ -10,8 +10,34 @@ cascade.models
 
 |
 
-.. autoclass:: cascade.models.ModelRepo
 .. autoclass:: cascade.models.ModelModifier
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.BasicModel
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.BasicModelModifier
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.ModelRepo
    :members:
 
 |
@@ -29,7 +55,7 @@ cascade.models
 
 |
 
-.. autoclass:: cascade.models.Model
+.. autoclass:: cascade.models.ModelRepoConcatenator
    :members:
 
 |

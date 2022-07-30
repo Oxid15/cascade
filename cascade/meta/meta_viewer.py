@@ -28,8 +28,12 @@ class MetaViewer:
         Parameters
         ----------
         root:
-            path to the folder containing meta files in .json format
-            to dump and load .json files MetaHandler is used
+            path to the folder containing metadata files
+            to dump and load metadata files MetaHandler is used
+        filt Dict, optional:
+            dictionary that specifies which values should be present in meta
+            for example to find all models use `filt={'type': 'model'}`
+
         See also
         --------
         cascade.meta.ModelRepo
