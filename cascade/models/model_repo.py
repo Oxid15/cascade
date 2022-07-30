@@ -57,7 +57,7 @@ class ModelRepo(Repo):
 
 
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo', lines=[dict(name='vgg16', cls=VGGModel)])
+    >>> repo = ModelRepo('repo', lines=[dict(name='vgg16', model_cls=VGGModel)])
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)

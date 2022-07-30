@@ -97,12 +97,15 @@ def number_iterator(request):
 
 
 @pytest.fixture(params=[
-   {'a': 0},
-   {'b': 1},
-   {'a': 0, 'b': 'alala'},
-   {'c': np.array([1, 2]), 'd': {'a': 0}},
-   {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
-   {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')}])
+    {'a': 0},
+    {'b': 1},
+    {'a': 0, 'b': 'alala'},
+    {'c': np.array([1, 2]), 'd': {'a': 0}},
+    {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
+    {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')},
+    {'g': {}},
+    {'h': []}
+])
 def dummy_model(request):
     return DummyModel(**request.param)
 
@@ -136,6 +139,6 @@ def model_repo(tmp_path):
     repo = ModelRepo(str(tmp_path), lines=[
         dict(
             name=str(num),
-            cls=DummyModel) for num in range(10)
+            model_cls=DummyModel) for num in range(10)
         ])
     yield repo

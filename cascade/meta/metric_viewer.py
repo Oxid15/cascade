@@ -48,15 +48,16 @@ class MetricViewer:
             try:
                 view = MetaViewer(viewer_root, filt={'type': 'model'})
             except KeyError:
-                view = [MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))[0]
-                    for model_name in line.model_names]
+                view = [
+                    MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))[0]
+                    for model_name in line.model_names
+                ]
 
                 warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
             for i in range(len(line.model_names)):
-                metric = {'line': viewer_root, 'num': i}
                 meta = view[i][-1]  # Takes last model from meta
                 metric = {
                     'line': viewer_root, 
@@ -82,7 +83,7 @@ class MetricViewer:
     def __repr__(self) -> str:
         return repr(self.table)
 
-    def plot_table(self, show=False) -> None:
+    def plot_table(self, show=False):
         data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
@@ -147,7 +148,7 @@ class MetricViewer:
                 selected_columns=[],
                 selected_rows=[],
                 page_action="native",
-                page_current= 0,
+                page_current=0,
                 page_size=page_size,
             )
         ])
