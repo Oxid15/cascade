@@ -99,7 +99,7 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(self, page_size=50, **kwargs) -> None:
+    def serve(self, page_size=50, include=None, exclude=None, **kwargs) -> None:
         # Conditional import
         try:
             import dash
@@ -111,8 +111,15 @@ class MetricViewer:
         else:
             from dash import Input, Output, html, dcc, dash_table
 
+        if include is None:
+            include = []
+        if exclude is None:
+            exclude = []
+
         df = self.table
-        df_flatten = pd.DataFrame(map(flatten, self.table.to_dict('records')))
+        df = df.drop(exclude, axis=1)
+        df = df[['line', 'num'] + include]
+        df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
 
         app = dash.Dash()
         dep_fig = go.Figure()
@@ -127,11 +134,11 @@ class MetricViewer:
                 }
             ),
             dcc.Dropdown(
-                list(df.columns),
+                list(df_flatten.columns),
                 id='dropdown-x',
                 multi=False),
             dcc.Dropdown(
-                list(df.columns),
+                list(df_flatten.columns),
                 id='dropdown-y',
                 multi=False),
             dcc.Graph(
