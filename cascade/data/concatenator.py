@@ -64,10 +64,10 @@ class Concatenator(Dataset):
 
     def get_meta(self) -> List[Dict]:
         """
-        Concatenator calls `get_meta()` of all its datasets and appends to its own meta
+        Concatenator calls `get_meta()` of all its datasets
         """
         meta = super().get_meta()
-        meta[0]['data'] = []
+        meta[0]['data'] = {}
         for ds in self._datasets:
-            meta[0]['data'] += ds.get_meta()
+            meta[0]['data'][repr(ds)] = ds.get_meta()
         return meta

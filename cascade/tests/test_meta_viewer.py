@@ -22,6 +22,8 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.meta import MetaViewer
+from cascade.models import ModelRepo
+from cascade.tests import DummyModel
 
 
 def test(tmp_path):
@@ -31,8 +33,9 @@ def test(tmp_path):
     with open(os.path.join(tmp_path, 'test.json'), 'w') as f:
         json.dump({'name': 'test0'}, f)
 
-    with open(os.path.join(tmp_path, 'model', 'test.json'), 'w') as f:
-        json.dump({'name': 'test1'}, f)
+    # Write also using mv
+    mv = MetaViewer(tmp_path)
+    mv.write(os.path.join(tmp_path, 'model', 'test.json'), {'name': 'test1'})    
 
     mv = MetaViewer(tmp_path)
 
@@ -41,3 +44,23 @@ def test(tmp_path):
     assert('name' in mv[1])
     assert(mv[0]['name'] == 'test0')
     assert(mv[1]['name'] == 'test1')
+
+
+def test_order(tmp_path):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path)
+    repo.add_line('line1', DummyModel)
+
+    for i in range(3):
+        model = DummyModel(real_num=i)
+        repo['line1'].save(model)
+
+    mv = MetaViewer(tmp_path)
+    k = 0
+
+    # This checks that models were read in exactly same order as they were saved
+    # real_num should be [0, 1, 2]
+    for meta in mv:
+        if meta[0]['type'] == 'model':
+            assert meta[0]['params']['real_num'] == k
+            k += 1

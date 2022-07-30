@@ -25,3 +25,5 @@ from .undersampler import UnderSampler
 from .time_series_dataset import TimeSeriesDataset, Average, Interpolate, Align
 from .numpy_wrapper import NumpyWrapper
 from .model_aggregate import ModelAggregate
+from .baselines import ConstantBaseline
+from .torch_model import TorchModel

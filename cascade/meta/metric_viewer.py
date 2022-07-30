@@ -41,26 +41,26 @@ class MetricViewer:
         self.repo = repo
 
         self.metrics = []
-        for name in self.repo.lines:
-            line = self.repo[name]
-            viewer_root = os.path.join(self.repo.root, name)
+        for line in self.repo:
+            viewer_root = line.root
 
             # Try to use viewer only on models using type key
             try:
                 view = MetaViewer(viewer_root, filt={'type': 'model'})
             except KeyError:
-                view = [MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))[0]
-                    for model_name in line.model_names]
+                view = [
+                    MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))[0]
+                    for model_name in line.model_names
+                ]
 
                 warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
             for i in range(len(line.model_names)):
-                metric = {'line': name, 'num': i}
                 meta = view[i][-1]  # Takes last model from meta
                 metric = {
-                    'line': name, 
+                    'line': viewer_root, 
                     'num': i
                 }
 
@@ -83,7 +83,7 @@ class MetricViewer:
     def __repr__(self) -> str:
         return repr(self.table)
 
-    def plot_table(self, show=False) -> None:
+    def plot_table(self, show=False):
         data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
@@ -99,20 +99,27 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(self, **kwargs) -> None:
+    def serve(self, page_size=50, include=None, exclude=None, **kwargs) -> None:
         # Conditional import
         try:
             import dash
         except ModuleNotFoundError:
             raise ModuleNotFoundError('''
             Cannot import dash. It is conditional 
-            dependency you can install it with 
-            `pip install dash`''')
+            dependency you can install it 
+            using the instructions from https://dash.plotly.com/installation''')
         else:
             from dash import Input, Output, html, dcc, dash_table
 
+        if include is None:
+            include = []
+        if exclude is None:
+            exclude = []
+
         df = self.table
-        df_flatten = pd.DataFrame(map(flatten, self.table.to_dict('records')))
+        df = df.drop(exclude, axis=1)
+        df = df[['line', 'num'] + include]
+        df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
 
         app = dash.Dash()
         dep_fig = go.Figure()
@@ -127,11 +134,11 @@ class MetricViewer:
                 }
             ),
             dcc.Dropdown(
-                list(df.columns),
+                list(df_flatten.columns),
                 id='dropdown-x',
                 multi=False),
             dcc.Dropdown(
-                list(df.columns),
+                list(df_flatten.columns),
                 id='dropdown-y',
                 multi=False),
             dcc.Graph(
@@ -148,8 +155,8 @@ class MetricViewer:
                 selected_columns=[],
                 selected_rows=[],
                 page_action="native",
-                page_current= 0,
-                page_size= 10,
+                page_current=0,
+                page_size=page_size,
             )
         ])
 

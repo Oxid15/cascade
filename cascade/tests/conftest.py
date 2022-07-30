@@ -17,8 +17,9 @@ limitations under the License.
 
 import os
 import sys
-import random
-import shutil
+import datetime
+import pendulum
+from dateutil import tz
 import numpy as np
 import pytest
 
@@ -26,7 +27,7 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper, Iterator
-from cascade.models import Model, ModelRepo
+from cascade.models import Model, ModelLine, ModelRepo, BasicModel
 
 
 class DummyModel(Model):
@@ -61,6 +62,20 @@ class EmptyModel(DummyModel):
       pass
 
 
+class OnesModel(BasicModel):
+    def predict(self, x, *args, **kwargs):
+        return np.array([1 for _ in range(len(x))])
+
+    def load(self, filepath) -> None:
+        pass
+
+    def save(self, filepath) -> None:
+        pass
+
+    def fit(self, x, y, *args, **kwargs) -> None:
+        pass
+
+
 @pytest.fixture(params=[
         [1, 2, 3, 4, 5],
         [0],
@@ -82,17 +97,41 @@ def number_iterator(request):
 
 
 @pytest.fixture(params=[
-   {'a': 0},
-   {'b': 1},
-   {'a': 0, 'b': 'alala'},
-   {'c': np.array([1, 2]), 'd': {'a': 0}}])
+    {'a': 0},
+    {'b': 1},
+    {'a': 0, 'b': 'alala'},
+    {'c': np.array([1, 2]), 'd': {'a': 0}},
+    {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
+    {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')},
+    {'g': {}},
+    {'h': []}
+])
 def dummy_model(request):
-   return DummyModel(**request.param)
+    return DummyModel(**request.param)
 
 
 @pytest.fixture
 def empty_model():
-   return EmptyModel()
+    return EmptyModel()
+
+
+@pytest.fixture(params=[
+    {
+        'model_cls': DummyModel,
+        'meta_fmt': '.json'
+    },
+    {
+        'model_cls': DummyModel,
+        'meta_fmt': '.yml'
+    }])
+def model_line(request, tmp_path):
+    line = ModelLine(str(tmp_path), **request.param)
+    return line
+
+
+@pytest.fixture
+def ones_model():
+   return OnesModel()
 
 
 @pytest.fixture
@@ -100,6 +139,6 @@ def model_repo(tmp_path):
     repo = ModelRepo(str(tmp_path), lines=[
         dict(
             name=str(num),
-            cls=DummyModel) for num in range(10)
+            model_cls=DummyModel) for num in range(10)
         ])
     yield repo

@@ -15,8 +15,8 @@ limitations under the License.
 """
 
 import os
-import json
-from ..base import MetaHandler
+from typing import List, Dict, Union
+from ..base import MetaHandler, JSONEncoder
 
 
 class MetaViewer:
@@ -41,8 +41,9 @@ class MetaViewer:
         self.mh = MetaHandler()
 
         names = []
-        for root, dirs, files in os.walk(self.root):
-            names += [os.path.join(root, name) for name in sorted(files) if os.path.splitext(name)[-1] == '.json']
+        for root, _, files in os.walk(self.root):
+            names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == '.json']
+        names = sorted(names)
 
         self.metas = []
         for name in names:
@@ -50,11 +51,11 @@ class MetaViewer:
         if filt is not None:
             self.metas = list(filter(self._filter, self.metas))
 
-    def __getitem__(self, index) -> dict:
+    def __getitem__(self, index) -> List[Dict]:
         """
         Returns
         -------
-        meta: dict
+        meta: List[Dict]
             object containing meta
         """
         return self.metas[index]
@@ -86,14 +87,14 @@ class MetaViewer:
             out += pretty(meta, 4)
         return out
 
-    def write(self, name, obj: dict) -> None:
+    def write(self, name, obj: List[Dict]) -> None:
         """
-        Dumps obj to name
-        """
+       Dumps obj to name
+       """
         self.metas.append(obj)
         self.mh.write(name, obj)
 
-    def read(self, path) -> dict:
+    def read(self, path) -> List[Dict]:
         """
         Loads object from path
         """
@@ -110,4 +111,4 @@ class MetaViewer:
         return True
 
     def obj_to_dict(self, obj):
-        return json.loads(self.mh.encode(obj))
+        return JSONEncoder().obj_to_dict(obj)

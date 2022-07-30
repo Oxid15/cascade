@@ -39,16 +39,13 @@ class HistoryViewer:
 
         metas = []
         self.params = []
-        for name in self.repo.lines:
-            line = self.repo[name]
-
+        for line in self.repo:
             # Try to use viewer only on models using type key
             try:
-                view = MetaViewer(self.repo.root, filt={'type': 'model'})
+                view = MetaViewer(line.root, filt={'type': 'model'})
             except KeyError:
                 view = [MetaViewer(os.path.join(
-                    self.repo.root, 
-                    name,
+                    line.root,
                     os.path.dirname(model_name)))[0] 
                     for model_name in line.model_names]
 
@@ -57,12 +54,12 @@ class HistoryViewer:
                 In the following versions it will be deprecated.''', FutureWarning)
 
             for i in range(len(line.model_names)):
-                new_meta = {'line': name, 'num': i}
+                new_meta = {'line': line.root, 'num': i}
                 new_meta.update(flatten(view[i][-1]))
                 metas.append(new_meta)
 
                 params = {
-                    'line': name,
+                    'line': line.root,
                 }
                 if 'params' in view[i][-1]:
                     if len(view[i][-1]['params']) > 0:

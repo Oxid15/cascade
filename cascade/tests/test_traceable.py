@@ -17,8 +17,6 @@ import datetime
 import os
 import json
 import sys
-import unittest
-from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -26,47 +24,42 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.base import Traceable
 
 
-class TestTraceable(TestCase):
-    def test_meta(self):
-        now = datetime.datetime.now()
-        tr = Traceable(meta_prefix={'time': now})
-        meta = tr.get_meta()
+def test_meta():
+    now = datetime.datetime.now()
+    tr = Traceable(meta_prefix={'time': now})
+    meta = tr.get_meta()
 
-        self.assertEqual(type(meta), list)
-        self.assertEqual(len(meta), 1)
-        self.assertEqual(type(meta[0]), dict)
-        self.assertEqual(meta[0]['time'], now)
-        self.assertTrue('name' in meta[0])
+    assert type(meta) == list
+    assert len(meta) == 1
+    assert type(meta[0]) == dict
+    assert meta[0]['time'] == now
+    assert 'name' in meta[0]
 
-    def test_update_meta(self):
-        tr = Traceable(meta_prefix={'a': 1, 'b': 2})
-        tr.update_meta({'b': 3})
-        meta = tr.get_meta()
+def test_update_meta():
+    tr = Traceable(meta_prefix={'a': 1, 'b': 2})
+    tr.update_meta({'b': 3})
+    meta = tr.get_meta()
 
-        self.assertEqual(meta[0]['a'], 1)
-        self.assertEqual(meta[0]['b'], 3)
+    assert meta[0]['a'] == 1
+    assert meta[0]['b'] == 3
 
-    def test_meta_from_file(self):
-        with open('test_meta_from_file.json', 'w') as f:
-            json.dump({'a': 1}, f)
+def test_meta_from_file(tmp_path):
+    with open(os.path.join(tmp_path, 'test_meta_from_file.json'), 'w') as f:
+        json.dump({'a': 1}, f)
 
-        tr = Traceable(meta_prefix='test_meta_from_file.json')
-        meta = tr.get_meta()
+    tr = Traceable(meta_prefix=os.path.join(tmp_path, 'test_meta_from_file.json'))
+    meta = tr.get_meta()
 
-        self.assertTrue('a' in meta[0])
-        self.assertEqual(meta[0]['a'], 1)
+    assert 'a' in meta[0]
+    assert meta[0]['a'] == 1
 
-    def test_update_meta_from_file(self):
-        with open('test_update_meta_from_file.json', 'w') as f:
-            json.dump({'a': 1}, f)
+def test_update_meta_from_file(tmp_path):
+    with open(os.path.join(tmp_path, 'test_meta_from_file.json'), 'w') as f:
+        json.dump({'a': 1}, f)
 
-        tr = Traceable()
-        tr.update_meta('test_update_meta_from_file.json')
-        meta = tr.get_meta()
+    tr = Traceable()
+    tr.update_meta(os.path.join(tmp_path, 'test_meta_from_file.json'))
+    meta = tr.get_meta()
 
-        self.assertTrue('a' in meta[0])
-        self.assertEqual(meta[0]['a'], 1)
-
-
-if __name__ == '__main__':
-    unittest.main()
+    assert 'a' in meta[0]
+    assert meta[0]['a'] == 1
