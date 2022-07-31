@@ -25,10 +25,10 @@ class Pickler(Modifier):
     """
     def __init__(self, path, dataset=None, *args, **kwargs) -> None:
         """
-        Loads pickled dataset or dumps one depending on parameters passed
+        Loads pickled dataset or dumps one depending on parameters passed:
 
-        If only path is passed - loads dataset from path provided if path exists
-        if path provided with a dataset dumps dataset to the path
+        1. If only path is passed - loads dataset from path provided if path exists
+        2. if path provided with a dataset dumps dataset to the path
 
         Parameters
         ----------

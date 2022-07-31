@@ -30,4 +30,4 @@ Below are examples of usage of Cascade for some typical tasks.
     examples/model_training.ipynb
 
 .. important::
-    This section is WIP, will be filled in following releases!
+    New use-cases will be added soon!
