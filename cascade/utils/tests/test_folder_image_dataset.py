@@ -28,8 +28,8 @@ from cascade.utils import FolderImageDataset
 
 @pytest.fixture
 def image_folder(tmp_path):
-    cv2.imwrite(os.path.join(tmp_path, '1.jpg'), np.zeros((3, 3), dtype=np.uint8))
-    cv2.imwrite(os.path.join(tmp_path, '2.png'), np.zeros((3, 3), dtype=np.uint8))
+    cv2.imwrite(os.path.join(tmp_path, '1.jpg'), np.zeros((4, 5, 3), dtype=np.uint8))
+    cv2.imwrite(os.path.join(tmp_path, '2.png'), np.zeros((4, 5, 3), dtype=np.uint8))
     return tmp_path
 
 
@@ -44,7 +44,8 @@ def test(image_folder):
     ds = FolderImageDataset(image_folder)
 
     assert len(ds) == 2
-    assert ds[0].shape == (3, 3)
+    assert ds[0].shape == (4, 5, 3)
+    assert ds[1].shape == (4, 5, 3)
 
 
 def test_raises(not_image_folder):
