@@ -30,12 +30,13 @@ def test(tmp_path):
     tmp_path = str(tmp_path)
     os.mkdir(os.path.join(tmp_path, 'model'))
 
-    with open(os.path.join(tmp_path, 'test.json'), 'w') as f:
+    # Write the file with pure json
+    with open(os.path.join(tmp_path, 'test0.json'), 'w') as f:
         json.dump({'name': 'test0'}, f)
 
-    # Write also using mv
+    # Write also using mev
     mv = MetaViewer(tmp_path)
-    mv.write(os.path.join(tmp_path, 'model', 'test.json'), {'name': 'test1'})    
+    mv.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})    
 
     mv = MetaViewer(tmp_path)
 
