@@ -48,3 +48,9 @@ jobs:
         python --version
         cd ./cascade/tests
         pytest --cov=cascade .
+    - name: Test utils
+      run: |
+        pwd
+        ls
+        cd ./cascade/utils/tests
+        pytest
