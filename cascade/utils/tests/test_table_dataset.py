@@ -16,15 +16,21 @@ limitations under the License.
 
 import os
 import sys
+import pandas as pd
+import pytest
 
-sys.path.append(os.path.abspath('../..'))
-from cascade.data import Iterator
+MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade.utils import TableDataset
 
 
-class NumberIterator(Iterator):
-    def __init__(self, max_val):
-        self.max_val = max_val
+def test_create(tmp_path):
+    ds = TableDataset(t=pd.DataFrame())
+    assert len(ds) == 0
 
-    def __iter__(self):
-        for i in range(self.max_val):
-            yield i
+    ds = TableDataset(t=ds)
+    assert len(ds) == 0
+
+    with pytest.raises(TypeError):
+        ds = TableDataset(t='Hello')

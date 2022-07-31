@@ -14,25 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
-import sys
-
-sys.path.append(os.path.abspath('../..'))
-from cascade.data import Dataset
+import torch
+from typing import ClassVar
+from ..models import Model
 
 
-class NumberDataset(Dataset):
-    def __init__(self, arr):
-        self.numbers = arr
-        super().__init__()
+class TorchModel(Model):
+    def __init__(self, model_class: ClassVar, *args, **kwargs) -> None:
+        self._model = model_class(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index):
-        return self.numbers[index]
+    def predict(self, *args, **kwargs):
+        return self._model(*args, **kwargs)
 
-    def __len__(self):
-        return len(self.numbers)
+    def save(self, path, *args, **kwargs) -> None:
+        with open(path, 'wb') as f:
+            torch.save(self._model, f)
+
+    def load(self, path, *args, **kwargs) -> None:
+        with open(path, 'rb') as f:
+            self._model = torch.load(f)
 
     def get_meta(self):
         meta = super().get_meta()
-        meta[0]['len'] = len(self)
+        meta[-1]['module'] = repr(self._model)
         return meta

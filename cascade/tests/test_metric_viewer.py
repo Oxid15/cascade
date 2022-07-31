@@ -16,57 +16,39 @@ limitations under the License.
 
 import os
 import sys
-import shutil
 import numpy as np
-import unittest
-from unittest import TestCase
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.models import ModelRepo
 from cascade.meta import MetricViewer
-from cascade.tests.dummy_model import DummyModel
 
 
-class TestMetricViewer(TestCase):
-    def test(self):
-        repo = ModelRepo('test_mtv')
-        repo.add_line('0', DummyModel)
+def test(model_repo, dummy_model):
+    m = dummy_model
+    m.evaluate()
+    model_repo['0'].save(m)
 
-        m = DummyModel()
+    mtv = MetricViewer(model_repo)
+    t = mtv.table
+
+    for item in ['line', 'num', 'created_at', 'saved', 'acc']:
+        assert(item in list(t.columns))
+
+
+def test_show_table(model_repo, dummy_model):
+    for _ in range(len(model_repo)):
+        m = dummy_model
         m.evaluate()
-        repo['0'].save(m)
+        model_repo['0'].save(m)
 
-        mtv = MetricViewer(repo)
-        t = mtv.table
-
-        self.assertListEqual(list(t.columns), ['line', 'num', 'created_at', 'saved', 'acc'])
-
-    def test_show_table(self):
-        repo = ModelRepo('test_mtv_show_table')
-        repo.add_line('0', DummyModel)
-
-        for _ in range(50):
-            m = DummyModel()
-            m.evaluate()
-            repo['0'].save(m)
-
-        mtv = MetricViewer(repo)
-        mtv.plot_table(show=True)
-
-    # def test_serve(self):
-    #     repo = ModelRepo('test_mtv_serve')
-    #     repo.add_line('0', DummyModel)
-
-    #     for _ in range(50):
-    #         m = DummyModel(a=np.random.randint(0, 255), b=int(np.random.normal()))
-    #         m.evaluate()
-    #         repo['0'].save(m)
-
-    #     mtv = MetricViewer(repo)
-    #     mtv.serve()
+    mtv = MetricViewer(model_repo)
+    mtv.plot_table(show=True)
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.skip
+def test_serve(model_repo):
+    mtv = MetricViewer(model_repo)
+    mtv.serve()
