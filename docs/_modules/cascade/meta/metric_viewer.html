@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.meta.metric_viewer - cascade 0.4.0 documentation</title>
+        <title>cascade.meta.metric_viewer - cascade 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.4.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.6.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -157,12 +157,18 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/pipeline_building.html">Pipeline building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/model_training.html">Model training</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../concepts.html">Concepts</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cascade.base.html">cascade.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../cascade.data.html">cascade.data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../cascade.models.html">cascade.models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../cascade.meta.html">cascade.meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cascade.utils.html">cascade.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -215,12 +221,14 @@
 <span class="sd">"""</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">pendulum</span>
+<span class="kn">from</span> <span class="nn">flatten_json</span> <span class="kn">import</span> <span class="n">flatten</span>
 <span class="kn">from</span> <span class="nn">plotly</span> <span class="kn">import</span> <span class="n">graph_objects</span> <span class="k">as</span> <span class="n">go</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">dash</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">dcc</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">MetaViewer</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">__version__</span>
 
 
 <div class="viewcode-block" id="MetricViewer"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer">[docs]</a><span class="k">class</span> <span class="nc">MetricViewer</span><span class="p">:</span>
@@ -229,7 +237,7 @@
 <span class="sd">    uses ModelRepo to extract metrics of all models if any</span>
 <span class="sd">    constructs a `pd.DataFrame` of metrics internally, which is showed in `__repr__`</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MetricViewer.__init__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -239,14 +247,36 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="n">repo</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">lines</span><span class="p">:</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-            <span class="n">viewer_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="p">:</span>
+            <span class="n">viewer_root</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">root</span>
 
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">model_names</span><span class="p">):</span>
-                <span class="n">view</span> <span class="o">=</span> <span class="n">MetaViewer</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">viewer_root</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">model_name</span><span class="p">)))</span>
-                <span class="n">metric</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'line'</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">'num'</span><span class="p">:</span> <span class="n">i</span><span class="p">}</span>
-                <span class="n">meta</span> <span class="o">=</span> <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Try to use viewer only on models using type key</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">view</span> <span class="o">=</span> <span class="n">MetaViewer</span><span class="p">(</span><span class="n">viewer_root</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'model'</span><span class="p">})</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">view</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">MetaViewer</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">viewer_root</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">model_name</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">model_names</span>
+                <span class="p">]</span>
+
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">'''You use cascade </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s1"> with the repo generated in version &lt;= 0.4.1 without type key in some of the meta files (in repo, line or model).</span>
+<span class="s1">                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.</span>
+<span class="s1">                In the following versions it will be deprecated.'''</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">model_names</span><span class="p">)):</span>
+                <span class="n">meta</span> <span class="o">=</span> <span class="n">view</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Takes last model from meta</span>
+                <span class="n">metric</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">'line'</span><span class="p">:</span> <span class="n">viewer_root</span><span class="p">,</span> 
+                    <span class="s1">'num'</span><span class="p">:</span> <span class="n">i</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="s1">'created_at'</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+                    <span class="n">metric</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">]</span> <span class="o">=</span> \
+                        <span class="n">pendulum</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="s1">'saved_at'</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+                        <span class="n">metric</span><span class="p">[</span><span class="s1">'saved'</span><span class="p">]</span> <span class="o">=</span> \
+                            <span class="n">pendulum</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">'saved_at'</span><span class="p">])</span>\
+                                <span class="o">.</span><span class="n">diff_for_humans</span><span class="p">(</span><span class="n">metric</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">])</span>
 
                 <span class="k">if</span> <span class="s1">'metrics'</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
                     <span class="n">metric</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">'metrics'</span><span class="p">])</span>
@@ -254,27 +284,60 @@
                     <span class="n">metric</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">'params'</span><span class="p">])</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">plot_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MetricViewer.plot_table"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.plot_table">[docs]</a>    <span class="k">def</span> <span class="nf">plot_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">flatten</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s1">'records'</span><span class="p">)))</span>
         <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span>
             <span class="n">go</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span>
-                <span class="n">header</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+                <span class="n">header</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
                             <span class="n">fill_color</span><span class="o">=</span><span class="s1">'#f4c9c7'</span><span class="p">,</span>
                             <span class="n">align</span><span class="o">=</span><span class="s1">'left'</span><span class="p">),</span>
-                <span class="n">cells</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span>
+                <span class="n">cells</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span>
                            <span class="n">fill_color</span><span class="o">=</span><span class="s1">'#bcced4'</span><span class="p">,</span>
-                           <span class="n">align</span><span class="o">=</span><span class="s1">'left'</span><span class="p">))</span>
-        <span class="p">])</span>
+                           <span class="n">align</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">])</span>
         <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">fig</span>
+        <span class="k">return</span> <span class="n">fig</span></div>
 
-    <span class="k">def</span> <span class="nf">serve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MetricViewer.serve"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.serve">[docs]</a>    <span class="k">def</span> <span class="nf">serve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        Runs dash-based server with interactive table of metrics and parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        page_size:</span>
+<span class="sd">            Size of the table in rows on one page</span>
+<span class="sd">        include List[str], optional:</span>
+<span class="sd">            List of parameters or metrics to be added. Only them will be present along with some default.</span>
+<span class="sd">        exclude List[str], optional:</span>
+<span class="sd">            List of parameters or metrics to be excluded from table.</span>
+<span class="sd">        """</span>
+        <span class="c1"># Conditional import</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">dash</span>
+        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span><span class="s1">'''</span>
+<span class="s1">            Cannot import dash. It is conditional </span>
+<span class="s1">            dependency you can install it </span>
+<span class="s1">            using the instructions from https://dash.plotly.com/installation'''</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">dash_table</span>
+
+        <span class="k">if</span> <span class="n">include</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">include</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">exclude</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">exclude</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">exclude</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'line'</span><span class="p">,</span> <span class="s1">'num'</span><span class="p">]</span> <span class="o">+</span> <span class="n">include</span><span class="p">]</span>
+        <span class="n">df_flatten</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">flatten</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s1">'records'</span><span class="p">)))</span>
 
         <span class="n">app</span> <span class="o">=</span> <span class="n">dash</span><span class="o">.</span><span class="n">Dash</span><span class="p">()</span>
         <span class="n">dep_fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
@@ -289,19 +352,29 @@
                 <span class="p">}</span>
             <span class="p">),</span>
             <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
-                <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">df_flatten</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
                 <span class="nb">id</span><span class="o">=</span><span class="s1">'dropdown-x'</span><span class="p">,</span>
                 <span class="n">multi</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
             <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
-                <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">df_flatten</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span>
                 <span class="nb">id</span><span class="o">=</span><span class="s1">'dropdown-y'</span><span class="p">,</span>
                 <span class="n">multi</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
             <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
                 <span class="nb">id</span><span class="o">=</span><span class="s1">'dependence-figure'</span><span class="p">,</span>
                 <span class="n">figure</span><span class="o">=</span><span class="n">dep_fig</span><span class="p">),</span>
-            <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
-                <span class="nb">id</span><span class="o">=</span><span class="s1">'table'</span><span class="p">,</span>
-                <span class="n">figure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_table</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">dash_table</span><span class="o">.</span><span class="n">DataTable</span><span class="p">(</span>
+                <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+                    <span class="p">{</span><span class="s1">'name'</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span> <span class="s1">'id'</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span> <span class="s1">'selectable'</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_flatten</span><span class="o">.</span><span class="n">columns</span>
+                <span class="p">],</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">df_flatten</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s1">'records'</span><span class="p">),</span>
+                <span class="n">filter_action</span><span class="o">=</span><span class="s2">"native"</span><span class="p">,</span>
+                <span class="n">sort_action</span><span class="o">=</span><span class="s2">"native"</span><span class="p">,</span>
+                <span class="n">sort_mode</span><span class="o">=</span><span class="s2">"multi"</span><span class="p">,</span>
+                <span class="n">selected_columns</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">selected_rows</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">page_action</span><span class="o">=</span><span class="s2">"native"</span><span class="p">,</span>
+                <span class="n">page_current</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">page_size</span><span class="o">=</span><span class="n">page_size</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">])</span>
 
@@ -323,7 +396,7 @@
                 <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s1"> relation'</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">fig</span>
 
-        <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">use_reloader</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+        <span class="n">app</span><span class="o">.</span><span class="n">run_server</span><span class="p">(</span><span class="n">use_reloader</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 </pre></div>
         </article>
       </div>
@@ -365,5 +438,6 @@
     <script src="../../../scripts/furo.js"></script>
     <script src="../../../clipboard.min.js"></script>
     <script src="../../../copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>
 </html>

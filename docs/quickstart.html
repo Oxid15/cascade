@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Concepts" href="concepts.html" /><link rel="prev" title="What is it" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Pipeline building" href="examples/pipeline_building.html" /><link rel="prev" title="What is it" href="index.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>Quickstart - cascade 0.5.1 documentation</title>
+        <title>Quickstart - cascade 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.5.1 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.6.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -158,13 +158,18 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">Quickstart</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html">cascade.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -218,27 +223,36 @@
 </section>
 <section id="use-cases">
 <h2>Use cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">#</a></h2>
-<section id="build-a-pipeline">
-<h3>Build a pipeline<a class="headerlink" href="#build-a-pipeline" title="Permalink to this headline">#</a></h3>
+<p>Below are examples of usage of Cascade for some typical tasks.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html#Adding-metadata">Adding metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html#Applying-noise">Applying noise</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html#Viewing-metadata">Viewing metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html#Ready-to-train-model">Ready to train model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html#See-also:">See also:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples/model_training.html">Model training</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#Defining-data-pipeline">Defining data pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#Model-definition">Model definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#id1">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#Evaluate-the-model">Evaluate the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#Check-the-metadata">Check the metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#Saving-the-model">Saving the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#Peeking-inside-repo">Peeking inside repo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#More-experiments">More experiments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#Results">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html#See-also:">See also:</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>This section is WIP, will be filled in following releases!</p>
+<p>New use-cases will be added soon!</p>
 </div>
-</section>
-<section id="train-models">
-<h3>Train models<a class="headerlink" href="#train-models" title="Permalink to this headline">#</a></h3>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>This section is WIP, will be filled in following releases!</p>
-</div>
-</section>
-<section id="feature-selection">
-<h3>Feature selection<a class="headerlink" href="#feature-selection" title="Permalink to this headline">#</a></h3>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>This section is WIP, will be filled in following releases!</p>
-</div>
-</section>
 </section>
 </section>
 
@@ -247,12 +261,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="concepts.html">
+          <a class="next-page" href="examples/pipeline_building.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Concepts</div>
+                <div class="title">Pipeline building</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -301,12 +315,7 @@
             <ul>
 <li><a class="reference internal" href="#">Quickstart</a><ul>
 <li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#use-cases">Use cases</a><ul>
-<li><a class="reference internal" href="#build-a-pipeline">Build a pipeline</a></li>
-<li><a class="reference internal" href="#train-models">Train models</a></li>
-<li><a class="reference internal" href="#feature-selection">Feature selection</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#use-cases">Use cases</a></li>
 </ul>
 </li>
 </ul>
@@ -325,5 +334,6 @@
     <script src="scripts/furo.js"></script>
     <script src="clipboard.min.js"></script>
     <script src="copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>
 </html>

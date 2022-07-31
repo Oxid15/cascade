@@ -81,7 +81,25 @@ cascade.data
 
 | 
 
+.. autoclass:: cascade.data.FolderDataset
+   :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.data.Pickler
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.data.RandomSampler
    :members:
 
 |

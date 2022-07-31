@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.models.model - cascade 0.4.0 documentation</title>
+        <title>cascade.models.model - cascade 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -123,7 +123,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.4.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.6.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -157,12 +157,18 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/pipeline_building.html">Pipeline building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/model_training.html">Model training</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../concepts.html">Concepts</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cascade.base.html">cascade.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../cascade.data.html">cascade.data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../cascade.models.html">cascade.models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../cascade.meta.html">cascade.meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cascade.utils.html">cascade.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -218,26 +224,28 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span> <span class="nn">pendulum</span>
 
+<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">Traceable</span>
 
-<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">Traceable</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Base class for any model.</span>
 <span class="sd">    Used to provide unified interface to any model, store metadata including metrics.</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Model.__init__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Should be called in any successor - initializes default meta needed.</span>
 <span class="sd">        Arguments passed in it should be related to model's hyperparameters, architecture.</span>
-<span class="sd">        All additional arguments should have defaults.</span>
-<span class="sd">        Successors should pass all of their parameters to superclass for it to be able to</span>
-<span class="sd">        log them in meta</span>
+<span class="sd">        All additional arguments should have defaults - to be able to create model and then load.</span>
+<span class="sd">        Successors may pass all of their parameters to superclass for it to be able to</span>
+<span class="sd">        log them in meta. Everything that is worth to document about model and data it was trained on can be</span>
+<span class="sd">        either in params or meta_prefix.</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="n">meta_prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">meta_prefix</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">meta_prefix</span> <span class="o">=</span> <span class="n">meta_prefix</span>
+        <span class="c1"># Model accepts meta_prefix explicitly to not to record it in 'params'</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">kwargs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span> <span class="o">=</span> <span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s1">'UTC'</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">meta_prefix</span><span class="o">=</span><span class="n">meta_prefix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Model.fit"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -259,49 +267,56 @@
 <span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Model.load"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Model.load"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Loads model from provided filepath. May be unpickling process or reading json configs.</span>
 <span class="sd">        Does not return any model, just restores internal state.</span>
 <span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Model.save"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Model.save"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        Saves model's state using provided filepath.</span>
 <span class="sd">        """</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<div class="viewcode-block" id="Model.get_meta"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.Model.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
         <span class="c1"># Successors may not call super().__init__</span>
         <span class="c1"># they may not have these default fields</span>
 
-        <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
 
         <span class="n">all_default_exist</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'created_at'</span><span class="p">):</span>
-            <span class="n">meta</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span>
+            <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'created_at'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">all_default_exist</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'metrics'</span><span class="p">):</span>
-            <span class="n">meta</span><span class="p">[</span><span class="s1">'metrics'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span>
+            <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'metrics'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">all_default_exist</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'params'</span><span class="p">):</span>
-            <span class="n">meta</span><span class="p">[</span><span class="s1">'params'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">all_default_exist</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'meta_prefix'</span><span class="p">):</span>
-            <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_prefix</span><span class="p">)</span>
+            <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'params'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">all_default_exist</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">all_default_exist</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">'Model</span><span class="se">\'</span><span class="s1">s meta is incomplete, maybe you haven</span><span class="se">\'</span><span class="s1">t call super().__init__ in subclass?'</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">meta</span><span class="p">]</span></div>
+        
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'type'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'model'</span>
+        <span class="k">return</span> <span class="n">meta</span></div></div>
+
+
+<div class="viewcode-block" id="ModelModifier"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelModifier">[docs]</a><span class="k">class</span> <span class="nc">ModelModifier</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelModifier.__init__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelModifier.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ModelModifier.get_meta"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelModifier.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+        <span class="n">prev_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span> <span class="o">+</span> <span class="n">prev_meta</span></div></div>
 </pre></div>
         </article>
       </div>
@@ -343,5 +358,6 @@
     <script src="../../../scripts/furo.js"></script>
     <script src="../../../clipboard.min.js"></script>
     <script src="../../../copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>
 </html>

@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="cascade.models" href="cascade.models.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.utils" href="cascade.utils.html" /><link rel="prev" title="cascade.models" href="cascade.models.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.meta - cascade 0.5.1 documentation</title>
+        <title>cascade.meta - cascade 0.6.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
@@ -124,7 +124,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.5.1 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.6.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -158,13 +158,18 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">cascade.meta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html">cascade.utils</a></li>
 </ul>
 </li>
 </ul>
@@ -208,6 +213,10 @@
 Uses plotly to show how metrics of models changed in time and how
 models with different hyperparameters depend on each other</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.HistoryViewer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/history_viewer.html#HistoryViewer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.HistoryViewer.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.HistoryViewer.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/history_viewer.html#HistoryViewer.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.HistoryViewer.plot" title="Permalink to this definition">#</a></dt>
 <dd><p>Plots training history of model versions using plotly.</p>
@@ -233,6 +242,35 @@ models with different hyperparameters depend on each other</p>
 <dd><p>Interface for viewing metrics in model meta files
 uses ModelRepo to extract metrics of all models if any
 constructs a <cite>pd.DataFrame</cite> of metrics internally, which is showed in <cite>__repr__</cite></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetricViewer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>repo</strong> (<a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo" title="cascade.models.ModelRepo"><em>ModelRepo</em></a>) – ModelRepo object to extract metrics from</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetricViewer.plot_table">
+<span class="sig-name descname"><span class="pre">plot_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.plot_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.plot_table" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetricViewer.serve">
+<span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.serve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.serve" title="Permalink to this definition">#</a></dt>
+<dd><p>Runs dash-based server with interactive table of metrics and parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page_size</strong> – Size of the table in rows on one page</p></li>
+<li><p><strong>List</strong><strong>[</strong><strong>str</strong><strong>]</strong> (<em>exclude</em>) – List of parameters or metrics to be added. Only them will be present along with some default.</p></li>
+<li><p><strong>optional</strong> – List of parameters or metrics to be added. Only them will be present along with some default.</p></li>
+<li><p><strong>List</strong><strong>[</strong><strong>str</strong><strong>]</strong> – List of parameters or metrics to be excluded from table.</p></li>
+<li><p><strong>optional</strong> – List of parameters or metrics to be excluded from table.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 </dd></dl>
 <div class="line-block">
 <div class="line"><br/></div>
@@ -249,24 +287,48 @@ constructs a <cite>pd.DataFrame</cite> of metrics internally, which is showed in
 <dd><p>The class to read and write meta data.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.MetaViewer.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.__getitem__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.__getitem__" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>meta</strong> – object containing meta</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
+<dd class="field-even"><p>List[Dict]</p>
 </dd>
 </dl>
 </dd></dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetaViewer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> – path to the folder containing metadata files
+to dump and load metadata files MetaHandler is used</p></li>
+<li><p><strong>Dict</strong> (<em>filt</em>) – dictionary that specifies which values should be present in meta
+for example to find all models use <cite>filt={‘type’: ‘model’}</cite></p></li>
+<li><p><strong>optional</strong> – dictionary that specifies which values should be present in meta
+for example to find all models use <cite>filt={‘type’: ‘model’}</cite></p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.meta.ModelRepo</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.meta.MetaHandler</span></code></p>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetaViewer.obj_to_dict">
+<span class="sig-name descname"><span class="pre">obj_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.obj_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.obj_to_dict" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.MetaViewer.read">
-<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.read" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.read" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads object from path</p>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.MetaViewer.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.write" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.write" title="Permalink to this definition">#</a></dt>
 <dd><p>Dumps obj to name</p>
 </dd></dl>
 </dd></dl>
@@ -283,6 +345,13 @@ constructs a <cite>pd.DataFrame</cite> of metrics internally, which is showed in
 <dt class="sig sig-object py" id="cascade.meta.Validator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.meta.</span></span><span class="sig-name descname"><span class="pre">Validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/validator.html#Validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.Validator" title="Permalink to this definition">#</a></dt>
 <dd><p>Base class for validators. Defines basic <cite>__init__</cite> structure</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.Validator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/validator.html#Validator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.Validator.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a Modifier. Makes no transformations in initialization.
+:param dataset: a dataset to modify
+:type dataset: Dataset</p>
+</dd></dl>
 </dd></dl>
 <div class="line-block">
 <div class="line"><br/></div>
@@ -303,6 +372,13 @@ constructs a <cite>pd.DataFrame</cite> of metrics internally, which is showed in
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">AggregateValidator</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.AggregateValidator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/validator.html#AggregateValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.AggregateValidator.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a Modifier. Makes no transformations in initialization.
+:param dataset: a dataset to modify
+:type dataset: Dataset</p>
+</dd></dl>
 </dd></dl>
 <div class="line-block">
 <div class="line"><br/></div>
@@ -324,6 +400,13 @@ Calls all previous lazy datasets in __init__</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">PredicateValidator</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">)</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.PredicateValidator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">cascade.data.dataset.T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/validator.html#PredicateValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.PredicateValidator.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a Modifier. Makes no transformations in initialization.
+:param dataset: a dataset to modify
+:type dataset: Dataset</p>
+</dd></dl>
 </dd></dl>
 <div class="line-block">
 <div class="line"><br/></div>
@@ -378,6 +461,19 @@ compared using <cite>deepdiff</cite> and if everything is ok it returns.</p>
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="cascade.data.html#cascade.data.Modifier" title="cascade.data.Modifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.data.Modifier</span></code></a></p>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetaValidator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">cascade.data.dataset.Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_validator.html#MetaValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaValidator.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.Dataset"><em>Dataset</em></a>) – dataset to validate</p></li>
+<li><p><strong>root</strong> (<em>str</em>) – path to the folder in which to store meta
+default is ‘./.cascade’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 </dd></dl>
 <div class="line-block">
 <div class="line"><br/></div>
@@ -395,7 +491,15 @@ compared using <cite>deepdiff</cite> and if everything is ok it returns.</p>
       <footer>
         
         <div class="related-pages">
-          
+          <a class="next-page" href="cascade.utils.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">cascade.utils</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
           <a class="prev-page" href="cascade.models.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
@@ -440,5 +544,6 @@ compared using <cite>deepdiff</cite> and if everything is ok it returns.</p>
     <script src="scripts/furo.js"></script>
     <script src="clipboard.min.js"></script>
     <script src="copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>
 </html>
