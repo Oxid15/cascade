@@ -43,8 +43,11 @@ def test(tmp_path):
     assert(len(mv) == 2)
     assert('name' in mv[0])
     assert('name' in mv[1])
-    assert(mv[0]['name'] == 'test0')
-    assert(mv[1]['name'] == 'test1')
+
+    # This order is due to sorting by path
+    # .../model/test1.json is less than .../test0.json
+    assert(mv[0]['name'] == 'test1')
+    assert(mv[1]['name'] == 'test0')
 
 
 def test_order(tmp_path):
