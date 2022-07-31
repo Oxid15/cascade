@@ -54,12 +54,3 @@ cascade.models
 |
 
 |
-
-.. autoclass:: cascade.models.ModelRepo
-   :members:
-
-|
-
-|
-
-|
