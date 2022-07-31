@@ -16,15 +16,19 @@ limitations under the License.
 
 import os
 import sys
+import numpy as np
 
-sys.path.append(os.path.abspath('../..'))
-from cascade.data import Iterator
+MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade.data import Wrapper
+from cascade.utils import NumpyWrapper
 
 
-class NumberIterator(Iterator):
-    def __init__(self, max_val):
-        self.max_val = max_val
+def test(tmp_path):
+    arr = np.array([1, 2, 3, 4, 5])
+    path = os.path.join(tmp_path, 'arr.npy')
+    np.save(path, arr)
 
-    def __iter__(self):
-        for i in range(self.max_val):
-            yield i
+    ds = NumpyWrapper(path)
+    assert(arr.tolist() == [item for item in ds])

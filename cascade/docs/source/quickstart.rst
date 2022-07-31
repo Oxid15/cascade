@@ -22,23 +22,12 @@ Install latest version using pip directly from main branch
 Use cases
 ---------
 
-Build a pipeline
-~~~~~~~~~~~~~~~~
-.. important::
-    This section is WIP, will be filled in following releases!
+Below are examples of usage of Cascade for some typical tasks.
 
-.. .. literalinclude:: test.ipynb
-..     :linenos:
-..     :language: python
+.. toctree::
 
-Train models
-~~~~~~~~~~~~
+    examples/pipeline_building.ipynb
+    examples/model_training.ipynb
 
 .. important::
-    This section is WIP, will be filled in following releases!
-
-Feature selection
-~~~~~~~~~~~~~~~~~
-
-.. important::
-    This section is WIP, will be filled in following releases!
+    New use-cases will be added soon!

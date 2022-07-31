@@ -6,3 +6,4 @@ Cascade modules reference
     cascade.data
     cascade.models
     cascade.meta
+    cascade.utils

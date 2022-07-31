@@ -23,11 +23,24 @@ import warnings
 from sklearn.pipeline import Pipeline
 
 # from ..base import MetaHandler
-from ..models import Model
+from ..models import BasicModel
 
 
-class SkModel(Model):
+class SkModel(BasicModel):
+    """
+    Wrapper for sklearn models.
+    Accepts the name and block to form pipeline. 
+    Can fit, evaluate, predict save and load out of the box.
+    """
     def __init__(self, name=None, blocks=None, **kwargs) -> None:
+        """
+        Parameters
+        ----------
+        name: str, optional
+            Name of the model
+        blocks: list
+            List of sklearn transformers to make a pipeline from
+        """
         if name is not None:
             warnings.warn('''You passed not required argument name. 
             It is deprecated and will be removed in following versions''', FutureWarning)
@@ -39,23 +52,29 @@ class SkModel(Model):
         if blocks is not None:
             self.pipeline = self._construct_pipeline(blocks)
 
-    def _construct_pipeline(self, blocks: List[Any]) -> Pipeline:
+    @staticmethod
+    def _construct_pipeline(blocks: List[Any]) -> Pipeline:
         return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
 
     def fit(self, x, y, *args, **kwargs) -> None:
+        """
+        Wrapper for pipeline.fit
+        """
         self.pipeline.fit(x, y, *args, **kwargs)
 
     def predict(self, x, *args, **kwargs):
+        """
+        Wrapper for pipeline.predict
+        """
         return self.pipeline.predict(x, *args, **kwargs)
     
     def predict_proba(self, x, *args, **kwargs):
+        """
+        Wrapper for pipeline.predict_proba
+        """
         return self.pipeline.predict_proba(x, *args, **kwargs)
 
-    def evaluate(self, x, y, metrics_dict, *args, **kwargs) -> None:
-        preds = self.predict(x, *args, **kwargs)
-        self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
-
-    # Will be added again when thorougly tested
+    # Will be added again when thoroughly tested
     # def _check_model_hash(self, meta, path_w_ext) -> None:
     #     with open(path_w_ext, 'rb') as f:
     #         file_hash = md5(f.read()).hexdigest()
@@ -68,10 +87,13 @@ class SkModel(Model):
     #              hash from .pkl: {file_hash}')
 
     def load(self, path) -> None:
+        """
+        Loads the model from path provided. If no extension, .pkl is added.
+        """
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
-        root = os.path.dirname(path)
-        names = glob.glob(os.path.join(f'{root}', 'meta.json'))
+        # root = os.path.dirname(path)
+        # names = glob.glob(os.path.join(f'{root}', 'meta.json'))
         # if len(names):
         #     meta = MetaHandler().read(names[0])
         #     if 'md5sum' in meta:
@@ -81,6 +103,10 @@ class SkModel(Model):
             self.pipeline = pickle.load(f)
 
     def save(self, path) -> None:
+        """
+        Saves model to the path provided. 
+        If no extension, then .pkl is added.
+        """
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
         with open(f'{path}', 'wb') as f:

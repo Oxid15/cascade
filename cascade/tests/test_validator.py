@@ -16,46 +16,33 @@ limitations under the License.
 
 import os
 import sys
-import json
-import shutil
-import unittest
-from unittest import TestCase
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.number_dataset import NumberDataset
+from cascade.data import Wrapper
 from cascade.meta import DataValidationException, Validator, AggregateValidator, PredicateValidator
 
 
-class TestValidator(TestCase):
-    def test_modifier_interface(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        ds = Validator(ds, lambda x: True)
-        self.assertEqual([1, 2, 3, 4, 5], [item for item in ds])
+def test_modifier_interface(number_dataset):
+    ds = Validator(number_dataset, lambda x: True)
+    assert(number_dataset._data == [item for item in ds])
 
 
-class TestAggregateValidator(TestCase):
-    def test_true(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        ds = AggregateValidator(ds, lambda d: len(d) == 5)
-
-    def test_false(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        with self.assertRaises(DataValidationException):
-            ds = AggregateValidator(ds, lambda d: len(d) != 5)
+def test_aggregate_positive(number_dataset):
+    ds = AggregateValidator(number_dataset, lambda d: len(d) == len(number_dataset))
 
 
-class TestPredicateValidator(TestCase):
-    def test_true(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        ds = PredicateValidator(ds, lambda x: x < 6)
-
-    def test_false(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        with self.assertRaises(DataValidationException):
-            ds = PredicateValidator(ds, lambda x: x > 3)
+def test_aggregate_negative(number_dataset):
+    with pytest.raises(DataValidationException):
+        ds = AggregateValidator(number_dataset, lambda d: len(d) != len(number_dataset))
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_predicate_positive(number_dataset):
+    ds = PredicateValidator(number_dataset, lambda x: x < float('inf'))
+
+
+def test_predicate_negative(number_dataset):
+    with pytest.raises(DataValidationException):
+        ds = PredicateValidator(number_dataset, lambda x: x > float('inf'))
