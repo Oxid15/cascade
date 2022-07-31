@@ -20,7 +20,7 @@ import pytest
 import cv2
 import numpy as np
 
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.utils import FolderImageDataset
@@ -28,8 +28,8 @@ from cascade.utils import FolderImageDataset
 
 @pytest.fixture
 def image_folder(tmp_path):
-    cv2.imwrite(os.path.join(tmp_path, '1.jpg'), np.zeros((3,3), dtype=np.uint8))
-    cv2.imwrite(os.path.join(tmp_path, '2.png'), np.zeros((3,3), dtype=np.uint8))
+    cv2.imwrite(os.path.join(tmp_path, '1.jpg'), np.zeros((3, 3), dtype=np.uint8))
+    cv2.imwrite(os.path.join(tmp_path, '2.png'), np.zeros((3, 3), dtype=np.uint8))
     return tmp_path
 
 
