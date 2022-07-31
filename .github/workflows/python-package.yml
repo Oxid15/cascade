@@ -27,9 +27,11 @@ jobs:
 
     - name: Install dependencies
       run: |
+        pwd
+        ls
         python -m pip install --upgrade pip
-        python -m pip install -r tests/requirements.txt
         python -m pip install -r requirements.txt
+        python -m pip install -r cascade/tests/requirements.txt
         python -m pip install -r utils_requirements.txt
 
     - name: Lint with flake8
