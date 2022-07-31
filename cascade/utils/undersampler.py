@@ -20,6 +20,15 @@ from tqdm import trange
 
 
 class UnderSampler(Sampler):
+    """
+    Accepts datasets which return tuples of objects and labels.
+    Isn't lazy - runs through all the items ones to determine key order. 
+    Doesn't store values afterwards.
+
+    To undersample it removes items of majority class for the amount
+    of times needed to make equal distribution. 
+    Works for any number of classes.
+    """
     def __init__(self, dataset):
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels = unique(labels)

@@ -17,24 +17,27 @@ limitations under the License.
 import os
 import sys
 
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import FolderDataset
+from cascade.utils import TextClassificationDataset
 
 
-def test(tmp_path):
+def test_create(tmp_path):
     tmp_path = str(tmp_path)
-    with open(os.path.join(tmp_path, '0.txt'), 'w') as w:
-        w.write('hello')
+    paths = [f'class_{i}' for i in range(3)]
 
-    ds = FolderDataset(tmp_path)
+    for path in paths:
+        path = os.path.join(tmp_path, path)
+        os.mkdir(path)
+
+        with open(os.path.join(path, 'text_1.txt'), 'w') as f:
+            f.write('hello')
+        with open(os.path.join(path, 'text_2.txt'), 'w') as f:
+            f.write('hello')
+
+    ds = TextClassificationDataset(tmp_path)
     meta = ds.get_meta()[0]
 
-    assert(len(ds) == 1)
-    assert('name' in meta)
-    assert('len' in meta)
-    assert('paths' in meta)
-    assert('md5sums' in meta)
-    assert(len(meta['paths']) == 1)
-    assert(len(meta['md5sums']) == 1)
+    assert meta['size'] == 6
+    assert len(meta['labels']) == 3

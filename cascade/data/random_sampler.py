@@ -19,12 +19,26 @@ from . import Dataset, Sampler
 
 
 class RandomSampler(Sampler):
+    """
+    Shuffles dataset. Can randomly sample from dataset 
+    if num_samples is not None and less than length of dataset.
+    """
     def __init__(self, dataset: Dataset, num_samples=None, **kwargs) -> None:
+        """
+        Parameters
+        ----------
+        dataset: Dataset
+            Input dataset to sample from
+        num_samples: int, optional
+            Should be less than len(dataset), but oversampling can be added in the future.
+            If None, then just shuffles the dataset.
+        """
         if num_samples is None:
             num_samples = len(dataset)
         super().__init__(dataset, num_samples, **kwargs)
-        self.indices = [i for i in range(len(dataset))][:num_samples]
+        self.indices = [i for i in range(len(dataset))]
         shuffle(self.indices)
-    
+        self.indices = self.indices[:num_samples]
+
     def __getitem__(self, index):
         return super().__getitem__(self.indices[index])

@@ -11,9 +11,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import itertools
 import os
 import logging
-from typing import List, Dict
+from typing import List, Dict, Iterable
 import shutil
 
 import pendulum
@@ -24,7 +25,27 @@ from .model_line import ModelLine
 from ..meta import MetaViewer
 
 
-class ModelRepo(Traceable):
+class Repo(Traceable):
+    """
+    Base interface for repos of models.
+
+    See also
+    --------
+    cascade.models.ModelRepo
+    """
+    root = None
+
+    def add_line(*args, **kwargs):
+        raise NotImplementedError()
+
+    def __getitem__(self, key):
+        raise NotImplementedError()
+    
+    def __len__(self):
+        raise NotImplementedError()
+
+
+class ModelRepo(Repo):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
@@ -43,7 +64,7 @@ class ModelRepo(Traceable):
 
 
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo', lines=[dict(name='vgg16', cls=VGGModel)])
+    >>> repo = ModelRepo('repo', lines=[dict(name='vgg16', model_cls=VGGModel)])
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
@@ -91,11 +112,11 @@ class ModelRepo(Traceable):
 
         if lines is not None:
             for line in lines:
-                self.add_line(line['name'], line['cls'])
+                self.add_line(**line)
 
         self._update_meta()
 
-    def add_line(self, name, model_cls):
+    def add_line(self, name, model_cls, **kwargs):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
@@ -111,7 +132,7 @@ class ModelRepo(Traceable):
         assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix)
+        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix, **kwargs)
         self.lines[name] = line
 
         self._update_meta()
@@ -125,6 +146,10 @@ class ModelRepo(Traceable):
            existing line of the name passed in `key`
         """
         return self.lines[key]
+
+    def __iter__(self):
+        for line in self.lines:
+            yield self.__getitem__(line)
 
     def __len__(self) -> int:
         """
@@ -166,3 +191,45 @@ class ModelRepo(Traceable):
             'type': 'repo'
         })
         return meta
+
+    def __del__(self):
+        # Release all files on desctruction
+        for handler in self.logger.handlers:
+            handler.close()
+            self.logger.removeHandler(handler)
+    
+    def __add__(self, repo):
+        return ModelRepoConcatenator([self, repo])
+
+
+class ModelRepoConcatenator(Repo):
+    """
+    The class to concatenate different Repos. 
+    For the ease of use please, don't use it directly.
+    Just do repo = repo_1 + repo_2 to unify repos.
+    """
+    def __init__(self, repos: Iterable[Repo], *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self._repos = repos
+
+    def __getitem__(self, key):
+        pair = key.split('_')
+        if len(pair) <= 2:
+            raise KeyError(f'Key {key} is not in required format \
+            `<repo_idx>_<line_name>`. \
+            Please, use the key in this format. For example `0_line_1`')
+        idx, line_name = pair[0], '_'.join(pair[1:])
+        idx = int(idx)
+
+        return self._repos[idx][line_name]
+
+    def __len__(self):
+        return sum([len(repo) for repo in self._repos])
+
+    def __iter__(self):
+        # this flattens the list of lines
+        for line in itertools.chain(*[[line for line in repo] for repo in self._repos]):
+            yield line
+
+    def __add__(self, repo):
+        return ModelRepoConcatenator([self, repo])

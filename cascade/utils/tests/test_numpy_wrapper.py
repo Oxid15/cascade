@@ -16,22 +16,19 @@ limitations under the License.
 
 import os
 import sys
-import pytest
+import numpy as np
 
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import RandomSampler, Wrapper
+from cascade.data import Wrapper
+from cascade.utils import NumpyWrapper
 
-@pytest.mark.parametrize(
-    'arr', [
-        ([1, 2, 3, 4, 5],),
-        ([1, 5],),
-        ([1, 2, -3],)
-    ]
-)
-def test(arr):
-   ds = Wrapper(arr)
-   ds = RandomSampler(ds)
 
-   assert([ds[i] for i in range(len(ds))] != arr)
+def test(tmp_path):
+    arr = np.array([1, 2, 3, 4, 5])
+    path = os.path.join(tmp_path, 'arr.npy')
+    np.save(path, arr)
+
+    ds = NumpyWrapper(path)
+    assert(arr.tolist() == [item for item in ds])

@@ -18,34 +18,35 @@ import os
 import sys
 import pytest
 
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper
-from cascade.data import Concatenator
-
-
-def test_meta():
-    n1 = Wrapper([0, 1])
-    n2 = Wrapper([2, 3, 4, 5])
-
-    c = Concatenator([n1, n2], meta_prefix={'num': 1})
-    assert(c.get_meta()[0]['num'] == 1)
+from cascade.utils import OverSampler
 
 
 @pytest.mark.parametrize(
-    'arrs', [
-        ([0],[0],[0]),
-        ([1,2,3,4], [11]),
-        ([1],),
-        ([1,2,3,4], [])
+    'arr, res', [
+        (
+            [(1, 0),(2, 0)],
+            [(1, 0), (2, 0)]
+        ),
+        (
+            [(1, 0),(2, 0), (3, 1)],
+            [(1, 0), (2, 0), (3, 1), (3, 1)]
+        ),
+        (
+            [(1, 0),(2, 0), (3, 1), (4, 2)],
+            [(1, 0), (2, 0), (3, 1), (4, 2), (3, 1), (4, 2)]
+        ),
+        (
+            [(1, 2),(2, 2), (3, 2), (4, 1)],
+            [(1, 2), (2, 2), (3, 2), (4, 1), (4, 1), (4, 1)]
+        )
     ]
 )
-def test_concatenation(arrs):
-    c = Concatenator([*arrs])
+def test(arr, res):
+    ds = Wrapper(arr)
+    ds = OverSampler(ds)
 
-    res = []
-    for arr in arrs:
-        res += arr
-
-    assert([c[i] for i in range(len(c))] == res)
+    assert(res == [ds[i] for i in range(len(ds))])

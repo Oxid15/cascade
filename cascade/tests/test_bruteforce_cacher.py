@@ -16,34 +16,26 @@ limitations under the License.
 
 import os
 import sys
-import unittest
-from unittest import TestCase
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.number_dataset import NumberDataset
-from cascade.tests.number_iterator import NumberIterator
-from cascade.data import BruteforceCacher
+from cascade.data import BruteforceCacher, Wrapper
 
 
-class TestBruteforceCacher(TestCase):
-    def test(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        ds = BruteforceCacher(ds)
-        self.assertEqual([1, 2, 3, 4, 5], [item for item in ds])
-
-        ds = NumberIterator(6)
-        ds = BruteforceCacher(ds)
-        self.assertEqual([0, 1, 2, 3, 4, 5], [item for item in ds])
-
-    def test_meta(self):
-        ds = NumberDataset([1, 2, 3, 4, 5])
-        ds = BruteforceCacher(ds)
-        meta = ds.get_meta()
-
-        self.assertEqual(len(meta), 2)
+def test_ds(number_dataset):
+    ds = BruteforceCacher(number_dataset)
+    assert([number_dataset[i] for i in range(len(number_dataset))] == [item for item in ds])
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_it(number_iterator):
+    ds = BruteforceCacher(number_iterator)
+    assert([item for item in number_iterator] == [item for item in ds])
+
+
+def test_meta():
+    ds = Wrapper([1, 2, 3, 4, 5])
+    ds = BruteforceCacher(ds)
+    meta = ds.get_meta()
+
+    assert(len(meta) == 2)
