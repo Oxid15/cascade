@@ -113,19 +113,23 @@ class ModelLine(Traceable):
         idx = len(self.model_names)
         folder_name = f'{idx:0>5d}'
         full_path = os.path.join(self.root, folder_name, 'model')
-        self.model_names.append(os.path.join(folder_name, 'model'))
 
+        # Create model's folder if no
         os.makedirs(os.path.join(self.root, folder_name), exist_ok=True)
+
+        # Prepare meta for saving
         meta = model.get_meta()
+
         if not only_meta:
+            # Save model
             model.save(full_path)
 
             # Find anything that matches /path/model_folder/model*
             exact_filename = glob.glob(f'{full_path}*')
 
-            assert len(exact_filename) > 0, 'Model file was\'nt found.\n \
-                It may be that Model didn\'t save itself, or the name of the file \
-                    didn\'t match "model*"'
+            assert len(exact_filename) > 0, 'Model file was\'nt found.\n '
+            'It may be that Model didn\'t save itself when save() was called,'
+            'or the name of the file didn\'t match "model*"'
 
             exact_filename = exact_filename[0]
             with open(exact_filename, 'rb') as f:
@@ -133,7 +137,9 @@ class ModelLine(Traceable):
 
             meta[-1]['name'] = exact_filename
             meta[-1]['md5sum'] = md5sum
+
         meta[-1]['saved_at'] = pendulum.now(tz='UTC')
+        self.model_names.append(os.path.join(folder_name, 'model'))
 
         # Save model's meta
         self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta' + self.meta_fmt), meta)
