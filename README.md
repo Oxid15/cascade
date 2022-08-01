@@ -20,7 +20,8 @@ More info on installation can be found in [docs](https://oxid15.github.io/cascad
 
 ## Usage
 
-The simplest use-case is pipeline building.
+The simplest use-case is pipeline building.  
+See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html).  
 
 ```python
 import torch
@@ -128,8 +129,9 @@ Docs are available online:  [Go to Cascade documentation](https://oxid15.github.
 
 ## Structure
 
-Cascade is divided into three main modules namely: `data`, `models` and `meta`  
+Cascade is divided into four main modules namely: `base`, `data`, `models` and `meta`  
 
+- `base` is a module of some base interfaces and classes 
 - `data` aims to provide OOP-solution to the problem of building complex data-pipelines
 - `models` provides standardized way of dealing with ML-models, train, evaluate, save, load, etc...
 - `meta` ensures that all relevant meta info about data and models is stored anbd can be easily viewed
