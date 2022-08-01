@@ -56,8 +56,8 @@ class ModelLine(Traceable):
         self.root = folder
         self.model_names = []
         if os.path.exists(self.root):
-            assert os.path.isdir(folder)
-            for root, dirs, files in os.walk(self.root):
+            assert os.path.isdir(self.root)
+            for root, _, files in os.walk(self.root):
                 model_dir = os.path.split(root)[-1]
                 self.model_names \
                     += [os.path.join(model_dir, name)
