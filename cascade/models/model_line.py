@@ -92,9 +92,9 @@ class ModelLine(Traceable):
         """
         return len(self.model_names)
 
-    def save(self, model: Model) -> None:
+    def save(self, model: Model, only_meta=False) -> None:
         """
-        Saves a model and its meta data to a line folder.
+        Saves a model and its metadata to a line folder.
         Model is automatically assigned a number and a model is saved
         using Model's method `save` in its own folder.
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
@@ -102,6 +102,13 @@ class ModelLine(Traceable):
         It is Model's responsibility to correctly  assign extension and save its own state.
 
         Additionally, saves ModelLine's meta to the Line's root
+
+        Parameters
+        ----------
+        model: cascade.models.Model
+            Model to be saved
+        only_meta: bool
+            Flag, that indicates whether to save model's binaries. If True saves only metadata.
         """
         idx = len(self.model_names)
         folder_name = f'{idx:0>5d}'
@@ -109,23 +116,23 @@ class ModelLine(Traceable):
         self.model_names.append(os.path.join(folder_name, 'model'))
 
         os.makedirs(os.path.join(self.root, folder_name), exist_ok=True)
-        model.save(full_path)
-
-        # Find anything that matches /path/model_folder/model*
-        exact_filename = glob.glob(f'{full_path}*')
-
-        assert len(exact_filename) > 0, 'Model file was\'nt found.\n \
-            It may be that Model didn\'t save itself, or the name of the file \
-                didn\'t match "model*"'
-
-        exact_filename = exact_filename[0]
-        with open(exact_filename, 'rb') as f:
-            md5sum = md5(f.read()).hexdigest()
-
         meta = model.get_meta()
+        if not only_meta:
+            model.save(full_path)
 
-        meta[-1]['name'] = exact_filename
-        meta[-1]['md5sum'] = md5sum
+            # Find anything that matches /path/model_folder/model*
+            exact_filename = glob.glob(f'{full_path}*')
+
+            assert len(exact_filename) > 0, 'Model file was\'nt found.\n \
+                It may be that Model didn\'t save itself, or the name of the file \
+                    didn\'t match "model*"'
+
+            exact_filename = exact_filename[0]
+            with open(exact_filename, 'rb') as f:
+                md5sum = md5(f.read()).hexdigest()
+
+            meta[-1]['name'] = exact_filename
+            meta[-1]['md5sum'] = md5sum
         meta[-1]['saved_at'] = pendulum.now(tz='UTC')
 
         # Save model's meta
