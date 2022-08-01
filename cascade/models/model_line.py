@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import List, Dict
 import pendulum
 import glob
@@ -56,15 +57,17 @@ class ModelLine(Traceable):
         self.root = folder
         self.model_names = []
         if os.path.exists(self.root):
-            assert os.path.isdir(self.root)
-            for root, _, files in os.walk(self.root):
-                model_dir = os.path.split(root)[-1]
-                self.model_names \
-                    += [os.path.join(model_dir, name)
-                        for name in files
-                        if os.path.splitext(name)[0] == 'model']
-                self.model_names = sorted(self.model_names)
+            assert os.path.isdir(self.root), f'folder should be directory, got `{folder}`'
+            self.model_names = sorted(
+                [d for d in os.listdir(self.root) 
+                    if os.path.isdir(os.path.join(self.root, d))])
+
+            if len(self.model_names) == 0:
+                warnings.warn('Model folders were not found by the line. It may be that '
+                              'you are using new version of cascade with old repos '
+                              'created before version 0.2.0')
         else:
+            # No folder -> create
             os.mkdir(self.root)
         self.meta_viewer = MetaViewer(self.root)
 
