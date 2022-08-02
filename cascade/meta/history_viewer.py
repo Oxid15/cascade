@@ -34,12 +34,22 @@ class HistoryViewer:
     Uses plotly to show how metrics of models changed in time and how
     models with different hyperparameters depend on each other
     """
-    def __init__(self, repo) -> None:
+    def __init__(self, repo, last_lines=None, last_models=None) -> None:
+        """
+        Parameters
+        ----------
+        repo: cascade.models.ModelRepo
+            Repo to be viewed
+        last_lines: int, optional
+            Constraints the number of lines back from the last one to view
+        last_models: int, optional
+            For each line constraints the number of models back from the last one to view
+        """
         self._repo = repo
 
         metas = []
         self._params = []
-        for line in self._repo:
+        for line in [*self._repo][::-1][:last_lines]:
             # Try to use viewer only on models using type key
             try:
                 view = MetaViewer(line.root, filt={'type': 'model'})
@@ -53,7 +63,7 @@ class HistoryViewer:
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
-            for i in range(len(line.model_names)):
+            for i in range(len(line.model_names))[:last_models]:
                 new_meta = {'line': line.root, 'num': i}
                 new_meta.update(flatten(view[i][-1]))
                 metas.append(new_meta)
