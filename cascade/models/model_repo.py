@@ -35,7 +35,7 @@ class Repo(Traceable):
     """
     root = None
 
-    def add_line(*args, **kwargs):
+    def add_line(self, *args, **kwargs):
         raise NotImplementedError()
 
     def __getitem__(self, key):
@@ -94,14 +94,14 @@ class ModelRepo(Repo):
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
             # Can create MV only if path already exists
-            self.meta_viewer = MetaViewer(self.root)
+            self._mv = MetaViewer(self.root)
             self.lines = {name: ModelLine(os.path.join(self.root, name),
                                           meta_prefix=self._meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
         else:
             os.mkdir(self.root)
             # Here the same with MV
-            self.meta_viewer = MetaViewer(self.root)
+            self._mv = MetaViewer(self.root)
             self.lines = dict()
 
         self.logger = logging.getLogger(folder)
@@ -168,19 +168,18 @@ class ModelRepo(Repo):
         # Reads meta if exists and updates it with new values
         # writes back to disk
         meta_path = os.path.join(self.root, 'meta.json')
-        hist_path = os.path.join(self.root, 'history.json')
 
         meta = {}
         if os.path.exists(meta_path):
-            meta = self.meta_viewer.read(meta_path)[0]
+            meta = self._mv.read(meta_path)[0]
 
         self.logger.info(DeepDiff(
             meta,
-            self.meta_viewer.obj_to_dict(self.get_meta()[0])).pretty()
+            self._mv.obj_to_dict(self.get_meta()[0])).pretty()
         )
 
         meta.update(self.get_meta()[0])
-        self.meta_viewer.write(meta_path, [meta])
+        self._mv.write(meta_path, [meta])
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
@@ -193,7 +192,7 @@ class ModelRepo(Repo):
         return meta
 
     def __del__(self):
-        # Release all files on desctruction
+        # Release all files on destruction
         for handler in self.logger.handlers:
             handler.close()
             self.logger.removeHandler(handler)
@@ -216,7 +215,7 @@ class ModelRepoConcatenator(Repo):
         pair = key.split('_')
         if len(pair) <= 2:
             raise KeyError(f'Key {key} is not in required format \
-            `<repo_idx>_<line_name>`. \
+            `<repo_idx>_..._<line_name>`. \
             Please, use the key in this format. For example `0_line_1`')
         idx, line_name = pair[0], '_'.join(pair[1:])
         idx = int(idx)
