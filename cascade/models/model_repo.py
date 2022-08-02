@@ -56,7 +56,7 @@ class ModelRepo(Repo):
     Example
     -------
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})
+    >>> repo = ModelRepo('repo', _meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})
     >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
     >>> vgg16 = VGG16Model()
     >>> vgg16.fit()
@@ -96,7 +96,7 @@ class ModelRepo(Repo):
             # Can create MV only if path already exists
             self.meta_viewer = MetaViewer(self.root)
             self.lines = {name: ModelLine(os.path.join(self.root, name),
-                                          meta_prefix=self.meta_prefix)
+                                          meta_prefix=self._meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
         else:
             os.mkdir(self.root)
@@ -132,7 +132,7 @@ class ModelRepo(Repo):
         assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self.meta_prefix, **kwargs)
+        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self._meta_prefix, **kwargs)
         self.lines[name] = line
 
         self._update_meta()

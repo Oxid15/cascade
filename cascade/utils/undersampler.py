@@ -35,20 +35,20 @@ class UnderSampler(Sampler):
         label_nums, _ = histogram(labels, bins=len(ulabels))
         rem_nums = min(label_nums)
 
-        self.rem_indices = []
+        self._rem_indices = []
         for label in ulabels:
             k = 0
             for _ in range(rem_nums):
                 while labels[k] != label:
                     k += 1
-                self.rem_indices.append(k)
-        ln = len(self.rem_indices)
+                self._rem_indices.append(k)
+        ln = len(self._rem_indices)
         print(f'Original length was {len(dataset)} and new is {ln}')
         super().__init__(dataset, ln)
 
     def __getitem__(self, index):
-        idx = self.rem_indices[index]
+        idx = self._rem_indices[index]
         return self._dataset[idx]
 
     def __len__(self):
-        return len(self.rem_indices)
+        return len(self._rem_indices)

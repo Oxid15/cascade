@@ -35,11 +35,11 @@ class HistoryViewer:
     models with different hyperparameters depend on each other
     """
     def __init__(self, repo) -> None:
-        self.repo = repo
+        self._repo = repo
 
         metas = []
-        self.params = []
-        for line in self.repo:
+        self._params = []
+        for line in self._repo:
             # Try to use viewer only on models using type key
             try:
                 view = MetaViewer(line.root, filt={'type': 'model'})
@@ -64,11 +64,11 @@ class HistoryViewer:
                 if 'params' in view[i][-1]:
                     if len(view[i][-1]['params']) > 0:
                         params.update(flatten({'params': view[i][-1]['params']}))
-                self.params.append(params)
+                self._params.append(params)
 
-        self.table = pd.DataFrame(metas)
-        if 'saved_at' in self.table:
-            self.table = self.table.sort_values('saved_at')
+        self._table = pd.DataFrame(metas)
+        if 'saved_at' in self._table:
+            self._table = self._table.sort_values('saved_at')
 
     def _diff(self, p1, params) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
@@ -102,19 +102,19 @@ class HistoryViewer:
         # After flatten 'metrics_' will be added to the metric name
         if not metric.startswith('metrics_'):
             metric = 'metrics_' + metric
-        assert metric in self.table
+        assert metric in self._table
 
         # turn time into evenly spaced intervals
-        time = [i for i in range(len(self.table))]
-        lines = self.table['line'].unique()
+        time = [i for i in range(len(self._table))]
+        lines = self._table['line'].unique()
 
         cmap = px.colors.qualitative.Plotly
         cmap_len = len(px.colors.qualitative.Plotly)
         line_cols = {line: cmap[i % cmap_len] for i, line in enumerate(lines)}
 
-        self.table['time'] = time
-        self.table['color'] = [line_cols[line] for line in self.table['line']]
-        table = self.table.fillna('')
+        self._table['time'] = time
+        self._table['color'] = [line_cols[line] for line in self._table['line']]
+        table = self._table.fillna('')
 
         # plot each model against metric
         # with all metadata on hover
@@ -123,7 +123,7 @@ class HistoryViewer:
             table,
             x='time',
             y=metric,
-            hover_data=[name for name in pd.DataFrame(self.params).columns],
+            hover_data=[name for name in pd.DataFrame(self._params).columns],
             color='line'
         )
 
@@ -131,7 +131,7 @@ class HistoryViewer:
         # plot each one with respected color
 
         for line in lines:
-            params = [p for p in self.params if p['line'] == line]
+            params = [p for p in self._params if p['line'] == line]
             edges = []
             for i in range(len(params)):
                 if i == 0:

@@ -35,15 +35,15 @@ class Concatenator(Dataset):
         """
         self._datasets = datasets
         lengths = [len(ds) for ds in self._datasets]
-        self.shifts = np.cumsum([0] + lengths)
+        self._shifts = np.cumsum([0] + lengths)
         super().__init__(*args, **kwargs)
 
     def __getitem__(self, index) -> T:
         ds_index = 0
-        for sh in self.shifts[1:]:
+        for sh in self._shifts[1:]:
             if index >= sh:
                 ds_index += 1
-        return self._datasets[ds_index][index - self.shifts[ds_index]]
+        return self._datasets[ds_index][index - self._shifts[ds_index]]
 
     def __len__(self) -> int:
         """

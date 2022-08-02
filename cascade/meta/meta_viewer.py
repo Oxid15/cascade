@@ -40,18 +40,18 @@ class MetaViewer:
         cascade.meta.MetaHandler
         """
         assert os.path.exists(root)
-        self.root = root
-        self.filt = filt
-        self.mh = MetaHandler()
+        self._root = root
+        self._filt = filt
+        self._mh = MetaHandler()
 
         names = []
-        for root, _, files in os.walk(self.root):
+        for root, _, files in os.walk(self._root):
             names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == '.json']
         names = sorted(names)
 
         self.metas = []
         for name in names:
-            self.metas.append(self.mh.read(name))
+            self.metas.append(self._mh.read(name))
         if filt is not None:
             self.metas = list(filter(self._filter, self.metas))
 
@@ -83,7 +83,7 @@ class MetaViewer:
                     out += '\n'
             return out
 
-        out = f'MetaViewer at {self.root}:\n'
+        out = f'MetaViewer at {self._root}:\n'
         for i, meta in enumerate(self.metas):
             out += '-' * 20 + '\n'
             out += f'  Meta {i}:\n'
@@ -96,21 +96,21 @@ class MetaViewer:
        Dumps obj to name
        """
         self.metas.append(obj)
-        self.mh.write(name, obj)
+        self._mh.write(name, obj)
 
     def read(self, path) -> List[Dict]:
         """
         Loads object from path
         """
-        return self.mh.read(path)
+        return self._mh.read(path)
 
     def _filter(self, meta):
         meta = meta[-1]  # Takes last meta
-        for key in self.filt:
+        for key in self._filt:
             if key not in meta:
                 raise KeyError(f"'{key}' key is not in\n{meta}")
             
-            if self.filt[key] != meta[key]:
+            if self._filt[key] != meta[key]:
                 return False
         return True
 

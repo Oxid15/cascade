@@ -27,7 +27,7 @@ class Validator(Modifier):
     """
     def __init__(self, dataset: Dataset, func: Callable[[Any], bool], **kwargs) -> None:
         super().__init__(dataset, **kwargs)
-        self.func = func
+        self._func = func
 
 
 class AggregateValidator(Validator):
@@ -43,8 +43,8 @@ class AggregateValidator(Validator):
     def __init__(self, dataset: Dataset, func: Callable[[Dataset], bool], **kwargs) -> None:
         super().__init__(dataset, func, **kwargs)
 
-        if not self.func(self._dataset):
-            raise DataValidationException(f'{repr(self._dataset)} fails on {repr(self.func)}')
+        if not self._func(self._dataset):
+            raise DataValidationException(f'{repr(self._dataset)} fails on {repr(self._func)}')
         else:
             print('OK!')
 
@@ -64,7 +64,7 @@ class PredicateValidator(Validator):
         super().__init__(dataset, func, **kwargs)
         bad_items = []
         for i, item in tqdm(enumerate(self._dataset), desc='Checking', leave=False):
-            if not self.func(item):
+            if not self._func(item):
                 bad_items.append(i)
 
         if len(bad_items):
