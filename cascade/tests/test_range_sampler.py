@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from ast import Assert
 import os
 import sys
 import pytest
@@ -25,24 +26,28 @@ from cascade.data import RangeSampler, Wrapper
 
 
 def test():
-    data = [0, 1, 2, 3, 4]
-    ds = Wrapper(data)
-    ds = RangeSampler(ds, 2)
+   data = [0, 1, 2, 3, 4]
+   ds = Wrapper(data)
+   ds = RangeSampler(ds, 2)
 
-    sampled = [item for item in ds]
+   sampled = [item for item in ds]
 
-    assert sampled == [data[i] for i in range(2)]
+   assert sampled == [data[i] for i in range(2)]
 
-    ds = Wrapper(data)
-    ds = RangeSampler(ds, 1, 3)
+   ds = Wrapper(data)
+   ds = RangeSampler(ds, 1, 3)
 
-    sampled = [item for item in ds]
+   sampled = [item for item in ds]
 
-    assert sampled == [data[i] for i in range(1, 3)]
+   assert sampled == [data[i] for i in range(1, 3)]
 
-    ds = Wrapper(data)
-    ds = RangeSampler(ds, 0, len(ds), 2)
+   ds = Wrapper(data)
+   ds = RangeSampler(ds, 0, len(ds), 2)
 
-    sampled = [item for item in ds]
+   sampled = [item for item in ds]
 
-    assert sampled == [data[i] for i in range(0, len(data), 2)]
+   assert sampled == [data[i] for i in range(0, len(data), 2)]
+
+   with pytest.raises(AssertionError):
+      ds = Wrapper(data)
+      ds = RangeSampler(data, 10, 0) # start > stop -> num_samples == 0
