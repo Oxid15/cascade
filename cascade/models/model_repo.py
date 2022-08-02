@@ -93,15 +93,15 @@ class ModelRepo(Repo):
 
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
-            # Can create MV only if path already exists
-            self._mv = MetaViewer(self.root)
+            # Can create MeV only if path already exists
+            self._mev = MetaViewer(self.root)
             self.lines = {name: ModelLine(os.path.join(self.root, name),
                                           meta_prefix=self._meta_prefix)
                           for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
         else:
             os.mkdir(self.root)
             # Here the same with MV
-            self._mv = MetaViewer(self.root)
+            self._mev = MetaViewer(self.root)
             self.lines = dict()
 
         self.logger = logging.getLogger(folder)
@@ -171,15 +171,15 @@ class ModelRepo(Repo):
 
         meta = {}
         if os.path.exists(meta_path):
-            meta = self._mv.read(meta_path)[0]
+            meta = self._mev.read(meta_path)[0]
 
         self.logger.info(DeepDiff(
             meta,
-            self._mv.obj_to_dict(self.get_meta()[0])).pretty()
+            self._mev.obj_to_dict(self.get_meta()[0])).pretty()
         )
 
         meta.update(self.get_meta()[0])
-        self._mv.write(meta_path, [meta])
+        self._mev.write(meta_path, [meta])
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
