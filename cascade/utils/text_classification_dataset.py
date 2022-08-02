@@ -35,34 +35,34 @@ class TextClassificationDataset(Dataset):
             In each folder should be only one class of texts.
         """
         super().__init__(**kwargs)
-        self.encoding = encoding
-        self.root = os.path.abspath(path)
-        folders = os.listdir(self.root)
-        self.paths = []
-        self.labels = []
+        self._encoding = encoding
+        self._root = os.path.abspath(path)
+        folders = os.listdir(self._root)
+        self._paths = []
+        self._labels = []
         for i, folder in enumerate(folders):
-            files = [name for name in os.listdir(os.path.join(self.root, folder))]
-            self.paths += [os.path.join(self.root, folder, f) for f in files]
-            self.labels += [i for _ in range(len(files))]
+            files = [name for name in os.listdir(os.path.join(self._root, folder))]
+            self._paths += [os.path.join(self._root, folder, f) for f in files]
+            self._labels += [i for _ in range(len(files))]
 
         print(f'Found {len(folders)} classes: \
-            {[(folder, len(os.listdir(os.path.join(self.root, folder)))) for folder in folders]}')
+            {[(folder, len(os.listdir(os.path.join(self._root, folder)))) for folder in folders]}')
 
     def __getitem__(self, index):
-        with open(self.paths[index], 'r', encoding=self.encoding) as f:
+        with open(self._paths[index], 'r', encoding=self._encoding) as f:
             text = ' '.join(f.readlines())
-            label = self.labels[index]
+            label = self._labels[index]
         return text, label
 
     def __len__(self):
-        return len(self.paths)
+        return len(self._paths)
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
                 'name': repr(self),
                 'size': len(self),
-                'root': self.root,
-                'labels': np.unique(self.labels).tolist()
+                'root': self._root,
+                'labels': np.unique(self._labels).tolist()
             })
         return meta

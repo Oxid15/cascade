@@ -61,10 +61,10 @@ class TimeSeriesDataset(Dataset):
         time = time[index]
         data = data[index]
 
-        self.time = time
-        self.num_idx = [i for i in range(len(data))]
-        index = pd.MultiIndex.from_frame(pd.DataFrame(self.time, self.num_idx))
-        self.table = pd.DataFrame(data, index=index)
+        self._time = time
+        self._num_idx = [i for i in range(len(data))]
+        index = pd.MultiIndex.from_frame(pd.DataFrame(self._time, self._num_idx))
+        self._table = pd.DataFrame(data, index=index)
         super().__init__(*args, **kwargs)
 
     def to_numpy(self):
@@ -74,7 +74,7 @@ class TimeSeriesDataset(Dataset):
         data: np.ndarray
             np.array of data.
         """
-        return self.table.to_numpy().T[0]
+        return self._table.to_numpy().T[0]
 
     def to_pandas(self):
         """
@@ -83,7 +83,7 @@ class TimeSeriesDataset(Dataset):
         data: pd.DataFrame
             table with time as index
         """
-        return pd.DataFrame(self.to_numpy(), index=self.time)
+        return pd.DataFrame(self.to_numpy(), index=self._time)
 
     def get_data(self):
         """
@@ -92,24 +92,24 @@ class TimeSeriesDataset(Dataset):
         data: tuple(time, data)
             (time as it is and data as np.array)
         """
-        return self.time, self.to_numpy()
+        return self._time, self.to_numpy()
 
     def _get_slice(self, index):
         # If date slice
         if isinstance(index.start, datetime) or isinstance(index.stop, datetime):
-            start = np.where(self.time == index.start)[0][0] \
+            start = np.where(self._time == index.start)[0][0] \
                 if index.start is not None else None
-            stop = np.where(self.time == index.stop)[0][0] \
+            stop = np.where(self._time == index.stop)[0][0] \
                 if index.stop is not None else None
             if stop is not None:
                 stop += 1
 
-            time = self.time[start:stop]
-            data = self.table.loc[index].to_numpy().T[0]
+            time = self._time[start:stop]
+            data = self._table.loc[index].to_numpy().T[0]
         else:
             # If int slice
-            time = self.time[index]
-            data = self.table.iloc[index].to_numpy().T[0]
+            time = self._time[index]
+            data = self._table.iloc[index].to_numpy().T[0]
 
         return TimeSeriesDataset(time=time, data=data)
 
@@ -120,7 +120,7 @@ class TimeSeriesDataset(Dataset):
         if isinstance(index[0], datetime):
             new_time = np.array(index)
         else:
-            new_time = self.time[[i for i in index]]
+            new_time = self._time[[i for i in index]]
 
         new_data = np.zeros(len(index))
         for k, i in enumerate(index):
@@ -133,16 +133,16 @@ class TimeSeriesDataset(Dataset):
                 raise NotImplementedError()
             return self._get_slice(index)
         elif isinstance(index, int):
-            return self.table.iloc[index].item()
+            return self._table.iloc[index].item()
         elif isinstance(index, datetime):
-            return self.table.loc[index][0].item()
+            return self._table.loc[index][0].item()
         elif isinstance(index, Iterable):
             return self._get_where(index)
         else:
             raise NotImplementedError(f'__getitem__ is not implemented for {type(index)}')
 
     def __len__(self):
-        return len(self.num_idx)
+        return len(self._num_idx)
 
 
 class Average(TimeSeriesDataset, Modifier):
@@ -166,10 +166,11 @@ class Average(TimeSeriesDataset, Modifier):
 
 class Interpolate(TimeSeriesDataset, Modifier):
     def __init__(self, dataset, method='linear', limit_direction='both', **kwargs):
-        t = dataset.table
-        t.index = pd.Index(dataset.time)
+        t = dataset.to_pandas()
+        time, _ = dataset.get_data()
+        t.index = pd.Index(time)
         t = t[0].interpolate(method=method, limit_direction=limit_direction)
-        super().__init__(dataset, time=dataset.time, data=t.to_numpy(), **kwargs)
+        super().__init__(dataset, time=time, data=t.to_numpy(), **kwargs)
 
 
 class Align(TimeSeriesDataset, Modifier):

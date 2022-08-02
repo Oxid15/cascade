@@ -52,8 +52,8 @@ class ModelLine(Traceable):
         super().__init__(**kwargs)
 
         assert meta_fmt in ['.json', '.yml'], 'Only .json or .yml are supported formats'
-        self.meta_fmt = meta_fmt
-        self.model_cls = model_cls
+        self._meta_fmt = meta_fmt
+        self._model_cls = model_cls
         self.root = folder
         self.model_names = []
         if os.path.exists(self.root):
@@ -80,7 +80,7 @@ class ModelLine(Traceable):
             model: Model
                 a loaded model
         """
-        model = self.model_cls()
+        model = self._model_cls()
         model.load(os.path.join(self.root, self.model_names[num]))
         return model
 
@@ -142,19 +142,19 @@ class ModelLine(Traceable):
         self.model_names.append(os.path.join(folder_name, 'model'))
 
         # Save model's meta
-        self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta' + self.meta_fmt), meta)
+        self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta' + self._meta_fmt), meta)
 
         # Save updated line's meta
-        self.meta_viewer.write(os.path.join(self.root, 'meta' + self.meta_fmt), self.get_meta())
+        self.meta_viewer.write(os.path.join(self.root, 'meta' + self._meta_fmt), self.get_meta())
 
     def __repr__(self) -> str:
-        return f'ModelLine of {len(self)} models of {self.model_cls}'
+        return f'ModelLine of {len(self)} models of {self._model_cls}'
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
             'root': self.root,
-            'model_cls': repr(self.model_cls),
+            'model_cls': repr(self._model_cls),
             'len': len(self),
             'updated_at': pendulum.now(tz='UTC'),
             'type': 'line'

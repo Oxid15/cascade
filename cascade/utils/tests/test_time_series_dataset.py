@@ -27,8 +27,9 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.utils import TimeSeriesDataset, Average, Interpolate, Align
 
+
 @pytest.mark.parametrize(
-    'arr',[
+    'arr', [
         [d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')],
         [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],
         [datetime(1922, 1, 2)]
@@ -40,8 +41,9 @@ def test_create_lists(arr):
     data = [i for i in range(len(time))]
     ts = TimeSeriesDataset(time=time, data=data)
 
+
 @pytest.mark.parametrize(
-    'arr',[
+    'arr', [
         np.array([d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')]),
         np.array([datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)]),
         np.array([datetime(1922, 1, 2)])
@@ -55,7 +57,7 @@ def test_create_arrays(arr):
 
 
 @pytest.mark.parametrize(
-    'arr',[
+    'arr', [
         [d.to_pydatetime() for d in pd.date_range(datetime(2000, 1, 1), datetime(2000, 1, 10), freq='1d')],
         [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],
         [datetime(1922, 1, 2)]
@@ -129,6 +131,7 @@ def test_get_datetime():
         items.append(ts[t])
     assert(items == [1, 2, 3])
 
+
 def test_slice_int():
     time = np.array([datetime(2001, 1, 1),
                      datetime(2001, 1, 2),
@@ -155,6 +158,7 @@ def test_slice_int():
     for i in range(len(sl)):
         items.append(sl[i])
     assert(items == [3, 4, 5])
+
 
 def test_slice_datetime():
     time = np.array([datetime(2001, 1, 1),

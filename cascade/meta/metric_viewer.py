@@ -38,10 +38,10 @@ class MetricViewer:
         repo: ModelRepo
             ModelRepo object to extract metrics from
         """
-        self.repo = repo
+        self._repo = repo
 
-        self.metrics = []
-        for line in self.repo:
+        self._metrics = []
+        for line in self._repo:
             viewer_root = line.root
 
             # Try to use viewer only on models using type key
@@ -77,8 +77,8 @@ class MetricViewer:
                 if 'params' in meta:
                     metric.update(meta['params'])
 
-                self.metrics.append(metric)
-        self.table = pd.DataFrame(self.metrics)
+                self._metrics.append(metric)
+        self.table = pd.DataFrame(self._metrics)
 
     def __repr__(self) -> str:
         return repr(self.table)
@@ -137,7 +137,7 @@ class MetricViewer:
 
         app.layout = html.Div([
             html.H1(
-                children=f'MetricViewer in {self.repo.root}',
+                children=f'MetricViewer in {self._repo.root}',
                 style={
                     'textAlign': 'center',
                     'color': '#084c61',

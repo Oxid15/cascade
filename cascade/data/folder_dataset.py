@@ -16,9 +16,10 @@ class FolderDataset(Dataset):
     """
     def __init__(self, root, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.root = os.path.abspath(root)
-        assert os.path.exists(self.root)
-        self.names = [os.path.join(self.root, name) for name in sorted(os.listdir(self.root)) if not os.path.isdir(name)]
+        self._root = os.path.abspath(root)
+        assert os.path.exists(self._root)
+        self._names = [os.path.join(self._root, name)
+                       for name in sorted(os.listdir(self._root)) if not os.path.isdir(name)]
 
     def __getitem__(self, item) -> T:
         raise NotImplementedError()
@@ -28,14 +29,14 @@ class FolderDataset(Dataset):
         meta[0].update({
             'name': repr(self),
             'len': len(self),
-            'paths': self.names,
+            'paths': self._names,
             'md5sums': []
         })
 
-        for name in self.names:
-            with open(os.path.join(self.root, name), 'rb') as f:
+        for name in self._names:
+            with open(os.path.join(self._root, name), 'rb') as f:
                 meta[0]['md5sums'].append(md5(f.read()).hexdigest())
         return meta
 
     def __len__(self):
-        return len(self.names)
+        return len(self._names)

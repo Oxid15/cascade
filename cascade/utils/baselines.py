@@ -26,19 +26,19 @@ class ConstantBaseline(BasicModel):
     """
     def __init__(self, constant=None, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.constant = constant
+        self._constant = constant
 
     def fit(self, x, y, *args, **kwargs) -> None:
         pass
 
     def predict(self, x, *args, **kwargs):
-        return np.full_like(x, self.constant)
+        return np.full_like(x, self._constant)
 
     def save(self, path) -> None:
         with open(path, 'w') as f:
-            json.dump({'constant': self.constant}, f)
+            json.dump({'constant': self._constant}, f)
 
     def load(self, path) -> None:
         with open(path, 'r') as f:
             obj = json.load(f)
-            self.constant = obj['constant']
+            self._constant = obj['constant']

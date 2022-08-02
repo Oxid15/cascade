@@ -41,28 +41,28 @@ class SequentialCacher(Modifier):
         # TODO: make something to release this assert
         assert hasattr(dataset, '__len__'), 'Dataset should have __len__'
         super().__init__(dataset, *args, **kwargs)
-        self.bs = batch_size
-        self.num_batches = int(ceil(len(self._dataset) / self.bs))
-        self.index = -1
-        self.batch = None
+        self._bs = batch_size
+        self._num_batches = int(ceil(len(self._dataset) / self._bs))
+        self._index = -1
+        self._batch = None
 
     def _load(self, index) -> None:
-        del self.batch
-        self.batch = []
+        del self._batch
+        self._batch = []
 
-        start = index * self.bs
-        end = min(start + self.bs, len(self._dataset))
+        start = index * self._bs
+        end = min(start + self._bs, len(self._dataset))
 
         for i in range(start, end):
-            self.batch.append(self._dataset[i])
+            self._batch.append(self._dataset[i])
 
-        self.index += 1
+        self._index += 1
 
     def __getitem__(self, index) -> T:
-        batch_index = index // self.bs
-        in_batch_idx = index % self.bs
+        batch_index = index // self._bs
+        in_batch_idx = index % self._bs
 
-        if batch_index != self.index:
+        if batch_index != self._index:
             self._load(batch_index)
 
-        return self.batch[in_batch_idx]
+        return self._batch[in_batch_idx]

@@ -36,9 +36,9 @@ class RandomSampler(Sampler):
         if num_samples is None:
             num_samples = len(dataset)
         super().__init__(dataset, num_samples, **kwargs)
-        self.indices = [i for i in range(len(dataset))]
-        shuffle(self.indices)
-        self.indices = self.indices[:num_samples]
+        self._indices = [i for i in range(len(dataset))]
+        shuffle(self._indices)
+        self._indices = self._indices[:num_samples]
 
     def __getitem__(self, index):
-        return super().__getitem__(self.indices[index])
+        return super().__getitem__(self._indices[index])

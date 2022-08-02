@@ -65,16 +65,16 @@ class MetaValidator(Validator):
             default is './.cascade'
         """
         super().__init__(dataset, lambda x: True)
-        self.mh = MetaHandler()
+        self._mh = MetaHandler()
         if root is None:
             root = './.cascade'
             os.makedirs(root, exist_ok=True)
-        self.root = root
+        self._root = root
 
         meta = self._dataset.get_meta()
         name = md5(str.encode(' '.join([m['name'] for m in meta]), 'utf-8')).hexdigest()
         name += '.json'
-        name = os.path.join(self.root, name)
+        name = os.path.join(self._root, name)
 
         if os.path.exists(name):
             self.base_meta = self._load(name)
@@ -83,11 +83,11 @@ class MetaValidator(Validator):
             self._save(meta, name)
 
     def _save(self, meta, name) -> None:
-        self.mh.write(name, meta)
+        self._mh.write(name, meta)
         print(f'Saved as {name}!')
 
     def _load(self, name) -> dict:
-        return self.mh.read(name)
+        return self._mh.read(name)
 
     def _check(self, query_meta):
         diff = DeepDiff(self.base_meta, query_meta, verbose_level=2)
