@@ -40,3 +40,6 @@ def test():
 
     assert([item for item in ds1] == [0, 1, 2, 3])
     assert([item for item in ds2] == [4])
+
+    # This means pipeline was made
+    assert len(ds1.get_meta()) == 2
