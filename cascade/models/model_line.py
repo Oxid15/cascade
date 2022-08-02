@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import List, Dict
 import pendulum
 import glob
@@ -56,15 +57,17 @@ class ModelLine(Traceable):
         self.root = folder
         self.model_names = []
         if os.path.exists(self.root):
-            assert os.path.isdir(folder)
-            for root, dirs, files in os.walk(self.root):
-                model_dir = os.path.split(root)[-1]
-                self.model_names \
-                    += [os.path.join(model_dir, name)
-                        for name in files
-                        if os.path.splitext(name)[0] == 'model']
-                self.model_names = sorted(self.model_names)
+            assert os.path.isdir(self.root), f'folder should be directory, got `{folder}`'
+            self.model_names = sorted(
+                [d for d in os.listdir(self.root) 
+                    if os.path.isdir(os.path.join(self.root, d))])
+
+            if len(self.model_names) == 0:
+                warnings.warn('Model folders were not found by the line. It may be that '
+                              'you are using new version of cascade with old repos '
+                              'created before version 0.2.0')
         else:
+            # No folder -> create
             os.mkdir(self.root)
         self.meta_viewer = MetaViewer(self.root)
 
@@ -89,9 +92,9 @@ class ModelLine(Traceable):
         """
         return len(self.model_names)
 
-    def save(self, model: Model) -> None:
+    def save(self, model: Model, only_meta=False) -> None:
         """
-        Saves a model and its meta data to a line folder.
+        Saves a model and its metadata to a line folder.
         Model is automatically assigned a number and a model is saved
         using Model's method `save` in its own folder.
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
@@ -99,31 +102,44 @@ class ModelLine(Traceable):
         It is Model's responsibility to correctly  assign extension and save its own state.
 
         Additionally, saves ModelLine's meta to the Line's root
+
+        Parameters
+        ----------
+        model: cascade.models.Model
+            Model to be saved
+        only_meta: bool
+            Flag, that indicates whether to save model's binaries. If True saves only metadata.
         """
         idx = len(self.model_names)
         folder_name = f'{idx:0>5d}'
         full_path = os.path.join(self.root, folder_name, 'model')
-        self.model_names.append(os.path.join(folder_name, 'model'))
 
+        # Create model's folder if no
         os.makedirs(os.path.join(self.root, folder_name), exist_ok=True)
-        model.save(full_path)
 
-        # Find anything that matches /path/model_folder/model*
-        exact_filename = glob.glob(f'{full_path}*')
-
-        assert len(exact_filename) > 0, 'Model file was\'nt found.\n \
-            It may be that Model didn\'t save itself, or the name of the file \
-                didn\'t match "model*"'
-
-        exact_filename = exact_filename[0]
-        with open(exact_filename, 'rb') as f:
-            md5sum = md5(f.read()).hexdigest()
-
+        # Prepare meta for saving
         meta = model.get_meta()
 
-        meta[-1]['name'] = exact_filename
-        meta[-1]['md5sum'] = md5sum
+        if not only_meta:
+            # Save model
+            model.save(full_path)
+
+            # Find anything that matches /path/model_folder/model*
+            exact_filename = glob.glob(f'{full_path}*')
+
+            assert len(exact_filename) > 0, 'Model file was\'nt found.\n '
+            'It may be that Model didn\'t save itself when save() was called,'
+            'or the name of the file didn\'t match "model*"'
+
+            exact_filename = exact_filename[0]
+            with open(exact_filename, 'rb') as f:
+                md5sum = md5(f.read()).hexdigest()
+
+            meta[-1]['name'] = exact_filename
+            meta[-1]['md5sum'] = md5sum
+
         meta[-1]['saved_at'] = pendulum.now(tz='UTC')
+        self.model_names.append(os.path.join(folder_name, 'model'))
 
         # Save model's meta
         self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta' + self.meta_fmt), meta)
