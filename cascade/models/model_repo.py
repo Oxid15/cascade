@@ -95,9 +95,9 @@ class ModelRepo(Repo):
             assert os.path.isdir(folder)
             # Can create MeV only if path already exists
             self._mev = MetaViewer(self.root)
-            self.lines = {name: ModelLine(os.path.join(self.root, name),
-                                          meta_prefix=self._meta_prefix)
-                          for name in os.listdir(self.root) if os.path.isdir(os.path.join(self.root, name))}
+            self.lines = {name: ModelLine(os.path.join(self.root, name), meta_prefix=self._meta_prefix)
+                          for name in sorted(os.listdir(self.root))
+                            if os.path.isdir(os.path.join(self.root, name))}
         else:
             os.mkdir(self.root)
             # Here the same with MV
