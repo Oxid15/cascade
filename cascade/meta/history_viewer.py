@@ -187,3 +187,45 @@ class HistoryViewer:
             fig.show()
 
         return fig
+
+    def serve(self, metric, **kwargs):
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+            Cannot import dash. It is conditional 
+            dependency you can install it 
+            using the instructions from https://dash.plotly.com/installation''')
+        else:
+            from dash import Input, Output, html, dcc, dash_table
+            from ..models import ModelRepo
+
+        app = dash.Dash()
+        fig = self.plot(metric)
+
+        app.layout = html.Div([
+            html.H1(
+                children=f'HistoryViewer in {self._repo.root}',
+                style={
+                    'textAlign': 'center',
+                    'color': '#084c61',
+                    'font-family': 'Montserrat'
+                }
+            ),
+            dcc.Graph(
+                id='history-figure',
+                figure=fig),
+            dcc.Interval(
+                id='history-interval',
+                interval=1000*3)
+        ])
+
+        @app.callback(Output('history-figure', 'figure'), 
+            Input('history-interval', 'n_intervals'))
+        def update_history(n_intervals):
+            self._repo = ModelRepo(self._repo.root)
+            self._make_table()
+            return self.plot(metric)
+
+        app.run_server(use_reloader=False, **kwargs)
