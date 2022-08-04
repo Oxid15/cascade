@@ -181,8 +181,8 @@ class MetricViewer:
             if x is not None and y is not None:
                 fig.add_trace(
                     go.Scatter(
-                        x=df[x],
-                        y=df[y],
+                        x=df_flatten[x],
+                        y=df_flatten[y],
                         mode='markers'
                     )
                 )
