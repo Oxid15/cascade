@@ -46,10 +46,14 @@ class HistoryViewer:
             For each line constraints the number of models back from the last one to view
         """
         self._repo = repo
+        self._last_lines = last_lines 
+        self._last_models = last_models
+        self._make_table()
 
+    def _make_table(self):
         metas = []
         self._params = []
-        for line in [*self._repo][::-1][:last_lines]:
+        for line in [*self._repo][::-1][:self._last_lines]:
             # Try to use viewer only on models using type key
             try:
                 view = MetaViewer(line.root, filt={'type': 'model'})
@@ -63,7 +67,7 @@ class HistoryViewer:
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
-            for i in range(len(line.model_names))[:last_models]:
+            for i in range(len(line.model_names))[:self._last_models]:
                 new_meta = {'line': line.root, 'num': i}
                 new_meta.update(flatten(view[i][-1]))
                 metas.append(new_meta)
@@ -99,7 +103,7 @@ class HistoryViewer:
                 arg_min = i
         return arg_min
 
-    def plot(self, metric: str) -> None:
+    def plot(self, metric: str, show=False) -> None:
         """
         Plots training history of model versions using plotly.
 
@@ -179,4 +183,49 @@ class HistoryViewer:
                 tickvals=[i for i in range(len(time))],
                 ticktext=time_text
             ))
-        fig.show()
+        if show:
+            fig.show()
+
+        return fig
+
+    def serve(self, metric, **kwargs):
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+            Cannot import dash. It is conditional 
+            dependency you can install it 
+            using the instructions from https://dash.plotly.com/installation''')
+        else:
+            from dash import Input, Output, html, dcc, dash_table
+            from ..models import ModelRepo
+
+        app = dash.Dash()
+        fig = self.plot(metric)
+
+        app.layout = html.Div([
+            html.H1(
+                children=f'HistoryViewer in {self._repo.root}',
+                style={
+                    'textAlign': 'center',
+                    'color': '#084c61',
+                    'font-family': 'Montserrat'
+                }
+            ),
+            dcc.Graph(
+                id='history-figure',
+                figure=fig),
+            dcc.Interval(
+                id='history-interval',
+                interval=1000*3)
+        ])
+
+        @app.callback(Output('history-figure', 'figure'), 
+            Input('history-interval', 'n_intervals'))
+        def update_history(n_intervals):
+            self._repo = ModelRepo(self._repo.root)
+            self._make_table()
+            return self.plot(metric)
+
+        app.run_server(use_reloader=False, **kwargs)

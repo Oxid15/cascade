@@ -39,7 +39,9 @@ class MetricViewer:
             ModelRepo object to extract metrics from
         """
         self._repo = repo
+        self._make_table()
 
+    def _make_table(self):
         self._metrics = []
         for line in self._repo:
             viewer_root = line.root
@@ -112,6 +114,74 @@ class MetricViewer:
         exclude List[str], optional:
             List of parameters or metrics to be excluded from table.
         """
+        def _layout():
+            self._repo = ModelRepo(self._repo.root)
+            self._make_table()
+
+            df = self.table
+            if exclude is not None:
+                df = df.drop(exclude, axis=1)
+
+            if include is not None:
+                df = df[['line', 'num'] + include]
+
+            df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
+            dep_fig = go.Figure()
+
+            @app.callback(
+                Output(component_id='dependence-figure', component_property='figure'),
+                Input(component_id='dropdown-x', component_property='value'),
+                Input(component_id='dropdown-y', component_property='value')
+            )
+            def _update_graph(x, y):
+                fig = go.Figure()
+                if x is not None and y is not None:
+                    fig.add_trace(
+                        go.Scatter(
+                            x=df_flatten[x],
+                            y=df_flatten[y],
+                            mode='markers'
+                        )
+                    )
+                    fig.update_layout(title=f'{x} to {y} relation')
+                return fig
+
+            return html.Div([
+                html.H1(
+                    children=f'MetricViewer in {self._repo.root}',
+                    style={
+                        'textAlign': 'center',
+                        'color': '#084c61',
+                        'font-family': 'Montserrat'
+                    }
+                ),
+                dcc.Dropdown(
+                    list(df_flatten.columns),
+                    id='dropdown-x',
+                    multi=False),
+                dcc.Dropdown(
+                    list(df_flatten.columns),
+                    id='dropdown-y',
+                    multi=False),
+                dcc.Graph(
+                    id='dependence-figure',
+                    figure=dep_fig),
+                dash_table.DataTable(
+                    columns=[
+                        {'name': col, 'id': col, 'selectable': True} for col in df_flatten.columns
+                    ],
+                    data=df_flatten.to_dict('records'),
+                    filter_action="native",
+                    sort_action="native",
+                    sort_mode="multi",
+                    selected_columns=[],
+                    selected_rows=[],
+                    page_action="native",
+                    page_current=0,
+                    page_size=page_size,
+                )
+            ])
+
         # Conditional import
         try:
             import dash
@@ -122,71 +192,8 @@ class MetricViewer:
             using the instructions from https://dash.plotly.com/installation''')
         else:
             from dash import Input, Output, html, dcc, dash_table
-
-        df = self.table
-        if exclude is not None:
-            df = df.drop(exclude, axis=1)
-
-        if include is not None:
-            df = df[['line', 'num'] + include]
-
-        df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
+            from ..models import ModelRepo
 
         app = dash.Dash()
-        dep_fig = go.Figure()
-
-        app.layout = html.Div([
-            html.H1(
-                children=f'MetricViewer in {self._repo.root}',
-                style={
-                    'textAlign': 'center',
-                    'color': '#084c61',
-                    'font-family': 'Montserrat'
-                }
-            ),
-            dcc.Dropdown(
-                list(df_flatten.columns),
-                id='dropdown-x',
-                multi=False),
-            dcc.Dropdown(
-                list(df_flatten.columns),
-                id='dropdown-y',
-                multi=False),
-            dcc.Graph(
-                id='dependence-figure',
-                figure=dep_fig),
-            dash_table.DataTable(
-                columns=[
-                    {'name': col, 'id': col, 'selectable': True} for col in df_flatten.columns
-                ],
-                data=df_flatten.to_dict('records'),
-                filter_action="native",
-                sort_action="native",
-                sort_mode="multi",
-                selected_columns=[],
-                selected_rows=[],
-                page_action="native",
-                page_current=0,
-                page_size=page_size,
-            )
-        ])
-
-        @app.callback(
-            Output(component_id='dependence-figure', component_property='figure'),
-            Input(component_id='dropdown-x', component_property='value'),
-            Input(component_id='dropdown-y', component_property='value')
-        )
-        def _update_graph(x, y):
-            fig = go.Figure()
-            if x is not None and y is not None:
-                fig.add_trace(
-                    go.Scatter(
-                        x=df_flatten[x],
-                        y=df_flatten[y],
-                        mode='markers'
-                    )
-                )
-                fig.update_layout(title=f'{x} to {y} relation')
-            return fig
-
+        app.layout = _layout
         app.run_server(use_reloader=False, **kwargs)
