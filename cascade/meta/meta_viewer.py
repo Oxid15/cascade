@@ -39,8 +39,11 @@ class MetaViewer:
         cascade.meta.ModelRepo
         cascade.meta.MetaHandler
         """
+        supported_formats = ('.json', '.yml')
+
         assert os.path.exists(root)
-        assert meta_fmt in ('.json', '.yml')
+        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
+
         self._root = root
         self._filt = filt
         self._meta_fmt = meta_fmt

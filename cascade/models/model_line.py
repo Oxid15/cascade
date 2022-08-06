@@ -51,7 +51,8 @@ class ModelLine(Traceable):
         """
         super().__init__(**kwargs)
 
-        assert meta_fmt in ('.json', '.yml'), 'Only .json or .yml are supported formats'
+        supported_formats = ('.json', '.yml')
+        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
         self._meta_fmt = meta_fmt
         self._model_cls = model_cls
         self.root = folder
