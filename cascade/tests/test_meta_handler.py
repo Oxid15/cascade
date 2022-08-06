@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+from json import JSONDecodeError
 import pendulum
 import numpy as np
 import pytest
@@ -36,18 +37,18 @@ def test(tmp_path, ext):
     tmp_path = str(tmp_path)
     mh = MetaHandler()
     mh.write(os.path.join(tmp_path, 'meta' + ext),
-    {
-        'name': 'test_mh',
-        'array': np.zeros(4),
-        'none': None,
-        'date': pendulum.now(tz='UTC')
-    })
+             {
+                 'name': 'test_mh',
+                 'array': np.zeros(4),
+                 'none': None,
+                 'date': pendulum.now(tz='UTC')
+             })
 
     obj = mh.read(os.path.join(tmp_path, 'meta' + ext))
 
-    assert(obj['name'] == 'test_mh')
-    assert(obj['array'] == [0, 0, 0, 0])
-    assert(obj['none'] is None)
+    assert (obj['name'] == 'test_mh')
+    assert (obj['array'] == [0, 0, 0, 0])
+    assert (obj['none'] is None)
 
 
 @pytest.mark.parametrize(
@@ -61,17 +62,17 @@ def test_overwrite(tmp_path, ext):
 
     mh = MetaHandler()
     mh.write(
-        tmp_path, 
+        tmp_path,
         {'name': 'first'},
         overwrite=False)
 
     mh.write(
-        tmp_path, 
+        tmp_path,
         {'name': 'second'},
         overwrite=False)
 
     obj = mh.read(tmp_path)
-    assert(obj['name'] == 'first')
+    assert (obj['name'] == 'first')
 
 
 @pytest.mark.parametrize(
@@ -90,4 +91,41 @@ def test_text(tmp_path, ext):
 
     obj = mh.read(tmp_path)
 
-    assert(obj[tmp_path] == info)
+    assert (obj[tmp_path] == info)
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml',
+        '.txt',
+        '.md'
+    ]
+)
+def test_not_exist(ext):
+    mh = MetaHandler()
+
+    # The case of non-existing file
+    with pytest.raises(IOError) as e:
+        mh.read('this_file_does_not_exist' + ext)
+    assert e.typename == 'FileNotFoundError'
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_read_fail(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    mh = MetaHandler()
+
+    # Simulate broken syntax in file
+    filename = os.path.join(tmp_path, 'meta' + ext)
+    with open(filename, 'w') as f:
+        f.write('\t{\t :this file is broken')
+
+    with pytest.raises(IOError) as e:
+        mh.read(filename)
+    assert filename in e.value.args[0]
