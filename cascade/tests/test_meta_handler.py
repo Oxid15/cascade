@@ -126,6 +126,7 @@ def test_read_fail(tmp_path, ext):
     with open(filename, 'w') as f:
         f.write('\t{\t :this file is broken')
 
+    # Test that file path is in error message
     with pytest.raises(IOError) as e:
         mh.read(filename)
     assert filename in e.value.args[0]
