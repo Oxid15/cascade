@@ -23,7 +23,7 @@ class MetaViewer:
     """
     The class to read and write meta data.
     """
-    def __init__(self, root, filt=None) -> None:
+    def __init__(self, root, filt=None, meta_fmt='.json') -> None:
         """
         Parameters
         ----------
@@ -40,13 +40,15 @@ class MetaViewer:
         cascade.meta.MetaHandler
         """
         assert os.path.exists(root)
+        assert meta_fmt in ('.json', '.yml')
         self._root = root
         self._filt = filt
+        self._meta_fmt = meta_fmt
         self._mh = MetaHandler()
 
         names = []
         for root, _, files in os.walk(self._root):
-            names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == '.json']
+            names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == self._meta_fmt]
         names = sorted(names)
 
         self.metas = []

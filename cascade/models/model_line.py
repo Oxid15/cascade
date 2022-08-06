@@ -51,7 +51,7 @@ class ModelLine(Traceable):
         """
         super().__init__(**kwargs)
 
-        assert meta_fmt in ['.json', '.yml'], 'Only .json or .yml are supported formats'
+        assert meta_fmt in ('.json', '.yml'), 'Only .json or .yml are supported formats'
         self._meta_fmt = meta_fmt
         self._model_cls = model_cls
         self.root = folder
@@ -69,7 +69,7 @@ class ModelLine(Traceable):
         else:
             # No folder -> create
             os.mkdir(self.root)
-        self.meta_viewer = MetaViewer(self.root)
+        self.meta_viewer = MetaViewer(self.root, meta_fmt=self._meta_fmt)
 
     def __getitem__(self, num) -> Model:
         """
