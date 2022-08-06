@@ -39,9 +39,9 @@ class MetricViewer:
             ModelRepo object to extract metrics from
         """
         self._repo = repo
-        self._make_table()
+        self.reload_table()
 
-    def _make_table(self):
+    def reload_table(self):
         self._metrics = []
         for line in self._repo:
             viewer_root = line.root
@@ -114,86 +114,112 @@ class MetricViewer:
         exclude List[str], optional:
             List of parameters or metrics to be excluded from table.
         """
-        def _layout():
-            self._repo = ModelRepo(self._repo.root)
-            self._make_table()
+        server = MetricServer(self, page_size=50, include=None, exclude=None, **kwargs)
+        server.serve()
 
-            df = self.table
-            if exclude is not None:
-                df = df.drop(exclude, axis=1)
 
-            if include is not None:
-                df = df[['line', 'num'] + include]
+class MetricServer:
+    def __init__(self, mv, page_size, include, exclude, **kwargs) -> None:
+        self._mv = mv
+        self._page_size = page_size
+        self._include = include
+        self._exclude = exclude
 
-            df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
-            dep_fig = go.Figure()
+    def _update_graph_callback(self, _app):
+        try:
+            from dash import Output, Input
+        except ModuleNotFoundError:
+            self._raise_cannot_import()
 
-            @app.callback(
+        @_app.callback(
                 Output(component_id='dependence-figure', component_property='figure'),
                 Input(component_id='dropdown-x', component_property='value'),
-                Input(component_id='dropdown-y', component_property='value')
-            )
-            def _update_graph(x, y):
-                fig = go.Figure()
-                if x is not None and y is not None:
-                    fig.add_trace(
-                        go.Scatter(
-                            x=df_flatten[x],
-                            y=df_flatten[y],
-                            mode='markers'
-                        )
+                Input(component_id='dropdown-y', component_property='value'))
+        def _update_graph(x, y):
+            fig = go.Figure()
+            if x is not None and y is not None:
+                fig.add_trace(
+                    go.Scatter(
+                        x=self._df_flatten[x],
+                        y=self._df_flatten[y],
+                        mode='markers'
                     )
-                    fig.update_layout(title=f'{x} to {y} relation')
-                return fig
-
-            return html.Div([
-                html.H1(
-                    children=f'MetricViewer in {self._repo.root}',
-                    style={
-                        'textAlign': 'center',
-                        'color': '#084c61',
-                        'font-family': 'Montserrat'
-                    }
-                ),
-                dcc.Dropdown(
-                    list(df_flatten.columns),
-                    id='dropdown-x',
-                    multi=False),
-                dcc.Dropdown(
-                    list(df_flatten.columns),
-                    id='dropdown-y',
-                    multi=False),
-                dcc.Graph(
-                    id='dependence-figure',
-                    figure=dep_fig),
-                dash_table.DataTable(
-                    columns=[
-                        {'name': col, 'id': col, 'selectable': True} for col in df_flatten.columns
-                    ],
-                    data=df_flatten.to_dict('records'),
-                    filter_action="native",
-                    sort_action="native",
-                    sort_mode="multi",
-                    selected_columns=[],
-                    selected_rows=[],
-                    page_action="native",
-                    page_current=0,
-                    page_size=page_size,
                 )
-            ])
+                fig.update_layout(title=f'{x} to {y} relation')
+            return fig
 
+
+    def _layout(self):
+        try:
+            from dash import html, dcc, dash_table
+        except ModuleNotFoundError:
+            self._raise_cannot_import()
+        else:
+            from ..models import ModelRepo
+
+        self._repo = ModelRepo(self._mv._repo.root)
+        self._mv.reload_table()
+
+        df = self._mv.table
+        if self._exclude is not None:
+            df = df.drop(self._exclude, axis=1)
+
+        if self._include is not None:
+            df = df[['line', 'num'] + self._include]
+
+        self._df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
+        dep_fig = go.Figure()
+
+        return html.Div([
+            html.H1(
+                children=f'MetricViewer in {self._repo.root}',
+                style={
+                    'textAlign': 'center',
+                    'color': '#084c61',
+                    'font-family': 'Montserrat'
+                }
+            ),
+            dcc.Dropdown(
+                list(self._df_flatten.columns),
+                id='dropdown-x',
+                multi=False),
+            dcc.Dropdown(
+                list(self._df_flatten.columns),
+                id='dropdown-y',
+                multi=False),
+            dcc.Graph(
+                id='dependence-figure',
+                figure=dep_fig),
+            dash_table.DataTable(
+                columns=[
+                    {'name': col, 'id': col, 'selectable': True} for col in self._df_flatten.columns
+                ],
+                data=self._df_flatten.to_dict('records'),
+                filter_action="native",
+                sort_action="native",
+                sort_mode="multi",
+                selected_columns=[],
+                selected_rows=[],
+                page_action="native",
+                page_current=0,
+                page_size=self._page_size,
+            )
+        ])
+
+    def serve(self, **kwargs):
         # Conditional import
         try:
             import dash
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-            Cannot import dash. It is conditional 
-            dependency you can install it 
-            using the instructions from https://dash.plotly.com/installation''')
-        else:
-            from dash import Input, Output, html, dcc, dash_table
-            from ..models import ModelRepo
+            self._raise_cannot_import()
 
         app = dash.Dash()
-        app.layout = _layout
+        app.layout = self._layout
+        self._update_graph_callback(app)
         app.run_server(use_reloader=False, **kwargs)
+
+    def _raise_cannot_import(self):
+        raise ModuleNotFoundError('''
+                    Cannot import dash. It is conditional 
+                    dependency you can install it 
+                    using the instructions from https://dash.plotly.com/installation''')
