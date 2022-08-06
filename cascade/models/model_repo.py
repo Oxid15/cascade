@@ -127,9 +127,10 @@ class ModelRepo(Repo):
         model_cls:
             A class of models in line. ModelLine uses this class to reconstruct a model
         name:
-            Line's name
+            Line's name. It will be used to name a folder of line.
        """
-        assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
+        assert type(model_cls) == type, f'model_cls argument should be model\'s class, \
+            however `{type(model_cls)}` is received'
 
         folder = os.path.join(self.root, name)
         line = ModelLine(folder, model_cls=model_cls, meta_prefix=self._meta_prefix, **kwargs)
