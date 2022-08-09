@@ -92,5 +92,6 @@ class MetaViewer:
                 return False
         return True
 
-    def obj_to_dict(self, obj):
+    @staticmethod
+    def obj_to_dict(obj):
         return JSONEncoder().obj_to_dict(obj)

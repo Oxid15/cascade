@@ -22,7 +22,7 @@ class PaSchemaValidator(AggregateValidator):
         """
         super().__init__(dataset, func=lambda x: self._validate(x, schema), *args, **kwargs)
 
-    def _validate(self, ds, schema) -> bool:
+    @staticmethod
         try:
             if type(schema) == str:
                 schema = paio.from_yaml(schema)
