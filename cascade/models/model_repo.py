@@ -190,10 +190,9 @@ class ModelRepo(Repo):
             except IOError as e:
                 warnings.warn(f'File reading error ignored: {e}')
 
-        self.logger.info(DeepDiff(
-            meta,
-            self._mev.obj_to_dict(self.get_meta()[0])).pretty()
-        )
+        self_meta = self._mev.obj_to_dict(self.get_meta()[0])
+        diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
+        self.logger.info(diff.pretty())
 
         meta.update(self.get_meta()[0])
         try:
