@@ -36,12 +36,17 @@ class Pickler(Modifier):
             path to the pickled dataset
         dataset: Dataset, optional
             a dataset to be pickled
+
+        Raises
+        ------
+        FileNotFoundError
         """
         super().__init__(dataset, *args, **kwargs)
         self._path = path
 
         if self._dataset is None:
-            assert os.path.exists(self._path)
+            if not os.path.exists(self._path):
+                raise FileNotFoundError(self._path)
             self._load()
         else:
             self._dump()

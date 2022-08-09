@@ -41,7 +41,8 @@ class MetaViewer:
         """
         supported_formats = ('.json', '.yml')
 
-        assert os.path.exists(root)
+        if not os.path.exists(root):
+            raise FileNotFoundError(root)
         assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
 
         self._root = root
