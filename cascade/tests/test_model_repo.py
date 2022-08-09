@@ -65,6 +65,11 @@ def test_overwrite(tmp_path, ext):
     assert(2 == len(repo))
 
 
+# This test is skipped due to its specificity
+# it was created to support old interface where
+# class was the first argument
+# this is not supported and not common for a long time now
+@pytest.mark.skip
 def test_add_line(tmp_path):
     tmp_path = str(tmp_path)
     repo = ModelRepo(tmp_path)
