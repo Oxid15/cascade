@@ -150,3 +150,75 @@ def test_add(tmp_path):
     for name, length in zip(line_names, line_lens):
         line = repo[name]
         assert len(line) == length
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json'
+    ]
+)
+def test_missing_repo_meta(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo_path = os.path.join(tmp_path, 'repo')
+    repo = ModelRepo(repo_path)
+    repo.add_line('0', DummyModel, meta_fmt=ext)
+
+    model = DummyModel()
+
+    repo['0'].save(model)
+
+    # simulate missing meta
+    meta_path = os.path.join(repo_path, 'meta' + ext)
+    os.remove(meta_path)
+
+    repo = ModelRepo(repo_path, lines=[
+        dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
+    model = repo['0'][0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json'
+    ]
+)
+def test_missing_line_meta(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo_path = os.path.join(tmp_path, 'repo')
+    repo = ModelRepo(repo_path)
+    repo.add_line('0', DummyModel, meta_fmt=ext)
+
+    model = DummyModel()
+
+    repo['0'].save(model)
+
+    # simulate missing meta
+    meta_path = os.path.join(repo_path, '0', 'meta' + ext)
+    os.remove(meta_path)
+
+    repo = ModelRepo(repo_path, lines=[
+        dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
+    model = repo['0'][0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json'
+    ]
+)
+def test_missing_model_meta(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo_path = os.path.join(tmp_path, 'repo')
+    repo = ModelRepo(repo_path)
+    repo.add_line('0', DummyModel, meta_fmt=ext)
+
+    model = DummyModel()
+
+    repo['0'].save(model)
+
+    # simulate missing meta
+    meta_path = os.path.join(repo_path, '0', '00000', 'meta' + ext)
+    os.remove(meta_path)
+
+    repo = ModelRepo(repo_path, lines=[
+        dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
+    model = repo['0'][0]
