@@ -3,7 +3,7 @@ from hashlib import md5
 from deepdiff import DeepDiff
 from . import Validator, DataValidationException
 from ..data import Dataset
-from ..base import MetaHandler
+from ..base import MetaHandler, supported_meta_formats
 
 
 class MetaValidator(Validator):
@@ -53,7 +53,7 @@ class MetaValidator(Validator):
     --------
     cascade.data.Modifier
     """
-    def __init__(self, dataset: Dataset, root=None) -> None:
+    def __init__(self, dataset: Dataset, root=None, meta_fmt='.json') -> None:
         """
         Parameters
         ----------
@@ -69,10 +69,11 @@ class MetaValidator(Validator):
             root = './.cascade'
             os.makedirs(root, exist_ok=True)
         self._root = root
+        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
 
         meta = self._dataset.get_meta()
         name = md5(str.encode(' '.join([m['name'] for m in meta]), 'utf-8')).hexdigest()
-        name += '.json'
+        name += meta_fmt
         name = os.path.join(self._root, name)
 
         if os.path.exists(name):
