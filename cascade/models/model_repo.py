@@ -120,27 +120,30 @@ class ModelRepo(Repo):
 
         self._update_meta()
 
-    def add_line(self, name, model_cls, meta_fmt=None, **kwargs):
+    def add_line(self, name, *args, meta_fmt=None, **kwargs):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
 
-        Additionally, updates repo's meta on disk
-        Parameters
-        ----------
-        model_cls:
-            A class of models in line. ModelLine uses this class to reconstruct a model
-        name:
-            Line's name. It will be used to name a folder of line.
+        Supports all the parameters of ModelLine using args and kwargs.
+
+        Parameters:
+            name: str
+                Name of the line. It is used to name a folder of line.
+                Repo prepends it with `self.root` before creating.
+            meta_fmt: str
+                Format of meta files. Supported values are the same as for repo.
+                If omitted, inherits format from repo.
+        See also
+        --------
+            cascade.models.ModelLine
        """
-        assert type(model_cls) == type, f'model_cls argument should be model\'s class, \
-            however `{type(model_cls)}` is received'
 
         folder = os.path.join(self.root, name)
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
         line = ModelLine(folder,
-                         model_cls=model_cls,
+                         *args,
                          meta_prefix=self._meta_prefix,
                          meta_fmt=meta_fmt,
                          **kwargs)
