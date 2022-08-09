@@ -60,8 +60,9 @@ class ModelLine(Traceable):
         if os.path.exists(self.root):
             assert os.path.isdir(self.root), f'folder should be directory, got `{folder}`'
             self.model_names = sorted(
-                [d for d in os.listdir(self.root) 
-                    if os.path.isdir(os.path.join(self.root, d))])
+                [os.path.join(model_folder, 'model')
+                    for model_folder in os.listdir(self.root)
+                    if os.path.isdir(os.path.join(self.root, model_folder))])
 
             if len(self.model_names) == 0:
                 warnings.warn('Model folders were not found by the line. It may be that '
