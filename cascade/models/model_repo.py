@@ -98,6 +98,7 @@ class ModelRepo(Repo):
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(folder)
 
+        self._setup_logger()
         if os.path.exists(self.root):
             assert os.path.isdir(folder)
             # Can create MeV only if path already exists
@@ -112,12 +113,6 @@ class ModelRepo(Repo):
             # Here the same with MV
             self._mev = MetaViewer(self.root)
             self.lines = dict()
-
-        self.logger = logging.getLogger(folder)
-        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
-        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
-        self.logger.addHandler(hdlr)
-        self.logger.setLevel('DEBUG')
 
         if lines is not None:
             for line in lines:
@@ -179,6 +174,13 @@ class ModelRepo(Repo):
     def __repr__(self) -> str:
         rp = f'ModelRepo in {self.root} of {len(self)} lines'
         return ', '.join([rp] + [repr(line) for line in self.lines])
+
+    def _setup_logger(self):
+        self.logger = logging.getLogger(self.root)
+        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
+        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
+        self.logger.addHandler(hdlr)
+        self.logger.setLevel('DEBUG')
 
     def _update_meta(self):
         # Reads meta if exists and updates it with new values
