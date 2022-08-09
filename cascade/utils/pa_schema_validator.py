@@ -20,9 +20,10 @@ class PaSchemaValidator(AggregateValidator):
             or path to the YAML file with schema.
             For more details on schemas see pandera's documentation.
         """
-        super().__init__(dataset, func=lambda x: self._validate(x, schema), *args, **kwargs)
+        super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
 
     @staticmethod
+    def _validate(ds, schema) -> bool:
         try:
             if type(schema) == str:
                 schema = paio.from_yaml(schema)

@@ -117,7 +117,7 @@ class MetricViewer:
         **kwargs:
             Arguments of dash app. Can be ip or port for example.
         """
-        server = MetricServer(self, page_size=50, include=None, exclude=None, **kwargs)
+        server = MetricServer(self, page_size=page_size, include=include, exclude=exclude, **kwargs)
         server.serve()
 
 
