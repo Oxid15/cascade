@@ -170,8 +170,7 @@ class ModelRepo(Repo):
         return len(self.lines)
 
     def __repr__(self) -> str:
-        rp = f'ModelRepo in {self.root} of {len(self)} lines'
-        return ', '.join([rp] + [repr(line) for line in self.lines])
+        return f'ModelRepo in {self.root} of {len(self)} lines'
 
     def _setup_logger(self):
         self.logger = logging.getLogger(self.root)
