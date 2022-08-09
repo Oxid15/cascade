@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import json
-from typing import Union, Dict, List
+from typing import Union
 import datetime
 from typing import List, Dict
 from json import JSONEncoder
