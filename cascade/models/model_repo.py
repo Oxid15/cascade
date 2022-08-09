@@ -91,28 +91,23 @@ class ModelRepo(Repo):
         """
         super().__init__(**kwargs)
         self.root = folder
+        self.lines = dict()
 
         supported_formats = ('.json', '.yml')
         assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
         self._meta_fmt = meta_fmt
         if overwrite and os.path.exists(self.root):
-            shutil.rmtree(folder)
+            shutil.rmtree(self.root)
 
+        os.makedirs(self.root, exist_ok=True)
+        # Can create MeV only if path already exists
+        self._mev = MetaViewer(self.root)
+        self.lines = {name: ModelLine(os.path.join(self.root, name),
+                                      meta_prefix=self._meta_prefix,
+                                      meta_fmt=self._meta_fmt)
+                      for name in sorted(os.listdir(self.root))
+                      if os.path.isdir(os.path.join(self.root, name))}
         self._setup_logger()
-        if os.path.exists(self.root):
-            assert os.path.isdir(folder)
-            # Can create MeV only if path already exists
-            self._mev = MetaViewer(self.root)
-            self.lines = {name: ModelLine(os.path.join(self.root, name),
-                                          meta_prefix=self._meta_prefix,
-                                          meta_fmt=self._meta_fmt)
-                          for name in sorted(os.listdir(self.root))
-                          if os.path.isdir(os.path.join(self.root, name))}
-        else:
-            os.mkdir(self.root)
-            # Here the same with MV
-            self._mev = MetaViewer(self.root)
-            self.lines = dict()
 
         if lines is not None:
             for line in lines:
