@@ -123,23 +123,14 @@ class Modifier(Dataset):
             a dataset to modify
         """
         self._dataset = dataset
-        self._index = -1
         super().__init__(*args, **kwargs)
 
     def __getitem__(self, index) -> T:
         return self._dataset[index]
 
     def __iter__(self):
-        self._index = -1
-        return self
-
-    def __next__(self) -> T:
-        if self._index < len(self) - 1:
-            self._index += 1
-            return self[self._index]
-        else:
-            self._index = -1
-            raise StopIteration()
+        for i in range(len(self)):
+            yield self.__getitem__(i)
 
     def __len__(self) -> int:
         return len(self._dataset)
