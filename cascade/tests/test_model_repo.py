@@ -222,3 +222,81 @@ def test_missing_model_meta(tmp_path, ext):
     repo = ModelRepo(repo_path, lines=[
         dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
     model = repo['0'][0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json'
+    ]
+)
+def test_failed_repo_meta(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo_path = os.path.join(tmp_path, 'repo')
+    repo = ModelRepo(repo_path)
+    repo.add_line('0', DummyModel, meta_fmt=ext)
+
+    model = DummyModel()
+
+    repo['0'].save(model)
+
+    # simulate failed meta
+    meta_path = os.path.join(repo_path, 'meta' + ext)
+    assert os.path.exists(meta_path)
+    with open(meta_path, 'w') as f:
+        f.write("\t{{{: 'sorry, i am broken'")
+
+    repo = ModelRepo(repo_path, lines=[
+        dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
+    model = repo['0'][0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json'
+    ]
+)
+def test_failed_line_meta(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo_path = os.path.join(tmp_path, 'repo')
+    repo = ModelRepo(repo_path)
+    repo.add_line('0', DummyModel, meta_fmt=ext)
+
+    model = DummyModel()
+
+    repo['0'].save(model)
+
+    # simulate failed meta
+    meta_path = os.path.join(repo_path, '0', 'meta' + ext)
+    assert os.path.exists(meta_path)
+    with open(meta_path, 'w') as f:
+        f.write("\t{{{: 'sorry, i am broken'")
+
+    repo = ModelRepo(repo_path, lines=[
+        dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
+    model = repo['0'][0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json'
+    ]
+)
+def test_failed_model_meta(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo_path = os.path.join(tmp_path, 'repo')
+    repo = ModelRepo(repo_path)
+    repo.add_line('0', DummyModel, meta_fmt=ext)
+
+    model = DummyModel()
+
+    repo['0'].save(model)
+
+    # simulate failed meta
+    meta_path = os.path.join(repo_path, '0', '00000', 'meta' + ext)
+    assert os.path.exists(meta_path)
+    with open(meta_path, 'w') as f:
+        f.write("\t{{{: 'sorry, i am broken'")
+
+    repo = ModelRepo(repo_path, lines=[
+        dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
+    model = repo['0'][0]

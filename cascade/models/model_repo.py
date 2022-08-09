@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import warnings
 import itertools
 import os
 import logging
@@ -172,7 +173,10 @@ class ModelRepo(Repo):
 
         meta = {}
         if os.path.exists(meta_path):
-            meta = self._mev.read(meta_path)[0]
+            try:
+                meta = self._mev.read(meta_path)[0]
+            except IOError as e:
+                warnings.warn(f'File reading error ignored: {e}')
 
         self.logger.info(DeepDiff(
             meta,
@@ -180,7 +184,10 @@ class ModelRepo(Repo):
         )
 
         meta.update(self.get_meta()[0])
-        self._mev.write(meta_path, [meta])
+        try:
+            self._mev.write(meta_path, [meta])
+        except IOError as e:
+            warnings.warn(f'File writing error ignored: {e}')
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
