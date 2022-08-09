@@ -21,9 +21,8 @@ import pendulum
 import glob
 from hashlib import md5
 
-from ..base import Traceable
+from ..base import Traceable, MetaHandler
 from .model import Model
-from ..meta import MetaViewer
 
 
 class ModelLine(Traceable):
@@ -71,7 +70,7 @@ class ModelLine(Traceable):
         else:
             # No folder -> create
             os.mkdir(self.root)
-        self.meta_viewer = MetaViewer(self.root, meta_fmt=self._meta_fmt)
+        self._mh = MetaHandler()
 
     def __getitem__(self, num) -> Model:
         """
@@ -144,10 +143,10 @@ class ModelLine(Traceable):
         self.model_names.append(os.path.join(folder_name, 'model'))
 
         # Save model's meta
-        self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta' + self._meta_fmt), meta)
+        self._mh.write(os.path.join(self.root, folder_name, 'meta' + self._meta_fmt), meta)
 
         # Save updated line's meta
-        self.meta_viewer.write(os.path.join(self.root, 'meta' + self._meta_fmt), self.get_meta())
+        self._mh.write(os.path.join(self.root, 'meta' + self._meta_fmt), self.get_meta())
 
     def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self._model_cls}'
