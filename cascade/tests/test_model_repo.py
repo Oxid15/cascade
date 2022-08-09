@@ -178,7 +178,8 @@ def test_add(tmp_path):
 
 @pytest.mark.parametrize(
     'ext', [
-        '.json'
+        '.json',
+        '.yml'
     ]
 )
 def test_missing_repo_meta(tmp_path, ext):
@@ -202,14 +203,15 @@ def test_missing_repo_meta(tmp_path, ext):
 
 @pytest.mark.parametrize(
     'ext', [
-        '.json'
+        '.json',
+        '.yml'
     ]
 )
 def test_missing_line_meta(tmp_path, ext):
     tmp_path = str(tmp_path)
     repo_path = os.path.join(tmp_path, 'repo')
-    repo = ModelRepo(repo_path)
-    repo.add_line('0', DummyModel, meta_fmt=ext)
+    repo = ModelRepo(repo_path, meta_fmt=ext)
+    repo.add_line('0', DummyModel)
 
     model = DummyModel()
 
@@ -226,14 +228,15 @@ def test_missing_line_meta(tmp_path, ext):
 
 @pytest.mark.parametrize(
     'ext', [
-        '.json'
+        '.json',
+        '.yml'
     ]
 )
 def test_missing_model_meta(tmp_path, ext):
     tmp_path = str(tmp_path)
     repo_path = os.path.join(tmp_path, 'repo')
-    repo = ModelRepo(repo_path)
-    repo.add_line('0', DummyModel, meta_fmt=ext)
+    repo = ModelRepo(repo_path, meta_fmt=ext)
+    repo.add_line('0', DummyModel)
 
     model = DummyModel()
 
@@ -250,14 +253,15 @@ def test_missing_model_meta(tmp_path, ext):
 
 @pytest.mark.parametrize(
     'ext', [
-        '.json'
+        '.json',
+        '.yml'
     ]
 )
 def test_failed_repo_meta(tmp_path, ext):
     tmp_path = str(tmp_path)
     repo_path = os.path.join(tmp_path, 'repo')
-    repo = ModelRepo(repo_path)
-    repo.add_line('0', DummyModel, meta_fmt=ext)
+    repo = ModelRepo(repo_path, meta_fmt=ext)
+    repo.add_line('0', DummyModel)
 
     model = DummyModel()
 
@@ -276,14 +280,15 @@ def test_failed_repo_meta(tmp_path, ext):
 
 @pytest.mark.parametrize(
     'ext', [
-        '.json'
+        '.json',
+        '.yml'
     ]
 )
 def test_failed_line_meta(tmp_path, ext):
     tmp_path = str(tmp_path)
     repo_path = os.path.join(tmp_path, 'repo')
-    repo = ModelRepo(repo_path)
-    repo.add_line('0', DummyModel, meta_fmt=ext)
+    repo = ModelRepo(repo_path, meta_fmt=ext)
+    repo.add_line('0', DummyModel)
 
     model = DummyModel()
 
@@ -302,14 +307,15 @@ def test_failed_line_meta(tmp_path, ext):
 
 @pytest.mark.parametrize(
     'ext', [
-        '.json'
+        '.json',
+        '.yml'
     ]
 )
 def test_failed_model_meta(tmp_path, ext):
     tmp_path = str(tmp_path)
     repo_path = os.path.join(tmp_path, 'repo')
-    repo = ModelRepo(repo_path)
-    repo.add_line('0', DummyModel, meta_fmt=ext)
+    repo = ModelRepo(repo_path, meta_fmt=ext)
+    repo.add_line('0', DummyModel)
 
     model = DummyModel()
 
