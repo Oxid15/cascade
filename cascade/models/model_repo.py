@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import warnings
 import itertools
 import os
 import logging
@@ -69,7 +70,7 @@ class ModelRepo(Repo):
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
     """
-    def __init__(self, folder, lines=None, overwrite=False, **kwargs):
+    def __init__(self, folder, lines=None, overwrite=False, meta_fmt='.json', **kwargs):
         """
         Parameters
         ----------
@@ -81,6 +82,9 @@ class ModelRepo(Repo):
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
+        meta_fmt: str
+            extension of repo's metadata files and that will be assigned to the lines by default
+            `.json` and `.yml` are supported
         See also
         --------
         cascade.models.ModelLine
@@ -88,6 +92,9 @@ class ModelRepo(Repo):
         super().__init__(**kwargs)
         self.root = folder
 
+        supported_formats = ('.json', '.yml')
+        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
+        self._meta_fmt = meta_fmt
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(folder)
 
@@ -95,9 +102,11 @@ class ModelRepo(Repo):
             assert os.path.isdir(folder)
             # Can create MeV only if path already exists
             self._mev = MetaViewer(self.root)
-            self.lines = {name: ModelLine(os.path.join(self.root, name), meta_prefix=self._meta_prefix)
+            self.lines = {name: ModelLine(os.path.join(self.root, name),
+                                          meta_prefix=self._meta_prefix,
+                                          meta_fmt=self._meta_fmt)
                           for name in sorted(os.listdir(self.root))
-                            if os.path.isdir(os.path.join(self.root, name))}
+                          if os.path.isdir(os.path.join(self.root, name))}
         else:
             os.mkdir(self.root)
             # Here the same with MV
@@ -116,7 +125,7 @@ class ModelRepo(Repo):
 
         self._update_meta()
 
-    def add_line(self, name, model_cls, **kwargs):
+    def add_line(self, name, model_cls, meta_fmt=None, **kwargs):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
@@ -127,12 +136,19 @@ class ModelRepo(Repo):
         model_cls:
             A class of models in line. ModelLine uses this class to reconstruct a model
         name:
-            Line's name
+            Line's name. It will be used to name a folder of line.
        """
-        assert type(model_cls) == type, f'You should pass model\'s class, not {type(model_cls)}'
+        assert type(model_cls) == type, f'model_cls argument should be model\'s class, \
+            however `{type(model_cls)}` is received'
 
         folder = os.path.join(self.root, name)
-        line = ModelLine(folder, model_cls=model_cls, meta_prefix=self._meta_prefix, **kwargs)
+        if meta_fmt is None:
+            meta_fmt = self._meta_fmt
+        line = ModelLine(folder,
+                         model_cls=model_cls,
+                         meta_prefix=self._meta_prefix,
+                         meta_fmt=meta_fmt,
+                         **kwargs)
         self.lines[name] = line
 
         self._update_meta()
@@ -167,11 +183,14 @@ class ModelRepo(Repo):
     def _update_meta(self):
         # Reads meta if exists and updates it with new values
         # writes back to disk
-        meta_path = os.path.join(self.root, 'meta.json')
+        meta_path = os.path.join(self.root, 'meta' + self._meta_fmt)
 
         meta = {}
         if os.path.exists(meta_path):
-            meta = self._mev.read(meta_path)[0]
+            try:
+                meta = self._mev.read(meta_path)[0]
+            except IOError as e:
+                warnings.warn(f'File reading error ignored: {e}')
 
         self.logger.info(DeepDiff(
             meta,
@@ -179,7 +198,10 @@ class ModelRepo(Repo):
         )
 
         meta.update(self.get_meta()[0])
-        self._mev.write(meta_path, [meta])
+        try:
+            self._mev.write(meta_path, [meta])
+        except IOError as e:
+            warnings.warn(f'File writing error ignored: {e}')
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()

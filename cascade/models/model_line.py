@@ -51,7 +51,8 @@ class ModelLine(Traceable):
         """
         super().__init__(**kwargs)
 
-        assert meta_fmt in ['.json', '.yml'], 'Only .json or .yml are supported formats'
+        supported_formats = ('.json', '.yml')
+        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
         self._meta_fmt = meta_fmt
         self._model_cls = model_cls
         self.root = folder
@@ -59,8 +60,9 @@ class ModelLine(Traceable):
         if os.path.exists(self.root):
             assert os.path.isdir(self.root), f'folder should be directory, got `{folder}`'
             self.model_names = sorted(
-                [d for d in os.listdir(self.root) 
-                    if os.path.isdir(os.path.join(self.root, d))])
+                [os.path.join(model_folder, 'model')
+                    for model_folder in os.listdir(self.root)
+                    if os.path.isdir(os.path.join(self.root, model_folder))])
 
             if len(self.model_names) == 0:
                 warnings.warn('Model folders were not found by the line. It may be that '
@@ -69,7 +71,7 @@ class ModelLine(Traceable):
         else:
             # No folder -> create
             os.mkdir(self.root)
-        self.meta_viewer = MetaViewer(self.root)
+        self.meta_viewer = MetaViewer(self.root, meta_fmt=self._meta_fmt)
 
     def __getitem__(self, num) -> Model:
         """

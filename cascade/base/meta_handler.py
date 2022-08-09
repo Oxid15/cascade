@@ -29,6 +29,7 @@ class CustomEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, type):
             return str(obj)
+
         if isinstance(obj, (datetime.datetime, datetime.date, datetime.time)):
             return obj.isoformat()
 
@@ -68,6 +69,12 @@ class BaseHandler:
     def write(self, path, obj, overwrite=True) -> None:
         raise NotImplementedError()
 
+    def _raise_io_error(self, path, exc):
+        # Any file decoding errors will be
+        # prepended with filepath for user
+        # to be able to identify broken file
+        raise IOError(f'Error while reading file `{path}`') from exc
+
 
 class JSONHandler(BaseHandler):
     """
@@ -81,18 +88,26 @@ class JSONHandler(BaseHandler):
         ----------
         path:
             Path to the file. If no extension provided, then .json will be added
+
+        Raises
+        ------
+        IOError
+            when decoding errors occur
         """
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.json'
 
         with open(path, 'r') as meta_file:
-            meta = json.load(meta_file)
-            if isinstance(meta, str):
-                meta = json.loads(meta)
+            try:
+                meta = json.load(meta_file)
+                if isinstance(meta, str):
+                    meta = json.loads(meta)
+            except json.JSONDecodeError as e:
+                self._raise_io_error(path, e)
             return meta
 
-    def write(self, name, obj:List[Dict], overwrite=True) -> None:
+    def write(self, name, obj: List[Dict], overwrite=True) -> None:
         """
         Writes json to path using custom encoder
         """
@@ -112,13 +127,21 @@ class YAMLHandler(BaseHandler):
         ----------
         path:
             Path to the file. If no extension provided, then .yml will be added
+        
+        Raises
+        ------
+        IOError
+            when decoding errors occur
         """
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.yml'
 
         with open(path, 'r') as meta_file:
-            meta = yaml.safe_load(meta_file)
+            try:
+                meta = yaml.safe_load(meta_file)
+            except yaml.YAMLError as e:
+                self._raise_io_error(path, e)
             return meta
 
     def write(self, path, obj, overwrite=True) -> None:
