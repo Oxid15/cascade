@@ -21,7 +21,7 @@ import shutil
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import Traceable
+from ..base import Traceable, supported_meta_formats
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
@@ -93,8 +93,7 @@ class ModelRepo(Repo):
         self.root = folder
         self.lines = dict()
 
-        supported_formats = ('.json', '.yml')
-        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
         if overwrite and os.path.exists(self.root):
             shutil.rmtree(self.root)

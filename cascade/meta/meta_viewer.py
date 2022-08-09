@@ -15,8 +15,8 @@ limitations under the License.
 """
 
 import os
-from typing import List, Dict, Union
-from ..base import MetaHandler, JSONEncoder
+from typing import List, Dict
+from ..base import MetaHandler, JSONEncoder, supported_meta_formats
 
 
 class MetaViewer:
@@ -39,11 +39,9 @@ class MetaViewer:
         cascade.meta.ModelRepo
         cascade.meta.MetaHandler
         """
-        supported_formats = ('.json', '.yml')
-
         if not os.path.exists(root):
             raise FileNotFoundError(root)
-        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
 
         self._root = root
         self._filt = filt

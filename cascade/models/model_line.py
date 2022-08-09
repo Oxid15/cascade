@@ -21,7 +21,7 @@ import pendulum
 import glob
 from hashlib import md5
 
-from ..base import Traceable, MetaHandler
+from ..base import Traceable, MetaHandler, supported_meta_formats
 from .model import Model
 
 
@@ -50,8 +50,7 @@ class ModelLine(Traceable):
         """
         super().__init__(**kwargs)
 
-        supported_formats = ('.json', '.yml')
-        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
         self._model_cls = model_cls
         self.root = folder

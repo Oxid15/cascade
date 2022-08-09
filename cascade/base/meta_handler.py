@@ -25,6 +25,9 @@ import yaml
 import numpy as np
 
 
+supported_meta_formats = ('.json', '.yml')
+
+
 class CustomEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, type):
