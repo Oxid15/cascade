@@ -217,9 +217,10 @@ class ModelRepo(Repo):
 
     def __del__(self):
         # Release all files on destruction
-        for handler in self.logger.handlers:
-            handler.close()
-            self.logger.removeHandler(handler)
+        if hasattr(self, 'logger'):
+            for handler in self.logger.handlers:
+                handler.close()
+                self.logger.removeHandler(handler)
     
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])
