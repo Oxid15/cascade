@@ -39,6 +39,7 @@ class MetricViewer:
             ModelRepo object to extract metrics from
         """
         self._repo = repo
+        self._metrics = []
         self.reload_table()
 
     def reload_table(self):
@@ -109,10 +110,12 @@ class MetricViewer:
         ----------
         page_size:
             Size of the table in rows on one page
-        include List[str], optional:
+        include: List[str], optional:
             List of parameters or metrics to be added. Only them will be present along with some default.
-        exclude List[str], optional:
+        exclude: List[str], optional:
             List of parameters or metrics to be excluded from table.
+        **kwargs:
+            Arguments of dash app. Can be ip or port for example.
         """
         server = MetricServer(self, page_size=50, include=None, exclude=None, **kwargs)
         server.serve()
@@ -147,7 +150,6 @@ class MetricServer:
                 )
                 fig.update_layout(title=f'{x} to {y} relation')
             return fig
-
 
     def _layout(self):
         try:

@@ -22,10 +22,9 @@ class MetaValidator(Validator):
 
     Example
     -------
-    >>> from cascade.tests import NumberDataset
-    >>> from cascade.data import Modifier
+    >>> from cascade.data import Modifier, Wrapper
     >>> from cascade.meta import MetaValidator
-    >>> ds = NumberDataset([1,2,3,4])  # Define dataset
+    >>> ds = Wrapper([1,2,3,4])  # Define dataset
     >>> ds = Modifier(ds)  # Wrap some modifiers
     >>> ds = Modifier(ds)
     >>> MetaValidator(ds) # Add validation by passing ds, but with no assigning to use data later

@@ -21,5 +21,7 @@ class SkClassifier(SkModel):
     """
     Alias for cascade.utils.SkModel remained for compatibility
     """
-    def __init__(self, name=None, blocks=[], **kwargs):
-        raise RuntimeError('SkClassifier is not supported anymore.\n It was an alias of SkModel and doesn\'t have any additional capabilities.\nPlease, replace SkClassifier with SkModel.')
+    def __init__(self, name=None, blocks=None, **kwargs):
+        raise RuntimeError('SkClassifier is not supported anymore.\n'
+                           'It was an alias of SkModel and doesn\'t have any additional capabilities.\n'
+                           'Please, replace SkClassifier with SkModel.')

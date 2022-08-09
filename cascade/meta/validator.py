@@ -36,8 +36,8 @@ class AggregateValidator(Validator):
 
     Example
     -------
-    >>> from cascade.tests.number_dataset import NumberDataset
-    >>> ds = NumberDataset([1, 2, 3, 4, 5])
+    >>> from cascade.data import Wrapper
+    >>> ds = Wrapper([1, 2, 3, 4, 5])
     >>> ds = AggregateValidator(ds, lambda x: len(x) == 5)
     """
     def __init__(self, dataset: Dataset, func: Callable[[Dataset], bool], **kwargs) -> None:
@@ -56,8 +56,8 @@ class PredicateValidator(Validator):
 
     Example
     -------
-    >>> from cascade.tests.number_dataset import NumberDataset
-    >>> ds = NumberDataset([1, 2, 3, 4, 5])
+    >>> from cascade.data import Wrapper
+    >>> ds = Wrapper([1, 2, 3, 4, 5])
     >>> ds = PredicateValidator(ds, lambda x: x < 6)
     """
     def __init__(self, dataset: Dataset, func: Callable[[T], bool], **kwargs) -> None:
