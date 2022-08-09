@@ -32,6 +32,17 @@ def test_repo(tmp_path):
     assert(2 == len(repo))
 
 
+def test_save_load(tmp_path, dummy_model):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path)
+    repo.add_line('0', DummyModel)
+    repo['0'].save(dummy_model)
+
+    repo = ModelRepo(tmp_path, lines=[
+        dict(name='0', model_cls=DummyModel)])
+    model = repo['0'][0]
+
+
 def test_overwrite(tmp_path):
     tmp_path = str(tmp_path)
     # If no overwrite repo will have 4 models
