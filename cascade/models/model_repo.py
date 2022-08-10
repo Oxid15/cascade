@@ -21,7 +21,7 @@ import shutil
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import Traceable
+from ..base import Traceable, supported_meta_formats
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
@@ -91,33 +91,22 @@ class ModelRepo(Repo):
         """
         super().__init__(**kwargs)
         self.root = folder
+        self.lines = dict()
 
-        supported_formats = ('.json', '.yml')
-        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
         if overwrite and os.path.exists(self.root):
-            shutil.rmtree(folder)
+            shutil.rmtree(self.root)
 
-        if os.path.exists(self.root):
-            assert os.path.isdir(folder)
-            # Can create MeV only if path already exists
-            self._mev = MetaViewer(self.root)
-            self.lines = {name: ModelLine(os.path.join(self.root, name),
-                                          meta_prefix=self._meta_prefix,
-                                          meta_fmt=self._meta_fmt)
-                          for name in sorted(os.listdir(self.root))
-                          if os.path.isdir(os.path.join(self.root, name))}
-        else:
-            os.mkdir(self.root)
-            # Here the same with MV
-            self._mev = MetaViewer(self.root)
-            self.lines = dict()
-
-        self.logger = logging.getLogger(folder)
-        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
-        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
-        self.logger.addHandler(hdlr)
-        self.logger.setLevel('DEBUG')
+        os.makedirs(self.root, exist_ok=True)
+        # Can create MeV only if path already exists
+        self._mev = MetaViewer(self.root)
+        self.lines = {name: ModelLine(os.path.join(self.root, name),
+                                      meta_prefix=self._meta_prefix,
+                                      meta_fmt=self._meta_fmt)
+                      for name in sorted(os.listdir(self.root))
+                      if os.path.isdir(os.path.join(self.root, name))}
+        self._setup_logger()
 
         if lines is not None:
             for line in lines:
@@ -125,27 +114,30 @@ class ModelRepo(Repo):
 
         self._update_meta()
 
-    def add_line(self, name, model_cls, meta_fmt=None, **kwargs):
+    def add_line(self, name, *args, meta_fmt=None, **kwargs):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
 
-        Additionally, updates repo's meta on disk
-        Parameters
-        ----------
-        model_cls:
-            A class of models in line. ModelLine uses this class to reconstruct a model
-        name:
-            Line's name. It will be used to name a folder of line.
+        Supports all the parameters of ModelLine using args and kwargs.
+
+        Parameters:
+            name: str
+                Name of the line. It is used to name a folder of line.
+                Repo prepends it with `self.root` before creating.
+            meta_fmt: str
+                Format of meta files. Supported values are the same as for repo.
+                If omitted, inherits format from repo.
+        See also
+        --------
+            cascade.models.ModelLine
        """
-        assert type(model_cls) == type, f'model_cls argument should be model\'s class, \
-            however `{type(model_cls)}` is received'
 
         folder = os.path.join(self.root, name)
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
         line = ModelLine(folder,
-                         model_cls=model_cls,
+                         *args,
                          meta_prefix=self._meta_prefix,
                          meta_fmt=meta_fmt,
                          **kwargs)
@@ -177,8 +169,14 @@ class ModelRepo(Repo):
         return len(self.lines)
 
     def __repr__(self) -> str:
-        rp = f'ModelRepo in {self.root} of {len(self)} lines'
-        return ', '.join([rp] + [repr(line) for line in self.lines])
+        return f'ModelRepo in {self.root} of {len(self)} lines'
+
+    def _setup_logger(self):
+        self.logger = logging.getLogger(self.root)
+        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
+        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
+        self.logger.addHandler(hdlr)
+        self.logger.setLevel('DEBUG')
 
     def _update_meta(self):
         # Reads meta if exists and updates it with new values
@@ -192,10 +190,9 @@ class ModelRepo(Repo):
             except IOError as e:
                 warnings.warn(f'File reading error ignored: {e}')
 
-        self.logger.info(DeepDiff(
-            meta,
-            self._mev.obj_to_dict(self.get_meta()[0])).pretty()
-        )
+        self_meta = self._mev.obj_to_dict(self.get_meta()[0])
+        diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
+        self.logger.info(diff.pretty())
 
         meta.update(self.get_meta()[0])
         try:
@@ -215,9 +212,10 @@ class ModelRepo(Repo):
 
     def __del__(self):
         # Release all files on destruction
-        for handler in self.logger.handlers:
-            handler.close()
-            self.logger.removeHandler(handler)
+        if hasattr(self, 'logger'):
+            for handler in self.logger.handlers:
+                handler.close()
+                self.logger.removeHandler(handler)
     
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])

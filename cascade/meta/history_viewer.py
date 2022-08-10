@@ -21,6 +21,7 @@ import pendulum
 import pandas as pd
 from flatten_json import flatten
 from deepdiff import DeepDiff
+import plotly
 from plotly import express as px
 from plotly import graph_objects as go
 
@@ -84,7 +85,8 @@ class HistoryViewer:
         if 'saved_at' in self._table:
             self._table = self._table.sort_values('saved_at')
 
-    def _diff(self, p1, params) -> List:
+    @staticmethod
+    def _diff( p1, params) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
         changed = [0 for _ in range(len(params))]
         for i in range(len(changed)):
@@ -96,14 +98,15 @@ class HistoryViewer:
                 changed[i] += len(diff[i]['dictionary_item_removed'])
         return changed
 
-    def _specific_argmin(self, arr, self_index) -> int:
+    @staticmethod
+    def _specific_argmin(arr, self_index) -> int:
         arg_min = 0
         for i in range(len(arr)):
             if arr[i] <= arr[arg_min] and i != self_index:
                 arg_min = i
         return arg_min
 
-    def plot(self, metric: str, show=False) -> None:
+    def plot(self, metric: str, show=False) -> plotly.graph_objects.Figure:
         """
         Plots training history of model versions using plotly.
 
@@ -111,6 +114,8 @@ class HistoryViewer:
         ----------
         metric: str
             Metric should be present in meta of at least one model in repo
+        show: bool
+            Whether to return and show or just return figure
         """
 
         # After flatten 'metrics_' will be added to the metric name
@@ -222,7 +227,7 @@ class HistoryViewer:
         ])
 
         @app.callback(Output('history-figure', 'figure'), 
-            Input('history-interval', 'n_intervals'))
+                      Input('history-interval', 'n_intervals'))
         def update_history(n_intervals):
             self._repo = ModelRepo(self._repo.root)
             self._make_table()

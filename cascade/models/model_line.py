@@ -21,9 +21,8 @@ import pendulum
 import glob
 from hashlib import md5
 
-from ..base import Traceable
+from ..base import Traceable, MetaHandler, supported_meta_formats
 from .model import Model
-from ..meta import MetaViewer
 
 
 class ModelLine(Traceable):
@@ -51,8 +50,7 @@ class ModelLine(Traceable):
         """
         super().__init__(**kwargs)
 
-        supported_formats = ('.json', '.yml')
-        assert meta_fmt in supported_formats, f'Only {supported_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
         self._model_cls = model_cls
         self.root = folder
@@ -71,7 +69,7 @@ class ModelLine(Traceable):
         else:
             # No folder -> create
             os.mkdir(self.root)
-        self.meta_viewer = MetaViewer(self.root, meta_fmt=self._meta_fmt)
+        self._mh = MetaHandler()
 
     def __getitem__(self, num) -> Model:
         """
@@ -144,10 +142,10 @@ class ModelLine(Traceable):
         self.model_names.append(os.path.join(folder_name, 'model'))
 
         # Save model's meta
-        self.meta_viewer.write(os.path.join(self.root, folder_name, 'meta' + self._meta_fmt), meta)
+        self._mh.write(os.path.join(self.root, folder_name, 'meta' + self._meta_fmt), meta)
 
         # Save updated line's meta
-        self.meta_viewer.write(os.path.join(self.root, 'meta' + self._meta_fmt), self.get_meta())
+        self._mh.write(os.path.join(self.root, 'meta' + self._meta_fmt), self.get_meta())
 
     def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self._model_cls}'

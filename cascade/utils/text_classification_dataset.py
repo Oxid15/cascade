@@ -34,7 +34,7 @@ class TextClassificationDataset(Dataset):
             Path to the folder with folders of text files.
             In each folder should be only one class of texts.
         """
-        super().__init__(**kwargs)
+        super().__init__(*args, *kwargs)
         self._encoding = encoding
         self._root = os.path.abspath(path)
         folders = os.listdir(self._root)

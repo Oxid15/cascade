@@ -23,9 +23,8 @@ class CyclicSampler(Sampler):
 
     Example
     -------
-    >>> from cascade.data import CyclicSampler
-    >>> from cascade.tests.number_dataset import NumberDataset
-    >>> ds = NumberDataset([1,2,3])
+    >>> from cascade.data import CyclicSampler, Wrapper
+    >>> ds = Wrapper([1,2,3])
     >>> ds = CyclicSampler(ds, 5)
     >>> for item in ds:
     ...     print(item)

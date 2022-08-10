@@ -10,9 +10,10 @@ class Traceable:
             meta_prefix = self._read_meta_from_file(meta_prefix)
         self._meta_prefix = meta_prefix
 
-    def _read_meta_from_file(self, path: str) -> Union[List[Dict], Dict]:
-            from . import MetaHandler
-            return MetaHandler().read(path)
+    @staticmethod
+    def _read_meta_from_file(path: str) -> Union[List[Dict], Dict]:
+        from . import MetaHandler
+        return MetaHandler().read(path)
 
     def get_meta(self) -> List[Dict]:
         """
@@ -44,5 +45,6 @@ class Traceable:
         else:
             self._warn_no_prefix()
 
-    def _warn_no_prefix(self):
+    @staticmethod
+    def _warn_no_prefix() -> None:
         warnings.warn('Object doesn\'t have _meta_prefix. This may mean super().__init__() wasn\'t called somewhere')
