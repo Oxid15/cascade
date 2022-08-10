@@ -37,15 +37,15 @@ class BasicTrainer(Trainer):
             line_name = f'{len(self._repo):0>5d}'
         self._repo.add_line(line_name, type(model))
 
-        self.meta_prefix['train_start_time'] = pendulum.now()
+        self._meta_prefix['train_start_time'] = pendulum.now()
 
         model.fit(train_data, **train_kwargs)
 
-        self.meta_prefix['train_end_time'] = pendulum.now()
+        self._meta_prefix['train_end_time'] = pendulum.now()
 
         model.evaluate(test_data, **test_kwargs)
 
-        self.meta_prefix['evaluate_end_time'] = pendulum.now()
+        self._meta_prefix['evaluate_end_time'] = pendulum.now()
 
         self._repo[line_name].save(model)
 
