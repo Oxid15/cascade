@@ -21,6 +21,7 @@ import pendulum
 import pandas as pd
 from flatten_json import flatten
 from deepdiff import DeepDiff
+import plotly
 from plotly import express as px
 from plotly import graph_objects as go
 
@@ -97,7 +98,7 @@ class HistoryViewer:
                 changed[i] += len(diff[i]['dictionary_item_removed'])
         return changed
 
-    @ staticmethod
+    @staticmethod
     def _specific_argmin(arr, self_index) -> int:
         arg_min = 0
         for i in range(len(arr)):
