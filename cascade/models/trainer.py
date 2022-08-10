@@ -1,29 +1,33 @@
+import pendulum
 from typing import Iterable, List, Dict
 
 from ..base import Traceable
 from ..models import Model, ModelRepo
 
-import pendulum
-
 
 class Trainer(Traceable):
     def __init__(self, repo, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-
-    def train(self, model, *args, **kwargs):
-        raise NotImplementedError()
-
-
-class BasicTrainer(Trainer):
-    def __init__(self, repo, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-
         if isinstance(repo, str):
             self._repo = ModelRepo(repo)
         elif isinstance(repo, ModelRepo):
             self._repo = repo
         
         self.metrics = {}
+        super().__init__(*args, **kwargs)
+
+    def train(self, model, *args, **kwargs):
+        raise NotImplementedError()
+
+    def get_meta(self) -> List[Dict]:
+        meta = super().get_meta()
+        meta[0]['metrics'] = self.metrics
+        meta[0]['repo'] = self._repo.get_meta()
+        return meta
+
+
+class BasicTrainer(Trainer):
+    def __init__(self, repo, *args, **kwargs) -> None:
+        super().__init__(repo, *args, **kwargs)
 
     def train(self, 
         model: Model, 
@@ -50,8 +54,3 @@ class BasicTrainer(Trainer):
         self._repo[line_name].save(model)
 
         self.metrics = model.metrics
-        
-
-    def get_meta(self) -> List[Dict]:
-        meta = super().get_meta()
-        meta[-1]['metrics'] = self.metrics
