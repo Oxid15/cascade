@@ -153,7 +153,8 @@ class Average(TimeSeriesDataset, Modifier):
         assert len(reg_data) > 1, 'Please, provide unit that would get more than one period'
         super().__init__(dataset, time=reg_time, data=reg_data, *args, **kwargs)
 
-    def _avg(self, arr, arr_dates, dates):
+    @staticmethod
+    def _avg(arr, arr_dates, dates):
         new_p = np.zeros(len(dates))
         for i in range(len(dates) - 1):
             data = arr[(arr_dates >= dates[i]) & (arr_dates < dates[i + 1])]

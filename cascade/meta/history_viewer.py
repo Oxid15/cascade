@@ -21,6 +21,7 @@ import pendulum
 import pandas as pd
 from flatten_json import flatten
 from deepdiff import DeepDiff
+import plotly
 from plotly import express as px
 from plotly import graph_objects as go
 
@@ -34,12 +35,26 @@ class HistoryViewer:
     Uses plotly to show how metrics of models changed in time and how
     models with different hyperparameters depend on each other
     """
-    def __init__(self, repo) -> None:
+    def __init__(self, repo, last_lines=None, last_models=None) -> None:
+        """
+        Parameters
+        ----------
+        repo: cascade.models.ModelRepo
+            Repo to be viewed
+        last_lines: int, optional
+            Constraints the number of lines back from the last one to view
+        last_models: int, optional
+            For each line constraints the number of models back from the last one to view
+        """
         self._repo = repo
+        self._last_lines = last_lines 
+        self._last_models = last_models
+        self._make_table()
 
+    def _make_table(self):
         metas = []
         self._params = []
-        for line in self._repo:
+        for line in [*self._repo][::-1][:self._last_lines]:
             # Try to use viewer only on models using type key
             try:
                 view = MetaViewer(line.root, filt={'type': 'model'})
@@ -53,7 +68,7 @@ class HistoryViewer:
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
-            for i in range(len(line.model_names)):
+            for i in range(len(line.model_names))[:self._last_models]:
                 new_meta = {'line': line.root, 'num': i}
                 new_meta.update(flatten(view[i][-1]))
                 metas.append(new_meta)
@@ -70,7 +85,8 @@ class HistoryViewer:
         if 'saved_at' in self._table:
             self._table = self._table.sort_values('saved_at')
 
-    def _diff(self, p1, params) -> List:
+    @staticmethod
+    def _diff( p1, params) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
         changed = [0 for _ in range(len(params))]
         for i in range(len(changed)):
@@ -82,14 +98,15 @@ class HistoryViewer:
                 changed[i] += len(diff[i]['dictionary_item_removed'])
         return changed
 
-    def _specific_argmin(self, arr, self_index) -> int:
+    @staticmethod
+    def _specific_argmin(arr, self_index) -> int:
         arg_min = 0
         for i in range(len(arr)):
             if arr[i] <= arr[arg_min] and i != self_index:
                 arg_min = i
         return arg_min
 
-    def plot(self, metric: str) -> None:
+    def plot(self, metric: str, show=False) -> plotly.graph_objects.Figure:
         """
         Plots training history of model versions using plotly.
 
@@ -97,6 +114,8 @@ class HistoryViewer:
         ----------
         metric: str
             Metric should be present in meta of at least one model in repo
+        show: bool
+            Whether to return and show or just return figure
         """
 
         # After flatten 'metrics_' will be added to the metric name
@@ -169,4 +188,49 @@ class HistoryViewer:
                 tickvals=[i for i in range(len(time))],
                 ticktext=time_text
             ))
-        fig.show()
+        if show:
+            fig.show()
+
+        return fig
+
+    def serve(self, metric, **kwargs):
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+            Cannot import dash. It is conditional 
+            dependency you can install it 
+            using the instructions from https://dash.plotly.com/installation''')
+        else:
+            from dash import Input, Output, html, dcc, dash_table
+            from ..models import ModelRepo
+
+        app = dash.Dash()
+        fig = self.plot(metric)
+
+        app.layout = html.Div([
+            html.H1(
+                children=f'HistoryViewer in {self._repo.root}',
+                style={
+                    'textAlign': 'center',
+                    'color': '#084c61',
+                    'font-family': 'Montserrat'
+                }
+            ),
+            dcc.Graph(
+                id='history-figure',
+                figure=fig),
+            dcc.Interval(
+                id='history-interval',
+                interval=1000*3)
+        ])
+
+        @app.callback(Output('history-figure', 'figure'), 
+                      Input('history-interval', 'n_intervals'))
+        def update_history(n_intervals):
+            self._repo = ModelRepo(self._repo.root)
+            self._make_table()
+            return self.plot(metric)
+
+        app.run_server(use_reloader=False, **kwargs)

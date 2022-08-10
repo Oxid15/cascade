@@ -17,7 +17,8 @@ class FolderDataset(Dataset):
     def __init__(self, root, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._root = os.path.abspath(root)
-        assert os.path.exists(self._root)
+        if not os.path.exists(self._root):
+            raise FileNotFoundError(self._root)
         self._names = [os.path.join(self._root, name)
                        for name in sorted(os.listdir(self._root)) if not os.path.isdir(name)]
 

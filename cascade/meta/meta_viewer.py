@@ -15,15 +15,15 @@ limitations under the License.
 """
 
 import os
-from typing import List, Dict, Union
-from ..base import MetaHandler, JSONEncoder
+from typing import List, Dict
+from ..base import MetaHandler, JSONEncoder, supported_meta_formats
 
 
 class MetaViewer:
     """
     The class to read and write meta data.
     """
-    def __init__(self, root, filt=None) -> None:
+    def __init__(self, root, filt=None, meta_fmt='.json') -> None:
         """
         Parameters
         ----------
@@ -39,21 +39,22 @@ class MetaViewer:
         cascade.meta.ModelRepo
         cascade.meta.MetaHandler
         """
-        assert os.path.exists(root)
+        if not os.path.exists(root):
+            raise FileNotFoundError(root)
+        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
+
         self._root = root
         self._filt = filt
+        self._meta_fmt = meta_fmt
         self._mh = MetaHandler()
 
-        names = []
+        self.names = []
         for root, _, files in os.walk(self._root):
-            names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == '.json']
-        names = sorted(names)
+            self.names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == self._meta_fmt]
+        self.names = sorted(self.names)
 
-        self.metas = []
-        for name in names:
-            self.metas.append(self._mh.read(name))
         if filt is not None:
-            self.metas = list(filter(self._filter, self.metas))
+            self.names = list(filter(self._filter, self.names))
 
     def __getitem__(self, index) -> List[Dict]:
         """
@@ -62,41 +63,17 @@ class MetaViewer:
         meta: List[Dict]
             object containing meta
         """
-        return self.metas[index]
+        return self.read(self.names[index])
 
     def __len__(self) -> int:
-        return len(self.metas)
+        return len(self.names)
 
-    def __repr__(self) -> str:
-        def pretty(d, indent=0, sep=' '):
-            out = ''
-            for key in d:
-                if isinstance(d, dict):
-                    value = d[key]
-                    out += sep * indent + str(key) + ':\n'
-                else:
-                    value = key
-                if isinstance(value, dict) or isinstance(value, list):
-                    out += pretty(value, indent + 1)
-                else:
-                    out += sep * (indent + 1) + str(value) + sep
-                    out += '\n'
-            return out
-
-        out = f'MetaViewer at {self._root}:\n'
-        for i, meta in enumerate(self.metas):
-            out += '-' * 20 + '\n'
-            out += f'  Meta {i}:\n'
-            out += '-' * 20 + '\n'
-            out += pretty(meta, 4)
-        return out
-
-    def write(self, name, obj: List[Dict]) -> None:
+    def write(self, path, obj: List[Dict]) -> None:
         """
-       Dumps obj to name
-       """
-        self.metas.append(obj)
-        self._mh.write(name, obj)
+        Dumps obj to path
+        """
+        # self.metas.append(obj)
+        self._mh.write(path, obj)
 
     def read(self, path) -> List[Dict]:
         """
@@ -104,7 +81,8 @@ class MetaViewer:
         """
         return self._mh.read(path)
 
-    def _filter(self, meta):
+    def _filter(self, name):
+        meta = self.read(name)
         meta = meta[-1]  # Takes last meta
         for key in self._filt:
             if key not in meta:
@@ -114,5 +92,6 @@ class MetaViewer:
                 return False
         return True
 
-    def obj_to_dict(self, obj):
+    @staticmethod
+    def obj_to_dict(obj):
         return JSONEncoder().obj_to_dict(obj)
