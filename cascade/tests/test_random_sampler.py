@@ -35,3 +35,18 @@ def test(arr):
    ds = RandomSampler(ds)
 
    assert([ds[i] for i in range(len(ds))] != arr)
+
+
+@pytest.mark.parametrize(
+    'arr', [
+        ([1, 2, 3, 4, 5],),
+        ([1, 5],),
+        ([1, 2, -3],)
+    ]
+)
+def test_over_and_under(arr):
+    ds = Wrapper(arr)
+    ds = RandomSampler(ds, 3)
+
+    for item in ds:
+        pass
