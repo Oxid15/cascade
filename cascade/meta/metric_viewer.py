@@ -159,7 +159,7 @@ class MetricServer:
         else:
             from ..models import ModelRepo
 
-        self._repo = ModelRepo(self._mv._repo.root)
+        self._mv._repo = ModelRepo(self._mv._repo.root)
         self._mv.reload_table()
 
         df = self._mv.table
@@ -174,7 +174,7 @@ class MetricServer:
 
         return html.Div([
             html.H1(
-                children=f'MetricViewer in {self._repo.root}',
+                children=f'MetricViewer in {self._mv._repo.root}',
                 style={
                     'textAlign': 'center',
                     'color': '#084c61',
