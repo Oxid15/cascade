@@ -71,9 +71,12 @@ def test_many_lines(model_repo, dummy_model):
     ]
 )
 def test_missing_model_meta(model_repo, dummy_model, ext):
-    model_repo.add_line('test', model_cls=DummyModel)
+    model_repo.add_line('test', model_cls=DummyModel, meta_fmt=ext)
+    dummy_model.evaluate()
     model_repo['test'].save(dummy_model)
-    os.remove(os.path.join(model_repo.root, 'test', '00000', 'meta', ext))
+    model_repo['test'].save(dummy_model)
+
+    os.remove(os.path.join(model_repo.root, 'test', '00000', 'meta' + ext))
 
     hv = HistoryViewer(model_repo)
     hv.plot('acc')
