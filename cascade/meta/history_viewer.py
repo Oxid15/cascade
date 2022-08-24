@@ -68,17 +68,22 @@ class HistoryViewer:
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
-            for i in range(len(line.model_names))[:self._last_models]:
+            for i in range(len(line))[:self._last_models]:
                 new_meta = {'line': line.root, 'num': i}
-                new_meta.update(flatten(view[i][-1]))
+                try:
+                    meta = view[i][-1]
+                except IndexError:
+                    meta = {}
+
+                new_meta.update(flatten(meta))
                 metas.append(new_meta)
 
                 params = {
                     'line': line.root,
                 }
-                if 'params' in view[i][-1]:
-                    if len(view[i][-1]['params']) > 0:
-                        params.update(flatten({'params': view[i][-1]['params']}))
+                if 'params' in meta:
+                    if len(meta['params']) > 0:
+                        params.update(flatten({'params': meta['params']}))
                 self._params.append(params)
 
         self._table = pd.DataFrame(metas)
@@ -178,8 +183,8 @@ class HistoryViewer:
 
         # Create human-readable ticks
         now = pendulum.now(tz='UTC')
-        time_text = [pendulum.parse(table['saved_at'].iloc[i]) for i in range(len(time))]
-        time_text = [t.diff_for_humans(now) for t in time_text]
+        time_text = table['saved_at']\
+            .apply(lambda t: t if t == '' else pendulum.parse(t).diff_for_humans(now))
 
         fig.update_layout(
             hovermode='x',

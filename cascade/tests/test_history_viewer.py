@@ -21,7 +21,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.conftest import EmptyModel
+from cascade.tests.conftest import EmptyModel, DummyModel
 from cascade.meta import HistoryViewer
 
 
@@ -59,6 +59,24 @@ def test_many_lines(model_repo, dummy_model):
 
     model_repo['0'].save(model0)
     model_repo['1'].save(model1)
+
+    hv = HistoryViewer(model_repo)
+    hv.plot('acc')
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_missing_model_meta(model_repo, dummy_model, ext):
+    model_repo.add_line('test', model_cls=DummyModel, meta_fmt=ext)
+    dummy_model.evaluate()
+    model_repo['test'].save(dummy_model)
+    model_repo['test'].save(dummy_model)
+
+    os.remove(os.path.join(model_repo.root, 'test', '00000', 'meta' + ext))
 
     hv = HistoryViewer(model_repo)
     hv.plot('acc')

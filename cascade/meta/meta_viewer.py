@@ -23,7 +23,7 @@ class MetaViewer:
     """
     The class to read and write meta data.
     """
-    def __init__(self, root, filt=None, meta_fmt='.json') -> None:
+    def __init__(self, root, filt=None) -> None:
         """
         Parameters
         ----------
@@ -41,16 +41,15 @@ class MetaViewer:
         """
         if not os.path.exists(root):
             raise FileNotFoundError(root)
-        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
 
         self._root = root
         self._filt = filt
-        self._meta_fmt = meta_fmt
         self._mh = MetaHandler()
 
         self.names = []
         for root, _, files in os.walk(self._root):
-            self.names += [os.path.join(root, name) for name in files if os.path.splitext(name)[-1] == self._meta_fmt]
+            self.names += [os.path.join(root, name)
+                           for name in files if os.path.splitext(name)[-1] in supported_meta_formats]
         self.names = sorted(self.names)
 
         if filt is not None:
@@ -72,7 +71,6 @@ class MetaViewer:
         """
         Dumps obj to path
         """
-        # self.metas.append(obj)
         self._mh.write(path, obj)
 
     def read(self, path) -> List[Dict]:
