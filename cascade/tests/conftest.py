@@ -104,7 +104,8 @@ def number_iterator(request):
     {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
     {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')},
     {'g': {}},
-    {'h': []}
+    {'h': []},
+    {'i': None}
 ])
 def dummy_model(request):
     return DummyModel(**request.param)
