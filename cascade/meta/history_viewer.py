@@ -216,7 +216,7 @@ class HistoryViewer:
 
         app.layout = html.Div([
             html.H1(
-                children=f'HistoryViewer in {self._repo.root}',
+                children=f'HistoryViewer in {self._repo}',
                 style={
                     'textAlign': 'center',
                     'color': '#084c61',
@@ -234,7 +234,7 @@ class HistoryViewer:
         @app.callback(Output('history-figure', 'figure'), 
                       Input('history-interval', 'n_intervals'))
         def update_history(n_intervals):
-            self._repo = ModelRepo(self._repo.root)
+            self._repo.reload()
             self._make_table()
             return self.plot(metric)
 

@@ -36,7 +36,7 @@ class Repo(Traceable):
     """
     root = None
 
-    def add_line(self, *args, **kwargs):
+    def reload(self):
         raise NotImplementedError()
 
     def __getitem__(self, key):
@@ -90,22 +90,18 @@ class ModelRepo(Repo):
         cascade.models.ModelLine
         """
         super().__init__(**kwargs)
-        self.root = folder
+        self._root = folder
         self.lines = dict()
 
         assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
-        if overwrite and os.path.exists(self.root):
-            shutil.rmtree(self.root)
+        if overwrite and os.path.exists(self._root):
+            shutil.rmtree(self._root)
 
-        os.makedirs(self.root, exist_ok=True)
+        os.makedirs(self._root, exist_ok=True)
         # Can create MeV only if path already exists
-        self._mev = MetaViewer(self.root)
-        self.lines = {name: ModelLine(os.path.join(self.root, name),
-                                      meta_prefix=self._meta_prefix,
-                                      meta_fmt=self._meta_fmt)
-                      for name in sorted(os.listdir(self.root))
-                      if os.path.isdir(os.path.join(self.root, name))}
+        self._mev = MetaViewer(self._root)
+        self._load_lines()
         self._setup_logger()
 
         if lines is not None:
@@ -113,6 +109,13 @@ class ModelRepo(Repo):
                 self.add_line(**line)
 
         self._update_meta()
+
+    def _load_lines(self):
+        self.lines = {name: ModelLine(os.path.join(self._root, name),
+                                      meta_prefix=self._meta_prefix,
+                                      meta_fmt=self._meta_fmt)
+                      for name in sorted(os.listdir(self._root))
+                      if os.path.isdir(os.path.join(self._root, name))}
 
     def add_line(self, name, *args, meta_fmt=None, **kwargs):
         """
@@ -124,7 +127,7 @@ class ModelRepo(Repo):
         Parameters:
             name: str
                 Name of the line. It is used to name a folder of line.
-                Repo prepends it with `self.root` before creating.
+                Repo prepends it with `self._root` before creating.
             meta_fmt: str
                 Format of meta files. Supported values are the same as for repo.
                 If omitted, inherits format from repo.
@@ -133,7 +136,7 @@ class ModelRepo(Repo):
             cascade.models.ModelLine
        """
 
-        folder = os.path.join(self.root, name)
+        folder = os.path.join(self._root, name)
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
         line = ModelLine(folder,
@@ -169,11 +172,11 @@ class ModelRepo(Repo):
         return len(self.lines)
 
     def __repr__(self) -> str:
-        return f'ModelRepo in {self.root} of {len(self)} lines'
+        return f'ModelRepo in {self._root} of {len(self)} lines'
 
     def _setup_logger(self):
-        self.logger = logging.getLogger(self.root)
-        hdlr = logging.FileHandler(os.path.join(self.root, 'history.log'))
+        self.logger = logging.getLogger(self._root)
+        hdlr = logging.FileHandler(os.path.join(self._root, 'history.log'))
         hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
         self.logger.addHandler(hdlr)
         self.logger.setLevel('DEBUG')
@@ -181,7 +184,7 @@ class ModelRepo(Repo):
     def _update_meta(self):
         # Reads meta if exists and updates it with new values
         # writes back to disk
-        meta_path = os.path.join(self.root, 'meta' + self._meta_fmt)
+        meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
 
         meta = {}
         if os.path.exists(meta_path):
@@ -203,12 +206,16 @@ class ModelRepo(Repo):
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
-            'root': self.root,
+            'root': self._root,
             'len': len(self),
             'updated_at': pendulum.now(tz='UTC'),
             'type': 'repo'
         })
         return meta
+
+    def reload(self) -> None:
+        self._load_lines()
+        self._update_meta()
 
     def __del__(self):
         # Release all files on destruction
@@ -252,3 +259,10 @@ class ModelRepoConcatenator(Repo):
 
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])
+
+    def __repr__(self):
+        return f'ModelRepoConcatenator of {len(self._repos)} repos, {len(self)} lines total'
+
+    def reload(self):
+        for repo in self._repos:
+            repo.reload()
