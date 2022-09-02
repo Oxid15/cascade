@@ -1,4 +1,4 @@
-import sys
+import os
 import logging
 from copy import deepcopy
 from typing import Iterable, List, Dict
@@ -36,7 +36,7 @@ class BasicTrainer(Trainer):
     def __init__(self, repo, *args, **kwargs) -> None:
         super().__init__(repo, *args, **kwargs)
 
-    def train(self, 
+    def train(self,
         model: Model,
         train_data: Iterable,
         test_data: Iterable,
@@ -58,17 +58,24 @@ class BasicTrainer(Trainer):
                 raise RuntimeError(f'Line {line_name} already exists in {self._repo}')
 
         self._repo.add_line(line_name, type(model))
+        line = self._repo[line_name]
+
+        if start_from is not None:
+            path = os.path.join(line.root, line.model_names[-1])
+            model.load(path)
 
         self._meta_prefix['train_start_at'] = pendulum.now()
         logger.info(f'Training started with parameters: {train_kwargs}')
         logger.info(f'repo is {self._repo}')
         logger.info(f'line is {line_name}')
+        if start_from is not None:
+            logger.info(f'started from model {len(line) - 1}')
         logger.info(f'training will last {epochs} epochs')
 
         for epoch in range(epochs):
             model.fit(train_data, **train_kwargs)
             model.evaluate(test_data, **test_kwargs)
-            self._repo[line_name].save(model)
+            line.save(model)
             self.metrics.append(deepcopy(model.metrics))
 
             logger.info(f'Epoch {epoch}: {model.metrics}')
