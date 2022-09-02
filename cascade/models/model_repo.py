@@ -219,6 +219,10 @@ class ModelRepo(Repo):
     
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])
+    
+    def get_line_names(self) -> List[str]:
+        # TODO: write test covering this
+        return list(self.lines.keys())
 
 
 class ModelRepoConcatenator(Repo):
