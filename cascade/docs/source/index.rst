@@ -20,7 +20,7 @@ Key Principles
 The logo of the project is a depiction of these principles: it symbolizes modularity, standartization, information flow and is cascade-like :)
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     quickstart
     concepts
