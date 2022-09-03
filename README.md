@@ -20,39 +20,7 @@ More info on installation can be found in [docs](https://oxid15.github.io/cascad
 
 ## Usage
 
-The simplest use-case is pipeline building.  
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html).  
-
-```python
-import torch
-from torch.utils.data import DataLoader
-import cv2
-
-from cascade.data import Modifier, FolderDataset
-
-# Define Dataset - an entity responsible for fetching data from source
-class SpecificImageDataset(FolderDataset):
-    # Since everything is held in FolderDataset and Dataset classes
-    # we need to only define __geiitem__
-    def __getitem__(self, index):
-        name = self.names[index]
-        img = cv2.imread(name)
-        return img
-
-
-class PreprocessModifier(Modifier):
-    # Same with Modifier - only __getitem__
-    def __getitem__(self, index):
-        img = super().__getitem__(index)
-        img = torch.Tensor(img)
-        return img
-
-
-ds = SpecificImageDataset('./images')
-ds = PreprocessModifier(ds)
-
-# Pass images further to train your model
-```
+See use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html).
 
 
 ## Why Cascade
