@@ -54,3 +54,21 @@ cascade.models
 |
 
 |
+
+.. autoclass:: cascade.models.Trainer
+   :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.BasicTrainer
+   :members:
+
+|
+
+|
+
+|

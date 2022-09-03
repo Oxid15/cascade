@@ -117,8 +117,8 @@ class MetricViewer:
         **kwargs:
             Arguments of dash app. Can be ip or port for example.
         """
-        server = MetricServer(self, page_size=page_size, include=include, exclude=exclude, **kwargs)
-        server.serve()
+        server = MetricServer(self, page_size=page_size, include=include, exclude=exclude)
+        server.serve(**kwargs)
 
 
 class MetricServer:
@@ -159,7 +159,7 @@ class MetricServer:
         else:
             from ..models import ModelRepo
 
-        self._mv._repo = ModelRepo(self._mv._repo.root)
+        self._mv._repo.reload()
         self._mv.reload_table()
 
         df = self._mv.table
@@ -174,7 +174,7 @@ class MetricServer:
 
         return html.Div([
             html.H1(
-                children=f'MetricViewer in {self._mv._repo.root}',
+                children=f'MetricViewer in {self._mv._repo}',
                 style={
                     'textAlign': 'center',
                     'color': '#084c61',

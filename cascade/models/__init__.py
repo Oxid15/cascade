@@ -18,3 +18,4 @@ from .model import Model, ModelModifier
 from .basic_model import BasicModel, BasicModelModifier
 from .model_repo import ModelRepo
 from .model_line import ModelLine
+from .trainer import Trainer, BasicTrainer
