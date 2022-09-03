@@ -10,7 +10,7 @@ setuptools.setup(
     author='Ilia Moiseev',
     author_email='ilia.moiseev.5@yandex.ru',
     license='Apache License 2.0',
-    description="Small ML-Engineering framework",
+    description="ML-Engineering library",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/oxid15/cascade",

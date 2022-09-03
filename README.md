@@ -3,7 +3,7 @@
 ![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
 ![build](https://github.com/oxid15/cascade/actions/workflows/python-package.yml/badge.svg)
 
-Small ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.  
+ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.  
 
 This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for 
 workflow, a set of templates for typical tasks.
@@ -105,7 +105,7 @@ Small and fast-prototyping AI-teams could use it as a tradeoff between total mis
 
 The key principles of Cascade are:
  * **Elegancy** - ML-pipelines code should be about ML with minimum meta-code
- * **Agility** - it should be easy to build new prototypes and wrap old ones into framework
+ * **Agility** - it should be easy to build new prototypes and integrate existing project with Cascade
  * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
  * **Traceability** - everything should have meta-data
 
