@@ -77,7 +77,7 @@ The key principles of Cascade are:
  * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
  * **Traceability** - everything should have meta-data
 
-The logo of the project is a depiction of these principles: it symbolizes modularity, standartization, information flow and is cascade-like :)
+The logo of the project is a depiction of these principles: it symbolizes modularity, standardization, information flow and is cascade-like :)
 
 
 
@@ -102,7 +102,7 @@ Cascade is divided into four main modules namely: `base`, `data`, `models` and `
 - `base` is a module of some base interfaces and classes 
 - `data` aims to provide OOP-solution to the problem of building complex data-pipelines
 - `models` provides standardized way of dealing with ML-models, train, evaluate, save, load, etc...
-- `meta` ensures that all relevant meta info about data and models is stored anbd can be easily viewed
+- `meta` ensures that all relevant meta info about data and models is stored and can be easily viewed
 
 There is also `utils` which is a collection of useful Datasets and Models which are too specific to add them to the core.
 
