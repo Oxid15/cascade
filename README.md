@@ -13,7 +13,7 @@ workflow, a set of templates for typical tasks.
 ## Installation
 Install latest version using pip 
 ```bash
-pip install git+https://github.com/oxid15/cascade.git@main
+pip install cascade-ml
 ```
 More info on installation can be found in [docs](https://oxid15.github.io/cascade/quickstart.html#installation)
 

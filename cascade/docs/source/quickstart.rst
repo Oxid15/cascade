@@ -7,7 +7,7 @@ Install latest version using pip directly from main branch
 
 .. code-block:: bash
 
-    pip install git+https://github.com/oxid15/cascade.git@main
+    pip install cascade-ml
 
 .. note::
     `cascade.utils` is also installed, but its requirements are optional and listed in the file `utils_requirements.txt`
