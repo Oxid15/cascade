@@ -67,6 +67,7 @@ class ModelLine(Traceable):
                 warnings.warn('Model folders were not found by the line. It may be that '
                               'you are using new version of cascade with old repos '
                               'created before version 0.2.0')
+
         else:
             # No folder -> create
             os.mkdir(self.root)
