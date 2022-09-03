@@ -2,6 +2,7 @@
 
 ![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
 ![build](https://github.com/oxid15/cascade/actions/workflows/python-package.yml/badge.svg)
+[![Downloads](https://pepy.tech/badge/cascade-ml)](https://pepy.tech/project/cascade-ml)
 
 ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.  
 
