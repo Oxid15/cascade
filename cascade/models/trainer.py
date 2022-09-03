@@ -10,6 +10,7 @@ from ..models import Model, ModelRepo
 
 logger = logging.getLogger(__name__)
 
+
 class Trainer(Traceable):
     def __init__(self, repo, *args, **kwargs) -> None:
         if isinstance(repo, str):
@@ -40,10 +41,17 @@ class BasicTrainer(Trainer):
         model: Model,
         train_data: Iterable,
         test_data: Iterable,
-        train_kwargs: Dict,
-        test_kwargs: Dict,
+        *args,
+        train_kwargs=None,
+        test_kwargs=None,
         epochs=1,
-        start_from=None) -> None:
+        start_from=None,
+        **kwargs) -> None:
+
+        if train_kwargs is None:
+            train_kwargs = {}
+        if test_kwargs is None:
+            test_kwargs = {}
 
         if start_from is not None:
             line_name = start_from
