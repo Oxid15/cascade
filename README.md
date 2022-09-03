@@ -11,7 +11,6 @@ workflow, a set of templates for typical tasks.
 
 
 ## Installation
-Install latest version using pip 
 ```bash
 pip install cascade-ml
 ```
