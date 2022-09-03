@@ -1,7 +1,7 @@
 import os
 import logging
 from copy import deepcopy
-from typing import Iterable, List, Dict
+from typing import Iterable, List, Dict, Union
 
 import pendulum
 from ..base import Traceable
@@ -12,7 +12,16 @@ logger = logging.getLogger(__name__)
 
 
 class Trainer(Traceable):
-    def __init__(self, repo, *args, **kwargs) -> None:
+    """
+    A class that encapsulates training, evaluation and saving of models.
+    """
+    def __init__(self, repo: Union[ModelRepo, str], *args, **kwargs) -> None:
+        """
+        Parameters
+        ----------
+            repo: Union[ModelRepo, str]
+                Either repo or path to it
+        """
         if isinstance(repo, str):
             self._repo = ModelRepo(repo)
         elif isinstance(repo, ModelRepo):
@@ -34,6 +43,11 @@ class Trainer(Traceable):
 
 
 class BasicTrainer(Trainer):
+    """
+    The most common of concrete Trainers.
+    Trains a model for a certain amount of epochs.
+    Can start from checkpoint if model file exists.
+    """
     def __init__(self, repo, *args, **kwargs) -> None:
         super().__init__(repo, *args, **kwargs)
 
@@ -47,6 +61,25 @@ class BasicTrainer(Trainer):
         epochs=1,
         start_from=None,
         **kwargs) -> None:
+        """
+        Trains, evaluates and saves given model. If specified, loads model from checkpoint.
+
+        Parameters:
+            model: Model
+                a model to be trained or which to load from line specified in `start_from`
+            train_data: Iterable
+                train data to be passed to model's fit()
+            test_data: Iterable
+                test data to be passed to model's evaluate()
+            train_kwargs:
+                arguments for fit()
+            test_kwargs:
+                arguments for evaluate() - the most common is the dict of metrics
+            epochs:
+                how many times to repeat training on data
+            start_from: str
+                name of line from which to start, start from the latest model in line
+        """
 
         if train_kwargs is None:
             train_kwargs = {}
