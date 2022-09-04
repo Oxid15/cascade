@@ -2,8 +2,9 @@
 
 ![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
 ![build](https://github.com/oxid15/cascade/actions/workflows/python-package.yml/badge.svg)
+[![Downloads](https://pepy.tech/badge/cascade-ml)](https://pepy.tech/project/cascade-ml)
 
-Small ML Engineering framework with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.  
+ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.  
 
 This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for 
 workflow, a set of templates for typical tasks.
@@ -11,48 +12,15 @@ workflow, a set of templates for typical tasks.
 
 
 ## Installation
-Install latest version using pip 
 ```bash
-pip install git+https://github.com/oxid15/cascade.git@main
+pip install cascade-ml
 ```
 More info on installation can be found in [docs](https://oxid15.github.io/cascade/quickstart.html#installation)
 
 
 ## Usage
 
-The simplest use-case is pipeline building.  
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html).  
-
-```python
-import torch
-from torch.utils.data import DataLoader
-import cv2
-
-from cascade.data import Modifier, FolderDataset
-
-# Define Dataset - an entity responsible for fetching data from source
-class SpecificImageDataset(FolderDataset):
-    # Since everything is held in FolderDataset and Dataset classes
-    # we need to only define __geiitem__
-    def __getitem__(self, index):
-        name = self.names[index]
-        img = cv2.imread(name)
-        return img
-
-
-class PreprocessModifier(Modifier):
-    # Same with Modifier - only __getitem__
-    def __getitem__(self, index):
-        img = super().__getitem__(index)
-        img = torch.Tensor(img)
-        return img
-
-
-ds = SpecificImageDataset('./images')
-ds = PreprocessModifier(ds)
-
-# Pass images further to train your model
-```
+See use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html).
 
 
 ## Why Cascade
@@ -105,11 +73,11 @@ Small and fast-prototyping AI-teams could use it as a tradeoff between total mis
 
 The key principles of Cascade are:
  * **Elegancy** - ML-pipelines code should be about ML with minimum meta-code
- * **Agility** - it should be easy to build new prototypes and wrap old ones into framework
+ * **Agility** - it should be easy to build new prototypes and integrate existing project with Cascade
  * **Reusability** - code should have an ability to be reused in similar projects with little or no effort
  * **Traceability** - everything should have meta-data
 
-The logo of the project is a depiction of these principles: it symbolizes modularity, standartization, information flow and is cascade-like :)
+The logo of the project is a depiction of these principles: it symbolizes modularity, standardization, information flow and is cascade-like :)
 
 
 
@@ -134,7 +102,7 @@ Cascade is divided into four main modules namely: `base`, `data`, `models` and `
 - `base` is a module of some base interfaces and classes 
 - `data` aims to provide OOP-solution to the problem of building complex data-pipelines
 - `models` provides standardized way of dealing with ML-models, train, evaluate, save, load, etc...
-- `meta` ensures that all relevant meta info about data and models is stored anbd can be easily viewed
+- `meta` ensures that all relevant meta info about data and models is stored and can be easily viewed
 
 There is also `utils` which is a collection of useful Datasets and Models which are too specific to add them to the core.
 
