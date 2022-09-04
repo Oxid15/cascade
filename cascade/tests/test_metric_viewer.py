@@ -22,6 +22,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.tests.conftest import DummyModel
 from cascade.models import ModelRepo
 from cascade.meta import MetricViewer
 
@@ -52,3 +53,22 @@ def test_show_table(model_repo, dummy_model):
 def test_serve(model_repo):
     mtv = MetricViewer(model_repo)
     mtv.serve()
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_missing_model_meta(tmp_path, dummy_model, ext):
+    model_repo = ModelRepo(str(tmp_path))
+    model_repo.add_line('test', model_cls=DummyModel, meta_fmt=ext)
+    dummy_model.evaluate()
+    model_repo['test'].save(dummy_model)
+    model_repo['test'].save(dummy_model)
+
+    os.remove(os.path.join(tmp_path, 'test', '00000', 'meta' + ext))
+
+    mv = MetricViewer(model_repo)
+    mv.plot_table()

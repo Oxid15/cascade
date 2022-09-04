@@ -61,7 +61,11 @@ class MetricViewer:
                 In the following versions it will be deprecated.''', FutureWarning)
 
             for i in range(len(line.model_names)):
-                meta = view[i][-1]  # Takes last model from meta
+                try:
+                    meta = view[i][-1]  # Takes last model from meta
+                except IndexError:
+                    meta = {}
+
                 metric = {
                     'line': viewer_root, 
                     'num': i
