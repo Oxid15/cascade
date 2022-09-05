@@ -58,8 +58,8 @@ class DummyModel(Model):
 
 
 class EmptyModel(DummyModel):
-   def __init__(self):
-      pass
+    def __init__(self):
+        pass
 
 
 class OnesModel(BasicModel):
@@ -77,23 +77,23 @@ class OnesModel(BasicModel):
 
 
 @pytest.fixture(params=[
-        [1, 2, 3, 4, 5],
-        [0],
-        [0, 0, 0, 0],
-        [-i for i in range(0, 100)]
-   ])
+    [1, 2, 3, 4, 5],
+    [0],
+    [0, 0, 0, 0],
+    [-i for i in range(0, 100)]
+])
 def number_dataset(request):
-   return Wrapper(request.param)
+    return Wrapper(request.param)
 
 
 @pytest.fixture(params=[
-        [1, 2, 3, 4, 5],
-        [0],
-        [0, 0, 0, 0],
-        [-i for i in range(100, 0)]
-   ])
+    [1, 2, 3, 4, 5],
+    [0],
+    [0, 0, 0, 0],
+    [-i for i in range(100, 0)]
+])
 def number_iterator(request):
-   return Iterator(request.param)
+    return Iterator(request.param)
 
 
 @pytest.fixture(params=[
@@ -104,7 +104,8 @@ def number_iterator(request):
     {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
     {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')},
     {'g': {}},
-    {'h': []}
+    {'h': []},
+    {'i': None}
 ])
 def dummy_model(request):
     return DummyModel(**request.param)
@@ -131,7 +132,7 @@ def model_line(request, tmp_path):
 
 @pytest.fixture
 def ones_model():
-   return OnesModel()
+    return OnesModel()
 
 
 @pytest.fixture
@@ -140,5 +141,5 @@ def model_repo(tmp_path):
         dict(
             name=str(num),
             model_cls=DummyModel) for num in range(10)
-        ])
-    yield repo
+    ])
+    return repo

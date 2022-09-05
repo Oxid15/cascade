@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from numpy.random import shuffle
+from numpy.random import random_integers, shuffle
 from . import Dataset, Sampler
 
 
 class RandomSampler(Sampler):
     """
-    Shuffles dataset. Can randomly sample from dataset 
+    Shuffles dataset. Can randomly sample from dataset
     if num_samples is not None and less than length of dataset.
     """
     def __init__(self, dataset: Dataset, num_samples=None, **kwargs) -> None:
@@ -30,15 +30,19 @@ class RandomSampler(Sampler):
         dataset: Dataset
             Input dataset to sample from
         num_samples: int, optional
-            Should be less than len(dataset), but oversampling can be added in the future.
+            If less or equal than len(dataset) samples without repetitions (shuffles indices).
+            If more than len(dataset) generates random integers as indices.
             If None, then just shuffles the dataset.
         """
         if num_samples is None:
             num_samples = len(dataset)
+        if num_samples <= len(dataset):
+            self._indices = [i for i in range(len(dataset))]
+            shuffle(self._indices)
+            self._indices = self._indices[:num_samples]
+        else:
+            self._indices = random_integers(0, len(dataset) - 1, num_samples)
         super().__init__(dataset, num_samples, **kwargs)
-        self.indices = [i for i in range(len(dataset))]
-        shuffle(self.indices)
-        self.indices = self.indices[:num_samples]
 
     def __getitem__(self, index):
-        return super().__getitem__(self.indices[index])
+        return super().__getitem__(self._indices[index])

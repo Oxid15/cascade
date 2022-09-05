@@ -41,7 +41,7 @@ class Model(Traceable):
         self.created_at = pendulum.now(tz='UTC')
         super().__init__(meta_prefix=meta_prefix, **kwargs)
 
-    def fit(self, *args, **kwargs):
+    def fit(self, *args, **kwargs) -> None:
         """
         Method to encapsulate training loops.
         May be provided with any training-related arguments.
@@ -98,7 +98,7 @@ class Model(Traceable):
 
         if not all_default_exist:
             warnings.warn('Model\'s meta is incomplete, maybe you haven\'t call super().__init__ in subclass?')
-        
+
         meta[0]['type'] = 'model'
         return meta
 

@@ -35,4 +35,4 @@ from cascade.data import Wrapper
 def test_apply_modifier(arr, func):
     ds = Wrapper(arr)
     ds = ApplyModifier(ds, func)
-    assert(list(map(func, arr)) == [item for item in ds])
+    assert list(map(func, arr)) == [item for item in ds]

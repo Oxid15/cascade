@@ -17,7 +17,7 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import SequentialCacher, Wrapper
+from cascade.data import SequentialCacher
 
 
 def test(number_dataset):
@@ -25,4 +25,4 @@ def test(number_dataset):
     res = []
     for i in range(len(ds)):
         res.append(ds[i])
-    assert(res == number_dataset._data)
+    assert res == number_dataset._data

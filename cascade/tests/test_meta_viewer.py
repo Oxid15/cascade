@@ -35,19 +35,19 @@ def test(tmp_path):
         json.dump({'name': 'test0'}, f)
 
     # Write also using mev
-    mv = MetaViewer(tmp_path)
-    mv.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})    
+    mev = MetaViewer(tmp_path)
+    mev.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})
 
-    mv = MetaViewer(tmp_path)
+    mev = MetaViewer(tmp_path)
 
-    assert(len(mv) == 2)
-    assert('name' in mv[0])
-    assert('name' in mv[1])
+    assert len(mev) == 2
+    assert 'name' in mev[0]
+    assert 'name' in mev[1]
 
     # This order is due to sorting by path
     # .../model/test1.json is less than .../test0.json
-    assert(mv[0]['name'] == 'test1')
-    assert(mv[1]['name'] == 'test0')
+    assert mev[0]['name'] == 'test1'
+    assert mev[1]['name'] == 'test0'
 
 
 def test_order(tmp_path):
@@ -59,12 +59,12 @@ def test_order(tmp_path):
         model = DummyModel(real_num=i)
         repo['line1'].save(model)
 
-    mv = MetaViewer(tmp_path)
+    mev = MetaViewer(tmp_path)
     k = 0
 
     # This checks that models were read in exactly same order as they were saved
     # real_num should be [0, 1, 2]
-    for meta in mv:
+    for meta in mev:
         if meta[0]['type'] == 'model':
             assert meta[0]['params']['real_num'] == k
             k += 1

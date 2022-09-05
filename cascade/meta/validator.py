@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable
+from typing import Callable, Union, List
 from tqdm import tqdm
 
 from ..data import Dataset, Modifier, T
@@ -25,9 +25,14 @@ class Validator(Modifier):
     """
     Base class for validators. Defines basic `__init__` structure
     """
-    def __init__(self, dataset: Dataset, func: Callable[[Any], bool], **kwargs) -> None:
+    def __init__(self, dataset: Dataset,
+                 func: Union[Callable[[T], bool], List[Callable[[T], bool]]],
+                 **kwargs) -> None:
         super().__init__(dataset, **kwargs)
-        self.func = func
+        if isinstance(func, Callable):
+            self._func = [func]
+        else:
+            self._func = func
 
 
 class AggregateValidator(Validator):
@@ -36,15 +41,20 @@ class AggregateValidator(Validator):
 
     Example
     -------
-    >>> from cascade.tests.number_dataset import NumberDataset
-    >>> ds = NumberDataset([1, 2, 3, 4, 5])
+    >>> from cascade.data import Wrapper
+    >>> ds = Wrapper([1, 2, 3, 4, 5])
     >>> ds = AggregateValidator(ds, lambda x: len(x) == 5)
     """
     def __init__(self, dataset: Dataset, func: Callable[[Dataset], bool], **kwargs) -> None:
         super().__init__(dataset, func, **kwargs)
 
-        if not self.func(self._dataset):
-            raise DataValidationException(f'{repr(self._dataset)} fails on {repr(self.func)}')
+        bad_results = []
+        for i, func in enumerate(self._func):
+            if not func(self._dataset):
+                bad_results.append(i)
+
+        if len(bad_results):
+            raise DataValidationException(f'Checks in positions {bad_results} failed')
         else:
             print('OK!')
 
@@ -56,18 +66,43 @@ class PredicateValidator(Validator):
 
     Example
     -------
-    >>> from cascade.tests.number_dataset import NumberDataset
-    >>> ds = NumberDataset([1, 2, 3, 4, 5])
+    >>> from cascade.data import Wrapper
+    >>> ds = Wrapper([1, 2, 3, 4, 5])
     >>> ds = PredicateValidator(ds, lambda x: x < 6)
     """
-    def __init__(self, dataset: Dataset, func: Callable[[T], bool], **kwargs) -> None:
+    def __init__(
+            self,
+            dataset: Dataset,
+            func: Union[Callable[[T], bool], List[Callable[[T], bool]]],
+            **kwargs) -> None:
         super().__init__(dataset, func, **kwargs)
-        bad_items = []
-        for i, item in tqdm(enumerate(self._dataset), desc='Checking', leave=False):
-            if not self.func(item):
-                bad_items.append(i)
 
-        if len(bad_items):
-            raise DataValidationException(f'Items {bad_items} are not valid')
+        bad_items = {j: [] for j in range(len(self._func))}
+        for i, item in tqdm(enumerate(self._dataset), desc='Checking', leave=False):
+            for j, func in enumerate(self._func):
+                if not func(item):
+                    bad_items[j].append(i)
+
+        bad_counts = [len(bad_items[i]) for i in range(len(self._func))]
+        if any(bad_counts):
+            self._raise(bad_items)
         else:
             print('OK!')
+
+    @staticmethod
+    def _prettify_items(items: List[int]) -> str:
+        if len(items) < 20:
+            return str(items)
+        else:
+            return f'{", ".join(map(str, items[:5]))} ... {", ".join(map(str, items[-5:]))}'
+
+    def _raise(self, items: List[int]):
+        bad_counts = [len(items[i]) for i in range(len(self._func))]
+
+        failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]
+        failed_items = '\n'.join([f'{i}: {self._prettify_items(items[i])}' for i in items])
+        raise DataValidationException(
+            f'Checks in positions {failed_checks} failed\n'
+            f'Items failed by check:\n'
+            f'{failed_items}'
+        )

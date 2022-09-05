@@ -35,5 +35,5 @@ def test_iter():
     for item in m:
         result2.append(item)
 
-    assert([1, 2, 3, 4, 5] == result1)
-    assert([1, 2, 3, 4, 5] == result2)
+    assert [1, 2, 3, 4, 5] == result1
+    assert [1, 2, 3, 4, 5] == result2

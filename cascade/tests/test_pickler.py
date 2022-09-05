@@ -41,4 +41,4 @@ def test(ds, tmp_path):
     for i in range(len(ds2)):
         res.append(ds2[i])
 
-    assert(res == true)
+    assert res == true

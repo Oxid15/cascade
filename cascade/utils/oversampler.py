@@ -22,11 +22,11 @@ from tqdm import trange
 class OverSampler(Sampler):
     """
     Accepts datasets which return tuples of objects and labels.
-    Isn't lazy - runs through all the items ones to determine key order. 
+    Isn't lazy - runs through all the items ones to determine key order.
     Doesn't store values afterwards.
 
     To oversample it repeats items with minority labels for the amount
-    of times needed to make equal distribution. 
+    of times needed to make equal distribution.
     Works for any number of classes.
     """
     def __init__(self, dataset, *args, **kwargs):
@@ -35,14 +35,14 @@ class OverSampler(Sampler):
         label_nums, _ = np.histogram(labels, bins=len(ulabels))
         add_nums = np.max(label_nums) - label_nums
 
-        self.add_indices = []
+        self._add_indices = []
         for label_idx, label in enumerate(ulabels):
             k = 0
             for _ in range(add_nums[label_idx]):
                 while labels[k] != label:
                     k += 1
-                self.add_indices.append(k)
-        ln = len(dataset) + len(self.add_indices)
+                self._add_indices.append(k)
+        ln = len(dataset) + len(self._add_indices)
         print(f'Original length was {len(dataset)} and new is {ln}')
 
         super().__init__(dataset, num_samples=ln, *args, **kwargs)
@@ -51,8 +51,8 @@ class OverSampler(Sampler):
         if index < len(self._dataset):
             return self._dataset[index]
         else:
-            idx = self.add_indices[index - len(self._dataset)]
+            idx = self._add_indices[index - len(self._dataset)]
             return self._dataset[idx]
 
     def __len__(self):
-        return len(self._dataset) + len(self.add_indices)
+        return len(self._dataset) + len(self._add_indices)

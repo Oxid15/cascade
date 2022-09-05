@@ -31,10 +31,10 @@ def test(tmp_path):
     ds = FolderDataset(tmp_path)
     meta = ds.get_meta()[0]
 
-    assert(len(ds) == 1)
-    assert('name' in meta)
-    assert('len' in meta)
-    assert('paths' in meta)
-    assert('md5sums' in meta)
-    assert(len(meta['paths']) == 1)
-    assert(len(meta['md5sums']) == 1)
+    assert len(ds) == 1
+    assert 'name' in meta
+    assert 'len' in meta
+    assert 'paths' in meta
+    assert 'md5sums' in meta
+    assert len(meta['paths']) == 1
+    assert len(meta['md5sums']) == 1

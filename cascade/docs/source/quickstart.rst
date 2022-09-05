@@ -7,7 +7,7 @@ Install latest version using pip directly from main branch
 
 .. code-block:: bash
 
-    pip install git+https://github.com/oxid15/cascade.git@main
+    pip install cascade-ml
 
 .. note::
     `cascade.utils` is also installed, but its requirements are optional and listed in the file `utils_requirements.txt`
@@ -25,9 +25,11 @@ Use cases
 Below are examples of usage of Cascade for some typical tasks.
 
 .. toctree::
+    :maxdepth: 1
 
     examples/pipeline_building.ipynb
     examples/model_training.ipynb
+    examples/data_validation.ipynb
 
 .. important::
     New use-cases will be added soon!
