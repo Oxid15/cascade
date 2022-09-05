@@ -6,11 +6,11 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cascade-ml",
-    version='0.6.0',
+    version='0.7.0',
     author='Ilia Moiseev',
     author_email='ilia.moiseev.5@yandex.ru',
     license='Apache License 2.0',
-    description="Small ML-Engineering framework",
+    description="ML-Engineering library",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/oxid15/cascade",

@@ -21,31 +21,32 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper
-from cascade.data import Concatenator
+from cascade.data import RangeSampler, Wrapper
 
 
-def test_meta():
-    n1 = Wrapper([0, 1])
-    n2 = Wrapper([2, 3, 4, 5])
+def test():
+    data = [0, 1, 2, 3, 4]
+    ds = Wrapper(data)
+    ds = RangeSampler(ds, 2)
 
-    c = Concatenator([n1, n2], meta_prefix={'num': 1})
-    assert c.get_meta()[0]['num'] == 1
+    sampled = [item for item in ds]
 
+    assert sampled == [data[i] for i in range(2)]
 
-@pytest.mark.parametrize(
-    'arrs', [
-        ([0], [0], [0]),
-        ([1, 2, 3, 4], [11]),
-        ([1],),
-        ([1, 2, 3, 4], [])
-    ]
-)
-def test_concatenation(arrs):
-    c = Concatenator([*arrs])
+    ds = Wrapper(data)
+    ds = RangeSampler(ds, 1, 3)
 
-    res = []
-    for arr in arrs:
-        res += arr
+    sampled = [item for item in ds]
 
-    assert [c[i] for i in range(len(c))] == res
+    assert sampled == [data[i] for i in range(1, 3)]
+
+    ds = Wrapper(data)
+    ds = RangeSampler(ds, 0, len(ds), 2)
+
+    sampled = [item for item in ds]
+
+    assert sampled == [data[i] for i in range(0, len(data), 2)]
+
+    with pytest.raises(AssertionError):
+        ds = Wrapper(data)
+        ds = RangeSampler(data, 10, 0)  # start > stop -> num_samples == 0

@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-import glob
+# import glob
 # from hashlib import md5
 import pickle
 from typing import Any, Dict, List
@@ -29,7 +29,7 @@ from ..models import BasicModel
 class SkModel(BasicModel):
     """
     Wrapper for sklearn models.
-    Accepts the name and block to form pipeline. 
+    Accepts the name and block to form pipeline.
     Can fit, evaluate, predict save and load out of the box.
     """
     def __init__(self, name=None, blocks=None, **kwargs) -> None:
@@ -42,7 +42,7 @@ class SkModel(BasicModel):
             List of sklearn transformers to make a pipeline from
         """
         if name is not None:
-            warnings.warn('''You passed not required argument name. 
+            warnings.warn('''You passed not required argument name.
             It is deprecated and will be removed in following versions''', FutureWarning)
             self.name = name
             super().__init__(name=name, **kwargs)
@@ -50,7 +50,7 @@ class SkModel(BasicModel):
             super().__init__(**kwargs)
 
         if blocks is not None:
-            self.pipeline = self._construct_pipeline(blocks)
+            self._pipeline = self._construct_pipeline(blocks)
 
     @staticmethod
     def _construct_pipeline(blocks: List[Any]) -> Pipeline:
@@ -60,19 +60,19 @@ class SkModel(BasicModel):
         """
         Wrapper for pipeline.fit
         """
-        self.pipeline.fit(x, y, *args, **kwargs)
+        self._pipeline.fit(x, y, *args, **kwargs)
 
     def predict(self, x, *args, **kwargs):
         """
         Wrapper for pipeline.predict
         """
-        return self.pipeline.predict(x, *args, **kwargs)
-    
+        return self._pipeline.predict(x, *args, **kwargs)
+
     def predict_proba(self, x, *args, **kwargs):
         """
         Wrapper for pipeline.predict_proba
         """
-        return self.pipeline.predict_proba(x, *args, **kwargs)
+        return self._pipeline.predict_proba(x, *args, **kwargs)
 
     # Will be added again when thoroughly tested
     # def _check_model_hash(self, meta, path_w_ext) -> None:
@@ -100,21 +100,21 @@ class SkModel(BasicModel):
         #         self._check_model_hash(meta, path)
 
         with open(path, 'rb') as f:
-            self.pipeline = pickle.load(f)
+            self._pipeline = pickle.load(f)
 
     def save(self, path) -> None:
         """
-        Saves model to the path provided. 
+        Saves model to the path provided.
         If no extension, then .pkl is added.
         """
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
         with open(f'{path}', 'wb') as f:
-            pickle.dump(self.pipeline, f)
+            pickle.dump(self._pipeline, f)
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
-            'pipeline': repr(self.pipeline)
+            'pipeline': repr(self._pipeline)
         })
         return meta

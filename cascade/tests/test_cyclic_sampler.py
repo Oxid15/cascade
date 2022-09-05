@@ -28,5 +28,5 @@ def test_cycle():
     ds = Wrapper([0, 1, 2, 3, 4])
     ds = CyclicSampler(ds, 16)
 
-    assert([ds[i] for i in range(len(ds))] ==
-                        [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0])
+    assert [ds[i] for i in range(len(ds))] \
+           == [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0]

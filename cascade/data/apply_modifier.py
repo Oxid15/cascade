@@ -33,12 +33,12 @@ class ApplyModifier(Modifier):
             each `__getitem__` would call `func` on an item obtained from a previous dataset
         """
         super().__init__(dataset, *args, **kwargs)
-        self.func = func
+        self._func = func
 
     def __getitem__(self, index: int) -> T:
         item = self._dataset[index]
-        return self.func(item)
+        return self._func(item)
 
     def __repr__(self) -> str:
         rp = super().__repr__()
-        return f'{rp}, {repr(self.func)}'
+        return f'{rp}, {repr(self._func)}'

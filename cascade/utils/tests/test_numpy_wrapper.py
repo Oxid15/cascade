@@ -18,10 +18,10 @@ import os
 import sys
 import numpy as np
 
-MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+MODULE_PATH = os.path.dirname(
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper
 from cascade.utils import NumpyWrapper
 
 
@@ -31,4 +31,4 @@ def test(tmp_path):
     np.save(path, arr)
 
     ds = NumpyWrapper(path)
-    assert(arr.tolist() == [item for item in ds])
+    assert arr.tolist() == [item for item in ds]

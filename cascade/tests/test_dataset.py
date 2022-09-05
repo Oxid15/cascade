@@ -36,11 +36,11 @@ def test_meta():
     ds = Dataset(meta_prefix={'time': now})
     meta = ds.get_meta()
 
-    assert(type(meta) == list)
-    assert(len(meta) == 1)
-    assert(type(meta[0]) == dict)
-    assert(meta[0]['time'] == now)
-    assert('name' in meta[0])
+    assert type(meta) == list
+    assert len(meta) == 1
+    assert type(meta[0]) == dict
+    assert meta[0]['time'] == now
+    assert 'name' in meta[0]
 
 
 def test_update_meta():
@@ -48,8 +48,8 @@ def test_update_meta():
     ds.update_meta({'b': 3})
     meta = ds.get_meta()
 
-    assert(meta[0]['a'] == 1)
-    assert(meta[0]['b'] == 3)
+    assert meta[0]['a'] == 1
+    assert meta[0]['b'] == 3
 
 
 def test_meta_from_file(tmp_path):
@@ -59,8 +59,8 @@ def test_meta_from_file(tmp_path):
     ds = Dataset(meta_prefix=os.path.join(tmp_path, 'test_meta_from_file.json'))
     meta = ds.get_meta()
 
-    assert('a' in meta[0])
-    assert(meta[0]['a'] == 1)
+    assert 'a' in meta[0]
+    assert meta[0]['a'] == 1
 
 
 def test_iterator():
@@ -68,7 +68,7 @@ def test_iterator():
     res = []
     for item in it:
         res.append(item)
-    assert([1, 2, 3, 4] == res)
+    assert [1, 2, 3, 4] == res
 
 
 def test_wrapper():
@@ -76,7 +76,7 @@ def test_wrapper():
     res = []
     for i in range(len(wr)):
         res.append(wr[i])
-    assert([1, 2, 3, 4] == res)
+    assert [1, 2, 3, 4] == res
 
 
 def test_modifier():
@@ -86,12 +86,12 @@ def test_modifier():
     res = []
     for i in range(len(ds)):
         res.append(ds[i])
-    assert([1, 2, 3, 4] == res)
+    assert [1, 2, 3, 4] == res
 
     res = []
     for it in ds:
         res.append(it)
-    assert([1, 2, 3, 4] == res)
+    assert [1, 2, 3, 4] == res
 
 
 def test_modifier_meta():
@@ -99,8 +99,8 @@ def test_modifier_meta():
     ds = Modifier(ds)
 
     meta = ds.get_meta()
-    assert(type(meta) == list)
-    assert(len(meta) == 2)
+    assert type(meta) == list
+    assert len(meta) == 2
 
 
 def test_sampler():
