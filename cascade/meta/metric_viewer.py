@@ -38,10 +38,13 @@ class MetricViewer:
         repo: ModelRepo
             ModelRepo object to extract metrics from
         """
-        self.repo = repo
+        self._repo = repo
+        self._metrics = []
+        self.reload_table()
 
-        self.metrics = []
-        for line in self.repo:
+    def reload_table(self):
+        self._metrics = []
+        for line in self._repo:
             viewer_root = line.root
 
             # Try to use viewer only on models using type key
@@ -58,7 +61,11 @@ class MetricViewer:
                 In the following versions it will be deprecated.''', FutureWarning)
 
             for i in range(len(line.model_names)):
-                meta = view[i][-1]  # Takes last model from meta
+                try:
+                    meta = view[i][-1]  # Takes last model from meta
+                except IndexError:
+                    meta = {}
+
                 metric = {
                     'line': viewer_root, 
                     'num': i
@@ -77,8 +84,8 @@ class MetricViewer:
                 if 'params' in meta:
                     metric.update(meta['params'])
 
-                self.metrics.append(metric)
-        self.table = pd.DataFrame(self.metrics)
+                self._metrics.append(metric)
+        self.table = pd.DataFrame(self._metrics)
 
     def __repr__(self) -> str:
         return repr(self.table)
@@ -107,37 +114,71 @@ class MetricViewer:
         ----------
         page_size:
             Size of the table in rows on one page
-        include List[str], optional:
+        include: List[str], optional:
             List of parameters or metrics to be added. Only them will be present along with some default.
-        exclude List[str], optional:
+        exclude: List[str], optional:
             List of parameters or metrics to be excluded from table.
+        **kwargs:
+            Arguments of dash app. Can be ip or port for example.
         """
-        # Conditional import
+        server = MetricServer(self, page_size=page_size, include=include, exclude=exclude)
+        server.serve(**kwargs)
+
+
+class MetricServer:
+    def __init__(self, mv, page_size, include, exclude, **kwargs) -> None:
+        self._mv = mv
+        self._page_size = page_size
+        self._include = include
+        self._exclude = exclude
+
+    def _update_graph_callback(self, _app):
         try:
-            import dash
+            from dash import Output, Input
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-            Cannot import dash. It is conditional 
-            dependency you can install it 
-            using the instructions from https://dash.plotly.com/installation''')
+            self._raise_cannot_import()
+
+        @_app.callback(
+                Output(component_id='dependence-figure', component_property='figure'),
+                Input(component_id='dropdown-x', component_property='value'),
+                Input(component_id='dropdown-y', component_property='value'))
+        def _update_graph(x, y):
+            fig = go.Figure()
+            if x is not None and y is not None:
+                fig.add_trace(
+                    go.Scatter(
+                        x=self._df_flatten[x],
+                        y=self._df_flatten[y],
+                        mode='markers'
+                    )
+                )
+                fig.update_layout(title=f'{x} to {y} relation')
+            return fig
+
+    def _layout(self):
+        try:
+            from dash import html, dcc, dash_table
+        except ModuleNotFoundError:
+            self._raise_cannot_import()
         else:
-            from dash import Input, Output, html, dcc, dash_table
+            from ..models import ModelRepo
 
-        df = self.table
-        if exclude is not None:
-            df = df.drop(exclude, axis=1)
+        self._mv._repo.reload()
+        self._mv.reload_table()
 
-        if include is not None:
-            df = df[['line', 'num'] + include]
+        df = self._mv.table
+        if self._exclude is not None:
+            df = df.drop(self._exclude, axis=1)
 
-        df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
+        if self._include is not None:
+            df = df[['line', 'num'] + self._include]
 
-        app = dash.Dash()
+        self._df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
         dep_fig = go.Figure()
 
-        app.layout = html.Div([
+        return html.Div([
             html.H1(
-                children=f'MetricViewer in {self.repo.root}',
+                children=f'MetricViewer in {self._mv._repo}',
                 style={
                     'textAlign': 'center',
                     'color': '#084c61',
@@ -145,11 +186,11 @@ class MetricViewer:
                 }
             ),
             dcc.Dropdown(
-                list(df_flatten.columns),
+                list(self._df_flatten.columns),
                 id='dropdown-x',
                 multi=False),
             dcc.Dropdown(
-                list(df_flatten.columns),
+                list(self._df_flatten.columns),
                 id='dropdown-y',
                 multi=False),
             dcc.Graph(
@@ -157,9 +198,9 @@ class MetricViewer:
                 figure=dep_fig),
             dash_table.DataTable(
                 columns=[
-                    {'name': col, 'id': col, 'selectable': True} for col in df_flatten.columns
+                    {'name': col, 'id': col, 'selectable': True} for col in self._df_flatten.columns
                 ],
-                data=df_flatten.to_dict('records'),
+                data=self._df_flatten.to_dict('records'),
                 filter_action="native",
                 sort_action="native",
                 sort_mode="multi",
@@ -167,26 +208,24 @@ class MetricViewer:
                 selected_rows=[],
                 page_action="native",
                 page_current=0,
-                page_size=page_size,
+                page_size=self._page_size,
             )
         ])
 
-        @app.callback(
-            Output(component_id='dependence-figure', component_property='figure'),
-            Input(component_id='dropdown-x', component_property='value'),
-            Input(component_id='dropdown-y', component_property='value')
-        )
-        def _update_graph(x, y):
-            fig = go.Figure()
-            if x is not None and y is not None:
-                fig.add_trace(
-                    go.Scatter(
-                        x=df_flatten[x],
-                        y=df_flatten[y],
-                        mode='markers'
-                    )
-                )
-                fig.update_layout(title=f'{x} to {y} relation')
-            return fig
+    def serve(self, **kwargs):
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            self._raise_cannot_import()
 
+        app = dash.Dash()
+        app.layout = self._layout
+        self._update_graph_callback(app)
         app.run_server(use_reloader=False, **kwargs)
+
+    def _raise_cannot_import(self):
+        raise ModuleNotFoundError('''
+                    Cannot import dash. It is conditional 
+                    dependency you can install it 
+                    using the instructions from https://dash.plotly.com/installation''')

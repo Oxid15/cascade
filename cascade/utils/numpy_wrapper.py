@@ -23,9 +23,9 @@ class NumpyWrapper(Wrapper):
     A wrapper around .npy files. Loads file on `__init__`.
     """
     def __init__(self, path, *args, **kwargs):
-        self.path = path
+        self._path = path
         super().__init__(np.load(path), *args, **kwargs)
 
     def get_meta(self):
         meta = super().get_meta()
-        meta[-1]['root'] = self.path
+        meta[-1]['root'] = self._path
