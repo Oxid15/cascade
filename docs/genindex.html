@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/><title>Index - cascade 0.6.0 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/><title>Index - cascade 0.7.0 documentation</title>
 <link rel="stylesheet" type="text/css" href="pygments.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
@@ -17,18 +17,24 @@
   body {
     --color-code-background: #f8f8f8;
   --color-code-foreground: black;
+  --color-brand-primary: #084c61;
+  --color-brand-content: #084c61;
   
   }
   @media not print {
     body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #084c61;
+  --color-brand-content: #084c61;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #084c61;
+  --color-brand-content: #084c61;
   
       }
     }
@@ -122,7 +128,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.6.0 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.7.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -159,6 +165,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
@@ -246,6 +253,8 @@
 </li>
           <li><a href="cascade.data.html#cascade.data.RandomSampler.__init__">(cascade.data.RandomSampler method)</a>
 </li>
+          <li><a href="cascade.data.html#cascade.data.RangeSampler.__init__">(cascade.data.RangeSampler method)</a>
+</li>
           <li><a href="cascade.data.html#cascade.data.Sampler.__init__">(cascade.data.Sampler method)</a>
 </li>
           <li><a href="cascade.data.html#cascade.data.SequentialCacher.__init__">(cascade.data.SequentialCacher method)</a>
@@ -266,6 +275,8 @@
 </li>
           <li><a href="cascade.meta.html#cascade.meta.Validator.__init__">(cascade.meta.Validator method)</a>
 </li>
+          <li><a href="cascade.models.html#cascade.models.BasicTrainer.__init__">(cascade.models.BasicTrainer method)</a>
+</li>
           <li><a href="cascade.models.html#cascade.models.Model.__init__">(cascade.models.Model method)</a>
 </li>
           <li><a href="cascade.models.html#cascade.models.ModelLine.__init__">(cascade.models.ModelLine method)</a>
@@ -273,6 +284,8 @@
           <li><a href="cascade.models.html#cascade.models.ModelModifier.__init__">(cascade.models.ModelModifier method)</a>
 </li>
           <li><a href="cascade.models.html#cascade.models.ModelRepo.__init__">(cascade.models.ModelRepo method)</a>
+</li>
+          <li><a href="cascade.models.html#cascade.models.Trainer.__init__">(cascade.models.Trainer method)</a>
 </li>
           <li><a href="cascade.utils.html#cascade.utils.ConstantBaseline.__init__">(cascade.utils.ConstantBaseline method)</a>
 </li>
@@ -345,9 +358,11 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cascade.models.html#cascade.models.BasicModel">BasicModel (class in cascade.models)</a>
 </li>
+        <li><a href="cascade.models.html#cascade.models.BasicModelModifier">BasicModelModifier (class in cascade.models)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cascade.models.html#cascade.models.BasicModelModifier">BasicModelModifier (class in cascade.models)</a>
+        <li><a href="cascade.models.html#cascade.models.BasicTrainer">BasicTrainer (class in cascade.models)</a>
 </li>
         <li><a href="cascade.data.html#cascade.data.BruteforceCacher">BruteforceCacher (class in cascade.data)</a>
 </li>
@@ -427,6 +442,8 @@
   <h2>G</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cascade.models.html#cascade.models.ModelRepo.get_line_names">get_line_names() (cascade.models.ModelRepo method)</a>
+</li>
         <li><a href="cascade.base.html#cascade.base.Traceable.get_meta">get_meta() (cascade.base.Traceable method)</a>
 
         <ul>
@@ -449,6 +466,8 @@
           <li><a href="cascade.models.html#cascade.models.ModelModifier.get_meta">(cascade.models.ModelModifier method)</a>
 </li>
           <li><a href="cascade.models.html#cascade.models.ModelRepo.get_meta">(cascade.models.ModelRepo method)</a>
+</li>
+          <li><a href="cascade.models.html#cascade.models.Trainer.get_meta">(cascade.models.Trainer method)</a>
 </li>
           <li><a href="cascade.utils.html#cascade.utils.NumpyWrapper.get_meta">(cascade.utils.NumpyWrapper method)</a>
 </li>
@@ -547,7 +566,7 @@
   <h2>O</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cascade.meta.html#cascade.meta.MetaViewer.obj_to_dict">obj_to_dict() (cascade.meta.MetaViewer method)</a>
+        <li><a href="cascade.meta.html#cascade.meta.MetaViewer.obj_to_dict">obj_to_dict() (cascade.meta.MetaViewer static method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
@@ -597,14 +616,20 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cascade.data.html#cascade.data.RandomSampler">RandomSampler (class in cascade.data)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cascade.data.html#cascade.data.RangeSampler">RangeSampler (class in cascade.data)</a>
+</li>
         <li><a href="cascade.base.html#cascade.base.MetaHandler.read">read() (cascade.base.MetaHandler method)</a>
 
         <ul>
           <li><a href="cascade.meta.html#cascade.meta.MetaViewer.read">(cascade.meta.MetaViewer method)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cascade.models.html#cascade.models.ModelRepo.reload">reload() (cascade.models.ModelRepo method)</a>
+</li>
+        <li><a href="cascade.meta.html#cascade.meta.MetricViewer.reload_table">reload_table() (cascade.meta.MetricViewer method)</a>
+</li>
     </ul></td>
   </tr></table>
 </section>
@@ -631,8 +656,12 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cascade.data.html#cascade.data.SequentialCacher">SequentialCacher (class in cascade.data)</a>
 </li>
-        <li><a href="cascade.meta.html#cascade.meta.MetricViewer.serve">serve() (cascade.meta.MetricViewer method)</a>
+        <li><a href="cascade.meta.html#cascade.meta.HistoryViewer.serve">serve() (cascade.meta.HistoryViewer method)</a>
+
+        <ul>
+          <li><a href="cascade.meta.html#cascade.meta.MetricViewer.serve">(cascade.meta.MetricViewer method)</a>
 </li>
+        </ul></li>
         <li><a href="cascade.utils.html#cascade.utils.SkModel">SkModel (class in cascade.utils)</a>
 </li>
     </ul></td>
@@ -647,13 +676,21 @@
 </li>
         <li><a href="cascade.utils.html#cascade.utils.TableFilter">TableFilter (class in cascade.utils)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cascade.utils.html#cascade.utils.TableIterator">TableIterator (class in cascade.utils)</a>
 </li>
         <li><a href="cascade.utils.html#cascade.utils.TableDataset.to_csv">to_csv() (cascade.utils.TableDataset method)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cascade.base.html#cascade.base.Traceable">Traceable (class in cascade.base)</a>
+</li>
+        <li><a href="cascade.models.html#cascade.models.BasicTrainer.train">train() (cascade.models.BasicTrainer method)</a>
+
+        <ul>
+          <li><a href="cascade.models.html#cascade.models.Trainer.train">(cascade.models.Trainer method)</a>
+</li>
+        </ul></li>
+        <li><a href="cascade.models.html#cascade.models.Trainer">Trainer (class in cascade.models)</a>
 </li>
     </ul></td>
   </tr></table>

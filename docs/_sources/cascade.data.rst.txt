@@ -116,3 +116,21 @@ cascade.data
 |
 
 | 
+
+
+.. autoclass:: cascade.data.RangeSampler
+
+|
+
+|
+
+| 
+
+.. autofunction:: cascade.split
+
+
+|
+
+|
+
+| 
