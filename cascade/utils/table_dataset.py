@@ -61,11 +61,11 @@ class TableDataset(Dataset):
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
-                'name': repr(self),
-                'columns': list(self._table.columns),
-                'len': len(self),
-                'info': self._table.describe().to_dict()
-            })
+            'name': repr(self),
+            'columns': list(self._table.columns),
+            'len': len(self),
+            'info': self._table.describe().to_dict()
+        })
         return meta
 
     def to_csv(self, path, **kwargs):
@@ -114,7 +114,7 @@ class CSVDataset(TableDataset):
 
 class PartedTableLoader(Dataset):
     """
-    Works like CSVDataset, but uses dask to load tables 
+    Works like CSVDataset, but uses dask to load tables
     and returns partitions on __getitem__
     """
     def __init__(self, csv_file_path, *args, **kwargs):
@@ -149,7 +149,8 @@ class TableIterator(Iterator):
             number of rows to return in one __next__
         """
         self.chunk_size = chunk_size
-        super().__init__(pd.read_csv(csv_file_path, iterator=True, *args, **kwargs))
+        super().__init__(pd.read_csv(csv_file_path,
+                         iterator=True, *args, **kwargs))
 
     def __next__(self):
         return self._data.get_chunk(self.chunk_size)
@@ -157,7 +158,7 @@ class TableIterator(Iterator):
 
 class LargeCSVDataset(SequentialCacher):
     """
-    SequentialCacher over large .csv file. 
+    SequentialCacher over large .csv file.
     Loads table by partitions.
     """
     def __init__(self, csv_file_path, *args, **kwargs):
@@ -181,7 +182,8 @@ class NullValidator(TableDataset, AggregateValidator):
     Checks there are no null values in the table.
     """
     def __init__(self, dataset: TableDataset, *args, **kwargs) -> None:
-        super().__init__(dataset, self.check_nulls, *args, t=dataset._table, **kwargs)
+        super().__init__(dataset, self.check_nulls,
+                         *args, t=dataset._table, **kwargs)
 
     def check_nulls(self, x):
         mask = x._table.isnull().values
@@ -192,8 +194,8 @@ class NullValidator(TableDataset, AggregateValidator):
             by_columns = mask.sum(axis=0)
             missing = pd.DataFrame(by_columns.reshape(1, len(by_columns)), columns=x._table.columns)
             raise DataValidationException(
-                f'There were NaN-values in {repr(self._dataset)}\n'\
-                f'Total count: {total}\n'\
-                f'By columns:\n'\
+                f'There were NaN-values in {repr(self._dataset)}\n'
+                f'Total count: {total}\n'
+                f'By columns:\n'
                 f'{missing}'
             )

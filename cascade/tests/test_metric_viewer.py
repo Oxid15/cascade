@@ -16,7 +16,6 @@ limitations under the License.
 
 import os
 import sys
-import numpy as np
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -36,7 +35,7 @@ def test(model_repo, dummy_model):
     t = mtv.table
 
     for item in ['line', 'num', 'created_at', 'saved', 'acc']:
-        assert(item in list(t.columns))
+        assert item in list(t.columns)
 
 
 def test_show_table(model_repo, dummy_model):

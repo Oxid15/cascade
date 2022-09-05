@@ -22,11 +22,11 @@ from tqdm import trange
 class OverSampler(Sampler):
     """
     Accepts datasets which return tuples of objects and labels.
-    Isn't lazy - runs through all the items ones to determine key order. 
+    Isn't lazy - runs through all the items ones to determine key order.
     Doesn't store values afterwards.
 
     To oversample it repeats items with minority labels for the amount
-    of times needed to make equal distribution. 
+    of times needed to make equal distribution.
     Works for any number of classes.
     """
     def __init__(self, dataset, *args, **kwargs):

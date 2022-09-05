@@ -21,20 +21,19 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.tests.conftest import DummyModel
-from cascade.models.model_repo import ModelLine
 
 
 def test_save_load(model_line, dummy_model):
     model_line.save(dummy_model)
     model = model_line[0]
 
-    assert(len(model_line) == 1)
-    assert(model.model == "b'model'")
+    assert len(model_line) == 1
+    assert model.model == "b'model'"
 
 
 def test_meta(model_line, dummy_model):
     model_line.save(dummy_model)
     meta = model_line.get_meta()
 
-    assert(meta[0]['model_cls'] == repr(DummyModel))
-    assert(meta[0]['len'] == 1)
+    assert meta[0]['model_cls'] == repr(DummyModel)
+    assert meta[0]['len'] == 1

@@ -41,12 +41,14 @@ class TextClassificationDataset(Dataset):
         self._paths = []
         self._labels = []
         for i, folder in enumerate(folders):
-            files = [name for name in os.listdir(os.path.join(self._root, folder))]
+            files = [name for name in
+                     os.listdir(os.path.join(self._root, folder))]
             self._paths += [os.path.join(self._root, folder, f) for f in files]
             self._labels += [i for _ in range(len(files))]
 
-        print(f'Found {len(folders)} classes: \
-            {[(folder, len(os.listdir(os.path.join(self._root, folder)))) for folder in folders]}')
+        classes = [(folder, len(os.listdir(os.path.join(self._root, folder))))
+                   for folder in folders]
+        print(f'Found {len(folders)} classes: {classes}')
 
     def __getitem__(self, index):
         with open(self._paths[index], 'r', encoding=self._encoding) as f:
@@ -60,9 +62,9 @@ class TextClassificationDataset(Dataset):
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
         meta[0].update({
-                'name': repr(self),
-                'size': len(self),
-                'root': self._root,
-                'labels': np.unique(self._labels).tolist()
-            })
+            'name': repr(self),
+            'size': len(self),
+            'root': self._root,
+            'labels': np.unique(self._labels).tolist()
+        })
         return meta

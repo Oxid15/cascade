@@ -35,6 +35,7 @@ def test_meta():
     assert meta[0]['time'] == now
     assert 'name' in meta[0]
 
+
 def test_update_meta():
     tr = Traceable(meta_prefix={'a': 1, 'b': 2})
     tr.update_meta({'b': 3})
@@ -42,6 +43,7 @@ def test_update_meta():
 
     assert meta[0]['a'] == 1
     assert meta[0]['b'] == 3
+
 
 def test_meta_from_file(tmp_path):
     with open(os.path.join(tmp_path, 'test_meta_from_file.json'), 'w') as f:
@@ -52,6 +54,7 @@ def test_meta_from_file(tmp_path):
 
     assert 'a' in meta[0]
     assert meta[0]['a'] == 1
+
 
 def test_update_meta_from_file(tmp_path):
     with open(os.path.join(tmp_path, 'test_meta_from_file.json'), 'w') as f:

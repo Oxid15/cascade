@@ -16,7 +16,6 @@ limitations under the License.
 
 import os
 import sys
-from json import JSONDecodeError
 import pendulum
 import numpy as np
 import pytest
@@ -36,13 +35,12 @@ from cascade.base import MetaHandler
 def test(tmp_path, ext):
     tmp_path = str(tmp_path)
     mh = MetaHandler()
-    mh.write(os.path.join(tmp_path, 'meta' + ext),
-             {
-                 'name': 'test_mh',
-                 'array': np.zeros(4),
-                 'none': None,
-                 'date': pendulum.now(tz='UTC')
-             })
+    mh.write(os.path.join(tmp_path, 'meta' + ext), {
+        'name': 'test_mh',
+        'array': np.zeros(4),
+        'none': None,
+        'date': pendulum.now(tz='UTC')
+    })
 
     obj = mh.read(os.path.join(tmp_path, 'meta' + ext))
 

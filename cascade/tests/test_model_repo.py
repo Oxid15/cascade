@@ -27,9 +27,9 @@ def test_repo(tmp_path):
     repo.add_line('dummy_1', DummyModel)
     repo.add_line('00001', DummyModel)
 
-    assert(os.path.exists(os.path.join(tmp_path, 'dummy_1')))
-    assert(os.path.exists(os.path.join(tmp_path, '00001')))
-    assert(2 == len(repo))
+    assert os.path.exists(os.path.join(tmp_path, 'dummy_1'))
+    assert os.path.exists(os.path.join(tmp_path, '00001'))
+    assert 2 == len(repo)
 
 
 def test_save_load(tmp_path, dummy_model):
@@ -62,7 +62,7 @@ def test_overwrite(tmp_path, ext):
     repo = ModelRepo(tmp_path, overwrite=True)
     repo.add_line('densenet', DummyModel)
     repo.add_line('efficientnet', DummyModel)
-    assert(2 == len(repo))
+    assert 2 == len(repo)
 
 
 # This test is skipped due to its specificity
@@ -95,7 +95,7 @@ def test_reusage(tmp_path, ext):
 
     repo = ModelRepo(tmp_path, meta_fmt=ext)
     repo.add_line('vgg16', DummyModel)
-    assert(len(repo['vgg16']) == 1)
+    assert len(repo['vgg16']) == 1
 
 
 @pytest.mark.parametrize(
@@ -115,11 +115,10 @@ def test_reusage_init_alias(tmp_path, ext):
 
     # some time...
 
-    repo = ModelRepo(tmp_path, lines=[dict(
-                            name='vgg16',
-                            model_cls=DummyModel
-                        )], meta_fmt=ext)
-    assert(len(repo['vgg16']) == 1)
+    repo = ModelRepo(tmp_path,
+                     lines=[dict(name='vgg16', model_cls=DummyModel)],
+                     meta_fmt=ext)
+    assert len(repo['vgg16']) == 1
 
 
 @pytest.mark.parametrize(
@@ -135,13 +134,13 @@ def test_meta(tmp_path, ext):
     repo.add_line('00001', DummyModel)
 
     meta = repo.get_meta()
-    assert(meta[0]['len'] == 2)
+    assert meta[0]['len'] == 2
 
     repo = ModelRepo(tmp_path, meta_fmt=ext)
     repo.add_line('00002', DummyModel)
 
     meta = repo.get_meta()
-    assert(meta[0]['len'] == 3)
+    assert meta[0]['len'] == 3
 
 
 def test_add(tmp_path):

@@ -26,7 +26,7 @@ from cascade.meta import DataValidationException, Validator, AggregateValidator,
 
 def test_modifier_interface(number_dataset):
     ds = Validator(number_dataset, lambda x: True)
-    assert(number_dataset._data == [item for item in ds])
+    assert number_dataset._data == [item for item in ds]
 
 
 def test_aggregate_positive(number_dataset):
@@ -49,14 +49,14 @@ def test_predicate_negative(number_dataset):
 
 def test_predicate_list_positive(number_dataset):
     ds = PredicateValidator(number_dataset, [
-        lambda x: x < float('inf'), 
-        lambda x: x < float('inf'), 
+        lambda x: x < float('inf'),
+        lambda x: x < float('inf'),
         lambda x: x < float('inf')])
 
 
 def test_predicate_list_negative(number_dataset):
     with pytest.raises(DataValidationException):
         ds = PredicateValidator(number_dataset, [
-            lambda x: x > float('inf'), 
-            lambda x: x > float('inf'), 
+            lambda x: x > float('inf'),
+            lambda x: x > float('inf'),
             lambda x: x > float('inf')])

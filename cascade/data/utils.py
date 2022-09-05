@@ -10,12 +10,12 @@ def split(ds: Dataset, frac=0.5, num=None) -> Tuple[Dataset]:
     Parameters
     ----------
     frac: float
-        A fraction for division of dataset. 
+        A fraction for division of dataset.
         For example if frac=0.8, then first dataset gets 80% of items and the second gets 20%.
         Is not used, when `num` is specified.
     num: int
         A number of items that first dataset will get. The second one will get len(dataset) - num items.
-    
+
     Example
     -------
     >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])

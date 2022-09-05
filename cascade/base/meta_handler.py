@@ -90,7 +90,8 @@ class JSONHandler(BaseHandler):
         Parameters
         ----------
         path:
-            Path to the file. If no extension provided, then .json will be added
+            Path to the file. If no extension provided,
+            then .json will be added
 
         Raises
         ------
@@ -130,7 +131,7 @@ class YAMLHandler(BaseHandler):
         ----------
         path:
             Path to the file. If no extension provided, then .yml will be added
-        
+
         Raises
         ------
         IOError
@@ -159,7 +160,8 @@ class YAMLHandler(BaseHandler):
 class TextHandler(BaseHandler):
     def read(self, path) -> Dict:
         """
-        Reads text file from path and returns dict in the form {path: 'text from file'}
+        Reads text file from path and returns dict
+        in the form {path: 'text from file'}
 
         Parameters
         ----------
@@ -172,7 +174,8 @@ class TextHandler(BaseHandler):
             return meta
 
     def write(self, path, obj, overwrite=True) -> None:
-        raise NotImplementedError('MetaHandler does not write text files, only reads')       
+        raise NotImplementedError(
+            'MetaHandler does not write text files, only reads')
 
 
 class MetaHandler:

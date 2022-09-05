@@ -56,7 +56,8 @@ class MetricViewer:
                     for model_name in line.model_names
                 ]
 
-                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without type key in some of the meta files (in repo, line or model).
+                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without
+                type key in some of the meta files (in repo, line or model).
                 Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
                 In the following versions it will be deprecated.''', FutureWarning)
 
@@ -67,7 +68,7 @@ class MetricViewer:
                     meta = {}
 
                 metric = {
-                    'line': viewer_root, 
+                    'line': viewer_root,
                     'num': i
                 }
 
@@ -76,8 +77,8 @@ class MetricViewer:
                         pendulum.parse(meta['created_at'])
                     if 'saved_at' in meta:
                         metric['saved'] = \
-                            pendulum.parse(meta['saved_at'])\
-                                .diff_for_humans(metric['created_at'])
+                            pendulum.parse(meta['saved_at']) \
+                            .diff_for_humans(metric['created_at'])
 
                 if 'metrics' in meta:
                     metric.update(meta['metrics'])
@@ -100,8 +101,8 @@ class MetricViewer:
                 cells=dict(values=[data[col] for col in data.columns],
                            fill_color='#bcced4',
                            align='left')
-                )
-            ])
+            )
+        ])
         if show:
             fig.show()
         return fig
@@ -139,9 +140,9 @@ class MetricServer:
             self._raise_cannot_import()
 
         @_app.callback(
-                Output(component_id='dependence-figure', component_property='figure'),
-                Input(component_id='dropdown-x', component_property='value'),
-                Input(component_id='dropdown-y', component_property='value'))
+            Output(component_id='dependence-figure', component_property='figure'),
+            Input(component_id='dropdown-x', component_property='value'),
+            Input(component_id='dropdown-y', component_property='value'))
         def _update_graph(x, y):
             fig = go.Figure()
             if x is not None and y is not None:
@@ -160,8 +161,6 @@ class MetricServer:
             from dash import html, dcc, dash_table
         except ModuleNotFoundError:
             self._raise_cannot_import()
-        else:
-            from ..models import ModelRepo
 
         self._mv._repo.reload()
         self._mv.reload_table()
@@ -226,6 +225,6 @@ class MetricServer:
 
     def _raise_cannot_import(self):
         raise ModuleNotFoundError('''
-                    Cannot import dash. It is conditional 
-                    dependency you can install it 
+                    Cannot import dash. It is conditional
+                    dependency you can install it
                     using the instructions from https://dash.plotly.com/installation''')

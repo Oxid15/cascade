@@ -5,7 +5,7 @@ from ..meta import AggregateValidator, DataValidationException
 
 class PaSchemaValidator(AggregateValidator):
     """
-    pandera-based data validator for `TableDataset`s. 
+    pandera-based data validator for `TableDataset`s.
     It accepts TableDataset and schema.
     For more details on schemas see pandera's documentation.
     """

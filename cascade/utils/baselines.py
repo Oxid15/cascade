@@ -21,7 +21,7 @@ from ..models import BasicModel
 class ConstantBaseline(BasicModel):
     """
     Constant function. This baseline can be used for
-    any classification task. It returns only one class 
+    any classification task. It returns only one class
     (for example it can be majority class)
     """
     def __init__(self, constant=None, **kwargs) -> None:

@@ -85,7 +85,7 @@ class MetaViewer:
         for key in self._filt:
             if key not in meta:
                 raise KeyError(f"'{key}' key is not in\n{meta}")
-            
+
             if self._filt[key] != meta[key]:
                 return False
         return True

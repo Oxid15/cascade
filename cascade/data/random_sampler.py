@@ -20,7 +20,7 @@ from . import Dataset, Sampler
 
 class RandomSampler(Sampler):
     """
-    Shuffles dataset. Can randomly sample from dataset 
+    Shuffles dataset. Can randomly sample from dataset
     if num_samples is not None and less than length of dataset.
     """
     def __init__(self, dataset: Dataset, num_samples=None, **kwargs) -> None:

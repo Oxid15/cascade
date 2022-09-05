@@ -27,7 +27,7 @@ class RangeSampler(Sampler):
     >>> from cascade.data import RangeSampler, Wrapper
     >>> ds = Wrapper([1, 2, 3, 4, 5])
     >>> # Define start, stop and step exactly as in range()
-    >>> sampler = RangeSampler(ds, 1, 5, 2) 
+    >>> sampler = RangeSampler(ds, 1, 5, 2)
     >>> for item in sampler:
     ...     print(item)
     ...

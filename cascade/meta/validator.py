@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable, Union, List
+from typing import Callable, Union, List
 from tqdm import tqdm
 
 from ..data import Dataset, Modifier, T
@@ -25,7 +25,9 @@ class Validator(Modifier):
     """
     Base class for validators. Defines basic `__init__` structure
     """
-    def __init__(self, dataset: Dataset, func: Union[Callable[[T], bool], List[Callable[[T], bool]]], **kwargs) -> None:
+    def __init__(self, dataset: Dataset,
+                 func: Union[Callable[[T], bool], List[Callable[[T], bool]]],
+                 **kwargs) -> None:
         super().__init__(dataset, **kwargs)
         if isinstance(func, Callable):
             self._func = [func]
@@ -100,7 +102,7 @@ class PredicateValidator(Validator):
         failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]
         failed_items = '\n'.join([f'{i}: {self._prettify_items(items[i])}' for i in items])
         raise DataValidationException(
-            f'Checks in positions {failed_checks} failed\n' \
-            f'Items failed by check:\n' \
+            f'Checks in positions {failed_checks} failed\n'
+            f'Items failed by check:\n'
             f'{failed_items}'
         )

@@ -28,18 +28,18 @@ def test():
 
     ds1, ds2 = cdd.split(ds)
 
-    assert([item for item in ds1] == [0, 1])
-    assert([item for item in ds2] == [2, 3, 4])
+    assert [item for item in ds1] == [0, 1]
+    assert [item for item in ds2] == [2, 3, 4]
 
     ds1, ds2 = cdd.split(ds, 0.6)
 
-    assert([item for item in ds1] == [0, 1, 2])
-    assert([item for item in ds2] == [3, 4])
+    assert [item for item in ds1] == [0, 1, 2]
+    assert [item for item in ds2] == [3, 4]
 
     ds1, ds2 = cdd.split(ds, num=4)
 
-    assert([item for item in ds1] == [0, 1, 2, 3])
-    assert([item for item in ds2] == [4])
+    assert [item for item in ds1] == [0, 1, 2, 3]
+    assert [item for item in ds2] == [4]
 
     # This means pipeline was made
     assert len(ds1.get_meta()) == 2

@@ -21,8 +21,9 @@ class Traceable:
         -------
         meta: List[Dict]
             A list where last element is this object's metadata.
-            Meta can be anything that is worth to document about the object and its properties.
-            This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
+            Meta can be anything that is worth to document about
+            the object and its properties. This is done in form
+            of list to enable cascade-like calls in Modifiers and Samplers.
         """
         meta = {
             'name': repr(self)
@@ -35,7 +36,8 @@ class Traceable:
 
     def update_meta(self, obj: Union[Dict, str]) -> None:
         """
-        Updates _meta_prefix, which is then updates dataset's meta when get_meta() is called
+        Updates _meta_prefix, which is then updates
+        dataset's meta when get_meta() is called
         """
         if isinstance(obj, str):
             obj = self._read_meta_from_file(obj)
@@ -47,4 +49,8 @@ class Traceable:
 
     @staticmethod
     def _warn_no_prefix() -> None:
-        warnings.warn('Object doesn\'t have _meta_prefix. This may mean super().__init__() wasn\'t called somewhere')
+        warnings.warn(
+            'Object doesn\'t have _meta_prefix. '
+            'This may mean super().__init__() wasn\'t'
+            'called somewhere'
+        )

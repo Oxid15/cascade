@@ -41,7 +41,7 @@ class Repo(Traceable):
 
     def __getitem__(self, key):
         raise NotImplementedError()
-    
+
     def __len__(self):
         raise NotImplementedError()
 
@@ -50,7 +50,7 @@ class ModelRepo(Repo):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
-    
+
     Stores meta-data in file meta.json in the root folder. With every run if the repo was already
     created earlier, updates its meta and logs changes in human-readable format in file history.log
 
@@ -223,10 +223,10 @@ class ModelRepo(Repo):
             for handler in self.logger.handlers:
                 handler.close()
                 self.logger.removeHandler(handler)
-    
+
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])
-    
+
     def get_line_names(self) -> List[str]:
         # TODO: write test covering this
         return list(self.lines.keys())
@@ -234,7 +234,7 @@ class ModelRepo(Repo):
 
 class ModelRepoConcatenator(Repo):
     """
-    The class to concatenate different Repos. 
+    The class to concatenate different Repos.
     For the ease of use please, don't use it directly.
     Just do repo = repo_1 + repo_2 to unify repos.
     """

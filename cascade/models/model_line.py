@@ -63,7 +63,7 @@ class ModelLine(Traceable):
                     if os.path.isdir(os.path.join(self.root, model_folder))])
 
             if len(self.model_names) == 0:
-                #TODO: add root to the message
+                # TODO: add root to the message
                 warnings.warn('Model folders were not found by the line. It may be that '
                               'you are using new version of cascade with old repos '
                               'created before version 0.2.0')

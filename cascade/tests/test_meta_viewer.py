@@ -36,18 +36,18 @@ def test(tmp_path):
 
     # Write also using mev
     mev = MetaViewer(tmp_path)
-    mev.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})    
+    mev.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})
 
     mev = MetaViewer(tmp_path)
 
-    assert(len(mev) == 2)
-    assert('name' in mev[0])
-    assert('name' in mev[1])
+    assert len(mev) == 2
+    assert 'name' in mev[0]
+    assert 'name' in mev[1]
 
     # This order is due to sorting by path
     # .../model/test1.json is less than .../test0.json
-    assert(mev[0]['name'] == 'test1')
-    assert(mev[1]['name'] == 'test0')
+    assert mev[0]['name'] == 'test1'
+    assert mev[1]['name'] == 'test0'
 
 
 def test_order(tmp_path):

@@ -30,15 +30,15 @@ def test_meta():
     n2 = Wrapper([2, 3, 4, 5])
 
     c = Concatenator([n1, n2], meta_prefix={'num': 1})
-    assert(c.get_meta()[0]['num'] == 1)
+    assert c.get_meta()[0]['num'] == 1
 
 
 @pytest.mark.parametrize(
     'arrs', [
-        ([0],[0],[0]),
-        ([1,2,3,4], [11]),
+        ([0], [0], [0]),
+        ([1, 2, 3, 4], [11]),
         ([1],),
-        ([1,2,3,4], [])
+        ([1, 2, 3, 4], [])
     ]
 )
 def test_concatenation(arrs):
@@ -48,4 +48,4 @@ def test_concatenation(arrs):
     for arr in arrs:
         res += arr
 
-    assert([c[i] for i in range(len(c))] == res)
+    assert [c[i] for i in range(len(c))] == res

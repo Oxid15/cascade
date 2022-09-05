@@ -45,13 +45,15 @@ class TimeSeriesDataset(Dataset):
             time = np.asarray(time)
         else:
             # The case of multiple inheritance
-            # time and data can be omitted to match with general signature of Dataset
+            # time and data can be omitted to match
+            # with general signature of Dataset
             data = np.array([])
             time = np.array([])
 
-        assert len(time) == len(data), f'Time and data should have same length,\
-            got {len(time)} and {len(data)}'
-        assert len(data.shape) == 1, f'series must be 1d, got shape {data.shape}'
+        assert len(time) == len(data), f'Time and data should have same \
+            length, got {len(time)} and {len(data)}'
+        assert len(data.shape) == 1, f'series must be 1d, \
+            got shape {data.shape}'
         assert all([isinstance(t, datetime) for t in time]), \
             'time elements should be instances of datetime.datetime'
 
@@ -63,7 +65,8 @@ class TimeSeriesDataset(Dataset):
 
         self._time = time
         self._num_idx = [i for i in range(len(data))]
-        index = pd.MultiIndex.from_frame(pd.DataFrame(self._time, self._num_idx))
+        index = pd.MultiIndex.from_frame(
+            pd.DataFrame(self._time, self._num_idx))
         self._table = pd.DataFrame(data, index=index)
         super().__init__(*args, **kwargs)
 
@@ -96,7 +99,9 @@ class TimeSeriesDataset(Dataset):
 
     def _get_slice(self, index):
         # If date slice
-        if isinstance(index.start, datetime) or isinstance(index.stop, datetime):
+        if isinstance(index.start, datetime) or \
+                isinstance(index.stop, datetime):
+
             start = np.where(self._time == index.start)[0][0] \
                 if index.start is not None else None
             stop = np.where(self._time == index.stop)[0][0] \
@@ -139,19 +144,28 @@ class TimeSeriesDataset(Dataset):
         elif isinstance(index, Iterable):
             return self._get_where(index)
         else:
-            raise NotImplementedError(f'__getitem__ is not implemented for {type(index)}')
+            raise NotImplementedError(
+                f'__getitem__ is not implemented for {type(index)}'
+            )
 
     def __len__(self):
         return len(self._num_idx)
 
 
 class Average(TimeSeriesDataset, Modifier):
-    def __init__(self, dataset: TimeSeriesDataset, unit='years', amount=1, *args, **kwargs):
+    def __init__(self, dataset: TimeSeriesDataset,
+                 unit='years', amount=1, *args, **kwargs):
         time, data = dataset.get_data()
-        reg_time = [d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)]
+        reg_time = [d for d in pendulum
+                    .period(time[0], time[-1])
+                    .range(unit, amount=amount)]
+
         reg_data = self._avg(data, time, reg_time)
-        assert len(reg_data) > 1, 'Please, provide unit that would get more than one period'
-        super().__init__(dataset, time=reg_time, data=reg_data, *args, **kwargs)
+        assert len(reg_data) > 1, 'Please, provide unit that ' \
+                                  'would get more than one period'
+
+        super().__init__(dataset, time=reg_time,
+                         data=reg_data, *args, **kwargs)
 
     @staticmethod
     def _avg(arr, arr_dates, dates):
@@ -166,7 +180,8 @@ class Average(TimeSeriesDataset, Modifier):
 
 
 class Interpolate(TimeSeriesDataset, Modifier):
-    def __init__(self, dataset, method='linear', limit_direction='both', **kwargs):
+    def __init__(self, dataset, method='linear',
+                 limit_direction='both', **kwargs):
         t = dataset.to_pandas()
         time, _ = dataset.get_data()
         t.index = pd.Index(time)
@@ -176,4 +191,5 @@ class Interpolate(TimeSeriesDataset, Modifier):
 
 class Align(TimeSeriesDataset, Modifier):
     def __init__(self, dataset, time, *args, **kwargs):
-        super().__init__(dataset, time=time, data=dataset[time], *args, **kwargs)
+        super().__init__(dataset, time=time,
+                         data=dataset[time], *args, **kwargs)

@@ -52,15 +52,15 @@ class BasicTrainer(Trainer):
         super().__init__(repo, *args, **kwargs)
 
     def train(self,
-        model: Model,
-        train_data: Iterable,
-        test_data: Iterable,
-        *args,
-        train_kwargs=None,
-        test_kwargs=None,
-        epochs=1,
-        start_from=None,
-        **kwargs) -> None:
+              model: Model,
+              train_data: Iterable,
+              test_data: Iterable,
+              *args,
+              train_kwargs=None,
+              test_kwargs=None,
+              epochs=1,
+              start_from=None,
+              **kwargs) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
 
