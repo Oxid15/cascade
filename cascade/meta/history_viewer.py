@@ -127,7 +127,7 @@ class HistoryViewer:
         # After flatten 'metrics_' will be added to the metric name
         if not metric.startswith('metrics_'):
             metric = 'metrics_' + metric
-        assert metric in self._table
+        assert metric in self._table, f'Metric {metric.replace("metrics_", "")} is not in the repo'
 
         # turn time into evenly spaced intervals
         time = [i for i in range(len(self._table))]
