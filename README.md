@@ -23,6 +23,7 @@ More info on installation can be found in [docs](https://oxid15.github.io/cascad
 See use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html).
 
 
+
 ## Why Cascade
 
 Cascade emerged as an attempt to bring order into messy and fast-paced ML-engineering workflow.  
@@ -78,6 +79,14 @@ The key principles of Cascade are:
  * **Traceability** - everything should have meta-data
 
 The logo of the project is a depiction of these principles: it symbolizes modularity, standardization, information flow and is cascade-like :)
+
+
+
+## Scope
+
+
+
+![](C:\cascade\cascade\docs\imgs\scope.png)
 
 
 
