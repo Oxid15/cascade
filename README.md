@@ -86,7 +86,7 @@ The logo of the project is a depiction of these principles: it symbolizes modula
 
 
 
-![](C:\cascade\cascade\docs\imgs\scope.png)
+![](cascade/docs/imgs/scope.png)
 
 
 
