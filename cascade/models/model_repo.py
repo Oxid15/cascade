@@ -15,13 +15,14 @@ import warnings
 import itertools
 import os
 import logging
-from typing import List, Dict, Iterable
+from typing import List, Dict, Iterable, Union
 import shutil
 
 import pendulum
 from deepdiff.diff import DeepDiff
 
 from ..base import Traceable, supported_meta_formats
+from .model import Model
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
@@ -70,7 +71,7 @@ class ModelRepo(Repo):
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
     """
-    def __init__(self, folder, lines=None, overwrite=False, meta_fmt='.json', **kwargs):
+    def __init__(self, folder, lines=None, overwrite=False, meta_fmt='.json', model_cls=Model, **kwargs):
         """
         Parameters
         ----------
@@ -85,13 +86,16 @@ class ModelRepo(Repo):
         meta_fmt: str
             extension of repo's metadata files and that will be assigned to the lines by default
             `.json` and `.yml` are supported
+        model_cls:
+            Default class for any ModelLine in repo
         See also
         --------
         cascade.models.ModelLine
         """
         super().__init__(**kwargs)
+        self._model_cls = model_cls
         self._root = folder
-        self.lines = dict()
+        self._lines = dict()
 
         assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
@@ -111,11 +115,13 @@ class ModelRepo(Repo):
         self._update_meta()
 
     def _load_lines(self):
-        self.lines = {name: ModelLine(os.path.join(self._root, name),
-                                      meta_prefix=self._meta_prefix,
-                                      meta_fmt=self._meta_fmt)
-                      for name in sorted(os.listdir(self._root))
-                      if os.path.isdir(os.path.join(self._root, name))}
+        self._lines = {
+            name: ModelLine(os.path.join(self._root, name),
+                            model_cls=self._model_cls,
+                            meta_prefix=self._meta_prefix,
+                            meta_fmt=self._meta_fmt)
+            for name in sorted(os.listdir(self._root))
+            if os.path.isdir(os.path.join(self._root, name))}
 
     def add_line(self, name, *args, meta_fmt=None, **kwargs):
         """
@@ -144,22 +150,27 @@ class ModelRepo(Repo):
                          meta_prefix=self._meta_prefix,
                          meta_fmt=meta_fmt,
                          **kwargs)
-        self.lines[name] = line
+        self._lines[name] = line
 
         self._update_meta()
         return line
 
-    def __getitem__(self, key) -> ModelLine:
+    def __getitem__(self, key: Union[str, int]) -> ModelLine:
         """
         Returns
         -------
         line: ModelLine
            existing line of the name passed in `key`
         """
-        return self.lines[key]
+        if isinstance(key, str):
+            return self._lines[key]
+        elif isinstance(key, int):
+            return self._lines[list(self._lines.keys())[key]]
+        else:
+            raise TypeError(f'{type(key)} is not supported as key')
 
     def __iter__(self):
-        for line in self.lines:
+        for line in self._lines:
             yield self.__getitem__(line)
 
     def __len__(self) -> int:
@@ -169,7 +180,7 @@ class ModelRepo(Repo):
         num: int
             a number of lines
         """
-        return len(self.lines)
+        return len(self._lines)
 
     def __repr__(self) -> str:
         return f'ModelRepo in {self._root} of {len(self)} lines'
@@ -229,7 +240,7 @@ class ModelRepo(Repo):
 
     def get_line_names(self) -> List[str]:
         # TODO: write test covering this
-        return list(self.lines.keys())
+        return list(self._lines.keys())
 
 
 class ModelRepoConcatenator(Repo):
