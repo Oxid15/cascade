@@ -91,7 +91,7 @@ class ModelRepo(Repo):
         """
         super().__init__(**kwargs)
         self._root = folder
-        self.lines = dict()
+        self._lines = dict()
 
         assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
@@ -111,7 +111,7 @@ class ModelRepo(Repo):
         self._update_meta()
 
     def _load_lines(self):
-        self.lines = {name: ModelLine(os.path.join(self._root, name),
+        self._lines = {name: ModelLine(os.path.join(self._root, name),
                                       meta_prefix=self._meta_prefix,
                                       meta_fmt=self._meta_fmt)
                       for name in sorted(os.listdir(self._root))
@@ -144,7 +144,7 @@ class ModelRepo(Repo):
                          meta_prefix=self._meta_prefix,
                          meta_fmt=meta_fmt,
                          **kwargs)
-        self.lines[name] = line
+        self._lines[name] = line
 
         self._update_meta()
         return line
@@ -156,10 +156,10 @@ class ModelRepo(Repo):
         line: ModelLine
            existing line of the name passed in `key`
         """
-        return self.lines[key]
+        return self._lines[key]
 
     def __iter__(self):
-        for line in self.lines:
+        for line in self._lines:
             yield self.__getitem__(line)
 
     def __len__(self) -> int:
@@ -169,7 +169,7 @@ class ModelRepo(Repo):
         num: int
             a number of lines
         """
-        return len(self.lines)
+        return len(self._lines)
 
     def __repr__(self) -> str:
         return f'ModelRepo in {self._root} of {len(self)} lines'
@@ -229,7 +229,7 @@ class ModelRepo(Repo):
 
     def get_line_names(self) -> List[str]:
         # TODO: write test covering this
-        return list(self.lines.keys())
+        return list(self._lines.keys())
 
 
 class ModelRepoConcatenator(Repo):
