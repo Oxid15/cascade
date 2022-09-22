@@ -119,11 +119,11 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def get_best_by(self, metric):
+    def get_best_by(self, metric, maximize=True):
         assert metric in self.table, f'{metric} is not in {self.table.columns}'
         t = self.table.loc[self.table[metric].notna()]
 
-        best_row = t.sort_values(metric).iloc[-1]
+        best_row = t.sort_values(metric, ascending=maximize).iloc[-1]
         name = os.path.split(best_row['line'])[-1]
         num = best_row['num']
         return self._repo[name][num]
