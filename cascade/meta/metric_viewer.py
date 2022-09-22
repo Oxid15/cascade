@@ -119,7 +119,18 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def get_best_by(self, metric, maximize=True):
+    def get_best_by(self, metric: str, maximize=True):
+        """
+        Loads the best model by the given metric
+
+        Parameters
+        ----------
+            metric: str
+                Name of the metric
+            maximize: bool
+                The direction of choosing the best model: `True` if best is better
+                and `False` if less is better
+        """
         assert metric in self.table, f'{metric} is not in {self.table.columns}'
         t = self.table.loc[self.table[metric].notna()]
 
@@ -130,18 +141,18 @@ class MetricViewer:
 
     def serve(self, page_size=50, include=None, exclude=None, **kwargs) -> None:
         """
-        Runs dash-based server with interactive table of metrics and parameters.
+        Runs dash-based server with interactive table of metrics and parameters
 
         Parameters
         ----------
         page_size:
             Size of the table in rows on one page
         include: List[str], optional:
-            List of parameters or metrics to be added. Only them will be present along with some default.
+            List of parameters or metrics to be added. Only them will be present along with some default
         exclude: List[str], optional:
-            List of parameters or metrics to be excluded from table.
+            List of parameters or metrics to be excluded from table
         **kwargs:
-            Arguments of dash app. Can be ip or port for example.
+            Arguments of dash app. Can be ip or port for example
         """
         server = MetricServer(self, page_size=page_size, include=include, exclude=exclude)
         server.serve(**kwargs)
