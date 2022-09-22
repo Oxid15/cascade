@@ -22,6 +22,7 @@ import pendulum
 from deepdiff.diff import DeepDiff
 
 from ..base import Traceable, supported_meta_formats
+from .model import Model
 from .model_line import ModelLine
 from ..meta import MetaViewer
 
@@ -70,7 +71,7 @@ class ModelRepo(Repo):
     >>> vgg16.fit()
     >>> repo['vgg16'].save(vgg16)
     """
-    def __init__(self, folder, lines=None, overwrite=False, meta_fmt='.json', **kwargs):
+    def __init__(self, folder, lines=None, overwrite=False, meta_fmt='.json', model_cls=Model, **kwargs):
         """
         Parameters
         ----------
@@ -85,11 +86,14 @@ class ModelRepo(Repo):
         meta_fmt: str
             extension of repo's metadata files and that will be assigned to the lines by default
             `.json` and `.yml` are supported
+        model_cls:
+            Default class for any ModelLine in repo
         See also
         --------
         cascade.models.ModelLine
         """
         super().__init__(**kwargs)
+        self._model_cls = model_cls
         self._root = folder
         self._lines = dict()
 
@@ -112,6 +116,7 @@ class ModelRepo(Repo):
 
     def _load_lines(self):
         self._lines = {name: ModelLine(os.path.join(self._root, name),
+                                      model_cls=self._model_cls,
                                       meta_prefix=self._meta_prefix,
                                       meta_fmt=self._meta_fmt)
                       for name in sorted(os.listdir(self._root))
