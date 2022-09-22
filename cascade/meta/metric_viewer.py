@@ -70,7 +70,7 @@ class MetricViewer:
 
                 warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without
                 type key in some of the meta files (in repo, line or model).
-                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
+                Consider updating your repo's meta or downgrading cascade's version.
                 In the following versions it will be deprecated.''', FutureWarning)
 
             for i in range(len(line.model_names)):
