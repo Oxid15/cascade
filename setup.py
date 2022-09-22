@@ -1,4 +1,5 @@
 import setuptools
+import cascade
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -6,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cascade-ml",
-    version='0.7.0',
+    version='0.8.0-alpha',
     author='Ilia Moiseev',
     author_email='ilia.moiseev.5@yandex.ru',
     license='Apache License 2.0',
