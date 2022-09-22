@@ -61,6 +61,8 @@ class BasicTrainer(Trainer):
               test_kwargs=None,
               epochs=1,
               start_from=None,
+              eval_strategy:int = None,
+              save_strategy:int = None,
               **kwargs) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
@@ -117,10 +119,21 @@ class BasicTrainer(Trainer):
 
         for epoch in range(epochs):
             model.fit(train_data, **train_kwargs)
-            model.evaluate(test_data, **test_kwargs)
-            line.save(model)
-            self.metrics.append(deepcopy(model.metrics))
 
+            if eval_strategy is not None:
+                if epoch % eval_strategy == 0:
+                    # This makes models `metrics` dict not to be overwritten
+                    # so it saves meta about previously made evaluation into any
+                    # new epoch
+                    model.evaluate(test_data, **test_kwargs)
+
+            if save_strategy is not None:
+                if epoch % save_strategy == 0:
+                    line.save(model)
+                else:
+                    line.save(model, only_meta=True)
+
+            self.metrics.append(deepcopy(model.metrics))
             logger.info(f'Epoch {epoch}: {model.metrics}')
 
         self._meta_prefix['train_end_at'] = pendulum.now()
