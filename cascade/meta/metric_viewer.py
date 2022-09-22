@@ -119,6 +119,15 @@ class MetricViewer:
             fig.show()
         return fig
 
+    def get_best_by(self, metric):
+        t = self.table.dropna(how='any')
+        assert metric in t, f'{metric} is not in {t.columns} after dropping NaNs'
+
+        best_row = t.sort_values(metric).iloc[-1]
+        name = os.path.split(best_row['line'])[-1]
+        num = best_row['num']
+        return self._repo[name][num]
+
     def serve(self, page_size=50, include=None, exclude=None, **kwargs) -> None:
         """
         Runs dash-based server with interactive table of metrics and parameters.
