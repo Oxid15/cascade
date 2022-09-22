@@ -15,7 +15,7 @@ import warnings
 import itertools
 import os
 import logging
-from typing import List, Dict, Iterable
+from typing import List, Dict, Iterable, Union
 import shutil
 
 import pendulum
@@ -149,14 +149,17 @@ class ModelRepo(Repo):
         self._update_meta()
         return line
 
-    def __getitem__(self, key) -> ModelLine:
+    def __getitem__(self, key: Union[str, int]) -> ModelLine:
         """
         Returns
         -------
         line: ModelLine
            existing line of the name passed in `key`
         """
-        return self._lines[key]
+        if isinstance(key, str):
+            return self._lines[key]
+        elif isinstance(key, int):
+            return self._lines[list(self._lines.keys())[key]]
 
     def __iter__(self):
         for line in self._lines:
