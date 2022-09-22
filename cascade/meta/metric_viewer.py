@@ -31,7 +31,7 @@ class MetricViewer:
     uses ModelRepo to extract metrics of all models if any
     constructs a `pd.DataFrame` of metrics internally, which is showed in `__repr__`
     """
-    def __init__(self, repo) -> None:
+    def __init__(self, repo, scope=None) -> None:
         """
         Parameters
         ----------
@@ -39,12 +39,24 @@ class MetricViewer:
             ModelRepo object to extract metrics from
         """
         self._repo = repo
+        self._scope = scope
         self._metrics = []
         self.reload_table()
 
+    def __getitem__(self, key):
+        return MetricViewer(self._repo, scope=key)
+
     def reload_table(self):
         self._metrics = []
-        for line in self._repo:
+        selected_names = self._repo.get_line_names()
+
+        if self._scope is not None:
+            selected_names = selected_names[self._scope]
+            if not isinstance(selected_names, list):
+                selected_names = [selected_names]
+
+        for name in selected_names:
+            line = self._repo[name]
             viewer_root = line.root
 
             # Try to use viewer only on models using type key
