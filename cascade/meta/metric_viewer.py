@@ -16,6 +16,8 @@ limitations under the License.
 
 import os
 import warnings
+from typing import Union
+
 import pendulum
 from flatten_json import flatten
 from plotly import graph_objects as go
@@ -37,13 +39,19 @@ class MetricViewer:
         ----------
         repo: ModelRepo
             ModelRepo object to extract metrics from
+        scope: Union[int, str, slice]
+            Index or a name of line to view. Can be set using `__getitem__`
         """
         self._repo = repo
         self._scope = scope
         self._metrics = []
         self.reload_table()
 
-    def __getitem__(self, key):
+    def __getitem__(self, key:Union[int, str, slice]):
+        """
+        Sets the scope of the viewer after creation.
+        Basically creates new viewer with another scope.
+        """
         return MetricViewer(self._repo, scope=key)
 
     def reload_table(self):
@@ -104,6 +112,9 @@ class MetricViewer:
         return repr(self.table)
 
     def plot_table(self, show=False):
+        """
+        Uses plotly to make the table of metrics
+        """
         data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
