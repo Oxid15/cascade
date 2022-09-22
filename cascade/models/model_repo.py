@@ -141,7 +141,7 @@ class ModelRepo(Repo):
         --------
             cascade.models.ModelLine
        """
-
+        #TODO: use default model_cls
         folder = os.path.join(self._root, name)
         if meta_fmt is None:
             meta_fmt = self._meta_fmt

@@ -61,8 +61,8 @@ def test_serve(model_repo):
     ]
 )
 def test_missing_model_meta(tmp_path, dummy_model, ext):
-    model_repo = ModelRepo(str(tmp_path))
-    model_repo.add_line('test', model_cls=DummyModel, meta_fmt=ext)
+    model_repo = ModelRepo(str(tmp_path), meta_fmt=ext)
+    model_repo.add_line('test', model_cls=DummyModel)
     dummy_model.evaluate()
     model_repo['test'].save(dummy_model)
     model_repo['test'].save(dummy_model)
@@ -71,3 +71,27 @@ def test_missing_model_meta(tmp_path, dummy_model, ext):
 
     mv = MetricViewer(model_repo)
     mv.plot_table()
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_get_best_by(tmp_path, ext):
+    repo = ModelRepo(str(tmp_path),
+        meta_fmt=ext,
+        model_cls=DummyModel)
+    line = repo.add_line('00001',
+        model_cls=DummyModel)
+
+    model = DummyModel()
+    model.evaluate()
+    line.save(model)
+
+    model = DummyModel()
+    line.save(model)
+
+    mv = MetricViewer(repo)
+    mv.get_best_by('acc')
