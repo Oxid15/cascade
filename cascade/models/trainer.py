@@ -1,3 +1,4 @@
+from argparse import ArgumentError
 import os
 import logging
 from copy import deepcopy
@@ -53,9 +54,9 @@ class BasicTrainer(Trainer):
 
     def train(self,
               model: Model,
-              train_data: Iterable,
-              test_data: Iterable,
               *args,
+              train_data=None,
+              test_data=None,
               train_kwargs=None,
               test_kwargs=None,
               epochs=1,
@@ -78,7 +79,8 @@ class BasicTrainer(Trainer):
             epochs:
                 how many times to repeat training on data
             start_from: str
-                name of line from which to start, start from the latest model in line
+                name or index of line from which to start
+                starts from the latest model in line
         """
 
         if train_kwargs is None:
