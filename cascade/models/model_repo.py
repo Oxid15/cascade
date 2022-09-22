@@ -115,12 +115,13 @@ class ModelRepo(Repo):
         self._update_meta()
 
     def _load_lines(self):
-        self._lines = {name: ModelLine(os.path.join(self._root, name),
-                                      model_cls=self._model_cls,
-                                      meta_prefix=self._meta_prefix,
-                                      meta_fmt=self._meta_fmt)
-                      for name in sorted(os.listdir(self._root))
-                      if os.path.isdir(os.path.join(self._root, name))}
+        self._lines = {
+            name: ModelLine(os.path.join(self._root, name),
+                            model_cls=self._model_cls,
+                            meta_prefix=self._meta_prefix,
+                            meta_fmt=self._meta_fmt)
+            for name in sorted(os.listdir(self._root))
+            if os.path.isdir(os.path.join(self._root, name))}
 
     def add_line(self, name, *args, meta_fmt=None, **kwargs):
         """
@@ -165,6 +166,8 @@ class ModelRepo(Repo):
             return self._lines[key]
         elif isinstance(key, int):
             return self._lines[list(self._lines.keys())[key]]
+        else:
+            raise TypeError(f'{type(key)} is not supported as key')
 
     def __iter__(self):
         for line in self._lines:
