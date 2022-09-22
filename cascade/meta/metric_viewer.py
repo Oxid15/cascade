@@ -120,7 +120,7 @@ class MetricViewer:
         return fig
 
     def get_best_by(self, metric):
-        t = self.table.dropna(how='any')
+        t = self.table.loc[self.table[metric].notna()]
         assert metric in t, f'{metric} is not in {t.columns} after dropping NaNs'
 
         best_row = t.sort_values(metric).iloc[-1]
