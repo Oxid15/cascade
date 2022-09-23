@@ -83,6 +83,11 @@ class BasicTrainer(Trainer):
             start_from: str
                 name or index of line from which to start
                 starts from the latest model in line
+            eval_strategy: int, optional
+                Evaluation will take place every `eval_strategy` epochs. If None - the strategy is 'no evaluation'.
+            save_strategy: int, optional
+                Saving will take place every `save_strategy` epochs. Meta will be saved anyway.
+                If None - the strategy is 'save only meta'.
         """
 
         if train_kwargs is None:
