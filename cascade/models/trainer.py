@@ -111,15 +111,20 @@ class BasicTrainer(Trainer):
         line = self._repo[line_name]
 
         if start_from is not None:
-            path = os.path.join(line.root, line.model_names[-1])
-            model.load(path)
+            for model_num in range(len(line) - 1, -1, -1):
+                path = os.path.join(line.root, line.model_names[model_num])
+                try:
+                    model.load(path)
+                    break
+                except FileNotFoundError as e:
+                    logger.warn(f'Model {path} files were not found\n{e}')
 
         self._meta_prefix['train_start_at'] = pendulum.now()
-        logger.info(f'Training started with parameters: {train_kwargs}')
+        logger.info(f'Training started with parameters:\n{train_kwargs}')
         logger.info(f'repo is {self._repo}')
         logger.info(f'line is {line_name}')
         if start_from is not None:
-            logger.info(f'started from model {len(line) - 1}')
+            logger.info(f'started from model {model_num}')
         logger.info(f'training will last {epochs} epochs')
 
         for epoch in range(epochs):
