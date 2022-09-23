@@ -119,7 +119,8 @@ class BasicTrainer(Trainer):
                 except FileNotFoundError as e:
                     logger.warn(f'Model {path} files were not found\n{e}')
 
-        self._meta_prefix['train_start_at'] = pendulum.now()
+        start_time = pendulum.now()
+        self._meta_prefix['train_start_at'] = start_time
         logger.info(f'Training started with parameters:\n{train_kwargs}')
         logger.info(f'repo is {self._repo}')
         logger.info(f'line is {line_name}')
@@ -146,4 +147,6 @@ class BasicTrainer(Trainer):
             self.metrics.append(deepcopy(model.metrics))
             logger.info(f'Epoch {epoch}: {model.metrics}')
 
-        self._meta_prefix['train_end_at'] = pendulum.now()
+        end_time = pendulum.now()
+        self._meta_prefix['train_end_at'] = end_time
+        logger.info(f'Training finished in {end_time.diff_for_humans(start_time, True)}')
