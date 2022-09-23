@@ -70,7 +70,7 @@ class BasicTrainer(Trainer):
               model: Model,
               *args,
               train_data: Iterable = None,
-              test_data: Union[Iterable, Dict[str, Iterable]] = None,
+              test_data: Iterable = None,
               train_kwargs: Dict = None,
               test_kwargs: Dict = None,
               epochs: int = 1,
@@ -86,7 +86,7 @@ class BasicTrainer(Trainer):
                 a model to be trained or which to load from line specified in `start_from`
             train_data: Iterable
                 train data to be passed to model's fit()
-            test_data: Union[Iterable, Dict[str, Iterable]], optional
+            test_data: Iterable, optional
                 test data to be passed to model's evaluate()
             train_kwargs: Dict, optional
                 arguments for fit()
