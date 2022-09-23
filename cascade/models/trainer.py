@@ -69,12 +69,12 @@ class BasicTrainer(Trainer):
     def train(self,
               model: Model,
               *args,
-              train_data=None,
-              test_data=None,
-              train_kwargs=None,
-              test_kwargs=None,
-              epochs=1,
-              start_from=None,
+              train_data: Iterable = None,
+              test_data: Union[Iterable, Dict[str, Iterable]] = None,
+              train_kwargs: Dict = None,
+              test_kwargs: Dict = None,
+              epochs: int = 1,
+              start_from: str = None,
               eval_strategy:int = None,
               save_strategy:int = None,
               **kwargs) -> None:
@@ -86,15 +86,15 @@ class BasicTrainer(Trainer):
                 a model to be trained or which to load from line specified in `start_from`
             train_data: Iterable
                 train data to be passed to model's fit()
-            test_data: Iterable
+            test_data: Union[Iterable, Dict[str, Iterable]], optional
                 test data to be passed to model's evaluate()
-            train_kwargs:
+            train_kwargs: Dict, optional
                 arguments for fit()
-            test_kwargs:
+            test_kwargs: Dict, optional
                 arguments for evaluate() - the most common is the dict of metrics
-            epochs:
+            epochs: int, optional
                 how many times to repeat training on data
-            start_from: str
+            start_from: str, optional
                 name or index of line from which to start
                 starts from the latest model in line
             eval_strategy: int, optional
