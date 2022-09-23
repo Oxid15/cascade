@@ -33,7 +33,7 @@ class MetricViewer:
     uses ModelRepo to extract metrics of all models if any
     constructs a `pd.DataFrame` of metrics internally, which is showed in `__repr__`
     """
-    def __init__(self, repo, scope=None) -> None:
+    def __init__(self, repo, scope: Union[int, str, slice] = None) -> None:
         """
         Parameters
         ----------
@@ -47,7 +47,7 @@ class MetricViewer:
         self._metrics = []
         self.reload_table()
 
-    def __getitem__(self, key:Union[int, str, slice]):
+    def __getitem__(self, key: Union[int, str, slice]):
         """
         Sets the scope of the viewer after creation.
         Basically creates new viewer with another scope.

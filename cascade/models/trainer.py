@@ -47,7 +47,8 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
-    def _find_last_model(self, model, line):
+    @staticmethod
+    def _find_last_model(model, line):
         model_num = len(line) - 1
         while True:
             path = os.path.join(line.root, line.model_names[model_num])
@@ -55,7 +56,7 @@ class BasicTrainer(Trainer):
                 model.load(path)
                 break
             except FileNotFoundError as e:
-                logger.warn(f'Model {path} files were not found\n{e}')
+                logger.warning(f'Model {path} files were not found\n{e}')
                 model_num -= 1
 
                 if model_num == -1:
@@ -70,8 +71,8 @@ class BasicTrainer(Trainer):
               test_kwargs: Dict = None,
               epochs: int = 1,
               start_from: str = None,
-              eval_strategy:int = None,
-              save_strategy:int = None,
+              eval_strategy: int = None,
+              save_strategy: int = None,
               **kwargs) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.

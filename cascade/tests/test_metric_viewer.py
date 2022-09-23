@@ -81,10 +81,9 @@ def test_missing_model_meta(tmp_path, dummy_model, ext):
 )
 def test_get_best_by(tmp_path, ext):
     repo = ModelRepo(str(tmp_path),
-        meta_fmt=ext,
-        model_cls=DummyModel)
-    line = repo.add_line('00001',
-        model_cls=DummyModel)
+                     meta_fmt=ext,
+                     model_cls=DummyModel)
+    line = repo.add_line('00001', model_cls=DummyModel)
 
     model = DummyModel()
     model.evaluate()
