@@ -64,7 +64,7 @@ class MetaViewer:
         meta: List[Dict]
             object containing meta
         """
-        return self.read(self.names[index])
+        return self._mh.read(self.names[index])
 
     def __len__(self) -> int:
         return len(self.names)
@@ -84,7 +84,7 @@ class MetaViewer:
         return self._mh.read(path)
 
     def _filter(self, name):
-        meta = self.read(name)
+        meta = self._mh.read(name)
         meta = meta[-1]  # Takes last meta
         for key in self._filt:
             if key not in meta:
