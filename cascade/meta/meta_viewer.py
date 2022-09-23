@@ -21,7 +21,7 @@ from ..base import MetaHandler, JSONEncoder, supported_meta_formats
 
 class MetaViewer:
     """
-    The class to read and write meta data.
+    The class to view all meta data files in folder.
     """
     def __init__(self, root, filt=None) -> None:
         """
