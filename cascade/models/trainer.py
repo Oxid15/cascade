@@ -100,6 +100,8 @@ class BasicTrainer(Trainer):
                 If None - the strategy is 'save only meta'.
         """
 
+        # TODO: check if eval_strategy specified that test_data provided also
+
         if train_kwargs is None:
             train_kwargs = {}
         if test_kwargs is None:
