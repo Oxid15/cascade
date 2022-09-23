@@ -139,13 +139,15 @@ class BasicTrainer(Trainer):
         logger.info(f'training will last {epochs} epochs')
 
         for epoch in range(epochs):
+            # Empty model's metrics to not to repeat them
+            # in epochs where no evaluation
+            model.metrics = {}
+
+            # Train model
             model.fit(train_data, **train_kwargs)
 
             if eval_strategy is not None:
                 if epoch % eval_strategy == 0:
-                    # This makes models `metrics` dict not to be overwritten
-                    # so it saves meta about previously made evaluation into any
-                    # new epoch
                     model.evaluate(test_data, **test_kwargs)
 
             if save_strategy is not None:
@@ -154,7 +156,9 @@ class BasicTrainer(Trainer):
                 else:
                     line.save(model, only_meta=True)
 
-            self.metrics.append(deepcopy(model.metrics))
+            # Record metrics:
+            # no need to copy since don't reuse model's metrics dict
+            self.metrics.append(model.metrics)
             logger.info(f'Epoch {epoch}: {model.metrics}')
 
         end_time = pendulum.now()
