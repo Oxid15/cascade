@@ -62,22 +62,10 @@ class MetaViewer:
         meta: List[Dict]
             object containing meta
         """
-        return self.read(self.names[index])
+        return self._mh.read(self.names[index])
 
     def __len__(self) -> int:
         return len(self.names)
-
-    def write(self, path, obj: List[Dict]) -> None:
-        """
-        Dumps obj to path
-        """
-        self._mh.write(path, obj)
-
-    def read(self, path) -> List[Dict]:
-        """
-        Loads object from path
-        """
-        return self._mh.read(path)
 
     def _filter(self, name):
         meta = self.read(name)
