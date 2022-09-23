@@ -1,7 +1,5 @@
-from argparse import ArgumentError
 import os
 import logging
-from copy import deepcopy
 from typing import Iterable, List, Dict, Union
 
 import pendulum
@@ -49,9 +47,6 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
-    def __init__(self, repo, *args, **kwargs) -> None:
-        super().__init__(repo, *args, **kwargs)
-
     def _find_last_model(self, model, line):
         model_num = len(line) - 1
         while True:
