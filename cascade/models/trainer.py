@@ -52,6 +52,20 @@ class BasicTrainer(Trainer):
     def __init__(self, repo, *args, **kwargs) -> None:
         super().__init__(repo, *args, **kwargs)
 
+    def _find_last_model(self, model, line):
+        model_num = len(line) - 1
+        while True:
+            path = os.path.join(line.root, line.model_names[model_num])
+            try:
+                model.load(path)
+                break
+            except FileNotFoundError as e:
+                logger.warn(f'Model {path} files were not found\n{e}')
+                model_num -= 1
+
+                if model_num == -1:
+                    raise FileNotFoundError(f'No model files were found in line {line}')
+
     def train(self,
               model: Model,
               *args,
@@ -110,23 +124,10 @@ class BasicTrainer(Trainer):
         self._repo.add_line(line_name, type(model))
         line = self._repo[line_name]
 
-        if len(line) == 0:
-            raise RuntimeError(f'Cannot start from line {line_name} as it is empty')
-
-        model_num = len(line) - 1
-
         if start_from is not None:
-            while True:
-                path = os.path.join(line.root, line.model_names[model_num])
-                try:
-                    model.load(path)
-                    break
-                except FileNotFoundError as e:
-                    logger.warn(f'Model {path} files were not found\n{e}')
-                    model_num -= 1
-
-                    if model_num == -1:
-                        raise FileNotFoundError(f'No model files were found in line {line_name}')
+            if len(line) == 0:
+                raise RuntimeError(f'Cannot start from line {line_name} as it is empty')
+            model_num = self._find_last_model(model, line)
 
         start_time = pendulum.now()
         self._meta_prefix['train_start_at'] = start_time
