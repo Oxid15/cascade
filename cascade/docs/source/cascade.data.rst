@@ -126,7 +126,7 @@ cascade.data
 
 | 
 
-.. autofunction:: cascade.split
+.. autofunction:: cascade.data.split
 
 
 |

@@ -40,6 +40,7 @@ class Pickler(Modifier):
         Raises
         ------
         FileNotFoundError
+            if path does not exist
         """
         super().__init__(dataset, *args, **kwargs)
         self._path = path
