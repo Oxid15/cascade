@@ -15,8 +15,10 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import List, Dict
-from ..base import MetaHandler, JSONEncoder, supported_meta_formats
+
+from ..base import MetaHandler, supported_meta_formats
 
 
 class MetaViewer:
@@ -62,10 +64,24 @@ class MetaViewer:
         meta: List[Dict]
             object containing meta
         """
-        return self._mh.read(self.names[index])
+        return self.read(self.names[index])
 
     def __len__(self) -> int:
         return len(self.names)
+
+    def write(self, path, obj: List[Dict]) -> None:
+        """
+        Dumps obj to path
+        """
+        warnings.warn('This method will be deprecated in future versions. Consider using MetaHandler instead.')
+        self._mh.write(path, obj)
+
+    def read(self, path) -> List[Dict]:
+        """
+        Loads object from path
+        """
+        warnings.warn('This method will be deprecated in future versions. Consider using MetaHandler instead.')
+        return self._mh.read(path)
 
     def _filter(self, name):
         meta = self.read(name)
