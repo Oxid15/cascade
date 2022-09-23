@@ -150,6 +150,8 @@ class BasicTrainer(Trainer):
                     line.save(model)
                 else:
                     line.save(model, only_meta=True)
+            else:
+                line.save(model, only_meta=True)
 
             # Record metrics:
             # no need to copy since don't reuse model's metrics dict
