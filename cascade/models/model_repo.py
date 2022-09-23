@@ -21,10 +21,9 @@ import shutil
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import Traceable, supported_meta_formats
+from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats
 from .model import Model
 from .model_line import ModelLine
-from ..meta import MetaViewer
 
 
 class Repo(Traceable):
@@ -103,8 +102,8 @@ class ModelRepo(Repo):
             shutil.rmtree(self._root)
 
         os.makedirs(self._root, exist_ok=True)
-        # Can create MeV only if path already exists
-        self._mev = MetaViewer(self._root)
+
+        self._mh = MetaHandler()
         self._load_lines()
         self._setup_logger()
 
@@ -200,17 +199,17 @@ class ModelRepo(Repo):
         meta = {}
         if os.path.exists(meta_path):
             try:
-                meta = self._mev.read(meta_path)[0]
+                meta = self._mh.read(meta_path)[0]
             except IOError as e:
                 warnings.warn(f'File reading error ignored: {e}')
 
-        self_meta = self._mev.obj_to_dict(self.get_meta()[0])
+        self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
         diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
         self.logger.info(diff.pretty())
 
         meta.update(self.get_meta()[0])
         try:
-            self._mev.write(meta_path, [meta])
+            self._mh.write(meta_path, [meta])
         except IOError as e:
             warnings.warn(f'File writing error ignored: {e}')
 

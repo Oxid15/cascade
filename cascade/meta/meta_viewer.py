@@ -89,7 +89,3 @@ class MetaViewer:
             if self._filt[key] != meta[key]:
                 return False
         return True
-
-    @staticmethod
-    def obj_to_dict(obj):
-        return JSONEncoder().obj_to_dict(obj)
