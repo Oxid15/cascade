@@ -19,7 +19,6 @@ import os
 # from hashlib import md5
 import pickle
 from typing import Any, Dict, List
-import warnings
 from sklearn.pipeline import Pipeline
 
 # from ..base import MetaHandler
@@ -32,7 +31,7 @@ class SkModel(BasicModel):
     Accepts the name and block to form pipeline.
     Can fit, evaluate, predict save and load out of the box.
     """
-    def __init__(self, name=None, blocks=None, **kwargs) -> None:
+    def __init__(self, blocks=None, **kwargs) -> None:
         """
         Parameters
         ----------
@@ -41,13 +40,7 @@ class SkModel(BasicModel):
         blocks: list
             List of sklearn transformers to make a pipeline from
         """
-        if name is not None:
-            warnings.warn('''You passed not required argument name.
-            It is deprecated and will be removed in following versions''', FutureWarning)
-            self.name = name
-            super().__init__(name=name, **kwargs)
-        else:
-            super().__init__(**kwargs)
+        super().__init__(**kwargs)
 
         if blocks is not None:
             self._pipeline = self._construct_pipeline(blocks)
