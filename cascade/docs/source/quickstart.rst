@@ -29,6 +29,7 @@ Below are examples of usage of Cascade for some typical tasks.
 
     examples/pipeline_building.ipynb
     examples/model_training.ipynb
+    examples/model_training_trainers.ipynb
     examples/data_validation.ipynb
 
 .. important::
