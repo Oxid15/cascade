@@ -15,7 +15,6 @@ limitations under the License.
 """
 
 import os
-import warnings
 from typing import Union
 
 import pendulum
@@ -67,19 +66,7 @@ class MetricViewer:
             line = self._repo[name]
             viewer_root = line.root
 
-            # Try to use viewer only on models using type key
-            try:
-                view = MetaViewer(viewer_root, filt={'type': 'model'})
-            except KeyError:
-                view = [
-                    MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))[0]
-                    for model_name in line.model_names
-                ]
-
-                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without
-                type key in some of the meta files (in repo, line or model).
-                Consider updating your repo's meta or downgrading cascade's version.
-                In the following versions it will be deprecated.''', FutureWarning)
+            view = MetaViewer(viewer_root, filt={'type': 'model'})
 
             for i in range(len(line.model_names)):
                 try:
