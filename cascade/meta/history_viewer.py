@@ -54,6 +54,7 @@ class HistoryViewer:
     def _make_table(self):
         metas = []
         self._params = []
+        # TODO: refactor this
         for line in [*self._repo][::-1][:self._last_lines]:
             # Try to use viewer only on models using type key
             try:
