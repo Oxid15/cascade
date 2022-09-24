@@ -85,7 +85,7 @@ The logo of the project is a depiction of these principles: it symbolizes modula
 
 ## Scope
 
-[![Scope](cascade/docs/imgs/scope.png)](https://oxid15.github.io/cascade/quickstart.html)
+<img src="cascade/docs/imgs/scope.png" width="600" height="285"/>
 
 Cascade is focused around model's lifecycle and data preprocessing pipelines. It provides tools for construction of data processing pipelines, model training and management of trained model's metadata and files.
 
