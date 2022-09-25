@@ -42,3 +42,6 @@ def test(ds, tmp_path):
         res.append(ds2[i])
 
     assert res == true
+
+    assert type(ds2.ds()) == type(ds)
+    assert str(ds2.ds()) == str(ds)
