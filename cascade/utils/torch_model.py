@@ -37,5 +37,5 @@ class TorchModel(Model):
 
     def get_meta(self):
         meta = super().get_meta()
-        meta[-1]['module'] = repr(self._model)
+        meta[0]['module'] = repr(self._model)
         return meta

@@ -137,10 +137,10 @@ class ModelLine(Traceable):
             with open(exact_filename, 'rb') as f:
                 md5sum = md5(f.read()).hexdigest()
 
-            meta[-1]['name'] = exact_filename
-            meta[-1]['md5sum'] = md5sum
+            meta[0]['name'] = exact_filename
+            meta[0]['md5sum'] = md5sum
 
-        meta[-1]['saved_at'] = pendulum.now(tz='UTC')
+        meta[0]['saved_at'] = pendulum.now(tz='UTC')
         self.model_names.append(os.path.join(folder_name, 'model'))
 
         # Save model's meta
