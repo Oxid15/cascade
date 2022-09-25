@@ -132,7 +132,9 @@ class ModelRepo(Repo):
         Parameters:
             name: str, optional
                 Name of the line. It is used to name a folder of line.
-                Repo prepends it with `self._root` before creating.
+                Repo prepends it with `self._root` before creating.  
+                Optional argument. If omitted - names new line automatically
+                using f'{len(self):0>5d}'
             meta_fmt: str, optional
                 Format of meta files. Supported values are the same as for repo.
                 If omitted, inherits format from repo.
