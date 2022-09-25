@@ -163,15 +163,14 @@ class LargeCSVDataset(SequentialCacher):
     """
     def __init__(self, csv_file_path, *args, **kwargs):
         dataset = PartedTableLoader(csv_file_path, *args, **kwargs)
+        self.len = len(dataset._table)
         self.num_batches = dataset._table.npartitions
         self.bs = self.len // self.num_batches
-
         super().__init__(dataset, self.bs)
-        self.len = len(dataset._table)
+
 
     def _load(self, index):
-        del self.batch
-        self.batch = TableDataset(self._dataset[index])
+        self._batch = TableDataset(t=self._dataset[index])
 
     def __len__(self):
         return self.len
