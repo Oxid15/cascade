@@ -122,7 +122,7 @@ class ModelRepo(Repo):
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))}
 
-    def add_line(self, name, *args, meta_fmt=None, **kwargs):
+    def add_line(self, name:str=None, *args, meta_fmt=None, **kwargs):
         """
         Adds new line to repo if it doesn't exist and returns it
         If line exists, defines it in repo
@@ -130,10 +130,10 @@ class ModelRepo(Repo):
         Supports all the parameters of ModelLine using args and kwargs.
 
         Parameters:
-            name: str
+            name: str, optional
                 Name of the line. It is used to name a folder of line.
                 Repo prepends it with `self._root` before creating.
-            meta_fmt: str
+            meta_fmt: str, optional
                 Format of meta files. Supported values are the same as for repo.
                 If omitted, inherits format from repo.
         See also
@@ -141,6 +141,16 @@ class ModelRepo(Repo):
             cascade.models.ModelLine
        """
         # TODO: use default model_cls
+        if name is None:
+            name = f'{len(self):0>5d}'
+            if name in self.get_line_names():
+                # Name can appear in the repo if the user manually
+                # removed the lines from the middle of the repo
+
+                # This will be handled strictly
+                # until it will become clear that some solution needed
+                raise RuntimeError(f'Line {name} already exists in {self}')
+
         folder = os.path.join(self._root, name)
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
