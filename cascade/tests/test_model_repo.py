@@ -365,3 +365,26 @@ def test_integer_indices(tmp_path, ext):
 
     assert first_line == repo[0]
     assert last_line == repo[-1]
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_auto_line_name(tmp_path, ext):
+    repo = ModelRepo(str(tmp_path), meta_fmt=ext)
+    repo.add_line()
+    repo.add_line('test')
+    repo.add_line()
+    repo.add_line()
+
+    names = repo.get_line_names()
+
+    assert names == ['00000', 'test', '00002', '00003']
+
+    repo = ModelRepo(str(tmp_path), meta_fmt=ext)
+
+    names = repo.get_line_names()
+
+    assert names == ['00000', '00002', '00003', 'test']
