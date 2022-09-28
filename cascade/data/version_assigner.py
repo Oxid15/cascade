@@ -6,6 +6,51 @@ from ..base import MetaHandler, supported_meta_formats
 
 
 class VersionAssigner(Modifier):
+    """
+    Class for automatic data versioning using metadata.
+    `VersionAssigner` is a simple `Modifier` that tracks changes in metadata and assigns
+    dataset a version considering changes in meta.
+    The version consists of two parts, namely major and minor in the format `MAJOR.MINOR` just
+    like in semantic versioning. The meaning of parts is the following: *major* number changes
+    if there are changes in the structure of the pipeline e.g. some dataset was added/removed;
+    *minor* number changes in case of any metadata change e.g. new data arrived and changed 
+    the length of modifiers on pipeline.
+
+    Example
+    -------
+    >>> # Set up the pipeline
+    >>> from cascade import data as cdd
+    >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
+    >>> ds = VersionAssigner(ds, 'data_log.yml') # can be any supported meta format
+    >>> print(ds.version)
+    ... 0.0
+
+    >>> # Changes its structure - add new modifier
+    >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
+    >>> ds = cdd.RangeSampler(ds, 0, len(ds), 2)
+    >>> ds = VersionAssigner(ds, 'data_log.yml')
+    >>> print(ds.version)
+    ... 1.0
+
+    >>> # Revert changes - version downgrades back
+    >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
+    >>> ds = VersionAssigner(ds, 'data_log.yml')
+    >>> print(ds.version)
+    ... 0.0
+
+    >>> # Update input data - minor update
+    >>> ds = cdd.Wrapper([0, 1, 2, 3, 4, 5])
+    >>> ds = VersionAssigner(ds, 'data_log.yml')
+    >>> print(ds.version)
+    ... 0.1
+
+    Note
+    ----
+    Some limitations are present. If meta data of some dataset has
+    something random or run-dependent like for example memory
+    address of an object or time of creation, then the version will
+    bump on every run.
+    """
     def __init__(self, dataset: Dataset, path, *args, **kwargs) -> None:
         super().__init__(dataset, *args, **kwargs)
         self._mh = MetaHandler()
