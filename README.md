@@ -22,6 +22,7 @@ More info on installation can be found in [docs](https://oxid15.github.io/cascad
 
 See use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html).
 
+![HistoryViewer](cascade/docs/imgs/history-viewer.gif)
 
 
 ## Why Cascade
@@ -84,8 +85,7 @@ The logo of the project is a depiction of these principles: it symbolizes modula
 
 ## Scope
 
-
-![https://oxid15.github.io/cascade/quickstart.html](cascade/docs/imgs/scope.png)
+<img src="cascade/docs/imgs/scope.png" width="600" height="285"/>
 
 Cascade is focused around model's lifecycle and data preprocessing pipelines. It provides tools for construction of data processing pipelines, model training and management of trained model's metadata and files.
 
@@ -100,8 +100,8 @@ Please make sure to update tests and docs as appropriate.
 
 
 ## Documentation
-
-Docs are available online:  [Go to Cascade documentation](https://oxid15.github.io/cascade/)
+---
+[Go to Cascade documentation](https://oxid15.github.io/cascade/)
 
 
 

@@ -1,6 +1,5 @@
 opencv-python
-pandas
 scikit-learn
-dask[dataframe]<2022.5.0
+dask[dataframe]>=2022.9.1
 pandera[io]
 torch
