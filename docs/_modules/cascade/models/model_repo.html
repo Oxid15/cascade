@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.models.model_repo - cascade 0.7.1 documentation</title>
+    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
+        <title>cascade.models.model_repo - cascade 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.1 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,6 +166,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/model_training.html">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
@@ -196,7 +197,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -211,18 +213,18 @@
         </div>
         <article role="main">
           <h1>Source code for cascade.models.model_repo</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Copyright 2022 Ilia Moiseev</span>
-<span class="sd">Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="sd">Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
 <span class="sd">you may not use this file except in compliance with the License.</span>
 <span class="sd">You may obtain a copy of the License at</span>
 <span class="sd">   http://www.apache.org/licenses/LICENSE-2.0</span>
 <span class="sd">Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="sd">distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
 <span class="sd">WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="sd">See the License for the specific language governing permissions and</span>
 <span class="sd">limitations under the License.</span>
-<span class="sd">"""</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
@@ -240,13 +242,13 @@
 
 
 <span class="k">class</span> <span class="nc">Repo</span><span class="p">(</span><span class="n">Traceable</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base interface for repos of models.</span>
 
 <span class="sd">    See also</span>
 <span class="sd">    --------</span>
 <span class="sd">    cascade.models.ModelRepo</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -260,7 +262,7 @@
 
 
 <div class="viewcode-block" id="ModelRepo"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo">[docs]</a><span class="k">class</span> <span class="nc">ModelRepo</span><span class="p">(</span><span class="n">Repo</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An interface to manage experiments with several lines of models.</span>
 <span class="sd">    When created, initializes an empty folder constituting a repository of model lines.</span>
 
@@ -270,21 +272,21 @@
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
 <span class="sd">    &gt;&gt;&gt; from cascade.models import ModelRepo</span>
-<span class="sd">    &gt;&gt;&gt; repo = ModelRepo('repo', _meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})</span>
-<span class="sd">    &gt;&gt;&gt; vgg16_line = repo.add_line('vgg16', VGG16Model)</span>
+<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, _meta_prefix={&#39;description&#39;: &#39;This is a repo with one VGG16 line for the example.&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; vgg16_line = repo.add_line(&#39;vgg16&#39;, VGG16Model)</span>
 <span class="sd">    &gt;&gt;&gt; vgg16 = VGG16Model()</span>
 <span class="sd">    &gt;&gt;&gt; vgg16.fit()</span>
 <span class="sd">    &gt;&gt;&gt; vgg16_line.save(vgg16)</span>
 
 
 <span class="sd">    &gt;&gt;&gt; from cascade.models import ModelRepo</span>
-<span class="sd">    &gt;&gt;&gt; repo = ModelRepo('repo', lines=[dict(name='vgg16', model_cls=VGGModel)])</span>
+<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, lines=[dict(name=&#39;vgg16&#39;, model_cls=VGGModel)])</span>
 <span class="sd">    &gt;&gt;&gt; vgg16 = VGG16Model()</span>
 <span class="sd">    &gt;&gt;&gt; vgg16.fit()</span>
-<span class="sd">    &gt;&gt;&gt; repo['vgg16'].save(vgg16)</span>
-<span class="sd">    """</span>
-<div class="viewcode-block" id="ModelRepo.__init__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">'.json'</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">"""</span>
+<span class="sd">    &gt;&gt;&gt; repo[&#39;vgg16&#39;].save(vgg16)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ModelRepo.__init__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        folder:</span>
@@ -296,17 +298,17 @@
 <span class="sd">            if True will remove folder that is passed in first argument and start a new repo</span>
 <span class="sd">            in that place</span>
 <span class="sd">        meta_fmt: str</span>
-<span class="sd">            extension of repo's metadata files and that will be assigned to the lines by default</span>
+<span class="sd">            extension of repo&#39;s metadata files and that will be assigned to the lines by default</span>
 <span class="sd">            `.json` and `.yml` are supported</span>
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
 <span class="sd">        cascade.models.ModelLine</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">folder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-        <span class="k">assert</span> <span class="n">meta_fmt</span> <span class="ow">in</span> <span class="n">supported_meta_formats</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'Only </span><span class="si">{</span><span class="n">supported_meta_formats</span><span class="si">}</span><span class="s1"> are supported formats'</span>
+        <span class="k">assert</span> <span class="n">meta_fmt</span> <span class="ow">in</span> <span class="n">supported_meta_formats</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Only </span><span class="si">{</span><span class="n">supported_meta_formats</span><span class="si">}</span><span class="s1"> are supported formats&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_meta_fmt</span> <span class="o">=</span> <span class="n">meta_fmt</span>
         <span class="k">if</span> <span class="n">overwrite</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">):</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">)</span>
@@ -331,8 +333,8 @@
                       <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="n">name</span><span class="p">))}</span>
 
 <div class="viewcode-block" id="ModelRepo.add_line"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.add_line">[docs]</a>    <span class="k">def</span> <span class="nf">add_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">"""</span>
-<span class="sd">        Adds new line to repo if it doesn't exist and returns it</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds new line to repo if it doesn&#39;t exist and returns it</span>
 <span class="sd">        If line exists, defines it in repo</span>
 
 <span class="sd">        Supports all the parameters of ModelLine using args and kwargs.</span>
@@ -347,7 +349,7 @@
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
 <span class="sd">            cascade.models.ModelLine</span>
-<span class="sd">       """</span>
+<span class="sd">       &quot;&quot;&quot;</span>
 
         <span class="n">folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">meta_fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -363,12 +365,12 @@
         <span class="k">return</span> <span class="n">line</span></div>
 
 <div class="viewcode-block" id="ModelRepo.__getitem__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModelLine</span><span class="p">:</span>
-        <span class="sd">"""</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        line: ModelLine</span>
 <span class="sd">           existing line of the name passed in `key`</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -376,53 +378,53 @@
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ModelRepo.__len__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">"""</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        num: int</span>
 <span class="sd">            a number of lines</span>
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">'ModelRepo in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="si">}</span><span class="s1"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s1"> lines'</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;ModelRepo in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="si">}</span><span class="s1"> of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s1"> lines&#39;</span>
 
     <span class="k">def</span> <span class="nf">_setup_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">)</span>
-        <span class="n">hdlr</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="s1">'history.log'</span><span class="p">))</span>
-        <span class="n">hdlr</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="si">%(asctime)s</span><span class="se">\n</span><span class="si">%(message)s</span><span class="s1">'</span><span class="p">))</span>
+        <span class="n">hdlr</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="s1">&#39;history.log&#39;</span><span class="p">))</span>
+        <span class="n">hdlr</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">%(asctime)s</span><span class="se">\n</span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">hdlr</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">'DEBUG'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_update_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Reads meta if exists and updates it with new values</span>
         <span class="c1"># writes back to disk</span>
-        <span class="n">meta_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="s1">'meta'</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_fmt</span><span class="p">)</span>
+        <span class="n">meta_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="s1">&#39;meta&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_fmt</span><span class="p">)</span>
 
         <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">meta_path</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mev</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">meta_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">'File reading error ignored: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File reading error ignored: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="n">self_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mev</span><span class="o">.</span><span class="n">obj_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">diff</span> <span class="o">=</span> <span class="n">DeepDiff</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">self_meta</span><span class="p">,</span> <span class="n">exclude_paths</span><span class="o">=</span><span class="p">[</span><span class="s2">"root['name']"</span><span class="p">,</span> <span class="s2">"root['updated_at']"</span><span class="p">])</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">DeepDiff</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">self_meta</span><span class="p">,</span> <span class="n">exclude_paths</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;root[&#39;name&#39;]&quot;</span><span class="p">,</span> <span class="s2">&quot;root[&#39;updated_at&#39;]&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
 
         <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mev</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">meta_path</span><span class="p">,</span> <span class="p">[</span><span class="n">meta</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">'File writing error ignored: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File writing error ignored: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ModelRepo.get_meta"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
         <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-            <span class="s1">'root'</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span>
-            <span class="s1">'len'</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
-            <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s1">'UTC'</span><span class="p">),</span>
-            <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'repo'</span>
+            <span class="s1">&#39;root&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span>
+            <span class="s1">&#39;len&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
+            <span class="s1">&#39;updated_at&#39;</span><span class="p">:</span> <span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;repo&#39;</span>
         <span class="p">})</span>
         <span class="k">return</span> <span class="n">meta</span></div>
 
@@ -432,7 +434,7 @@
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Release all files on destruction</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">'logger'</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;logger&#39;</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
                 <span class="n">handler</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
@@ -446,22 +448,22 @@
 
 
 <span class="k">class</span> <span class="nc">ModelRepoConcatenator</span><span class="p">(</span><span class="n">Repo</span><span class="p">):</span>
-    <span class="sd">"""</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The class to concatenate different Repos.</span>
-<span class="sd">    For the ease of use please, don't use it directly.</span>
+<span class="sd">    For the ease of use please, don&#39;t use it directly.</span>
 <span class="sd">    Just do repo = repo_1 + repo_2 to unify repos.</span>
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repos</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Repo</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_repos</span> <span class="o">=</span> <span class="n">repos</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="n">pair</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">'_'</span><span class="p">)</span>
+        <span class="n">pair</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pair</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> is not in required format </span><span class="se">\</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> is not in required format </span><span class="se">\</span>
 <span class="s1">            `&lt;repo_idx&gt;_..._&lt;line_name&gt;`. </span><span class="se">\</span>
-<span class="s1">            Please, use the key in this format. For example `0_line_1`'</span><span class="p">)</span>
-        <span class="n">idx</span><span class="p">,</span> <span class="n">line_name</span> <span class="o">=</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">'_'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="s1">            Please, use the key in this format. For example `0_line_1`&#39;</span><span class="p">)</span>
+        <span class="n">idx</span><span class="p">,</span> <span class="n">line_name</span> <span class="o">=</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repos</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">line_name</span><span class="p">]</span>
@@ -478,7 +480,7 @@
         <span class="k">return</span> <span class="n">ModelRepoConcatenator</span><span class="p">([</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">'ModelRepoConcatenator of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repos</span><span class="p">)</span><span class="si">}</span><span class="s1"> repos, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s1"> lines total'</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;ModelRepoConcatenator of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repos</span><span class="p">)</span><span class="si">}</span><span class="s1"> repos, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s1"> lines total&#39;</span>
 
     <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">repo</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repos</span><span class="p">:</span>
@@ -520,7 +522,9 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../documentation_options.js"></script>
     <script src="../../../jquery.js"></script>
     <script src="../../../underscore.js"></script>
+    <script src="../../../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../doctools.js"></script>
+    <script src="../../../sphinx_highlight.js"></script>
     <script src="../../../scripts/furo.js"></script>
     <script src="../../../clipboard.min.js"></script>
     <script src="../../../copybutton.js"></script>

@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="cascade.meta" href="cascade.meta.html" />
 
-    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.utils - cascade 0.7.1 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
+        <title>cascade.utils - cascade 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.7.1 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -141,7 +141,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -167,6 +167,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
@@ -197,7 +198,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -205,14 +207,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
           <section id="cascade-utils">
-<h1>cascade.utils<a class="headerlink" href="#cascade-utils" title="Permalink to this headline">#</a></h1>
+<h1>cascade.utils<a class="headerlink" href="#cascade-utils" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.ConstantBaseline">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">ConstantBaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline" title="Permalink to this definition">#</a></dt>
@@ -221,7 +223,7 @@ any classification task. It returns only one class
 (for example it can be majority class)</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.ConstantBaseline.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.__init__" title="Permalink to this definition">#</a></dt>
 <dd><p>Should be called in any successor - initializes default meta needed.
 Arguments passed in it should be related to model’s hyperparameters, architecture.
 All additional arguments should have defaults - to be able to create model and then load.
@@ -229,38 +231,44 @@ Successors may pass all of their parameters to superclass for it to be able to
 log them in meta. Everything that is worth to document about model and data it was trained on can be
 either in params or meta_prefix.</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.ConstantBaseline.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Method to encapsulate training loops.
 May be provided with any training-related arguments.</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.ConstantBaseline.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.load" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.load" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads model from provided filepath. May be unpickling process or reading json configs.
 Does not return any model, just restores internal state.</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.ConstantBaseline.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.predict" title="Permalink to this definition">#</a></dt>
 <dd><p>Method to encapsulate inference.
 May include preprocessing steps to make model self-sufficient.</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.ConstantBaseline.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.save" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/baselines.html#ConstantBaseline.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.ConstantBaseline.save" title="Permalink to this definition">#</a></dt>
 <dd><p>Saves model’s state using provided filepath.</p>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.FolderImageDataset">
@@ -269,14 +277,15 @@ May include preprocessing steps to make model self-sufficient.</p>
 Accepts the path to the folder with images. In each __getitem__ call
 invokes opencv imread on image and returns it if it exists.</p>
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.NumpyWrapper">
@@ -286,6 +295,7 @@ invokes opencv imread on image and returns it if it exists.</p>
 <dt class="sig sig-object py" id="cascade.utils.NumpyWrapper.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/numpy_wrapper.html#NumpyWrapper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.NumpyWrapper.__init__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.NumpyWrapper.get_meta">
 <span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/numpy_wrapper.html#NumpyWrapper.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.NumpyWrapper.get_meta" title="Permalink to this definition">#</a></dt>
@@ -300,15 +310,17 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.OverSampler">
@@ -326,15 +338,17 @@ Works for any number of classes.</p>
 :param dataset: a dataset to modify
 :type dataset: Dataset</p>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.PaSchemaValidator">
@@ -344,7 +358,7 @@ It accepts TableDataset and schema.
 For more details on schemas see pandera’s documentation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.PaSchemaValidator.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/pa_schema_validator.html#PaSchemaValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.PaSchemaValidator.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/pa_schema_validator.html#PaSchemaValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.PaSchemaValidator.__init__" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -356,15 +370,17 @@ For more details on schemas see pandera’s documentation.</p></li>
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.SkModel">
@@ -374,7 +390,7 @@ Accepts the name and block to form pipeline.
 Can fit, evaluate, predict save and load out of the box.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.SkModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.__init__" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -384,14 +400,16 @@ Can fit, evaluate, predict save and load out of the box.</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.SkModel.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Wrapper for pipeline.fit</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.SkModel.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.get_meta" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.get_meta" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
@@ -404,36 +422,42 @@ of list to enable cascade-like calls in Modifiers and Samplers.</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.SkModel.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.load" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.load" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads the model from path provided. If no extension, .pkl is added.</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.SkModel.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.predict" title="Permalink to this definition">#</a></dt>
 <dd><p>Wrapper for pipeline.predict</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.SkModel.predict_proba">
 <span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.predict_proba"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.predict_proba" title="Permalink to this definition">#</a></dt>
 <dd><p>Wrapper for pipeline.predict_proba</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.SkModel.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.save" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/sk_model.html#SkModel.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.SkModel.save" title="Permalink to this definition">#</a></dt>
 <dd><p>Saves model to the path provided.
 If no extension, then .pkl is added.</p>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.TableDataset">
@@ -444,6 +468,7 @@ If no extension, then .pkl is added.</p>
 <span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#TableDataset.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TableDataset.__getitem__" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns row from table by index</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.TableDataset.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#TableDataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TableDataset.__init__" title="Permalink to this definition">#</a></dt>
@@ -453,14 +478,16 @@ If no extension, then .pkl is added.</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.TableDataset.__len__">
 <span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#TableDataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TableDataset.__len__" title="Permalink to this definition">#</a></dt>
 <dd><p>Return len of the table</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.TableDataset.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#TableDataset.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TableDataset.get_meta" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#TableDataset.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TableDataset.get_meta" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>meta</strong> – A list where last element is this dataset’s metadata.
@@ -472,20 +499,23 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.TableDataset.to_csv">
 <span class="sig-name descname"><span class="pre">to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#TableDataset.to_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TableDataset.to_csv" title="Permalink to this definition">#</a></dt>
 <dd><p>Saves the table to .csv</p>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.TableFilter">
@@ -503,15 +533,17 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.CSVDataset">
@@ -527,15 +559,17 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.PartedTableLoader">
@@ -547,24 +581,28 @@ and returns partitions on __getitem__</p>
 <span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#PartedTableLoader.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.PartedTableLoader.__getitem__" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns partition under the index</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.PartedTableLoader.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csv_file_path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#PartedTableLoader.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.PartedTableLoader.__init__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.PartedTableLoader.__len__">
 <span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#PartedTableLoader.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.PartedTableLoader.__len__" title="Permalink to this definition">#</a></dt>
 <dd><p>The number of partitions</p>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.TableIterator">
@@ -582,15 +620,17 @@ and returns partitions on __getitem__</p>
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.LargeCSVDataset">
@@ -609,42 +649,47 @@ Loads table by partitions.</p>
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.NullValidator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">NullValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.utils.TableDataset" title="cascade.utils.table_dataset.TableDataset"><span class="pre">cascade.utils.table_dataset.TableDataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#NullValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.NullValidator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">NullValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.utils.TableDataset" title="cascade.utils.table_dataset.TableDataset"><span class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#NullValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.NullValidator" title="Permalink to this definition">#</a></dt>
 <dd><p>Checks there are no null values in the table.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.NullValidator.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.utils.TableDataset" title="cascade.utils.table_dataset.TableDataset"><span class="pre">cascade.utils.table_dataset.TableDataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">→</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#NullValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.NullValidator.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.utils.TableDataset" title="cascade.utils.table_dataset.TableDataset"><span class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#NullValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.NullValidator.__init__" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>t</strong> – pd.DataFrame or TableDataset to be set as table</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.NullValidator.check_nulls">
 <span class="sig-name descname"><span class="pre">check_nulls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#NullValidator.check_nulls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.NullValidator.check_nulls" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
+
 </dd></dl>
+
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 <div class="line-block">
-<div class="line"><br/></div>
+<div class="line"><br /></div>
 </div>
 </section>
 
@@ -655,7 +700,7 @@ Loads table by partitions.</p>
         <div class="related-pages">
           
           <a class="prev-page" href="cascade.meta.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -685,8 +730,93 @@ Loads table by partitions.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">cascade.utils</a><ul>
+<li><a class="reference internal" href="#cascade.utils.ConstantBaseline"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.ConstantBaseline.__init__"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.ConstantBaseline.fit"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.ConstantBaseline.load"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.load()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.ConstantBaseline.predict"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.ConstantBaseline.save"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.FolderImageDataset"><code class="docutils literal notranslate"><span class="pre">FolderImageDataset</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.NumpyWrapper"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.NumpyWrapper.__init__"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.NumpyWrapper.get_meta"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.OverSampler"><code class="docutils literal notranslate"><span class="pre">OverSampler</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.OverSampler.__init__"><code class="docutils literal notranslate"><span class="pre">OverSampler.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.PaSchemaValidator"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.PaSchemaValidator.__init__"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.SkModel"><code class="docutils literal notranslate"><span class="pre">SkModel</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.SkModel.__init__"><code class="docutils literal notranslate"><span class="pre">SkModel.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.SkModel.fit"><code class="docutils literal notranslate"><span class="pre">SkModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.SkModel.get_meta"><code class="docutils literal notranslate"><span class="pre">SkModel.get_meta()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.SkModel.load"><code class="docutils literal notranslate"><span class="pre">SkModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.SkModel.predict"><code class="docutils literal notranslate"><span class="pre">SkModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.SkModel.predict_proba"><code class="docutils literal notranslate"><span class="pre">SkModel.predict_proba()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.SkModel.save"><code class="docutils literal notranslate"><span class="pre">SkModel.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.TableDataset"><code class="docutils literal notranslate"><span class="pre">TableDataset</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.TableDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">TableDataset.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TableDataset.__init__"><code class="docutils literal notranslate"><span class="pre">TableDataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TableDataset.__len__"><code class="docutils literal notranslate"><span class="pre">TableDataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TableDataset.get_meta"><code class="docutils literal notranslate"><span class="pre">TableDataset.get_meta()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TableDataset.to_csv"><code class="docutils literal notranslate"><span class="pre">TableDataset.to_csv()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.TableFilter"><code class="docutils literal notranslate"><span class="pre">TableFilter</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.TableFilter.__init__"><code class="docutils literal notranslate"><span class="pre">TableFilter.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.CSVDataset"><code class="docutils literal notranslate"><span class="pre">CSVDataset</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.CSVDataset.__init__"><code class="docutils literal notranslate"><span class="pre">CSVDataset.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.PartedTableLoader"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.PartedTableLoader.__getitem__"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.PartedTableLoader.__init__"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.PartedTableLoader.__len__"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader.__len__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.TableIterator"><code class="docutils literal notranslate"><span class="pre">TableIterator</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.TableIterator.__init__"><code class="docutils literal notranslate"><span class="pre">TableIterator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.LargeCSVDataset"><code class="docutils literal notranslate"><span class="pre">LargeCSVDataset</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.LargeCSVDataset.__init__"><code class="docutils literal notranslate"><span class="pre">LargeCSVDataset.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.NullValidator"><code class="docutils literal notranslate"><span class="pre">NullValidator</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.NullValidator.__init__"><code class="docutils literal notranslate"><span class="pre">NullValidator.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.NullValidator.check_nulls"><code class="docutils literal notranslate"><span class="pre">NullValidator.check_nulls()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -694,7 +824,9 @@ Loads table by partitions.</p>
 </div><script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
     <script src="jquery.js"></script>
     <script src="underscore.js"></script>
+    <script src="_sphinx_javascript_frameworks_compat.js"></script>
     <script src="doctools.js"></script>
+    <script src="sphinx_highlight.js"></script>
     <script src="scripts/furo.js"></script>
     <script src="clipboard.min.js"></script>
     <script src="copybutton.js"></script>

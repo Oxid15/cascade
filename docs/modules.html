@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.base" href="cascade.base.html" /><link rel="prev" title="Concepts" href="concepts.html" />
 
-    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>Cascade modules reference - cascade 0.7.1 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
+        <title>Cascade modules reference - cascade 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.7.1 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -167,6 +167,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
@@ -197,7 +198,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -212,14 +214,256 @@
         </div>
         <article role="main">
           <section id="cascade-modules-reference">
-<h1>Cascade modules reference<a class="headerlink" href="#cascade-modules-reference" title="Permalink to this headline">#</a></h1>
+<h1>Cascade modules reference<a class="headerlink" href="#cascade-modules-reference" title="Permalink to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.utils.html">cascade.utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cascade.base.html">cascade.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cascade.base.html#cascade.base.Traceable"><code class="docutils literal notranslate"><span class="pre">Traceable</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.base.html#cascade.base.Traceable.__init__"><code class="docutils literal notranslate"><span class="pre">Traceable.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.base.html#cascade.base.Traceable.get_meta"><code class="docutils literal notranslate"><span class="pre">Traceable.get_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.base.html#cascade.base.Traceable.update_meta"><code class="docutils literal notranslate"><span class="pre">Traceable.update_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.base.html#cascade.base.MetaHandler"><code class="docutils literal notranslate"><span class="pre">MetaHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.base.html#cascade.base.MetaHandler.read"><code class="docutils literal notranslate"><span class="pre">MetaHandler.read()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.base.html#cascade.base.MetaHandler.write"><code class="docutils literal notranslate"><span class="pre">MetaHandler.write()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">Dataset.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset.__init__"><code class="docutils literal notranslate"><span class="pre">Dataset.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset.__repr__"><code class="docutils literal notranslate"><span class="pre">Dataset.__repr__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset.get_meta"><code class="docutils literal notranslate"><span class="pre">Dataset.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Iterator"><code class="docutils literal notranslate"><span class="pre">Iterator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Iterator.__init__"><code class="docutils literal notranslate"><span class="pre">Iterator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Iterator.get_meta"><code class="docutils literal notranslate"><span class="pre">Iterator.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Wrapper"><code class="docutils literal notranslate"><span class="pre">Wrapper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Wrapper.__init__"><code class="docutils literal notranslate"><span class="pre">Wrapper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Wrapper.get_meta"><code class="docutils literal notranslate"><span class="pre">Wrapper.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Modifier"><code class="docutils literal notranslate"><span class="pre">Modifier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Modifier.__init__"><code class="docutils literal notranslate"><span class="pre">Modifier.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Modifier.get_meta"><code class="docutils literal notranslate"><span class="pre">Modifier.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Sampler"><code class="docutils literal notranslate"><span class="pre">Sampler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Sampler.__init__"><code class="docutils literal notranslate"><span class="pre">Sampler.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.ApplyModifier"><code class="docutils literal notranslate"><span class="pre">ApplyModifier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.ApplyModifier.__init__"><code class="docutils literal notranslate"><span class="pre">ApplyModifier.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.BruteforceCacher"><code class="docutils literal notranslate"><span class="pre">BruteforceCacher</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.BruteforceCacher.__init__"><code class="docutils literal notranslate"><span class="pre">BruteforceCacher.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Concatenator"><code class="docutils literal notranslate"><span class="pre">Concatenator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Concatenator.__init__"><code class="docutils literal notranslate"><span class="pre">Concatenator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Concatenator.__len__"><code class="docutils literal notranslate"><span class="pre">Concatenator.__len__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Concatenator.__repr__"><code class="docutils literal notranslate"><span class="pre">Concatenator.__repr__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Concatenator.get_meta"><code class="docutils literal notranslate"><span class="pre">Concatenator.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.CyclicSampler"><code class="docutils literal notranslate"><span class="pre">CyclicSampler</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.FolderDataset"><code class="docutils literal notranslate"><span class="pre">FolderDataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.FolderDataset.__init__"><code class="docutils literal notranslate"><span class="pre">FolderDataset.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.FolderDataset.get_meta"><code class="docutils literal notranslate"><span class="pre">FolderDataset.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Pickler"><code class="docutils literal notranslate"><span class="pre">Pickler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Pickler.__init__"><code class="docutils literal notranslate"><span class="pre">Pickler.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.RandomSampler"><code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.RandomSampler.__init__"><code class="docutils literal notranslate"><span class="pre">RandomSampler.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.SequentialCacher"><code class="docutils literal notranslate"><span class="pre">SequentialCacher</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.SequentialCacher.__init__"><code class="docutils literal notranslate"><span class="pre">SequentialCacher.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.RangeSampler"><code class="docutils literal notranslate"><span class="pre">RangeSampler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.RangeSampler.__init__"><code class="docutils literal notranslate"><span class="pre">RangeSampler.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model.__init__"><code class="docutils literal notranslate"><span class="pre">Model.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model.evaluate"><code class="docutils literal notranslate"><span class="pre">Model.evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model.fit"><code class="docutils literal notranslate"><span class="pre">Model.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model.get_meta"><code class="docutils literal notranslate"><span class="pre">Model.get_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model.load"><code class="docutils literal notranslate"><span class="pre">Model.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model.predict"><code class="docutils literal notranslate"><span class="pre">Model.predict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model.save"><code class="docutils literal notranslate"><span class="pre">Model.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.ModelModifier"><code class="docutils literal notranslate"><span class="pre">ModelModifier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelModifier.__init__"><code class="docutils literal notranslate"><span class="pre">ModelModifier.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelModifier.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelModifier.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModel"><code class="docutils literal notranslate"><span class="pre">BasicModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModel.evaluate"><code class="docutils literal notranslate"><span class="pre">BasicModel.evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModel.fit"><code class="docutils literal notranslate"><span class="pre">BasicModel.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModel.load"><code class="docutils literal notranslate"><span class="pre">BasicModel.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModel.predict"><code class="docutils literal notranslate"><span class="pre">BasicModel.predict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModel.save"><code class="docutils literal notranslate"><span class="pre">BasicModel.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModelModifier"><code class="docutils literal notranslate"><span class="pre">BasicModelModifier</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo"><code class="docutils literal notranslate"><span class="pre">ModelRepo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo.__getitem__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo.__init__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo.__len__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__len__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo.add_line"><code class="docutils literal notranslate"><span class="pre">ModelRepo.add_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo.get_line_names"><code class="docutils literal notranslate"><span class="pre">ModelRepo.get_line_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelRepo.get_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo.reload"><code class="docutils literal notranslate"><span class="pre">ModelRepo.reload()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine"><code class="docutils literal notranslate"><span class="pre">ModelLine</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine.__getitem__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine.__init__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine.__len__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__len__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelLine.get_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine.save"><code class="docutils literal notranslate"><span class="pre">ModelLine.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Trainer.__init__"><code class="docutils literal notranslate"><span class="pre">Trainer.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Trainer.get_meta"><code class="docutils literal notranslate"><span class="pre">Trainer.get_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Trainer.train"><code class="docutils literal notranslate"><span class="pre">Trainer.train()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.BasicTrainer"><code class="docutils literal notranslate"><span class="pre">BasicTrainer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicTrainer.__init__"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicTrainer.train"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.train()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.HistoryViewer"><code class="docutils literal notranslate"><span class="pre">HistoryViewer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.HistoryViewer.__init__"><code class="docutils literal notranslate"><span class="pre">HistoryViewer.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.HistoryViewer.plot"><code class="docutils literal notranslate"><span class="pre">HistoryViewer.plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.HistoryViewer.serve"><code class="docutils literal notranslate"><span class="pre">HistoryViewer.serve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer"><code class="docutils literal notranslate"><span class="pre">MetricViewer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.__init__"><code class="docutils literal notranslate"><span class="pre">MetricViewer.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.plot_table"><code class="docutils literal notranslate"><span class="pre">MetricViewer.plot_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.reload_table"><code class="docutils literal notranslate"><span class="pre">MetricViewer.reload_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.serve"><code class="docutils literal notranslate"><span class="pre">MetricViewer.serve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer"><code class="docutils literal notranslate"><span class="pre">MetaViewer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.__getitem__"><code class="docutils literal notranslate"><span class="pre">MetaViewer.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.__init__"><code class="docutils literal notranslate"><span class="pre">MetaViewer.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.obj_to_dict"><code class="docutils literal notranslate"><span class="pre">MetaViewer.obj_to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.read"><code class="docutils literal notranslate"><span class="pre">MetaViewer.read()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.write"><code class="docutils literal notranslate"><span class="pre">MetaViewer.write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.Validator"><code class="docutils literal notranslate"><span class="pre">Validator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.Validator.__init__"><code class="docutils literal notranslate"><span class="pre">Validator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.AggregateValidator"><code class="docutils literal notranslate"><span class="pre">AggregateValidator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.AggregateValidator.__init__"><code class="docutils literal notranslate"><span class="pre">AggregateValidator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.PredicateValidator"><code class="docutils literal notranslate"><span class="pre">PredicateValidator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.PredicateValidator.__init__"><code class="docutils literal notranslate"><span class="pre">PredicateValidator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaValidator"><code class="docutils literal notranslate"><span class="pre">MetaValidator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaValidator.__init__"><code class="docutils literal notranslate"><span class="pre">MetaValidator.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cascade.utils.html">cascade.utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.ConstantBaseline"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.ConstantBaseline.__init__"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.ConstantBaseline.fit"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.ConstantBaseline.load"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.ConstantBaseline.predict"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.predict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.ConstantBaseline.save"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.FolderImageDataset"><code class="docutils literal notranslate"><span class="pre">FolderImageDataset</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.NumpyWrapper"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NumpyWrapper.__init__"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NumpyWrapper.get_meta"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper.get_meta()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.OverSampler"><code class="docutils literal notranslate"><span class="pre">OverSampler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.OverSampler.__init__"><code class="docutils literal notranslate"><span class="pre">OverSampler.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.PaSchemaValidator"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PaSchemaValidator.__init__"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel"><code class="docutils literal notranslate"><span class="pre">SkModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel.__init__"><code class="docutils literal notranslate"><span class="pre">SkModel.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel.fit"><code class="docutils literal notranslate"><span class="pre">SkModel.fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel.get_meta"><code class="docutils literal notranslate"><span class="pre">SkModel.get_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel.load"><code class="docutils literal notranslate"><span class="pre">SkModel.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel.predict"><code class="docutils literal notranslate"><span class="pre">SkModel.predict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel.predict_proba"><code class="docutils literal notranslate"><span class="pre">SkModel.predict_proba()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel.save"><code class="docutils literal notranslate"><span class="pre">SkModel.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset"><code class="docutils literal notranslate"><span class="pre">TableDataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset.__getitem__"><code class="docutils literal notranslate"><span class="pre">TableDataset.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset.__init__"><code class="docutils literal notranslate"><span class="pre">TableDataset.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset.__len__"><code class="docutils literal notranslate"><span class="pre">TableDataset.__len__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset.get_meta"><code class="docutils literal notranslate"><span class="pre">TableDataset.get_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset.to_csv"><code class="docutils literal notranslate"><span class="pre">TableDataset.to_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableFilter"><code class="docutils literal notranslate"><span class="pre">TableFilter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableFilter.__init__"><code class="docutils literal notranslate"><span class="pre">TableFilter.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.CSVDataset"><code class="docutils literal notranslate"><span class="pre">CSVDataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.CSVDataset.__init__"><code class="docutils literal notranslate"><span class="pre">CSVDataset.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.PartedTableLoader"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PartedTableLoader.__getitem__"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader.__getitem__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PartedTableLoader.__init__"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PartedTableLoader.__len__"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader.__len__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableIterator"><code class="docutils literal notranslate"><span class="pre">TableIterator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableIterator.__init__"><code class="docutils literal notranslate"><span class="pre">TableIterator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.LargeCSVDataset"><code class="docutils literal notranslate"><span class="pre">LargeCSVDataset</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.LargeCSVDataset.__init__"><code class="docutils literal notranslate"><span class="pre">LargeCSVDataset.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html#cascade.utils.NullValidator"><code class="docutils literal notranslate"><span class="pre">NullValidator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NullValidator.__init__"><code class="docutils literal notranslate"><span class="pre">NullValidator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NullValidator.check_nulls"><code class="docutils literal notranslate"><span class="pre">NullValidator.check_nulls()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -236,10 +480,10 @@
                 </div>
                 <div class="title">cascade.base</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="concepts.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -278,7 +522,9 @@
 </div><script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
     <script src="jquery.js"></script>
     <script src="underscore.js"></script>
+    <script src="_sphinx_javascript_frameworks_compat.js"></script>
     <script src="doctools.js"></script>
+    <script src="sphinx_highlight.js"></script>
     <script src="scripts/furo.js"></script>
     <script src="clipboard.min.js"></script>
     <script src="copybutton.js"></script>

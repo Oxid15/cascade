@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" />
 
-    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade 0.7.1 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
+        <title>cascade 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">cascade 0.7.1 documentation</div></a>
+      <a href="#"><div class="brand">cascade 0.7.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -141,7 +141,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -167,6 +167,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
@@ -197,7 +198,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -205,24 +207,24 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
           <section id="what-is-it">
-<h1>What is it<a class="headerlink" href="#what-is-it" title="Permalink to this headline">#</a></h1>
+<h1>What is it<a class="headerlink" href="#what-is-it" title="Permalink to this heading">#</a></h1>
 <p>ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.</p>
 <p>This project is an attempt to build such bundle of tools for ML-Engineer, certain standards and guides for
 workflow, a set of templates for typical tasks.</p>
 </section>
 <section id="who-could-find-it-useful">
-<h1>Who could find it useful<a class="headerlink" href="#who-could-find-it-useful" title="Permalink to this headline">#</a></h1>
+<h1>Who could find it useful<a class="headerlink" href="#who-could-find-it-useful" title="Permalink to this heading">#</a></h1>
 <p>Small and fast-prototyping AI-teams (or even single AI developers) could use it as a tradeoff between total missingness of any ML-Engineering framework and demanding enterprise solutions.</p>
 </section>
 <section id="key-principles">
-<h1>Key Principles<a class="headerlink" href="#key-principles" title="Permalink to this headline">#</a></h1>
+<h1>Key Principles<a class="headerlink" href="#key-principles" title="Permalink to this heading">#</a></h1>
 <ul class="simple">
 <li><p><strong>Elegancy</strong> - ML-pipelines code should be about ML with minimum meta-code</p></li>
 <li><p><strong>Agility</strong> - it should be easy to build new prototypes and integrate existing project with Cascade</p></li>
@@ -237,6 +239,7 @@ workflow, a set of templates for typical tasks.</p>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#use-cases">Use cases</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
@@ -263,11 +266,66 @@ workflow, a set of templates for typical tasks.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Cascade modules reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html">cascade.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.base.html#cascade.base.Traceable"><code class="docutils literal notranslate"><span class="pre">Traceable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.base.html#cascade.base.MetaHandler"><code class="docutils literal notranslate"><span class="pre">MetaHandler</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Iterator"><code class="docutils literal notranslate"><span class="pre">Iterator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Wrapper"><code class="docutils literal notranslate"><span class="pre">Wrapper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Modifier"><code class="docutils literal notranslate"><span class="pre">Modifier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Sampler"><code class="docutils literal notranslate"><span class="pre">Sampler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.ApplyModifier"><code class="docutils literal notranslate"><span class="pre">ApplyModifier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.BruteforceCacher"><code class="docutils literal notranslate"><span class="pre">BruteforceCacher</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Concatenator"><code class="docutils literal notranslate"><span class="pre">Concatenator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.CyclicSampler"><code class="docutils literal notranslate"><span class="pre">CyclicSampler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.FolderDataset"><code class="docutils literal notranslate"><span class="pre">FolderDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Pickler"><code class="docutils literal notranslate"><span class="pre">Pickler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.RandomSampler"><code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.SequentialCacher"><code class="docutils literal notranslate"><span class="pre">SequentialCacher</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.RangeSampler"><code class="docutils literal notranslate"><span class="pre">RangeSampler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.models.html">cascade.models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelModifier"><code class="docutils literal notranslate"><span class="pre">ModelModifier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModel"><code class="docutils literal notranslate"><span class="pre">BasicModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicModelModifier"><code class="docutils literal notranslate"><span class="pre">BasicModelModifier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo"><code class="docutils literal notranslate"><span class="pre">ModelRepo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.ModelLine"><code class="docutils literal notranslate"><span class="pre">ModelLine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicTrainer"><code class="docutils literal notranslate"><span class="pre">BasicTrainer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.HistoryViewer"><code class="docutils literal notranslate"><span class="pre">HistoryViewer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer"><code class="docutils literal notranslate"><span class="pre">MetricViewer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer"><code class="docutils literal notranslate"><span class="pre">MetaViewer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.Validator"><code class="docutils literal notranslate"><span class="pre">Validator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.AggregateValidator"><code class="docutils literal notranslate"><span class="pre">AggregateValidator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.PredicateValidator"><code class="docutils literal notranslate"><span class="pre">PredicateValidator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaValidator"><code class="docutils literal notranslate"><span class="pre">MetaValidator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.utils.html">cascade.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.ConstantBaseline"><code class="docutils literal notranslate"><span class="pre">ConstantBaseline</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.FolderImageDataset"><code class="docutils literal notranslate"><span class="pre">FolderImageDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NumpyWrapper"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.OverSampler"><code class="docutils literal notranslate"><span class="pre">OverSampler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PaSchemaValidator"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel"><code class="docutils literal notranslate"><span class="pre">SkModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset"><code class="docutils literal notranslate"><span class="pre">TableDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableFilter"><code class="docutils literal notranslate"><span class="pre">TableFilter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.CSVDataset"><code class="docutils literal notranslate"><span class="pre">CSVDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PartedTableLoader"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableIterator"><code class="docutils literal notranslate"><span class="pre">TableIterator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.LargeCSVDataset"><code class="docutils literal notranslate"><span class="pre">LargeCSVDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NullValidator"><code class="docutils literal notranslate"><span class="pre">NullValidator</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -286,7 +344,7 @@ workflow, a set of templates for typical tasks.</p>
                 </div>
                 <div class="title">Quickstart</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           
         </div>
@@ -309,26 +367,8 @@ workflow, a set of templates for typical tasks.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">What is it</a></li>
-<li><a class="reference internal" href="#who-could-find-it-useful">Who could find it useful</a></li>
-<li><a class="reference internal" href="#key-principles">Key Principles</a></li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
@@ -336,7 +376,9 @@ workflow, a set of templates for typical tasks.</p>
 </div><script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
     <script src="jquery.js"></script>
     <script src="underscore.js"></script>
+    <script src="_sphinx_javascript_frameworks_compat.js"></script>
     <script src="doctools.js"></script>
+    <script src="sphinx_highlight.js"></script>
     <script src="scripts/furo.js"></script>
     <script src="clipboard.min.js"></script>
     <script src="copybutton.js"></script>

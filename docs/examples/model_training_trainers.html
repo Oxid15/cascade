@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Model training using trainers" href="model_training_trainers.html" /><link rel="prev" title="Pipeline building" href="pipeline_building.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Data validation" href="data_validation.html" /><link rel="prev" title="Model training" href="model_training.html" />
 
     <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>Model training - cascade 0.7.2 documentation</title>
+        <title>Model training using trainers - cascade 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
@@ -166,8 +166,8 @@
   <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../quickstart.html">Quickstart</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pipeline_building.html">Pipeline building</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Model training</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_training_trainers.html">Model training using trainers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_training.html">Model training</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_validation.html">Data validation</a></li>
 </ul>
 </li>
@@ -461,16 +461,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Model-training">
-<h1>Model training<a class="headerlink" href="#Model-training" title="Permalink to this heading">#</a></h1>
-<div class="line-block">
-<div class="line">This use-case is model training.</div>
-<div class="line">By going through this you will know how to use Cascade for metadata tracking, hyperparameter tuning and model selection.</div>
-</div>
-<div class="line-block">
-<div class="line">Previous part is the pipeline building and is taken without comments.</div>
-<div class="line">For more detailed description of it see Pipeline building example.</div>
-</div>
+<section id="Model-training-using-trainers">
+<h1>Model training using trainers<a class="headerlink" href="#Model-training-using-trainers" title="Permalink to this heading">#</a></h1>
+<p>This use-case is model training - the same, but now the usage of Trainer will be shown.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -509,7 +502,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="Defining-data-pipeline">
 <h2>Defining data pipeline<a class="headerlink" href="#Defining-data-pipeline" title="Permalink to this heading">#</a></h2>
-<p>This part will be without comments</p>
+<p>This part will be without comments. For more detailed explanations, please see <a class="reference external" href="https://oxid15.github.io/cascade/examples/pipeline_building.html">pipeline building example</a></p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -520,7 +513,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -549,6 +542,10 @@ div.rendered_html tbody tr:hover {
 <span class="n">train_ds</span> <span class="o">=</span> <span class="n">NoiseModifier</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
 <span class="n">test_ds</span> <span class="o">=</span> <span class="n">NoiseModifier</span><span class="p">(</span><span class="n">test_ds</span><span class="p">)</span>
 
+<span class="c1"># We will constraint the number of samples to speed up learning in example</span>
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">CyclicSampler</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">CyclicSampler</span><span class="p">(</span><span class="n">test_ds</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+
 <span class="n">train_dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">train_ds</span><span class="p">,</span>
                                        <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
                                        <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -557,81 +554,6 @@ div.rendered_html tbody tr:hover {
                                       <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
-Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to data\MNIST\raw\train-images-idx3-ubyte.gz
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5a3900ec1ac24f0086df1f49d6d6ba19", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Extracting data\MNIST\raw\train-images-idx3-ubyte.gz to data\MNIST\raw
-
-Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
-Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to data\MNIST\raw\train-labels-idx1-ubyte.gz
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "98c7b27dc37442628a22258d4e0376dc", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Extracting data\MNIST\raw\train-labels-idx1-ubyte.gz to data\MNIST\raw
-
-Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
-Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to data\MNIST\raw\t10k-images-idx3-ubyte.gz
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "4da7dda1ce8c4d25a9035fa6790fcbd3", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Extracting data\MNIST\raw\t10k-images-idx3-ubyte.gz to data\MNIST\raw
-
-Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
-Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to data\MNIST\raw\t10k-labels-idx1-ubyte.gz
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "62a23c24850f43eb8ce8b26fae4e9747", "version_major": 2, "version_minor": 0}</script></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
-
-</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -647,7 +569,10 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
+[{&#39;name&#39;: &#39;cascade.data.cyclic_sampler.CyclicSampler&#39;,
+  &#39;type&#39;: &#39;dataset&#39;,
+  &#39;len&#39;: 10000},
+ {&#39;name&#39;: &#39;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
  {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
   &#39;desc&#39;: &#39;This is MNIST dataset of handwritten images, TRAIN PART&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
@@ -684,6 +609,7 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 </div>
 </div>
 <p>Next Cascade’s wrapper is defined. The most of the interaction with pytorch modules are already implemented in <code class="docutils literal notranslate"><span class="pre">cascade.utils.TorchModel</span></code> so we need to only define how to train and evaluate the model.</p>
+<p>The difference between previous example and this in the <code class="docutils literal notranslate"><span class="pre">fit</span></code> function - now it only fits one epoch per call and doesn’t need additional logging - Trainer will cover this functionality.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -691,24 +617,21 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Classifier</span><span class="p">(</span><span class="n">cdu</span><span class="o">.</span><span class="n">TorchModel</span><span class="p">):</span>
     <span class="c1"># In train we copy-paste regular pytorch trainloop,</span>
     <span class="c1"># but use self._model, where our SimpleNN is placed</span>
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">num_epochs</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
         <span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
 
         <span class="n">ds_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_dl</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_dl</span><span class="p">):</span>
-                <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_dl</span><span class="p">):</span>
+            <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span>
 
-                <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
-                <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-                <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-                <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
-                <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">500</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="nb">print</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epochs [</span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">num_epochs</span><span class="si">}</span><span class="s1">], Step[</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">ds_size</span><span class="si">}</span><span class="s1">], Loss: </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="c1"># Evaluate function takes the metrics from arguments</span>
     <span class="c1"># and populates self.metrics without returning anything</span>
@@ -730,18 +653,13 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 </pre></div>
 </div>
 </div>
-</section>
-<section id="id1">
-<h2>Model training<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
-<div class="line-block">
-<div class="line">Now we are ready to train our model. We define hyperparameters and pass them to our wrapper. Wrapper accepts pytorch module’s class and all the parameters that are needed to initialize it.</div>
-<div class="line">Additionally we pass keyword arguments that are connected to training. It is done to add them to the model’s metadata.</div>
-</div>
-<div class="nbinput docutils container">
+<section id="Model-initialization">
+<h3>Model initialization<a class="headerlink" href="#Model-initialization" title="Permalink to this heading">#</a></h3>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">LR</span> <span class="o">=</span> <span class="mf">1e-3</span>
 
 <span class="c1"># Classifier will initialize SimpleNN with all the parameters passed</span>
@@ -757,326 +675,157 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
     <span class="n">num_epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span>
     <span class="n">lr</span><span class="o">=</span><span class="n">LR</span><span class="p">,</span>
     <span class="n">bs</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_dl</span><span class="p">,</span> <span class="n">NUM_EPOCHS</span><span class="p">,</span> <span class="n">LR</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3302
-Epochs [0/2], Step[500/6000], Loss: 0.4325
-Epochs [0/2], Step[1000/6000], Loss: 0.5293
-Epochs [0/2], Step[1500/6000], Loss: 0.1659
-Epochs [0/2], Step[2000/6000], Loss: 0.1425
-Epochs [0/2], Step[2500/6000], Loss: 0.8064
-Epochs [0/2], Step[3000/6000], Loss: 0.3455
-Epochs [0/2], Step[3500/6000], Loss: 0.0440
-Epochs [0/2], Step[4000/6000], Loss: 0.0330
-Epochs [0/2], Step[4500/6000], Loss: 0.1240
-Epochs [0/2], Step[5000/6000], Loss: 1.0246
-Epochs [0/2], Step[5500/6000], Loss: 0.1439
-Epochs [1/2], Step[0/6000], Loss: 0.3888
-Epochs [1/2], Step[500/6000], Loss: 0.1590
-Epochs [1/2], Step[1000/6000], Loss: 0.1442
-Epochs [1/2], Step[1500/6000], Loss: 0.0707
-Epochs [1/2], Step[2000/6000], Loss: 0.0710
-Epochs [1/2], Step[2500/6000], Loss: 0.0776
-Epochs [1/2], Step[3000/6000], Loss: 0.6068
-Epochs [1/2], Step[3500/6000], Loss: 0.2580
-Epochs [1/2], Step[4000/6000], Loss: 0.1803
-Epochs [1/2], Step[4500/6000], Loss: 0.3980
-Epochs [1/2], Step[5000/6000], Loss: 0.1370
-Epochs [1/2], Step[5500/6000], Loss: 1.2236
-</pre></div></div>
-</div>
 </section>
-<section id="Evaluate-the-model">
-<h2>Evaluate the model<a class="headerlink" href="#Evaluate-the-model" title="Permalink to this heading">#</a></h2>
-<div class="line-block">
-<div class="line">Now we can evaluate model performance on test dataset. We pass the data and the dictionary with one metric. We can pass as many metrics as we like in the form of functions accepting ground-truth and predictions and returning metric value.</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">f(true,</span> <span class="pre">pred)</span> <span class="pre">-&gt;</span> <span class="pre">metric</span></code></div>
-</div>
-<div class="nbinput docutils container">
+</section>
+<section id="Set-up-trainer">
+<h2>Set up trainer<a class="headerlink" href="#Set-up-trainer" title="Permalink to this heading">#</a></h2>
+<p>Let’s set up logging first to catch trainer’s logs</p>
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_dl</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)],</span>
+    <span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trainer accepts ModelRepo object or just a path</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">cdm</span><span class="o">.</span><span class="n">BasicTrainer</span><span class="p">(</span><span class="s1">&#39;trainer_repo&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:08&lt;00:00, 123.22it/s]
-</pre></div></div>
-</div>
-</section>
-<section id="Check-the-metadata">
-<h2>Check the metadata<a class="headerlink" href="#Check-the-metadata" title="Permalink to this heading">#</a></h2>
-<p>Let’s examine metadata obtained from the model after training.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x00000203FEA754E0&gt;&#39;,
-  &#39;created_at&#39;: DateTime(2022, 9, 29, 10, 31, 50, 75311, tzinfo=Timezone(&#39;UTC&#39;)),
-  &#39;metrics&#39;: {&#39;acc&#39;: 0.9683},
-  &#39;params&#39;: {&#39;input_size&#39;: 784,
-   &#39;hidden_size&#39;: 100,
-   &#39;num_classes&#39;: 10,
-   &#39;num_epochs&#39;: 2,
-   &#39;lr&#39;: 0.001,
-   &#39;bs&#39;: 10},
-  &#39;type&#39;: &#39;model&#39;,
-  &#39;module&#39;: &#39;SimpleNN(\n  (l1): Linear(in_features=784, out_features=100, bias=True)\n  (l2): Linear(in_features=100, out_features=10, bias=True)\n  (relu): ReLU()\n)&#39;}]
+INFO:trainer_repo:Item root[&#39;root&#39;] added to dictionary.
+Item root[&#39;len&#39;] added to dictionary.
+Item root[&#39;type&#39;] added to dictionary.
 </pre></div></div>
 </div>
-<div class="line-block">
-<div class="line">We can notice several things. The model is tracking the time of creation. It’s metrics in place as expected after evaluation.</div>
-<div class="line">Let’s look at the params dict. We can see all the parameters that we passed using keywords in the wrapper. The wrapper recorded them in the metadata for us automatically.</div>
-</div>
-</section>
-<section id="Saving-the-model">
-<h2>Saving the model<a class="headerlink" href="#Saving-the-model" title="Permalink to this heading">#</a></h2>
-<div class="line-block">
-<div class="line">It’s time to save the trained model. We can just use model.save() method, but let’s look at another Cascade’s tool for model management.</div>
-<div class="line">It is called <code class="docutils literal notranslate"><span class="pre">ModelRepo</span></code>.</div>
-</div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span> <span class="o">=</span> <span class="n">cdm</span><span class="o">.</span><span class="n">ModelRepo</span><span class="p">(</span><span class="s1">&#39;./repo&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The main method of course is train</span>
+<span class="c1"># It will do all the stuff needed for us</span>
+<span class="c1"># including training, evaluating, saving and logging</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">train_data</span><span class="o">=</span><span class="n">train_dl</span><span class="p">,</span>
+    <span class="n">test_data</span><span class="o">=</span><span class="n">test_dl</span><span class="p">,</span>
+    <span class="n">train_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">LR</span><span class="p">,</span> <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="n">BATCH_SIZE</span><span class="p">},</span> <span class="c1"># will be passed into model.fit()</span>
+    <span class="n">test_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;metrics_dict&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">}},</span> <span class="c1"># will be passed into model.evaluate()</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span>
+    <span class="n">start_from</span><span class="o">=</span><span class="kc">None</span> <span class="c1"># can start from checkpoint if line is specified</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>This is the repository of models. It manages a series of experiments over a sets of models of different architectures called model lines.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s1">&#39;linear_nn&#39;</span><span class="p">,</span> <span class="n">Classifier</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ModelLine of 0 models of &lt;class &#39;__main__.Classifier&#39;&gt;
+INFO:trainer_repo:Value of root[&#39;len&#39;] changed from 0 to 1.
+INFO:cascade.models.trainer:Training started with parameters: {&#39;lr&#39;: 0.001, &#39;bs&#39;: 10}
+INFO:cascade.models.trainer:repo is ModelRepo in trainer_repo of 1 lines
+INFO:cascade.models.trainer:line is 00000
+INFO:cascade.models.trainer:training will last 10 epochs
 </pre></div></div>
 </div>
-<p>Model line is the manager of models with similar architecture, but different parameters or different epochs. It manages saving of model and its meta and also loading of model.</p>
-<div class="line-block">
-<div class="line">Aside from model’s metadata we would like to know on what data model was trained. Exactly for this we have metadata of our previously written data pipeline.</div>
-<div class="line">Let’s update model’s meta with the field for train data.</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 101.13it/s]
+</pre></div></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">update_meta</span><span class="p">({</span><span class="s1">&#39;train_data&#39;</span><span class="p">:</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()})</span>
-<span class="n">model</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x00000203FEA754E0&gt;&#39;,
-  &#39;train_data&#39;: [{&#39;name&#39;: &#39;__main__.NoiseModifier&#39;,
-    &#39;type&#39;: &#39;dataset&#39;,
-    &#39;len&#39;: 60000},
-   {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
-    &#39;desc&#39;: &#39;This is MNIST dataset of handwritten images, TRAIN PART&#39;,
-    &#39;type&#39;: &#39;dataset&#39;,
-    &#39;len&#39;: 60000,
-    &#39;obj_type&#39;: &#34;&lt;class &#39;torchvision.datasets.mnist.MNIST&#39;&gt;&#34;}],
-  &#39;created_at&#39;: DateTime(2022, 9, 29, 10, 31, 50, 75311, tzinfo=Timezone(&#39;UTC&#39;)),
-  &#39;metrics&#39;: {&#39;acc&#39;: 0.9683},
-  &#39;params&#39;: {&#39;input_size&#39;: 784,
-   &#39;hidden_size&#39;: 100,
-   &#39;num_classes&#39;: 10,
-   &#39;num_epochs&#39;: 2,
-   &#39;lr&#39;: 0.001,
-   &#39;bs&#39;: 10},
-  &#39;type&#39;: &#39;model&#39;,
-  &#39;module&#39;: &#39;SimpleNN(\n  (l1): Linear(in_features=784, out_features=100, bias=True)\n  (l2): Linear(in_features=100, out_features=10, bias=True)\n  (relu): ReLU()\n)&#39;}]
+INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.8694}
 </pre></div></div>
 </div>
-<p>Saving the model is as easy as this:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span><span class="p">[</span><span class="s1">&#39;linear_nn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</pre></div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:05&lt;00:00, 92.90it/s]
+</pre></div></div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="line-block">
-<div class="line">This will save the model to the path:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">repo/linear_nn/00000/model</span></code></div>
-<div class="line">And metadata:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">repo/linear_nn/00000/meta.json</span></code></div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.8966}
+</pre></div></div>
 </div>
-</section>
-<section id="Peeking-inside-repo">
-<h2>Peeking inside repo<a class="headerlink" href="#Peeking-inside-repo" title="Permalink to this heading">#</a></h2>
-<p>To see model’s metrics and parameters we don’t need to manually go to the folders mentioned or print large metadata in console. Cascade has tools for conveniently show metrics. One of them is <code class="docutils literal notranslate"><span class="pre">MetricViewer</span></code>.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="o">=</span> <span class="n">cde</span><span class="o">.</span><span class="n">MetricViewer</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
-<span class="c1"># We can show the table like this</span>
-<span class="c1"># mv.plot_table()</span>
-<span class="c1"># Or we can open web-application like this</span>
-<span class="c1"># mv.serve()</span>
-<span class="c1"># but it will not be rendered in the documentation, so...</span>
-<span class="n">mv</span><span class="o">.</span><span class="n">table</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+100%|██████████| 500/500 [00:06&lt;00:00, 82.20it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.9108}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 104.00it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.9236}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>line</th>
-      <th>num</th>
-      <th>created_at</th>
-      <th>saved</th>
-      <th>acc</th>
-      <th>input_size</th>
-      <th>hidden_size</th>
-      <th>num_classes</th>
-      <th>num_epochs</th>
-      <th>lr</th>
-      <th>bs</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>./repo\linear_nn</td>
-      <td>0</td>
-      <td>2022-09-29 10:31:50.075311+00:00</td>
-      <td>3 minutes after</td>
-      <td>0.9683</td>
-      <td>784</td>
-      <td>100</td>
-      <td>10</td>
-      <td>2</td>
-      <td>0.001</td>
-      <td>10</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<p>It accepts the repo object and can show tables of metrics and metadata. However, when the table is too big and we need more powerful tool, mv also has method <code class="docutils literal notranslate"><span class="pre">serve</span></code> that opens fully interactive table of metrics with the ability to sort and filter results.</p>
-</section>
-<section id="More-experiments">
-<h2>More experiments<a class="headerlink" href="#More-experiments" title="Permalink to this heading">#</a></h2>
-<div class="line-block">
-<div class="line">What if we want to automatically run a number of experiments and then choose the best model?</div>
-<div class="line">The workflow is pretty similar. In the example below we try to find the best option for hidden size of the model.</div>
-<div class="line">We define the set of parameters for our experiments and run them in loop every time saving the results.</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s1">&#39;hidden_size&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="s1">&#39;num_epochs&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
-    <span class="p">{</span><span class="s1">&#39;hidden_size&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>  <span class="s1">&#39;num_epochs&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
-    <span class="p">{</span><span class="s1">&#39;hidden_size&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;num_epochs&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
-<span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">Classifier</span><span class="p">(</span><span class="n">SimpleNN</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">p</span><span class="p">,</span>
-        <span class="n">input_size</span><span class="o">=</span><span class="n">INPUT_SIZE</span><span class="p">,</span>
-        <span class="n">num_classes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_dl</span><span class="p">,</span> <span class="o">**</span><span class="n">p</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_dl</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">})</span>
-    <span class="n">repo</span><span class="p">[</span><span class="s1">&#39;linear_nn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</pre></div>
-</div>
+100%|██████████| 500/500 [00:05&lt;00:00, 96.73it/s]
+</pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.4571
-Epochs [0/2], Step[500/6000], Loss: 1.0967
-Epochs [0/2], Step[1000/6000], Loss: 0.4225
-Epochs [0/2], Step[1500/6000], Loss: 0.2484
-Epochs [0/2], Step[2000/6000], Loss: 0.6260
-Epochs [0/2], Step[2500/6000], Loss: 0.7339
-Epochs [0/2], Step[3000/6000], Loss: 0.2391
-Epochs [0/2], Step[3500/6000], Loss: 0.1168
-Epochs [0/2], Step[4000/6000], Loss: 0.1487
-Epochs [0/2], Step[4500/6000], Loss: 0.1443
-Epochs [0/2], Step[5000/6000], Loss: 0.4470
-Epochs [0/2], Step[5500/6000], Loss: 0.1249
-Epochs [1/2], Step[0/6000], Loss: 0.0234
-Epochs [1/2], Step[500/6000], Loss: 0.8463
-Epochs [1/2], Step[1000/6000], Loss: 0.6868
-Epochs [1/2], Step[1500/6000], Loss: 0.0778
-Epochs [1/2], Step[2000/6000], Loss: 0.5753
-Epochs [1/2], Step[2500/6000], Loss: 0.1124
-Epochs [1/2], Step[3000/6000], Loss: 0.3524
-Epochs [1/2], Step[3500/6000], Loss: 0.0390
-Epochs [1/2], Step[4000/6000], Loss: 0.2751
-Epochs [1/2], Step[4500/6000], Loss: 0.2004
-Epochs [1/2], Step[5000/6000], Loss: 1.3080
-Epochs [1/2], Step[5500/6000], Loss: 0.4650
+INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.9218}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1084,7 +833,8 @@ Epochs [1/2], Step[5500/6000], Loss: 0.4650
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:08&lt;00:00, 120.13it/s]
+
+100%|██████████| 500/500 [00:04&lt;00:00, 105.31it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1092,30 +842,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.4650
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3723
-Epochs [0/2], Step[500/6000], Loss: 0.3752
-Epochs [0/2], Step[1000/6000], Loss: 0.1233
-Epochs [0/2], Step[1500/6000], Loss: 0.3859
-Epochs [0/2], Step[2000/6000], Loss: 0.5020
-Epochs [0/2], Step[2500/6000], Loss: 0.1884
-Epochs [0/2], Step[3000/6000], Loss: 0.4840
-Epochs [0/2], Step[3500/6000], Loss: 0.1361
-Epochs [0/2], Step[4000/6000], Loss: 0.0838
-Epochs [0/2], Step[4500/6000], Loss: 0.1545
-Epochs [0/2], Step[5000/6000], Loss: 0.2079
-Epochs [0/2], Step[5500/6000], Loss: 0.0968
-Epochs [1/2], Step[0/6000], Loss: 0.0349
-Epochs [1/2], Step[500/6000], Loss: 0.0818
-Epochs [1/2], Step[1000/6000], Loss: 0.0083
-Epochs [1/2], Step[1500/6000], Loss: 0.7127
-Epochs [1/2], Step[2000/6000], Loss: 0.0295
-Epochs [1/2], Step[2500/6000], Loss: 0.1446
-Epochs [1/2], Step[3000/6000], Loss: 0.0038
-Epochs [1/2], Step[3500/6000], Loss: 0.4833
-Epochs [1/2], Step[4000/6000], Loss: 0.0088
-Epochs [1/2], Step[4500/6000], Loss: 0.0353
-Epochs [1/2], Step[5000/6000], Loss: 0.0765
-Epochs [1/2], Step[5500/6000], Loss: 0.2901
+INFO:cascade.models.trainer:Epoch 5: {&#39;acc&#39;: 0.9292}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1123,7 +850,8 @@ Epochs [1/2], Step[5500/6000], Loss: 0.2901
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:16&lt;00:00, 61.73it/s]
+
+100%|██████████| 500/500 [00:04&lt;00:00, 110.11it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1131,30 +859,58 @@ Epochs [1/2], Step[5500/6000], Loss: 0.2901
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.2739
-Epochs [0/2], Step[500/6000], Loss: 0.5625
-Epochs [0/2], Step[1000/6000], Loss: 0.9360
-Epochs [0/2], Step[1500/6000], Loss: 0.5730
-Epochs [0/2], Step[2000/6000], Loss: 0.5343
-Epochs [0/2], Step[2500/6000], Loss: 0.1844
-Epochs [0/2], Step[3000/6000], Loss: 0.1406
-Epochs [0/2], Step[3500/6000], Loss: 0.1659
-Epochs [0/2], Step[4000/6000], Loss: 0.0047
-Epochs [0/2], Step[4500/6000], Loss: 0.0174
-Epochs [0/2], Step[5000/6000], Loss: 0.0312
-Epochs [0/2], Step[5500/6000], Loss: 0.0549
-Epochs [1/2], Step[0/6000], Loss: 0.5435
-Epochs [1/2], Step[500/6000], Loss: 0.1612
-Epochs [1/2], Step[1000/6000], Loss: 0.0475
-Epochs [1/2], Step[1500/6000], Loss: 0.0158
-Epochs [1/2], Step[2000/6000], Loss: 0.0103
-Epochs [1/2], Step[2500/6000], Loss: 0.1072
-Epochs [1/2], Step[3000/6000], Loss: 0.0171
-Epochs [1/2], Step[3500/6000], Loss: 0.0894
-Epochs [1/2], Step[4000/6000], Loss: 0.0090
-Epochs [1/2], Step[4500/6000], Loss: 0.0506
-Epochs [1/2], Step[5000/6000], Loss: 0.2653
-Epochs [1/2], Step[5500/6000], Loss: 0.2379
+INFO:cascade.models.trainer:Epoch 6: {&#39;acc&#39;: 0.926}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:08&lt;00:00, 61.45it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 7: {&#39;acc&#39;: 0.9316}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:04&lt;00:00, 112.81it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 8: {&#39;acc&#39;: 0.9324}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:04&lt;00:00, 112.31it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 9: {&#39;acc&#39;: 0.9308}
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1162,125 +918,205 @@ Epochs [1/2], Step[5500/6000], Loss: 0.2379
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:09&lt;00:00, 108.42it/s]
+
 </pre></div></div>
 </div>
 </section>
 <section id="Results">
 <h2>Results<a class="headerlink" href="#Results" title="Permalink to this heading">#</a></h2>
-<p>We can see the results of our experiments - all of them are present in the table and we can choose the best option.</p>
+<p>We can obtain the results of training from trainer’s meta data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="o">=</span> <span class="n">cde</span><span class="o">.</span><span class="n">MetricViewer</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
-<span class="c1"># mv.plot_table()</span>
-<span class="n">mv</span><span class="o">.</span><span class="n">table</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;name&#39;: &#39;&lt;cascade.models.trainer.BasicTrainer object at 0x000002A771436A40&gt;&#39;,
+  &#39;train_start_at&#39;: DateTime(2022, 9, 29, 13, 46, 3, 916386, tzinfo=Timezone(&#39;Europe/Moscow&#39;)),
+  &#39;train_end_at&#39;: DateTime(2022, 9, 29, 13, 50, 2, 861501, tzinfo=Timezone(&#39;Europe/Moscow&#39;)),
+  &#39;metrics&#39;: [{&#39;acc&#39;: 0.8694},
+   {&#39;acc&#39;: 0.8966},
+   {&#39;acc&#39;: 0.9108},
+   {&#39;acc&#39;: 0.9236},
+   {&#39;acc&#39;: 0.9218},
+   {&#39;acc&#39;: 0.9292},
+   {&#39;acc&#39;: 0.926},
+   {&#39;acc&#39;: 0.9316},
+   {&#39;acc&#39;: 0.9324},
+   {&#39;acc&#39;: 0.9308}],
+  &#39;repo&#39;: [{&#39;name&#39;: &#39;ModelRepo in trainer_repo of 1 lines&#39;,
+    &#39;root&#39;: &#39;trainer_repo&#39;,
+    &#39;len&#39;: 1,
+    &#39;updated_at&#39;: DateTime(2022, 9, 29, 10, 50, 3, 232331, tzinfo=Timezone(&#39;UTC&#39;)),
+    &#39;type&#39;: &#39;repo&#39;}]}]
+</pre></div></div>
+</div>
+</section>
+<section id="Start-from-checkpoint">
+<h2>Start from checkpoint<a class="headerlink" href="#Start-from-checkpoint" title="Permalink to this heading">#</a></h2>
+<p>Let’s try continue learning where we finished using the same line as before.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">train_data</span><span class="o">=</span><span class="n">train_dl</span><span class="p">,</span>
+    <span class="n">test_data</span><span class="o">=</span><span class="n">test_dl</span><span class="p">,</span>
+    <span class="n">train_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">LR</span><span class="p">,</span> <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="n">BATCH_SIZE</span><span class="p">},</span>
+    <span class="n">test_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;metrics_dict&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">}},</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">start_from</span><span class="o">=</span><span class="s1">&#39;00000&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:trainer_repo:
+INFO:cascade.models.trainer:Training started with parameters: {&#39;lr&#39;: 0.001, &#39;bs&#39;: 10}
+INFO:cascade.models.trainer:repo is ModelRepo in trainer_repo of 1 lines
+INFO:cascade.models.trainer:line is 00000
+INFO:cascade.models.trainer:started from model 9
+INFO:cascade.models.trainer:training will last 5 epochs
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 119.46it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.9312}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 116.02it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.936}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
+100%|██████████| 500/500 [00:08&lt;00:00, 58.45it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.9332}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 103.49it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.9322}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 102.67it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.9368}
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
 
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>line</th>
-      <th>num</th>
-      <th>created_at</th>
-      <th>saved</th>
-      <th>acc</th>
-      <th>input_size</th>
-      <th>hidden_size</th>
-      <th>num_classes</th>
-      <th>num_epochs</th>
-      <th>lr</th>
-      <th>bs</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>./repo\linear_nn</td>
-      <td>0</td>
-      <td>2022-09-29T10:31:50.075311+00:00</td>
-      <td>3 minutes after</td>
-      <td>0.9683</td>
-      <td>784</td>
-      <td>100</td>
-      <td>10</td>
-      <td>2</td>
-      <td>0.001</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>./repo\linear_nn</td>
-      <td>1</td>
-      <td>2022-09-29T10:35:50.562182+00:00</td>
-      <td>2 minutes after</td>
-      <td>0.9130</td>
-      <td>784</td>
-      <td>10</td>
-      <td>10</td>
-      <td>2</td>
-      <td>0.001</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>./repo\linear_nn</td>
-      <td>2</td>
-      <td>2022-09-29T10:38:15.490117+00:00</td>
-      <td>2 minutes after</td>
-      <td>0.9564</td>
-      <td>784</td>
-      <td>50</td>
-      <td>10</td>
-      <td>2</td>
-      <td>0.001</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>./repo\linear_nn</td>
-      <td>3</td>
-      <td>2022-09-29T10:41:00.380577+00:00</td>
-      <td>3 minutes after</td>
-      <td>0.9628</td>
-      <td>784</td>
-      <td>100</td>
-      <td>10</td>
-      <td>2</td>
-      <td>0.001</td>
-      <td>10</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">metrics</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;acc&#39;: 0.8694},
+ {&#39;acc&#39;: 0.8966},
+ {&#39;acc&#39;: 0.9108},
+ {&#39;acc&#39;: 0.9236},
+ {&#39;acc&#39;: 0.9218},
+ {&#39;acc&#39;: 0.9292},
+ {&#39;acc&#39;: 0.926},
+ {&#39;acc&#39;: 0.9316},
+ {&#39;acc&#39;: 0.9324},
+ {&#39;acc&#39;: 0.9308},
+ {&#39;acc&#39;: 0.9312},
+ {&#39;acc&#39;: 0.936},
+ {&#39;acc&#39;: 0.9332},
+ {&#39;acc&#39;: 0.9322},
+ {&#39;acc&#39;: 0.9368}]
+</pre></div></div>
 </div>
 </section>
 <section id="See-also:">
 <h2>See also:<a class="headerlink" href="#See-also:" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="pipeline_building.html">Pipeline building</a> - (Previous example)</p></li>
+<li><p><a class="reference external" href="pipeline_building.html">Pipeline building</a></p></li>
 <li><p><a class="reference external" href="https://oxid15.github.io/cascade/">Documentation</a></p></li>
 <li><p><a class="reference external" href="https://oxid15.github.io/cascade/concepts.html">Key concepts</a></p></li>
 <li><p><a class="reference external" href="https://oxid15.github.io/cascade/modules.html">Code reference</a></p></li>
@@ -1293,23 +1129,23 @@ Epochs [1/2], Step[5500/6000], Loss: 0.2379
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="model_training_trainers.html">
+          <a class="next-page" href="data_validation.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Model training using trainers</div>
+                <div class="title">Data validation</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="pipeline_building.html">
+          <a class="prev-page" href="model_training.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Pipeline building</div>
+                <div class="title">Model training</div>
                 
               </div>
             </a>
@@ -1345,16 +1181,15 @@ Epochs [1/2], Step[5500/6000], Loss: 0.2379
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Model training</a><ul>
+<li><a class="reference internal" href="#">Model training using trainers</a><ul>
 <li><a class="reference internal" href="#Defining-data-pipeline">Defining data pipeline</a></li>
-<li><a class="reference internal" href="#Model-definition">Model definition</a></li>
-<li><a class="reference internal" href="#id1">Model training</a></li>
-<li><a class="reference internal" href="#Evaluate-the-model">Evaluate the model</a></li>
-<li><a class="reference internal" href="#Check-the-metadata">Check the metadata</a></li>
-<li><a class="reference internal" href="#Saving-the-model">Saving the model</a></li>
-<li><a class="reference internal" href="#Peeking-inside-repo">Peeking inside repo</a></li>
-<li><a class="reference internal" href="#More-experiments">More experiments</a></li>
+<li><a class="reference internal" href="#Model-definition">Model definition</a><ul>
+<li><a class="reference internal" href="#Model-initialization">Model initialization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Set-up-trainer">Set up trainer</a></li>
 <li><a class="reference internal" href="#Results">Results</a></li>
+<li><a class="reference internal" href="#Start-from-checkpoint">Start from checkpoint</a></li>
 <li><a class="reference internal" href="#See-also:">See also:</a></li>
 </ul>
 </li>

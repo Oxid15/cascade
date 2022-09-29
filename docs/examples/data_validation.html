@@ -1,14 +1,14 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Concepts" href="../concepts.html" /><link rel="prev" title="Model training" href="model_training.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Concepts" href="../concepts.html" /><link rel="prev" title="Model training using trainers" href="model_training_trainers.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>Data validation - cascade 0.7.1 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
+        <title>Data validation - cascade 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.7.1 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -167,6 +167,7 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../quickstart.html">Quickstart</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_training.html">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Data validation</a></li>
 </ul>
 </li>
@@ -197,7 +198,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -460,7 +462,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Data-validation">
-<h1>Data validation<a class="headerlink" href="#Data-validation" title="Permalink to this headline">#</a></h1>
+<h1>Data validation<a class="headerlink" href="#Data-validation" title="Permalink to this heading">#</a></h1>
 <div class="line-block">
 <div class="line">This use-case is about validation of the data before model training.</div>
 <div class="line">The scenarios are numerous and by using Cascade you can easily implement solution for any case.</div>
@@ -492,17 +494,17 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-'0.7.0'
+&#39;0.7.2&#39;
 </pre></div></div>
 </div>
 <section id="Validation-in-general">
-<h2>Validation in general<a class="headerlink" href="#Validation-in-general" title="Permalink to this headline">#</a></h2>
+<h2>Validation in general<a class="headerlink" href="#Validation-in-general" title="Permalink to this heading">#</a></h2>
 <div class="line-block">
 <div class="line">Cascade has basic validation building blocks as it has some specific validation solutions. In this section general cases will be explained.</div>
 <div class="line">In general one having a dataset can validate either all elements in the dataset one by one or a dataset as a whole. For these purposes Cascade has <code class="docutils literal notranslate"><span class="pre">PredicateValidator</span></code> and <code class="docutils literal notranslate"><span class="pre">AggregateValidator</span></code> classes. Let’s see them on a real example.</div>
 </div>
 <section id="When-everything-is-OK!">
-<h3>When everything is OK!<a class="headerlink" href="#When-everything-is-OK!" title="Permalink to this headline">#</a></h3>
+<h3>When everything is OK!<a class="headerlink" href="#When-everything-is-OK!" title="Permalink to this heading">#</a></h3>
 <p>Let’s load the data. Tabular datasets will be used in the later section, let’s now load the data for optical character recognition to demonstrate data validation features.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -519,7 +521,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">digits_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([(</span><span class="n">item</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">'target'</span><span class="p">])])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">digits_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([(</span><span class="n">item</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])])</span>
 </pre></div>
 </div>
 </div>
@@ -551,7 +553,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'data'</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -771,7 +773,7 @@ cascade.meta.validator.AggregateValidator
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">'.yml'</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -807,10 +809,10 @@ cascade.meta.meta_validator.MetaValidator
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{'name': 'cascade.data.dataset.Wrapper',
-  'type': 'dataset',
-  'len': 1797,
-  'obj_type': "&lt;class 'list'&gt;"}]
+[{&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
+  &#39;type&#39;: &#39;dataset&#39;,
+  &#39;len&#39;: 1797,
+  &#39;obj_type&#39;: &#34;&lt;class &#39;list&#39;&gt;&#34;}]
 </pre></div></div>
 </div>
 <div class="line-block">
@@ -821,7 +823,7 @@ cascade.meta.meta_validator.MetaValidator
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">'.yml'</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -845,7 +847,7 @@ cascade.meta.meta_validator.MetaValidator
 <p>Everything is ok, meta is unchanged. But what if we change the pipeline? MetaValidator works for unique pipelines. If we add new stage to it, it will make another record and will validate against it in the future. To identify pipelines It uses the list of dataset names.</p>
 </section>
 <section id="When-everything-is-not-OK">
-<h3>When everything is not OK<a class="headerlink" href="#When-everything-is-not-OK" title="Permalink to this headline">#</a></h3>
+<h3>When everything is not OK<a class="headerlink" href="#When-everything-is-not-OK" title="Permalink to this heading">#</a></h3>
 <p>What if our hypotheses are false due to some errors? Validators will raise <code class="docutils literal notranslate"><span class="pre">cascade.meta.DataValidationException</span></code> with the detailed description of what gone wrong where it possible. Let’s see how it works.</p>
 <p>For the purpose of experiment, let’s suppose that we don’t wanna see zeros in labels. Let’s check for it.</p>
 <div class="nbinput docutils container">
@@ -872,23 +874,23 @@ cascade.meta.meta_validator.MetaValidator
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
 <span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
 <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 33</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href='vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X44sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt;</span> cde.PredicateValidator(digits_ds, lambda x: x[1] != 0)
+<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X44sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cde.PredicateValidator(digits_ds, lambda x: x[1] != 0)
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:86</span>, in <span class="ansi-cyan-fg">PredicateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
-<span class="ansi-green-fg">     84</span> bad_counts = [len(bad_items[i]) for i in range(len(self._func))]
-<span class="ansi-green-fg">     85</span> if any(bad_counts):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 86</span>     self._raise(bad_items)
-<span class="ansi-green-fg">     87</span> else:
-<span class="ansi-green-fg">     88</span>     print('OK!')
+File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:88</span>, in <span class="ansi-cyan-fg">PredicateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
+<span class="ansi-green-fg">     86</span> bad_counts = [len(bad_items[i]) for i in range(len(self._func))]
+<span class="ansi-green-fg">     87</span> if any(bad_counts):
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 88</span>     self._raise(bad_items)
+<span class="ansi-green-fg">     89</span> else:
+<span class="ansi-green-fg">     90</span>     print(&#39;OK!&#39;)
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:102</span>, in <span class="ansi-cyan-fg">PredicateValidator._raise</span><span class="ansi-blue-intense-fg ansi-bold">(self, items)</span>
-<span class="ansi-green-fg">    100</span> failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]
-<span class="ansi-green-fg">    101</span> failed_items = '\n'.join([f'{i}: {self._prettify_items(items[i])}' for i in items])
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 102</span> raise DataValidationException(
-<span class="ansi-green-fg">    103</span>     f'Checks in positions {failed_checks} failed\n' \
-<span class="ansi-green-fg">    104</span>     f'Items failed by check:\n' \
-<span class="ansi-green-fg">    105</span>     f'{failed_items}'
-<span class="ansi-green-fg">    106</span> )
+File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:104</span>, in <span class="ansi-cyan-fg">PredicateValidator._raise</span><span class="ansi-blue-intense-fg ansi-bold">(self, items)</span>
+<span class="ansi-green-fg">    102</span> failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]
+<span class="ansi-green-fg">    103</span> failed_items = &#39;\n&#39;.join([f&#39;{i}: {self._prettify_items(items[i])}&#39; for i in items])
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 104</span> raise DataValidationException(
+<span class="ansi-green-fg">    105</span>     f&#39;Checks in positions {failed_checks} failed\n&#39;
+<span class="ansi-green-fg">    106</span>     f&#39;Items failed by check:\n&#39;
+<span class="ansi-green-fg">    107</span>     f&#39;{failed_items}&#39;
+<span class="ansi-green-fg">    108</span> )
 
 <span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: Checks in positions [0] failed
 Items failed by check:
@@ -897,7 +899,7 @@ Items failed by check:
 </div>
 <p>In the exception items causing the error are listed. This can be helpful to identify the problem.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">AggregateValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">ds</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span>
@@ -912,14 +914,14 @@ Items failed by check:
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
 <span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
 <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 35</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href='vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X46sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt;</span> cde.AggregateValidator(digits_ds, lambda ds: len(ds) &lt; 1000)
+<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X46sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cde.AggregateValidator(digits_ds, lambda ds: len(ds) &lt; 1000)
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:55</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
-<span class="ansi-green-fg">     52</span>         bad_results.append(i)
-<span class="ansi-green-fg">     54</span> if len(bad_results):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 55</span>     raise DataValidationException(f'Checks in positions {bad_results} failed')
-<span class="ansi-green-fg">     56</span> else:
-<span class="ansi-green-fg">     57</span>     print('OK!')
+File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:57</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
+<span class="ansi-green-fg">     54</span>         bad_results.append(i)
+<span class="ansi-green-fg">     56</span> if len(bad_results):
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 57</span>     raise DataValidationException(f&#39;Checks in positions {bad_results} failed&#39;)
+<span class="ansi-green-fg">     58</span> else:
+<span class="ansi-green-fg">     59</span>     print(&#39;OK!&#39;)
 
 <span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: Checks in positions [0] failed
 </pre></div></div>
@@ -927,7 +929,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\valid
 <p>The exceptions provide info about what got wrong.</p>
 <p>Now let’s simulate the change in meta data of dataset. Let’s manually change the length of it for example and see how <code class="docutils literal notranslate"><span class="pre">MetaValidator</span></code> works.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">digits_ds</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">digits_ds</span><span class="o">.</span><span class="n">_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">]</span>
@@ -936,22 +938,22 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\valid
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{'name': 'cascade.data.dataset.Wrapper',
-  'type': 'dataset',
-  'len': 1000,
-  'obj_type': "&lt;class 'list'&gt;"}]
+[{&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
+  &#39;type&#39;: &#39;dataset&#39;,
+  &#39;len&#39;: 1000,
+  &#39;obj_type&#39;: &#34;&lt;class &#39;list&#39;&gt;&#34;}]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">'.yml'</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -960,7 +962,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\valid
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Value of root[0]['len'] changed from 1797 to 1000.
+Value of root[0][&#39;len&#39;] changed from 1797 to 1000.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -971,7 +973,7 @@ Value of root[0]['len'] changed from 1797 to 1000.
 <span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
 <span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
 <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 39</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href='vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X53sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt;</span> cde.MetaValidator(digits_ds, meta_fmt='.yml')
+<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X53sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cde.MetaValidator(digits_ds, meta_fmt=&#39;.yml&#39;)
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\meta_validator.py:81</span>, in <span class="ansi-cyan-fg">MetaValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, root, meta_fmt)</span>
 <span class="ansi-green-fg">     79</span> if os.path.exists(name):
@@ -985,22 +987,22 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\meta_
 <span class="ansi-green-fg">     95</span>     print(diff.pretty())
 <span class="ansi-green-intense-fg ansi-bold">---&gt; 96</span>     raise DataValidationException(diff)
 <span class="ansi-green-fg">     97</span> else:
-<span class="ansi-green-fg">     98</span>     print('OK!')
+<span class="ansi-green-fg">     98</span>     print(&#39;OK!&#39;)
 
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: {'values_changed': {"root[0]['len']": {'new_value': 1000, 'old_value': 1797}}}
+<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: {&#39;values_changed&#39;: {&#34;root[0][&#39;len&#39;]&#34;: {&#39;new_value&#39;: 1000, &#39;old_value&#39;: 1797}}}
 </pre></div></div>
 </div>
 <p>It provides detailed description of what values changed and how.</p>
 </section>
 </section>
 <section id="Validation-of-tables">
-<h2>Validation of tables<a class="headerlink" href="#Validation-of-tables" title="Permalink to this headline">#</a></h2>
+<h2>Validation of tables<a class="headerlink" href="#Validation-of-tables" title="Permalink to this heading">#</a></h2>
 <div class="line-block">
 <div class="line">Validation of tabular data is more specific case and is more developed. For this purpose Cascade can use already made solutions in the familiar form of the <code class="docutils literal notranslate"><span class="pre">Validator</span></code>.</div>
 <div class="line">Now let’s load tabular data for this section.</div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
@@ -1010,18 +1012,18 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\meta_
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">'data'</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">'feature_names'</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;feature_names&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <p>We will use <code class="docutils literal notranslate"><span class="pre">TableDataset</span></code> - special container for <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>s in Cascade.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris_ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">TableDataset</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
@@ -1030,7 +1032,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\meta_
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1057,7 +1059,7 @@ cascade.utils.table_dataset.TableDataset
 <div class="line">For the documentation of Pandera’s classes, please see: <a class="reference external" href="https://pandera.readthedocs.io/en/stable/index.html">pandera docs</a>.</div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandera</span> <span class="k">as</span> <span class="nn">pa</span>
@@ -1066,20 +1068,20 @@ cascade.utils.table_dataset.TableDataset
 </div>
 <p>We add all columns and check that all values are greater than zero.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">DataFrameSchema</span><span class="p">({</span>
-    <span class="s2">"sepal length (cm)"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
-    <span class="s2">"sepal width (cm)"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
-    <span class="s2">"petal length (cm)"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
-    <span class="s2">"petal width (cm)"</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+    <span class="s2">&quot;sepal length (cm)&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+    <span class="s2">&quot;sepal width (cm)&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+    <span class="s2">&quot;petal length (cm)&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
+    <span class="s2">&quot;petal width (cm)&quot;</span><span class="p">:</span> <span class="n">pa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">checks</span><span class="o">=</span><span class="n">pa</span><span class="o">.</span><span class="n">Check</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
 <span class="p">})</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
@@ -1095,7 +1097,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1105,18 +1107,18 @@ cascade.utils.pa_schema_validator.PaSchemaValidator
 </div>
 <p>For future uses we can save schema to yaml and use Validator with the path.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">(</span><span class="s1">'./iris_schema.yml'</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">(</span><span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">'./iris_schema.yml'</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1129,7 +1131,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1139,18 +1141,18 @@ cascade.utils.pa_schema_validator.PaSchemaValidator
 </div>
 <p>Let’s manually violate our assumption and see what will happen.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris_ds</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="s1">'sepal length (cm)'</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris_ds</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="s1">&#39;sepal length (cm)&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">'./iris_schema.yml'</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1180,7 +1182,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Loc
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:712</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-fg">    711</span> except errors.SchemaError as err:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 712</span>     error_handler.collect_error("schema_component_check", err)
+<span class="ansi-green-intense-fg ansi-bold">--&gt; 712</span>     error_handler.collect_error(&#34;schema_component_check&#34;, err)
 <span class="ansi-green-fg">    713</span> except errors.SchemaErrors as err:
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-intense-fg ansi-bold">(self, reason_code, schema_error, original_exc)</span>
@@ -1195,13 +1197,13 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Loc
 <span class="ansi-green-intense-fg ansi-bold">--&gt; 704</span>     result = schema_component(
 <span class="ansi-green-fg">    705</span>         df_to_validate,
 <span class="ansi-green-fg">    706</span>         lazy=lazy,
-<span class="ansi-green-fg">    707</span>         # don't make a copy of the data
+<span class="ansi-green-fg">    707</span>         # don&#39;t make a copy of the data
 <span class="ansi-green-fg">    708</span>         inplace=True,
 <span class="ansi-green-fg">    709</span>     )
 <span class="ansi-green-fg">    710</span>     check_results.append(check_utils.is_table(result))
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:2046</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.__call__</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">   2045</span> """Alias for ``validate`` method."""
+<span class="ansi-green-fg">   2045</span> &#34;&#34;&#34;Alias for ``validate`` method.&#34;&#34;&#34;
 <span class="ansi-green-intense-fg ansi-bold">-&gt; 2046</span> return self.validate(
 <span class="ansi-green-fg">   2047</span>     check_obj, head, tail, sample, random_state, lazy, inplace
 <span class="ansi-green-fg">   2048</span> )
@@ -1225,7 +1227,7 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Loc
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:2004</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-fg">   2003</span> except errors.SchemaError as err:
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 2004</span>     error_handler.collect_error("dataframe_check", err)
+<span class="ansi-green-intense-fg ansi-bold">-&gt; 2004</span>     error_handler.collect_error(&#34;dataframe_check&#34;, err)
 <span class="ansi-green-fg">   2005</span> except Exception as err:  # pylint: disable=broad-except
 <span class="ansi-green-fg">   2006</span>     # catch other exceptions that may occur when executing the
 <span class="ansi-green-fg">   2007</span>     # Check
@@ -1281,33 +1283,33 @@ During handling of the above exception, another exception occurred:
 
 <span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
 <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 56</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href='vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#Y106sZmlsZQ%3D%3D?line=0'&gt;1&lt;/a&gt;</span> cdu.PaSchemaValidator(iris_ds, './iris_schema.yml')
+<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#Y106sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cdu.PaSchemaValidator(iris_ds, &#39;./iris_schema.yml&#39;)
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\utils\pa_schema_validator.py:23</span>, in <span class="ansi-cyan-fg">PaSchemaValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, schema, *args, **kwargs)</span>
 <span class="ansi-green-fg">     12</span> def __init__(self, dataset, schema, *args, **kwargs) -&gt; None:
-<span class="ansi-green-fg">     13</span>     """
+<span class="ansi-green-fg">     13</span>     &#34;&#34;&#34;
 <span class="ansi-green-fg">     14</span>     Parameters
 <span class="ansi-green-fg">     15</span>     ----------
 <span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">     21</span>         For more details on schemas see pandera's documentation.
-<span class="ansi-green-fg">     22</span>     """
+<span class="ansi-green-fg">     21</span>         For more details on schemas see pandera&#39;s documentation.
+<span class="ansi-green-fg">     22</span>     &#34;&#34;&#34;
 <span class="ansi-green-intense-fg ansi-bold">---&gt; 23</span>     super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:51</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
-<span class="ansi-green-fg">     49</span> bad_results = []
-<span class="ansi-green-fg">     50</span> for i, func in enumerate(self._func):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 51</span>     if not func(self._dataset):
-<span class="ansi-green-fg">     52</span>         bad_results.append(i)
-<span class="ansi-green-fg">     54</span> if len(bad_results):
+File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\meta\validator.py:53</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
+<span class="ansi-green-fg">     51</span> bad_results = []
+<span class="ansi-green-fg">     52</span> for i, func in enumerate(self._func):
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 53</span>     if not func(self._dataset):
+<span class="ansi-green-fg">     54</span>         bad_results.append(i)
+<span class="ansi-green-fg">     56</span> if len(bad_results):
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\utils\pa_schema_validator.py:23</span>, in <span class="ansi-cyan-fg">PaSchemaValidator.__init__.&lt;locals&gt;.&lt;lambda&gt;</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
 <span class="ansi-green-fg">     12</span> def __init__(self, dataset, schema, *args, **kwargs) -&gt; None:
-<span class="ansi-green-fg">     13</span>     """
+<span class="ansi-green-fg">     13</span>     &#34;&#34;&#34;
 <span class="ansi-green-fg">     14</span>     Parameters
 <span class="ansi-green-fg">     15</span>     ----------
 <span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">     21</span>         For more details on schemas see pandera's documentation.
-<span class="ansi-green-fg">     22</span>     """
+<span class="ansi-green-fg">     21</span>         For more details on schemas see pandera&#39;s documentation.
+<span class="ansi-green-fg">     22</span>     &#34;&#34;&#34;
 <span class="ansi-green-intense-fg ansi-bold">---&gt; 23</span>     super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
 
 File <span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\utils\pa_schema_validator.py:32</span>, in <span class="ansi-cyan-fg">PaSchemaValidator._validate</span><span class="ansi-blue-intense-fg ansi-bold">(ds, schema)</span>
@@ -1340,7 +1342,7 @@ failure cases:
 <p>Data validation is an important part of any established ML-pipeline. Simple checks can speed up problem identification. By using Cascade one can easily develop own dataset checks and use already made solutions.</p>
 </section>
 <section id="See-also:">
-<h2>See also:<a class="headerlink" href="#See-also:" title="Permalink to this headline">#</a></h2>
+<h2>See also:<a class="headerlink" href="#See-also:" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://oxid15.github.io/cascade/">Documentation</a></p></li>
 <li><p><a class="reference external" href="https://oxid15.github.io/cascade/concepts.html">Key concepts</a></p></li>
@@ -1361,16 +1363,16 @@ failure cases:
                 </div>
                 <div class="title">Concepts</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="model_training.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+          <a class="prev-page" href="model_training_trainers.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Model training</div>
+                <div class="title">Model training using trainers</div>
                 
               </div>
             </a>
@@ -1400,7 +1402,7 @@ failure cases:
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
@@ -1428,7 +1430,9 @@ failure cases:
 </div><script data-url_root="../" id="documentation_options" src="../documentation_options.js"></script>
     <script src="../jquery.js"></script>
     <script src="../underscore.js"></script>
+    <script src="../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../doctools.js"></script>
+    <script src="../sphinx_highlight.js"></script>
     <script src="../scripts/furo.js"></script>
     <script src="../clipboard.min.js"></script>
     <script src="../copybutton.js"></script>
