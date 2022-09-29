@@ -25,7 +25,7 @@ class BruteforceCacher(Modifier):
 
     See also
     --------
-    Cascade.data.SequentialCacher
+    cascade.data.SequentialCacher
     """
     def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
         super().__init__(dataset, *args, **kwargs)
