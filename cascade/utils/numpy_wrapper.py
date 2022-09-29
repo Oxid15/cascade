@@ -28,4 +28,4 @@ class NumpyWrapper(Wrapper):
 
     def get_meta(self):
         meta = super().get_meta()
-        meta[-1]['root'] = self._path
+        meta[0]['root'] = self._path
