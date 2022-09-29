@@ -72,7 +72,7 @@ class HistoryViewer:
             for i in range(len(line))[:self._last_models]:
                 new_meta = {'line': line.root, 'num': i}
                 try:
-                    meta = view[i][-1]
+                    meta = view[i][0]
                 except IndexError:
                     meta = {}
 

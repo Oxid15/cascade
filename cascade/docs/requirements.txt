@@ -1,4 +1,4 @@
-sphinx
-furo
-sphinx-copybutton
-nbsphinx
+sphinx>=5.2.0
+furo>=2022.9.15
+sphinx-copybutton>=1.26.9
+nbsphinx>=0.8.8

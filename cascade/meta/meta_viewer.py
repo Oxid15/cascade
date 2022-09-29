@@ -80,8 +80,8 @@ class MetaViewer:
         return self._mh.read(path)
 
     def _filter(self, name):
-        meta = self.read(name)
-        meta = meta[-1]  # Takes last meta
+        meta = self._mh.read(name)
+        meta = meta[0]  # Takes first meta which is last model's meta
         for key in self._filt:
             if key not in meta:
                 raise KeyError(f"'{key}' key is not in\n{meta}")

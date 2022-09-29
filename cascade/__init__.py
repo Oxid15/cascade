@@ -15,15 +15,13 @@ limitations under the License.
 """
 
 
-__version__ = '0.7.1'
+__version__ = '0.7.2'
 __author__ = 'Ilia Moiseev'
 __author_email__ = 'ilia.moiseev.5@yandex.ru'
 
 from . import data
 from . import models
 from . import meta
-
-from . import tests
 
 # cascade does not have
 # from . import utils
