@@ -135,3 +135,12 @@ cascade.data
 |
 
 | 
+
+
+.. autoclass:: cascade.data.VersionAssigner
+
+|
+
+|
+
+| 
