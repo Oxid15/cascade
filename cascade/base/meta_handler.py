@@ -16,9 +16,8 @@ limitations under the License.
 
 import os
 import json
-from typing import Union
 import datetime
-from typing import List, Dict
+from typing import Union, List, Dict
 from json import JSONEncoder
 
 import yaml
@@ -61,15 +60,15 @@ class CustomEncoder(JSONEncoder):
 
         return super(CustomEncoder, self).default(obj)
 
-    def obj_to_dict(self, obj):
+    def obj_to_dict(self, obj) -> Dict:
         return json.loads(self.encode(obj))
 
 
 class BaseHandler:
-    def read(self, path) -> List[Dict]:
+    def read(self, path: str) -> Union[Dict, List[Dict]]:
         raise NotImplementedError()
 
-    def write(self, path, obj, overwrite=True) -> None:
+    def write(self, path: str, obj, overwrite=True) -> None:
         raise NotImplementedError()
 
     def _raise_io_error(self, path, exc):
@@ -80,24 +79,7 @@ class BaseHandler:
 
 
 class JSONHandler(BaseHandler):
-    """
-    Handles the logic of dumping and loading json files
-    """
-    def read(self, path) -> Union[Dict, List[Dict]]:
-        """
-        Reads json from path
-
-        Parameters
-        ----------
-        path:
-            Path to the file. If no extension provided,
-            then .json will be added
-
-        Raises
-        ------
-        IOError
-            when decoding errors occur
-        """
+    def read(self, path: str) -> Union[Dict, List[Dict]]:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.json'
@@ -111,32 +93,16 @@ class JSONHandler(BaseHandler):
                 self._raise_io_error(path, e)
             return meta
 
-    def write(self, name, obj: List[Dict], overwrite=True) -> None:
-        """
-        Writes json to path using custom encoder
-        """
-        if not overwrite and os.path.exists(name):
+    def write(self, path:str, obj: List[Dict], overwrite=True) -> None:
+        if not overwrite and os.path.exists(path):
             return
 
-        with open(name, 'w') as f:
+        with open(path, 'w') as f:
             json.dump(obj, f, cls=CustomEncoder, indent=4)
 
 
 class YAMLHandler(BaseHandler):
-    def read(self, path) -> Union[Dict, List[Dict]]:
-        """
-        Reads yaml from path
-
-        Parameters
-        ----------
-        path:
-            Path to the file. If no extension provided, then .yml will be added
-
-        Raises
-        ------
-        IOError
-            when decoding errors occur
-        """
+    def read(self, path: str) -> Union[Dict, List[Dict]]:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.yml'
@@ -148,7 +114,7 @@ class YAMLHandler(BaseHandler):
                 self._raise_io_error(path, e)
             return meta
 
-    def write(self, path, obj, overwrite=True) -> None:
+    def write(self, path: str, obj, overwrite=True) -> None:
         if not overwrite and os.path.exists(path):
             return
 
@@ -158,14 +124,14 @@ class YAMLHandler(BaseHandler):
 
 
 class TextHandler(BaseHandler):
-    def read(self, path) -> Dict:
+    def read(self, path: str) -> Dict:
         """
         Reads text file from path and returns dict
         in the form {path: 'text from file'}
 
         Parameters
         ----------
-        path:
+        path: str
             Path to the file
         """
 
@@ -179,11 +145,61 @@ class TextHandler(BaseHandler):
 
 
 class MetaHandler:
-    def read(self, path) -> List[Dict]:
+    """
+    Encapsulates the logic of reading and writing metadata to disk.
+
+    Supported read-write formats are `json` and `yml`. Other formats
+    are supported as read-only. For example one can read meta from txt or md file.
+
+    Examples
+    --------
+    >>> from cascade.base import MetaHandler
+    >>> mh = MetaHandler()
+    >>> mh.write('meta.json', {'hello': 'world'})
+    >>> obj = mh.read('meta.json')
+    >>> mh.write('meta.yml', {'hello': 'world'})
+    >>> obj = mh.read('meta.yml')
+    """
+    def read(self, path: str) -> Union[Dict, List[Dict]]:
+        """
+        Reads object from path.
+
+        Parameters
+        ----------
+            path: str
+                Path to the object.
+
+        Returns
+        -------
+            obj: Union[Dict, List[Dict]]
+
+        Raises
+        ------
+        IOError
+            when decoding errors occur
+        """
         handler = self._get_handler(path)
         return handler.read(path)
 
-    def write(self, path, obj, overwrite=True) -> None:
+    def write(self, path: str, obj, overwrite:bool = True) -> None:
+        """
+        Writes object to path.
+
+        Parameters
+        ----------
+            path: str
+                Path where to write object with name and extension
+            obj
+                An object to be serialized and saved
+            overwrite: bool, optional
+                Whether to overwrite the file if it already exists. If False
+                and file already exists will silently return without saving.
+
+        Raises
+        ------
+        IOError
+            when encoding errors occur
+        """
         handler = self._get_handler(path)
         return handler.write(path, obj, overwrite=overwrite)
 
