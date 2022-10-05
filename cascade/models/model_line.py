@@ -31,19 +31,19 @@ class ModelLine(Traceable):
     A line of models is typically a models with the same hyperparameters and architecture,
     but different epochs or using different data.
     """
-    def __init__(self, folder, model_cls=Model, meta_fmt='.json', **kwargs) -> None:
+    def __init__(self, folder: str, model_cls=Model, meta_fmt='.json', **kwargs) -> None:
         """
         All models in line should be instances of the same class.
 
         Parameters
         ----------
-        folder:
-            Path to a folder where ModelLine will be created or already was created
-            if folder does not exist, creates it
-        model_cls:
-            A class of models in repo. ModelLine uses this class to reconstruct a model
-        meta_fmt:
-            Format in which to store meta data. '.json', '.yml' are supported. .json is default.
+        folder: str
+            Path to a folder where ModelLine will be created or already was created.
+            If folder does not exist, creates it
+        model_cls: type, optional
+            A class of models in line. ModelLine uses this class to reconstruct a model
+        meta_fmt: str, optional
+            Format in which to store meta data.
         See also
         --------
         cascade.models.ModelRepo
@@ -96,20 +96,20 @@ class ModelLine(Traceable):
 
     def save(self, model: Model, only_meta=False) -> None:
         """
-        Saves a model and its metadata to a line folder.
+        Saves a model and its metadata to a line's folder.
         Model is automatically assigned a number and a model is saved
         using Model's method `save` in its own folder.
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
         The name passed to model's save is just "model" without extension.
         It is Model's responsibility to correctly  assign extension and save its own state.
 
-        Additionally, saves ModelLine's meta to the Line's root
+        Additionally, saves ModelLine's meta to the Line's root.
 
         Parameters
         ----------
-        model: cascade.models.Model
+        model: Model
             Model to be saved
-        only_meta: bool
+        only_meta: bool, optional
             Flag, that indicates whether to save model's binaries. If True saves only metadata.
         """
         idx = len(self.model_names)
