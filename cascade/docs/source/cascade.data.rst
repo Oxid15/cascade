@@ -109,8 +109,7 @@ cascade.data
 
 | 
 
-.. autoclass:: cascade.data.SequentialCacher
-    :members:
+.. autoclass:: cascade.data.RangeSampler
 
 |
 
@@ -118,8 +117,8 @@ cascade.data
 
 | 
 
-
-.. autoclass:: cascade.data.RangeSampler
+.. autoclass:: cascade.data.SequentialCacher
+    :members:
 
 |
 
