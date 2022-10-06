@@ -2,7 +2,7 @@ cascade.utils
 ============== 
 
 .. autoclass:: cascade.utils.ConstantBaseline
-   :members:
+    :members:
 
 |
 
@@ -11,7 +11,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.FolderImageDataset
-   :members:
+    :members:
 
 |
 
@@ -20,7 +20,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.NumpyWrapper
-   :members:
+    :members:
 
 |
 
@@ -29,7 +29,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.OverSampler
-   :members:
+    :members:
 
 |
 
@@ -38,7 +38,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.PaSchemaValidator
-   :members:
+    :members:
 
 |
 
@@ -47,7 +47,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.SkModel
-   :members:
+    :members:
 
 |
 
@@ -56,7 +56,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.TableDataset
-   :members:
+    :members:
 
 |
 
@@ -65,7 +65,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.TableFilter
-   :members:
+    :members:
 
 |
 
@@ -74,7 +74,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.CSVDataset
-   :members:
+    :members:
 
 |
 
@@ -84,7 +84,7 @@ cascade.utils
 
 
 .. autoclass:: cascade.utils.PartedTableLoader
-   :members:
+    :members:
 
 |
 
@@ -93,7 +93,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.TableIterator
-   :members:
+    :members:
 
 |
 
@@ -102,7 +102,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.LargeCSVDataset
-   :members:
+    :members:
 
 |
 
@@ -111,7 +111,7 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.NullValidator
-   :members:
+    :members:
 
 |
 

@@ -23,6 +23,14 @@ from .dataset import Dataset, T
 class Concatenator(Dataset):
     """
     Unifies several Datasets under one, calling them sequentially in the provided order.
+
+    Examples
+    --------
+    >>> from cascade.data import Wrapper, Concatenator
+    >>> ds_1 = Wrapper([0, 1, 2])
+    >>> ds_2 = Wrapper([2, 1, 0])
+    >>> ds = Concatenator((ds_1, ds_2))
+    >>> assert [item for item in ds] == [0, 1, 2, 2, 1, 0]
     """
     def __init__(self, datasets: Iterable[Dataset], *args, **kwargs) -> None:
         """
@@ -30,8 +38,8 @@ class Concatenator(Dataset):
 
         Parameters
         ----------
-        datasets: Iterable[Dataset]
-            a list or tuple of datasets to concatenate
+        datasets: Union[Iterable[Dataset], Mapping[Dataset]]
+            A list or tuple of datasets to concatenate
         """
         self._datasets = datasets
         lengths = [len(ds) for ds in self._datasets]
@@ -67,7 +75,5 @@ class Concatenator(Dataset):
         Concatenator calls `get_meta()` of all its datasets
         """
         meta = super().get_meta()
-        meta[0]['data'] = {}
-        for ds in self._datasets:
-            meta[0]['data'][repr(ds)] = ds.get_meta()
+        meta[0]['data'] = [ds.get_meta() for ds in self._datasets]
         return meta

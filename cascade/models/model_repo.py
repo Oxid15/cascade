@@ -51,40 +51,41 @@ class ModelRepo(Repo):
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
 
-    Stores meta-data in file meta.json in the root folder. With every run if the repo was already
+    Stores its meta-data in its root folder. With every run if the repo was already
     created earlier, updates its meta and logs changes in human-readable format in file history.log
 
     Example
     -------
     >>> from cascade.models import ModelRepo
+    >>> from cascade.utils import ConstantBaseline
     >>> repo = ModelRepo('repo', _meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})
-    >>> vgg16_line = repo.add_line('vgg16', VGG16Model)
-    >>> vgg16 = VGG16Model()
-    >>> vgg16.fit()
-    >>> vgg16_line.save(vgg16)
+    >>> line = repo.add_line('model', ConstantBaseline)
+    >>> model = ConstantBaseline(1)
+    >>> model.fit()
+    >>> line.save(model)
 
 
     >>> from cascade.models import ModelRepo
-    >>> repo = ModelRepo('repo', lines=[dict(name='vgg16', model_cls=VGGModel)])
-    >>> vgg16 = VGG16Model()
-    >>> vgg16.fit()
-    >>> repo['vgg16'].save(vgg16)
+    >>> from cascade.utils import ConstantBaseline
+    >>> repo = ModelRepo('repo', lines=[dict(name='constant', model_cls=ConstantBaseline)])
+    >>> model = ConstantBaseline()
+    >>> model.fit()
+    >>> repo['constant'].save(model)
     """
-    def __init__(self, folder, lines=None, overwrite=False, meta_fmt='.json', **kwargs):
+    def __init__(self, folder, lines:List[Dict] = None,
+                 overwrite:bool = False, meta_fmt:str = '.json', **kwargs):
         """
         Parameters
         ----------
         folder:
-            Path to a folder where ModelRepo needs to be created or already was created
-            if folder does not exist, creates it
-        lines: List[Dict]
-            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
-        overwrite: bool
-            if True will remove folder that is passed in first argument and start a new repo
-            in that place
-        meta_fmt: str
-            extension of repo's metadata files and that will be assigned to the lines by default
-            `.json` and `.yml` are supported
+            Path to a folder where ModelRepo needs to be created or already was created.
+            If folder does not exist, creates it automatically.
+        lines: List[Dict], optional
+            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`).
+        overwrite: bool, optional
+            If True will remove folder that is passed in first argument and start a new repo in that place.
+        meta_fmt: str, optional
+            Extension of repo's metadata files and that will be assigned to the lines by default.
         See also
         --------
         cascade.models.ModelLine
@@ -119,18 +120,17 @@ class ModelRepo(Repo):
 
     def add_line(self, name, *args, meta_fmt=None, **kwargs):
         """
-        Adds new line to repo if it doesn't exist and returns it
-        If line exists, defines it in repo
+        Adds new line to repo if it doesn't exist and returns it.
+        If line exists, defines it in repo with parameters provided.
 
         Supports all the parameters of ModelLine using args and kwargs.
 
         Parameters:
-            name: str
-                Name of the line. It is used to name a folder of line.
-                Repo prepends it with `self._root` before creating.
-            meta_fmt: str
-                Format of meta files. Supported values are the same as for repo.
-                If omitted, inherits format from repo.
+        name: str
+            Name of the line. It is used to name a folder of line.
+            Repo prepends it with `self._root` before creating.
+        meta_fmt: str
+            Format of meta files. If omitted, inherits format from repo.
         See also
         --------
             cascade.models.ModelLine
@@ -214,6 +214,9 @@ class ModelRepo(Repo):
         return meta
 
     def reload(self) -> None:
+        """
+        Updates internal state.
+        """
         self._load_lines()
         self._update_meta()
 
@@ -228,6 +231,9 @@ class ModelRepo(Repo):
         return ModelRepoConcatenator([self, repo])
 
     def get_line_names(self) -> List[str]:
+        """
+        Returns list of line names.
+        """
         # TODO: write test covering this
         return list(self.lines.keys())
 
@@ -236,7 +242,7 @@ class ModelRepoConcatenator(Repo):
     """
     The class to concatenate different Repos.
     For the ease of use please, don't use it directly.
-    Just do repo = repo_1 + repo_2 to unify repos.
+    Just do `repo = repo_1 + repo_2` to unify two or more repos.
     """
     def __init__(self, repos: Iterable[Repo], *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)

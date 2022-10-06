@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 
-__version__ = '0.7.2'
+__version__ = '0.7.3'
 __author__ = 'Ilia Moiseev'
 __author_email__ = 'ilia.moiseev.5@yandex.ru'
 

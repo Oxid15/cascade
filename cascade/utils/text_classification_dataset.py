@@ -26,13 +26,15 @@ class TextClassificationDataset(Dataset):
     Dataset to simplify loading of data for text classification.
     Texts of different classes should be placed in different folders.
     """
-    def __init__(self, path, encoding='utf-8', *args, **kwargs):
+    def __init__(self, path: str, encoding: str = 'utf-8', *args, **kwargs):
         """
         Parameters
         ----------
-        path:
+        path: str
             Path to the folder with folders of text files.
             In each folder should be only one class of texts.
+        encoding: str, optional
+            Encoding that is used to open files.
         """
         super().__init__(*args, *kwargs)
         self._encoding = encoding
@@ -57,6 +59,9 @@ class TextClassificationDataset(Dataset):
         return text, label
 
     def __len__(self):
+        """
+        Total number of files.
+        """
         return len(self._paths)
 
     def get_meta(self) -> List[Dict]:

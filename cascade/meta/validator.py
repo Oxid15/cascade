@@ -18,7 +18,9 @@ from ..data import Dataset, Modifier, T
 
 
 class DataValidationException(Exception):
-    pass
+    """
+    Raised when data validation fails
+    """
 
 
 class Validator(Modifier):
@@ -37,7 +39,8 @@ class Validator(Modifier):
 
 class AggregateValidator(Validator):
     """
-    This validator accepts an aggregate function that accepts a `Dataset` and return `True` of `False`
+    This validator accepts an aggregate function
+    that accepts a `Dataset` and returns `True` or `False`
 
     Example
     -------
@@ -61,8 +64,8 @@ class AggregateValidator(Validator):
 
 class PredicateValidator(Validator):
     """
-    This validator accepts function that is applied to each item in dataset and return `True` or `False`
-    Calls all previous lazy datasets in __init__
+    This validator accepts function that is applied to each item in a dataset
+    and returns `True` or `False`. Calls `__getitem__`s of all previous datasets in `__init__`.
 
     Example
     -------

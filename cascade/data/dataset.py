@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Dict, Generic, Iterable, List, TypeVar
+from typing import Dict, Generic, Iterable, List, Mapping, TypeVar
 from ..base import Traceable
 
 T = TypeVar('T')
@@ -35,7 +35,7 @@ class Dataset(Generic[T], Traceable):
         """
         Abstract method - should be defined in every successor
         """
-        raise NotImplementedError
+        raise NotImplementedError()
 
     def get_meta(self) -> List[Dict]:
         """
@@ -50,22 +50,25 @@ class Dataset(Generic[T], Traceable):
         meta[0]['type'] = 'dataset'
         return meta
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Returns
         -------
-        string representation of a Dataset. This repr used as a name for get_meta() method
-        by default gives the name of class from basic repr
+        repr: str 
+            Representation of a Dataset. This repr used as a name for get_meta() method
+            by default gives the name of class from basic repr
 
         See also
         --------
         cascade.data.Dataset.get_meta()
         """
-        rp = super().__repr__()
-        return rp[1:].split()[0]
+        return super().__repr__().split()[0]
 
 
 class Iterator(Dataset):
+    """
+    Wraps Dataset around any Iterable. Does not have map-like interface.
+    """
     def __init__(self, data: Iterable, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._data = data
@@ -87,7 +90,7 @@ class Wrapper(Dataset):
     """
     Wraps Dataset around any list-like object.
     """
-    def __init__(self, obj, *args, **kwargs) -> None:
+    def __init__(self, obj: Mapping, *args, **kwargs) -> None:
         self._data = obj
         super().__init__(*args, **kwargs)
 
@@ -120,7 +123,7 @@ class Modifier(Dataset):
         Parameters
         ----------
         dataset: Dataset
-            a dataset to modify
+            A dataset to modify
         """
         self._dataset = dataset
         super().__init__(*args, **kwargs)
@@ -128,7 +131,7 @@ class Modifier(Dataset):
     def __getitem__(self, index) -> T:
         return self._dataset[index]
 
-    def __iter__(self):
+    def __iter__(self) -> T:
         for i in range(len(self)):
             yield self.__getitem__(i)
 
@@ -150,14 +153,26 @@ class Modifier(Dataset):
 class Sampler(Modifier):
     """
     Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number of
-    items in dataset. It can constitute a batch sampler or random sampler or sample in cycling manner.
+    items in dataset. It can be used to build a batch sampler, random sampler, etc.
 
     See also
     --------
     cascade.data.CyclicSampler
+    cascade.data.RandomSampler
+    cascade.data.RangeSampler
     """
     def __init__(self, dataset: Dataset, num_samples: int, *args, **kwargs) -> None:
-        assert num_samples > 0
+        """
+        Constructs a Sampler.
+
+        Parameters
+        ----------
+            dataset: Dataset
+                A dataset to sample from
+            num_samples: int
+                The number of samples
+        """
+        assert num_samples > 0, 'The number of samples should be positive'
         super().__init__(dataset, *args, **kwargs)
         self._num_samples = num_samples
 

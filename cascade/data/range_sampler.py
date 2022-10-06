@@ -42,7 +42,24 @@ class RangeSampler(Sampler):
     2
     3
     """
-    def __init__(self, dataset: Dataset, start=None, stop=None, step=1, *args, **kwargs) -> None:
+    def __init__(self,
+        dataset: Dataset,
+        start:int = None,
+        stop:int = None,
+        step:int = 1,
+        *args, **kwargs) -> None:
+        """
+        Parameters
+        ----------
+            dataset: Dataset
+                A dataset to sampler from
+            start: int
+                Start index in range - included
+            stop: int
+                Stop index in range - excluded
+            step: int, optional
+                Step of range
+        """
         if start is not None and stop is None:
             stop = start
             start = 0

@@ -25,15 +25,8 @@ class CyclicSampler(Sampler):
     -------
     >>> from cascade.data import CyclicSampler, Wrapper
     >>> ds = Wrapper([1,2,3])
-    >>> ds = CyclicSampler(ds, 5)
-    >>> for item in ds:
-    ...     print(item)
-    ...
-    1
-    2
-    3
-    1
-    2
+    >>> ds = CyclicSampler(ds, 7)
+    >>> assert [item for item in ds] == [1, 2, 3, 1, 2, 3, 1]
     """
     def __getitem__(self, index) -> T:
         internal_index = index % len(self._dataset)

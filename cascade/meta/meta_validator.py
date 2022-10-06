@@ -45,10 +45,6 @@ class MetaValidator(Validator):
 
     If the structure of pipeline is different it saves new meta file.
 
-    Raises
-    ------
-    cascade.meta.DataValidationException
-
     See also
     --------
     cascade.data.Modifier
@@ -58,10 +54,16 @@ class MetaValidator(Validator):
         Parameters
         ----------
         dataset: Dataset
-            dataset to validate
-        root: str
-            path to the folder in which to store meta
+            Dataset to validate
+        root: str, optional
+            Path to the folder in which to store meta
             default is './.cascade'
+        meta_fmt: str, optional
+            Format of metadata files
+
+        Raises
+        ------
+        cascade.meta.DataValidationException
         """
         super().__init__(dataset, lambda x: True)
         self._mh = MetaHandler()

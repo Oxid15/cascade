@@ -29,14 +29,18 @@ class SequentialCacher(Modifier):
     --------
     BruteforceCacher
     """
-    def __init__(self, dataset: Dataset, batch_size=2, *args, **kwargs) -> None:
+    def __init__(
+        self,
+        dataset: Dataset,
+        batch_size: int = 2,
+        *args, **kwargs) -> None:
         """
         Parameters
         ----------
         dataset: Dataset
-            dataset to cache sequentially
-        batch_size: int, default: 2
-            a number of items to load and keep in each moment
+            Dataset to cache sequentially
+        batch_size: int, optional
+            A number of items to load and keep in each moment
         """
         # TODO: make something to release this assert
         assert hasattr(dataset, '__len__'), 'Dataset should have __len__'
