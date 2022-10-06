@@ -138,7 +138,6 @@ class MetricViewer:
         num = best_row['num']
         return self._repo[name][num]
 
-    def serve(self, page_size=50, include=None, exclude=None, **kwargs) -> None:
     def serve(
         self,
         page_size: int = 50,
