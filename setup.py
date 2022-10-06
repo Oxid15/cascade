@@ -27,12 +27,12 @@ setuptools.setup(
     python_requires=">=3.8",
     install_requires=[
         'tqdm>=4.64.1',
-        'numpy>=1.23.3',
-        'pandas>=1.4.2',
+        'numpy>=1.18.5',
+        'pandas>=1.4.0',
         'deepdiff>=5.8.0',
         'pendulum>=2.1.2',
         'plotly>=5.7.0',
         'flatten_json>=0.1.13',
-        'pyyaml>=6.0'
+        'pyyaml>=5.4.1'
     ]
 )
