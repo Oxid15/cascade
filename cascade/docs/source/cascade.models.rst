@@ -1,26 +1,8 @@
 cascade.models
 ============== 
 
-.. autoclass:: cascade.models.Model
-   :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.models.ModelModifier
-   :members:
-
-|
-
-|
-
-|
-
 .. autoclass:: cascade.models.BasicModel
-   :members:
+    :members:
 
 |
 
@@ -29,16 +11,7 @@ cascade.models
 |
 
 .. autoclass:: cascade.models.BasicModelModifier
-   :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.models.ModelRepo
-   :members:
+    :members:
 
 |
 
@@ -47,7 +20,7 @@ cascade.models
 |
 
 .. autoclass:: cascade.models.ModelLine
-   :members:
+    :members:
 
 |
 
@@ -55,8 +28,26 @@ cascade.models
 
 |
 
-.. autoclass:: cascade.models.Trainer
-   :members:
+.. autoclass:: cascade.models.ModelRepo
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.Model
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.models.ModelModifier
+    :members:
 
 |
 
@@ -65,7 +56,17 @@ cascade.models
 |
 
 .. autoclass:: cascade.models.BasicTrainer
-   :members:
+    :members:
+
+|
+
+|
+
+|
+
+
+.. autoclass:: cascade.models.Trainer
+    :members:
 
 |
 

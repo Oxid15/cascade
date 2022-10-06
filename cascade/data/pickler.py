@@ -16,14 +16,14 @@ limitations under the License.
 
 import os
 import pickle
-from . import Modifier
+from . import Dataset, Modifier
 
 
 class Pickler(Modifier):
     """
-    Pickles an input dataset or unpickles one
+    Pickles input dataset or unpickles one
     """
-    def __init__(self, path, dataset=None, *args, **kwargs) -> None:
+    def __init__(self, path: str, dataset: Dataset = None, *args, **kwargs) -> None:
         """
         Loads pickled dataset or dumps one depending on parameters passed:
 
@@ -32,10 +32,10 @@ class Pickler(Modifier):
 
         Parameters
         ----------
-        path:
-            path to the pickled dataset
+        path: str
+            Path to the pickled dataset
         dataset: Dataset, optional
-            a dataset to be pickled
+            A dataset to be pickled
 
         Raises
         ------

@@ -1,7 +1,7 @@
 cascade.data
 ============ 
 .. autoclass:: cascade.data.ApplyModifier
-   :members:
+    :members:
 
 |
 
@@ -10,7 +10,7 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.BruteforceCacher
-   :members:
+    :members:
 
 |
 
@@ -19,7 +19,7 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.Concatenator
-   :members:
+    :members:
 
 |
 
@@ -28,7 +28,7 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.CyclicSampler
-   :members:
+    :members:
 
 |
 
@@ -37,7 +37,7 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.Dataset
-   :members:
+    :members:
 
 |
 
@@ -46,7 +46,7 @@ cascade.data
 |
 
 .. autoclass:: cascade.data.Iterator
-   :members:
+    :members:
 
 |
 
@@ -55,7 +55,7 @@ cascade.data
 |
 
 .. autoclass:: cascade.data.Wrapper
-   :members:
+    :members:
 
 |
 
@@ -65,7 +65,7 @@ cascade.data
 
 
 .. autoclass:: cascade.data.Modifier
-   :members:
+    :members:
 
 |
 
@@ -74,7 +74,7 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.Sampler
-   :members:
+    :members:
 
 |
 
@@ -83,7 +83,7 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.FolderDataset
-   :members:
+    :members:
 
 |
 
@@ -92,7 +92,7 @@ cascade.data
 |
 
 .. autoclass:: cascade.data.Pickler
-   :members:
+    :members:
 
 |
 
@@ -101,7 +101,15 @@ cascade.data
 |
 
 .. autoclass:: cascade.data.RandomSampler
-   :members:
+    :members:
+
+|
+
+|
+
+| 
+
+.. autoclass:: cascade.data.RangeSampler
 
 |
 
@@ -110,16 +118,7 @@ cascade.data
 | 
 
 .. autoclass:: cascade.data.SequentialCacher
-   :members:
-
-|
-
-|
-
-| 
-
-
-.. autoclass:: cascade.data.RangeSampler
+    :members:
 
 |
 

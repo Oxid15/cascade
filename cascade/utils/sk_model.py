@@ -37,7 +37,7 @@ class SkModel(BasicModel):
         ----------
         name: str, optional
             Name of the model
-        blocks: list
+        blocks: list, optional
             List of sklearn transformers to make a pipeline from
         """
         super().__init__(**kwargs)
@@ -101,7 +101,7 @@ class SkModel(BasicModel):
         with open(path, 'rb') as f:
             self._pipeline = pickle.load(f)
 
-    def save(self, path) -> None:
+    def save(self, path: str) -> None:
         """
         Saves model to the path provided.
         If no extension, then .pkl is added.

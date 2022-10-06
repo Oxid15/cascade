@@ -18,8 +18,8 @@ class Trainer(Traceable):
         """
         Parameters
         ----------
-            repo: Union[ModelRepo, str]
-                Either repo or path to it
+        repo: Union[ModelRepo, str]
+            Either repo or path to it
         """
         if isinstance(repo, str):
             self._repo = ModelRepo(repo)

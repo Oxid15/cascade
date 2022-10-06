@@ -23,22 +23,20 @@ from ..base import MetaHandler, supported_meta_formats
 
 class MetaViewer:
     """
-    The class to view all meta data files in folder.
+    The class to view all metadata in folders and subfolders.
     """
-    def __init__(self, root, filt=None) -> None:
+    def __init__(self, root: str, filt: Dict=None) -> None:
         """
         Parameters
         ----------
-        root:
+        root: str
             path to the folder containing metadata files
-            to dump and load metadata files MetaHandler is used
         filt Dict, optional:
-            dictionary that specifies which values should be present in meta
+            dictionary that specifies which values that should be present in meta
             for example to find all models use `filt={'type': 'model'}`
 
         See also
         --------
-        cascade.meta.ModelRepo
         cascade.meta.MetaHandler
         """
         if not os.path.exists(root):
@@ -57,12 +55,12 @@ class MetaViewer:
         if filt is not None:
             self.names = list(filter(self._filter, self.names))
 
-    def __getitem__(self, index) -> List[Dict]:
+    def __getitem__(self, index: int) -> List[Dict]:
         """
         Returns
         -------
         meta: List[Dict]
-            object containing meta
+            Meta object
         """
         return self._mh.read(self.names[index])
 

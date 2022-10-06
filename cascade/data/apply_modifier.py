@@ -20,17 +20,27 @@ from . import Dataset, Modifier, T
 
 class ApplyModifier(Modifier):
     """
-    Modifier that maps a function to previous dataset's elements in a lazy way.
+    Modifier that maps a function to given dataset's items in a lazy way.
     """
     def __init__(self, dataset: Dataset, func: Callable, *args, **kwargs) -> None:
         """
         Parameters
         ----------
         dataset: Dataset
-            a dataset to modify
+            A dataset to modify
         func: Callable
-            a function to be applied to every item of a dataset -
+            A function to be applied to every item of a dataset -
             each `__getitem__` would call `func` on an item obtained from a previous dataset
+
+        Examples
+        --------
+        >>> from cascade import data as cdd
+        >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
+        >>> ds = cdd.ApplyModifier(ds, lambda x: x ** 2)
+
+        Now function will only be applied when items are retrieved
+
+        >>> assert [item for item in ds] == [0, 1, 4, 9, 16]
         """
         super().__init__(dataset, *args, **kwargs)
         self._func = func

@@ -31,6 +31,7 @@ def test_meta():
 
     c = Concatenator([n1, n2], meta_prefix={'num': 1})
     assert c.get_meta()[0]['num'] == 1
+    assert len(c.get_meta()[0]['data']) == 2
 
 
 @pytest.mark.parametrize(
