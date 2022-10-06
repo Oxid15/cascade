@@ -265,122 +265,10 @@ class ModelRepo(Repo):
         """
         # TODO: write test covering this
         return list(self._lines.keys())
-
-    def serve(self, **kwargs):
-        # Conditional import
-        try:
-            import dash
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-            Cannot import dash. It is conditional
-            dependency you can install it
-            using the instructions from https://dash.plotly.com/installation''')
-        else:
-            from dash import html, dash_table, dcc
-
-        def model_card(repo, line, num):
-            # TODO: it is not good to use only first occurence
-            model_path = glob.glob(os.path.join(repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
-            meta = repo._mh.read(model_path)
-
-            model_tables = [
-                go.Table(
-                        header=dict(values=['Key', 'Value'],
-                                    align='left'),
-                        cells=dict(values=[
-                            [key for key in meta[i]],
-                            [str(meta[i][key]) for key in meta[i]]],
-                                align='left')
-                    )
-                for i in range(len(meta))
-            ]
-            fig = go.Figure(data=model_tables)
-            return html.Details(
-                children=[
-                    html.Summary(f'Model {num:0>5d}'),
-                    dcc.Graph(id=f'tables-{line}-{num}', figure=fig)
-                ]
-            )
-
-        def load_metrics(repo, line):
-            total_metrics = []
-            for num in range(len(repo[line])):
-                # TODO: same as previous
-                model_path = glob.glob(os.path.join(repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
-                metrics = repo._mh.read(model_path)[0]['metrics']
-                total_metrics.append(metrics)
-            return total_metrics
-
-        def _update_graph_callback(_app, repo, line):
-            from dash import Output, Input
-
-            @_app.callback(
-                Output(component_id=f'{line}-graph', component_property='figure'),
-                Input(component_id=f'{line}-dropdown', component_property='value'))
-            def _update_graph(x):
-                fig = go.Figure()
-                if x is not None:
-                    metrics = load_metrics(repo, line)
-                    fig.add_trace(
-                        go.Scatter(
-                            x=[i for i in range(len(metrics))],
-                            y=[metrics[i][x] for i in range(len(metrics))],
-                            mode='markers+lines'
-                        )
-                    )
-                    fig.update_layout(title=str(x))
-                return fig
-
-        def line_graph(repo, line_name):
-            # TODO: needs manually-written pagination
-            # https://dash.plotly.com/urls
-            fig = go.Figure()
-            metrics = load_metrics(repo, line_name)
-            metrics_keys = []
-            for m in metrics:
-                metrics_keys += [key for key in m]
-            return html.Div(
-                children=[
-                    dcc.Graph(
-                        id=f'{line_name}-graph',
-                        figure=fig
-                    ),
-                    dcc.Dropdown(
-                        list(set(metrics_keys)),
-                        id=f'{line_name}-dropdown',
-                        multi=False
-                    )
-                ]
-            )
-
-        def line_card(repo, line_name):
-            models = [model_card(self, line_name, num)
-                      for num in range(len(self._lines[line_name]))]
-            return html.Div(
-                children=[
-                    html.H3(children=f'ModelLine {line_name}'),
-                    line_graph(repo, line_name),
-                    html.Details(
-                        children=[
-                                html.Summary(children='Models'),
-                                *models
-                        ]
-                    )
-                ]
-            )
-
-        lines = [line_card(self, line_name) for line_name in self._lines]
-
-        app = dash.Dash()
-        app.layout = html.Div([
-            html.H1(
-                children=f'{self}'
-            ),
-            *lines
-        ])
-        for line in self._lines:
-            _update_graph_callback(app, self, line)
-        app.run(**kwargs)
+    
+    def serve(self, *args, **kwargs):
+        server = RepoServer(self)
+        server.serve(*args, **kwargs)
 
 
 class ModelRepoConcatenator(Repo):
@@ -421,3 +309,132 @@ class ModelRepoConcatenator(Repo):
     def reload(self):
         for repo in self._repos:
             repo.reload()
+
+
+class RepoServer:
+    def __init__(self, repo: Repo) -> None:
+        self._repo = repo
+
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            self._raise_cannot_import()
+        else:
+            from dash import html, dash_table, dcc
+            self._dash = dash
+            self._html = html
+            self._dcc = dcc
+
+    def _model_card(self, line, num):
+        # TODO: it is not good to use only first occurence
+        model_path = glob.glob(os.path.join(self._repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
+        meta = self._repo._mh.read(model_path)
+
+        model_tables = [
+            go.Table(
+                    header=dict(values=['Key', 'Value'],
+                                align='left'),
+                    cells=dict(values=[
+                        [key for key in meta[i]],
+                        [str(meta[i][key]) for key in meta[i]]],
+                            align='left')
+                )
+            for i in range(len(meta))
+        ]
+        fig = go.Figure(data=model_tables)
+        return self._html.Details(
+            children=[
+                self._html.Summary(f'Model {num:0>5d}'),
+                self._dcc.Graph(id=f'tables-{line}-{num}', figure=fig)
+            ]
+        )
+
+    def _load_metrics(self, line):
+        total_metrics = []
+        for num in range(len(self._repo[line])):
+            # TODO: same as previous
+            model_path = glob.glob(os.path.join(self._repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
+            metrics = self._repo._mh.read(model_path)[0]['metrics']
+            total_metrics.append(metrics)
+        return total_metrics
+
+    def _update_graph_callback(self, _app, line):
+        from dash import Output, Input
+
+        @_app.callback(
+            Output(component_id=f'{line}-graph', component_property='figure'),
+            Input(component_id=f'{line}-dropdown', component_property='value'))
+        def _update_graph(x):
+            fig = go.Figure()
+            if x is not None:
+                metrics = self._load_metrics(line)
+                fig.add_trace(
+                    go.Scatter(
+                        x=[i for i in range(len(metrics))],
+                        y=[metrics[i][x] for i in range(len(metrics))],
+                        mode='markers+lines'
+                    )
+                )
+                fig.update_layout(title=str(x))
+            return fig
+
+    def _line_graph(self, line_name):
+        # TODO: needs manually-written pagination
+        # https://dash.plotly.com/urls
+
+        fig = go.Figure()
+        metrics = self._load_metrics(line_name)
+        metrics_keys = []
+        for m in metrics:
+            metrics_keys += [key for key in m]
+        return self._html.Div(
+            children=[
+                self._dcc.Graph(
+                    id=f'{line_name}-graph',
+                    figure=fig
+                ),
+                self._dcc.Dropdown(
+                    list(set(metrics_keys)),
+                    id=f'{line_name}-dropdown',
+                    multi=False
+                )
+            ]
+        )
+
+    def _line_card(self, line_name):
+        models = [self._model_card(line_name, num)
+                    for num in range(len(self._repo[line_name]))]
+        return self._html.Div(
+            children=[
+                self._html.H3(children=f'ModelLine {line_name}'),
+                self._line_graph(line_name),
+                self._html.Details(
+                    children=[
+                            self._html.Summary(children='Models'),
+                            *models
+                    ]
+                )
+            ]
+        )
+
+    def serve(self, **kwargs):
+        lines = [self._line_card(line_name)
+                 for line_name in self._repo.get_line_names()]
+
+        app = self._dash.Dash()
+        app.layout = self._html.Div([
+            self._html.H1(
+                children=f'{self._repo}'
+            ),
+            *lines
+        ])
+        for line in self._repo.get_line_names():
+            self._update_graph_callback(app, line)
+        app.run(**kwargs)
+
+    def _raise_cannot_import(self):
+        raise ModuleNotFoundError('''
+                    Cannot import dash. It is conditional
+                    dependency you can install it
+                    using the instructions from https://dash.plotly.com/installation''')
