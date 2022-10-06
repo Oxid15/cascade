@@ -19,8 +19,8 @@ class Trainer(Traceable):
         """
         Parameters
         ----------
-            repo: Union[ModelRepo, str]
-                Either repo or path to it
+        repo: Union[ModelRepo, str]
+            Either repo or path to it
         """
         if isinstance(repo, str):
             self._repo = ModelRepo(repo)
@@ -56,10 +56,10 @@ class BasicTrainer(Trainer):
               train_data: Iterable,
               test_data: Iterable,
               *args,
-              train_kwargs=None,
-              test_kwargs=None,
-              epochs=1,
-              start_from=None,
+              train_kwargs: Dict = None,
+              test_kwargs: Dict = None,
+              epochs: int = 1,
+              start_from: str = None,
               **kwargs) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
@@ -71,13 +71,13 @@ class BasicTrainer(Trainer):
                 train data to be passed to model's fit()
             test_data: Iterable
                 test data to be passed to model's evaluate()
-            train_kwargs:
+            train_kwargs: Dict, optional
                 arguments for fit()
-            test_kwargs:
+            test_kwargs: Dict, optional
                 arguments for evaluate() - the most common is the dict of metrics
-            epochs:
+            epochs: int, optional
                 how many times to repeat training on data
-            start_from: str
+            start_from: str, optional
                 name of line from which to start, start from the latest model in line
         """
 

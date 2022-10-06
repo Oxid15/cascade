@@ -20,14 +20,41 @@ from . import Dataset, Modifier, T
 
 class BruteforceCacher(Modifier):
     """
-    Unusual modifier which loads everything in memory in initialization phase
-    and then returns values from cache
+    Identity modifier that calls all previous pipeline in __init__ loading everything
+    in memory. This is useful in combination with `Pickler` when pipeline
+    has heavy operations upstream. You can load everything and pickle it to turn off
+    heavy part of the pipeline.
+
+    Examples
+    --------
+    >>> from cascade import data as cdd
+    >>> ds = cdd.Wrapper([0 for _ in range(1000000)])
+    >>> ds = cdd.ApplyModifier(ds, lambda x: x + 1)
+    >>> ds = cdd.ApplyModifier(ds, lambda x: x + 1)
+    >>> ds = cdd.ApplyModifier(ds, lambda x: x + 1)
+
+    Cache heavy upstream part once
+
+    >>> ds = cdd.BruteforceCacher(ds)
+
+    Then pickle it
+
+    >>> ds = cdd.Pickler('ds', ds)
+
+    Unpickle and use further
+
+    >>> ds = cdd.Pickler('ds')
+    >>> ds = cdd.RandomSampler(ds, 1000)
 
     See also
     --------
-    Cascade.data.SequentialCacher
+    cascade.data.SequentialCacher
+    cascade.data.Pickler
     """
     def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
+        """
+        Loads every item in dataset in internal list.
+        """
         super().__init__(dataset, *args, **kwargs)
         # forcibly calling all previous datasets in the init
         if hasattr(self._dataset, '__len__') and hasattr(self._dataset, '__getitem__'):

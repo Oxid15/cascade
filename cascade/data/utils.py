@@ -22,24 +22,24 @@ def split(ds: Dataset, frac=0.5, num=None) -> Tuple[Dataset]:
 
     >>> ds1, ds2 = cdd.split(ds)
     >>> print([item for item in ds1])
-    ... [0, 1]
+    [0, 1]
 
     >>> print([item for item in ds2])
-    ... [2, 3, 4]
+    [2, 3, 4]
 
     >>> ds1, ds2 = cdd.split(ds, 0.6)
 
     >>> print([item for item in ds1])
-    ... [0, 1, 2]
+    [0, 1, 2]
     >>> print([item for item in ds2])
-    ... [3, 4]
+    [3, 4]
 
     >>> ds1, ds2 = cdd.split(ds, num=4)
 
     >>> print([item for item in ds1])
-    ... [0, 1, 2, 3]
+    [0, 1, 2, 3]
     >>> print([item for item in ds2])
-    ... [4]
+    [4]
     '''
     if num is None:
         num = floor(len(ds) * frac)

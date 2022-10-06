@@ -8,13 +8,19 @@ from .dataset import Dataset, T
 class FolderDataset(Dataset):
     """
     Basic "folder of files" dataset. Accepts root folder in which considers all files.
-    Is abstract - getitem is not defined, since it is specific for each file type
+    Is abstract - getitem is not defined, since it is specific for each file type.
 
     See also
     --------
     cascade.utils.FolderImageDataset
     """
-    def __init__(self, root, *args, **kwargs) -> None:
+    def __init__(self, root: str, *args, **kwargs) -> None:
+        """
+        Parameters
+        ----------
+        root: str
+            A path to the folder of files 
+        """
         super().__init__(*args, **kwargs)
         self._root = os.path.abspath(root)
         if not os.path.exists(self._root):
@@ -39,5 +45,5 @@ class FolderDataset(Dataset):
                 meta[0]['md5sums'].append(md5(f.read()).hexdigest())
         return meta
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._names)

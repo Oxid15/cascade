@@ -57,7 +57,7 @@ class Model(Traceable):
 
     def evaluate(self, *args, **kwargs) -> None:
         """
-        Evaluates model against any metrics. Should not return any values, just populating self.metrics dict.
+        Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.
         """
         raise NotImplementedError()
 
@@ -104,7 +104,17 @@ class Model(Traceable):
 
 
 class ModelModifier(Model):
+    """
+    Analog of dataset's Modifier. Can be used to chain
+    two models in one.
+    """
     def __init__(self, model: Model, **kwargs):
+        """
+        Parameters
+        ----------
+        model: Model
+            A model to modify.
+        """
         self._model = model
         super().__init__(**kwargs)
 
