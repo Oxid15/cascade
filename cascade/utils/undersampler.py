@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from ..data import Sampler
+from ..data import T, Dataset, Sampler
 from numpy import unique, min, histogram
 from tqdm import trange
 
@@ -23,13 +23,13 @@ class UnderSampler(Sampler):
     """
     Accepts datasets which return tuples of objects and labels.
     Isn't lazy - runs through all the items ones to determine key order.
-    Doesn't store values afterwards.
+    Doesn't store values in memory afterwards.
 
     To undersample it removes items of majority class for the amount
     of times needed to make equal distribution.
     Works for any number of classes.
     """
-    def __init__(self, dataset):
+    def __init__(self, dataset: Dataset) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels = unique(labels)
         label_nums, _ = histogram(labels, bins=len(ulabels))
@@ -46,7 +46,7 @@ class UnderSampler(Sampler):
         print(f'Original length was {len(dataset)} and new is {ln}')
         super().__init__(dataset, ln)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> T:
         idx = self._rem_indices[index]
         return self._dataset[idx]
 

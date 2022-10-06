@@ -38,7 +38,7 @@ class SkModel(BasicModel):
         ----------
         name: str, optional
             Name of the model
-        blocks: list
+        blocks: list, optional
             List of sklearn transformers to make a pipeline from
         """
         if name is not None:
@@ -86,7 +86,7 @@ class SkModel(BasicModel):
     #              hash from meta: {meta["md5sum"]}\n \
     #              hash from .pkl: {file_hash}')
 
-    def load(self, path) -> None:
+    def load(self, path: str) -> None:
         """
         Loads the model from path provided. If no extension, .pkl is added.
         """
@@ -102,7 +102,7 @@ class SkModel(BasicModel):
         with open(path, 'rb') as f:
             self._pipeline = pickle.load(f)
 
-    def save(self, path) -> None:
+    def save(self, path: str) -> None:
         """
         Saves model to the path provided.
         If no extension, then .pkl is added.

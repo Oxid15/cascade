@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Dict
+from typing import List, Dict, Iterable
 import pandas as pd
 from dask import dataframe as dd
 
@@ -24,13 +24,14 @@ from ..data import Dataset, Modifier, Iterator, SequentialCacher
 
 class TableDataset(Dataset):
     """
-    Wrapper for `pd.DataFrame`s
+    Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
+    validation.
     """
     def __init__(self, *args, t=None, **kwargs):
         """
         Parameters
         ----------
-        t:
+        t: optional
             pd.DataFrame or TableDataset to be set as table
         """
         super().__init__(*args, **kwargs)
@@ -45,7 +46,7 @@ class TableDataset(Dataset):
 
     def __getitem__(self, index):
         """
-        Returns row from table by index
+        Returns a row from table by index
         """
         return self._table.iloc[index]
 
@@ -54,7 +55,7 @@ class TableDataset(Dataset):
 
     def __len__(self):
         """
-        Return len of the table
+        Returns length of the table
         """
         return len(self._table)
 
@@ -70,7 +71,8 @@ class TableDataset(Dataset):
 
     def to_csv(self, path, **kwargs):
         """
-        Saves the table to .csv
+        Saves the table to .csv file. Any kwargs are sent to
+        `pd.DataFrame.to_csv`.
         """
         self._table.to_csv(path, **kwargs)
 
@@ -79,14 +81,15 @@ class TableFilter(TableDataset, Modifier):
     """
     Filter for table values
     """
-    def __init__(self, dataset, mask, *args, **kwargs):
+    def __init__(self, dataset: TableDataset,
+                 mask: Iterable[bool], *args, **kwargs):
         """
         Parameters
         ----------
         dataset: TableDataset
-            Dataset to be filtered
+            Dataset to be filtered.
         mask: Iterable[bool]
-            Binary mask to select values from table
+            Binary mask to select values from table.
         """
         super().__init__(dataset, t=dataset._table, *args, **kwargs)
         init_len = len(dataset)
@@ -101,7 +104,7 @@ class CSVDataset(TableDataset):
     """
     def __init__(self, csv_file_path, *args, **kwargs):
         """
-        Passes all args and kwargs to the read_csv
+        Passes all args and kwargs to `pd.read_csv`
 
         Parameters
         ----------
@@ -115,7 +118,11 @@ class CSVDataset(TableDataset):
 class PartedTableLoader(Dataset):
     """
     Works like CSVDataset, but uses dask to load tables
-    and returns partitions on __getitem__
+    and returns partitions on `__getitem__`.
+
+    See also
+    --------
+    cascade.utils.CSVDataset
     """
     def __init__(self, csv_file_path, *args, **kwargs):
         super().__init__(**kwargs)
@@ -123,13 +130,13 @@ class PartedTableLoader(Dataset):
 
     def __getitem__(self, index):
         """
-        Returns partition under the index
+        Returns partition under the index.
         """
         return self._table.get_partition(index).compute()
 
     def __len__(self):
         """
-        The number of partitions
+        Returns the number of partitions.
         """
         return self._table.npartitions
 
@@ -138,14 +145,13 @@ class TableIterator(Iterator):
     """
     Iterates over the table from path by the chunks.
     """
-    def __init__(self, csv_file_path, *args, chunk_size=1000, **kwargs):
+    def __init__(self, csv_file_path: str, *args, chunk_size:int = 1000, **kwargs):
         """
         Parameters
         ----------
-        csv_file_path:
-            path to the .csv file
-
-        chunk_size: int
+        csv_file_path: str
+            Path to the .csv file
+        chunk_size: int, optional
             number of rows to return in one __next__
         """
         self.chunk_size = chunk_size
@@ -178,13 +184,13 @@ class LargeCSVDataset(SequentialCacher):
 
 class NullValidator(TableDataset, AggregateValidator):
     """
-    Checks there are no null values in the table.
+    Checks that there are no null values in the table.
     """
     def __init__(self, dataset: TableDataset, *args, **kwargs) -> None:
-        super().__init__(dataset, self.check_nulls,
+        super().__init__(dataset, self._check_nulls,
                          *args, t=dataset._table, **kwargs)
 
-    def check_nulls(self, x):
+    def _check_nulls(self, x):
         mask = x._table.isnull().values
         if ~(mask.any()):
             return True

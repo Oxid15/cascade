@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from ..data import Sampler
+from ..data import T, Dataset, Sampler
 import numpy as np
 from tqdm import trange
 
 
 class OverSampler(Sampler):
     """
-    Accepts datasets which return tuples of objects and labels.
+    Accepts datasets which return tuples of objects and labels in the respected order.
     Isn't lazy - runs through all the items ones to determine key order.
     Doesn't store values afterwards.
 
@@ -29,7 +29,7 @@ class OverSampler(Sampler):
     of times needed to make equal distribution.
     Works for any number of classes.
     """
-    def __init__(self, dataset, *args, **kwargs):
+    def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels = np.unique(labels)
         label_nums, _ = np.histogram(labels, bins=len(ulabels))
@@ -47,12 +47,12 @@ class OverSampler(Sampler):
 
         super().__init__(dataset, num_samples=ln, *args, **kwargs)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> T:
         if index < len(self._dataset):
             return self._dataset[index]
         else:
             idx = self._add_indices[index - len(self._dataset)]
             return self._dataset[idx]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._dataset) + len(self._add_indices)
