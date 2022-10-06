@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Union
+from typing import Union, List
 
 import pendulum
 from flatten_json import flatten
