@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.models.trainer - cascade 0.7.2 documentation</title>
+        <title>cascade.models.trainer - cascade 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -234,8 +234,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            repo: Union[ModelRepo, str]</span>
-<span class="sd">                Either repo or path to it</span>
+<span class="sd">        repo: Union[ModelRepo, str]</span>
+<span class="sd">            Either repo or path to it</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">repo</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
@@ -271,10 +271,10 @@
               <span class="n">train_data</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span>
               <span class="n">test_data</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span>
               <span class="o">*</span><span class="n">args</span><span class="p">,</span>
-              <span class="n">train_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">test_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-              <span class="n">start_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">train_kwargs</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">test_kwargs</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+              <span class="n">start_from</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Trains, evaluates and saves given model. If specified, loads model from checkpoint.</span>
@@ -286,13 +286,13 @@
 <span class="sd">                train data to be passed to model&#39;s fit()</span>
 <span class="sd">            test_data: Iterable</span>
 <span class="sd">                test data to be passed to model&#39;s evaluate()</span>
-<span class="sd">            train_kwargs:</span>
+<span class="sd">            train_kwargs: Dict, optional</span>
 <span class="sd">                arguments for fit()</span>
-<span class="sd">            test_kwargs:</span>
+<span class="sd">            test_kwargs: Dict, optional</span>
 <span class="sd">                arguments for evaluate() - the most common is the dict of metrics</span>
-<span class="sd">            epochs:</span>
+<span class="sd">            epochs: int, optional</span>
 <span class="sd">                how many times to repeat training on data</span>
-<span class="sd">            start_from: str</span>
+<span class="sd">            start_from: str, optional</span>
 <span class="sd">                name of line from which to start, start from the latest model in line</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.data.pickler - cascade 0.7.2 documentation</title>
+        <title>cascade.data.pickler - cascade 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -231,14 +231,14 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Modifier</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Modifier</span>
 
 
 <div class="viewcode-block" id="Pickler"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.Pickler">[docs]</a><span class="k">class</span> <span class="nc">Pickler</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Pickles an input dataset or unpickles one</span>
+<span class="sd">    Pickles input dataset or unpickles one</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Pickler.__init__"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.Pickler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Pickler.__init__"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.Pickler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads pickled dataset or dumps one depending on parameters passed:</span>
 
@@ -247,10 +247,10 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        path:</span>
-<span class="sd">            path to the pickled dataset</span>
+<span class="sd">        path: str</span>
+<span class="sd">            Path to the pickled dataset</span>
 <span class="sd">        dataset: Dataset, optional</span>
-<span class="sd">            a dataset to be pickled</span>
+<span class="sd">            A dataset to be pickled</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>

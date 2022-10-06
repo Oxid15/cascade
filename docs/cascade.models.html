@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.meta" href="cascade.meta.html" /><link rel="prev" title="cascade.data" href="cascade.data.html" />
 
     <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.models - cascade 0.7.2 documentation</title>
+        <title>cascade.models - cascade 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -216,123 +216,6 @@
           <section id="cascade-models">
 <h1>cascade.models<a class="headerlink" href="#cascade-models" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="cascade.models.Model">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model" title="Permalink to this definition">#</a></dt>
-<dd><p>Base class for any model.
-Used to provide unified interface to any model, store metadata including metrics.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Model.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>Should be called in any successor - initializes default meta needed.
-Arguments passed in it should be related to model’s hyperparameters, architecture.
-All additional arguments should have defaults - to be able to create model and then load.
-Successors may pass all of their parameters to superclass for it to be able to
-log them in meta. Everything that is worth to document about model and data it was trained on can be
-either in params or meta_prefix.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Model.evaluate">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.evaluate" title="Permalink to this definition">#</a></dt>
-<dd><p>Evaluates model against any metrics. Should not return any values, just populating self.metrics dict.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Model.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.fit" title="Permalink to this definition">#</a></dt>
-<dd><p>Method to encapsulate training loops.
-May be provided with any training-related arguments.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Model.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.get_meta" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
-Meta can be anything that is worth to document about
-the object and its properties. This is done in form
-of list to enable cascade-like calls in Modifiers and Samplers.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[Dict]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Model.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.load" title="Permalink to this definition">#</a></dt>
-<dd><p>Loads model from provided filepath. May be unpickling process or reading json configs.
-Does not return any model, just restores internal state.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Model.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#Model.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.predict" title="Permalink to this definition">#</a></dt>
-<dd><p>Method to encapsulate inference.
-May include preprocessing steps to make model self-sufficient.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Model.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.save" title="Permalink to this definition">#</a></dt>
-<dd><p>Saves model’s state using provided filepath.</p>
-</dd></dl>
-
-</dd></dl>
-
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.models.ModelModifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelModifier.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier.__init__" title="Permalink to this definition">#</a></dt>
-<dd><p>Should be called in any successor - initializes default meta needed.
-Arguments passed in it should be related to model’s hyperparameters, architecture.
-All additional arguments should have defaults - to be able to create model and then load.
-Successors may pass all of their parameters to superclass for it to be able to
-log them in meta. Everything that is worth to document about model and data it was trained on can be
-either in params or meta_prefix.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelModifier.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier.get_meta" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
-Meta can be anything that is worth to document about
-the object and its properties. This is done in form
-of list to enable cascade-like calls in Modifiers and Samplers.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[Dict]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<dl class="py class">
 <dt class="sig sig-object py" id="cascade.models.BasicModel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">BasicModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/basic_model.html#BasicModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicModel" title="Permalink to this definition">#</a></dt>
 <dd><p>Basic model is a more concrete version of an abstract Model class.
@@ -344,11 +227,23 @@ refer to Model class.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.BasicModel.evaluate">
-<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">AnyStr</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/basic_model.html#BasicModel.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicModel.evaluate" title="Permalink to this definition">#</a></dt>
-<dd><p>Receives x and y batches. Passes x to the model’s predict method along with any args or kwargs needed.
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/basic_model.html#BasicModel.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicModel.evaluate" title="Permalink to this definition">#</a></dt>
+<dd><p>Receives x and y validation sequences. Passes x to the model’s predict
+method along with any args or kwargs needed.
 Then updates self.metrics with what functions in <cite>metrics_dict</cite> return.
 <cite>metrics_dict</cite> should contain names of the metrics and the functions with the interface:
-f(true, predicted) -&gt; metric_value</p>
+f(true, predicted) -&gt; metric_value, where metric_value is not always scalar, can be
+array or dict. For example confusion matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Input of the model.</p></li>
+<li><p><strong>y</strong> – Desired output to compare with the values predicted.</p></li>
+<li><p><strong>metrics_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Callable</em><em>]</em>) – Dictionary with functions that given ground-truth and
+predicted values return metrics.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -405,136 +300,8 @@ May include preprocessing steps to make model self-sufficient.</p>
 <div class="line"><br /></div>
 </div>
 <dl class="py class">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelRepo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.json'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo" title="Permalink to this definition">#</a></dt>
-<dd><p>An interface to manage experiments with several lines of models.
-When created, initializes an empty folder constituting a repository of model lines.</p>
-<p>Stores meta-data in file meta.json in the root folder. With every run if the repo was already
-created earlier, updates its meta and logs changes in human-readable format in file history.log</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">ModelRepo</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">&#39;repo&#39;</span><span class="p">,</span> <span class="n">_meta_prefix</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;This is a repo with one VGG16 line for the example.&#39;</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16_line</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s1">&#39;vgg16&#39;</span><span class="p">,</span> <span class="n">VGG16Model</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span> <span class="o">=</span> <span class="n">VGG16Model</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16_line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">vgg16</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">ModelRepo</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">&#39;repo&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;vgg16&#39;</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">VGGModel</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span> <span class="o">=</span> <span class="n">VGG16Model</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">vgg16</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span><span class="p">[</span><span class="s1">&#39;vgg16&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">vgg16</span><span class="p">)</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cascade.models.ModelLine" title="cascade.models.model_line.ModelLine"><span class="pre">ModelLine</span></a></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.__getitem__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>line</strong> – existing line of the name passed in <cite>key</cite></p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#cascade.models.ModelLine" title="cascade.models.ModelLine">ModelLine</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.json'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folder</strong> – Path to a folder where ModelRepo needs to be created or already was created
-if folder does not exist, creates it</p></li>
-<li><p><strong>lines</strong> (<em>List</em><em>[</em><em>Dict</em><em>]</em>) – A list with parameters of model lines to add at creation or to initialize (alias for <cite>add_model</cite>)</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em>) – if True will remove folder that is passed in first argument and start a new repo
-in that place</p></li>
-<li><p><strong>meta_fmt</strong> (<em>str</em>) – extension of repo’s metadata files and that will be assigned to the lines by default
-<cite>.json</cite> and <cite>.yml</cite> are supported</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#cascade.models.ModelLine" title="cascade.models.ModelLine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.models.ModelLine</span></code></a></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo.__len__">
-<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.__len__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>num</strong> – a number of lines</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo.add_line">
-<span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.add_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.add_line" title="Permalink to this definition">#</a></dt>
-<dd><p>Adds new line to repo if it doesn’t exist and returns it
-If line exists, defines it in repo</p>
-<p>Supports all the parameters of ModelLine using args and kwargs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – str
-Name of the line. It is used to name a folder of line.
-Repo prepends it with <cite>self._root</cite> before creating.</p></li>
-<li><p><strong>meta_fmt</strong> – str
-Format of meta files. Supported values are the same as for repo.
-If omitted, inherits format from repo.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo.get_line_names">
-<span class="sig-name descname"><span class="pre">get_line_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.get_line_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.get_line_names" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.get_meta" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
-Meta can be anything that is worth to document about
-the object and its properties. This is done in form
-of list to enable cascade-like calls in Modifiers and Samplers.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[Dict]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.ModelRepo.reload">
-<span class="sig-name descname"><span class="pre">reload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.reload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.reload" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<dl class="py class">
 <dt class="sig sig-object py" id="cascade.models.ModelLine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cls=&lt;class</span> <span class="pre">'cascade.models.model.Model'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt='.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cls=&lt;class</span> <span class="pre">'cascade.models.model.Model'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt='.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine" title="Permalink to this definition">#</a></dt>
 <dd><p>A manager for a line of models. Used by ModelRepo for access to models on disk.
 A line of models is typically a models with the same hyperparameters and architecture,
 but different epochs or using different data.</p>
@@ -554,15 +321,15 @@ but different epochs or using different data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.ModelLine.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cls=&lt;class</span> <span class="pre">'cascade.models.model.Model'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt='.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_cls=&lt;class</span> <span class="pre">'cascade.models.model.Model'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt='.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine.__init__" title="Permalink to this definition">#</a></dt>
 <dd><p>All models in line should be instances of the same class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>folder</strong> – Path to a folder where ModelLine will be created or already was created
-if folder does not exist, creates it</p></li>
-<li><p><strong>model_cls</strong> – A class of models in repo. ModelLine uses this class to reconstruct a model</p></li>
-<li><p><strong>meta_fmt</strong> – Format in which to store meta data. ‘.json’, ‘.yml’ are supported. .json is default.</p></li>
+<li><p><strong>folder</strong> (<em>str</em>) – Path to a folder where ModelLine will be created or already was created.
+If folder does not exist, creates it</p></li>
+<li><p><strong>model_cls</strong> (<em>type</em><em>, </em><em>optional</em>) – A class of models in line. ModelLine uses this class to reconstruct a model</p></li>
+<li><p><strong>meta_fmt</strong> (<em>str</em><em>, </em><em>optional</em>) – Format in which to store meta data.</p></li>
 </ul>
 </dd>
 </dl>
@@ -589,8 +356,8 @@ if folder does not exist, creates it</p></li>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
 Meta can be anything that is worth to document about
-the object and its properties. This is done in form
-of list to enable cascade-like calls in Modifiers and Samplers.</p>
+the object and its properties.
+Meta is list to allow the formation of pipelines.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>List[Dict]</p>
@@ -601,18 +368,317 @@ of list to enable cascade-like calls in Modifiers and Samplers.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.ModelLine.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model_line.html#ModelLine.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelLine.save" title="Permalink to this definition">#</a></dt>
-<dd><p>Saves a model and its metadata to a line folder.
+<dd><p>Saves a model and its metadata to a line’s folder.
 Model is automatically assigned a number and a model is saved
 using Model’s method <cite>save</cite> in its own folder.
 Folder’s name is assigned using f’{idx:0&gt;5d}’. For example: 00001 or 00042.
 The name passed to model’s save is just “model” without extension.
 It is Model’s responsibility to correctly  assign extension and save its own state.</p>
-<p>Additionally, saves ModelLine’s meta to the Line’s root</p>
+<p>Additionally, saves ModelLine’s meta to the Line’s root.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<a class="reference internal" href="#cascade.models.Model" title="cascade.models.Model"><em>cascade.models.Model</em></a>) – Model to be saved</p></li>
-<li><p><strong>only_meta</strong> (<em>bool</em>) – Flag, that indicates whether to save model’s binaries. If True saves only metadata.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="#cascade.models.Model" title="cascade.models.Model"><em>Model</em></a>) – Model to be saved</p></li>
+<li><p><strong>only_meta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Flag, that indicates whether to save model’s binaries. If True saves only metadata.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelRepo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.json'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo" title="Permalink to this definition">#</a></dt>
+<dd><p>An interface to manage experiments with several lines of models.
+When created, initializes an empty folder constituting a repository of model lines.</p>
+<p>Stores its meta-data in its root folder. With every run if the repo was already
+created earlier, updates its meta and logs changes in human-readable format in file history.log</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">ModelRepo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.utils</span> <span class="kn">import</span> <span class="n">ConstantBaseline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">&#39;repo&#39;</span><span class="p">,</span> <span class="n">_meta_prefix</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;This is a repo with one VGG16 line for the example.&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">ConstantBaseline</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ConstantBaseline</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">ModelRepo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.utils</span> <span class="kn">import</span> <span class="n">ConstantBaseline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">&#39;repo&#39;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">ConstantBaseline</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ConstantBaseline</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repo</span><span class="p">[</span><span class="s1">&#39;constant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#cascade.models.ModelLine" title="cascade.models.model_line.ModelLine"><span class="pre">ModelLine</span></a></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.__getitem__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>line</strong> – existing line of the name passed in <cite>key</cite></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#cascade.models.ModelLine" title="cascade.models.ModelLine">ModelLine</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.json'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> – Path to a folder where ModelRepo needs to be created or already was created.
+If folder does not exist, creates it automatically.</p></li>
+<li><p><strong>lines</strong> (<em>List</em><em>[</em><em>Dict</em><em>]</em><em>, </em><em>optional</em>) – A list with parameters of model lines to add at creation or to initialize (alias for <cite>add_model</cite>).</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True will remove folder that is passed in first argument and start a new repo in that place.</p></li>
+<li><p><strong>meta_fmt</strong> (<em>str</em><em>, </em><em>optional</em>) – Extension of repo’s metadata files and that will be assigned to the lines by default.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#cascade.models.ModelLine" title="cascade.models.ModelLine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.models.ModelLine</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.__len__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>num</strong> – a number of lines</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.add_line">
+<span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.add_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.add_line" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds new line to repo if it doesn’t exist and returns it.
+If line exists, defines it in repo with parameters provided.</p>
+<p>Supports all the parameters of ModelLine using args and kwargs.</p>
+<p>Parameters:
+name: str</p>
+<blockquote>
+<div><p>Name of the line. It is used to name a folder of line.
+Repo prepends it with <cite>self._root</cite> before creating.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>meta_fmt: str</dt><dd><p>Format of meta files. If omitted, inherits format from repo.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.get_line_names">
+<span class="sig-name descname"><span class="pre">get_line_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.get_line_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.get_line_names" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns list of line names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about
+the object and its properties.
+Meta is list to allow the formation of pipelines.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelRepo.reload">
+<span class="sig-name descname"><span class="pre">reload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model_repo.html#ModelRepo.reload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelRepo.reload" title="Permalink to this definition">#</a></dt>
+<dd><p>Updates internal state.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.models.Model">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model" title="Permalink to this definition">#</a></dt>
+<dd><p>Base class for any model.
+Used to provide unified interface to any model, store metadata including metrics.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Should be called in any successor - initializes default meta needed.
+Arguments passed in it should be related to model’s hyperparameters, architecture.
+All additional arguments should have defaults - to be able to create model and then load.
+Successors may pass all of their parameters to superclass for it to be able to
+log them in meta. Everything that is worth to document about model and data it was trained on can be
+either in params or meta_prefix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.evaluate" title="Permalink to this definition">#</a></dt>
+<dd><p>Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.fit" title="Permalink to this definition">#</a></dt>
+<dd><p>Method to encapsulate training loops.
+May be provided with any training-related arguments.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about
+the object and its properties.
+Meta is list to allow the formation of pipelines.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.load" title="Permalink to this definition">#</a></dt>
+<dd><p>Loads model from provided filepath. May be unpickling process or reading json configs.
+Does not return any model, just restores internal state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#Model.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.predict" title="Permalink to this definition">#</a></dt>
+<dd><p>Method to encapsulate inference.
+May include preprocessing steps to make model self-sufficient.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#Model.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.save" title="Permalink to this definition">#</a></dt>
+<dd><p>Saves model’s state using provided filepath.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.models.ModelModifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier" title="Permalink to this definition">#</a></dt>
+<dd><p>Analog of dataset’s Modifier. Can be used to chain
+two models in one.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelModifier.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference internal" href="#cascade.models.Model" title="cascade.models.Model"><em>Model</em></a>) – A model to modify.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.ModelModifier.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/models/model.html#ModelModifier.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about
+the object and its properties.
+Meta is list to allow the formation of pipelines.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.models.BasicTrainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">BasicTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/trainer.html#BasicTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer" title="Permalink to this definition">#</a></dt>
+<dd><p>The most common of concrete Trainers.
+Trains a model for a certain amount of epochs.
+Can start from checkpoint if model file exists.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.BasicTrainer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/trainer.html#BasicTrainer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>repo</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#cascade.models.ModelRepo" title="cascade.models.ModelRepo"><em>ModelRepo</em></a><em>, </em><em>str</em><em>]</em>) – Either repo or path to it</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.BasicTrainer.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/trainer.html#BasicTrainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer.train" title="Permalink to this definition">#</a></dt>
+<dd><p>Trains, evaluates and saves given model. If specified, loads model from checkpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – Model
+a model to be trained or which to load from line specified in <cite>start_from</cite></p></li>
+<li><p><strong>train_data</strong> – Iterable
+train data to be passed to model’s fit()</p></li>
+<li><p><strong>test_data</strong> – Iterable
+test data to be passed to model’s evaluate()</p></li>
+<li><p><strong>train_kwargs</strong> – Dict, optional
+arguments for fit()</p></li>
+<li><p><strong>test_kwargs</strong> – Dict, optional
+arguments for evaluate() - the most common is the dict of metrics</p></li>
+<li><p><strong>epochs</strong> – int, optional
+how many times to repeat training on data</p></li>
+<li><p><strong>start_from</strong> – str, optional
+name of line from which to start, start from the latest model in line</p></li>
 </ul>
 </dd>
 </dl>
@@ -650,8 +716,8 @@ It is Model’s responsibility to correctly  assign extension and save its own s
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
 Meta can be anything that is worth to document about
-the object and its properties. This is done in form
-of list to enable cascade-like calls in Modifiers and Samplers.</p>
+the object and its properties.
+Meta is list to allow the formation of pipelines.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>List[Dict]</p>
@@ -663,56 +729,6 @@ of list to enable cascade-like calls in Modifiers and Samplers.</p>
 <dt class="sig sig-object py" id="cascade.models.Trainer.train">
 <span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/trainer.html#Trainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Trainer.train" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
-
-</dd></dl>
-
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.models.BasicTrainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">BasicTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/models/trainer.html#BasicTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer" title="Permalink to this definition">#</a></dt>
-<dd><p>The most common of concrete Trainers.
-Trains a model for a certain amount of epochs.
-Can start from checkpoint if model file exists.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.BasicTrainer.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/trainer.html#BasicTrainer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>repo</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#cascade.models.ModelRepo" title="cascade.models.ModelRepo"><em>ModelRepo</em></a><em>, </em><em>str</em><em>]</em>) – Either repo or path to it</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.BasicTrainer.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/models/trainer.html#BasicTrainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer.train" title="Permalink to this definition">#</a></dt>
-<dd><p>Trains, evaluates and saves given model. If specified, loads model from checkpoint.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> – Model
-a model to be trained or which to load from line specified in <cite>start_from</cite></p></li>
-<li><p><strong>train_data</strong> – Iterable
-train data to be passed to model’s fit()</p></li>
-<li><p><strong>test_data</strong> – Iterable
-test data to be passed to model’s evaluate()</p></li>
-<li><p><strong>train_kwargs</strong> – arguments for fit()</p></li>
-<li><p><strong>test_kwargs</strong> – arguments for evaluate() - the most common is the dict of metrics</p></li>
-<li><p><strong>epochs</strong> – how many times to repeat training on data</p></li>
-<li><p><strong>start_from</strong> – str
-name of line from which to start, start from the latest model in line</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
 
 </dd></dl>
 
@@ -785,6 +801,33 @@ name of line from which to start, start from the latest model in line</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">cascade.models</a><ul>
+<li><a class="reference internal" href="#cascade.models.BasicModel"><code class="docutils literal notranslate"><span class="pre">BasicModel</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.models.BasicModel.evaluate"><code class="docutils literal notranslate"><span class="pre">BasicModel.evaluate()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.BasicModel.fit"><code class="docutils literal notranslate"><span class="pre">BasicModel.fit()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.BasicModel.load"><code class="docutils literal notranslate"><span class="pre">BasicModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.BasicModel.predict"><code class="docutils literal notranslate"><span class="pre">BasicModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.BasicModel.save"><code class="docutils literal notranslate"><span class="pre">BasicModel.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.models.BasicModelModifier"><code class="docutils literal notranslate"><span class="pre">BasicModelModifier</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelLine"><code class="docutils literal notranslate"><span class="pre">ModelLine</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.models.ModelLine.__getitem__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelLine.__init__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelLine.__len__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelLine.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelLine.get_meta()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelLine.save"><code class="docutils literal notranslate"><span class="pre">ModelLine.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.models.ModelRepo"><code class="docutils literal notranslate"><span class="pre">ModelRepo</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.models.ModelRepo.__getitem__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__getitem__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelRepo.__init__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelRepo.__len__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelRepo.add_line"><code class="docutils literal notranslate"><span class="pre">ModelRepo.add_line()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelRepo.get_line_names"><code class="docutils literal notranslate"><span class="pre">ModelRepo.get_line_names()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelRepo.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelRepo.get_meta()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.ModelRepo.reload"><code class="docutils literal notranslate"><span class="pre">ModelRepo.reload()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#cascade.models.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
 <li><a class="reference internal" href="#cascade.models.Model.__init__"><code class="docutils literal notranslate"><span class="pre">Model.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.models.Model.evaluate"><code class="docutils literal notranslate"><span class="pre">Model.evaluate()</span></code></a></li>
@@ -800,42 +843,15 @@ name of line from which to start, start from the latest model in line</p></li>
 <li><a class="reference internal" href="#cascade.models.ModelModifier.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelModifier.get_meta()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#cascade.models.BasicModel"><code class="docutils literal notranslate"><span class="pre">BasicModel</span></code></a><ul>
-<li><a class="reference internal" href="#cascade.models.BasicModel.evaluate"><code class="docutils literal notranslate"><span class="pre">BasicModel.evaluate()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.BasicModel.fit"><code class="docutils literal notranslate"><span class="pre">BasicModel.fit()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.BasicModel.load"><code class="docutils literal notranslate"><span class="pre">BasicModel.load()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.BasicModel.predict"><code class="docutils literal notranslate"><span class="pre">BasicModel.predict()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.BasicModel.save"><code class="docutils literal notranslate"><span class="pre">BasicModel.save()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#cascade.models.BasicModelModifier"><code class="docutils literal notranslate"><span class="pre">BasicModelModifier</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelRepo"><code class="docutils literal notranslate"><span class="pre">ModelRepo</span></code></a><ul>
-<li><a class="reference internal" href="#cascade.models.ModelRepo.__getitem__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__getitem__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelRepo.__init__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelRepo.__len__"><code class="docutils literal notranslate"><span class="pre">ModelRepo.__len__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelRepo.add_line"><code class="docutils literal notranslate"><span class="pre">ModelRepo.add_line()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelRepo.get_line_names"><code class="docutils literal notranslate"><span class="pre">ModelRepo.get_line_names()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelRepo.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelRepo.get_meta()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelRepo.reload"><code class="docutils literal notranslate"><span class="pre">ModelRepo.reload()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#cascade.models.ModelLine"><code class="docutils literal notranslate"><span class="pre">ModelLine</span></code></a><ul>
-<li><a class="reference internal" href="#cascade.models.ModelLine.__getitem__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__getitem__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelLine.__init__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelLine.__len__"><code class="docutils literal notranslate"><span class="pre">ModelLine.__len__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelLine.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelLine.get_meta()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.ModelLine.save"><code class="docutils literal notranslate"><span class="pre">ModelLine.save()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.BasicTrainer"><code class="docutils literal notranslate"><span class="pre">BasicTrainer</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.models.BasicTrainer.__init__"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.models.BasicTrainer.train"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.train()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#cascade.models.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a><ul>
 <li><a class="reference internal" href="#cascade.models.Trainer.__init__"><code class="docutils literal notranslate"><span class="pre">Trainer.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.models.Trainer.get_meta"><code class="docutils literal notranslate"><span class="pre">Trainer.get_meta()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.models.Trainer.train"><code class="docutils literal notranslate"><span class="pre">Trainer.train()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#cascade.models.BasicTrainer"><code class="docutils literal notranslate"><span class="pre">BasicTrainer</span></code></a><ul>
-<li><a class="reference internal" href="#cascade.models.BasicTrainer.__init__"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.models.BasicTrainer.train"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.train()</span></code></a></li>
 </ul>
 </li>
 </ul>

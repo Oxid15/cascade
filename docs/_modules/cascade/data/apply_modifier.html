@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.data.apply_modifier - cascade 0.7.2 documentation</title>
+        <title>cascade.data.apply_modifier - cascade 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -235,17 +235,27 @@
 
 <div class="viewcode-block" id="ApplyModifier"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.ApplyModifier">[docs]</a><span class="k">class</span> <span class="nc">ApplyModifier</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Modifier that maps a function to previous dataset&#39;s elements in a lazy way.</span>
+<span class="sd">    Modifier that maps a function to given dataset&#39;s items in a lazy way.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="ApplyModifier.__init__"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.ApplyModifier.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        dataset: Dataset</span>
-<span class="sd">            a dataset to modify</span>
+<span class="sd">            A dataset to modify</span>
 <span class="sd">        func: Callable</span>
-<span class="sd">            a function to be applied to every item of a dataset -</span>
+<span class="sd">            A function to be applied to every item of a dataset -</span>
 <span class="sd">            each `__getitem__` would call `func` on an item obtained from a previous dataset</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from cascade import data as cdd</span>
+<span class="sd">        &gt;&gt;&gt; ds = cdd.Wrapper([0, 1, 2, 3, 4])</span>
+<span class="sd">        &gt;&gt;&gt; ds = cdd.ApplyModifier(ds, lambda x: x ** 2)</span>
+
+<span class="sd">        Now function will only be applied when items are retrieved</span>
+
+<span class="sd">        &gt;&gt;&gt; assert [item for item in ds] == [0, 1, 4, 9, 16]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_func</span> <span class="o">=</span> <span class="n">func</span></div>

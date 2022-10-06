@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.models.model_repo - cascade 0.7.2 documentation</title>
+        <title>cascade.models.model_repo - cascade 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -266,40 +266,41 @@
 <span class="sd">    An interface to manage experiments with several lines of models.</span>
 <span class="sd">    When created, initializes an empty folder constituting a repository of model lines.</span>
 
-<span class="sd">    Stores meta-data in file meta.json in the root folder. With every run if the repo was already</span>
+<span class="sd">    Stores its meta-data in its root folder. With every run if the repo was already</span>
 <span class="sd">    created earlier, updates its meta and logs changes in human-readable format in file history.log</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
 <span class="sd">    &gt;&gt;&gt; from cascade.models import ModelRepo</span>
+<span class="sd">    &gt;&gt;&gt; from cascade.utils import ConstantBaseline</span>
 <span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, _meta_prefix={&#39;description&#39;: &#39;This is a repo with one VGG16 line for the example.&#39;})</span>
-<span class="sd">    &gt;&gt;&gt; vgg16_line = repo.add_line(&#39;vgg16&#39;, VGG16Model)</span>
-<span class="sd">    &gt;&gt;&gt; vgg16 = VGG16Model()</span>
-<span class="sd">    &gt;&gt;&gt; vgg16.fit()</span>
-<span class="sd">    &gt;&gt;&gt; vgg16_line.save(vgg16)</span>
+<span class="sd">    &gt;&gt;&gt; line = repo.add_line(&#39;model&#39;, ConstantBaseline)</span>
+<span class="sd">    &gt;&gt;&gt; model = ConstantBaseline(1)</span>
+<span class="sd">    &gt;&gt;&gt; model.fit()</span>
+<span class="sd">    &gt;&gt;&gt; line.save(model)</span>
 
 
 <span class="sd">    &gt;&gt;&gt; from cascade.models import ModelRepo</span>
-<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, lines=[dict(name=&#39;vgg16&#39;, model_cls=VGGModel)])</span>
-<span class="sd">    &gt;&gt;&gt; vgg16 = VGG16Model()</span>
-<span class="sd">    &gt;&gt;&gt; vgg16.fit()</span>
-<span class="sd">    &gt;&gt;&gt; repo[&#39;vgg16&#39;].save(vgg16)</span>
+<span class="sd">    &gt;&gt;&gt; from cascade.utils import ConstantBaseline</span>
+<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, lines=[dict(name=&#39;constant&#39;, model_cls=ConstantBaseline)])</span>
+<span class="sd">    &gt;&gt;&gt; model = ConstantBaseline()</span>
+<span class="sd">    &gt;&gt;&gt; model.fit()</span>
+<span class="sd">    &gt;&gt;&gt; repo[&#39;constant&#39;].save(model)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="ModelRepo.__init__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelRepo.__init__"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">overwrite</span><span class="p">:</span><span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;.json&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        folder:</span>
-<span class="sd">            Path to a folder where ModelRepo needs to be created or already was created</span>
-<span class="sd">            if folder does not exist, creates it</span>
-<span class="sd">        lines: List[Dict]</span>
-<span class="sd">            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)</span>
-<span class="sd">        overwrite: bool</span>
-<span class="sd">            if True will remove folder that is passed in first argument and start a new repo</span>
-<span class="sd">            in that place</span>
-<span class="sd">        meta_fmt: str</span>
-<span class="sd">            extension of repo&#39;s metadata files and that will be assigned to the lines by default</span>
-<span class="sd">            `.json` and `.yml` are supported</span>
+<span class="sd">            Path to a folder where ModelRepo needs to be created or already was created.</span>
+<span class="sd">            If folder does not exist, creates it automatically.</span>
+<span class="sd">        lines: List[Dict], optional</span>
+<span class="sd">            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`).</span>
+<span class="sd">        overwrite: bool, optional</span>
+<span class="sd">            If True will remove folder that is passed in first argument and start a new repo in that place.</span>
+<span class="sd">        meta_fmt: str, optional</span>
+<span class="sd">            Extension of repo&#39;s metadata files and that will be assigned to the lines by default.</span>
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
 <span class="sd">        cascade.models.ModelLine</span>
@@ -334,18 +335,17 @@
 
 <div class="viewcode-block" id="ModelRepo.add_line"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.add_line">[docs]</a>    <span class="k">def</span> <span class="nf">add_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adds new line to repo if it doesn&#39;t exist and returns it</span>
-<span class="sd">        If line exists, defines it in repo</span>
+<span class="sd">        Adds new line to repo if it doesn&#39;t exist and returns it.</span>
+<span class="sd">        If line exists, defines it in repo with parameters provided.</span>
 
 <span class="sd">        Supports all the parameters of ModelLine using args and kwargs.</span>
 
 <span class="sd">        Parameters:</span>
-<span class="sd">            name: str</span>
-<span class="sd">                Name of the line. It is used to name a folder of line.</span>
-<span class="sd">                Repo prepends it with `self._root` before creating.</span>
-<span class="sd">            meta_fmt: str</span>
-<span class="sd">                Format of meta files. Supported values are the same as for repo.</span>
-<span class="sd">                If omitted, inherits format from repo.</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Name of the line. It is used to name a folder of line.</span>
+<span class="sd">            Repo prepends it with `self._root` before creating.</span>
+<span class="sd">        meta_fmt: str</span>
+<span class="sd">            Format of meta files. If omitted, inherits format from repo.</span>
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
 <span class="sd">            cascade.models.ModelLine</span>
@@ -429,6 +429,9 @@
         <span class="k">return</span> <span class="n">meta</span></div>
 
 <div class="viewcode-block" id="ModelRepo.reload"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates internal state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_load_lines</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_meta</span><span class="p">()</span></div>
 
@@ -443,6 +446,9 @@
         <span class="k">return</span> <span class="n">ModelRepoConcatenator</span><span class="p">([</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">])</span>
 
 <div class="viewcode-block" id="ModelRepo.get_line_names"><a class="viewcode-back" href="../../../cascade.models.html#cascade.models.ModelRepo.get_line_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_line_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns list of line names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO: write test covering this</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div></div>
 
@@ -451,7 +457,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The class to concatenate different Repos.</span>
 <span class="sd">    For the ease of use please, don&#39;t use it directly.</span>
-<span class="sd">    Just do repo = repo_1 + repo_2 to unify repos.</span>
+<span class="sd">    Just do `repo = repo_1 + repo_2` to unify two or more repos.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repos</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Repo</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

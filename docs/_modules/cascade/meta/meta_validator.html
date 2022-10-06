@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
-        <title>cascade.meta.meta_validator - cascade 0.7.0 documentation</title>
+    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
+        <title>cascade.meta.meta_validator - cascade 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -26,16 +26,16 @@
     body[data-theme="dark"] {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
-  --color-brand-primary: #084c61;
-  --color-brand-content: #084c61;
+  --color-brand-primary: #db504a;
+  --color-brand-content: #db504a;
   
     }
     @media (prefers-color-scheme: dark) {
       body:not([data-theme="light"]) {
         --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
-  --color-brand-primary: #084c61;
-  --color-brand-content: #084c61;
+  --color-brand-primary: #db504a;
+  --color-brand-content: #db504a;
   
       }
     }
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,6 +166,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/model_training.html">Model training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../examples/model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
@@ -196,7 +197,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -220,8 +222,8 @@
 
 
 <div class="viewcode-block" id="MetaValidator"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaValidator">[docs]</a><span class="k">class</span> <span class="nc">MetaValidator</span><span class="p">(</span><span class="n">Validator</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Standard validator that saves the dataset's meta</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standard validator that saves the dataset&#39;s meta</span>
 <span class="sd">    on the first run and checks if it is consistent</span>
 <span class="sd">    on the following runs.</span>
 
@@ -245,47 +247,49 @@
 <span class="sd">    In this example on the first run validator saves meta of this pipeline, which looks</span>
 <span class="sd">    something like this:</span>
 
-<span class="sd">    &gt;&gt;&gt; [{'len': 4, 'name': 'cascade.data.dataset.Modifier'},</span>
-<span class="sd">    &gt;&gt;&gt; {'len': 4, 'name': 'cascade.data.dataset.Modifier'},</span>
-<span class="sd">    &gt;&gt;&gt; {'len': 4, 'name': 'cascade.tests.number_dataset.NumberDataset'}]</span>
+<span class="sd">    &gt;&gt;&gt; [{&#39;len&#39;: 4, &#39;name&#39;: &#39;cascade.data.dataset.Modifier&#39;},</span>
+<span class="sd">    &gt;&gt;&gt; {&#39;len&#39;: 4, &#39;name&#39;: &#39;cascade.data.dataset.Modifier&#39;},</span>
+<span class="sd">    &gt;&gt;&gt; {&#39;len&#39;: 4, &#39;name&#39;: &#39;cascade.tests.number_dataset.NumberDataset&#39;}]</span>
 
 
-<span class="sd">    On the second run of the pipeline it computes pipeline's meta and then</span>
-<span class="sd">    meta's hash based on the names of blocks. This is needed to check if</span>
+<span class="sd">    On the second run of the pipeline it computes pipeline&#39;s meta and then</span>
+<span class="sd">    meta&#39;s hash based on the names of blocks. This is needed to check if</span>
 <span class="sd">    pipeline structure is changed.</span>
 <span class="sd">    If it founds that pipeline has the same structure, then meta dicts are</span>
 <span class="sd">    compared using `deepdiff` and if everything is ok it returns.</span>
 
 <span class="sd">    If the structure of pipeline is different it saves new meta file.</span>
 
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    cascade.meta.DataValidationException</span>
-
 <span class="sd">    See also</span>
 <span class="sd">    --------</span>
 <span class="sd">    cascade.data.Modifier</span>
-<span class="sd">    """</span>
-<div class="viewcode-block" id="MetaValidator.__init__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaValidator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">'.json'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MetaValidator.__init__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaValidator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.json&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        dataset: Dataset</span>
-<span class="sd">            dataset to validate</span>
-<span class="sd">        root: str</span>
-<span class="sd">            path to the folder in which to store meta</span>
-<span class="sd">            default is './.cascade'</span>
-<span class="sd">        """</span>
+<span class="sd">            Dataset to validate</span>
+<span class="sd">        root: str, optional</span>
+<span class="sd">            Path to the folder in which to store meta</span>
+<span class="sd">            default is &#39;./.cascade&#39;</span>
+<span class="sd">        meta_fmt: str, optional</span>
+<span class="sd">            Format of metadata files</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        cascade.meta.DataValidationException</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span> <span class="o">=</span> <span class="n">MetaHandler</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="s1">'./.cascade'</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="s1">&#39;./.cascade&#39;</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">root</span>
-        <span class="k">assert</span> <span class="n">meta_fmt</span> <span class="ow">in</span> <span class="n">supported_meta_formats</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'Only </span><span class="si">{</span><span class="n">supported_meta_formats</span><span class="si">}</span><span class="s1"> are supported formats'</span>
+        <span class="k">assert</span> <span class="n">meta_fmt</span> <span class="ow">in</span> <span class="n">supported_meta_formats</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Only </span><span class="si">{</span><span class="n">supported_meta_formats</span><span class="si">}</span><span class="s1"> are supported formats&#39;</span>
 
         <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">m</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">]),</span> <span class="s1">'utf-8'</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">m</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">]),</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
         <span class="n">name</span> <span class="o">+=</span> <span class="n">meta_fmt</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 
@@ -297,7 +301,7 @@
 
     <span class="k">def</span> <span class="nf">_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Saved as </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">!'</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Saved as </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">!&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -308,7 +312,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
             <span class="k">raise</span> <span class="n">DataValidationException</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">'OK!'</span><span class="p">)</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;OK!&#39;</span><span class="p">)</span></div>
 </pre></div>
         </article>
       </div>
@@ -346,7 +350,9 @@
 </div><script data-url_root="../../../" id="documentation_options" src="../../../documentation_options.js"></script>
     <script src="../../../jquery.js"></script>
     <script src="../../../underscore.js"></script>
+    <script src="../../../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../doctools.js"></script>
+    <script src="../../../sphinx_highlight.js"></script>
     <script src="../../../scripts/furo.js"></script>
     <script src="../../../clipboard.min.js"></script>
     <script src="../../../copybutton.js"></script>

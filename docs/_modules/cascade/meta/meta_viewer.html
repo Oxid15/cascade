@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.meta.meta_viewer - cascade 0.7.2 documentation</title>
+        <title>cascade.meta.meta_viewer - cascade 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -236,22 +236,20 @@
 
 <div class="viewcode-block" id="MetaViewer"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaViewer">[docs]</a><span class="k">class</span> <span class="nc">MetaViewer</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The class to read and write meta data.</span>
+<span class="sd">    The class to view all metadata in folders and subfolders.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="MetaViewer.__init__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaViewer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MetaViewer.__init__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaViewer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filt</span><span class="p">:</span> <span class="n">Dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        root:</span>
+<span class="sd">        root: str</span>
 <span class="sd">            path to the folder containing metadata files</span>
-<span class="sd">            to dump and load metadata files MetaHandler is used</span>
 <span class="sd">        filt Dict, optional:</span>
-<span class="sd">            dictionary that specifies which values should be present in meta</span>
+<span class="sd">            dictionary that specifies which values that should be present in meta</span>
 <span class="sd">            for example to find all models use `filt={&#39;type&#39;: &#39;model&#39;}`</span>
 
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
-<span class="sd">        cascade.meta.ModelRepo</span>
 <span class="sd">        cascade.meta.MetaHandler</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
@@ -270,12 +268,12 @@
         <span class="k">if</span> <span class="n">filt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="MetaViewer.__getitem__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaViewer.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<div class="viewcode-block" id="MetaViewer.__getitem__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaViewer.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        meta: List[Dict]</span>
-<span class="sd">            object containing meta</span>
+<span class="sd">            Meta object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">index</span><span class="p">])</span></div>
 
@@ -307,6 +305,9 @@
 
 <div class="viewcode-block" id="MetaViewer.obj_to_dict"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetaViewer.obj_to_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">obj_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes the object using extended JSONEncoder</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">JSONEncoder</span><span class="p">()</span><span class="o">.</span><span class="n">obj_to_dict</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div></div>
 </pre></div>
         </article>
