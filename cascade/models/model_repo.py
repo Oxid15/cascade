@@ -11,17 +11,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
+import glob
 import warnings
 import itertools
-import os
 import logging
 from typing import List, Dict, Iterable, Union
 import shutil
 
+from plotly import graph_objects as go
+from flatten_json import flatten
+import pandas as pd
 import pendulum
 from deepdiff.diff import DeepDiff
 
 from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats
+from ..meta import MetricViewer
 from .model import Model
 from .model_line import ModelLine
 
@@ -260,6 +265,67 @@ class ModelRepo(Repo):
         """
         # TODO: write test covering this
         return list(self._lines.keys())
+
+    def serve(self, **kwargs):
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+            Cannot import dash. It is conditional
+            dependency you can install it
+            using the instructions from https://dash.plotly.com/installation''')
+        else:
+            from dash import html, dash_table, dcc
+
+        def model_card(repo, line, num):
+            model_path = glob.glob(os.path.join(repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
+            meta = repo._mh.read(model_path)
+
+            model_tables = [
+                go.Table(
+                        header=dict(values=['Key', 'Value'],
+                                    align='left'),
+                        cells=dict(values=[
+                            [key for key in meta[i]],
+                            [str(meta[i][key]) for key in meta[i]]],
+                                align='left')
+                    )
+                for i in range(len(meta))
+            ]
+            fig = go.Figure(data=model_tables)
+            return html.Details(
+                children=[
+                    html.Summary(f'Model {num:0>5d}'),
+                    dcc.Graph(id=f'tables-{line}-{num}', figure=fig)
+                ]
+            )
+
+        def line_card(line_name):
+            models = [model_card(self, line_name, num)
+                      for num in range(len(self._lines[line_name]))]
+            return html.Div(
+                children=[
+                    html.H3(children=f'ModelLine {line_name}'),
+                    html.Details(
+                        children=[
+                                html.Summary(children='Models'),
+                                *models
+                            ]
+            )]
+            )
+
+        lines = [line_card(line_name) for line_name in self._lines]
+
+        app = dash.Dash()
+        app.layout = html.Div([
+            html.H1(
+                children=f'{self}'
+            ),
+            *lines
+        ])
+
+        app.run(**kwargs)
 
 
 class ModelRepoConcatenator(Repo):
