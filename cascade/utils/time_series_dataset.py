@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Iterable
+from typing import Iterable, Literal
 
 import pendulum
 from datetime import datetime
@@ -35,9 +35,9 @@ class TimeSeriesDataset(Dataset):
         """
         Parameters
         ----------
-        time: Iterable[datetime]
+        time: Iterable[datetime], optional
             The time dimension. Should be represented subclasses of datetime
-        data: Iterable
+        data: Iterable, optional
             The data dimension. Should be 1D array or list.
         """
         if time is not None and data is not None:
@@ -72,6 +72,8 @@ class TimeSeriesDataset(Dataset):
 
     def to_numpy(self):
         """
+        Returns only data without time in numpy array format.
+
         Returns
         -------
         data: np.ndarray
@@ -92,8 +94,8 @@ class TimeSeriesDataset(Dataset):
         """
         Returns
         -------
-        data: tuple(time, data)
-            (time as it is and data as np.array)
+        data: tuple
+            Time and data as np.array
         """
         return self._time, self.to_numpy()
 
@@ -153,8 +155,23 @@ class TimeSeriesDataset(Dataset):
 
 
 class Average(TimeSeriesDataset, Modifier):
+    """
+    Averages values over some time step.
+    """
     def __init__(self, dataset: TimeSeriesDataset,
-                 unit='years', amount=1, *args, **kwargs):
+                 unit: str = 'years',
+                 amount=1, *args, **kwargs):
+        """
+        Parameters
+        ----------
+        dataset: TimeSeriesDataset,
+            A dataset to average
+        unit: str, optional
+            Time unit over which to average - years, month, etc.
+        amount:
+            The amount of units over which to average. For example for six month periods use
+            `unit='months'` and `amount=6`.
+        """
         time, data = dataset.get_data()
         reg_time = [d for d in pendulum
                     .period(time[0], time[-1])
@@ -180,6 +197,9 @@ class Average(TimeSeriesDataset, Modifier):
 
 
 class Interpolate(TimeSeriesDataset, Modifier):
+    """
+    The wrapper around pd.Series.interpolate.
+    """
     def __init__(self, dataset, method='linear',
                  limit_direction='both', **kwargs):
         t = dataset.to_pandas()
@@ -190,6 +210,12 @@ class Interpolate(TimeSeriesDataset, Modifier):
 
 
 class Align(TimeSeriesDataset, Modifier):
+    """
+    Given dataset and some time scale selects
+    data from dataset using time scale. Works
+    only if dataset has data in given points
+    in time.
+    """
     def __init__(self, dataset, time, *args, **kwargs):
         super().__init__(dataset, time=time,
                          data=dataset[time], *args, **kwargs)

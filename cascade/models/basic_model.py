@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 
-from typing import Dict, Callable, AnyStr
+from typing import Dict, Callable
 from .model import Model, ModelModifier
 
 
@@ -39,12 +39,24 @@ class BasicModel(Model):
     def predict(self, x, *args, **kwargs):
         raise NotImplementedError()
 
-    def evaluate(self, x, y, metrics_dict: Dict[AnyStr, Callable], *args, **kwargs) -> None:
+    def evaluate(self, x, y, metrics_dict: Dict[str, Callable], *args, **kwargs) -> None:
         """
-        Receives x and y batches. Passes x to the model's predict method along with any args or kwargs needed.
+        Receives x and y validation sequences. Passes x to the model's predict
+        method along with any args or kwargs needed.
         Then updates self.metrics with what functions in `metrics_dict` return.
         `metrics_dict` should contain names of the metrics and the functions with the interface:
-        f(true, predicted) -> metric_value
+        f(true, predicted) -> metric_value, where metric_value is not always scalar, can be
+        array or dict. For example confusion matrix.
+
+        Parameters
+        ----------
+            x:
+                Input of the model.
+            y:
+                Desired output to compare with the values predicted.
+            metrics_dict: Dict[str, Callable]
+                Dictionary with functions that given ground-truth and
+                predicted values return metrics.
         """
         preds = self.predict(x, *args, **kwargs)
         self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
@@ -57,4 +69,3 @@ class BasicModelModifier(ModelModifier, BasicModel):
     """
     Interface to unify BasicModel and ModelModifier.
     """
-    pass

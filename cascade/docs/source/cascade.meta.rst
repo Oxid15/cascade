@@ -1,7 +1,7 @@
 cascade.meta
 ============ 
 .. autoclass:: cascade.meta.HistoryViewer
-   :members:
+    :members:
 
 |
 
@@ -10,7 +10,7 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.MetaValidator
-   :members:
+    :members:
 
 |
 
@@ -20,7 +20,7 @@ cascade.meta
 
 
 .. autoclass:: cascade.meta.MetaViewer
-   :members:
+    :members:
 
 |
 
@@ -29,7 +29,7 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.MetricViewer
-   :members:
+    :members:
 
 |
 
@@ -38,7 +38,7 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.Validator
-   :members:
+    :members:
 
 |
 
@@ -47,7 +47,7 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.AggregateValidator
-   :members:
+    :members:
 
 |
 
@@ -56,7 +56,7 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.PredicateValidator
-   :members:
+    :members:
 
 |
 

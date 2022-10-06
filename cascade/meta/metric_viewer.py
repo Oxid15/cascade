@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+from typing import List
 import warnings
 import pendulum
 from flatten_json import flatten
@@ -28,8 +29,9 @@ from .. import __version__
 class MetricViewer:
     """
     Interface for viewing metrics in model meta files
-    uses ModelRepo to extract metrics of all models if any
-    constructs a `pd.DataFrame` of metrics internally, which is showed in `__repr__`
+    uses ModelRepo to extract metrics of all models if any.
+    As metrics it uses data from `metrics` field in models'
+    meta and as parameters it uses `params` field.
     """
     def __init__(self, repo) -> None:
         """
@@ -42,7 +44,10 @@ class MetricViewer:
         self._metrics = []
         self.reload_table()
 
-    def reload_table(self):
+    def reload_table(self) -> None:
+        """
+        Updates internal state
+        """
         self._metrics = []
         for line in self._repo:
             viewer_root = line.root
@@ -91,7 +96,10 @@ class MetricViewer:
     def __repr__(self) -> str:
         return repr(self.table)
 
-    def plot_table(self, show=False):
+    def plot_table(self, show: bool = False):
+        """
+        Uses plotly to graphically show table with metrics and parameters.
+        """
         data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
@@ -107,13 +115,18 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(self, page_size=50, include=None, exclude=None, **kwargs) -> None:
+    def serve(
+        self,
+        page_size: int = 50,
+        include: List[str] = None,
+        exclude: List[str] = None,
+        **kwargs) -> None:
         """
         Runs dash-based server with interactive table of metrics and parameters.
 
         Parameters
         ----------
-        page_size:
+        page_size: int, optional
             Size of the table in rows on one page
         include: List[str], optional:
             List of parameters or metrics to be added. Only them will be present along with some default.

@@ -31,7 +31,12 @@ class ConstantBaseline(BasicModel):
     def fit(self, x, y, *args, **kwargs) -> None:
         pass
 
-    def predict(self, x, *args, **kwargs):
+    def predict(self, x, *args, **kwargs) -> np.ndarray:
+        """
+        Returns the array of the same shape as input full of
+        given constant.
+        """
+        # TODO: make more universal when work with input shape
         return np.full_like(x, self._constant)
 
     def save(self, path) -> None:

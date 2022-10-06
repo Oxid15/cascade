@@ -27,15 +27,20 @@ from plotly import graph_objects as go
 
 from . import MetaViewer
 from .. import __version__
+from ..data import Dataset
 
 
 class HistoryViewer:
     """
     The tool which allows user to visualize training history of model versions.
-    Uses plotly to show how metrics of models changed in time and how
-    models with different hyperparameters depend on each other
+    Uses shows how metrics of models changed over time and how
+    models with different hyperparameters depend on each other.
     """
-    def __init__(self, repo, last_lines=None, last_models=None) -> None:
+    def __init__(
+        self,
+        repo,
+        last_lines: int = None,
+        last_models: int = None) -> None:
         """
         Parameters
         ----------
@@ -112,7 +117,7 @@ class HistoryViewer:
                 arg_min = i
         return arg_min
 
-    def plot(self, metric: str, show=False) -> plotly.graph_objects.Figure:
+    def plot(self, metric: str, show: bool = False) -> plotly.graph_objects.Figure:
         """
         Plots training history of model versions using plotly.
 
@@ -120,7 +125,7 @@ class HistoryViewer:
         ----------
         metric: str
             Metric should be present in meta of at least one model in repo
-        show: bool
+        show: bool, optional
             Whether to return and show or just return figure
         """
 
@@ -199,7 +204,14 @@ class HistoryViewer:
 
         return fig
 
-    def serve(self, metric, **kwargs):
+    def serve(self, metric: str, **kwargs):
+        """
+        Run dash-based server with HistoryViewer, updating plots in real-time.
+        
+        Note
+        ----
+        This feature needs `dash` to be installed.
+        """
         # Conditional import
         try:
             import dash
