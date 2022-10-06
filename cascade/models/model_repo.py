@@ -279,6 +279,7 @@ class ModelRepo(Repo):
             from dash import html, dash_table, dcc
 
         def model_card(repo, line, num):
+            # TODO: it is not good to use only first occurence
             model_path = glob.glob(os.path.join(repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
             meta = repo._mh.read(model_path)
 
@@ -301,21 +302,74 @@ class ModelRepo(Repo):
                 ]
             )
 
-        def line_card(line_name):
+        def load_metrics(repo, line):
+            total_metrics = []
+            for num in range(len(repo[line])):
+                # TODO: same as previous
+                model_path = glob.glob(os.path.join(repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
+                metrics = repo._mh.read(model_path)[0]['metrics']
+                total_metrics.append(metrics)
+            return total_metrics
+
+        def _update_graph_callback(_app, repo, line):
+            from dash import Output, Input
+
+            @_app.callback(
+                Output(component_id=f'{line}-graph', component_property='figure'),
+                Input(component_id=f'{line}-dropdown', component_property='value'))
+            def _update_graph(x):
+                fig = go.Figure()
+                if x is not None:
+                    metrics = load_metrics(repo, line)
+                    fig.add_trace(
+                        go.Scatter(
+                            x=[i for i in range(len(metrics))],
+                            y=[metrics[i][x] for i in range(len(metrics))],
+                            mode='markers+lines'
+                        )
+                    )
+                    fig.update_layout(title=str(x))
+                return fig
+
+        def line_graph(repo, line_name):
+            # TODO: needs manually-written pagination
+            # https://dash.plotly.com/urls
+            fig = go.Figure()
+            metrics = load_metrics(repo, line_name)
+            metrics_keys = []
+            for m in metrics:
+                metrics_keys += [key for key in m]
+            return html.Div(
+                children=[
+                    dcc.Graph(
+                        id=f'{line_name}-graph',
+                        figure=fig
+                    ),
+                    dcc.Dropdown(
+                        list(set(metrics_keys)),
+                        id=f'{line_name}-dropdown',
+                        multi=False
+                    )
+                ]
+            )
+
+        def line_card(repo, line_name):
             models = [model_card(self, line_name, num)
                       for num in range(len(self._lines[line_name]))]
             return html.Div(
                 children=[
                     html.H3(children=f'ModelLine {line_name}'),
+                    line_graph(repo, line_name),
                     html.Details(
                         children=[
                                 html.Summary(children='Models'),
                                 *models
-                            ]
-            )]
+                        ]
+                    )
+                ]
             )
 
-        lines = [line_card(line_name) for line_name in self._lines]
+        lines = [line_card(self, line_name) for line_name in self._lines]
 
         app = dash.Dash()
         app.layout = html.Div([
@@ -324,7 +378,8 @@ class ModelRepo(Repo):
             ),
             *lines
         ])
-
+        for line in self._lines:
+            _update_graph_callback(app, self, line)
         app.run(**kwargs)
 
 
