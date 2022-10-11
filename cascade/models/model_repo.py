@@ -350,11 +350,15 @@ class RepoServer:
         return self._html.Details(
             children=[
                 self._html.Summary(f'Model {model_name}'),
-                self._dcc.Graph(id=f'tables-{line}-{num}', figure=fig),
+                self._dcc.Graph(id=f'tables-{line}-{model_name}', figure=fig),
                 self._html.Table(children=[
                     self._html.Th(children='Files of model'),
-                    *[self._html.Tr(children=[self._html.Td(children=name)])
-                    for name in self._meta[line][model_name]['files']]
+                    *[self._html.Tr(children=[
+                            self._html.Td(children=name, id=f'cell-{line}-{model_name}-{i}'),
+                            self._html.Button('DELETE', id=f'delete-{line}-{model_name}-{i}')
+                        ]
+                    )
+                    for i, name in enumerate(self._meta[line][model_name]['files'])]
                 ])
             ]
         )
@@ -391,6 +395,17 @@ class RepoServer:
                     self._meta[line][model]['meta'][0][0]['metrics']
                 )
         return metrics
+
+    def _delete_file_callback(self, _app, line, model, idx, name):
+        @_app.callback([
+            self._dash.Output(f'cell-{line}-{model}-{idx}', 'children'),
+            self._dash.Input(f'delete-{line}-{model}-{idx}', 'n_clicks')
+        ])
+        def update_output(n_clicks):
+            if n_clicks is not None:
+                os.remove(os.path.join(self._repo._root, line, model, name))
+                return ('deleted', )
+            return (name, )
 
     def _update_graph_callback(self, _app, line):
         from dash import Output, Input
@@ -461,8 +476,11 @@ class RepoServer:
             ),
             *lines
         ])
-        for line in self._repo.get_line_names():
+        for line in self._meta:
             self._update_graph_callback(app, line)
+            for model in self._meta[line]:
+                for i, name in enumerate(self._meta[line][model]['files']):
+                    self._delete_file_callback(app, line, model, i, name)
         app.run(**kwargs)
 
     def _raise_cannot_import(self):
