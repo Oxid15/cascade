@@ -328,6 +328,7 @@ class RepoServer:
             self._dcc = dcc
         
         self._meta = self._load_meta()
+        self._metrics = self._select_metrics()
 
     def _model_card(self, line, num):
         # TODO: it is not good to use only first occurence
@@ -367,7 +368,7 @@ class RepoServer:
                 
                 meta[line_dir][model_dir]['meta'] = []
                 for f in model_files:
-                    if os.path.splitext(f)[-1] in supported_meta_formats:
+                    if os.path.splitext(f)[0] == 'meta':
                         meta[line_dir][model_dir]['meta'].append(
                             self._mh.read(
                                 os.path.join(self._repo._root, line_dir, model_dir, f)
@@ -375,14 +376,16 @@ class RepoServer:
                         )
         return meta
 
-    def _load_metrics(self, line):
-        total_metrics = []
-        for num in range(len(self._repo[line])):
-            # TODO: same as previous
-            model_path = glob.glob(os.path.join(self._repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
-            metrics = self._repo._mh.read(model_path)[0]['metrics']
-            total_metrics.append(metrics)
-        return total_metrics
+    def _select_metrics(self):
+        metrics = {}
+        for line in self._meta:
+            metrics[line] = []
+            for model in self._meta[line]:
+                # TODO: to use only first is not good
+                metrics[line].append(
+                    self._meta[line][model]['meta'][0][0]['metrics']
+                )
+        return metrics
 
     def _update_graph_callback(self, _app, line):
         from dash import Output, Input
@@ -393,11 +396,10 @@ class RepoServer:
         def _update_graph(x):
             fig = go.Figure()
             if x is not None:
-                metrics = self._load_metrics(line)
                 fig.add_trace(
                     go.Scatter(
-                        x=[i for i in range(len(metrics))],
-                        y=[metrics[i][x] for i in range(len(metrics))],
+                        x=[i for i in range(len(self._metrics[line]))],
+                        y=[self._metrics[line][i][x] for i in range(len(self._metrics[line]))],
                         mode='markers+lines'
                     )
                 )
@@ -409,9 +411,9 @@ class RepoServer:
         # https://dash.plotly.com/urls
 
         fig = go.Figure()
-        metrics = self._load_metrics(line_name)
+
         metrics_keys = []
-        for m in metrics:
+        for m in self._metrics[line_name]:
             metrics_keys += [key for key in m]
         return self._html.Div(
             children=[
