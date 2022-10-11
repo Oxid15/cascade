@@ -314,6 +314,7 @@ class ModelRepoConcatenator(Repo):
 class RepoServer:
     def __init__(self, repo: Repo) -> None:
         self._repo = repo
+        self._mh = MetaHandler()
 
         # Conditional import
         try:
@@ -321,10 +322,12 @@ class RepoServer:
         except ModuleNotFoundError:
             self._raise_cannot_import()
         else:
-            from dash import html, dash_table, dcc
+            from dash import html, dcc
             self._dash = dash
             self._html = html
             self._dcc = dcc
+        
+        self._meta = self._load_meta()
 
     def _model_card(self, line, num):
         # TODO: it is not good to use only first occurence
@@ -349,6 +352,28 @@ class RepoServer:
                 self._dcc.Graph(id=f'tables-{line}-{num}', figure=fig)
             ]
         )
+
+    def _load_meta(self):
+        meta = {name: {} for name in os.listdir(self._repo._root)
+            if os.path.isdir(os.path.join(self._repo._root, name))}
+        for line_dir in meta:
+            meta[line_dir] = {name: {} for name in
+                os.listdir(os.path.join(self._repo._root, line_dir))
+                if os.path.isdir(os.path.join(self._repo._root, line_dir, name))}
+
+            for model_dir in meta[line_dir]:
+                model_files = os.listdir(os.path.join(self._repo._root, line_dir, model_dir))
+                meta[line_dir][model_dir]['files'] = model_files
+                
+                meta[line_dir][model_dir]['meta'] = []
+                for f in model_files:
+                    if os.path.splitext(f)[-1] in supported_meta_formats:
+                        meta[line_dir][model_dir]['meta'].append(
+                            self._mh.read(
+                                os.path.join(self._repo._root, line_dir, model_dir, f)
+                            )
+                        )
+        return meta
 
     def _load_metrics(self, line):
         total_metrics = []
