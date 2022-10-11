@@ -332,9 +332,8 @@ class RepoServer:
 
     def _model_card(self, line, num):
         # TODO: it is not good to use only first occurence
-        model_path = glob.glob(os.path.join(self._repo[line].root, f'{num:0>5d}', 'meta.*'))[0]
-        meta = self._repo._mh.read(model_path)
-
+        model_name = f'{num:0>5d}'
+        meta = self._meta[line][model_name]['meta'][0]
         model_tables = [
             go.Table(
                     header=dict(values=['Key', 'Value'],
@@ -343,14 +342,20 @@ class RepoServer:
                         [key for key in meta[i]],
                         [str(meta[i][key]) for key in meta[i]]],
                             align='left')
-                )
+            )
             for i in range(len(meta))
         ]
+
         fig = go.Figure(data=model_tables)
         return self._html.Details(
             children=[
-                self._html.Summary(f'Model {num:0>5d}'),
-                self._dcc.Graph(id=f'tables-{line}-{num}', figure=fig)
+                self._html.Summary(f'Model {model_name}'),
+                self._dcc.Graph(id=f'tables-{line}-{num}', figure=fig),
+                self._html.Table(children=[
+                    self._html.Th(children='Files of model'),
+                    *[self._html.Tr(children=[self._html.Td(children=name)])
+                    for name in self._meta[line][model_name]['files']]
+                ])
             ]
         )
 
