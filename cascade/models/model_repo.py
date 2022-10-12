@@ -329,6 +329,7 @@ class RepoServer:
         
         self._meta = self._load_meta()
         self._metrics = self._select_metrics()
+        self._style_font = 'Montserrat, Helvetica Neue, Helvetica, Arial, sans-serif'
 
     def _model_card(self, line, num):
         # TODO: it is not good to use only first occurence
@@ -349,18 +350,54 @@ class RepoServer:
         fig = go.Figure(data=model_tables)
         return self._html.Details(
             children=[
-                self._html.Summary(f'Model {model_name}'),
-                self._dcc.Graph(id=f'tables-{line}-{model_name}', figure=fig),
-                self._html.Table(children=[
-                    self._html.Th(children='Files of model'),
-                    *[self._html.Tr(children=[
-                            self._html.Td(children=name, id=f'cell-{line}-{model_name}-{i}'),
-                            self._html.Button('DELETE', id=f'delete-{line}-{model_name}-{i}')
-                        ]
-                    )
-                    for i, name in enumerate(self._meta[line][model_name]['files'])]
-                ])
-            ]
+                self._html.Summary(f'🧪Model {model_name}',
+                    style={
+                        'margin': '2px 0px 2px 25px',
+                        'font-size': '20px',
+                        'font-family': self._style_font
+                    }
+                ),
+                self._dcc.Graph(
+                    id=f'tables-{line}-{model_name}',
+                    figure=fig,
+                    style={'margin-left': '25px'}
+                ),
+                self._html.Table(
+                    children=[
+                        self._html.Th(
+                            children='📁Files of model',
+                            style={
+                                'font-size': '20px',
+                                'font-family': self._style_font
+                            }
+                        ),
+                        *[self._html.Tr(children=[
+                                self._html.Td(
+                                    children=name,
+                                    id=f'cell-{line}-{model_name}-{i}',
+                                    style={
+                                        'font-size': '20px',
+                                        'font-family': self._style_font
+                                    }
+                                ),
+                                self._html.Td(
+                                    children=self._html.Button(
+                                        '💀DELETE',
+                                        id=f'delete-{line}-{model_name}-{i}',
+                                        style={
+                                            'font-size': '15px',
+                                            'font-family': self._style_font
+                                        }
+                                    )
+                                )
+                            ]
+                        )
+                        for i, name in enumerate(self._meta[line][model_name]['files'])]
+                    ])
+            ],
+            style={
+                'margin': '15px 0px 10px 25px'
+            }
         )
 
     def _load_meta(self):
@@ -439,12 +476,14 @@ class RepoServer:
             children=[
                 self._dcc.Graph(
                     id=f'{line_name}-graph',
-                    figure=fig
+                    figure=fig,
+                    style={'margin-left': '20px'}
                 ),
                 self._dcc.Dropdown(
                     list(set(metrics_keys)),
                     id=f'{line_name}-dropdown',
-                    multi=False
+                    multi=False,
+                    style={'margin-left': '20px'}
                 )
             ]
         )
@@ -454,11 +493,26 @@ class RepoServer:
                     for num in range(len(self._repo[line_name]))]
         return self._html.Div(
             children=[
-                self._html.H3(children=f'ModelLine {line_name}'),
+                self._html.H3(
+                    children=f'ModelLine {line_name}',
+                    style={
+                        'font-size': '25px',
+                        'margin-left': '20px',
+                        'font-family': self._style_font
+                    }
+                ),
                 self._line_graph(line_name),
                 self._html.Details(
                     children=[
-                            self._html.Summary(children='Models'),
+                            self._html.Summary(
+                                children='Models',
+                                style={
+                                    'font-size': '25px',
+                                    'margin-left': '25px',
+                                    'margin-top': '25px',
+                                    'font-family': self._style_font
+                                }
+                            ),
                             *models
                     ]
                 )
@@ -472,7 +526,12 @@ class RepoServer:
         app = self._dash.Dash()
         app.layout = self._html.Div([
             self._html.H1(
-                children=f'{self._repo}'
+                children=f'{self._repo}',
+                style={
+                    'font-size': '35px',
+                    'margin-left': '10px',
+                    'font-family': self._style_font
+                }
             ),
             *lines
         ])
