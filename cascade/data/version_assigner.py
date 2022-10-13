@@ -51,7 +51,16 @@ class VersionAssigner(Modifier):
     address of an object or time of creation, then the version will
     bump on every run.
     """
-    def __init__(self, dataset: Dataset, path, *args, **kwargs) -> None:
+    def __init__(self, dataset: Dataset, path: str, *args, **kwargs) -> None:
+        """
+        Parameters
+        ----------
+            dataset: Dataset
+                a dataset to infer version to
+            path: str
+                a path to a version log file of this dataset can be of any supported
+                meta format
+        """
         super().__init__(dataset, *args, **kwargs)
         self._mh = MetaHandler()
         self._assign_path(path)   
