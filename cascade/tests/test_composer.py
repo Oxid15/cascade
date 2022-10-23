@@ -22,31 +22,37 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper
-from cascade.data import Concatenator
+from cascade.data import Composer
 
 
 def test_meta():
-    n1 = Wrapper([0, 1])
+    n1 = Wrapper([0, 1, 2, 3])
     n2 = Wrapper([2, 3, 4, 5])
 
-    c = Concatenator([n1, n2], meta_prefix={'num': 1})
+    c = Composer([n1, n2], meta_prefix={'num': 1})
     assert c.get_meta()[0]['num'] == 1
     assert len(c.get_meta()[0]['data']) == 2
 
-# TODO: replace arrs with datasets
+
 @pytest.mark.parametrize(
-    'arrs', [
-        ([0], [0], [0]),
-        ([1, 2, 3, 4], [11]),
-        ([1],),
-        ([1, 2, 3, 4], [])
+    'datasets', [
+        (Wrapper([0]), Wrapper([0]), Wrapper([0])),
+        (Wrapper([1, 2, 3, 4]), Wrapper([2, 3, 4, 5]))
     ]
 )
-def test_concatenation(arrs):
-    c = Concatenator([*arrs])
+def test_composition(datasets):
+    c = Composer(datasets)
 
-    res = []
-    for arr in arrs:
-        res += arr
+    assert [item for item in zip(*datasets)] == [item for item in c]
 
-    assert [c[i] for i in range(len(c))] == res
+
+@pytest.mark.parametrize(
+    'datasets', [
+        (Wrapper([0]), Wrapper([0, 1, 2]), Wrapper([0])),
+        (Wrapper([1, 2, 3, 4]), Wrapper([4, 5])),
+        (Wrapper([1, 2, 3, 4]), Wrapper([1, 2, 3, 4]), Wrapper([1, 2, 3]))
+    ]
+)
+def test_different_lengths(datasets):
+    with pytest.raises(ValueError):
+        Composer(datasets)
