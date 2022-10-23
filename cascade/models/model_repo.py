@@ -409,9 +409,14 @@ class RepoServer:
                 if os.path.isdir(os.path.join(self._repo._root, line_dir, name))}
 
             for model_dir in meta[line_dir]:
-                model_files = os.listdir(os.path.join(self._repo._root, line_dir, model_dir))
+                full_model_dir = os.path.join(self._repo._root, line_dir, model_dir)
+                model_files = os.listdir(full_model_dir)
+
+                # explicitly filter out directories
+                model_files = [path for path in model_files
+                    if not os.path.isdir(os.path.join(full_model_dir, path))]
                 meta[line_dir][model_dir]['files'] = model_files
-                
+
                 meta[line_dir][model_dir]['meta'] = []
                 for f in model_files:
                     if os.path.splitext(f)[0] == 'meta':
