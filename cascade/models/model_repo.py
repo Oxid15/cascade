@@ -494,6 +494,26 @@ class RepoServer:
         )
 
     def _line_card(self, line_name):
+        tab_style = {
+            'font-size': '15px',
+            'margin-left': '20px',
+            'font-family': self._style_font,
+            'height': '25px',
+            'borderBottom': '1px solid white',
+            'padding-top': '6px'
+        }
+
+        tab_selected_style = {
+            'font-size': '15px',
+            'margin-left': '20px',
+            'font-family': self._style_font,
+            'height': '25px',
+            'borderTop': '1px solid white',
+            'borderBottom': '1px solid white',
+            'padding-top': '6px',
+            'backgroundColor': '#DB504A'
+        }
+
         models = [self._model_card(line_name, num)
                     for num in range(len(self._repo[line_name]))]
         return self._html.Div(
@@ -506,19 +526,37 @@ class RepoServer:
                         'font-family': self._style_font
                     }
                 ),
-                self._line_graph(line_name),
-                self._html.Details(
+                self._dcc.Tabs(
                     children=[
-                            self._html.Summary(
-                                children='Models',
-                                style={
-                                    'font-size': '25px',
-                                    'margin-left': '25px',
-                                    'margin-top': '25px',
-                                    'font-family': self._style_font
-                                }
-                            ),
-                            *models
+                        self._dcc.Tab(
+                            label='Models',
+                            children=[
+                                self._html.Details(
+                                    children=[
+                                        self._html.Summary(
+                                            children='Show',
+                                            style={
+                                                'font-size': '25px',
+                                                'margin-left': '25px',
+                                                'margin-top': '25px',
+                                                'font-family': self._style_font
+                                            }
+                                        ),
+                                        *models
+                                    ]
+                                ),
+                            ],
+                            selected_style=tab_selected_style,
+                            style=tab_style
+                        ),
+                        self._dcc.Tab(
+                            label='Plot',
+                            children=[
+                                self._line_graph(line_name)
+                            ],
+                            selected_style=tab_selected_style,
+                            style=tab_style
+                        )
                     ]
                 )
             ]
