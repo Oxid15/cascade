@@ -57,7 +57,7 @@ class HistoryViewer:
 
     def _make_table(self):
         metas = []
-        self._params = []
+        params = []
         # TODO: refactor this
         for line in [*self._repo][::-1][:self._last_lines]:
             view = MetaViewer(line.root, filt={'type': 'model'})
@@ -72,15 +72,16 @@ class HistoryViewer:
                 new_meta.update(flatten(meta))
                 metas.append(new_meta)
 
-                params = {
+                p = {
                     'line': line.root,
                 }
                 if 'params' in meta:
                     if len(meta['params']) > 0:
-                        params.update(flatten({'params': meta['params']}))
-                self._params.append(params)
+                        p.update(flatten({'params': meta['params']}))
+                params.append(p)
 
         self._table = pd.DataFrame(metas)
+        self._params = params
         if 'saved_at' in self._table:
             self._table = self._table.sort_values('saved_at')
 
