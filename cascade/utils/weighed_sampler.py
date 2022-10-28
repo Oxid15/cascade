@@ -23,9 +23,37 @@ from tqdm import trange
 
 class WeighedSampler(Sampler):
     """
+    Samples each class certain amount of times.
+    
+    Important
+    ---------
+    Sampler orders the items in the dataset in such way that items with each label go in row.
+    Consider shuffling the dataset after sampling if label order is important.
 
+    Example
+    -------
+    >>> from cascade import utils as cdu, data as cdd
+    >>> ds = cdd.Wrapper([('item1', 0), ('item2', 1)])
+    >>> ds = cdu.WeighedSampler(ds, {0: 2, 1: 1})
+    >>> assert [item for item in ds] == [('item1', 0), ('item1', 0), ('item2', 1)]
+
+    See also
+    --------
+    cascade.utils.OverSampler
+    cascade.utils.UnderSampler
+    cascade.data.RandomSampler
     """
     def __init__(self, dataset: Dataset, partitioning: Dict[Any, int] = None) -> None:
+        """
+        Parameters
+        ----------
+            dataset: Dataset
+                A dataset to sample
+            partitioning: Dict[Any, int], optional
+                A dictionary with labels as keys and the number of samples as values.
+                If some label omitted, assumes that it should be sampled the same number
+                of times it is actually appears in the dataset.
+        """
         if partitioning is None:
             partitioning = {}
 
