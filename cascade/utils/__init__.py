@@ -29,3 +29,4 @@ from .model_aggregate import ModelAggregate
 from .baselines import ConstantBaseline
 from .torch_model import TorchModel
 from .pa_schema_validator import PaSchemaValidator
+from .weighed_sampler import WeighedSampler
