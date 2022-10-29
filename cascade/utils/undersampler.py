@@ -28,6 +28,11 @@ class UnderSampler(Sampler):
     To undersample it removes items of majority class for the amount
     of times needed to make equal distribution.
     Works for any number of classes.
+
+    Important
+    ---------
+    Sampler orders the items in the dataset in such way that items with each label go in row.
+    Consider shuffling the dataset after sampling if label order is important.
     """
     def __init__(self, dataset: Dataset) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
