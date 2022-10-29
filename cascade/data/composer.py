@@ -3,6 +3,17 @@ from . import T, Dataset
 
 
 class Composer(Dataset):
+    """
+    Unifies two or more datasets element-wise.
+
+    Example
+    -------
+    >>> from cascade import data as cdd
+    >>> items = cdd.Wrapper([0, 1, 2, 3, 4])
+    >>> labels = cdd.Wrapper([1, 0, 0, 1, 1])
+    >>> ds = cdd.Composer((items, labels))
+    >>> assert ds[0] == (0, 1)
+    """
     def __init__(self, datasets: Iterable[Dataset], *args, **kwargs) -> None:
         """
         Parameters
