@@ -31,7 +31,7 @@ class UnderSampler(Sampler):
 
     Important
     ---------
-    Sampler orders the items in the dataset in such way that items with each label go in row.
+    Sampler orders the items in the dataset.
     Consider shuffling the dataset after sampling if label order is important.
     """
     def __init__(self, dataset: Dataset) -> None:
