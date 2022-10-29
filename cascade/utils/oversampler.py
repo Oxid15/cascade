@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from ..data import T, Dataset, Sampler
-import numpy as np
+from numpy import unique, max
 from tqdm import trange
 
 
@@ -29,6 +29,8 @@ class OverSampler(Sampler):
     of times needed to make equal distribution.
     Works for any number of classes.
 
+    Labels are considered to be in the second place of each item that a dataset returns.
+
     Important
     ---------
     Sampler orders the items in the dataset.
@@ -36,17 +38,17 @@ class OverSampler(Sampler):
     """
     def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
-        ulabels = np.unique(labels)
-        label_nums, _ = np.histogram(labels, bins=len(ulabels))
-        add_nums = np.max(label_nums) - label_nums
+        ulabels, counts = unique(labels, return_counts=True)
+        how_much_add = max(counts) - counts
 
         self._add_indices = []
         for label_idx, label in enumerate(ulabels):
             k = 0
-            for _ in range(add_nums[label_idx]):
+            for _ in range(how_much_add[label_idx]):
                 while labels[k] != label:
                     k += 1
                 self._add_indices.append(k)
+
         ln = len(dataset) + len(self._add_indices)
         print(f'Original length was {len(dataset)} and new is {ln}')
 
