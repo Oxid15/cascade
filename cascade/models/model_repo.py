@@ -57,18 +57,18 @@ class ModelRepo(Repo):
     Example
     -------
     >>> from cascade.models import ModelRepo
-    >>> from cascade.utils import ConstantBaseline
-    >>> repo = ModelRepo('repo', _meta_prefix={'description': 'This is a repo with one VGG16 line for the example.'})
-    >>> line = repo.add_line('model', ConstantBaseline)
-    >>> model = ConstantBaseline(1)
+    >>> from cascade import utils as cdu
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one line for the example.'})
+    >>> line = repo.add_line('model', cdu.ConstantBaseline)
+    >>> model = cdu.ConstantBaseline(1)
     >>> model.fit()
     >>> line.save(model)
 
 
     >>> from cascade.models import ModelRepo
-    >>> from cascade.utils import ConstantBaseline
-    >>> repo = ModelRepo('repo', lines=[dict(name='constant', model_cls=ConstantBaseline)])
-    >>> model = ConstantBaseline()
+    >>> from cascade import utils as cdu
+    >>> repo = ModelRepo('repo', lines=[dict(name='constant', model_cls=cdu.ConstantBaseline)])
+    >>> model = cdu.ConstantBaseline()
     >>> model.fit()
     >>> repo['constant'].save(model)
     """
