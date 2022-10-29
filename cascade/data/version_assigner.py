@@ -59,7 +59,7 @@ class VersionAssigner(Modifier):
     It is only applied to the major version changes and may be fixed in
     following versions.
     """
-    def __init__(self, dataset: Dataset, path: str, *args, **kwargs) -> None:
+    def __init__(self, dataset: Dataset, path: str, verbose=False, *args, **kwargs) -> None:
         """
         Parameters
         ----------
@@ -124,6 +124,9 @@ class VersionAssigner(Modifier):
                 'pipeline': pipeline
             }
             self._mh.write(self._root, self._versions)
+        
+        if verbose:
+            print('Dataset version:', self.version)
 
     def _assign_path(self, path):
         _, ext = os.path.splitext(path)
