@@ -37,6 +37,15 @@ cascade.utils
 
 |
 
+.. autoclass:: cascade.utils.UnderSampler
+    :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.utils.PaSchemaValidator
     :members:
 
@@ -111,6 +120,15 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.NullValidator
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.TimeSeriesDataset
     :members:
 
 |
