@@ -1,6 +1,5 @@
 import os
 import logging
-from copy import deepcopy
 from typing import Iterable, List, Dict, Union
 
 import pendulum
@@ -48,18 +47,32 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
-    def __init__(self, repo, *args, **kwargs) -> None:
-        super().__init__(repo, *args, **kwargs)
+    @staticmethod
+    def _find_last_model(model, line):
+        model_num = len(line) - 1
+        while True:
+            path = os.path.join(line.root, line.model_names[model_num])
+            try:
+                model.load(path)
+                break
+            except FileNotFoundError as e:
+                logger.warning(f'Model {path} files were not found\n{e}')
+                model_num -= 1
+
+                if model_num == -1:
+                    raise FileNotFoundError(f'No model files were found in line {line}')
 
     def train(self,
               model: Model,
-              train_data: Iterable,
-              test_data: Iterable,
               *args,
+              train_data: Iterable = None,
+              test_data: Iterable = None,
               train_kwargs: Dict = None,
               test_kwargs: Dict = None,
               epochs: int = 1,
               start_from: str = None,
+              eval_strategy: int = None,
+              save_strategy: int = None,
               **kwargs) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
@@ -69,7 +82,7 @@ class BasicTrainer(Trainer):
                 a model to be trained or which to load from line specified in `start_from`
             train_data: Iterable
                 train data to be passed to model's fit()
-            test_data: Iterable
+            test_data: Iterable, optional
                 test data to be passed to model's evaluate()
             train_kwargs: Dict, optional
                 arguments for fit()
@@ -78,8 +91,16 @@ class BasicTrainer(Trainer):
             epochs: int, optional
                 how many times to repeat training on data
             start_from: str, optional
-                name of line from which to start, start from the latest model in line
+                name or index of line from which to start
+                starts from the latest model in line
+            eval_strategy: int, optional
+                Evaluation will take place every `eval_strategy` epochs. If None - the strategy is 'no evaluation'.
+            save_strategy: int, optional
+                Saving will take place every `save_strategy` epochs. Meta will be saved anyway.
+                If None - the strategy is 'save only meta'.
         """
+
+        # TODO: check if eval_strategy specified that test_data provided also
 
         if train_kwargs is None:
             train_kwargs = {}
@@ -102,23 +123,44 @@ class BasicTrainer(Trainer):
         line = self._repo[line_name]
 
         if start_from is not None:
-            path = os.path.join(line.root, line.model_names[-1])
-            model.load(path)
+            if len(line) == 0:
+                raise RuntimeError(f'Cannot start from line {line_name} as it is empty')
+            model_num = self._find_last_model(model, line)
 
-        self._meta_prefix['train_start_at'] = pendulum.now()
-        logger.info(f'Training started with parameters: {train_kwargs}')
+        start_time = pendulum.now()
+        self._meta_prefix['train_start_at'] = start_time
+        logger.info(f'Training started with parameters:\n{train_kwargs}')
         logger.info(f'repo is {self._repo}')
         logger.info(f'line is {line_name}')
         if start_from is not None:
-            logger.info(f'started from model {len(line) - 1}')
+            logger.info(f'started from model {model_num}')
         logger.info(f'training will last {epochs} epochs')
 
         for epoch in range(epochs):
-            model.fit(train_data, **train_kwargs)
-            model.evaluate(test_data, **test_kwargs)
-            line.save(model)
-            self.metrics.append(deepcopy(model.metrics))
+            # Empty model's metrics to not to repeat them
+            # in epochs where no evaluation
+            model.metrics = {}
 
+            # Train model
+            model.fit(train_data, **train_kwargs)
+
+            if eval_strategy is not None:
+                if epoch % eval_strategy == 0:
+                    model.evaluate(test_data, **test_kwargs)
+
+            if save_strategy is not None:
+                if epoch % save_strategy == 0:
+                    line.save(model)
+                else:
+                    line.save(model, only_meta=True)
+            else:
+                line.save(model, only_meta=True)
+
+            # Record metrics:
+            # no need to copy since don't reuse model's metrics dict
+            self.metrics.append(model.metrics)
             logger.info(f'Epoch {epoch}: {model.metrics}')
 
-        self._meta_prefix['train_end_at'] = pendulum.now()
+        end_time = pendulum.now()
+        self._meta_prefix['train_end_at'] = end_time
+        logger.info(f'Training finished in {end_time.diff_for_humans(start_time, True)}')

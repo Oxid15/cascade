@@ -1,9 +1,12 @@
 """
 Copyright 2022 Ilia Moiseev
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
    http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,30 +21,32 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Pickler, Wrapper, Modifier, Sampler
+from cascade.data import Wrapper, ApplyModifier, VersionAssigner
 
 
 @pytest.mark.parametrize(
-    'ds',
-    [
-        Wrapper([1, 2, 3, 4, 5]),
-        Wrapper([1]),
-        Sampler(Modifier(Wrapper([1])), 1)
+    'ext', [
+        '.json',
+        '.yml'
     ]
 )
-def test(ds, tmp_path):
-    ds1 = Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
-    ds2 = Pickler(os.path.join(tmp_path, 'ds.pkl'))
+def test(tmp_path, ext):
+    filepath = os.path.join(tmp_path, 'ds' + ext)
 
-    true = []
-    for i in range(len(ds)):
-        true.append(ds[i])
+    ds = Wrapper([0, 1, 2, 3, 4])
+    ds = VersionAssigner(ds, filepath)
 
-    res = []
-    for i in range(len(ds2)):
-        res.append(ds2[i])
+    assert ds.version == '0.0'
+    assert ds.get_meta()[0]['version'] == '0.0'
 
-    assert res == true
+    ds = Wrapper([0, 1, 2, 3, 4])
+    ds = ApplyModifier(ds, lambda x: x ** 2)
+    ds = VersionAssigner(ds, filepath)
 
-    assert type(ds2.ds()) == type(ds)
-    assert str(ds2.ds()) == str(ds)
+    assert ds.version == '1.0'
+
+    ds = Wrapper([0, 1, 2, 3, 4, 5])
+    ds = ApplyModifier(ds, lambda x: x ** 2)
+    ds = VersionAssigner(ds, filepath)
+
+    assert ds.version == '1.1'

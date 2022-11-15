@@ -19,11 +19,13 @@ from .dataset import Dataset, Modifier, Sampler, T, Wrapper, Iterator
 from .apply_modifier import ApplyModifier
 from .bruteforce_cacher import BruteforceCacher
 from .sequential_cacher import SequentialCacher
+from .composer import Composer
 from .concatenator import Concatenator
 from .cyclic_sampler import CyclicSampler
 from .random_sampler import RandomSampler
 from .pickler import Pickler
 from .folder_dataset import FolderDataset
 from .range_sampler import RangeSampler
+from .version_assigner import VersionAssigner
 
 from .utils import split
