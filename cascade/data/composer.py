@@ -31,10 +31,11 @@ class Composer(Dataset):
     def _validate_input(self, datasets):
         lengths = [len(ds) for ds in datasets]
         first = lengths[0]
-        if not all([l == first for l in lengths]):
+        if not all([ln == first for ln in lengths]):
             raise ValueError(
-                f'The datasets passed should be of the same length\n' \
-                f'Actual lengths: {lengths}')
+                f'The datasets passed should be of the same length\n'
+                f'Actual lengths: {lengths}'
+            )
 
     def __getitem__(self, index: int) -> Tuple[T]:
         return tuple(ds[index] for ds in self._datasets)

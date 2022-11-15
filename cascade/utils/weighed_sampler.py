@@ -24,7 +24,7 @@ from tqdm import trange
 class WeighedSampler(Sampler):
     """
     Samples each class certain amount of times.
-    
+
     Important
     ---------
     Sampler orders the items in the dataset in such way that items with each label go in row.

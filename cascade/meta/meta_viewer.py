@@ -25,7 +25,7 @@ class MetaViewer:
     """
     The class to view all metadata in folders and subfolders.
     """
-    def __init__(self, root: str, filt: Dict=None) -> None:
+    def __init__(self, root: str, filt: Dict = None) -> None:
         """
         Parameters
         ----------

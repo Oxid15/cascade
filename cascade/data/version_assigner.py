@@ -13,7 +13,7 @@ class VersionAssigner(Modifier):
     The version consists of two parts, namely major and minor in the format `MAJOR.MINOR` just
     like in semantic versioning. The meaning of parts is the following: *major* number changes
     if there are changes in the structure of the pipeline e.g. some dataset was added/removed;
-    *minor* number changes in case of any metadata change e.g. new data arrived and changed 
+    *minor* number changes in case of any metadata change e.g. new data arrived and changed
     the length of modifiers on pipeline.
 
     Example
@@ -71,7 +71,7 @@ class VersionAssigner(Modifier):
         """
         super().__init__(dataset, *args, **kwargs)
         self._mh = MetaHandler()
-        self._assign_path(path)   
+        self._assign_path(path)
         self._versions = {}
 
         # get meta for info about pipeline
@@ -87,7 +87,7 @@ class VersionAssigner(Modifier):
         pipe_hash = md5(str.encode(pipeline, 'utf-8')).hexdigest()
 
         if os.path.exists(self._root):
-            self._versions = self._mh.read(self._root)    
+            self._versions = self._mh.read(self._root)
 
             if pipe_hash in self._versions:
                 if meta_hash in self._versions[pipe_hash]:
@@ -124,7 +124,7 @@ class VersionAssigner(Modifier):
                 'pipeline': pipeline
             }
             self._mh.write(self._root, self._versions)
-        
+
         if verbose:
             print('Dataset version:', self.version)
 

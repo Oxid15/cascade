@@ -15,7 +15,6 @@ limitations under the License.
 """
 
 from hashlib import md5
-import numpy as np
 
 
 def numpy_md5(x) -> str:

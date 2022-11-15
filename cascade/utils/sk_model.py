@@ -67,7 +67,6 @@ class SkModel(BasicModel):
         """
         return self._pipeline.predict_proba(x, *args, **kwargs)
 
-
     def _check_model_hash(self, path) -> None:
         root = os.path.dirname(path)
         names = glob.glob(os.path.join(f'{root}', 'meta.*'))
@@ -80,10 +79,11 @@ class SkModel(BasicModel):
                 with open(path, 'rb') as f:
                     file_hash = md5(f.read()).hexdigest()
                 if file_hash != meta['md5sum']:
-                    raise RuntimeError(f'.pkl model hash check failed ' \
-                       f'it may be that model\'s .pkl file was corrupted\n' \
-                       f'hash from {names[0]}: {meta["md5sum"]}\n'
-                       f'hash of {path}: {file_hash}'
+                    raise RuntimeError(
+                        f'.pkl model hash check failed '
+                        f'it may be that model\'s .pkl file was corrupted\n'
+                        f'hash from {names[0]}: {meta["md5sum"]}\n'
+                        f'hash of {path}: {file_hash}'
                     )
         elif len(names) > 1:
             raise RuntimeError(f'Multiple possible meta-files found: {names}')

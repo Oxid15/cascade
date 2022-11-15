@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 from typing import List
 import pendulum
 import pandas as pd
@@ -25,8 +24,6 @@ from plotly import express as px
 from plotly import graph_objects as go
 
 from . import MetaViewer
-from .. import __version__
-from ..data import Dataset
 
 
 class HistoryViewer:
@@ -36,10 +33,10 @@ class HistoryViewer:
     models with different hyperparameters depend on each other.
     """
     def __init__(
-        self,
-        repo,
-        last_lines: int = None,
-        last_models: int = None) -> None:
+            self,
+            repo,
+            last_lines: int = None,
+            last_models: int = None) -> None:
         """
         Parameters
         ----------
@@ -196,7 +193,7 @@ class HistoryViewer:
     def serve(self, metric: str, **kwargs):
         """
         Run dash-based server with HistoryViewer, updating plots in real-time.
-        
+
         Note
         ----
         This feature needs `dash` to be installed.

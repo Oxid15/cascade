@@ -19,7 +19,7 @@ class FolderDataset(Dataset):
         Parameters
         ----------
         root: str
-            A path to the folder of files 
+            A path to the folder of files
         """
         super().__init__(*args, **kwargs)
         self._root = os.path.abspath(root)

@@ -42,11 +42,11 @@ def test(tmp_path, ext):
     ds = Wrapper([0, 1, 2, 3, 4])
     ds = ApplyModifier(ds, lambda x: x ** 2)
     ds = VersionAssigner(ds, filepath)
-    
+
     assert ds.version == '1.0'
 
     ds = Wrapper([0, 1, 2, 3, 4, 5])
     ds = ApplyModifier(ds, lambda x: x ** 2)
     ds = VersionAssigner(ds, filepath)
-    
+
     assert ds.version == '1.1'

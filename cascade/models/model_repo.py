@@ -12,21 +12,16 @@ limitations under the License.
 """
 
 import os
-import glob
 import warnings
 import itertools
 import logging
 from typing import List, Dict, Iterable, Union
 import shutil
 
-from plotly import graph_objects as go
-from flatten_json import flatten
-import pandas as pd
 import pendulum
 from deepdiff.diff import DeepDiff
 
 from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats
-from ..meta import MetricViewer
 from .model import Model
 from .model_line import ModelLine
 
@@ -129,7 +124,7 @@ class ModelRepo(Repo):
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))}
 
-    def add_line(self, name:str=None, *args, meta_fmt=None, **kwargs):
+    def add_line(self, name: str = None, *args, meta_fmt=None, **kwargs):
         """
         Adds new line to repo if it doesn't exist and returns it.
         If line exists, defines it in repo with parameters provided.
@@ -139,7 +134,7 @@ class ModelRepo(Repo):
         Parameters:
             name: str, optional
                 Name of the line. It is used to name a folder of line.
-                Repo prepends it with `self._root` before creating.  
+                Repo prepends it with `self._root` before creating.
                 Optional argument. If omitted - names new line automatically
                 using f'{len(self):0>5d}'
             meta_fmt: str, optional
@@ -265,6 +260,7 @@ class ModelRepo(Repo):
         """
         # TODO: write test covering this
         return list(self._lines.keys())
+
 
 class ModelRepoConcatenator(Repo):
     """

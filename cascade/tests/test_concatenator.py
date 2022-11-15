@@ -33,6 +33,7 @@ def test_meta():
     assert c.get_meta()[0]['num'] == 1
     assert len(c.get_meta()[0]['data']) == 2
 
+
 # TODO: replace arrs with datasets
 @pytest.mark.parametrize(
     'arrs', [

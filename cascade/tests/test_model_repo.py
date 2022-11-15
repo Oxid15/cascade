@@ -366,6 +366,7 @@ def test_integer_indices(tmp_path, ext):
     assert first_line == repo[0]
     assert last_line == repo[-1]
 
+
 @pytest.mark.parametrize(
     'ext', [
         '.json',

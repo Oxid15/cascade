@@ -34,7 +34,6 @@ def test_hash_check(tmp_path):
     tmp_path = str(tmp_path)
     repo = csd.models.ModelRepo(tmp_path, overwrite=True, meta_fmt='.yml')
 
-
     tree = csu.SkModel(blocks=[
         DecisionTreeClassifier()
     ])
@@ -49,7 +48,6 @@ def test_hash_check(tmp_path):
 
     # This should pass
     tree.load(os.path.join(tmp_path, 'tree', '00000', 'model'))
-
 
     # This should fail
     shutil.move(

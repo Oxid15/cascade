@@ -39,11 +39,11 @@ class DataleakValidator(Validator):
         size = len(train_repeating_idx)
         if size > 0:
             raise DataValidationException(
-                f'Train and test datasets have {size} common items\n' \
-                f'Train indices: {prettify_items(train_repeating_idx)}\n' \
+                f'Train and test datasets have {size} common items\n'
+                f'Train indices: {prettify_items(train_repeating_idx)}\n'
                 f'Test indices: {prettify_items(test_repeating_idx)}'
             )
         else:
             print('OK!')
-        
+
         super().__init__(self, train_ds, **kwargs)

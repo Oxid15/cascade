@@ -32,7 +32,6 @@ def test_simple_hash():
 
     cme.DataleakValidator(train_ds, test_ds)
 
-
     train_ds = cdd.Wrapper(['a', 'b', 'c'])
     test_ds = cdd.Wrapper(['c', 'd', 'e'])
 
@@ -45,7 +44,6 @@ def test_np_hash():
     test_ds = cdd.Wrapper(np.zeros(10))
 
     cme.DataleakValidator(train_ds, test_ds, hash_fn=cme.numpy_md5)
-
 
     train_ds = cdd.Wrapper(np.zeros(10))
     test_ds = cdd.Wrapper(np.zeros(10))

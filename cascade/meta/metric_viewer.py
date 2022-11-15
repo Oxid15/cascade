@@ -23,7 +23,6 @@ from plotly import graph_objects as go
 import pandas as pd
 
 from . import MetaViewer
-from .. import __version__
 
 
 class MetricViewer:
@@ -139,11 +138,11 @@ class MetricViewer:
         return self._repo[name][num]
 
     def serve(
-        self,
-        page_size: int = 50,
-        include: List[str] = None,
-        exclude: List[str] = None,
-        **kwargs) -> None:
+            self,
+            page_size: int = 50,
+            include: List[str] = None,
+            exclude: List[str] = None,
+            **kwargs) -> None:
         """
         Runs dash-based server with interactive table of metrics and parameters
 

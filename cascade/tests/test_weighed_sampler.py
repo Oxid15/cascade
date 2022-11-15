@@ -16,7 +16,6 @@ limitations under the License.
 
 import os
 import sys
-import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -24,9 +23,10 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 import cascade.data as cdd
 from cascade.utils import WeighedSampler
 
+
 def test():
     ds = cdd.Wrapper(
-        [          
+        [
             (0, 0),
             (1, 0),
             (2, 1),
@@ -40,18 +40,17 @@ def test():
     ds = WeighedSampler(ds, {0: 3, 1: 4})
 
     assert [item for item in ds] == [
-            (0, 0),
-            (1, 0),
-            (0, 0),
-            (2, 1),
-            (3, 1),
-            (4, 1),
-            (5, 1)
+        (0, 0),
+        (1, 0),
+        (0, 0),
+        (2, 1),
+        (3, 1),
+        (4, 1),
+        (5, 1)
     ]
 
-
     ds = cdd.Wrapper(
-        [          
+        [
             (0, 0),
             (1, 0),
             (2, 1),
@@ -65,15 +64,15 @@ def test():
     ds = WeighedSampler(ds, {0: 0, 1: 5})
 
     assert [item for item in ds] == [
-            (2, 1),
-            (3, 1),
-            (4, 1),
-            (5, 1),
-            (6, 1)
+        (2, 1),
+        (3, 1),
+        (4, 1),
+        (5, 1),
+        (6, 1)
     ]
 
     ds = cdd.Wrapper(
-        [          
+        [
             (0, 0),
             (1, 0),
             (2, 1),
@@ -86,12 +85,12 @@ def test():
 
     ds = WeighedSampler(ds)
 
-    assert [item for item in ds] == [          
-                (0, 0),
-                (1, 0),
-                (2, 1),
-                (3, 1),
-                (4, 1),
-                (5, 1),
-                (6, 1)
-        ]
+    assert [item for item in ds] == [
+        (0, 0),
+        (1, 0),
+        (2, 1),
+        (3, 1),
+        (4, 1),
+        (5, 1),
+        (6, 1)
+    ]
