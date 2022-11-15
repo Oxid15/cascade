@@ -334,3 +334,57 @@ def test_failed_model_meta(tmp_path, ext):
     repo = ModelRepo(repo_path, lines=[
         dict(name='0', model_cls=DummyModel, meta_fmt=ext)])
     model = repo['0'][0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_get_line_names(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path, meta_fmt=ext)
+    repo.add_line('a')
+    repo.add_line('b')
+
+    assert repo.get_line_names() == ['a', 'b']
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_integer_indices(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path, meta_fmt=ext)
+    first_line = repo.add_line('a')
+    last_line = repo.add_line('b')
+
+    assert first_line == repo[0]
+    assert last_line == repo[-1]
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_auto_line_name(tmp_path, ext):
+    repo = ModelRepo(str(tmp_path), meta_fmt=ext)
+    repo.add_line()
+    repo.add_line('test')
+    repo.add_line()
+    repo.add_line()
+
+    names = repo.get_line_names()
+
+    assert names == ['00000', 'test', '00002', '00003']
+
+    repo = ModelRepo(str(tmp_path), meta_fmt=ext)
+
+    names = repo.get_line_names()
+
+    assert names == ['00000', '00002', '00003', 'test']

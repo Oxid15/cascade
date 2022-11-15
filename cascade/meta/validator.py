@@ -23,6 +23,13 @@ class DataValidationException(Exception):
     """
 
 
+def prettify_items(items: List[int]) -> str:
+    if len(items) < 20:
+        return str(items)
+    else:
+        return f'{", ".join(map(str, items[:5]))} ... {", ".join(map(str, items[-5:]))}'
+
+
 class Validator(Modifier):
     """
     Base class for validators. Defines basic `__init__` structure
@@ -92,18 +99,11 @@ class PredicateValidator(Validator):
         else:
             print('OK!')
 
-    @staticmethod
-    def _prettify_items(items: List[int]) -> str:
-        if len(items) < 20:
-            return str(items)
-        else:
-            return f'{", ".join(map(str, items[:5]))} ... {", ".join(map(str, items[-5:]))}'
-
     def _raise(self, items: List[int]):
         bad_counts = [len(items[i]) for i in range(len(self._func))]
 
         failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]
-        failed_items = '\n'.join([f'{i}: {self._prettify_items(items[i])}' for i in items])
+        failed_items = '\n'.join([f'{i}: {prettify_items(items[i])}' for i in items])
         raise DataValidationException(
             f'Checks in positions {failed_checks} failed\n'
             f'Items failed by check:\n'

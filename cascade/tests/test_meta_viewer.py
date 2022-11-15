@@ -21,6 +21,7 @@ import json
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.base import MetaHandler
 from cascade.meta import MetaViewer
 from cascade.models import ModelRepo
 from cascade.tests import DummyModel
@@ -34,9 +35,9 @@ def test(tmp_path):
     with open(os.path.join(tmp_path, 'test0.json'), 'w') as f:
         json.dump({'name': 'test0'}, f)
 
-    # Write also using mev
-    mev = MetaViewer(tmp_path)
-    mev.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})
+    # Write using mh
+    mh = MetaHandler()
+    mh.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})
 
     mev = MetaViewer(tmp_path)
 

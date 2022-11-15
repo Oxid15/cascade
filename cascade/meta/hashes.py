@@ -14,14 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .sk_model import SkModel
+from hashlib import md5
+import numpy as np
 
 
-class SkClassifier(SkModel):
-    """
-    Alias for cascade.utils.SkModel remained for compatibility
-    """
-    def __init__(self, name=None, blocks=None, **kwargs):
-        raise RuntimeError('SkClassifier is not supported anymore.\n'
-                           'It was an alias of SkModel and doesn\'t have any additional capabilities.\n'
-                           'Please, replace SkClassifier with SkModel.')
+def numpy_md5(x) -> str:
+    return md5(x.tobytes()).hexdigest()

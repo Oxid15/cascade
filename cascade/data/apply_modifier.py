@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Callable
+from typing import List, Dict, Callable
 from . import Dataset, Modifier, T
 
 
@@ -48,7 +48,3 @@ class ApplyModifier(Modifier):
     def __getitem__(self, index: int) -> T:
         item = self._dataset[index]
         return self._func(item)
-
-    def __repr__(self) -> str:
-        rp = super().__repr__()
-        return f'{rp}, {repr(self._func)}'

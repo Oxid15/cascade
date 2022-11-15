@@ -21,32 +21,32 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper
-from cascade.data import Concatenator
+from cascade.data import Wrapper, ApplyModifier, VersionAssigner
 
 
-def test_meta():
-    n1 = Wrapper([0, 1])
-    n2 = Wrapper([2, 3, 4, 5])
-
-    c = Concatenator([n1, n2], meta_prefix={'num': 1})
-    assert c.get_meta()[0]['num'] == 1
-    assert len(c.get_meta()[0]['data']) == 2
-
-# TODO: replace arrs with datasets
 @pytest.mark.parametrize(
-    'arrs', [
-        ([0], [0], [0]),
-        ([1, 2, 3, 4], [11]),
-        ([1],),
-        ([1, 2, 3, 4], [])
+    'ext', [
+        '.json',
+        '.yml'
     ]
 )
-def test_concatenation(arrs):
-    c = Concatenator([*arrs])
+def test(tmp_path, ext):
+    filepath = os.path.join(tmp_path, 'ds' + ext)
 
-    res = []
-    for arr in arrs:
-        res += arr
+    ds = Wrapper([0, 1, 2, 3, 4])
+    ds = VersionAssigner(ds, filepath)
 
-    assert [c[i] for i in range(len(c))] == res
+    assert ds.version == '0.0'
+    assert ds.get_meta()[0]['version'] == '0.0'
+
+    ds = Wrapper([0, 1, 2, 3, 4])
+    ds = ApplyModifier(ds, lambda x: x ** 2)
+    ds = VersionAssigner(ds, filepath)
+    
+    assert ds.version == '1.0'
+
+    ds = Wrapper([0, 1, 2, 3, 4, 5])
+    ds = ApplyModifier(ds, lambda x: x ** 2)
+    ds = VersionAssigner(ds, filepath)
+    
+    assert ds.version == '1.1'

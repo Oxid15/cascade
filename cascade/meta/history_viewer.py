@@ -15,7 +15,6 @@ limitations under the License.
 """
 
 import os
-import warnings
 from typing import List
 import pendulum
 import pandas as pd
@@ -58,21 +57,10 @@ class HistoryViewer:
 
     def _make_table(self):
         metas = []
-        self._params = []
+        params = []
+        # TODO: refactor this
         for line in [*self._repo][::-1][:self._last_lines]:
-            # Try to use viewer only on models using type key
-            try:
-                view = MetaViewer(line.root, filt={'type': 'model'})
-            except KeyError:
-                view = [MetaViewer(os.path.join(
-                    line.root,
-                    os.path.dirname(model_name)))[0]
-                    for model_name in line.model_names]
-
-                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without
-                type key in some of the meta files (in repo, line or model).
-                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
-                In the following versions it will be deprecated.''', FutureWarning)
+            view = MetaViewer(line.root, filt={'type': 'model'})
 
             for i in range(len(line))[:self._last_models]:
                 new_meta = {'line': line.root, 'num': i}
@@ -84,15 +72,16 @@ class HistoryViewer:
                 new_meta.update(flatten(meta))
                 metas.append(new_meta)
 
-                params = {
+                p = {
                     'line': line.root,
                 }
                 if 'params' in meta:
                     if len(meta['params']) > 0:
-                        params.update(flatten({'params': meta['params']}))
-                self._params.append(params)
+                        p.update(flatten({'params': meta['params']}))
+                params.append(p)
 
         self._table = pd.DataFrame(metas)
+        self._params = params
         if 'saved_at' in self._table:
             self._table = self._table.sort_values('saved_at')
 
