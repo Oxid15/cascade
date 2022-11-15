@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.base" href="cascade.base.html" /><link rel="prev" title="Concepts" href="concepts.html" />
 
-    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>Cascade modules reference - cascade 0.7.3 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>Cascade modules reference - cascade 0.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -199,7 +199,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -281,6 +282,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.Pickler"><code class="docutils literal notranslate"><span class="pre">Pickler</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Pickler.__init__"><code class="docutils literal notranslate"><span class="pre">Pickler.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Pickler.ds"><code class="docutils literal notranslate"><span class="pre">Pickler.ds()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.RandomSampler"><code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code></a><ul>
@@ -296,6 +298,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="cascade.data.html#cascade.data.VersionAssigner"><code class="docutils literal notranslate"><span class="pre">VersionAssigner</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.VersionAssigner.__init__"><code class="docutils literal notranslate"><span class="pre">VersionAssigner.__init__()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a><ul>
@@ -342,7 +348,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.models.html#cascade.models.BasicTrainer"><code class="docutils literal notranslate"><span class="pre">BasicTrainer</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicTrainer.__init__"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.models.html#cascade.models.BasicTrainer.train"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.train()</span></code></a></li>
 </ul>
 </li>
@@ -368,13 +373,14 @@
 <li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer"><code class="docutils literal notranslate"><span class="pre">MetaViewer</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.__getitem__"><code class="docutils literal notranslate"><span class="pre">MetaViewer.__getitem__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.__init__"><code class="docutils literal notranslate"><span class="pre">MetaViewer.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.obj_to_dict"><code class="docutils literal notranslate"><span class="pre">MetaViewer.obj_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.read"><code class="docutils literal notranslate"><span class="pre">MetaViewer.read()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer.write"><code class="docutils literal notranslate"><span class="pre">MetaViewer.write()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer"><code class="docutils literal notranslate"><span class="pre">MetricViewer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.__getitem__"><code class="docutils literal notranslate"><span class="pre">MetricViewer.__getitem__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.__init__"><code class="docutils literal notranslate"><span class="pre">MetricViewer.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.get_best_by"><code class="docutils literal notranslate"><span class="pre">MetricViewer.get_best_by()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.plot_table"><code class="docutils literal notranslate"><span class="pre">MetricViewer.plot_table()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.reload_table"><code class="docutils literal notranslate"><span class="pre">MetricViewer.reload_table()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetricViewer.serve"><code class="docutils literal notranslate"><span class="pre">MetricViewer.serve()</span></code></a></li>

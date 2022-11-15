@@ -1,0 +1,1768 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Dataset Zoo\n",
+    "Cascade by itself is **DIY ML-engineering solution**. This means that it provides certain basics on top of which you can easily build own ML-workflow.  \n",
+    "  \n",
+    "Cascade has plenty of solutions - basic that are added to the core and more specific that are in the special `utils` module. And if you didn't found suitable component, you can write it yourself.  \n",
+    "  \n",
+    "Here some of already-made components are presented. These are the `Dataset`s - building blocks of Cascade's pipelines, their description and short examples of how to use them in your workflow."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0.8.0-alpha\n"
+     ]
+    }
+   ],
+   "source": [
+    "import cascade\n",
+    "print(cascade.__version__)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Wrappers\n",
+    "[Wrapper documentation](../cascade.data.html#cascade.data.Wrapper)  \n",
+    "  \n",
+    "If your solution has some data source that is already accesible in python-code, but you need to plug it in Cascade's workflow it may be all you need. `Wrapper` gives the items from the source one by one, adding some info about the undelying data to its metadata."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0 1 2 3 4 "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4]) # Here for simplicity the list of numbers is a data source\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '<cascade.data.dataset.Wrapper',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 5,\n",
+       "  'obj_type': \"<class 'list'>\"}]"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Iterators\n",
+    "[Iterator documentation](../cascade.data.html#cascade.data.Iterator)  \n",
+    "  \n",
+    "If data source doesn't have length - you cannot use `Wrapper`s, but it is not a problem, you can use `Iterator`s instead! It is basically the same dataset, but using different interface."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0 1 2 3 4 "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "def gen():\n",
+    "    for number in range(5):\n",
+    "        yield number\n",
+    "\n",
+    "ds = cdd.Iterator(gen())\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## ApplyModifier\n",
+    "[ApplyModifier documentation](../cascade.data.html#cascade.data.ApplyModifier)  \n",
+    "  \n",
+    "The pipelines are frequently applying some python-functions to the items in datasets. In Cascade this is done by using `ApplyModifier`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0 1 4 9 16 "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "# The function that will be applied\n",
+    "def square(x):\n",
+    "    return x ** 2\n",
+    "\n",
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4])\n",
+    "ds = cdd.ApplyModifier(ds, square) # ds now a pipeline of two stages\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Concatenator\n",
+    "[Concatenator documentation](../cascade.data.html#cascade.data.Concatenator)  \n",
+    "  \n",
+    "Concatenation is also frequent operation that is done to unify several datasets into one. In Cascade it is done easily using `Concatenator`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0 1 2 3 4 5 6 7 8 9 "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "ds_1 = cdd.Wrapper([0, 1, 2, 3, 4])\n",
+    "ds_2 = cdd.Wrapper([5, 6, 7, 8, 9])\n",
+    "\n",
+    "ds = cdd.Concatenator((ds_1, ds_2))\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In addition, it also stores metadata of all its datasets."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '<cascade.data.concatenator.Concatenator of\\n<cascade.data.dataset.Wrapper\\n<cascade.data.dataset.Wrapper',\n",
+       "  'type': 'dataset',\n",
+       "  'data': [[{'name': '<cascade.data.dataset.Wrapper',\n",
+       "     'type': 'dataset',\n",
+       "     'len': 5,\n",
+       "     'obj_type': \"<class 'list'>\"}],\n",
+       "   [{'name': '<cascade.data.dataset.Wrapper',\n",
+       "     'type': 'dataset',\n",
+       "     'len': 5,\n",
+       "     'obj_type': \"<class 'list'>\"}]]}]"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## split\n",
+    "[split documentation](../cascade.data.html#cascade.data.split)  \n",
+    "  \n",
+    "This is the opposite of concatenate - we can split one dataset into train and test parts easily with `cdd.split()`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0, 1, 2, 3, 4, 5, \n",
+      "6, 7, "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4, 5, 6, 7])\n",
+    "train_ds, test_ds = cdd.split(ds, 0.8)\n",
+    "\n",
+    "for item in train_ds:\n",
+    "    print(item, end=', ')\n",
+    "print()\n",
+    "for item in test_ds:\n",
+    "    print(item, end=', ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Basically, this function creates two RangeSampler dividing input dataset into two parts."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '<cascade.data.range_sampler.RangeSampler',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 6},\n",
+       " {'name': '<cascade.data.dataset.Wrapper',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 8,\n",
+       "  'obj_type': \"<class 'list'>\"}]"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "train_ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## CyclicSampler\n",
+    "[CyclicSampler documentation](../cascade.data.html#cascade.data.CyclicSampler)  \n",
+    "  \n",
+    "When you need an easy way to repeat your dataset several times or the opposite - restrict the number of items in dataset, you can use this."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0 1 2 3 4 0 1 2 3 4 0 "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4])\n",
+    "ds = cdd.CyclicSampler(ds, 11)\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## RandomSampler\n",
+    "[RandomSampler documentation](../cascade.data.html#cascade.data.RandomSampler)  \n",
+    "  \n",
+    "Undeterministic counterpart of CyclicSampler. Ideal solution for shuffling the data in lazy way."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "4 0 3 3 3 1 3 2 4 0 0 "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "import numpy as np\n",
+    "np.random.seed(0)\n",
+    "\n",
+    "\n",
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4])\n",
+    "ds = cdd.RandomSampler(ds, 11)\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "With no arguments - shuffles the dataset."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "3 0 1 2 4 "
+     ]
+    }
+   ],
+   "source": [
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4])\n",
+    "ds = cdd.RandomSampler(ds)\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## RangeSampler\n",
+    "[RangeSampler documentation](../cascade.data.html#cascade.data.RangeSampler)  \n",
+    "  \n",
+    "This is if you need python's range in Cascade realm. Has just similar interface as `range`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1 3 5 7 9 "
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4 , 5, 6, 7, 8, 9, 10])\n",
+    "ds = cdd.RangeSampler(ds, 1, 10, 2)\n",
+    "\n",
+    "for item in ds:\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## BruteforceCacher\n",
+    "[BruteforceCacher documentation](../cascade.data.html#cascade.data.BruteforceCacher)  \n",
+    "  \n",
+    "Modifiers are lazy and not storing all data in memory. This is important when datasets are big and do not fit into memory, but can slow down some processes. If your data fits into memory, you can cache previous stages of pipeline to speed up next stages.  \n",
+    "  \n",
+    "Suppose for example that we need to obtain our data through very slow network"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 10/10 [00:10<00:00,  1.01s/it]\n"
+     ]
+    }
+   ],
+   "source": [
+    "import time\n",
+    "\n",
+    "\n",
+    "class LongLoadingDataSource(cdd.Dataset):\n",
+    "    def __init__(self, length, *args, **kwargs):\n",
+    "        super().__init__(*args, **kwargs)\n",
+    "        self._length = length\n",
+    "\n",
+    "    def __getitem__(self, index):\n",
+    "        time.sleep(1)\n",
+    "        return index\n",
+    "    \n",
+    "    def __len__(self):\n",
+    "        return self._length\n",
+    "\n",
+    "ds = LongLoadingDataSource(10)\n",
+    "ds = cdd.BruteforceCacher(ds)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we waited all loading process and cached everything. Since that all data is in memory and the loading is no problem.\n",
+    "But what if we have a script that should be executed every time and then caching has no sense?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Pickler\n",
+    "[Pickler documentation](../cascade.data.html#cascade.data.Pickler)  \n",
+    "  \n",
+    "\n",
+    "For these purposes `Pickler` was implemented. You can cache and then pickle previous pipeline on the disk, then load it and use without problems. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 10/10 [00:10<00:00,  1.01s/it]\n"
+     ]
+    }
+   ],
+   "source": [
+    "ds = LongLoadingDataSource(10)\n",
+    "ds = cdd.BruteforceCacher(ds)\n",
+    "ds = cdd.Pickler('ds.pkl', ds)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 10/10 [00:00<00:00, 8336.92it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0 1 2 3 4 5 6 7 8 9 "
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from tqdm import tqdm\n",
+    "\n",
+    "ds = cdd.Pickler('ds.pkl')\n",
+    "\n",
+    "for item in tqdm(ds):\n",
+    "    print(item, end=' ')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Note that after unpickling we don't need to wait for loading again."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## SequentialCacher\n",
+    "[SequentialCacher documentation](../cascade.data.html#cascade.data.SequentialCacher)  \n",
+    "  \n",
+    "Some data is accessed sequentially and can be cached in advance by batches."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Step 0\n",
+      "loaded 0\n",
+      "loaded 1\n",
+      "loaded 2\n",
+      "loaded 3\n",
+      "loaded 4\n",
+      "loaded 5\n",
+      "loaded 6\n",
+      "loaded 7\n",
+      "loaded 8\n",
+      "loaded 9\n",
+      "Step 1\n",
+      "Step 2\n",
+      "Step 3\n",
+      "Step 4\n",
+      "Step 5\n",
+      "Step 6\n",
+      "Step 7\n",
+      "Step 8\n",
+      "Step 9\n",
+      "Step 10\n",
+      "loaded 10\n",
+      "loaded 11\n",
+      "loaded 12\n",
+      "loaded 13\n",
+      "loaded 14\n",
+      "loaded 15\n",
+      "loaded 16\n",
+      "loaded 17\n",
+      "loaded 18\n",
+      "loaded 19\n"
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "class AlertOnLoad(cdd.Dataset):\n",
+    "    # This dataset prints the value every time it is accessed\n",
+    "    def __init__(self, length, *args, **kwargs):\n",
+    "        super().__init__(*args, **kwargs)\n",
+    "        self._length = length\n",
+    "\n",
+    "    def __getitem__(self, index):\n",
+    "        print(f'loaded {index}')\n",
+    "        return index\n",
+    "    \n",
+    "    def __len__(self):\n",
+    "        return self._length\n",
+    "\n",
+    "\n",
+    "ds = AlertOnLoad(100)\n",
+    "ds = cdd.SequentialCacher(ds, 10)\n",
+    "\n",
+    "for i in range(11):\n",
+    "    print(f'Step {i}')\n",
+    "    ds[i] # Load the element"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## VersionAssigner\n",
+    "[VersionAssigner documentation](../cascade.meta.html#cascade.meta.VersionAssigner)  \n",
+    "  \n",
+    "To track any ML experiment we should know what data passed into the model. In real-life ML the data is always changing and to track its lineage Cascade offers an engineer some of its tools.\n",
+    "  \n",
+    "`VersionAssigner` infers the version of a pipeline given using its metadata. It logs metadata state and when something changes it decides which part of version to update.  \n",
+    "  \n",
+    "Dataset versions in Cascade consist of two parts: `MAJOR.MINOR`. Major version updates when pipeline structure changed - new stage added for example. Minor updates when anything except structure changes.\n",
+    "  \n",
+    "It is easier to illustrate that in the example:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "from cascade import data as cdd\n",
+    "\n",
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4])\n",
+    "ds = cdd.VersionAssigner(ds, 'ds_version_log.yml')\n",
+    "print(ds.version)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4])\n",
+    "ds = cdd.Modifier(ds) # New stage added - structure changed\n",
+    "ds = cdd.VersionAssigner(ds, 'ds_version_log.yml')\n",
+    "print(ds.version)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1.1\n"
+     ]
+    }
+   ],
+   "source": [
+    "ds = cdd.Wrapper([0, 1, 2, 3, 4, 5, 6, 7]) # New data added\n",
+    "ds = cdd.Modifier(ds)\n",
+    "ds = cdd.VersionAssigner(ds, 'ds_version_log.yml')\n",
+    "print(ds.version)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## OverSampler and UnderSampler\n",
+    "[OverSampler documentation](../cascade.utils.html#cascade.utils.OverSampler)  \n",
+    "[UnderSampler documentation](../cascade.utils.html#cascade.utils.UnderSampler)  \n",
+    "  \n",
+    "These sampling strategies placed into utils module because they make quite big assumtions about datasets - that they emit tuples and the second element of each tuple is a classification label. \n",
+    "   \n",
+    "Using that labels they equalize label distribution by repeating or deleting some elements. The sampler themselves are lazy, but to obtain label distribution, they load elements one-by-one not storing them in memory in initialization.  \n",
+    "  \n",
+    "They are also deterministic and place elements with similar labels together. Consider using `RandomSampler` to shuffle datasets before passing them to learning."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 4/4 [00:00<00:00, 1971.93it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Original length was 4 and new is 6\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "[('a', 0), ('b', 1), ('c', 1), ('d', 2), ('a', 0), ('d', 2)]"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "from cascade import utils as cdu\n",
+    "from cascade import data as cdd\n",
+    "\n",
+    "\n",
+    "ds = cdd.Wrapper([\n",
+    "    ('a', 0),\n",
+    "    ('b', 1),\n",
+    "    ('c', 1),\n",
+    "    ('d', 2),\n",
+    "])\n",
+    "\n",
+    "ds = cdu.OverSampler(ds)\n",
+    "[item for item in ds]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 4/4 [00:00<00:00, 3474.98it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Original length was 4 and new is 3\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "[('a', 0), ('b', 1), ('d', 2)]"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds = cdd.Wrapper([\n",
+    "    ('a', 0),\n",
+    "    ('b', 1),\n",
+    "    ('c', 1),\n",
+    "    ('d', 2),\n",
+    "])\n",
+    "\n",
+    "ds = cdu.UnderSampler(ds)\n",
+    "[item for item in ds]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Specific datasets\n",
+    "  \n",
+    "Some data types require specific functionality from its dataset wrapper. Some wrappers are already implemented and contain a number of useful tools and features."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### TimeSeriesDataset\n",
+    "[TimeSeriesDataset documentation](../cascade.utils.html#cascade.utils.TimeSeriesDataset)  \n",
+    "\n",
+    "One `TimeSeriesDataset` contains whole time series data. They require separate time and data channels to initialize."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-05</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-06</th>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-07</th>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            0\n",
+       "2022-11-05  0\n",
+       "2022-11-06  1\n",
+       "2022-11-07  2"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import datetime\n",
+    "from cascade import utils as cdu\n",
+    "\n",
+    "\n",
+    "ds = cdu.TimeSeriesDataset(time=[\n",
+    "    datetime.datetime(2022, 11, 5),\n",
+    "    datetime.datetime(2022, 11, 6),\n",
+    "    datetime.datetime(2022, 11, 7),\n",
+    "], data=[0, 1, 2])\n",
+    "\n",
+    "ds.to_pandas()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The important thing about these datasets is that they *always should be initialized with keywords*. The usage of `time` and `data` is mandatory for dataset to work. The same applies to other specific datasets such as TableDataset and its keyword `t` for table."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "Empty DataFrame\n",
+       "Columns: [0]\n",
+       "Index: []"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds = cdu.TimeSeriesDataset([\n",
+    "    datetime.datetime(2022, 11, 5),\n",
+    "    datetime.datetime(2022, 11, 6),\n",
+    "    datetime.datetime(2022, 11, 7),\n",
+    "], [0, 1, 2])\n",
+    "\n",
+    "ds.to_pandas()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This is due to unification of two interfaces in `Modifier`s for these datasets. A `Modifier` should be also `TimeSeriesDataset`. \n",
+    "   \n",
+    "Let's initialize ds again:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ds = cdu.TimeSeriesDataset(time=[\n",
+    "    datetime.datetime(2022, 11, 5),\n",
+    "    datetime.datetime(2022, 11, 6),\n",
+    "    datetime.datetime(2022, 11, 7),\n",
+    "    datetime.datetime(2022, 11, 8),\n",
+    "], data=[1, 0, 2, 5])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can use several convenience access methods such as any type of indexing: using integers or dates."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "2"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds[2]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "2"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds[datetime.datetime(2022, 11, 7)]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The slices are also available."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-06</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-07</th>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-08</th>\n",
+       "      <td>5</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            0\n",
+       "2022-11-06  0\n",
+       "2022-11-07  2\n",
+       "2022-11-08  5"
+      ]
+     },
+     "execution_count": 32,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds[1:].to_pandas() # Using integers"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-06</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-07</th>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-08</th>\n",
+       "      <td>5</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            0\n",
+       "2022-11-06  0\n",
+       "2022-11-07  2\n",
+       "2022-11-08  5"
+      ]
+     },
+     "execution_count": 33,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds[datetime.datetime(2022, 11, 6):].to_pandas() # Or using time"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Note that every slice returns new `TimeSerisDataset` instance."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "There is always a general way to extract all data, which is most useful for plotting data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(array([datetime.datetime(2022, 11, 5, 0, 0),\n",
+       "        datetime.datetime(2022, 11, 6, 0, 0),\n",
+       "        datetime.datetime(2022, 11, 7, 0, 0),\n",
+       "        datetime.datetime(2022, 11, 8, 0, 0)], dtype=object),\n",
+       " array([1, 0, 2, 5]))"
+      ]
+     },
+     "execution_count": 34,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds.get_data()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[<matplotlib.lines.Line2D at 0x20371829660>]"
+      ]
+     },
+     "execution_count": 35,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "from matplotlib import pyplot as plt\n",
+    "\n",
+    "plt.plot(*ds.get_data())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "You can always get the data alone using `to_numpy()`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([1, 0, 2, 5])"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds.to_numpy()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in `Modifier`.  \n",
+    "  \n",
+    "First - dataset is initialized with nan-value. Nan-value is `numpy.nan` because Interpolate uses pandas under-the-hood."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-05</th>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-06</th>\n",
+       "      <td>NaN</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-07</th>\n",
+       "      <td>2.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "              0\n",
+       "2022-11-05  0.0\n",
+       "2022-11-06  NaN\n",
+       "2022-11-07  2.0"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import numpy as np\n",
+    "\n",
+    "ds = cdu.TimeSeriesDataset(time=[\n",
+    "    datetime.datetime(2022, 11, 5),\n",
+    "    datetime.datetime(2022, 11, 6),\n",
+    "    datetime.datetime(2022, 11, 7),\n",
+    "], data=[0, np.nan, 2])\n",
+    "\n",
+    "ds.to_pandas()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-05</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-06</th>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-07</th>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "            0\n",
+       "2022-11-05  0\n",
+       "2022-11-06  1\n",
+       "2022-11-07  2"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cdu.Interpolate(ds, method='linear', limit_direction='both').to_pandas() # These arguments are defaults"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Averaging over some time-window is also a frequent task in work with time-series. Here in `Average` you can set the time grain and a quantity to average."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pendulum\n",
+    "\n",
+    "\n",
+    "ds = cdu.TimeSeriesDataset(time=[\n",
+    "    pendulum.datetime(2022, 11, 5),\n",
+    "    pendulum.datetime(2022, 11, 6),\n",
+    "    pendulum.datetime(2022, 11, 7),\n",
+    "    pendulum.datetime(2022, 11, 8),\n",
+    "], data=[0, 1, 2, 3])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-05 00:00:00+00:00</th>\n",
+       "      <td>0.5</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-07 00:00:00+00:00</th>\n",
+       "      <td>2.5</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                             0\n",
+       "2022-11-05 00:00:00+00:00  0.5\n",
+       "2022-11-07 00:00:00+00:00  2.5"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cdu.Average(ds, unit='days', amount=2).to_pandas()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-08 00:00:00+00:00</th>\n",
+       "      <td>3.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                             0\n",
+       "2022-11-08 00:00:00+00:00  3.0"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cdu.Align(ds, [pendulum.datetime(2022, 11, 8)]).to_pandas()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## TableDataset\n",
+    "[TableDataset documentation](../cascade.utils.html#cascade.utils.TableDataset)  \n",
+    "\n",
+    "  \n",
+    "Frequently the work with tables is done. To track them efficiently using Cascade this wrapper was created."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<cascade.utils.table_dataset.TableDataset\n",
+       "    0  1\n",
+       "0  2  0\n",
+       "1  1  0\n",
+       "2  1  0"
+      ]
+     },
+     "execution_count": 51,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "ds = cdu.TableDataset(t=pd.DataFrame(data=[[2, 0], [1, 0], [1, 0]]))\n",
+    "ds"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The most important thing here is the extensive metadata that this wrapper holds."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '<cascade.utils.table_dataset.TableDataset\\n    0  1\\n0  2  0\\n1  1  0\\n2  1  0',\n",
+       "  'type': 'dataset',\n",
+       "  'columns': [0, 1],\n",
+       "  'len': 3,\n",
+       "  'info': {0: {'count': 3.0,\n",
+       "    'mean': 1.3333333333333333,\n",
+       "    'std': 0.5773502691896257,\n",
+       "    'min': 1.0,\n",
+       "    '25%': 1.0,\n",
+       "    '50%': 1.0,\n",
+       "    '75%': 1.5,\n",
+       "    'max': 2.0},\n",
+       "   1: {'count': 3.0,\n",
+       "    'mean': 0.0,\n",
+       "    'std': 0.0,\n",
+       "    'min': 0.0,\n",
+       "    '25%': 0.0,\n",
+       "    '50%': 0.0,\n",
+       "    '75%': 0.0,\n",
+       "    'max': 0.0}}}]"
+      ]
+     },
+     "execution_count": 52,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Filtering is common when using tables. This modifier accepts binary mask and records new stage in the pipeline's metadata."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Length before filtering: 3, length after: 2\n"
+     ]
+    }
+   ],
+   "source": [
+    "ds = cdu.TableFilter(ds, ds._table[0] == 1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '<cascade.utils.table_dataset.TableFilter\\n    0  1\\n1  1  0\\n2  1  0',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 2,\n",
+       "  'columns': [0, 1],\n",
+       "  'info': {0: {'count': 2.0,\n",
+       "    'mean': 1.0,\n",
+       "    'std': 0.0,\n",
+       "    'min': 1.0,\n",
+       "    '25%': 1.0,\n",
+       "    '50%': 1.0,\n",
+       "    '75%': 1.0,\n",
+       "    'max': 1.0},\n",
+       "   1: {'count': 2.0,\n",
+       "    'mean': 0.0,\n",
+       "    'std': 0.0,\n",
+       "    'min': 0.0,\n",
+       "    '25%': 0.0,\n",
+       "    '50%': 0.0,\n",
+       "    '75%': 0.0,\n",
+       "    'max': 0.0}}},\n",
+       " {'name': '<cascade.utils.table_dataset.TableDataset\\n    0  1\\n0  2  0\\n1  1  0\\n2  1  0',\n",
+       "  'type': 'dataset',\n",
+       "  'columns': [0, 1],\n",
+       "  'len': 3,\n",
+       "  'info': {0: {'count': 3.0,\n",
+       "    'mean': 1.3333333333333333,\n",
+       "    'std': 0.5773502691896257,\n",
+       "    'min': 1.0,\n",
+       "    '25%': 1.0,\n",
+       "    '50%': 1.0,\n",
+       "    '75%': 1.5,\n",
+       "    'max': 2.0},\n",
+       "   1: {'count': 3.0,\n",
+       "    'mean': 0.0,\n",
+       "    'std': 0.0,\n",
+       "    'min': 0.0,\n",
+       "    '25%': 0.0,\n",
+       "    '50%': 0.0,\n",
+       "    '75%': 0.0,\n",
+       "    'max': 0.0}}}]"
+      ]
+     },
+     "execution_count": 54,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## More to come\n",
+    "Cascade is rapidly developing and shaped to the needs of its users, so there are more new tools to come!"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3.10.4 64-bit",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.4"
+  },
+  "orig_nbformat": 4,
+  "vscode": {
+   "interpreter": {
+    "hash": "87f4f7b13864d85c4a2c9cc8379c2fc28050103468031879c35c8b8ef7dd6990"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

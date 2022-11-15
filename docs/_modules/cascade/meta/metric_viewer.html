@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.meta.metric_viewer - cascade 0.7.3 documentation</title>
+    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>cascade.meta.metric_viewer - cascade 0.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -230,15 +230,14 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
 <span class="kn">import</span> <span class="nn">pendulum</span>
 <span class="kn">from</span> <span class="nn">flatten_json</span> <span class="kn">import</span> <span class="n">flatten</span>
 <span class="kn">from</span> <span class="nn">plotly</span> <span class="kn">import</span> <span class="n">graph_objects</span> <span class="k">as</span> <span class="n">go</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">MetaViewer</span>
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">__version__</span>
 
 
 <div class="viewcode-block" id="MetricViewer"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer">[docs]</a><span class="k">class</span> <span class="nc">MetricViewer</span><span class="p">:</span>
@@ -248,38 +247,41 @@
 <span class="sd">    As metrics it uses data from `metrics` field in models&#39;</span>
 <span class="sd">    meta and as parameters it uses `params` field.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="MetricViewer.__init__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MetricViewer.__init__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">scope</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">slice</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        repo: ModelRepo</span>
 <span class="sd">            ModelRepo object to extract metrics from</span>
+<span class="sd">        scope: Union[int, str, slice]</span>
+<span class="sd">            Index or a name of line to view. Can be set using `__getitem__`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span> <span class="o">=</span> <span class="n">repo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scope</span> <span class="o">=</span> <span class="n">scope</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reload_table</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MetricViewer.reload_table"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.reload_table">[docs]</a>    <span class="k">def</span> <span class="nf">reload_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MetricViewer.__getitem__"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.__getitem__">[docs]</a>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">slice</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates internal state</span>
+<span class="sd">        Sets the scope of the viewer after creation.</span>
+<span class="sd">        Basically creates new viewer with another scope.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">MetricViewer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetricViewer.reload_table"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.reload_table">[docs]</a>    <span class="k">def</span> <span class="nf">reload_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metrics</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="p">:</span>
+        <span class="n">selected_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="o">.</span><span class="n">get_line_names</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scope</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">selected_names</span> <span class="o">=</span> <span class="n">selected_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_scope</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selected_names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">selected_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">selected_names</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">selected_names</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="n">viewer_root</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">root</span>
 
-            <span class="c1"># Try to use viewer only on models using type key</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">view</span> <span class="o">=</span> <span class="n">MetaViewer</span><span class="p">(</span><span class="n">viewer_root</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;model&#39;</span><span class="p">})</span>
-            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                <span class="n">view</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">MetaViewer</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">viewer_root</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">model_name</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">for</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">model_names</span>
-                <span class="p">]</span>
-
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&#39;&#39;You use cascade </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s1"> with the repo generated in version &lt;= 0.4.1 without</span>
-<span class="s1">                type key in some of the meta files (in repo, line or model).</span>
-<span class="s1">                Consider updating your repo&#39;s meta by opening it with ModelRepo constructor in new version or manually.</span>
-<span class="s1">                In the following versions it will be deprecated.&#39;&#39;&#39;</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">)</span>
+            <span class="n">view</span> <span class="o">=</span> <span class="n">MetaViewer</span><span class="p">(</span><span class="n">viewer_root</span><span class="p">,</span> <span class="n">filt</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;model&#39;</span><span class="p">})</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">model_names</span><span class="p">)):</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -330,25 +332,45 @@
             <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="MetricViewer.serve"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.serve">[docs]</a>    <span class="k">def</span> <span class="nf">serve</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
-        <span class="n">include</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">exclude</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MetricViewer.get_best_by"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.get_best_by">[docs]</a>    <span class="k">def</span> <span class="nf">get_best_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">maximize</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Runs dash-based server with interactive table of metrics and parameters.</span>
+<span class="sd">        Loads the best model by the given metric</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            metric: str</span>
+<span class="sd">                Name of the metric</span>
+<span class="sd">            maximize: bool</span>
+<span class="sd">                The direction of choosing the best model: `True` if best is better</span>
+<span class="sd">                and `False` if less is better</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">metric</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">metric</span><span class="si">}</span><span class="s1"> is not in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
+
+        <span class="n">best_row</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">maximize</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">best_row</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">best_row</span><span class="p">[</span><span class="s1">&#39;num&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">num</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="MetricViewer.serve"><a class="viewcode-back" href="../../../cascade.meta.html#cascade.meta.MetricViewer.serve">[docs]</a>    <span class="k">def</span> <span class="nf">serve</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+            <span class="n">include</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">exclude</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs dash-based server with interactive table of metrics and parameters</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        page_size: int, optional</span>
 <span class="sd">            Size of the table in rows on one page</span>
 <span class="sd">        include: List[str], optional:</span>
-<span class="sd">            List of parameters or metrics to be added. Only them will be present along with some default.</span>
+<span class="sd">            List of parameters or metrics to be added. Only them will be present along with some default</span>
 <span class="sd">        exclude: List[str], optional:</span>
-<span class="sd">            List of parameters or metrics to be excluded from table.</span>
+<span class="sd">            List of parameters or metrics to be excluded from table</span>
 <span class="sd">        **kwargs:</span>
-<span class="sd">            Arguments of dash app. Can be ip or port for example.</span>
+<span class="sd">            Arguments of dash app. Can be ip or port for example</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">server</span> <span class="o">=</span> <span class="n">MetricServer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="n">page_size</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="n">include</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span><span class="p">)</span>
         <span class="n">server</span><span class="o">.</span><span class="n">serve</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
@@ -498,7 +520,7 @@
     <script src="../../../sphinx_highlight.js"></script>
     <script src="../../../scripts/furo.js"></script>
     <script src="../../../clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>
 </html>

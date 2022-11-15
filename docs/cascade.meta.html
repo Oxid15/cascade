@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.utils" href="cascade.utils.html" /><link rel="prev" title="cascade.models" href="cascade.models.html" />
 
-    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.meta - cascade 0.7.3 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>cascade.meta - cascade 0.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -199,7 +199,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -375,12 +376,6 @@ for example to find all models use <cite>filt={‘type’: ‘model’}</cite></
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="cascade.meta.MetaViewer.obj_to_dict">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obj_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.obj_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.obj_to_dict" title="Permalink to this definition">#</a></dt>
-<dd><p>Serializes the object using extended JSONEncoder</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.MetaViewer.read">
 <span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/meta/meta_viewer.html#MetaViewer.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetaViewer.read" title="Permalink to this definition">#</a></dt>
 <dd><p>Loads object from path</p>
@@ -405,17 +400,42 @@ for example to find all models use <cite>filt={‘type’: ‘model’}</cite></
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.meta.MetricViewer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.meta.</span></span><span class="sig-name descname"><span class="pre">MetricViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.meta.</span></span><span class="sig-name descname"><span class="pre">MetricViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer" title="Permalink to this definition">#</a></dt>
 <dd><p>Interface for viewing metrics in model meta files
 uses ModelRepo to extract metrics of all models if any.
 As metrics it uses data from <cite>metrics</cite> field in models’
 meta and as parameters it uses <cite>params</cite> field.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetricViewer.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.__getitem__" title="Permalink to this definition">#</a></dt>
+<dd><p>Sets the scope of the viewer after creation.
+Basically creates new viewer with another scope.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.MetricViewer.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.__init__" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>repo</strong> (<a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo" title="cascade.models.ModelRepo"><em>ModelRepo</em></a>) – ModelRepo object to extract metrics from</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<a class="reference internal" href="cascade.models.html#cascade.models.ModelRepo" title="cascade.models.ModelRepo"><em>ModelRepo</em></a>) – ModelRepo object to extract metrics from</p></li>
+<li><p><strong>scope</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>str</em><em>, </em><em>slice</em><em>]</em>) – Index or a name of line to view. Can be set using <cite>__getitem__</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.MetricViewer.get_best_by">
+<span class="sig-name descname"><span class="pre">get_best_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.get_best_by"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.get_best_by" title="Permalink to this definition">#</a></dt>
+<dd><p>Loads the best model by the given metric</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metric</strong> (<em>str</em>) – Name of the metric</p></li>
+<li><p><strong>maximize</strong> (<em>bool</em>) – The direction of choosing the best model: <cite>True</cite> if best is better
+and <cite>False</cite> if less is better</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -428,21 +448,20 @@ meta and as parameters it uses <cite>params</cite> field.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.MetricViewer.reload_table">
-<span class="sig-name descname"><span class="pre">reload_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.reload_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.reload_table" title="Permalink to this definition">#</a></dt>
-<dd><p>Updates internal state</p>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">reload_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.reload_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.reload_table" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.meta.MetricViewer.serve">
 <span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/metric_viewer.html#MetricViewer.serve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.MetricViewer.serve" title="Permalink to this definition">#</a></dt>
-<dd><p>Runs dash-based server with interactive table of metrics and parameters.</p>
+<dd><p>Runs dash-based server with interactive table of metrics and parameters</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>page_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Size of the table in rows on one page</p></li>
-<li><p><strong>include</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional:</em>) – List of parameters or metrics to be added. Only them will be present along with some default.</p></li>
-<li><p><strong>exclude</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional:</em>) – List of parameters or metrics to be excluded from table.</p></li>
-<li><p><strong>**kwargs</strong> – Arguments of dash app. Can be ip or port for example.</p></li>
+<li><p><strong>include</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional:</em>) – List of parameters or metrics to be added. Only them will be present along with some default</p></li>
+<li><p><strong>exclude</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional:</em>) – List of parameters or metrics to be excluded from table</p></li>
+<li><p><strong>**kwargs</strong> – Arguments of dash app. Can be ip or port for example</p></li>
 </ul>
 </dd>
 </dl>
@@ -615,13 +634,14 @@ and returns <cite>True</cite> or <cite>False</cite>. Calls <cite>__getitem__`s o
 <li><a class="reference internal" href="#cascade.meta.MetaViewer"><code class="docutils literal notranslate"><span class="pre">MetaViewer</span></code></a><ul>
 <li><a class="reference internal" href="#cascade.meta.MetaViewer.__getitem__"><code class="docutils literal notranslate"><span class="pre">MetaViewer.__getitem__()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.MetaViewer.__init__"><code class="docutils literal notranslate"><span class="pre">MetaViewer.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#cascade.meta.MetaViewer.obj_to_dict"><code class="docutils literal notranslate"><span class="pre">MetaViewer.obj_to_dict()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.MetaViewer.read"><code class="docutils literal notranslate"><span class="pre">MetaViewer.read()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.MetaViewer.write"><code class="docutils literal notranslate"><span class="pre">MetaViewer.write()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#cascade.meta.MetricViewer"><code class="docutils literal notranslate"><span class="pre">MetricViewer</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.meta.MetricViewer.__getitem__"><code class="docutils literal notranslate"><span class="pre">MetricViewer.__getitem__()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.MetricViewer.__init__"><code class="docutils literal notranslate"><span class="pre">MetricViewer.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.meta.MetricViewer.get_best_by"><code class="docutils literal notranslate"><span class="pre">MetricViewer.get_best_by()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.MetricViewer.plot_table"><code class="docutils literal notranslate"><span class="pre">MetricViewer.plot_table()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.MetricViewer.reload_table"><code class="docutils literal notranslate"><span class="pre">MetricViewer.reload_table()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.MetricViewer.serve"><code class="docutils literal notranslate"><span class="pre">MetricViewer.serve()</span></code></a></li>

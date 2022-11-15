@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.models" href="cascade.models.html" /><link rel="prev" title="cascade.base" href="cascade.base.html" />
 
-    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.2.0.post0, furo 2022.09.15"/>
-        <title>cascade.data - cascade 0.7.3 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>cascade.data - cascade 0.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
-    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -199,7 +199,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -658,6 +659,12 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.data.Pickler.ds">
+<span class="sig-name descname"><span class="pre">ds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/pickler.html#Pickler.ds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.Pickler.ds" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns pickled dataset</p>
+</dd></dl>
+
 </dd></dl>
 
 <div class="line-block">
@@ -840,6 +847,88 @@ Is not used, when <cite>num</cite> is specified.</p></li>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.data.VersionAssigner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.data.</span></span><span class="sig-name descname"><span class="pre">VersionAssigner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/data/version_assigner.html#VersionAssigner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.VersionAssigner" title="Permalink to this definition">#</a></dt>
+<dd><p>Class for automatic data versioning using metadata.
+<cite>VersionAssigner</cite> is a simple <cite>Modifier</cite> that tracks changes in metadata and assigns
+dataset a version considering changes in meta.
+The version consists of two parts, namely major and minor in the format <cite>MAJOR.MINOR</cite> just
+like in semantic versioning. The meaning of parts is the following: <em>major</em> number changes
+if there are changes in the structure of the pipeline e.g. some dataset was added/removed;
+<em>minor</em> number changes in case of any metadata change e.g. new data arrived and changed
+the length of modifiers on pipeline.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set up the pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">)</span> <span class="c1"># can be any supported meta format</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+<span class="gp">... </span><span class="mf">0.0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Changes its structure - add new modifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">RangeSampler</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+<span class="gp">... </span><span class="mf">1.0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Revert changes - version downgrades back</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+<span class="gp">... </span><span class="mf">0.0</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Update input data - minor update</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+<span class="gp">... </span><span class="mf">0.1</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some limitations are present. If meta data of some dataset has
+something random or run-dependent like for example memory
+address of an object or time of creation, then the version will
+bump on every run.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In current implementation counts only highest-level pipeline changes.
+For example if final part of a pipeline is Concatenator will only
+count it and not the structure of a pipelines before.
+It is only applied to the major version changes and may be fixed in
+following versions.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.data.VersionAssigner.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/data/version_assigner.html#VersionAssigner.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.data.VersionAssigner.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="#cascade.data.Dataset" title="cascade.data.Dataset"><em>Dataset</em></a>) – a dataset to infer version to</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – a path to a version log file of this dataset can be of any supported
+meta format</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 </section>
 
         </article>
@@ -949,6 +1038,7 @@ Is not used, when <cite>num</cite> is specified.</p></li>
 </li>
 <li><a class="reference internal" href="#cascade.data.Pickler"><code class="docutils literal notranslate"><span class="pre">Pickler</span></code></a><ul>
 <li><a class="reference internal" href="#cascade.data.Pickler.__init__"><code class="docutils literal notranslate"><span class="pre">Pickler.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.data.Pickler.ds"><code class="docutils literal notranslate"><span class="pre">Pickler.ds()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#cascade.data.RandomSampler"><code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code></a><ul>
@@ -964,6 +1054,10 @@ Is not used, when <cite>num</cite> is specified.</p></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#cascade.data.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.data.VersionAssigner"><code class="docutils literal notranslate"><span class="pre">VersionAssigner</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.data.VersionAssigner.__init__"><code class="docutils literal notranslate"><span class="pre">VersionAssigner.__init__()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
