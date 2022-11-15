@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from ..data import T, Dataset, Sampler
-from numpy import unique, min, histogram
+from numpy import unique, min
 from tqdm import trange
 
 
@@ -28,20 +28,27 @@ class UnderSampler(Sampler):
     To undersample it removes items of majority class for the amount
     of times needed to make equal distribution.
     Works for any number of classes.
+
+    Labels are considered to be in the second place of each item that a dataset returns.
+
+    Important
+    ---------
+    Sampler orders the items in the dataset.
+    Consider shuffling the dataset after sampling if label order is important.
     """
     def __init__(self, dataset: Dataset) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
-        ulabels = unique(labels)
-        label_nums, _ = histogram(labels, bins=len(ulabels))
-        rem_nums = min(label_nums)
+        ulabels, counts = unique(labels, return_counts=True)
+        min_count = min(counts)
 
         self._rem_indices = []
         for label in ulabels:
             k = 0
-            for _ in range(rem_nums):
+            for _ in range(min_count):
                 while labels[k] != label:
                     k += 1
                 self._rem_indices.append(k)
+
         ln = len(self._rem_indices)
         print(f'Original length was {len(dataset)} and new is {ln}')
         super().__init__(dataset, ln)

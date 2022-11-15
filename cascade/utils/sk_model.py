@@ -15,14 +15,13 @@ limitations under the License.
 """
 
 import os
-# import glob
-# from hashlib import md5
+import glob
+from hashlib import md5
 import pickle
 from typing import Any, Dict, List
-import warnings
 from sklearn.pipeline import Pipeline
 
-# from ..base import MetaHandler
+from ..base import MetaHandler
 from ..models import BasicModel
 
 
@@ -32,7 +31,7 @@ class SkModel(BasicModel):
     Accepts the name and block to form pipeline.
     Can fit, evaluate, predict save and load out of the box.
     """
-    def __init__(self, name=None, blocks=None, **kwargs) -> None:
+    def __init__(self, blocks=None, **kwargs) -> None:
         """
         Parameters
         ----------
@@ -41,13 +40,7 @@ class SkModel(BasicModel):
         blocks: list, optional
             List of sklearn transformers to make a pipeline from
         """
-        if name is not None:
-            warnings.warn('''You passed not required argument name.
-            It is deprecated and will be removed in following versions''', FutureWarning)
-            self.name = name
-            super().__init__(name=name, **kwargs)
-        else:
-            super().__init__(**kwargs)
+        super().__init__(**kwargs)
 
         if blocks is not None:
             self._pipeline = self._construct_pipeline(blocks)
@@ -74,30 +67,36 @@ class SkModel(BasicModel):
         """
         return self._pipeline.predict_proba(x, *args, **kwargs)
 
-    # Will be added again when thoroughly tested
-    # def _check_model_hash(self, meta, path_w_ext) -> None:
-    #     with open(path_w_ext, 'rb') as f:
-    #         file_hash = md5(f.read()).hexdigest()
-    #     if file_hash == meta['md5sum']:
-    #         return
-    #     else:
-    #         raise RuntimeError(f'.pkl model hash check failed\n \
-    #              it may be that model\'s .pkl file was corrupted\n \
-    #              hash from meta: {meta["md5sum"]}\n \
-    #              hash from .pkl: {file_hash}')
+    def _check_model_hash(self, path) -> None:
+        root = os.path.dirname(path)
+        names = glob.glob(os.path.join(f'{root}', 'meta.*'))
+        if len(names) == 1:
+            meta = MetaHandler().read(names[0])
+            # Uses first meta in list
+            # Usually the list is of unit length
+            meta = meta[0]
+            if 'md5sum' in meta:
+                with open(path, 'rb') as f:
+                    file_hash = md5(f.read()).hexdigest()
+                if file_hash != meta['md5sum']:
+                    raise RuntimeError(
+                        f'.pkl model hash check failed '
+                        f'it may be that model\'s .pkl file was corrupted\n'
+                        f'hash from {names[0]}: {meta["md5sum"]}\n'
+                        f'hash of {path}: {file_hash}'
+                    )
+        elif len(names) > 1:
+            raise RuntimeError(f'Multiple possible meta-files found: {names}')
 
-    def load(self, path: str) -> None:
+    def load(self, path, check_hash=True) -> None:
         """
         Loads the model from path provided. If no extension, .pkl is added.
         """
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
-        # root = os.path.dirname(path)
-        # names = glob.glob(os.path.join(f'{root}', 'meta.json'))
-        # if len(names):
-        #     meta = MetaHandler().read(names[0])
-        #     if 'md5sum' in meta:
-        #         self._check_model_hash(meta, path)
+
+        if check_hash:
+            self._check_model_hash(path)
 
         with open(path, 'rb') as f:
             self._pipeline = pickle.load(f)

@@ -54,7 +54,7 @@ class Dataset(Generic[T], Traceable):
         """
         Returns
         -------
-        repr: str 
+        repr: str
             Representation of a Dataset. This repr used as a name for get_meta() method
             by default gives the name of class from basic repr
 

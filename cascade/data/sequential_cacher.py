@@ -30,10 +30,10 @@ class SequentialCacher(Modifier):
     BruteforceCacher
     """
     def __init__(
-        self,
-        dataset: Dataset,
-        batch_size: int = 2,
-        *args, **kwargs) -> None:
+            self,
+            dataset: Dataset,
+            batch_size: int = 2,
+            *args, **kwargs) -> None:
         """
         Parameters
         ----------

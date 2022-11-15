@@ -59,3 +59,9 @@ class Pickler(Modifier):
     def _load(self) -> None:
         with open(self._path, 'rb') as f:
             self._dataset = pickle.load(f)
+
+    def ds(self):
+        """
+        Returns pickled dataset
+        """
+        return self._dataset

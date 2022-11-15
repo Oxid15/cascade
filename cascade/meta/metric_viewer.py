@@ -15,15 +15,14 @@ limitations under the License.
 """
 
 import os
-from typing import List
-import warnings
+from typing import Union, List
+
 import pendulum
 from flatten_json import flatten
 from plotly import graph_objects as go
 import pandas as pd
 
 from . import MetaViewer
-from .. import __version__
 
 
 class MetricViewer:
@@ -33,38 +32,41 @@ class MetricViewer:
     As metrics it uses data from `metrics` field in models'
     meta and as parameters it uses `params` field.
     """
-    def __init__(self, repo) -> None:
+    def __init__(self, repo, scope: Union[int, str, slice] = None) -> None:
         """
         Parameters
         ----------
         repo: ModelRepo
             ModelRepo object to extract metrics from
+        scope: Union[int, str, slice]
+            Index or a name of line to view. Can be set using `__getitem__`
         """
         self._repo = repo
+        self._scope = scope
         self._metrics = []
         self.reload_table()
 
-    def reload_table(self) -> None:
+    def __getitem__(self, key: Union[int, str, slice]):
         """
-        Updates internal state
+        Sets the scope of the viewer after creation.
+        Basically creates new viewer with another scope.
         """
+        return MetricViewer(self._repo, scope=key)
+
+    def reload_table(self):
         self._metrics = []
-        for line in self._repo:
+        selected_names = self._repo.get_line_names()
+
+        if self._scope is not None:
+            selected_names = selected_names[self._scope]
+            if not isinstance(selected_names, list):
+                selected_names = [selected_names]
+
+        for name in selected_names:
+            line = self._repo[name]
             viewer_root = line.root
 
-            # Try to use viewer only on models using type key
-            try:
-                view = MetaViewer(viewer_root, filt={'type': 'model'})
-            except KeyError:
-                view = [
-                    MetaViewer(os.path.join(viewer_root, os.path.dirname(model_name)))[0]
-                    for model_name in line.model_names
-                ]
-
-                warnings.warn(f'''You use cascade {__version__} with the repo generated in version <= 0.4.1 without
-                type key in some of the meta files (in repo, line or model).
-                Consider updating your repo's meta by opening it with ModelRepo constructor in new version or manually.
-                In the following versions it will be deprecated.''', FutureWarning)
+            view = MetaViewer(viewer_root, filt={'type': 'model'})
 
             for i in range(len(line.model_names)):
                 try:
@@ -115,25 +117,45 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def serve(
-        self,
-        page_size: int = 50,
-        include: List[str] = None,
-        exclude: List[str] = None,
-        **kwargs) -> None:
+    def get_best_by(self, metric: str, maximize=True):
         """
-        Runs dash-based server with interactive table of metrics and parameters.
+        Loads the best model by the given metric
+
+        Parameters
+        ----------
+            metric: str
+                Name of the metric
+            maximize: bool
+                The direction of choosing the best model: `True` if best is better
+                and `False` if less is better
+        """
+        assert metric in self.table, f'{metric} is not in {self.table.columns}'
+        t = self.table.loc[self.table[metric].notna()]
+
+        best_row = t.sort_values(metric, ascending=maximize).iloc[-1]
+        name = os.path.split(best_row['line'])[-1]
+        num = best_row['num']
+        return self._repo[name][num]
+
+    def serve(
+            self,
+            page_size: int = 50,
+            include: List[str] = None,
+            exclude: List[str] = None,
+            **kwargs) -> None:
+        """
+        Runs dash-based server with interactive table of metrics and parameters
 
         Parameters
         ----------
         page_size: int, optional
             Size of the table in rows on one page
         include: List[str], optional:
-            List of parameters or metrics to be added. Only them will be present along with some default.
+            List of parameters or metrics to be added. Only them will be present along with some default
         exclude: List[str], optional:
-            List of parameters or metrics to be excluded from table.
+            List of parameters or metrics to be excluded from table
         **kwargs:
-            Arguments of dash app. Can be ip or port for example.
+            Arguments of dash app. Can be ip or port for example
         """
         server = MetricServer(self, page_size=page_size, include=include, exclude=exclude)
         server.serve(**kwargs)
