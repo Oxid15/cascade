@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .meta_viewer import MetaViewer
-from .metric_viewer import MetricViewer
-from .validator import DataValidationException, Validator, AggregateValidator, PredicateValidator
-from .meta_validator import MetaValidator
-from .history_viewer import HistoryViewer
-from .dataleak_validator import DataleakValidator
-from .hashes import numpy_md5
+from hashlib import md5
+import numpy as np
+
+
+def numpy_md5(x) -> str:
+    return md5(x.tobytes()).hexdigest()
