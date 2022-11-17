@@ -15,15 +15,17 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import List, Dict
-from ..base import MetaHandler, JSONEncoder, supported_meta_formats
+
+from ..base import MetaHandler, supported_meta_formats
 
 
 class MetaViewer:
     """
     The class to view all metadata in folders and subfolders.
     """
-    def __init__(self, root: str, filt: Dict=None) -> None:
+    def __init__(self, root: str, filt: Dict = None) -> None:
         """
         Parameters
         ----------
@@ -60,7 +62,7 @@ class MetaViewer:
         meta: List[Dict]
             Meta object
         """
-        return self.read(self.names[index])
+        return self._mh.read(self.names[index])
 
     def __len__(self) -> int:
         return len(self.names)
@@ -69,12 +71,14 @@ class MetaViewer:
         """
         Dumps obj to path
         """
+        warnings.warn('This method will be deprecated in future versions. Consider using MetaHandler instead.')
         self._mh.write(path, obj)
 
     def read(self, path) -> List[Dict]:
         """
         Loads object from path
         """
+        warnings.warn('This method will be deprecated in future versions. Consider using MetaHandler instead.')
         return self._mh.read(path)
 
     def _filter(self, name):
@@ -87,10 +91,3 @@ class MetaViewer:
             if self._filt[key] != meta[key]:
                 return False
         return True
-
-    @staticmethod
-    def obj_to_dict(obj):
-        """
-        Serializes the object using extended JSONEncoder
-        """
-        return JSONEncoder().obj_to_dict(obj)

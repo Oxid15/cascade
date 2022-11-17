@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from .folder_image_dataset import FolderImageDataset
-from .sk_classifier import SkModel, SkClassifier
+from .sk_model import SkModel
 from .table_dataset import (TableDataset,
                             TableFilter, CSVDataset,
                             PartedTableLoader, TableIterator,
@@ -29,3 +29,4 @@ from .model_aggregate import ModelAggregate
 from .baselines import ConstantBaseline
 from .torch_model import TorchModel
 from .pa_schema_validator import PaSchemaValidator
+from .weighed_sampler import WeighedSampler

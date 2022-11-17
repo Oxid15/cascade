@@ -19,7 +19,7 @@ class PaSchemaValidator(AggregateValidator):
             Schema of the table in the format that is acceptable by pandera
             or path to the YAML file with schema.
             For more details on schemas see pandera's documentation.
-        
+
         Raises
         ------
         DataValidationException

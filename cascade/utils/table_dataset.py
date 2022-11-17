@@ -145,7 +145,7 @@ class TableIterator(Iterator):
     """
     Iterates over the table from path by the chunks.
     """
-    def __init__(self, csv_file_path: str, *args, chunk_size:int = 1000, **kwargs):
+    def __init__(self, csv_file_path: str, *args, chunk_size: int = 1000, **kwargs):
         """
         Parameters
         ----------
@@ -173,7 +173,6 @@ class LargeCSVDataset(SequentialCacher):
         self.num_batches = dataset._table.npartitions
         self.bs = self.len // self.num_batches
         super().__init__(dataset, self.bs)
-
 
     def _load(self, index):
         self._batch = TableDataset(t=self._dataset[index])

@@ -7,7 +7,7 @@ class Traceable:
     Base class for everything that has metadata in cascade.
     Handles the logic of getting and updating internal meta prefix.
     """
-    def __init__(self, *args, meta_prefix:Union[Dict, str] = None, **kwargs) -> None:
+    def __init__(self, *args, meta_prefix: Union[Dict, str] = None, **kwargs) -> None:
         """
         Parameters
         ----------
@@ -15,7 +15,7 @@ class Traceable:
             The dictionary that is used to update object's meta in `get_meta` call.
             Due to the call of update can overwrite default values.
             If str - prefix assumed to be path and loaded using MetaHandler.
-        
+
         See also
         --------
         cascade.base.MetaHandler

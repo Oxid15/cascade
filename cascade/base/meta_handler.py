@@ -93,7 +93,7 @@ class JSONHandler(BaseHandler):
                 self._raise_io_error(path, e)
             return meta
 
-    def write(self, path:str, obj: List[Dict], overwrite=True) -> None:
+    def write(self, path: str, obj: List[Dict], overwrite=True) -> None:
         if not overwrite and os.path.exists(path):
             return
 
@@ -181,7 +181,7 @@ class MetaHandler:
         handler = self._get_handler(path)
         return handler.read(path)
 
-    def write(self, path: str, obj, overwrite:bool = True) -> None:
+    def write(self, path: str, obj, overwrite: bool = True) -> None:
         """
         Writes object to path.
 
