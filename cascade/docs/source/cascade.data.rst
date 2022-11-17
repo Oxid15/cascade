@@ -18,6 +18,15 @@ cascade.data
 
 | 
 
+.. autoclass:: cascade.data.Composer
+    :members:
+
+|
+
+|
+
+| 
+
 .. autoclass:: cascade.data.Concatenator
     :members:
 

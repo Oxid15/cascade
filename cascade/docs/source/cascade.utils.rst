@@ -73,6 +73,15 @@ cascade.utils
 
 |
 
+.. autoclass:: cascade.utils.TextClassificationDataset
+    :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.utils.TableFilter
     :members:
 
@@ -129,6 +138,24 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.TimeSeriesDataset
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.TorchModel
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.WeighedSampler
     :members:
 
 |
