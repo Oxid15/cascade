@@ -23,6 +23,5 @@ The logo of the project is a depiction of these principles: it symbolizes modula
     :maxdepth: 3
 
     quickstart
-    examples/dataset_zoo.ipynb
     concepts
     modules
