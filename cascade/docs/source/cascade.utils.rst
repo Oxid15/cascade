@@ -37,6 +37,15 @@ cascade.utils
 
 |
 
+.. autoclass:: cascade.utils.UnderSampler
+    :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.utils.PaSchemaValidator
     :members:
 
@@ -56,6 +65,15 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.TableDataset
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.TextClassificationDataset
     :members:
 
 |
@@ -111,6 +129,33 @@ cascade.utils
 |
 
 .. autoclass:: cascade.utils.NullValidator
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.TimeSeriesDataset
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.TorchModel
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.WeighedSampler
     :members:
 
 |

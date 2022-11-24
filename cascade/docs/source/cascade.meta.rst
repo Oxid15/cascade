@@ -1,6 +1,24 @@
 cascade.meta
 ============ 
 
+.. autoclass:: cascade.meta.DataleakValidator
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.numpy_md5
+    :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.meta.HistoryViewer
     :members:
 
