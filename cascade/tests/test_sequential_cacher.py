@@ -25,4 +25,4 @@ def test(number_dataset):
     res = []
     for i in range(len(ds)):
         res.append(ds[i])
-    assert res == number_dataset._data
+    assert res == [item for item in number_dataset]
