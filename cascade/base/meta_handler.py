@@ -71,11 +71,14 @@ class BaseHandler:
     def write(self, path: str, obj, overwrite=True) -> None:
         raise NotImplementedError()
 
-    def _raise_io_error(self, path, exc):
+    def _raise_io_error(self, path, exc=None):
         # Any file decoding errors will be
         # prepended with filepath for user
         # to be able to identify broken file
-        raise IOError(f'Error while reading file `{path}`') from exc
+        if exc is not None:
+            raise IOError(f'Error while reading file `{path}`') from exc
+        else:
+            raise IOError(f'Error while reading file `{path}`')
 
 
 class JSONHandler(BaseHandler):
@@ -110,6 +113,10 @@ class YAMLHandler(BaseHandler):
         with open(path, 'r') as meta_file:
             try:
                 meta = yaml.safe_load(meta_file)
+
+                # Safe load may return None if something wrong
+                if meta is None:
+                    self._raise_io_error(path)
             except yaml.YAMLError as e:
                 self._raise_io_error(path, e)
             return meta
