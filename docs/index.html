@@ -165,6 +165,7 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/model_training_trainers.html">Model training using trainers</a></li>
@@ -238,6 +239,7 @@ workflow, a set of templates for typical tasks.</p>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#use-cases">Use cases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/model_training.html">Model training</a></li>
 <li class="toctree-l3"><a class="reference internal" href="examples/model_training_trainers.html">Model training using trainers</a></li>
@@ -275,6 +277,7 @@ workflow, a set of templates for typical tasks.</p>
 <li class="toctree-l2"><a class="reference internal" href="cascade.data.html">cascade.data</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.ApplyModifier"><code class="docutils literal notranslate"><span class="pre">ApplyModifier</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.BruteforceCacher"><code class="docutils literal notranslate"><span class="pre">BruteforceCacher</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Composer"><code class="docutils literal notranslate"><span class="pre">Composer</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Concatenator"><code class="docutils literal notranslate"><span class="pre">Concatenator</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.CyclicSampler"><code class="docutils literal notranslate"><span class="pre">CyclicSampler</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
@@ -303,6 +306,8 @@ workflow, a set of templates for typical tasks.</p>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cascade.meta.html">cascade.meta</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.DataleakValidator"><code class="docutils literal notranslate"><span class="pre">DataleakValidator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.numpy_md5"><code class="docutils literal notranslate"><span class="pre">numpy_md5</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.HistoryViewer"><code class="docutils literal notranslate"><span class="pre">HistoryViewer</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaValidator"><code class="docutils literal notranslate"><span class="pre">MetaValidator</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.meta.html#cascade.meta.MetaViewer"><code class="docutils literal notranslate"><span class="pre">MetaViewer</span></code></a></li>
@@ -317,15 +322,20 @@ workflow, a set of templates for typical tasks.</p>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.FolderImageDataset"><code class="docutils literal notranslate"><span class="pre">FolderImageDataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NumpyWrapper"><code class="docutils literal notranslate"><span class="pre">NumpyWrapper</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.OverSampler"><code class="docutils literal notranslate"><span class="pre">OverSampler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.UnderSampler"><code class="docutils literal notranslate"><span class="pre">UnderSampler</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PaSchemaValidator"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.SkModel"><code class="docutils literal notranslate"><span class="pre">SkModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableDataset"><code class="docutils literal notranslate"><span class="pre">TableDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TextClassificationDataset"><code class="docutils literal notranslate"><span class="pre">TextClassificationDataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableFilter"><code class="docutils literal notranslate"><span class="pre">TableFilter</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.CSVDataset"><code class="docutils literal notranslate"><span class="pre">CSVDataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.PartedTableLoader"><code class="docutils literal notranslate"><span class="pre">PartedTableLoader</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TableIterator"><code class="docutils literal notranslate"><span class="pre">TableIterator</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.LargeCSVDataset"><code class="docutils literal notranslate"><span class="pre">LargeCSVDataset</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.NullValidator"><code class="docutils literal notranslate"><span class="pre">NullValidator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TimeSeriesDataset"><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.TorchModel"><code class="docutils literal notranslate"><span class="pre">TorchModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cascade.utils.html#cascade.utils.WeighedSampler"><code class="docutils literal notranslate"><span class="pre">WeighedSampler</span></code></a></li>
 </ul>
 </li>
 </ul>

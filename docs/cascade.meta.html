@@ -171,6 +171,7 @@
 <li class="toctree-l2"><a class="reference internal" href="examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="examples/dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
@@ -216,6 +217,42 @@
         <article role="main">
           <section id="cascade-meta">
 <h1>cascade.meta<a class="headerlink" href="#cascade-meta" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.meta.DataleakValidator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.meta.</span></span><span class="sig-name descname"><span class="pre">DataleakValidator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/dataleak_validator.html#DataleakValidator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.DataleakValidator" title="Permalink to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="cascade.meta.DataleakValidator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/meta/dataleak_validator.html#DataleakValidator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.DataleakValidator.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a Modifier. Makes no transformations in initialization.
+:param dataset: A dataset to modify
+:type dataset: Dataset</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.meta.numpy_md5">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.meta.</span></span><span class="sig-name descname"><span class="pre">numpy_md5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/hashes.html#numpy_md5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.numpy_md5" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.meta.HistoryViewer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.meta.</span></span><span class="sig-name descname"><span class="pre">HistoryViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_models</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/meta/history_viewer.html#HistoryViewer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.meta.HistoryViewer" title="Permalink to this definition">#</a></dt>
@@ -621,6 +658,11 @@ and returns <cite>True</cite> or <cite>False</cite>. Calls <cite>__getitem__`s o
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">cascade.meta</a><ul>
+<li><a class="reference internal" href="#cascade.meta.DataleakValidator"><code class="docutils literal notranslate"><span class="pre">DataleakValidator</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.meta.DataleakValidator.__init__"><code class="docutils literal notranslate"><span class="pre">DataleakValidator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.meta.numpy_md5"><code class="docutils literal notranslate"><span class="pre">numpy_md5</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.HistoryViewer"><code class="docutils literal notranslate"><span class="pre">HistoryViewer</span></code></a><ul>
 <li><a class="reference internal" href="#cascade.meta.HistoryViewer.__init__"><code class="docutils literal notranslate"><span class="pre">HistoryViewer.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.meta.HistoryViewer.plot"><code class="docutils literal notranslate"><span class="pre">HistoryViewer.plot()</span></code></a></li>

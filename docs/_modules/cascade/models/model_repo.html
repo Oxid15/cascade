@@ -170,6 +170,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../concepts.html">Concepts</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../cascade.base.html">cascade.base</a></li>
@@ -272,18 +273,18 @@
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
 <span class="sd">    &gt;&gt;&gt; from cascade.models import ModelRepo</span>
-<span class="sd">    &gt;&gt;&gt; from cascade.utils import ConstantBaseline</span>
-<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, _meta_prefix={&#39;description&#39;: &#39;This is a repo with one VGG16 line for the example.&#39;})</span>
-<span class="sd">    &gt;&gt;&gt; line = repo.add_line(&#39;model&#39;, ConstantBaseline)</span>
-<span class="sd">    &gt;&gt;&gt; model = ConstantBaseline(1)</span>
+<span class="sd">    &gt;&gt;&gt; from cascade import utils as cdu</span>
+<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, meta_prefix={&#39;description&#39;: &#39;This is a repo with one line for the example.&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; line = repo.add_line(&#39;model&#39;, cdu.ConstantBaseline)</span>
+<span class="sd">    &gt;&gt;&gt; model = cdu.ConstantBaseline(1)</span>
 <span class="sd">    &gt;&gt;&gt; model.fit()</span>
 <span class="sd">    &gt;&gt;&gt; line.save(model)</span>
 
 
 <span class="sd">    &gt;&gt;&gt; from cascade.models import ModelRepo</span>
-<span class="sd">    &gt;&gt;&gt; from cascade.utils import ConstantBaseline</span>
-<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, lines=[dict(name=&#39;constant&#39;, model_cls=ConstantBaseline)])</span>
-<span class="sd">    &gt;&gt;&gt; model = ConstantBaseline()</span>
+<span class="sd">    &gt;&gt;&gt; from cascade import utils as cdu</span>
+<span class="sd">    &gt;&gt;&gt; repo = ModelRepo(&#39;repo&#39;, lines=[dict(name=&#39;constant&#39;, model_cls=cdu.ConstantBaseline)])</span>
+<span class="sd">    &gt;&gt;&gt; model = cdu.ConstantBaseline()</span>
 <span class="sd">    &gt;&gt;&gt; model.fit()</span>
 <span class="sd">    &gt;&gt;&gt; repo[&#39;constant&#39;].save(model)</span>
 <span class="sd">    &quot;&quot;&quot;</span>

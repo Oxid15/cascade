@@ -3,12 +3,12 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Concepts" href="../concepts.html" /><link rel="prev" title="Data validation" href="data_validation.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Pipeline building" href="pipeline_building.html" /><link rel="prev" title="Quickstart" href="../quickstart.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-5.2.3, furo 2022.09.15"/>
-        <title>Dataset Zoo - cascade 0.7.3 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>Dataset Zoo - cascade 0.8.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.7.3 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -164,14 +164,14 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../quickstart.html">Quickstart</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Dataset Zoo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_training.html">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_validation.html">Data validation</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Dataset Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cascade.base.html">cascade.base</a></li>
@@ -200,7 +200,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -468,7 +469,7 @@ div.rendered_html tbody tr:hover {
 <p>Cascade has plenty of solutions - basic that are added to the core and more specific that are in the special <code class="docutils literal notranslate"><span class="pre">utils</span></code> module. And if you didn’t found suitable component, you can write it yourself.</p>
 <p>Here some of already-made components are presented. These are the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code>s - building blocks of Cascade’s pipelines, their description and short examples of how to use them in your workflow.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cascade</span>
@@ -481,7 +482,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.8.0-alpha
+0.8.0
 </pre></div></div>
 </div>
 <section id="Wrappers">
@@ -666,10 +667,10 @@ div.rendered_html tbody tr:hover {
 <span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">train_ds</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">test_ds</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -704,6 +705,36 @@ div.rendered_html tbody tr:hover {
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 8,
   &#39;obj_type&#39;: &#34;&lt;class &#39;list&#39;&gt;&#34;}]
+</pre></div></div>
+</div>
+</section>
+<section id="Composer">
+<h2>Composer<a class="headerlink" href="#Composer" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="../cascade.data.html#cascade.data.Composer">Composer documentation</a></p>
+<p>Composer is another way of unifying two datasets, but in this case the union dataset returns tuples of item from composed datasets. This is useful, when items and labels for classification are from different datasets.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+
+
+<span class="n">items</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Composer</span><span class="p">((</span><span class="n">items</span><span class="p">,</span> <span class="n">labels</span><span class="p">))</span>
+
+<span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[(&#39;A&#39;, 0), (&#39;B&#39;, 1), (&#39;C&#39;, 0), (&#39;D&#39;, 1)]
 </pre></div></div>
 </div>
 </section>
@@ -989,20 +1020,21 @@ loaded 19
 </section>
 <section id="VersionAssigner">
 <h2>VersionAssigner<a class="headerlink" href="#VersionAssigner" title="Permalink to this heading">#</a></h2>
-<p><a class="reference external" href="../cascade.meta.html#cascade.meta.VersionAssigner">VersionAssigner documentation</a></p>
-<p>To track any ML experiment we should know what data passed into the model. In real-life ML the data is always changing and to track its lineage Cascade offers an engineer some of its tools.</p>
-<p><code class="docutils literal notranslate"><span class="pre">VersionAssigner</span></code> infers the version of a pipeline given using its metadata. It logs metadata state and when something changes it decides which part of version to update.</p>
-<p>Dataset versions in Cascade consist of two parts: <code class="docutils literal notranslate"><span class="pre">MAJOR.MINOR</span></code>. Major version updates when pipeline structure changed - new stage added for example. Minor updates when anything except structure changes.</p>
-<p>It is easier to illustrate that in the example:</p>
+<p><a class="reference external" href="../cascade.data.html#cascade.data.VersionAssigner">VersionAssigner documentation</a></p>
+<div class="line-block">
+<div class="line">Dataset versioning is the way to compress whole information about a pipeline into human-readable form of semantically significant numbers separated by a dot.</div>
+<div class="line">The principle is basically the same as in SemVer - the version structure is <code class="docutils literal notranslate"><span class="pre">MAJOR.MINOR</span></code>. The first component changes when the change is in the pipeline composition i.e. some modifiers added/deleted. The second changes when any field of meta data changes.</div>
+<div class="line">VersionAssigner tracks versions using special log file, which can be used by the user to determine which kind of dataset corresponds to which version.</div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
+
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;ds_version_log.yml&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1011,18 +1043,18 @@ loaded 19
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.0
+Dataset version: 0.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Modifier</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="c1"># New stage added - structure changed</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;ds_version_log.yml&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
-</pre></div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Change its structure - add new modifier</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">RangeSampler</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1030,17 +1062,35 @@ loaded 19
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.0
+Dataset version: 1.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span> <span class="c1"># New data added</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Modifier</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;ds_version_log.yml&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Revert changes - version downgrades back using records</span>
+<span class="c1"># in the data_log</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dataset version: 0.0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update input data - minor update</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s1">&#39;data_log.yml&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1049,7 +1099,7 @@ loaded 19
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.1
+Dataset version: 0.1
 </pre></div></div>
 </div>
 </section>
@@ -1162,6 +1212,67 @@ Original length was 4 and new is 3
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 [(&#39;a&#39;, 0), (&#39;b&#39;, 1), (&#39;d&#39;, 2)]
+</pre></div></div>
+</div>
+</section>
+<section id="WeighedSampler">
+<h2>WeighedSampler<a class="headerlink" href="#WeighedSampler" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="../cascade.utils.html#cascade.utils.WeighedSampler">WeighedSampler documentation</a></p>
+<p>If you need more freedom in how to sample your data according to the label you have, you can use this</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">cdu</span>
+<span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+<span class="p">])</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">WeighedSampler</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">partitioning</span><span class="o">=</span><span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="mi">2</span>
+<span class="p">})</span>
+
+<span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4/4 [00:00&lt;?, ?it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Original length was 4 and new is 7
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[(&#39;A&#39;, 0), (&#39;B&#39;, 0), (&#39;A&#39;, 0), (&#39;B&#39;, 0), (&#39;C&#39;, 1), (&#39;C&#39;, 1), (&#39;D&#39;, 2)]
 </pre></div></div>
 </div>
 </section>
@@ -1478,7 +1589,7 @@ Original length was 4 and new is 3
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_dataset_zoo_57_1.png" src="../_images/examples_dataset_zoo_57_1.png" />
+<img alt="../_images/examples_dataset_zoo_62_1.png" src="../_images/examples_dataset_zoo_62_1.png" />
 </div>
 </div>
 <p>You can always get the data alone using <code class="docutils literal notranslate"><span class="pre">to_numpy()</span></code></p>
@@ -1719,9 +1830,8 @@ array([1, 0, 2, 5])
 </div></div>
 </div>
 </section>
-</section>
 <section id="TableDataset">
-<h2>TableDataset<a class="headerlink" href="#TableDataset" title="Permalink to this heading">#</a></h2>
+<h3>TableDataset<a class="headerlink" href="#TableDataset" title="Permalink to this heading">#</a></h3>
 <p><a class="reference external" href="../cascade.utils.html#cascade.utils.TableDataset">TableDataset documentation</a></p>
 <p>Frequently the work with tables is done. To track them efficiently using Cascade this wrapper was created.</p>
 <div class="nbinput docutils container">
@@ -1859,6 +1969,7 @@ Length before filtering: 3, length after: 2
 </pre></div></div>
 </div>
 </section>
+</section>
 <section id="More-to-come">
 <h2>More to come<a class="headerlink" href="#More-to-come" title="Permalink to this heading">#</a></h2>
 <p>Cascade is rapidly developing and shaped to the needs of its users, so there are more new tools to come!</p>
@@ -1870,23 +1981,23 @@ Length before filtering: 3, length after: 2
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../concepts.html">
+          <a class="next-page" href="pipeline_building.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Concepts</div>
+                <div class="title">Pipeline building</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="data_validation.html">
+          <a class="prev-page" href="../quickstart.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Data validation</div>
+                <div class="title">Quickstart</div>
                 
               </div>
             </a>
@@ -1928,6 +2039,7 @@ Length before filtering: 3, length after: 2
 <li><a class="reference internal" href="#ApplyModifier">ApplyModifier</a></li>
 <li><a class="reference internal" href="#Concatenator">Concatenator</a></li>
 <li><a class="reference internal" href="#split">split</a></li>
+<li><a class="reference internal" href="#Composer">Composer</a></li>
 <li><a class="reference internal" href="#CyclicSampler">CyclicSampler</a></li>
 <li><a class="reference internal" href="#RandomSampler">RandomSampler</a></li>
 <li><a class="reference internal" href="#RangeSampler">RangeSampler</a></li>
@@ -1936,11 +2048,12 @@ Length before filtering: 3, length after: 2
 <li><a class="reference internal" href="#SequentialCacher">SequentialCacher</a></li>
 <li><a class="reference internal" href="#VersionAssigner">VersionAssigner</a></li>
 <li><a class="reference internal" href="#OverSampler-and-UnderSampler">OverSampler and UnderSampler</a></li>
+<li><a class="reference internal" href="#WeighedSampler">WeighedSampler</a></li>
 <li><a class="reference internal" href="#Specific-datasets">Specific datasets</a><ul>
 <li><a class="reference internal" href="#TimeSeriesDataset">TimeSeriesDataset</a></li>
+<li><a class="reference internal" href="#TableDataset">TableDataset</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#TableDataset">TableDataset</a></li>
 <li><a class="reference internal" href="#More-to-come">More to come</a></li>
 </ul>
 </li>

@@ -171,6 +171,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data_validation.html">Data validation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cascade.base.html">cascade.base</a></li>
@@ -470,6 +471,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cascade.data</span> <span class="k">as</span> <span class="nn">cdd</span>
+<span class="kn">import</span> <span class="nn">cascade.meta</span> <span class="k">as</span> <span class="nn">cme</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torchvision</span>
@@ -501,11 +503,11 @@ c:\Users\илья\AppData\Local\Programs\Python\Python38\lib\site-packages\tqdm\
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;0.7.2&#39;
+&#39;0.8.0&#39;
 </pre></div></div>
 </div>
 <p>Let’s load torch dataset</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
@@ -520,29 +522,6 @@ c:\Users\илья\AppData\Local\Programs\Python\Python38\lib\site-packages\tqdm\
                                     <span class="n">transform</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
-Using downloaded and verified file: data\MNIST\raw\train-images-idx3-ubyte.gz
-Extracting data\MNIST\raw\train-images-idx3-ubyte.gz to data\MNIST\raw
-
-Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
-Using downloaded and verified file: data\MNIST\raw\train-labels-idx1-ubyte.gz
-Extracting data\MNIST\raw\train-labels-idx1-ubyte.gz to data\MNIST\raw
-
-Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
-Using downloaded and verified file: data\MNIST\raw\t10k-images-idx3-ubyte.gz
-Extracting data\MNIST\raw\t10k-images-idx3-ubyte.gz to data\MNIST\raw
-
-Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
-Using downloaded and verified file: data\MNIST\raw\t10k-labels-idx1-ubyte.gz
-Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
-
-</pre></div></div>
 </div>
 <section id="Adding-metadata">
 <h2>Adding metadata<a class="headerlink" href="#Adding-metadata" title="Permalink to this heading">#</a></h2>
@@ -594,6 +573,80 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 </div>
 </div>
 </section>
+<section id="Validation">
+<h2>Validation<a class="headerlink" href="#Validation" title="Permalink to this heading">#</a></h2>
+<p>Data validation is one of the most important parts of any ML-pipeline. Testing some assumtions is useful when our pipeline is very complex, but here let’s add validation stage just for demonstration.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cme</span><span class="o">.</span><span class="n">PredicateValidator</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+OK!
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;cascade.meta.validator.PredicateValidator
+</pre></div></div>
+</div>
+</section>
+<section id="Versioning">
+<h2>Versioning<a class="headerlink" href="#Versioning" title="Permalink to this heading">#</a></h2>
+<p>For tracking changes in the pipeline during the experiments, the version could be used.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdd</span><span class="o">.</span><span class="n">VersionAssigner</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="s1">&#39;./train_ds_version_log.yml&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dataset version: 0.0
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;cascade.data.version_assigner.VersionAssigner
+</pre></div></div>
+</div>
+</section>
 <section id="Viewing-metadata">
 <h2>Viewing metadata<a class="headerlink" href="#Viewing-metadata" title="Permalink to this heading">#</a></h2>
 <div class="line-block">
@@ -602,7 +655,7 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 <div class="line">Using keyword <code class="docutils literal notranslate"><span class="pre">meta_prefix</span></code> and method <code class="docutils literal notranslate"><span class="pre">update_meta</span></code> we can add any info we want to the object’s metadata.</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -610,13 +663,13 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
- {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
+[{&#39;name&#39;: &#39;&lt;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
+ {&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
   &#39;desc&#39;: &#39;This is MNIST dataset of handwritten images&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 60000,
@@ -628,7 +681,7 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 <h2>Ready to train model<a class="headerlink" href="#Ready-to-train-model" title="Permalink to this heading">#</a></h2>
 <p>Now we can set the batch size and pass our pipeline to the DataLoaders.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
@@ -636,7 +689,7 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainldr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">train_ds</span><span class="p">,</span>
@@ -715,6 +768,8 @@ Extracting data\MNIST\raw\t10k-labels-idx1-ubyte.gz to data\MNIST\raw
 <li><a class="reference internal" href="#">Pipeline building</a><ul>
 <li><a class="reference internal" href="#Adding-metadata">Adding metadata</a></li>
 <li><a class="reference internal" href="#Applying-noise">Applying noise</a></li>
+<li><a class="reference internal" href="#Validation">Validation</a></li>
+<li><a class="reference internal" href="#Versioning">Versioning</a></li>
 <li><a class="reference internal" href="#Viewing-metadata">Viewing metadata</a></li>
 <li><a class="reference internal" href="#Ready-to-train-model">Ready to train model</a></li>
 <li><a class="reference internal" href="#See-also:">See also:</a></li>

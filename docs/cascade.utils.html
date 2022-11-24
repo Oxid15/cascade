@@ -171,6 +171,7 @@
 <li class="toctree-l2"><a class="reference internal" href="examples/data_validation.html">Data validation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="examples/dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">Cascade modules reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
@@ -341,6 +342,46 @@ Consider shuffling the dataset after sampling if label order is important.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.utils.OverSampler.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/oversampler.html#OverSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.OverSampler.__init__" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs a Sampler.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.Dataset"><em>Dataset</em></a>) – A dataset to sample from</p></li>
+<li><p><strong>num_samples</strong> (<em>int</em>) – The number of samples</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.utils.UnderSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">UnderSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/undersampler.html#UnderSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.UnderSampler" title="Permalink to this definition">#</a></dt>
+<dd><p>Accepts datasets which return tuples of objects and labels.
+Isn’t lazy - runs through all the items ones to determine key order.
+Doesn’t store values in memory afterwards.</p>
+<p>To undersample it removes items of majority class for the amount
+of times needed to make equal distribution.
+Works for any number of classes.</p>
+<p>Labels are considered to be in the second place of each item that a dataset returns.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Sampler orders the items in the dataset.
+Consider shuffling the dataset after sampling if label order is important.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.UnderSampler.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/undersampler.html#UnderSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.UnderSampler.__init__" title="Permalink to this definition">#</a></dt>
 <dd><p>Constructs a Sampler.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -536,6 +577,57 @@ This is done in form of list to enable cascade-like calls in Modifiers and Sampl
 <div class="line"><br /></div>
 </div>
 <dl class="py class">
+<dt class="sig sig-object py" id="cascade.utils.TextClassificationDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">TextClassificationDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/text_classification_dataset.html#TextClassificationDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TextClassificationDataset" title="Permalink to this definition">#</a></dt>
+<dd><p>Dataset to simplify loading of data for text classification.
+Texts of different classes should be placed in different folders.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TextClassificationDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/text_classification_dataset.html#TextClassificationDataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TextClassificationDataset.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to the folder with folders of text files.
+In each folder should be only one class of texts.</p></li>
+<li><p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – Encoding that is used to open files.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TextClassificationDataset.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/text_classification_dataset.html#TextClassificationDataset.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TextClassificationDataset.__len__" title="Permalink to this definition">#</a></dt>
+<dd><p>Total number of files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TextClassificationDataset.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/utils/text_classification_dataset.html#TextClassificationDataset.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TextClassificationDataset.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this dataset’s metadata.
+Meta can be anything that is worth to document about the dataset and its data.
+This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
 <dt class="sig sig-object py" id="cascade.utils.TableFilter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">TableFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.utils.TableDataset" title="cascade.utils.table_dataset.TableDataset"><span class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/table_dataset.html#TableFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TableFilter" title="Permalink to this definition">#</a></dt>
 <dd><p>Filter for table values</p>
@@ -708,6 +800,192 @@ Loads table by partitions.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.utils.TimeSeriesDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">TimeSeriesDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/time_series_dataset.html#TimeSeriesDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TimeSeriesDataset" title="Permalink to this definition">#</a></dt>
+<dd><p>Dataset to simplify the work with time series.
+Manages the time and data. Reflects the list API
+and implements access by index and by datetime also.
+More than that, slices with indices and with datetimes can also be used.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TimeSeriesDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/time_series_dataset.html#TimeSeriesDataset.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TimeSeriesDataset.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>Iterable</em><em>[</em><em>datetime</em><em>]</em><em>, </em><em>optional</em>) – The time dimension. Should be represented subclasses of datetime</p></li>
+<li><p><strong>data</strong> (<em>Iterable</em><em>, </em><em>optional</em>) – The data dimension. Should be 1D array or list.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TimeSeriesDataset.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/time_series_dataset.html#TimeSeriesDataset.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TimeSeriesDataset.get_data" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – Time and data as np.array</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TimeSeriesDataset.to_numpy">
+<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/time_series_dataset.html#TimeSeriesDataset.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TimeSeriesDataset.to_numpy" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns only data without time in numpy array format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – np.array of data.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TimeSeriesDataset.to_pandas">
+<span class="sig-name descname"><span class="pre">to_pandas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/time_series_dataset.html#TimeSeriesDataset.to_pandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TimeSeriesDataset.to_pandas" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>data</strong> – table with time as index</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.utils.TorchModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">TorchModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/torch_model.html#TorchModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TorchModel" title="Permalink to this definition">#</a></dt>
+<dd><p>The wrapper around <a href="#id5"><span class="problematic" id="id6">`</span></a>nn.Module`s.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TorchModel.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/torch_model.html#TorchModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TorchModel.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model_class</strong> (<em>type</em>) – The class created when new nn.Module was defined. Will be used
+to construct model. If any arguments needed, please pass them
+into <cite>args</cite> and <cite>kwargs</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TorchModel.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/utils/torch_model.html#TorchModel.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TorchModel.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
+Meta can be anything that is worth to document about
+the object and its properties.
+Meta is list to allow the formation of pipelines.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TorchModel.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/torch_model.html#TorchModel.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TorchModel.load" title="Permalink to this definition">#</a></dt>
+<dd><p>Loads the model using <cite>torch.load</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TorchModel.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/torch_model.html#TorchModel.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TorchModel.predict" title="Permalink to this definition">#</a></dt>
+<dd><p>Calls internal module with whatever arguments.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.TorchModel.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/torch_model.html#TorchModel.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.TorchModel.save" title="Permalink to this definition">#</a></dt>
+<dd><p>Saves the model using <cite>torch.save</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.utils.WeighedSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.utils.</span></span><span class="sig-name descname"><span class="pre">WeighedSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">partitioning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/weighed_sampler.html#WeighedSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.WeighedSampler" title="Permalink to this definition">#</a></dt>
+<dd><p>Samples each class certain amount of times.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Sampler orders the items in the dataset in such way that items with each label go in row.
+Consider shuffling the dataset after sampling if label order is important.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">cdu</span><span class="p">,</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([(</span><span class="s1">&#39;item1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">WeighedSampler</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span> <span class="o">==</span> <span class="p">[(</span><span class="s1">&#39;item1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;item1&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;item2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#cascade.utils.OverSampler" title="cascade.utils.OverSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.utils.OverSampler</span></code></a>, <a class="reference internal" href="#cascade.utils.UnderSampler" title="cascade.utils.UnderSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.utils.UnderSampler</span></code></a>, <a class="reference internal" href="cascade.data.html#cascade.data.RandomSampler" title="cascade.data.RandomSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.data.RandomSampler</span></code></a></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.WeighedSampler.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.dataset.Dataset"><span class="pre">Dataset</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">partitioning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/utils/weighed_sampler.html#WeighedSampler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.WeighedSampler.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="cascade.data.html#cascade.data.Dataset" title="cascade.data.Dataset"><em>Dataset</em></a>) – A dataset to sample</p></li>
+<li><p><strong>partitioning</strong> (<em>Dict</em><em>[</em><em>Any</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – A dictionary with labels as keys and the number of samples as values.
+If some label omitted, assumes that it should be sampled the same number
+of times it is actually appears in the dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.utils.WeighedSampler.get_meta">
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/utils/weighed_sampler.html#WeighedSampler.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.utils.WeighedSampler.get_meta" title="Permalink to this definition">#</a></dt>
+<dd><p>Overrides base method enabling cascade-like calls to previous datasets.
+The metadata of a pipeline that consist of several modifiers can be easily
+obtained with <cite>get_meta</cite> of the last block.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 </section>
 
         </article>
@@ -778,6 +1056,10 @@ Loads table by partitions.</p>
 <li><a class="reference internal" href="#cascade.utils.OverSampler.__init__"><code class="docutils literal notranslate"><span class="pre">OverSampler.__init__()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#cascade.utils.UnderSampler"><code class="docutils literal notranslate"><span class="pre">UnderSampler</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.UnderSampler.__init__"><code class="docutils literal notranslate"><span class="pre">UnderSampler.__init__()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#cascade.utils.PaSchemaValidator"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator</span></code></a><ul>
 <li><a class="reference internal" href="#cascade.utils.PaSchemaValidator.__init__"><code class="docutils literal notranslate"><span class="pre">PaSchemaValidator.__init__()</span></code></a></li>
 </ul>
@@ -798,6 +1080,12 @@ Loads table by partitions.</p>
 <li><a class="reference internal" href="#cascade.utils.TableDataset.__len__"><code class="docutils literal notranslate"><span class="pre">TableDataset.__len__()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.utils.TableDataset.get_meta"><code class="docutils literal notranslate"><span class="pre">TableDataset.get_meta()</span></code></a></li>
 <li><a class="reference internal" href="#cascade.utils.TableDataset.to_csv"><code class="docutils literal notranslate"><span class="pre">TableDataset.to_csv()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.TextClassificationDataset"><code class="docutils literal notranslate"><span class="pre">TextClassificationDataset</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.TextClassificationDataset.__init__"><code class="docutils literal notranslate"><span class="pre">TextClassificationDataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TextClassificationDataset.__len__"><code class="docutils literal notranslate"><span class="pre">TextClassificationDataset.__len__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TextClassificationDataset.get_meta"><code class="docutils literal notranslate"><span class="pre">TextClassificationDataset.get_meta()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#cascade.utils.TableFilter"><code class="docutils literal notranslate"><span class="pre">TableFilter</span></code></a><ul>
@@ -824,6 +1112,26 @@ Loads table by partitions.</p>
 </li>
 <li><a class="reference internal" href="#cascade.utils.NullValidator"><code class="docutils literal notranslate"><span class="pre">NullValidator</span></code></a><ul>
 <li><a class="reference internal" href="#cascade.utils.NullValidator.__init__"><code class="docutils literal notranslate"><span class="pre">NullValidator.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.TimeSeriesDataset"><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.TimeSeriesDataset.__init__"><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TimeSeriesDataset.get_data"><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.get_data()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TimeSeriesDataset.to_numpy"><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.to_numpy()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TimeSeriesDataset.to_pandas"><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.to_pandas()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.TorchModel"><code class="docutils literal notranslate"><span class="pre">TorchModel</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.TorchModel.__init__"><code class="docutils literal notranslate"><span class="pre">TorchModel.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TorchModel.get_meta"><code class="docutils literal notranslate"><span class="pre">TorchModel.get_meta()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TorchModel.load"><code class="docutils literal notranslate"><span class="pre">TorchModel.load()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TorchModel.predict"><code class="docutils literal notranslate"><span class="pre">TorchModel.predict()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.TorchModel.save"><code class="docutils literal notranslate"><span class="pre">TorchModel.save()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cascade.utils.WeighedSampler"><code class="docutils literal notranslate"><span class="pre">WeighedSampler</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.utils.WeighedSampler.__init__"><code class="docutils literal notranslate"><span class="pre">WeighedSampler.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.utils.WeighedSampler.get_meta"><code class="docutils literal notranslate"><span class="pre">WeighedSampler.get_meta()</span></code></a></li>
 </ul>
 </li>
 </ul>
