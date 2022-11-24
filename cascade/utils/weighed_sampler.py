@@ -79,7 +79,7 @@ class WeighedSampler(Sampler):
                 count += 1
 
         ln = len(self._indices)
-        assert ln == sum(partitioning.values()), 'The length should be equal to the sum of partitions'
+        assert ln == sum(partitioning.values()), 'The length should be equal to the sum of partitions - something went wrong'
         print(f'Original length was {len(dataset)} and new is {ln}')
         super().__init__(dataset, ln)
 
