@@ -58,7 +58,7 @@ class WeighedSampler(Sampler):
             partitioning = {}
 
         self._partitioning = partitioning
-        labels = np.asarray([int(dataset[i][1]) for i in trange(len(dataset))])
+        labels = np.asarray([dataset[i][1] for i in trange(len(dataset))])
         ulabels, counts = np.unique(labels, return_counts=True)
 
         # If label is omitted in partitioning, add it with true count

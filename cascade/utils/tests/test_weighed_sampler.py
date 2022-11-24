@@ -38,6 +38,7 @@ def test():
         ]
     )
 
+    # Over and under sampling simultaneously
     ds = WeighedSampler(ds, {0: 3, 1: 4})
 
     assert [item for item in ds] == [
@@ -62,6 +63,7 @@ def test():
         ]
     )
 
+    # Remove label using zero and sample exact number
     ds = WeighedSampler(ds, {0: 0, 1: 5})
 
     assert [item for item in ds] == [
@@ -84,6 +86,7 @@ def test():
         ]
     )
 
+    # Omit mapping
     ds = WeighedSampler(ds)
 
     assert [item for item in ds] == [
@@ -94,4 +97,28 @@ def test():
         (4, 1),
         (5, 1),
         (6, 1)
+    ]
+
+def test_str_labels():
+    ds = cdd.Wrapper(
+        [
+            (0, 'bar'),
+            (1, 'bar'),
+            (2, 'foo'),
+            (3, 'foo'),
+            (4, 'foo'),
+            (5, 'foo'),
+            (6, 'foo')
+        ]
+    )
+
+    # Omit mapping
+    ds = WeighedSampler(ds, {'bar': 3, 'foo': 2})
+
+    assert [item for item in ds] == [
+        (0, 'bar'),
+        (1, 'bar'),
+        (0, 'bar'),
+        (2, 'foo'),
+        (3, 'foo')
     ]
