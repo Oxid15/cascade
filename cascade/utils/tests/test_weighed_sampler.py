@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(
     os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -112,7 +113,6 @@ def test_str_labels():
         ]
     )
 
-    # Omit mapping
     ds = WeighedSampler(ds, {'bar': 3, 'foo': 2})
 
     assert [item for item in ds] == [
@@ -122,3 +122,20 @@ def test_str_labels():
         (2, 'foo'),
         (3, 'foo')
     ]
+
+def test_missing_class():
+    ds = cdd.Wrapper(
+        [
+            (0, 'bar'),
+            (1, 'bar'),
+            (2, 'foo'),
+            (3, 'foo'),
+            (4, 'foo'),
+            (5, 'foo'),
+            (6, 'foo')
+        ]
+    )
+
+    # Raise if class is missing in dataset
+    with pytest.raises(ValueError):
+        ds = WeighedSampler(ds, {'bar': 3, 'foo': 2, 'spam': 20})

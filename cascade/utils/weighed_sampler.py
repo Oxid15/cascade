@@ -54,12 +54,14 @@ class WeighedSampler(Sampler):
                 If some label omitted, assumes that it should be sampled the same number
                 of times it is actually appears in the dataset.
         """
+        labels = np.asarray([dataset[i][1] for i in trange(len(dataset))])
+        ulabels, counts = np.unique(labels, return_counts=True)
+
         if partitioning is None:
             partitioning = {}
 
+        self._check_partitioning(ulabels, partitioning)
         self._partitioning = partitioning
-        labels = np.asarray([dataset[i][1] for i in trange(len(dataset))])
-        ulabels, counts = np.unique(labels, return_counts=True)
 
         # If label is omitted in partitioning, add it with true count
         for ulabel, count in zip(ulabels, counts):
@@ -89,3 +91,12 @@ class WeighedSampler(Sampler):
         meta = super().get_meta()
         meta[0]['partitioning'] = self._partitioning
         return meta
+
+    def _check_partitioning(self, ulabels, partitioning):
+        '''
+        Checks if all labels that were passed in partitioning
+        are present in dataset's unique labels
+        '''
+        for label in partitioning:
+            if label not in ulabels:
+                raise ValueError(f'Label {label} was not found in dataset\'s labels: {ulabels}')
