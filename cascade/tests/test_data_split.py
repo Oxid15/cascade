@@ -43,3 +43,8 @@ def test():
 
     # This means pipeline was made
     assert len(ds1.get_meta()) == 2
+
+
+# def test_wrong_usage():
+#     ds = cdd.Wrapper([0, 1, 2, 3])
+#     a, b = cdd.split(ds, None)

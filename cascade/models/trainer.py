@@ -4,7 +4,7 @@ from typing import Iterable, List, Dict, Union, Any
 
 import pendulum
 from ..base import Traceable
-from ..models import Model, ModelRepo
+from ..models import Model, ModelLine, ModelRepo
 
 
 logger = logging.getLogger(__name__)

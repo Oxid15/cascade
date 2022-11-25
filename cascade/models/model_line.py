@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Type
+from typing import Type, Literal, Any
 import pendulum
 import glob
 from hashlib import md5

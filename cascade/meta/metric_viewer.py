@@ -99,7 +99,7 @@ class MetricViewer:
     def __repr__(self) -> str:
         return repr(self.table)
 
-    def plot_table(self, show: bool = False) -> Figure:
+    def plot_table(self, show: bool = False):
         """
         Uses plotly to graphically show table with metrics and parameters.
         """
@@ -251,7 +251,7 @@ class MetricServer:
             )
         ])
 
-    def serve(self, **kwargs) -> None:
+    def serve(self, **kwargs: Any) -> None:
         # Conditional import
         try:
             import dash
