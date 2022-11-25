@@ -1,8 +1,7 @@
 import warnings
 from typing import List, Dict, Union, Any
 
-
-Meta = List[Dict[Any, Any]]
+from . import Meta
 
 
 class Traceable:
