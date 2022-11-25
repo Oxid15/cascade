@@ -25,7 +25,7 @@ class FolderImageDataset(FolderDataset):
     invokes opencv imread on image and returns it if it exists.
     """
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> cv2.Mat:
         name = self._names[index]
         img = cv2.imread(f'{name}')
         if img is not None:

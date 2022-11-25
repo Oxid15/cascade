@@ -1,7 +1,7 @@
 import os
 from hashlib import md5
-from typing import Dict, List
-from . import Dataset, Modifier
+from typing import Dict, List, Any, Tuple
+from . import Dataset, Modifier, T
 from ..base import MetaHandler, supported_meta_formats
 
 
@@ -59,7 +59,8 @@ class VersionAssigner(Modifier):
     It is only applied to the major version changes and may be fixed in
     following versions.
     """
-    def __init__(self, dataset: Dataset, path: str, verbose=False, *args, **kwargs) -> None:
+    def __init__(self, dataset: Dataset[T], path: str, verbose: bool = False,
+                 *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -128,7 +129,7 @@ class VersionAssigner(Modifier):
         if verbose:
             print('Dataset version:', self.version)
 
-    def _assign_path(self, path):
+    def _assign_path(self, path: str) -> None:
         _, ext = os.path.splitext(path)
         if ext == '':
             raise ValueError(f'Provided path {path} has no extension')
@@ -136,19 +137,19 @@ class VersionAssigner(Modifier):
         assert ext in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._root = path
 
-    def _split_ver(self, ver):
+    def _split_ver(self, ver: str) -> Tuple[int, int]:
         major, minor = ver.split('.')
         return int(major), int(minor)
 
-    def _join_ver(self, major, minor):
+    def _join_ver(self, major: int, minor: int) -> str:
         return f'{major}.{minor}'
 
-    def _get_last_version_from_pipe(self, pipe_hash):
+    def _get_last_version_from_pipe(self, pipe_hash: str) -> str:
         versions = [item['version'] for item in self._versions[pipe_hash].values()]
         versions = sorted(versions)
         return versions[-1]
 
-    def _get_last_version(self):
+    def _get_last_version(self) -> str:
         versions_flat = []
         for pipe_hash in self._versions:
             versions_flat += [item['version'] for item in self._versions[pipe_hash].values()]

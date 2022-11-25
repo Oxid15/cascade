@@ -1,7 +1,7 @@
 import pandera.io as paio
 from pandera.errors import SchemaError
 from ..meta import AggregateValidator, DataValidationException
-
+from . import TableDataset
 
 class PaSchemaValidator(AggregateValidator):
     """
@@ -9,7 +9,7 @@ class PaSchemaValidator(AggregateValidator):
     It accepts TableDataset and schema.
     For more details on schemas see pandera's documentation.
     """
-    def __init__(self, dataset, schema, *args, **kwargs) -> None:
+    def __init__(self, dataset: TableDataset, schema, *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -27,7 +27,7 @@ class PaSchemaValidator(AggregateValidator):
         super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
 
     @staticmethod
-    def _validate(ds, schema) -> bool:
+    def _validate(ds: TableDataset, schema) -> bool:
         try:
             if type(schema) == str:
                 schema = paio.from_yaml(schema)

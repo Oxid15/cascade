@@ -15,10 +15,11 @@ limitations under the License.
 """
 
 import os
-from typing import List, Dict
+from typing import Any, Tuple
 
 import numpy as np
 from ..data import Dataset
+from base import Meta
 
 
 class TextClassificationDataset(Dataset):
@@ -26,7 +27,7 @@ class TextClassificationDataset(Dataset):
     Dataset to simplify loading of data for text classification.
     Texts of different classes should be placed in different folders.
     """
-    def __init__(self, path: str, encoding: str = 'utf-8', *args, **kwargs):
+    def __init__(self, path: str, encoding: str = 'utf-8', *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -52,19 +53,19 @@ class TextClassificationDataset(Dataset):
                    for folder in folders]
         print(f'Found {len(folders)} classes: {classes}')
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> Tuple[str, int]:
         with open(self._paths[index], 'r', encoding=self._encoding) as f:
             text = ' '.join(f.readlines())
             label = self._labels[index]
         return text, label
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         Total number of files.
         """
         return len(self._paths)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({
             'name': repr(self),

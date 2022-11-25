@@ -1,9 +1,10 @@
 from math import floor
-from typing import Tuple
-from . import Dataset, RangeSampler
+from typing import Tuple, Union
+from . import SizedDataset, RangeSampler, T
 
 
-def split(ds: Dataset, frac=0.5, num=None) -> Tuple[Dataset]:
+def split(ds: SizedDataset[T], frac: Union[float, None] = 0.5,
+          num: Union[int, None] = None) -> Tuple[SizedDataset, SizedDataset]:
     '''
     Splits dataset into two cascade.data.RangeSampler`s
 

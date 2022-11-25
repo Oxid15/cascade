@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Dict, List
+from typing import Type, Any
 import torch
 from ..models import Model
+from ..base import Meta
 
 
 class TorchModel(Model):
     """
     The wrapper around `nn.Module`s.
     """
-    def __init__(self, model_class: type, *args, **kwargs) -> None:
+    def __init__(self, model_class: Type, *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -35,13 +36,13 @@ class TorchModel(Model):
         self._model = model_class(*args, **kwargs)
         super().__init__(*args, **kwargs)
 
-    def predict(self, *args, **kwargs):
+    def predict(self, *args, **kwargs) -> Any:
         """
         Calls internal module with whatever arguments.
         """
         return self._model(*args, **kwargs)
 
-    def save(self, path: str, *args, **kwargs) -> None:
+    def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Saves the model using `torch.save`.
         """
@@ -49,14 +50,14 @@ class TorchModel(Model):
             # TODO: pass args and kwargs
             torch.save(self._model, f)
 
-    def load(self, path: str, *args, **kwargs) -> None:
+    def load(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Loads the model using `torch.load`.
         """
         with open(path, 'rb') as f:
             self._model = torch.load(f)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]['module'] = repr(self._model)
         return meta

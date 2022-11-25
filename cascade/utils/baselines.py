@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import json
+from typing import Any
 import numpy as np
 from ..models import BasicModel
 
@@ -24,14 +25,14 @@ class ConstantBaseline(BasicModel):
     any classification task. It returns only one class
     (for example it can be majority class)
     """
-    def __init__(self, constant=None, **kwargs) -> None:
+    def __init__(self, constant: Any = None, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._constant = constant
 
-    def fit(self, x, y, *args, **kwargs) -> None:
+    def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
         pass
 
-    def predict(self, x, *args, **kwargs) -> np.ndarray:
+    def predict(self, x: Any, *args: Any, **kwargs: Any) -> np.ndarray:
         """
         Returns the array of the same shape as input full of
         given constant.
@@ -39,11 +40,11 @@ class ConstantBaseline(BasicModel):
         # TODO: make more universal when work with input shape
         return np.full_like(x, self._constant)
 
-    def save(self, path) -> None:
+    def save(self, path: str) -> None:
         with open(path, 'w') as f:
             json.dump({'constant': self._constant}, f)
 
-    def load(self, path) -> None:
+    def load(self, path: str) -> None:
         with open(path, 'r') as f:
             obj = json.load(f)
             self._constant = obj['constant']

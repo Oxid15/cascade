@@ -1,11 +1,12 @@
 import os
 
-from typing import List, Dict
+from typing import Any
 from hashlib import md5
-from .dataset import Dataset, T
+from ..base import Meta
+from .dataset import SizedDataset, T
 
 
-class FolderDataset(Dataset):
+class FolderDataset(SizedDataset):
     """
     Basic "folder of files" dataset. Accepts root folder in which considers all files.
     Is abstract - getitem is not defined, since it is specific for each file type.
@@ -14,7 +15,7 @@ class FolderDataset(Dataset):
     --------
     cascade.utils.FolderImageDataset
     """
-    def __init__(self, root: str, *args, **kwargs) -> None:
+    def __init__(self, root: str, *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -28,10 +29,10 @@ class FolderDataset(Dataset):
         self._names = [os.path.join(self._root, name)
                        for name in sorted(os.listdir(self._root)) if not os.path.isdir(name)]
 
-    def __getitem__(self, item) -> T:
+    def __getitem__(self, item: int) -> T:
         raise NotImplementedError()
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({
             'name': repr(self),

@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
-from . import T, Dataset, Sampler
+from typing import Any, Union
+from . import T, SizedDataset, Sampler
 
 
 class RangeSampler(Sampler):
@@ -44,15 +44,15 @@ class RangeSampler(Sampler):
     """
     def __init__(
             self,
-            dataset: Dataset,
-            start: int = None,
-            stop: int = None,
-            step: int = 1,
-            *args, **kwargs) -> None:
+            dataset: SizedDataset[T],
+            start: Union[int, None] = None,
+            stop: Union[int, None] = None,
+            step: Union[int, None] = 1,
+            *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
-            dataset: Dataset
+            dataset: SizedDataset
                 A dataset to sampler from
             start: int
                 Start index in range - included
@@ -68,6 +68,6 @@ class RangeSampler(Sampler):
         self._indices = [i for i in range(start, stop, step)]
         super().__init__(dataset, len(self._indices), *args, **kwargs)
 
-    def __getitem__(self, index) -> T:
+    def __getitem__(self, index: int) -> T:
         internal_index = self._indices[index]
         return super().__getitem__(internal_index)

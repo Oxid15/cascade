@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Any, Dict, List
 from tqdm import tqdm, trange
-from . import Dataset, Modifier, T
+from . import SizedDataset, Modifier, T
 
 
 class BruteforceCacher(Modifier):
@@ -51,7 +52,8 @@ class BruteforceCacher(Modifier):
     cascade.data.SequentialCacher
     cascade.data.Pickler
     """
-    def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
+    def __init__(self, dataset: SizedDataset[T],
+                 *args: List[Any], **kwargs: Dict[Any, Any]) -> None:
         """
         Loads every item in dataset in internal list.
         """
@@ -62,10 +64,12 @@ class BruteforceCacher(Modifier):
         elif hasattr(self._dataset, '__iter__'):
             self._data = [item for item in tqdm(self._dataset)]
         else:
-            raise AttributeError('Input dataset must provide Mapping or Iterable interface')
+            raise AttributeError(
+                'Input dataset must provide __len__ and __getitem__ or __iter__'
+            )
 
     def __getitem__(self, index) -> T:
         return self._data[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._data)

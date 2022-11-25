@@ -1,8 +1,10 @@
-from typing import List, Iterable, Tuple, Dict
-from . import T, Dataset
+from typing import List, Tuple, Dict, Any
+
+from . import SizedDataset
+from ..base import Meta
 
 
-class Composer(Dataset):
+class Composer(SizedDataset):
     """
     Unifies two or more datasets element-wise.
 
@@ -14,7 +16,7 @@ class Composer(Dataset):
     >>> ds = cdd.Composer((items, labels))
     >>> assert ds[0] == (0, 1)
     """
-    def __init__(self, datasets: Iterable[Dataset], *args, **kwargs) -> None:
+    def __init__(self, datasets: List[SizedDataset[Any]], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -28,7 +30,7 @@ class Composer(Dataset):
         # set the length of any dataset as the length of Composer
         self._len = len(self._datasets[0])
 
-    def _validate_input(self, datasets):
+    def _validate_input(self, datasets: List[SizedDataset[Any]]) -> None:
         lengths = [len(ds) for ds in datasets]
         first = lengths[0]
         if not all([ln == first for ln in lengths]):
@@ -37,13 +39,13 @@ class Composer(Dataset):
                 f'Actual lengths: {lengths}'
             )
 
-    def __getitem__(self, index: int) -> Tuple[T]:
+    def __getitem__(self, index: int) -> Tuple[Any]:
         return tuple(ds[index] for ds in self._datasets)
 
     def __len__(self) -> int:
         return self._len
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         """
         Composer calls `get_meta()` of all its datasets
         """

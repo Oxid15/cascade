@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Iterable
+from typing import Iterable, Any, Union, Tuple
 
 import pendulum
 from datetime import datetime
@@ -31,7 +31,10 @@ class TimeSeriesDataset(Dataset):
     and implements access by index and by datetime also.
     More than that, slices with indices and with datetimes can also be used.
     """
-    def __init__(self, *args, time=None, data=None, **kwargs):
+    def __init__(self, *args: Any,
+                 time: Union[Iterable[datetime], None] = None,
+                 data: Union[Iterable[Any], None] = None,
+                 **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -70,7 +73,7 @@ class TimeSeriesDataset(Dataset):
         self._table = pd.DataFrame(data, index=index)
         super().__init__(*args, **kwargs)
 
-    def to_numpy(self):
+    def to_numpy(self) -> np.ndarray:
         """
         Returns only data without time in numpy array format.
 
@@ -81,7 +84,7 @@ class TimeSeriesDataset(Dataset):
         """
         return self._table.to_numpy().T[0]
 
-    def to_pandas(self):
+    def to_pandas(self) -> pd.DataFrame:
         """
         Returns
         -------
@@ -90,7 +93,7 @@ class TimeSeriesDataset(Dataset):
         """
         return pd.DataFrame(self.to_numpy(), index=self._time)
 
-    def get_data(self):
+    def get_data(self) -> Tuple[np.ndarray, np.ndarray]:
         """
         Returns
         -------
@@ -99,7 +102,7 @@ class TimeSeriesDataset(Dataset):
         """
         return self._time, self.to_numpy()
 
-    def _get_slice(self, index):
+    def _get_slice(self, index: int):
         # If date slice
         if isinstance(index.start, datetime) or \
                 isinstance(index.stop, datetime):
@@ -120,7 +123,7 @@ class TimeSeriesDataset(Dataset):
 
         return TimeSeriesDataset(time=time, data=data)
 
-    def _get_where(self, index):
+    def _get_where(self, index: Union[int, slice]):
         if isinstance(index[0], slice):
             raise NotImplementedError()
 
@@ -134,7 +137,7 @@ class TimeSeriesDataset(Dataset):
             new_data[k] = self[i]
         return TimeSeriesDataset(time=new_time, data=new_data)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: Union[int, slice, datetime, Iterable[int]]):
         if isinstance(index, slice):
             if index.step is not None:
                 raise NotImplementedError()
@@ -150,7 +153,7 @@ class TimeSeriesDataset(Dataset):
                 f'__getitem__ is not implemented for {type(index)}'
             )
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._num_idx)
 
 
@@ -160,7 +163,7 @@ class Average(TimeSeriesDataset, Modifier):
     """
     def __init__(self, dataset: TimeSeriesDataset,
                  unit: str = 'years',
-                 amount=1, *args, **kwargs):
+                 amount: int = 1, *args: Any, **kwargs: Any):
         """
         Parameters
         ----------
@@ -200,8 +203,10 @@ class Interpolate(TimeSeriesDataset, Modifier):
     """
     The wrapper around pd.Series.interpolate.
     """
-    def __init__(self, dataset, method='linear',
-                 limit_direction='both', **kwargs):
+    def __init__(self, dataset: TimeSeriesDataset,
+                 method: str = 'linear',
+                 limit_direction: str = 'both',
+                 **kwargs) -> None:
         t = dataset.to_pandas()
         time, _ = dataset.get_data()
         t.index = pd.Index(time)
@@ -216,6 +221,7 @@ class Align(TimeSeriesDataset, Modifier):
     only if dataset has data in given points
     in time.
     """
-    def __init__(self, dataset, time, *args, **kwargs):
+    def __init__(self, dataset: TimeSeriesDataset,
+                 time: Iterable[datetime], *args: Any, **kwargs: Any) -> None:
         super().__init__(dataset, time=time,
                          data=dataset[time], *args, **kwargs)

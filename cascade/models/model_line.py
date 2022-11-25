@@ -16,12 +16,12 @@ limitations under the License.
 
 import os
 import warnings
-from typing import List, Dict
+from typing import Type
 import pendulum
 import glob
 from hashlib import md5
 
-from ..base import Traceable, MetaHandler, supported_meta_formats
+from ..base import Traceable, MetaHandler, supported_meta_formats, Meta
 from .model import Model
 
 
@@ -31,7 +31,8 @@ class ModelLine(Traceable):
     A line of models is typically a models with the same hyperparameters and architecture,
     but different epochs or using different data.
     """
-    def __init__(self, folder: str, model_cls=Model, meta_fmt='.json', **kwargs) -> None:
+    def __init__(self, folder: str, model_cls: Type = Model,
+                 meta_fmt: Literal['.json', '.yml'] ='.json', **kwargs: Any) -> None:
         """
         All models in line should be instances of the same class.
 
@@ -50,7 +51,8 @@ class ModelLine(Traceable):
         """
         super().__init__(**kwargs)
 
-        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, \
+            f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
         self._model_cls = model_cls
         self.root = folder
@@ -73,7 +75,7 @@ class ModelLine(Traceable):
             os.mkdir(self.root)
         self._mh = MetaHandler()
 
-    def __getitem__(self, num) -> Model:
+    def __getitem__(self, num: int) -> Model:
         """
         Creates a model of `model_cls` and loads it using Model's `load` method.
 
@@ -94,7 +96,7 @@ class ModelLine(Traceable):
         """
         return len(self.model_names)
 
-    def save(self, model: Model, only_meta=False) -> None:
+    def save(self, model: Model, only_meta: bool = False) -> None:
         """
         Saves a model and its metadata to a line's folder.
         Model is automatically assigned a number and a model is saved
@@ -152,7 +154,7 @@ class ModelLine(Traceable):
     def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self._model_cls}'
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({
             'root': self.root,
