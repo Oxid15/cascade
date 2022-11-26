@@ -53,7 +53,7 @@ class RangeSampler(Sampler):
         Parameters
         ----------
             dataset: SizedDataset
-                A dataset to sampler from
+                A dataset to sample from
             start: int
                 Start index in range - included
             stop: int
@@ -61,11 +61,19 @@ class RangeSampler(Sampler):
             step: int, optional
                 Step of range
         """
+        # Check if only stop was passed
         if start is not None and stop is None:
             stop = start
             start = 0
 
         self._indices = [i for i in range(start, stop, step)]
+
+        if len(self._indices) == 0:
+            raise ValueError(
+                f'Given combination of start, stop and step'
+                f'produced empty dataset. Got start = {start}, stop = {stop}, step = {step}'
+            )
+
         super().__init__(dataset, len(self._indices), *args, **kwargs)
 
     def __getitem__(self, index: int) -> T:
