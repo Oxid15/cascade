@@ -61,6 +61,14 @@ class RangeSampler(Sampler):
             step: int, optional
                 Step of range
         """
+
+        # Check if can build range
+        if start is None and stop is None:
+            raise ValueError(
+                f"Either start or stop must be present\
+                Got start = {start}, stop = {stop}"
+            )
+
         # Check if only stop was passed
         if start is not None and stop is None:
             stop = start

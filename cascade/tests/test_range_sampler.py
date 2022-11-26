@@ -56,4 +56,8 @@ def test_step():
 def test_wrong_usage():
     with pytest.raises(ValueError):
         ds = Wrapper(DATA)
-        ds = RangeSampler(ds, 10, 0)  # start > stop -> num_samples == 0
+        ds = RangeSampler(ds, 10, 0)  # start > stop
+
+    with pytest.raises(ValueError):
+        ds = Wrapper(DATA)
+        ds = RangeSampler(ds)
