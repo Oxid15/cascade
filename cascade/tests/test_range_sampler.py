@@ -47,6 +47,6 @@ def test():
 
     assert sampled == [data[i] for i in range(0, len(data), 2)]
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(ValueError):
         ds = Wrapper(data)
         ds = RangeSampler(data, 10, 0)  # start > stop -> num_samples == 0
