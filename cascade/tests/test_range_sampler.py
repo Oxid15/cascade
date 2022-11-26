@@ -23,30 +23,37 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import RangeSampler, Wrapper
 
+DATA = [0, 1, 2, 3, 4]
+
 
 def test():
-    data = [0, 1, 2, 3, 4]
-    ds = Wrapper(data)
+    ds = Wrapper(DATA)
     ds = RangeSampler(ds, 2)
 
     sampled = [item for item in ds]
 
-    assert sampled == [data[i] for i in range(2)]
+    assert sampled == [DATA[i] for i in range(2)]
 
-    ds = Wrapper(data)
+
+def test_start_stop():
+    ds = Wrapper(DATA)
     ds = RangeSampler(ds, 1, 3)
 
     sampled = [item for item in ds]
 
-    assert sampled == [data[i] for i in range(1, 3)]
+    assert sampled == [DATA[i] for i in range(1, 3)]
 
-    ds = Wrapper(data)
+
+def test_step():
+    ds = Wrapper(DATA)
     ds = RangeSampler(ds, 0, len(ds), 2)
 
     sampled = [item for item in ds]
 
-    assert sampled == [data[i] for i in range(0, len(data), 2)]
+    assert sampled == [DATA[i] for i in range(0, len(DATA), 2)]
 
+
+def test_wrong_usage():
     with pytest.raises(ValueError):
-        ds = Wrapper(data)
-        ds = RangeSampler(data, 10, 0)  # start > stop -> num_samples == 0
+        ds = Wrapper(DATA)
+        ds = RangeSampler(ds, 10, 0)  # start > stop -> num_samples == 0
