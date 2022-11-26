@@ -75,7 +75,7 @@ class Model(Traceable):
         """
         raise NotImplementedError()
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         # Successors may not call super().__init__
         # they may not have these default fields
 
@@ -98,7 +98,9 @@ class Model(Traceable):
             all_default_exist = False
 
         if not all_default_exist:
-            warnings.warn('Model\'s meta is incomplete, maybe you haven\'t call super().__init__ in subclass?')
+            warnings.warn(
+                'Model\'s meta is incomplete, '
+                'maybe you haven\'t call super().__init__ in subclass?')
 
         meta[0]['type'] = 'model'
         return meta
@@ -109,7 +111,7 @@ class ModelModifier(Model):
     Analog of dataset's Modifier. Can be used to chain
     two models in one.
     """
-    def __init__(self, model: Model, *args: Any, **kwargs: Any):
+    def __init__(self, model: Model, *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------

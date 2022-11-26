@@ -22,7 +22,7 @@ class ApplyModifier(Modifier):
     """
     Modifier that maps a function to given dataset's items in a lazy way.
     """
-    def __init__(self, dataset: Dataset[T], func: Callable[[Any], Any],
+    def __init__(self, dataset: Dataset[T], func: Callable[[T], Any],
                  *args: List[Any], **kwargs: Dict[Any, Any]) -> None:
         """
         Parameters
@@ -46,6 +46,6 @@ class ApplyModifier(Modifier):
         super().__init__(dataset, *args, **kwargs)
         self._func = func
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: int) -> Any:
         item = self._dataset[index]
         return self._func(item)
