@@ -28,15 +28,16 @@ def f(x: int) -> int:
 @pytest.mark.parametrize(
     'ds',
     [
+        Iterator([0]),
         Wrapper([0]),
         ApplyModifier(Wrapper([0, 1, 2]), f),
         BruteforceCacher(Wrapper([0, 2])),
         Composer([Wrapper([0]), Wrapper([1])]),
         Concatenator([Wrapper([0]), Wrapper([1])]),
         CyclicSampler(Wrapper([0]), 1),
-        RandomSampler(Wrapper([1,2,3]), 2),
-        RangeSampler(Wrapper([0,1,2,3]), 0, 3, 1),
-        SequentialCacher(Wrapper([0,1,2,3]))
+        RandomSampler(Wrapper([1, 2, 3]), 2),
+        RangeSampler(Wrapper([0, 1, 2, 3]), 0, 3, 1),
+        SequentialCacher(Wrapper([0, 1, 2, 3]))
     ]
 )
 def test_coverage(ds, tmp_path):
