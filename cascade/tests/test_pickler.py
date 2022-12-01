@@ -18,7 +18,29 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Pickler, Wrapper, Modifier, Sampler
+from cascade.data import *
+
+
+def f(x: int) -> int:
+    return 2 * x
+
+
+@pytest.mark.parametrize(
+    'ds',
+    [
+        Wrapper([0]),
+        ApplyModifier(Wrapper([0, 1, 2]), f),
+        BruteforceCacher(Wrapper([0, 2])),
+        Composer([Wrapper([0]), Wrapper([1])]),
+        Concatenator([Wrapper([0]), Wrapper([1])]),
+        CyclicSampler(Wrapper([0]), 1),
+        RandomSampler(Wrapper([1,2,3]), 2),
+        RangeSampler(Wrapper([0,1,2,3]), 0, 3, 1),
+        SequentialCacher(Wrapper([0,1,2,3]))
+    ]
+)
+def test_coverage(ds, tmp_path):
+    Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
 
 
 @pytest.mark.parametrize(
@@ -29,19 +51,19 @@ from cascade.data import Pickler, Wrapper, Modifier, Sampler
         Sampler(Modifier(Wrapper([1])), 1)
     ]
 )
-def test(ds, tmp_path):
-    ds1 = Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
-    ds2 = Pickler(os.path.join(tmp_path, 'ds.pkl'))
+def test_integrity(ds, tmp_path):
+    _ = Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
+    loaded_ds = Pickler(os.path.join(tmp_path, 'ds.pkl'))
 
     true = []
     for i in range(len(ds)):
         true.append(ds[i])
 
     res = []
-    for i in range(len(ds2)):
-        res.append(ds2[i])
+    for i in range(len(loaded_ds)):
+        res.append(loaded_ds[i])
 
     assert res == true
 
-    assert type(ds2.ds()) == type(ds)
-    assert str(ds2.ds()) == str(ds)
+    assert type(loaded_ds.ds()) == type(ds)
+    assert str(loaded_ds.ds()) == str(ds)
