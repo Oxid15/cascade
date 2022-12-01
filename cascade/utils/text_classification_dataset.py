@@ -19,7 +19,7 @@ from typing import Any, Tuple
 
 import numpy as np
 from ..data import Dataset
-from base import Meta
+from ..base import Meta
 
 
 class TextClassificationDataset(Dataset):
