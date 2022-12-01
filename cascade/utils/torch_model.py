@@ -44,11 +44,10 @@ class TorchModel(Model):
 
     def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Saves the model using `torch.save`.
+        Saves the model using `torch.save`. Args and kwargs are passed into torch.save
         """
         with open(path, 'wb') as f:
-            # TODO: pass args and kwargs
-            torch.save(self._model, f)
+            torch.save(self._model, f, *args, **kwargs)
 
     def load(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
