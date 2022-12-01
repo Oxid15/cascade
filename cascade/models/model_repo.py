@@ -265,7 +265,6 @@ class ModelRepo(Repo):
         """
         Returns list of line names.
         """
-        # TODO: write test covering this
         return list(self._lines.keys())
 
 
