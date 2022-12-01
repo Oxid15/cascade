@@ -57,13 +57,16 @@ class HistoryViewer:
     def _make_table(self) -> None:
         metas = []
         params = []
-        # TODO: refactor this
-        for line in [*self._repo][::-1][:self._last_lines]:
+
+        # Takes last N lines in correct order
+        for line_name in self._repo.get_line_names()[-self._last_lines:]:
+            line = self._repo[line_name]
             view = MetaViewer(line.root, filt={'type': 'model'})
 
             for i in range(len(line))[:self._last_models]:
                 new_meta = {'line': line.root, 'num': i}
                 try:
+                    # TODO: to take only first is not good...
                     meta = view[i][0]
                 except IndexError:
                     meta = {}
