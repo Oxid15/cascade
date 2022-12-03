@@ -13,12 +13,15 @@ limitations under the License.
 
 import os
 import sys
+import datetime
 import pytest
+import pandas as pd
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import *
+from cascade import utils as cdu
 
 
 def f(x: int) -> int:
@@ -40,7 +43,19 @@ def f(x: int) -> int:
         SequentialCacher(Wrapper([0, 1, 2, 3]))
     ]
 )
-def test_coverage(ds, tmp_path):
+def test_data_coverage(ds, tmp_path):
+    Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
+
+
+@pytest.mark.parametrize(
+    'ds',
+    [
+        cdu.TableDataset(t=pd.DataFrame()),
+        cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame()), []),
+        cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24])
+    ]
+)
+def test_utils_coverage(ds, tmp_path):
     Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
 
 
