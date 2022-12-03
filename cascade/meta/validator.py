@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Callable, Union, List
+from typing import Callable, Union, List, NoReturn, Dict, Any
 from tqdm import tqdm
 
 from ..data import Dataset, Modifier, T
@@ -34,9 +34,9 @@ class Validator(Modifier):
     """
     Base class for validators. Defines basic `__init__` structure
     """
-    def __init__(self, dataset: Dataset,
+    def __init__(self, dataset: Dataset[T],
                  func: Union[Callable[[T], bool], List[Callable[[T], bool]]],
-                 **kwargs) -> None:
+                 **kwargs: Any) -> None:
         super().__init__(dataset, **kwargs)
         if isinstance(func, Callable):
             self._func = [func]
@@ -55,7 +55,7 @@ class AggregateValidator(Validator):
     >>> ds = Wrapper([1, 2, 3, 4, 5])
     >>> ds = AggregateValidator(ds, lambda x: len(x) == 5)
     """
-    def __init__(self, dataset: Dataset, func: Callable[[Dataset], bool], **kwargs) -> None:
+    def __init__(self, dataset: Dataset[T], func: Callable[[Dataset[T]], bool], **kwargs) -> None:
         super().__init__(dataset, func, **kwargs)
 
         bad_results = []
@@ -84,7 +84,7 @@ class PredicateValidator(Validator):
             self,
             dataset: Dataset,
             func: Union[Callable[[T], bool], List[Callable[[T], bool]]],
-            **kwargs) -> None:
+            **kwargs: Any) -> None:
         super().__init__(dataset, func, **kwargs)
 
         bad_items = {j: [] for j in range(len(self._func))}
@@ -99,7 +99,7 @@ class PredicateValidator(Validator):
         else:
             print('OK!')
 
-    def _raise(self, items: List[int]):
+    def _raise(self, items: Dict[int, List[int]]) -> NoReturn:
         bad_counts = [len(items[i]) for i in range(len(self._func))]
 
         failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]

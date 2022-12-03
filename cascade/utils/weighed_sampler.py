@@ -14,11 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict
-from ..data import T, Dataset, Sampler
+from typing import Any, Dict, Union, Tuple
+
 from itertools import cycle
 import numpy as np
 from tqdm import trange
+
+from ..data import SizedDataset, Sampler
+from ..base import Meta
 
 
 class WeighedSampler(Sampler):
@@ -43,7 +46,8 @@ class WeighedSampler(Sampler):
     cascade.utils.UnderSampler
     cascade.data.RandomSampler
     """
-    def __init__(self, dataset: Dataset, partitioning: Dict[Any, int] = None) -> None:
+    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]],
+                 partitioning: Union[Dict[Any, int], None] = None) -> None:
         """
         Parameters
         ----------
@@ -54,12 +58,14 @@ class WeighedSampler(Sampler):
                 If some label omitted, assumes that it should be sampled the same number
                 of times it is actually appears in the dataset.
         """
+        labels = np.asarray([dataset[i][1] for i in trange(len(dataset))])
+        ulabels, counts = np.unique(labels, return_counts=True)
+
         if partitioning is None:
             partitioning = {}
 
+        self._check_partitioning(ulabels, partitioning)
         self._partitioning = partitioning
-        labels = np.asarray([int(dataset[i][1]) for i in trange(len(dataset))])
-        ulabels, counts = np.unique(labels, return_counts=True)
 
         # If label is omitted in partitioning, add it with true count
         for ulabel, count in zip(ulabels, counts):
@@ -77,15 +83,25 @@ class WeighedSampler(Sampler):
                 count += 1
 
         ln = len(self._indices)
-        assert ln == sum(partitioning.values()), 'The length should be equal to the sum of partitions'
+        assert ln == sum(partitioning.values()), \
+            'The length should be equal to the sum of partitions - something went wrong'
         print(f'Original length was {len(dataset)} and new is {ln}')
         super().__init__(dataset, ln)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
         idx = self._indices[index]
         return self._dataset[idx]
 
-    def get_meta(self):
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]['partitioning'] = self._partitioning
         return meta
+
+    def _check_partitioning(self, ulabels, partitioning) -> None:
+        '''
+        Checks if all labels that were passed in partitioning
+        are present in dataset's unique labels
+        '''
+        for label in partitioning:
+            if label not in ulabels:
+                raise ValueError(f'Label {label} was not found in dataset\'s labels: {ulabels}')

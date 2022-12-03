@@ -13,10 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+from typing import Any, Tuple
 
-from ..data import T, Dataset, Sampler
 from numpy import unique, min
 from tqdm import trange
+
+from ..data import SizedDataset, Sampler
 
 
 class UnderSampler(Sampler):
@@ -36,7 +38,7 @@ class UnderSampler(Sampler):
     Sampler orders the items in the dataset.
     Consider shuffling the dataset after sampling if label order is important.
     """
-    def __init__(self, dataset: Dataset) -> None:
+    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels, counts = unique(labels, return_counts=True)
         min_count = min(counts)
@@ -51,11 +53,11 @@ class UnderSampler(Sampler):
 
         ln = len(self._rem_indices)
         print(f'Original length was {len(dataset)} and new is {ln}')
-        super().__init__(dataset, ln)
+        super().__init__(dataset, ln, *args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
         idx = self._rem_indices[index]
         return self._dataset[idx]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._rem_indices)

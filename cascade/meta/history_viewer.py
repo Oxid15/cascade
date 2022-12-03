@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List
+from typing import List, Union, Dict, Any
+
 import pendulum
 import pandas as pd
 from flatten_json import flatten
@@ -23,6 +24,7 @@ import plotly
 from plotly import express as px
 from plotly import graph_objects as go
 
+from ..models import ModelRepo
 from . import MetaViewer
 
 
@@ -34,9 +36,9 @@ class HistoryViewer:
     """
     def __init__(
             self,
-            repo,
-            last_lines: int = None,
-            last_models: int = None) -> None:
+            repo: ModelRepo,
+            last_lines: Union[int, None] = None,
+            last_models: Union[int, None] = None) -> None:
         """
         Parameters
         ----------
@@ -52,16 +54,19 @@ class HistoryViewer:
         self._last_models = last_models
         self._make_table()
 
-    def _make_table(self):
+    def _make_table(self) -> None:
         metas = []
         params = []
-        # TODO: refactor this
-        for line in [*self._repo][::-1][:self._last_lines]:
+
+        # Takes last N lines in correct order
+        for line_name in self._repo.get_line_names()[-self._last_lines:]:
+            line = self._repo[line_name]
             view = MetaViewer(line.root, filt={'type': 'model'})
 
             for i in range(len(line))[:self._last_models]:
                 new_meta = {'line': line.root, 'num': i}
                 try:
+                    # TODO: to take only first is not good...
                     meta = view[i][0]
                 except IndexError:
                     meta = {}
@@ -83,7 +88,7 @@ class HistoryViewer:
             self._table = self._table.sort_values('saved_at')
 
     @staticmethod
-    def _diff(p1, params) -> List:
+    def _diff(p1: Dict[Any, Any], params: Dict[Any, Any]) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
         changed = [0 for _ in range(len(params))]
         for i in range(len(changed)):
@@ -190,7 +195,7 @@ class HistoryViewer:
 
         return fig
 
-    def serve(self, metric: str, **kwargs):
+    def serve(self, metric: str, **kwargs: Any) -> None:
         """
         Run dash-based server with HistoryViewer, updating plots in real-time.
 

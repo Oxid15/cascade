@@ -17,18 +17,19 @@ limitations under the License.
 import os
 import json
 import datetime
-from typing import Union, List, Dict
+from typing import NoReturn, Union, List, Dict, Any
 from json import JSONEncoder
 
 import yaml
 import numpy as np
 
+from . import Meta
 
 supported_meta_formats = ('.json', '.yml')
 
 
 class CustomEncoder(JSONEncoder):
-    def default(self, obj):
+    def default(self, obj: Any) -> Any:
         if isinstance(obj, type):
             return str(obj)
 
@@ -60,26 +61,29 @@ class CustomEncoder(JSONEncoder):
 
         return super(CustomEncoder, self).default(obj)
 
-    def obj_to_dict(self, obj) -> Dict:
+    def obj_to_dict(self, obj: Any) -> Dict:
         return json.loads(self.encode(obj))
 
 
 class BaseHandler:
-    def read(self, path: str) -> Union[Dict, List[Dict]]:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         raise NotImplementedError()
 
-    def write(self, path: str, obj, overwrite=True) -> None:
+    def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         raise NotImplementedError()
 
-    def _raise_io_error(self, path, exc):
+    def _raise_io_error(self, path: str, exc: Union[Exception, None] = None) -> NoReturn:
         # Any file decoding errors will be
         # prepended with filepath for user
         # to be able to identify broken file
-        raise IOError(f'Error while reading file `{path}`') from exc
+        if exc is not None:
+            raise IOError(f'Error while reading file `{path}`') from exc
+        else:
+            raise IOError(f'Error while reading file `{path}`')
 
 
 class JSONHandler(BaseHandler):
-    def read(self, path: str) -> Union[Dict, List[Dict]]:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.json'
@@ -93,7 +97,7 @@ class JSONHandler(BaseHandler):
                 self._raise_io_error(path, e)
             return meta
 
-    def write(self, path: str, obj: List[Dict], overwrite=True) -> None:
+    def write(self, path: str, obj: List[Dict], overwrite: bool = True) -> None:
         if not overwrite and os.path.exists(path):
             return
 
@@ -102,7 +106,7 @@ class JSONHandler(BaseHandler):
 
 
 class YAMLHandler(BaseHandler):
-    def read(self, path: str) -> Union[Dict, List[Dict]]:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.yml'
@@ -110,11 +114,15 @@ class YAMLHandler(BaseHandler):
         with open(path, 'r') as meta_file:
             try:
                 meta = yaml.safe_load(meta_file)
+
+                # Safe load may return None if something wrong
+                if meta is None:
+                    self._raise_io_error(path)
             except yaml.YAMLError as e:
                 self._raise_io_error(path, e)
             return meta
 
-    def write(self, path: str, obj, overwrite=True) -> None:
+    def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         if not overwrite and os.path.exists(path):
             return
 
@@ -139,7 +147,7 @@ class TextHandler(BaseHandler):
             meta = {path: ''.join(meta_file.readlines())}
             return meta
 
-    def write(self, path, obj, overwrite=True) -> None:
+    def write(self, path: str, obj: Any, overwrite: bool = True) -> NoReturn:
         raise NotImplementedError(
             'MetaHandler does not write text files, only reads')
 
@@ -160,7 +168,7 @@ class MetaHandler:
     >>> mh.write('meta.yml', {'hello': 'world'})
     >>> obj = mh.read('meta.yml')
     """
-    def read(self, path: str) -> Union[Dict, List[Dict]]:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         """
         Reads object from path.
 
@@ -171,7 +179,7 @@ class MetaHandler:
 
         Returns
         -------
-            obj: Union[Dict, List[Dict]]
+            obj: Union[List[Any], Dict[Any, Any]]
 
         Raises
         ------
@@ -181,7 +189,7 @@ class MetaHandler:
         handler = self._get_handler(path)
         return handler.read(path)
 
-    def write(self, path: str, obj, overwrite: bool = True) -> None:
+    def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         """
         Writes object to path.
 
@@ -203,7 +211,7 @@ class MetaHandler:
         handler = self._get_handler(path)
         return handler.write(path, obj, overwrite=overwrite)
 
-    def _get_handler(self, path) -> BaseHandler:
+    def _get_handler(self, path: str) -> BaseHandler:
         ext = os.path.splitext(path)[-1]
         if ext == '.json':
             return JSONHandler()

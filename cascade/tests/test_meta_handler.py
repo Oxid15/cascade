@@ -128,3 +128,24 @@ def test_read_fail(tmp_path, ext):
     with pytest.raises(IOError) as e:
         mh.read(filename)
     assert filename in e.value.args[0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_empty_file(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    mh = MetaHandler()
+
+    # Simulate empty file
+    filename = os.path.join(tmp_path, 'meta' + ext)
+    with open(filename, 'w') as f:
+        f.write('')
+
+    # Test that file path is in error message
+    with pytest.raises(IOError) as e:
+        mh.read(filename)
+    assert filename in e.value.args[0]

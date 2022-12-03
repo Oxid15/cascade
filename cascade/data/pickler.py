@@ -15,15 +15,19 @@ limitations under the License.
 """
 
 import os
+from typing import Union, Any
 import pickle
-from . import Dataset, Modifier
+from . import Dataset, Modifier, T
 
 
 class Pickler(Modifier):
     """
     Pickles input dataset or unpickles one
     """
-    def __init__(self, path: str, dataset: Dataset = None, *args, **kwargs) -> None:
+    def __init__(self,
+                 path: str,
+                 dataset: Union[Dataset[T], None] = None,
+                 *args: Any, **kwargs: Any) -> None:
         """
         Loads pickled dataset or dumps one depending on parameters passed:
 
@@ -60,7 +64,7 @@ class Pickler(Modifier):
         with open(self._path, 'rb') as f:
             self._dataset = pickle.load(f)
 
-    def ds(self):
+    def ds(self) -> Dataset[T]:
         """
         Returns pickled dataset
         """

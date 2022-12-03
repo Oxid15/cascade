@@ -1,10 +1,10 @@
 import os
 import logging
-from typing import Iterable, List, Dict, Union
+from typing import Iterable, List, Dict, Union, Any
 
 import pendulum
 from ..base import Traceable
-from ..models import Model, ModelRepo
+from ..models import Model, ModelLine, ModelRepo
 
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class Trainer(Traceable):
     """
     A class that encapsulates training, evaluation and saving of models.
     """
-    def __init__(self, repo: Union[ModelRepo, str], *args, **kwargs) -> None:
+    def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -31,7 +31,7 @@ class Trainer(Traceable):
         self.metrics = []
         super().__init__(*args, **kwargs)
 
-    def train(self, model, *args, **kwargs):
+    def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise NotImplementedError()
 
     def get_meta(self) -> List[Dict]:
@@ -48,7 +48,7 @@ class BasicTrainer(Trainer):
     Can start from checkpoint if model file exists.
     """
     @staticmethod
-    def _find_last_model(model, line):
+    def _find_last_model(model: Model, line: ModelLine) -> None:
         model_num = len(line) - 1
         while True:
             path = os.path.join(line.root, line.model_names[model_num])
@@ -64,16 +64,16 @@ class BasicTrainer(Trainer):
 
     def train(self,
               model: Model,
-              *args,
-              train_data: Iterable = None,
-              test_data: Iterable = None,
-              train_kwargs: Dict = None,
-              test_kwargs: Dict = None,
+              *args: Any,
+              train_data: Union[Iterable[Any], None] = None,
+              test_data: Union[Iterable[Any], None] = None,
+              train_kwargs: Union[Dict[Any, Any], None] = None,
+              test_kwargs: Union[Dict[Any, Any], None] = None,
               epochs: int = 1,
-              start_from: str = None,
-              eval_strategy: int = None,
-              save_strategy: int = None,
-              **kwargs) -> None:
+              start_from: Union[str, None] = None,
+              eval_strategy: Union[int, None] = None,
+              save_strategy: Union[int, None] = None,
+              **kwargs: Any) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
 
@@ -100,12 +100,13 @@ class BasicTrainer(Trainer):
                 If None - the strategy is 'save only meta'.
         """
 
-        # TODO: check if eval_strategy specified that test_data provided also
-
         if train_kwargs is None:
             train_kwargs = {}
         if test_kwargs is None:
             test_kwargs = {}
+
+        if eval_strategy is not None and test_data is None:
+            raise ValueError('Eval strategy is specified, but no test data provided')
 
         if start_from is not None:
             line_name = start_from

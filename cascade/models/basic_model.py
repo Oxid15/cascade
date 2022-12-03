@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 
-from typing import Dict, Callable
+from typing import Dict, Callable, Any
 from .model import Model, ModelModifier
 
 
@@ -30,16 +30,17 @@ class BasicModel(Model):
     cascade.models.Model
     """
 
-    def load(self, filepath) -> None:
+    def load(self, filepath: str) -> None:
         raise NotImplementedError()
 
-    def save(self, filepath) -> None:
+    def save(self, filepath: str) -> None:
         raise NotImplementedError()
 
-    def predict(self, x, *args, **kwargs):
+    def predict(self, x: Any, *args: Any, **kwargs: Any):
         raise NotImplementedError()
 
-    def evaluate(self, x, y, metrics_dict: Dict[str, Callable], *args, **kwargs) -> None:
+    def evaluate(self, x: Any, y: Any,
+                 metrics_dict: Dict[str, Callable], *args: Any, **kwargs: Any) -> None:
         """
         Receives x and y validation sequences. Passes x to the model's predict
         method along with any args or kwargs needed.
@@ -61,7 +62,7 @@ class BasicModel(Model):
         preds = self.predict(x, *args, **kwargs)
         self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
 
-    def fit(self, x, y, *args, **kwargs) -> None:
+    def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
         raise NotImplementedError()
 
 

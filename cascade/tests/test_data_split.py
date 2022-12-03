@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -43,3 +44,20 @@ def test():
 
     # This means pipeline was made
     assert len(ds1.get_meta()) == 2
+
+
+def test_wrong_usage():
+    ds = cdd.Wrapper([0, 1, 2, 3])
+
+    with pytest.raises(ValueError):
+        a, b = cdd.split(ds, None)
+
+
+def test_empty():
+    ds = cdd.Wrapper([])
+
+    with pytest.raises(ValueError):
+        a, b = cdd.split(ds, num=10)
+
+    with pytest.raises(ValueError):
+        a, b = cdd.split(ds)
