@@ -44,7 +44,7 @@ class TableDataset(Dataset):
         else:
             raise TypeError('Input table is not a pandas.DataFrame nor TableDataset')
 
-    def __getitem__(self, index: int) -> pd.Series[Any]:
+    def __getitem__(self, index: int) -> pd.Series:
         """
         Returns a row from table by index
         """
