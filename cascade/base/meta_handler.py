@@ -66,7 +66,7 @@ class CustomEncoder(JSONEncoder):
 
 
 class BaseHandler:
-    def read(self, path: str) -> Meta:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         raise NotImplementedError()
 
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
@@ -83,7 +83,7 @@ class BaseHandler:
 
 
 class JSONHandler(BaseHandler):
-    def read(self, path: str) -> Meta:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.json'
@@ -106,7 +106,7 @@ class JSONHandler(BaseHandler):
 
 
 class YAMLHandler(BaseHandler):
-    def read(self, path: str) -> Meta:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.yml'
@@ -168,7 +168,7 @@ class MetaHandler:
     >>> mh.write('meta.yml', {'hello': 'world'})
     >>> obj = mh.read('meta.yml')
     """
-    def read(self, path: str) -> Meta:
+    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
         """
         Reads object from path.
 
@@ -179,7 +179,7 @@ class MetaHandler:
 
         Returns
         -------
-            obj: Meta
+            obj: Union[List[Any], Dict[Any, Any]]
 
         Raises
         ------

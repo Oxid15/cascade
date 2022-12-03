@@ -34,7 +34,7 @@ class Traceable:
         self._meta_prefix = meta_prefix
 
     @staticmethod
-    def _read_meta_from_file(path: str) -> Meta:
+    def _read_meta_from_file(path: str) -> Union[List[Any], Dict[Any, Any]]:
         from . import MetaHandler
         return MetaHandler().read(path)
 
@@ -64,6 +64,12 @@ class Traceable:
         """
         if isinstance(obj, str):
             obj = self._read_meta_from_file(obj)
+
+        if isinstance(obj, list):
+            raise RuntimeError(
+                'Object that was passed or read from path is a list.'
+                'There is no clear way how to update this object\'s meta'
+                'using list')
 
         if hasattr(self, '_meta_prefix'):
             self._meta_prefix.update(obj)
