@@ -62,7 +62,8 @@ class Dataset(Generic[T], Traceable):
         --------
         cascade.data.Dataset.get_meta()
         """
-        return super().__repr__().split()[0]
+        # Removes adress part of basic object repr and leading < symbol
+        return super().__repr__().split()[0][1:]
 
 
 class SizedDataset(Dataset[T], Sized):
