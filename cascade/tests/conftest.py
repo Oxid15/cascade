@@ -22,12 +22,16 @@ import pendulum
 from dateutil import tz
 import numpy as np
 import pytest
+import pandas as pd
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper, Iterator
+from cascade.data import Dataset, Wrapper, Iterator, ApplyModifier, \
+    BruteforceCacher, Composer, Concatenator, CyclicSampler, \
+    RandomSampler, RangeSampler, SequentialCacher
 from cascade.models import Model, ModelLine, ModelRepo, BasicModel
+from cascade import utils as cdu
 
 
 class DummyModel(Model):
@@ -74,6 +78,39 @@ class OnesModel(BasicModel):
 
     def fit(self, x, y, *args, **kwargs) -> None:
         pass
+
+
+def f(x: int) -> int:
+    return 2 * x
+
+
+@pytest.fixture(
+    params=[
+        Iterator([0]),
+        Wrapper([0]),
+        ApplyModifier(Wrapper([0, 1, 2]), f),
+        BruteforceCacher(Wrapper([0, 2])),
+        Composer([Wrapper([0]), Wrapper([1])]),
+        Concatenator([Wrapper([0]), Wrapper([1])]),
+        CyclicSampler(Wrapper([0]), 1),
+        RandomSampler(Wrapper([1, 2, 3]), 2),
+        RangeSampler(Wrapper([0, 1, 2, 3]), 0, 3, 1),
+        SequentialCacher(Wrapper([0, 1, 2, 3]))
+    ]
+)
+def dataset(request) -> Dataset:
+    return request.param
+
+
+@pytest.fixture(
+    params=[
+        cdu.TableDataset(t=pd.DataFrame()),
+        cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame()), []),
+        cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24])
+    ]
+)
+def utils_dataset(request) -> Dataset:
+    return request.param
 
 
 @pytest.fixture(params=[

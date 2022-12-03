@@ -24,39 +24,12 @@ from cascade.data import *
 from cascade import utils as cdu
 
 
-def f(x: int) -> int:
-    return 2 * x
+def test_data_coverage(dataset, tmp_path):
+    Pickler(os.path.join(tmp_path, 'ds.pkl'), dataset)
 
 
-@pytest.mark.parametrize(
-    'ds',
-    [
-        Iterator([0]),
-        Wrapper([0]),
-        ApplyModifier(Wrapper([0, 1, 2]), f),
-        BruteforceCacher(Wrapper([0, 2])),
-        Composer([Wrapper([0]), Wrapper([1])]),
-        Concatenator([Wrapper([0]), Wrapper([1])]),
-        CyclicSampler(Wrapper([0]), 1),
-        RandomSampler(Wrapper([1, 2, 3]), 2),
-        RangeSampler(Wrapper([0, 1, 2, 3]), 0, 3, 1),
-        SequentialCacher(Wrapper([0, 1, 2, 3]))
-    ]
-)
-def test_data_coverage(ds, tmp_path):
-    Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
-
-
-@pytest.mark.parametrize(
-    'ds',
-    [
-        cdu.TableDataset(t=pd.DataFrame()),
-        cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame()), []),
-        cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24])
-    ]
-)
-def test_utils_coverage(ds, tmp_path):
-    Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
+def test_utils_coverage(utils_dataset, tmp_path):
+    Pickler(os.path.join(tmp_path, 'ds.pkl'), utils_dataset)
 
 
 @pytest.mark.parametrize(
