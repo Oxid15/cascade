@@ -124,16 +124,26 @@ class MetricViewer:
 
         Parameters
         ----------
-            metric: str
-                Name of the metric
-            maximize: bool
-                The direction of choosing the best model: `True` if best is better
-                and `False` if less is better
+        metric: str
+            Name of the metric
+        maximize: bool
+            The direction of choosing the best model: `True` if greater is better
+            and `False` if less is better
+
+        Raises
+        ------
+        TypeError if metric objects cannot be sorted. If only one model in repo, then
+        returns it without error since no sorting involved.
         """
         assert metric in self.table, f'{metric} is not in {self.table.columns}'
         t = self.table.loc[self.table[metric].notna()]
 
-        best_row = t.sort_values(metric, ascending=maximize).iloc[-1]
+        try:
+            t = t.sort_values(metric, ascending=maximize)
+        except TypeError as e:
+            raise TypeError(f'Metric {metric} objects cannot be sorted') from e
+
+        best_row = t.iloc[-1]
         name = os.path.split(best_row['line'])[-1]
         num = best_row['num']
         return self._repo[name][num]
