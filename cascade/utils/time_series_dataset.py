@@ -21,6 +21,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
+from ..base import Meta
 from ..data import Dataset, Modifier
 
 
@@ -156,6 +157,16 @@ class TimeSeriesDataset(Dataset):
     def __len__(self) -> int:
         return len(self._num_idx)
 
+    def get_meta(self) -> Meta:
+        meta = super().get_meta()
+        meta[0].update(
+            {
+                'time_from': self._time[0],
+                'time_to': self._time[-1],
+                'info': self._table.describe().to_dict()
+            }
+        )
+        return meta
 
 class Average(TimeSeriesDataset, Modifier):
     """
@@ -163,7 +174,7 @@ class Average(TimeSeriesDataset, Modifier):
     """
     def __init__(self, dataset: TimeSeriesDataset,
                  unit: str = 'years',
-                 amount: int = 1, *args: Any, **kwargs: Any):
+                 amount: int = 1, *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -206,7 +217,7 @@ class Interpolate(TimeSeriesDataset, Modifier):
     def __init__(self, dataset: TimeSeriesDataset,
                  method: str = 'linear',
                  limit_direction: str = 'both',
-                 **kwargs) -> None:
+                 **kwargs: Any) -> None:
         t = dataset.to_pandas()
         time, _ = dataset.get_data()
         t.index = pd.Index(time)
