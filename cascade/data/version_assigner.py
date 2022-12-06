@@ -78,13 +78,14 @@ class VersionAssigner(Modifier):
 
         # get meta for info about pipeline
         meta = self._dataset.get_meta()
+        pipeline = skeleton(meta)
 
         meta_str = str(meta)
-        pipeline = str(skeleton(meta))
+        pipeline_str = str(pipeline)
 
         # identify pipeline
         meta_hash = md5(str.encode(meta_str, 'utf-8')).hexdigest()
-        pipe_hash = md5(str.encode(pipeline, 'utf-8')).hexdigest()
+        pipe_hash = md5(str.encode(pipeline_str, 'utf-8')).hexdigest()
 
         if os.path.exists(self._root):
             self._versions = self._mh.read(self._root)
