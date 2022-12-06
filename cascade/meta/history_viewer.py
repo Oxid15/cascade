@@ -58,8 +58,12 @@ class HistoryViewer:
         metas = []
         params = []
 
-        # Takes last N lines in correct order
-        for line_name in self._repo.get_line_names()[-self._last_lines:]:
+        line_names = self._repo.get_line_names()
+        if self._last_lines is not None:
+            # Takes last N lines in correct order
+            line_names = line_names[-self._last_lines:]
+
+        for line_name in line_names:
             line = self._repo[line_name]
             view = MetaViewer(line.root, filt={'type': 'model'})
 
