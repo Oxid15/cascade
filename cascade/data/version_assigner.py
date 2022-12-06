@@ -3,6 +3,7 @@ from hashlib import md5
 from typing import Dict, List, Any, Tuple
 from . import Dataset, Modifier, T
 from ..base import MetaHandler, supported_meta_formats
+from ..meta import skeleton
 
 
 class VersionAssigner(Modifier):
@@ -78,10 +79,8 @@ class VersionAssigner(Modifier):
         # get meta for info about pipeline
         meta = self._dataset.get_meta()
 
-        # TODO: extract all names
-        # use whole meta and pipeline which is only first-level names
         meta_str = str(meta)
-        pipeline = ' '.join([m['name'] for m in meta])
+        pipeline = str(skeleton(meta))
 
         # identify pipeline
         meta_hash = md5(str.encode(meta_str, 'utf-8')).hexdigest()
