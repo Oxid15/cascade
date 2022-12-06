@@ -168,6 +168,7 @@ class TimeSeriesDataset(Dataset):
         )
         return meta
 
+
 class Average(TimeSeriesDataset, Modifier):
     """
     Averages values over some time step.
@@ -195,8 +196,21 @@ class Average(TimeSeriesDataset, Modifier):
         assert len(reg_data) > 1, 'Please, provide unit that ' \
                                   'would get more than one period'
 
+        self._unit = unit
+        self._amount = amount
+
         super().__init__(dataset, time=reg_time,
                          data=reg_data, *args, **kwargs)
+
+    def get_meta(self) -> Meta:
+        meta = super().get_meta()
+        meta[0].update(
+            {
+                'unit': self._unit,
+                'amount': self._amount
+            }
+        )
+        return meta
 
     @staticmethod
     def _avg(arr, arr_dates, dates):
@@ -223,6 +237,19 @@ class Interpolate(TimeSeriesDataset, Modifier):
         t.index = pd.Index(time)
         t = t[0].interpolate(method=method, limit_direction=limit_direction)
         super().__init__(dataset, time=time, data=t.to_numpy(), **kwargs)
+
+        self._method = method
+        self._limit_direction = limit_direction
+
+    def get_meta(self) -> Meta:
+        meta = super().get_meta()
+        meta[0].update(
+            {
+                'method': self._method,
+                'limit_direction': self._limit_direction
+            }
+        )
+        return meta
 
 
 class Align(TimeSeriesDataset, Modifier):
