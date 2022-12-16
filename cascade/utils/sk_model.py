@@ -18,10 +18,10 @@ import os
 import glob
 from hashlib import md5
 import pickle
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union, Any
 from sklearn.pipeline import Pipeline
 
-from ..base import MetaHandler
+from ..base import MetaHandler, Meta
 from ..models import BasicModel
 
 
@@ -31,7 +31,7 @@ class SkModel(BasicModel):
     Accepts the name and block to form pipeline.
     Can fit, evaluate, predict save and load out of the box.
     """
-    def __init__(self, blocks=None, **kwargs) -> None:
+    def __init__(self, *args: Any, blocks: Union[List[Any], None]=None, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -40,7 +40,7 @@ class SkModel(BasicModel):
         blocks: list, optional
             List of sklearn transformers to make a pipeline from
         """
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
         if blocks is not None:
             self._pipeline = self._construct_pipeline(blocks)
@@ -49,25 +49,25 @@ class SkModel(BasicModel):
     def _construct_pipeline(blocks: List[Any]) -> Pipeline:
         return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
 
-    def fit(self, x, y, *args, **kwargs) -> None:
+    def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
         """
         Wrapper for pipeline.fit
         """
         self._pipeline.fit(x, y, *args, **kwargs)
 
-    def predict(self, x, *args, **kwargs):
+    def predict(self, x: Any, *args: Any, **kwargs: Any) -> Any:
         """
         Wrapper for pipeline.predict
         """
         return self._pipeline.predict(x, *args, **kwargs)
 
-    def predict_proba(self, x, *args, **kwargs):
+    def predict_proba(self, x: Any, *args: Any, **kwargs: Any) -> Any:
         """
         Wrapper for pipeline.predict_proba
         """
         return self._pipeline.predict_proba(x, *args, **kwargs)
 
-    def _check_model_hash(self, path) -> None:
+    def _check_model_hash(self, path: str) -> None:
         root = os.path.dirname(path)
         names = glob.glob(os.path.join(f'{root}', 'meta.*'))
         if len(names) == 1:
@@ -88,7 +88,7 @@ class SkModel(BasicModel):
         elif len(names) > 1:
             raise RuntimeError(f'Multiple possible meta-files found: {names}')
 
-    def load(self, path, check_hash=True) -> None:
+    def load(self, path: str, check_hash: bool = True) -> None:
         """
         Loads the model from path provided. If no extension, .pkl is added.
         """
@@ -111,7 +111,7 @@ class SkModel(BasicModel):
         with open(f'{path}', 'wb') as f:
             pickle.dump(self._pipeline, f)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({
             'pipeline': repr(self._pipeline)

@@ -14,19 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Dict, List
+from typing import Dict, List, Any
 import numpy as np
 from ..data import Wrapper
+from ..base import Meta
 
 
 class NumpyWrapper(Wrapper):
     """
     A wrapper around .npy files. Loads file in `__init__`.
     """
-    def __init__(self, path: str, *args, **kwargs) -> None:
+    def __init__(self, path: str, *args: Any, **kwargs: Any) -> None:
         self._path = path
         super().__init__(np.load(path), *args, **kwargs)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]['root'] = self._path
+        return meta

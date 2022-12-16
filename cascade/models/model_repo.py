@@ -15,13 +15,13 @@ import os
 import warnings
 import itertools
 import logging
-from typing import List, Dict, Iterable, Union
+from typing import List, Iterable, Union, Any, Literal, Type, Generator
 import shutil
 
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats
+from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats, Meta
 from .model import Model
 from .model_line import ModelLine
 
@@ -36,13 +36,13 @@ class Repo(Traceable):
     """
     root = None
 
-    def reload(self):
+    def reload(self) -> None:
         raise NotImplementedError()
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> ModelLine:
         raise NotImplementedError()
 
-    def __len__(self):
+    def __len__(self) -> int:
         raise NotImplementedError()
 
 
@@ -72,7 +72,13 @@ class ModelRepo(Repo):
     >>> model.fit()
     >>> repo['constant'].save(model)
     """
-    def __init__(self, folder, lines=None, overwrite=False, meta_fmt='.json', model_cls=Model, **kwargs):
+    def __init__(
+        self,
+        folder: str,
+        lines: Union[Iterable[ModelLine], None] = None,
+        overwrite: bool = False,
+        meta_fmt: Literal['.json', '.yml'] = '.json',
+        model_cls: Type = Model, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -98,7 +104,8 @@ class ModelRepo(Repo):
         self._root = folder
         self._lines = dict()
 
-        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, \
+            f'Only {supported_meta_formats} are supported formats'
         self._meta_fmt = meta_fmt
         if overwrite and os.path.exists(self._root):
             shutil.rmtree(self._root)
@@ -115,7 +122,7 @@ class ModelRepo(Repo):
 
         self._update_meta()
 
-    def _load_lines(self):
+    def _load_lines(self) -> None:
         self._lines = {
             name: ModelLine(os.path.join(self._root, name),
                             model_cls=self._model_cls,
@@ -124,7 +131,7 @@ class ModelRepo(Repo):
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))}
 
-    def add_line(self, name: str = None, *args, meta_fmt=None, **kwargs):
+    def add_line(self, name: str = None, *args, meta_fmt=None, **kwargs) -> ModelLine:
         """
         Adds new line to repo if it doesn't exist and returns it.
         If line exists, defines it in repo with parameters provided.
@@ -182,7 +189,7 @@ class ModelRepo(Repo):
         else:
             raise TypeError(f'{type(key)} is not supported as key')
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[ModelLine, None, None]:
         for line in self._lines:
             yield self.__getitem__(line)
 
@@ -198,14 +205,14 @@ class ModelRepo(Repo):
     def __repr__(self) -> str:
         return f'ModelRepo in {self._root} of {len(self)} lines'
 
-    def _setup_logger(self):
+    def _setup_logger(self) -> None:
         self.logger = logging.getLogger(self._root)
         hdlr = logging.FileHandler(os.path.join(self._root, 'history.log'))
         hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
         self.logger.addHandler(hdlr)
         self.logger.setLevel('DEBUG')
 
-    def _update_meta(self):
+    def _update_meta(self) -> None:
         # Reads meta if exists and updates it with new values
         # writes back to disk
         meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
@@ -227,7 +234,7 @@ class ModelRepo(Repo):
         except IOError as e:
             warnings.warn(f'File writing error ignored: {e}')
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({
             'root': self._root,
@@ -244,7 +251,7 @@ class ModelRepo(Repo):
         self._load_lines()
         self._update_meta()
 
-    def __del__(self):
+    def __del__(self) -> None:
         # Release all files on destruction
         if hasattr(self, 'logger'):
             for handler in self.logger.handlers:
@@ -258,7 +265,6 @@ class ModelRepo(Repo):
         """
         Returns list of line names.
         """
-        # TODO: write test covering this
         return list(self._lines.keys())
 
 
@@ -268,11 +274,11 @@ class ModelRepoConcatenator(Repo):
     For the ease of use please, don't use it directly.
     Just do `repo = repo_1 + repo_2` to unify two or more repos.
     """
-    def __init__(self, repos: Iterable[Repo], *args, **kwargs) -> None:
+    def __init__(self, repos: Iterable[Repo], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._repos = repos
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> ModelLine:
         pair = key.split('_')
         if len(pair) <= 2:
             raise KeyError(f'Key {key} is not in required format \
@@ -283,20 +289,20 @@ class ModelRepoConcatenator(Repo):
 
         return self._repos[idx][line_name]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return sum([len(repo) for repo in self._repos])
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[ModelLine, None, None]:
         # this flattens the list of lines
         for line in itertools.chain(*[[line for line in repo] for repo in self._repos]):
             yield line
 
-    def __add__(self, repo):
+    def __add__(self, repo: ModelRepo):
         return ModelRepoConcatenator([self, repo])
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'ModelRepoConcatenator of {len(self._repos)} repos, {len(self)} lines total'
 
-    def reload(self):
+    def reload(self) -> None:
         for repo in self._repos:
             repo.reload()

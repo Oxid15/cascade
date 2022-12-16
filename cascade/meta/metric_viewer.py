@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Union, List
+from typing import Union, List, Any, NoReturn
 
 import pendulum
 from flatten_json import flatten
@@ -23,6 +23,7 @@ from plotly import graph_objects as go
 import pandas as pd
 
 from . import MetaViewer
+from ..models import Model, ModelRepo
 
 
 class MetricViewer:
@@ -32,7 +33,7 @@ class MetricViewer:
     As metrics it uses data from `metrics` field in models'
     meta and as parameters it uses `params` field.
     """
-    def __init__(self, repo, scope: Union[int, str, slice] = None) -> None:
+    def __init__(self, repo: ModelRepo, scope: Union[int, str, slice, None] = None) -> None:
         """
         Parameters
         ----------
@@ -53,7 +54,7 @@ class MetricViewer:
         """
         return MetricViewer(self._repo, scope=key)
 
-    def reload_table(self):
+    def reload_table(self) -> None:
         self._metrics = []
         selected_names = self._repo.get_line_names()
 
@@ -117,22 +118,32 @@ class MetricViewer:
             fig.show()
         return fig
 
-    def get_best_by(self, metric: str, maximize=True):
+    def get_best_by(self, metric: str, maximize: bool = True) -> Model:
         """
         Loads the best model by the given metric
 
         Parameters
         ----------
-            metric: str
-                Name of the metric
-            maximize: bool
-                The direction of choosing the best model: `True` if best is better
-                and `False` if less is better
+        metric: str
+            Name of the metric
+        maximize: bool
+            The direction of choosing the best model: `True` if greater is better
+            and `False` if less is better
+
+        Raises
+        ------
+        TypeError if metric objects cannot be sorted. If only one model in repo, then
+        returns it without error since no sorting involved.
         """
         assert metric in self.table, f'{metric} is not in {self.table.columns}'
         t = self.table.loc[self.table[metric].notna()]
 
-        best_row = t.sort_values(metric, ascending=maximize).iloc[-1]
+        try:
+            t = t.sort_values(metric, ascending=maximize)
+        except TypeError as e:
+            raise TypeError(f'Metric {metric} objects cannot be sorted') from e
+
+        best_row = t.iloc[-1]
         name = os.path.split(best_row['line'])[-1]
         num = best_row['num']
         return self._repo[name][num]
@@ -140,9 +151,9 @@ class MetricViewer:
     def serve(
             self,
             page_size: int = 50,
-            include: List[str] = None,
-            exclude: List[str] = None,
-            **kwargs) -> None:
+            include: Union[List[str], None] = None,
+            exclude: Union[List[str], None] = None,
+            **kwargs: Any) -> None:
         """
         Runs dash-based server with interactive table of metrics and parameters
 
@@ -151,7 +162,8 @@ class MetricViewer:
         page_size: int, optional
             Size of the table in rows on one page
         include: List[str], optional:
-            List of parameters or metrics to be added. Only them will be present along with some default
+            List of parameters or metrics to be added.
+            Only they will be present along with some default
         exclude: List[str], optional:
             List of parameters or metrics to be excluded from table
         **kwargs:
@@ -162,13 +174,16 @@ class MetricViewer:
 
 
 class MetricServer:
-    def __init__(self, mv, page_size, include, exclude, **kwargs) -> None:
+    def __init__(self, mv: MetricViewer,
+                 page_size: int,
+                 include: Union[List[str], None],
+                 exclude: Union[List[str], None], **kwargs: Any) -> None:
         self._mv = mv
         self._page_size = page_size
         self._include = include
         self._exclude = exclude
 
-    def _update_graph_callback(self, _app):
+    def _update_graph_callback(self, _app) -> None:
         try:
             from dash import Output, Input
         except ModuleNotFoundError:
@@ -246,7 +261,7 @@ class MetricServer:
             )
         ])
 
-    def serve(self, **kwargs):
+    def serve(self, **kwargs: Any) -> None:
         # Conditional import
         try:
             import dash
@@ -258,7 +273,7 @@ class MetricServer:
         self._update_graph_callback(app)
         app.run_server(use_reloader=False, **kwargs)
 
-    def _raise_cannot_import(self):
+    def _raise_cannot_import(self) -> NoReturn:
         raise ModuleNotFoundError('''
                     Cannot import dash. It is conditional
                     dependency you can install it

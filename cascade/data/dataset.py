@@ -11,8 +11,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Dict, Generic, Iterable, List, Mapping, TypeVar
-from ..base import Traceable
+from typing import Dict, Generic, Iterable, List, TypeVar, Any, Sized, Sequence
+from ..base import Traceable, Meta
 
 T = TypeVar('T')
 
@@ -28,20 +28,20 @@ class Dataset(Generic[T], Traceable):
     --------
     cascade.base.Traceable
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
 
-    def __getitem__(self, index) -> T:
+    def __getitem__(self, index: int) -> T:
         """
         Abstract method - should be defined in every successor
         """
         raise NotImplementedError()
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         """
         Returns
         -------
-        meta: List[Dict]
+        meta: Meta
             A list where last element is this dataset's metadata.
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
@@ -62,62 +62,81 @@ class Dataset(Generic[T], Traceable):
         --------
         cascade.data.Dataset.get_meta()
         """
-        return super().__repr__().split()[0]
+        # Removes adress part of basic object repr and leading < symbol
+        return super().__repr__().split()[0][1:]
+
+
+class SizedDataset(Dataset[T], Sized):
+    """
+    An abstract class to represent a dataset
+    with __len__ method present. Inheritance of
+    this class should mean the presence of length.
+
+    If your dataset does not have length defined, please
+    use Dataset.
+
+    See also
+    --------
+    cascade.data.Dataset
+    """
+    def len(self) -> int:
+        raise NotImplementedError()
 
 
 class Iterator(Dataset):
     """
     Wraps Dataset around any Iterable. Does not have map-like interface.
     """
-    def __init__(self, data: Iterable, *args, **kwargs):
+    def __init__(self, data: Iterable[T], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._data = data
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int) -> T:
         raise NotImplementedError()
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[T]:
         for item in self._data:
             yield item
 
-    def get_meta(self):
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]['obj_type'] = str(type(self._data))
         return meta
 
 
-class Wrapper(Dataset):
+class Wrapper(SizedDataset):
     """
     Wraps Dataset around any list-like object.
     """
-    def __init__(self, obj: Mapping, *args, **kwargs) -> None:
+    def __init__(self, obj: Sequence[T], *args: Any, **kwargs: Any) -> None:
         self._data = obj
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index) -> T:
+    def __getitem__(self, index: int) -> T:
         return self._data[index]
 
     def __len__(self) -> int:
         return len(self._data)
 
-    def get_meta(self):
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]['len'] = len(self)
         meta[0]['obj_type'] = str(type(self._data))
         return meta
 
 
-class Modifier(Dataset):
+class Modifier(SizedDataset):
     """
-    Basic pipeline building block in Cascade. Every block which is not a data source should be a successor
-    of Sampler or Modifier.
+    Basic pipeline building block in Cascade. Every block which is not a data source should be
+    a successor of Sampler or Modifier.
     This structure enables a workflow, when we have a data pipeline which consists of uniform blocks
-    each of them has a reference to the previous one in its `_dataset` field. See get_meta method for example.
+    each of them has a reference to the previous one in its `_dataset` field. See get_meta method
+    for example.
     Basically Modifier defines an arbitrary transformation on every dataset's item that is applied
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
     """
-    def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
+    def __init__(self, dataset: SizedDataset[T], *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
         Parameters
@@ -128,7 +147,7 @@ class Modifier(Dataset):
         self._dataset = dataset
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index) -> T:
+    def __getitem__(self, index: int) -> T:
         return self._dataset[index]
 
     def __iter__(self) -> T:
@@ -138,7 +157,7 @@ class Modifier(Dataset):
     def __len__(self) -> int:
         return len(self._dataset)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         """
         Overrides base method enabling cascade-like calls to previous datasets.
         The metadata of a pipeline that consist of several modifiers can be easily
@@ -152,8 +171,8 @@ class Modifier(Dataset):
 
 class Sampler(Modifier):
     """
-    Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number of
-    items in dataset. It can be used to build a batch sampler, random sampler, etc.
+    Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number
+    of items in dataset. It can be used to build a batch sampler, random sampler, etc.
 
     See also
     --------
@@ -161,7 +180,8 @@ class Sampler(Modifier):
     cascade.data.RandomSampler
     cascade.data.RangeSampler
     """
-    def __init__(self, dataset: Dataset, num_samples: int, *args, **kwargs) -> None:
+    def __init__(self, dataset: SizedDataset[T], num_samples: int,
+                 *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Sampler.
 

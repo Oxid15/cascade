@@ -14,14 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Callable, Union, Any
 from tqdm import tqdm
 
 from . import Validator, DataValidationException
 from .validator import prettify_items
+from ..data import Dataset, T
 
 
 class DataleakValidator(Validator):
-    def __init__(self, train_ds, test_ds, hash_fn=None, **kwargs) -> None:
+    def __init__(
+            self,
+            train_ds: Dataset[T],
+            test_ds: Dataset[T],
+            hash_fn: Union[Callable[[Any], str], None] = None,
+            **kwargs: Any
+    ) -> None:
         if hash_fn is None:
             hash_fn = hash
 

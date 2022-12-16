@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from . import Dataset, Modifier, T
+from typing import Any
+
+from . import SizedDataset, Modifier, T
 from numpy import ceil
 
 
@@ -22,7 +24,8 @@ class SequentialCacher(Modifier):
     """
     A batched version of BruteforceCacher class.
 
-    On first `__getitem__` call loads a batch of length `batch_size` and until indices are in the same batch doesn't
+    On first `__getitem__` call loads a batch of length `batch_size` and until
+    indices are in the same batch doesn't
     load anything. When index misses a cached batch, then a new one is loaded.
 
     See also
@@ -31,9 +34,9 @@ class SequentialCacher(Modifier):
     """
     def __init__(
             self,
-            dataset: Dataset,
+            dataset: SizedDataset[T],
             batch_size: int = 2,
-            *args, **kwargs) -> None:
+            *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -42,7 +45,7 @@ class SequentialCacher(Modifier):
         batch_size: int, optional
             A number of items to load and keep in each moment
         """
-        # TODO: make something to release this assert
+
         assert hasattr(dataset, '__len__'), 'Dataset should have __len__'
         super().__init__(dataset, *args, **kwargs)
         self._bs = batch_size
@@ -50,7 +53,7 @@ class SequentialCacher(Modifier):
         self._index = -1
         self._batch = None
 
-    def _load(self, index) -> None:
+    def _load(self, index: int) -> None:
         del self._batch
         self._batch = []
 
@@ -62,7 +65,7 @@ class SequentialCacher(Modifier):
 
         self._index += 1
 
-    def __getitem__(self, index) -> T:
+    def __getitem__(self, index: int) -> T:
         batch_index = index // self._bs
         in_batch_idx = index % self._bs
 

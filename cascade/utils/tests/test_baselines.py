@@ -4,7 +4,9 @@ Copyright 2022 Ilia Moiseev
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
    http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,25 +16,23 @@ limitations under the License.
 
 import os
 import sys
-import pytest
+import numpy as np
 
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+MODULE_PATH = os.path.dirname(
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper
-from cascade.meta import MetaValidator, DataValidationException
+from cascade.utils import ConstantBaseline
 
 
-def pipeline_run(ds, root):
-    MetaValidator(ds, root=root)
+def test():
+    model = ConstantBaseline(constant=1)
+    assert np.all(model.predict([0, 0, 0]) == np.array([1, 1, 1]))
 
+    model = ConstantBaseline(constant=[1, 0])
+    assert np.all(model.predict([0, 0, 0]) == np.array([[1, 0], [1, 0], [1, 0]]))
 
-def test_true(number_dataset, tmp_path):
-    pipeline_run(number_dataset, str(tmp_path))
-    pipeline_run(number_dataset, str(tmp_path))
-
-
-def test_raise(tmp_path):
-    pipeline_run(Wrapper([1, 2, 3, 4, 5]), str(tmp_path))
-    with pytest.raises(DataValidationException):
-        pipeline_run(Wrapper([1, 2, 3, 4, 5, 6]), str(tmp_path))
+    model = ConstantBaseline(constant=[[1, 0], [0, 1]])
+    assert np.all(
+        model.predict([0, 0, 0]) == np.array([[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]])
+    )

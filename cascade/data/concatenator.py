@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Dict, Iterable
+from typing import List, Any
 
 import numpy as np
-from .dataset import Dataset, T
+from .dataset import SizedDataset, T
+from ..base import Meta
 
 
-class Concatenator(Dataset):
+class Concatenator(SizedDataset):
     """
     Unifies several Datasets under one, calling them sequentially in the provided order.
 
@@ -32,7 +33,7 @@ class Concatenator(Dataset):
     >>> ds = Concatenator((ds_1, ds_2))
     >>> assert [item for item in ds] == [0, 1, 2, 2, 1, 0]
     """
-    def __init__(self, datasets: Iterable[Dataset], *args, **kwargs) -> None:
+    def __init__(self, datasets: List[SizedDataset[T]], *args: Any, **kwargs: Any) -> None:
         """
         Creates concatenated dataset from the list of datasets provided
 
@@ -46,7 +47,7 @@ class Concatenator(Dataset):
         self._shifts = np.cumsum([0] + lengths)
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index) -> T:
+    def __getitem__(self, index: int) -> T:
         ds_index = 0
         for sh in self._shifts[1:]:
             if index >= sh:
@@ -70,7 +71,7 @@ class Concatenator(Dataset):
         rp = super().__repr__()
         return f'{rp} of\n' + '\n'.join(repr(ds) for ds in self._datasets)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         """
         Concatenator calls `get_meta()` of all its datasets
         """

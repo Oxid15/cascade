@@ -34,13 +34,12 @@ def test_meta():
     assert len(c.get_meta()[0]['data']) == 2
 
 
-# TODO: replace arrs with datasets
 @pytest.mark.parametrize(
     'arrs', [
-        ([0], [0], [0]),
-        ([1, 2, 3, 4], [11]),
-        ([1],),
-        ([1, 2, 3, 4], [])
+        (Wrapper([0]), Wrapper([0]), Wrapper([0])),
+        (Wrapper([1, 2, 3, 4]), Wrapper([11])),
+        (Wrapper([1]),),
+        (Wrapper([1, 2, 3, 4]), Wrapper([]))
     ]
 )
 def test_concatenation(arrs):

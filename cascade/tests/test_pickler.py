@@ -13,12 +13,23 @@ limitations under the License.
 
 import os
 import sys
+import datetime
 import pytest
+import pandas as pd
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Pickler, Wrapper, Modifier, Sampler
+from cascade.data import *
+from cascade import utils as cdu
+
+
+def test_data_coverage(dataset, tmp_path):
+    Pickler(os.path.join(tmp_path, 'ds.pkl'), dataset)
+
+
+def test_utils_coverage(utils_dataset, tmp_path):
+    Pickler(os.path.join(tmp_path, 'ds.pkl'), utils_dataset)
 
 
 @pytest.mark.parametrize(
@@ -29,19 +40,19 @@ from cascade.data import Pickler, Wrapper, Modifier, Sampler
         Sampler(Modifier(Wrapper([1])), 1)
     ]
 )
-def test(ds, tmp_path):
-    ds1 = Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
-    ds2 = Pickler(os.path.join(tmp_path, 'ds.pkl'))
+def test_integrity(ds, tmp_path):
+    _ = Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
+    loaded_ds = Pickler(os.path.join(tmp_path, 'ds.pkl'))
 
     true = []
     for i in range(len(ds)):
         true.append(ds[i])
 
     res = []
-    for i in range(len(ds2)):
-        res.append(ds2[i])
+    for i in range(len(loaded_ds)):
+        res.append(loaded_ds[i])
 
     assert res == true
 
-    assert type(ds2.ds()) == type(ds)
-    assert str(ds2.ds()) == str(ds)
+    assert type(loaded_ds.ds()) == type(ds)
+    assert str(loaded_ds.ds()) == str(ds)

@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Any
 from hashlib import md5
 
 
-def numpy_md5(x) -> str:
+def numpy_md5(x: Any) -> str:
     return md5(x.tobytes()).hexdigest()

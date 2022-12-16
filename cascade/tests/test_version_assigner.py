@@ -21,7 +21,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper, ApplyModifier, VersionAssigner
+from cascade.data import Wrapper, ApplyModifier, VersionAssigner, Concatenator
 
 
 @pytest.mark.parametrize(
@@ -50,3 +50,30 @@ def test(tmp_path, ext):
     ds = VersionAssigner(ds, filepath)
 
     assert ds.version == '1.1'
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_deep_changes(tmp_path, ext):
+    filepath = os.path.join(tmp_path, 'ds' + ext)
+
+    ds = Wrapper([0, 1, 2, 3, 4])
+    ds = ApplyModifier(ds, lambda x: x * 2)
+    ds = Concatenator([ds, ds])
+    ds = Concatenator([ds, ds])
+    ds = VersionAssigner(ds, filepath)
+
+    assert ds.version == '0.0'
+
+    ds = Wrapper([0, 1, 2, 3, 4])
+    ds = ApplyModifier(ds, lambda x: x * 2)
+    ds = ApplyModifier(ds, lambda x: x * 2)
+    ds = Concatenator([ds, ds])
+    ds = Concatenator([ds, ds])
+    ds = VersionAssigner(ds, filepath)
+
+    assert ds.version == '1.0'

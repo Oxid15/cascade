@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Callable
+from typing import Callable, Any, List, Dict
 from . import Dataset, Modifier, T
 
 
@@ -22,7 +22,8 @@ class ApplyModifier(Modifier):
     """
     Modifier that maps a function to given dataset's items in a lazy way.
     """
-    def __init__(self, dataset: Dataset, func: Callable, *args, **kwargs) -> None:
+    def __init__(self, dataset: Dataset[T], func: Callable[[T], Any],
+                 *args: List[Any], **kwargs: Dict[Any, Any]) -> None:
         """
         Parameters
         ----------
@@ -45,6 +46,6 @@ class ApplyModifier(Modifier):
         super().__init__(dataset, *args, **kwargs)
         self._func = func
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: int) -> Any:
         item = self._dataset[index]
         return self._func(item)

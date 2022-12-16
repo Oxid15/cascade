@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Any, Union
 from numpy.random import random_integers, shuffle
-from . import Dataset, Sampler, T
+from . import SizedDataset, Sampler, T
 
 
 class RandomSampler(Sampler):
@@ -23,7 +24,8 @@ class RandomSampler(Sampler):
     Shuffles dataset. Can randomly sample from dataset
     if num_samples is not None and less than length of dataset.
     """
-    def __init__(self, dataset: Dataset, num_samples: int = None, **kwargs) -> None:
+    def __init__(self, dataset: SizedDataset[T], num_samples: Union[int, None] = None,
+                 *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -44,5 +46,5 @@ class RandomSampler(Sampler):
             self._indices = random_integers(0, len(dataset) - 1, num_samples)
         super().__init__(dataset, num_samples, **kwargs)
 
-    def __getitem__(self, index) -> T:
+    def __getitem__(self, index: int) -> T:
         return super().__getitem__(self._indices[index])
