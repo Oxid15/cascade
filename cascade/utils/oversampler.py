@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from ..data import T, Dataset, Sampler
+from typing import Tuple, Any
+
+from ..data import SizedDataset, Sampler
 from numpy import unique, max
 from tqdm import trange
 
@@ -36,7 +38,7 @@ class OverSampler(Sampler):
     Sampler orders the items in the dataset.
     Consider shuffling the dataset after sampling if label order is important.
     """
-    def __init__(self, dataset: Dataset, *args, **kwargs) -> None:
+    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels, counts = unique(labels, return_counts=True)
         how_much_add = max(counts) - counts
@@ -54,7 +56,7 @@ class OverSampler(Sampler):
 
         super().__init__(dataset, num_samples=ln, *args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
         if index < len(self._dataset):
             return self._dataset[index]
         else:

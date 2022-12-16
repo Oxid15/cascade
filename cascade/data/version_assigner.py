@@ -1,8 +1,25 @@
+"""
+Copyright 2022 Ilia Moiseev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
 import os
 from hashlib import md5
-from typing import Dict, List
-from . import Dataset, Modifier
+from typing import Dict, List, Any, Tuple
+from . import Dataset, Modifier, T
 from ..base import MetaHandler, supported_meta_formats
+from ..meta import skeleton
 
 
 class VersionAssigner(Modifier):
@@ -59,7 +76,8 @@ class VersionAssigner(Modifier):
     It is only applied to the major version changes and may be fixed in
     following versions.
     """
-    def __init__(self, dataset: Dataset, path: str, verbose=False, *args, **kwargs) -> None:
+    def __init__(self, dataset: Dataset[T], path: str, verbose: bool = False,
+                 *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -76,15 +94,14 @@ class VersionAssigner(Modifier):
 
         # get meta for info about pipeline
         meta = self._dataset.get_meta()
+        pipeline = skeleton(meta)
 
-        # TODO: extract all names
-        # use whole meta and pipeline which is only first-level names
         meta_str = str(meta)
-        pipeline = ' '.join([m['name'] for m in meta])
+        pipeline_str = str(pipeline)
 
         # identify pipeline
         meta_hash = md5(str.encode(meta_str, 'utf-8')).hexdigest()
-        pipe_hash = md5(str.encode(pipeline, 'utf-8')).hexdigest()
+        pipe_hash = md5(str.encode(pipeline_str, 'utf-8')).hexdigest()
 
         if os.path.exists(self._root):
             self._versions = self._mh.read(self._root)
@@ -128,7 +145,7 @@ class VersionAssigner(Modifier):
         if verbose:
             print('Dataset version:', self.version)
 
-    def _assign_path(self, path):
+    def _assign_path(self, path: str) -> None:
         _, ext = os.path.splitext(path)
         if ext == '':
             raise ValueError(f'Provided path {path} has no extension')
@@ -136,19 +153,19 @@ class VersionAssigner(Modifier):
         assert ext in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
         self._root = path
 
-    def _split_ver(self, ver):
+    def _split_ver(self, ver: str) -> Tuple[int, int]:
         major, minor = ver.split('.')
         return int(major), int(minor)
 
-    def _join_ver(self, major, minor):
+    def _join_ver(self, major: int, minor: int) -> str:
         return f'{major}.{minor}'
 
-    def _get_last_version_from_pipe(self, pipe_hash):
+    def _get_last_version_from_pipe(self, pipe_hash: str) -> str:
         versions = [item['version'] for item in self._versions[pipe_hash].values()]
         versions = sorted(versions)
         return versions[-1]
 
-    def _get_last_version(self):
+    def _get_last_version(self) -> str:
         versions_flat = []
         for pipe_hash in self._versions:
             versions_flat += [item['version'] for item in self._versions[pipe_hash].values()]

@@ -1,5 +1,24 @@
+"""
+Copyright 2022 Ilia Moiseev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
+
 import warnings
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Any
+
+from . import Meta
 
 
 class Traceable:
@@ -7,7 +26,12 @@ class Traceable:
     Base class for everything that has metadata in cascade.
     Handles the logic of getting and updating internal meta prefix.
     """
-    def __init__(self, *args, meta_prefix: Union[Dict, str] = None, **kwargs) -> None:
+    def __init__(
+        self,
+        *args: Any,
+        meta_prefix: Union[Meta, str, None] = None,
+        **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -27,7 +51,7 @@ class Traceable:
         self._meta_prefix = meta_prefix
 
     @staticmethod
-    def _read_meta_from_file(path: str) -> Union[List[Dict], Dict]:
+    def _read_meta_from_file(path: str) -> Union[List[Any], Dict[Any, Any]]:
         from . import MetaHandler
         return MetaHandler().read(path)
 
@@ -57,6 +81,12 @@ class Traceable:
         """
         if isinstance(obj, str):
             obj = self._read_meta_from_file(obj)
+
+        if isinstance(obj, list):
+            raise RuntimeError(
+                'Object that was passed or read from path is a list.'
+                'There is no clear way how to update this object\'s meta'
+                'using list')
 
         if hasattr(self, '_meta_prefix'):
             self._meta_prefix.update(obj)

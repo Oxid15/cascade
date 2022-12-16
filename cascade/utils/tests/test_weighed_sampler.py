@@ -16,8 +16,10 @@ limitations under the License.
 
 import os
 import sys
+import pytest
 
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+MODULE_PATH = os.path.dirname(
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 import cascade.data as cdd
@@ -37,6 +39,7 @@ def test():
         ]
     )
 
+    # Over and under sampling simultaneously
     ds = WeighedSampler(ds, {0: 3, 1: 4})
 
     assert [item for item in ds] == [
@@ -61,6 +64,7 @@ def test():
         ]
     )
 
+    # Remove label using zero and sample exact number
     ds = WeighedSampler(ds, {0: 0, 1: 5})
 
     assert [item for item in ds] == [
@@ -83,6 +87,7 @@ def test():
         ]
     )
 
+    # Omit mapping
     ds = WeighedSampler(ds)
 
     assert [item for item in ds] == [
@@ -94,3 +99,45 @@ def test():
         (5, 1),
         (6, 1)
     ]
+
+
+def test_str_labels():
+    ds = cdd.Wrapper(
+        [
+            (0, 'bar'),
+            (1, 'bar'),
+            (2, 'foo'),
+            (3, 'foo'),
+            (4, 'foo'),
+            (5, 'foo'),
+            (6, 'foo')
+        ]
+    )
+
+    ds = WeighedSampler(ds, {'bar': 3, 'foo': 2})
+
+    assert [item for item in ds] == [
+        (0, 'bar'),
+        (1, 'bar'),
+        (0, 'bar'),
+        (2, 'foo'),
+        (3, 'foo')
+    ]
+
+
+def test_missing_class():
+    ds = cdd.Wrapper(
+        [
+            (0, 'bar'),
+            (1, 'bar'),
+            (2, 'foo'),
+            (3, 'foo'),
+            (4, 'foo'),
+            (5, 'foo'),
+            (6, 'foo')
+        ]
+    )
+
+    # Raise if class is missing in dataset
+    with pytest.raises(ValueError):
+        ds = WeighedSampler(ds, {'bar': 3, 'foo': 2, 'spam': 20})

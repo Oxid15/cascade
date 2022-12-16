@@ -25,4 +25,19 @@ def test(number_dataset):
     res = []
     for i in range(len(ds)):
         res.append(ds[i])
-    assert res == number_dataset._data
+    assert res == [item for item in number_dataset]
+
+
+def test_repeated_usage(number_dataset):
+    ds = SequentialCacher(number_dataset, 2)
+    res = []
+    for i in range(len(ds)):
+        res.append(ds[i])
+
+    assert res == [item for item in number_dataset]
+
+    res = []
+    for i in range(len(ds)):
+        res.append(ds[i])
+
+    assert res == [item for item in number_dataset]

@@ -1,9 +1,28 @@
+"""
+Copyright 2022 Ilia Moiseev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
 import os
+from typing import Any, Union, Literal, Dict, List
+
 from hashlib import md5
 from deepdiff import DeepDiff
+
 from . import Validator, DataValidationException
-from ..data import Dataset
-from ..base import MetaHandler, supported_meta_formats
+from ..data import SizedDataset, T
+from ..base import MetaHandler, supported_meta_formats, Meta
 
 
 class MetaValidator(Validator):
@@ -49,7 +68,9 @@ class MetaValidator(Validator):
     --------
     cascade.data.Modifier
     """
-    def __init__(self, dataset: Dataset, root=None, meta_fmt='.json') -> None:
+    def __init__(self, dataset: SizedDataset[T],
+                 root: Union[str, None] = None,
+                 meta_fmt: Literal['.json', '.yml'] = '.json') -> None:
         """
         Parameters
         ----------
@@ -71,7 +92,8 @@ class MetaValidator(Validator):
             root = './.cascade'
             os.makedirs(root, exist_ok=True)
         self._root = root
-        assert meta_fmt in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
+        assert meta_fmt in supported_meta_formats, \
+            f'Only {supported_meta_formats} are supported formats'
 
         meta = self._dataset.get_meta()
         name = md5(str.encode(' '.join([m['name'] for m in meta]), 'utf-8')).hexdigest()
@@ -84,14 +106,14 @@ class MetaValidator(Validator):
         else:
             self._save(meta, name)
 
-    def _save(self, meta, name) -> None:
+    def _save(self, meta: Meta, name: str) -> None:
         self._mh.write(name, meta)
         print(f'Saved as {name}!')
 
-    def _load(self, name) -> dict:
+    def _load(self, name: str) -> Meta:
         return self._mh.read(name)
 
-    def _check(self, query_meta):
+    def _check(self, query_meta) -> None:
         diff = DeepDiff(self.base_meta, query_meta, verbose_level=2)
         if len(diff):
             print(diff.pretty())

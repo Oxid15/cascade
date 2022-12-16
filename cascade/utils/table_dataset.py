@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Dict, Iterable
+from typing import List, Union, Any, Literal
 import pandas as pd
 from dask import dataframe as dd
 
 from ..meta import AggregateValidator, DataValidationException
 from ..data import Dataset, Modifier, Iterator, SequentialCacher
-
+from ..base import Meta
 
 class TableDataset(Dataset):
     """
     Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
     validation.
     """
-    def __init__(self, *args, t=None, **kwargs):
+    def __init__(self, *args: Any, t: Union[pd.DataFrame, None] = None, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -44,22 +44,22 @@ class TableDataset(Dataset):
         else:
             raise TypeError('Input table is not a pandas.DataFrame nor TableDataset')
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> pd.Series:
         """
         Returns a row from table by index
         """
         return self._table.iloc[index]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'{super().__repr__()}\n {repr(self._table)}'
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         Returns length of the table
         """
         return len(self._table)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({
             'name': repr(self),
@@ -69,7 +69,7 @@ class TableDataset(Dataset):
         })
         return meta
 
-    def to_csv(self, path, **kwargs):
+    def to_csv(self, path: str, **kwargs: Any) -> None:
         """
         Saves the table to .csv file. Any kwargs are sent to
         `pd.DataFrame.to_csv`.
@@ -82,7 +82,7 @@ class TableFilter(TableDataset, Modifier):
     Filter for table values
     """
     def __init__(self, dataset: TableDataset,
-                 mask: Iterable[bool], *args, **kwargs):
+                 mask: List[bool], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -102,7 +102,7 @@ class CSVDataset(TableDataset):
     """
     Wrapper for .csv files.
     """
-    def __init__(self, csv_file_path, *args, **kwargs):
+    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         """
         Passes all args and kwargs to `pd.read_csv`
 
@@ -124,17 +124,17 @@ class PartedTableLoader(Dataset):
     --------
     cascade.utils.CSVDataset
     """
-    def __init__(self, csv_file_path, *args, **kwargs):
+    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._table = dd.read_csv(csv_file_path, *args, **kwargs)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int):
         """
         Returns partition under the index.
         """
         return self._table.get_partition(index).compute()
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         Returns the number of partitions.
         """
@@ -145,7 +145,8 @@ class TableIterator(Iterator):
     """
     Iterates over the table from path by the chunks.
     """
-    def __init__(self, csv_file_path: str, *args, chunk_size: int = 1000, **kwargs):
+    def __init__(self, csv_file_path: str, *args: Any,
+                 chunk_size: int = 1000, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -167,29 +168,29 @@ class LargeCSVDataset(SequentialCacher):
     SequentialCacher over large .csv file.
     Loads table by partitions.
     """
-    def __init__(self, csv_file_path, *args, **kwargs):
+    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         dataset = PartedTableLoader(csv_file_path, *args, **kwargs)
-        self.len = len(dataset._table)
+        self._ln = len(dataset._table)
         self.num_batches = dataset._table.npartitions
-        self.bs = self.len // self.num_batches
+        self.bs = self._ln // self.num_batches
         super().__init__(dataset, self.bs)
 
-    def _load(self, index):
+    def _load(self, index: int) -> None:
         self._batch = TableDataset(t=self._dataset[index])
 
-    def __len__(self):
-        return self.len
+    def __len__(self) -> int:
+        return self._ln
 
 
 class NullValidator(TableDataset, AggregateValidator):
     """
     Checks that there are no null values in the table.
     """
-    def __init__(self, dataset: TableDataset, *args, **kwargs) -> None:
+    def __init__(self, dataset: TableDataset, *args: Any, **kwargs: Any) -> None:
         super().__init__(dataset, self._check_nulls,
                          *args, t=dataset._table, **kwargs)
 
-    def _check_nulls(self, x):
+    def _check_nulls(self, x: TableDataset) -> Literal[True]:
         mask = x._table.isnull().values
         if ~(mask.any()):
             return True
