@@ -51,6 +51,7 @@ class UnderSampler(Sampler):
                 while labels[k] != label:
                     k += 1
                 self._rem_indices.append(k)
+                k += 1
 
         ln = len(self._rem_indices)
         print(f'Original length was {len(dataset)} and new is {ln}')
