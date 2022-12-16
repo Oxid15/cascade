@@ -60,6 +60,10 @@ class RangeSampler(Sampler):
                 Stop index in range - excluded
             step: int, optional
                 Step of range
+        Raises
+        ------
+        ValueError: when no start or stop present or
+        when parameters given produce empty dataset
         """
 
         # Check if can build range
