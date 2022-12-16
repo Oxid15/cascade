@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Pipeline building" href="pipeline_building.html" /><link rel="prev" title="Quickstart" href="../quickstart.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Dataset Zoo - cascade 0.8.0 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Dataset Zoo - cascade 0.9.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -158,7 +158,7 @@
   
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -482,7 +482,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.8.0
+0.9.0
 </pre></div></div>
 </div>
 <section id="Wrappers">
@@ -525,7 +525,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
+[{&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 5,
   &#39;obj_type&#39;: &#34;&lt;class &#39;list&#39;&gt;&#34;}]
@@ -639,13 +639,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;cascade.data.concatenator.Concatenator of\n&lt;cascade.data.dataset.Wrapper\n&lt;cascade.data.dataset.Wrapper&#39;,
+[{&#39;name&#39;: &#39;cascade.data.concatenator.Concatenator of\ncascade.data.dataset.Wrapper\ncascade.data.dataset.Wrapper&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
-  &#39;data&#39;: [[{&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
+  &#39;data&#39;: [[{&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
      &#39;type&#39;: &#39;dataset&#39;,
      &#39;len&#39;: 5,
      &#39;obj_type&#39;: &#34;&lt;class &#39;list&#39;&gt;&#34;}],
-   [{&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
+   [{&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
      &#39;type&#39;: &#39;dataset&#39;,
      &#39;len&#39;: 5,
      &#39;obj_type&#39;: &#34;&lt;class &#39;list&#39;&gt;&#34;}]]}]
@@ -657,7 +657,7 @@ div.rendered_html tbody tr:hover {
 <p><a class="reference external" href="../cascade.data.html#cascade.data.split">split documentation</a></p>
 <p>This is the opposite of concatenate - we can split one dataset into train and test parts easily with <code class="docutils literal notranslate"><span class="pre">cdd.split()</span></code></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -679,13 +679,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0, 1, 2, 3, 4, 5,
-6, 7,
+0 1 2 3 4 5
+6 7
 </pre></div></div>
 </div>
 <p>Basically, this function creates two RangeSampler dividing input dataset into two parts.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -693,15 +693,15 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;cascade.data.range_sampler.RangeSampler&#39;,
+[{&#39;name&#39;: &#39;cascade.data.range_sampler.RangeSampler&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 6},
- {&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
+ {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 8,
   &#39;obj_type&#39;: &#34;&lt;class &#39;list&#39;&gt;&#34;}]
@@ -713,7 +713,7 @@ div.rendered_html tbody tr:hover {
 <p><a class="reference external" href="../cascade.data.html#cascade.data.Composer">Composer documentation</a></p>
 <p>Composer is another way of unifying two datasets, but in this case the union dataset returns tuples of item from composed datasets. This is useful, when items and labels for classification are from different datasets.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -729,7 +729,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -743,7 +743,7 @@ div.rendered_html tbody tr:hover {
 <p><a class="reference external" href="../cascade.data.html#cascade.data.CyclicSampler">CyclicSampler documentation</a></p>
 <p>When you need an easy way to repeat your dataset several times or the opposite - restrict the number of items in dataset, you can use this.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -771,7 +771,7 @@ div.rendered_html tbody tr:hover {
 <p><a class="reference external" href="../cascade.data.html#cascade.data.RandomSampler">RandomSampler documentation</a></p>
 <p>Undeterministic counterpart of CyclicSampler. Ideal solution for shuffling the data in lazy way.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -797,7 +797,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>With no arguments - shuffles the dataset.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
@@ -822,7 +822,7 @@ div.rendered_html tbody tr:hover {
 <p><a class="reference external" href="../cascade.data.html#cascade.data.RangeSampler">RangeSampler documentation</a></p>
 <p>This is if you need python’s range in Cascade realm. Has just similar interface as <code class="docutils literal notranslate"><span class="pre">range</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -851,7 +851,7 @@ div.rendered_html tbody tr:hover {
 <p>Modifiers are lazy and not storing all data in memory. This is important when datasets are big and do not fit into memory, but can slow down some processes. If your data fits into memory, you can cache previous stages of pipeline to speed up next stages.</p>
 <p>Suppose for example that we need to obtain our data through very slow network</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
@@ -889,7 +889,7 @@ div.rendered_html tbody tr:hover {
 <p><a class="reference external" href="../cascade.data.html#cascade.data.Pickler">Pickler documentation</a></p>
 <p>For these purposes <code class="docutils literal notranslate"><span class="pre">Pickler</span></code> was implemented. You can cache and then pickle previous pipeline on the disk, then load it and use without problems.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">LongLoadingDataSource</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -907,7 +907,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
@@ -924,23 +924,15 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 10/10 [00:00&lt;00:00, 8336.92it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0 1 2 3 4 5 6 7 8 9
+100%|██████████| 10/10 [00:00&lt;00:00, 26613.60it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
-
+0 1 2 3 4 5 6 7 8 9
 </pre></div></div>
 </div>
 <p>Note that after unpickling we don’t need to wait for loading again.</p>
@@ -950,7 +942,7 @@ div.rendered_html tbody tr:hover {
 <p><a class="reference external" href="../cascade.data.html#cascade.data.SequentialCacher">SequentialCacher documentation</a></p>
 <p>Some data is accessed sequentially and can be cached in advance by batches.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -1027,7 +1019,7 @@ loaded 19
 <div class="line">VersionAssigner tracks versions using special log file, which can be used by the user to determine which kind of dataset corresponds to which version.</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -1047,7 +1039,7 @@ Dataset version: 0.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Change its structure - add new modifier</span>
@@ -1066,7 +1058,7 @@ Dataset version: 1.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Revert changes - version downgrades back using records</span>
@@ -1085,7 +1077,7 @@ Dataset version: 0.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update input data - minor update</span>
@@ -1113,7 +1105,7 @@ Dataset version: 0.1
 <p>Using that labels they equalize label distribution by repeating or deleting some elements. The sampler themselves are lazy, but to obtain label distribution, they load elements one-by-one not storing them in memory in initialization.</p>
 <p>They are also deterministic and place elements with similar labels together. Consider using <code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code> to shuffle datasets before passing them to learning.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">cdu</span>
@@ -1137,7 +1129,7 @@ Dataset version: 0.1
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4/4 [00:00&lt;00:00, 1971.93it/s]
+100%|██████████| 4/4 [00:00&lt;?, ?it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1157,7 +1149,7 @@ Original length was 4 and new is 6
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1166,7 +1158,7 @@ Original length was 4 and new is 6
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span>
@@ -1186,7 +1178,7 @@ Original length was 4 and new is 6
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4/4 [00:00&lt;00:00, 3474.98it/s]
+100%|██████████| 4/4 [00:00&lt;00:00, 4020.42it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1206,7 +1198,7 @@ Original length was 4 and new is 3
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1220,7 +1212,7 @@ Original length was 4 and new is 3
 <p><a class="reference external" href="../cascade.utils.html#cascade.utils.WeighedSampler">WeighedSampler documentation</a></p>
 <p>If you need more freedom in how to sample your data according to the label you have, you can use this</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">cdu</span>
@@ -1267,7 +1259,7 @@ Original length was 4 and new is 7
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1284,7 +1276,7 @@ Original length was 4 and new is 7
 <p><a class="reference external" href="../cascade.utils.html#cascade.utils.TimeSeriesDataset">TimeSeriesDataset documentation</a></p>
 <p>One <code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code> contains whole time series data. They require separate time and data channels to initialize.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
@@ -1302,7 +1294,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1346,7 +1338,7 @@ Original length was 4 and new is 7
 </div>
 <p>The important thing about these datasets is that they <em>always should be initialized with keywords</em>. The usage of <code class="docutils literal notranslate"><span class="pre">time</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> is mandatory for dataset to work. The same applies to other specific datasets such as TableDataset and its keyword <code class="docutils literal notranslate"><span class="pre">t</span></code> for table.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">TimeSeriesDataset</span><span class="p">([</span>
@@ -1360,7 +1352,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1393,7 +1385,7 @@ Original length was 4 and new is 7
 <p>This is due to unification of two interfaces in <code class="docutils literal notranslate"><span class="pre">Modifier</span></code>s for these datasets. A <code class="docutils literal notranslate"><span class="pre">Modifier</span></code> should be also <code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code>.</p>
 <p>Let’s initialize ds again:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">[</span>
@@ -1407,7 +1399,7 @@ Original length was 4 and new is 7
 </div>
 <p>You can use several convenience access methods such as any type of indexing: using integers or dates.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -1415,7 +1407,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1424,7 +1416,7 @@ Original length was 4 and new is 7
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">)]</span>
@@ -1432,7 +1424,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1442,7 +1434,7 @@ Original length was 4 and new is 7
 </div>
 <p>The slices are also available.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span> <span class="c1"># Using integers</span>
@@ -1450,7 +1442,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1493,7 +1485,7 @@ Original length was 4 and new is 7
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">6</span><span class="p">):]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span> <span class="c1"># Or using time</span>
@@ -1501,7 +1493,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1546,7 +1538,7 @@ Original length was 4 and new is 7
 <p>Note that every slice returns new <code class="docutils literal notranslate"><span class="pre">TimeSerisDataset</span></code> instance.</p>
 <p>There is always a general way to extract all data, which is most useful for plotting data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
@@ -1554,7 +1546,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1567,7 +1559,7 @@ Original length was 4 and new is 7
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
@@ -1577,12 +1569,12 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x20371829660&gt;]
+[&lt;matplotlib.lines.Line2D at 0x175e2cbcf70&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1594,7 +1586,7 @@ Original length was 4 and new is 7
 </div>
 <p>You can always get the data alone using <code class="docutils literal notranslate"><span class="pre">to_numpy()</span></code></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
@@ -1602,7 +1594,7 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1613,7 +1605,7 @@ array([1, 0, 2, 5])
 <p>Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in <code class="docutils literal notranslate"><span class="pre">Modifier</span></code>.</p>
 <p>First - dataset is initialized with nan-value. Nan-value is <code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> because Interpolate uses pandas under-the-hood.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1629,7 +1621,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1672,7 +1664,7 @@ array([1, 0, 2, 5])
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">Interpolate</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">limit_direction</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span> <span class="c1"># These arguments are defaults</span>
@@ -1680,7 +1672,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1708,15 +1700,15 @@ array([1, 0, 2, 5])
   <tbody>
     <tr>
       <th>2022-11-05</th>
-      <td>0</td>
+      <td>0.0</td>
     </tr>
     <tr>
       <th>2022-11-06</th>
-      <td>1</td>
+      <td>1.0</td>
     </tr>
     <tr>
       <th>2022-11-07</th>
-      <td>2</td>
+      <td>2.0</td>
     </tr>
   </tbody>
 </table>
@@ -1724,7 +1716,7 @@ array([1, 0, 2, 5])
 </div>
 <p>Averaging over some time-window is also a frequent task in work with time-series. Here in <code class="docutils literal notranslate"><span class="pre">Average</span></code> you can set the time grain and a quantity to average.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pendulum</span>
@@ -1740,7 +1732,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">Average</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;days&#39;</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
@@ -1748,7 +1740,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1787,7 +1779,7 @@ array([1, 0, 2, 5])
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">Align</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">[</span><span class="n">pendulum</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">)])</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
@@ -1795,7 +1787,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1835,7 +1827,7 @@ array([1, 0, 2, 5])
 <p><a class="reference external" href="../cascade.utils.html#cascade.utils.TableDataset">TableDataset documentation</a></p>
 <p>Frequently the work with tables is done. To track them efficiently using Cascade this wrapper was created.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -1846,12 +1838,12 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;cascade.utils.table_dataset.TableDataset
+cascade.utils.table_dataset.TableDataset
     0  1
 0  2  0
 1  1  0
@@ -1860,7 +1852,7 @@ array([1, 0, 2, 5])
 </div>
 <p>The most important thing here is the extensive metadata that this wrapper holds.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -1868,12 +1860,12 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;cascade.utils.table_dataset.TableDataset\n    0  1\n0  2  0\n1  1  0\n2  1  0&#39;,
+[{&#39;name&#39;: &#39;cascade.utils.table_dataset.TableDataset\n    0  1\n0  2  0\n1  1  0\n2  1  0&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;columns&#39;: [0, 1],
   &#39;len&#39;: 3,
@@ -1897,7 +1889,7 @@ array([1, 0, 2, 5])
 </div>
 <p>Filtering is common when using tables. This modifier accepts binary mask and records new stage in the pipeline’s metadata.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">TableFilter</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
@@ -1913,7 +1905,7 @@ Length before filtering: 3, length after: 2
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -1921,12 +1913,12 @@ Length before filtering: 3, length after: 2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;cascade.utils.table_dataset.TableFilter\n    0  1\n1  1  0\n2  1  0&#39;,
+[{&#39;name&#39;: &#39;cascade.utils.table_dataset.TableFilter\n    0  1\n1  1  0\n2  1  0&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 2,
   &#39;columns&#39;: [0, 1],
@@ -1946,7 +1938,7 @@ Length before filtering: 3, length after: 2
     &#39;50%&#39;: 0.0,
     &#39;75%&#39;: 0.0,
     &#39;max&#39;: 0.0}}},
- {&#39;name&#39;: &#39;&lt;cascade.utils.table_dataset.TableDataset\n    0  1\n0  2  0\n1  1  0\n2  1  0&#39;,
+ {&#39;name&#39;: &#39;cascade.utils.table_dataset.TableDataset\n    0  1\n0  2  0\n1  1  0\n2  1  0&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;columns&#39;: [0, 1],
   &#39;len&#39;: 3,
@@ -2013,9 +2005,7 @@ Length before filtering: 3, length after: 2
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         

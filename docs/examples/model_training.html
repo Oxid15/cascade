@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Model training using trainers" href="model_training_trainers.html" /><link rel="prev" title="Pipeline building" href="pipeline_building.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Model training - cascade 0.8.0 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Model training - cascade 0.9.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -158,20 +158,20 @@
   
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../quickstart.html">Quickstart</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Model training</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_validation.html">Data validation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cascade.base.html">cascade.base</a></li>
@@ -515,7 +515,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;0.8.0&#39;
+&#39;0.9.0&#39;
 </pre></div></div>
 </div>
 <section id="Defining-data-pipeline">
@@ -583,8 +583,8 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
- {&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
+[{&#39;name&#39;: &#39;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
+ {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
   &#39;desc&#39;: &#39;This is MNIST dataset of handwritten images, TRAIN PART&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 60000,
@@ -702,30 +702,30 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3241
-Epochs [0/2], Step[500/6000], Loss: 0.3712
-Epochs [0/2], Step[1000/6000], Loss: 0.3960
-Epochs [0/2], Step[1500/6000], Loss: 0.5714
-Epochs [0/2], Step[2000/6000], Loss: 0.1867
-Epochs [0/2], Step[2500/6000], Loss: 0.1706
-Epochs [0/2], Step[3000/6000], Loss: 0.0922
-Epochs [0/2], Step[3500/6000], Loss: 0.1323
-Epochs [0/2], Step[4000/6000], Loss: 0.0492
-Epochs [0/2], Step[4500/6000], Loss: 0.0727
-Epochs [0/2], Step[5000/6000], Loss: 0.2078
-Epochs [0/2], Step[5500/6000], Loss: 0.1647
-Epochs [1/2], Step[0/6000], Loss: 0.3009
-Epochs [1/2], Step[500/6000], Loss: 0.0329
-Epochs [1/2], Step[1000/6000], Loss: 0.0637
-Epochs [1/2], Step[1500/6000], Loss: 0.3806
-Epochs [1/2], Step[2000/6000], Loss: 0.0654
-Epochs [1/2], Step[2500/6000], Loss: 0.0555
-Epochs [1/2], Step[3000/6000], Loss: 0.0071
-Epochs [1/2], Step[3500/6000], Loss: 0.1811
-Epochs [1/2], Step[4000/6000], Loss: 0.0771
-Epochs [1/2], Step[4500/6000], Loss: 0.2000
-Epochs [1/2], Step[5000/6000], Loss: 0.0770
-Epochs [1/2], Step[5500/6000], Loss: 0.6602
+Epochs [0/2], Step[0/6000], Loss: 2.3324
+Epochs [0/2], Step[500/6000], Loss: 0.4537
+Epochs [0/2], Step[1000/6000], Loss: 0.6350
+Epochs [0/2], Step[1500/6000], Loss: 0.3816
+Epochs [0/2], Step[2000/6000], Loss: 0.3799
+Epochs [0/2], Step[2500/6000], Loss: 0.6853
+Epochs [0/2], Step[3000/6000], Loss: 0.3109
+Epochs [0/2], Step[3500/6000], Loss: 0.1745
+Epochs [0/2], Step[4000/6000], Loss: 0.5948
+Epochs [0/2], Step[4500/6000], Loss: 1.0893
+Epochs [0/2], Step[5000/6000], Loss: 0.4245
+Epochs [0/2], Step[5500/6000], Loss: 0.2368
+Epochs [1/2], Step[0/6000], Loss: 0.0109
+Epochs [1/2], Step[500/6000], Loss: 0.2031
+Epochs [1/2], Step[1000/6000], Loss: 0.0063
+Epochs [1/2], Step[1500/6000], Loss: 0.0358
+Epochs [1/2], Step[2000/6000], Loss: 0.9956
+Epochs [1/2], Step[2500/6000], Loss: 0.0183
+Epochs [1/2], Step[3000/6000], Loss: 0.0079
+Epochs [1/2], Step[3500/6000], Loss: 0.0503
+Epochs [1/2], Step[4000/6000], Loss: 0.1367
+Epochs [1/2], Step[4500/6000], Loss: 0.0920
+Epochs [1/2], Step[5000/6000], Loss: 0.0046
+Epochs [1/2], Step[5500/6000], Loss: 0.0358
 </pre></div></div>
 </div>
 </section>
@@ -748,7 +748,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.6602
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:03&lt;00:00, 252.09it/s]
+100%|██████████| 1000/1000 [00:07&lt;00:00, 132.87it/s]
 </pre></div></div>
 </div>
 </section>
@@ -769,9 +769,9 @@ Epochs [1/2], Step[5500/6000], Loss: 0.6602
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x0000028CB0BCA800&gt;&#39;,
-  &#39;created_at&#39;: DateTime(2022, 11, 19, 21, 17, 37, 907731, tzinfo=Timezone(&#39;UTC&#39;)),
-  &#39;metrics&#39;: {&#39;acc&#39;: 0.9665},
+[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x000002147DB6BC70&gt;&#39;,
+  &#39;created_at&#39;: DateTime(2022, 12, 16, 15, 53, 37, 227100, tzinfo=Timezone(&#39;UTC&#39;)),
+  &#39;metrics&#39;: {&#39;acc&#39;: 0.9701},
   &#39;params&#39;: {&#39;input_size&#39;: 784,
    &#39;hidden_size&#39;: 100,
    &#39;num_classes&#39;: 10,
@@ -816,7 +816,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.6602
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-ModelLine of 0 models of &lt;class &#39;__main__.Classifier&#39;&gt;
+ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </pre></div></div>
 </div>
 <p>Model line is the manager of models with similar architecture, but different parameters or different epochs. It manages saving of model and its meta and also loading of model.</p>
@@ -839,17 +839,17 @@ ModelLine of 0 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x0000028CB0BCA800&gt;&#39;,
-  &#39;train_data&#39;: [{&#39;name&#39;: &#39;&lt;__main__.NoiseModifier&#39;,
+[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x000002147DB6BC70&gt;&#39;,
+  &#39;train_data&#39;: [{&#39;name&#39;: &#39;__main__.NoiseModifier&#39;,
     &#39;type&#39;: &#39;dataset&#39;,
     &#39;len&#39;: 60000},
-   {&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
+   {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
     &#39;desc&#39;: &#39;This is MNIST dataset of handwritten images, TRAIN PART&#39;,
     &#39;type&#39;: &#39;dataset&#39;,
     &#39;len&#39;: 60000,
     &#39;obj_type&#39;: &#34;&lt;class &#39;torchvision.datasets.mnist.MNIST&#39;&gt;&#34;}],
-  &#39;created_at&#39;: DateTime(2022, 11, 19, 21, 17, 37, 907731, tzinfo=Timezone(&#39;UTC&#39;)),
-  &#39;metrics&#39;: {&#39;acc&#39;: 0.9665},
+  &#39;created_at&#39;: DateTime(2022, 12, 16, 15, 53, 37, 227100, tzinfo=Timezone(&#39;UTC&#39;)),
+  &#39;metrics&#39;: {&#39;acc&#39;: 0.9701},
   &#39;params&#39;: {&#39;input_size&#39;: 784,
    &#39;hidden_size&#39;: 100,
    &#39;num_classes&#39;: 10,
@@ -934,9 +934,65 @@ ModelLine of 0 models of &lt;class &#39;__main__.Classifier&#39;&gt;
       <th>0</th>
       <td>./repo\linear_nn</td>
       <td>0</td>
-      <td>2022-11-19 21:17:37.907731+00:00</td>
-      <td>1 minute after</td>
-      <td>0.9665</td>
+      <td>2022-07-31T17:02:50.341904+00:00</td>
+      <td>3 minutes after</td>
+      <td>0.9655</td>
+      <td>784</td>
+      <td>100</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>./repo\linear_nn</td>
+      <td>1</td>
+      <td>2022-07-31T17:06:06.581812+00:00</td>
+      <td>2 minutes after</td>
+      <td>0.9206</td>
+      <td>784</td>
+      <td>10</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>./repo\linear_nn</td>
+      <td>2</td>
+      <td>2022-07-31T17:08:52.144148+00:00</td>
+      <td>3 minutes after</td>
+      <td>0.9569</td>
+      <td>784</td>
+      <td>50</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>./repo\linear_nn</td>
+      <td>3</td>
+      <td>2022-07-31T17:12:00.739810+00:00</td>
+      <td>3 minutes after</td>
+      <td>0.9644</td>
+      <td>784</td>
+      <td>100</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>./repo\linear_nn</td>
+      <td>4</td>
+      <td>2022-12-16T15:53:37.227100+00:00</td>
+      <td>2 minutes after</td>
+      <td>0.9701</td>
       <td>784</td>
       <td>100</td>
       <td>10</td>
@@ -989,30 +1045,30 @@ ModelLine of 0 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3033
-Epochs [0/2], Step[500/6000], Loss: 0.6128
-Epochs [0/2], Step[1000/6000], Loss: 0.3960
-Epochs [0/2], Step[1500/6000], Loss: 0.3663
-Epochs [0/2], Step[2000/6000], Loss: 0.2131
-Epochs [0/2], Step[2500/6000], Loss: 0.1081
-Epochs [0/2], Step[3000/6000], Loss: 0.0841
-Epochs [0/2], Step[3500/6000], Loss: 0.2338
-Epochs [0/2], Step[4000/6000], Loss: 0.0900
-Epochs [0/2], Step[4500/6000], Loss: 0.1944
-Epochs [0/2], Step[5000/6000], Loss: 0.6686
-Epochs [0/2], Step[5500/6000], Loss: 0.3011
-Epochs [1/2], Step[0/6000], Loss: 0.4292
-Epochs [1/2], Step[500/6000], Loss: 0.2362
-Epochs [1/2], Step[1000/6000], Loss: 0.1663
-Epochs [1/2], Step[1500/6000], Loss: 0.7612
-Epochs [1/2], Step[2000/6000], Loss: 0.2567
-Epochs [1/2], Step[2500/6000], Loss: 0.0732
-Epochs [1/2], Step[3000/6000], Loss: 0.1885
-Epochs [1/2], Step[3500/6000], Loss: 0.0598
-Epochs [1/2], Step[4000/6000], Loss: 1.5017
-Epochs [1/2], Step[4500/6000], Loss: 0.4400
-Epochs [1/2], Step[5000/6000], Loss: 0.0317
-Epochs [1/2], Step[5500/6000], Loss: 0.0244
+Epochs [0/2], Step[0/6000], Loss: 2.4243
+Epochs [0/2], Step[500/6000], Loss: 0.6931
+Epochs [0/2], Step[1000/6000], Loss: 0.4575
+Epochs [0/2], Step[1500/6000], Loss: 0.2364
+Epochs [0/2], Step[2000/6000], Loss: 0.2601
+Epochs [0/2], Step[2500/6000], Loss: 0.4240
+Epochs [0/2], Step[3000/6000], Loss: 0.0305
+Epochs [0/2], Step[3500/6000], Loss: 0.2040
+Epochs [0/2], Step[4000/6000], Loss: 0.2186
+Epochs [0/2], Step[4500/6000], Loss: 0.1473
+Epochs [0/2], Step[5000/6000], Loss: 0.0370
+Epochs [0/2], Step[5500/6000], Loss: 0.1006
+Epochs [1/2], Step[0/6000], Loss: 0.9437
+Epochs [1/2], Step[500/6000], Loss: 0.0433
+Epochs [1/2], Step[1000/6000], Loss: 0.5475
+Epochs [1/2], Step[1500/6000], Loss: 0.0952
+Epochs [1/2], Step[2000/6000], Loss: 0.1831
+Epochs [1/2], Step[2500/6000], Loss: 0.0332
+Epochs [1/2], Step[3000/6000], Loss: 0.7178
+Epochs [1/2], Step[3500/6000], Loss: 0.3301
+Epochs [1/2], Step[4000/6000], Loss: 0.1956
+Epochs [1/2], Step[4500/6000], Loss: 0.1746
+Epochs [1/2], Step[5000/6000], Loss: 0.0644
+Epochs [1/2], Step[5500/6000], Loss: 0.8114
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1020,7 +1076,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0244
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:03&lt;00:00, 292.54it/s]
+100%|██████████| 1000/1000 [00:04&lt;00:00, 233.41it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1028,30 +1084,30 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0244
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.2916
-Epochs [0/2], Step[500/6000], Loss: 0.3343
-Epochs [0/2], Step[1000/6000], Loss: 0.1156
-Epochs [0/2], Step[1500/6000], Loss: 1.2676
-Epochs [0/2], Step[2000/6000], Loss: 0.0610
-Epochs [0/2], Step[2500/6000], Loss: 0.0242
-Epochs [0/2], Step[3000/6000], Loss: 0.1531
-Epochs [0/2], Step[3500/6000], Loss: 0.2146
-Epochs [0/2], Step[4000/6000], Loss: 0.4593
-Epochs [0/2], Step[4500/6000], Loss: 0.4860
-Epochs [0/2], Step[5000/6000], Loss: 0.6144
-Epochs [0/2], Step[5500/6000], Loss: 0.1444
-Epochs [1/2], Step[0/6000], Loss: 0.2438
-Epochs [1/2], Step[500/6000], Loss: 0.0286
-Epochs [1/2], Step[1000/6000], Loss: 0.0689
-Epochs [1/2], Step[1500/6000], Loss: 0.0386
-Epochs [1/2], Step[2000/6000], Loss: 0.2309
-Epochs [1/2], Step[2500/6000], Loss: 0.0448
-Epochs [1/2], Step[3000/6000], Loss: 0.0113
-Epochs [1/2], Step[3500/6000], Loss: 0.4113
-Epochs [1/2], Step[4000/6000], Loss: 0.0704
-Epochs [1/2], Step[4500/6000], Loss: 0.0657
-Epochs [1/2], Step[5000/6000], Loss: 0.0164
-Epochs [1/2], Step[5500/6000], Loss: 1.1549
+Epochs [0/2], Step[0/6000], Loss: 2.3714
+Epochs [0/2], Step[500/6000], Loss: 0.3902
+Epochs [0/2], Step[1000/6000], Loss: 0.3610
+Epochs [0/2], Step[1500/6000], Loss: 0.0881
+Epochs [0/2], Step[2000/6000], Loss: 0.2079
+Epochs [0/2], Step[2500/6000], Loss: 0.0915
+Epochs [0/2], Step[3000/6000], Loss: 0.3039
+Epochs [0/2], Step[3500/6000], Loss: 0.0453
+Epochs [0/2], Step[4000/6000], Loss: 0.1484
+Epochs [0/2], Step[4500/6000], Loss: 0.0287
+Epochs [0/2], Step[5000/6000], Loss: 0.6291
+Epochs [0/2], Step[5500/6000], Loss: 0.6607
+Epochs [1/2], Step[0/6000], Loss: 0.1351
+Epochs [1/2], Step[500/6000], Loss: 0.3669
+Epochs [1/2], Step[1000/6000], Loss: 0.4014
+Epochs [1/2], Step[1500/6000], Loss: 0.5391
+Epochs [1/2], Step[2000/6000], Loss: 0.0285
+Epochs [1/2], Step[2500/6000], Loss: 0.0870
+Epochs [1/2], Step[3000/6000], Loss: 0.0924
+Epochs [1/2], Step[3500/6000], Loss: 0.0664
+Epochs [1/2], Step[4000/6000], Loss: 0.4767
+Epochs [1/2], Step[4500/6000], Loss: 0.1683
+Epochs [1/2], Step[5000/6000], Loss: 0.1860
+Epochs [1/2], Step[5500/6000], Loss: 0.0065
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1059,7 +1115,7 @@ Epochs [1/2], Step[5500/6000], Loss: 1.1549
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:03&lt;00:00, 264.30it/s]
+100%|██████████| 1000/1000 [00:08&lt;00:00, 123.94it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1067,30 +1123,30 @@ Epochs [1/2], Step[5500/6000], Loss: 1.1549
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3187
-Epochs [0/2], Step[500/6000], Loss: 0.3134
-Epochs [0/2], Step[1000/6000], Loss: 0.3356
-Epochs [0/2], Step[1500/6000], Loss: 0.1194
-Epochs [0/2], Step[2000/6000], Loss: 0.3673
-Epochs [0/2], Step[2500/6000], Loss: 0.1212
-Epochs [0/2], Step[3000/6000], Loss: 0.0475
-Epochs [0/2], Step[3500/6000], Loss: 0.0745
-Epochs [0/2], Step[4000/6000], Loss: 0.1287
-Epochs [0/2], Step[4500/6000], Loss: 0.7030
-Epochs [0/2], Step[5000/6000], Loss: 0.1741
-Epochs [0/2], Step[5500/6000], Loss: 0.0516
-Epochs [1/2], Step[0/6000], Loss: 0.0579
-Epochs [1/2], Step[500/6000], Loss: 0.0335
-Epochs [1/2], Step[1000/6000], Loss: 0.0330
-Epochs [1/2], Step[1500/6000], Loss: 0.0732
-Epochs [1/2], Step[2000/6000], Loss: 0.0147
-Epochs [1/2], Step[2500/6000], Loss: 0.0046
-Epochs [1/2], Step[3000/6000], Loss: 0.1720
-Epochs [1/2], Step[3500/6000], Loss: 0.1348
-Epochs [1/2], Step[4000/6000], Loss: 0.1013
-Epochs [1/2], Step[4500/6000], Loss: 0.0492
-Epochs [1/2], Step[5000/6000], Loss: 0.1680
-Epochs [1/2], Step[5500/6000], Loss: 0.0371
+Epochs [0/2], Step[0/6000], Loss: 2.3175
+Epochs [0/2], Step[500/6000], Loss: 0.5927
+Epochs [0/2], Step[1000/6000], Loss: 0.0942
+Epochs [0/2], Step[1500/6000], Loss: 0.0177
+Epochs [0/2], Step[2000/6000], Loss: 0.0794
+Epochs [0/2], Step[2500/6000], Loss: 0.1792
+Epochs [0/2], Step[3000/6000], Loss: 0.2164
+Epochs [0/2], Step[3500/6000], Loss: 0.1236
+Epochs [0/2], Step[4000/6000], Loss: 0.3817
+Epochs [0/2], Step[4500/6000], Loss: 0.1111
+Epochs [0/2], Step[5000/6000], Loss: 0.6958
+Epochs [0/2], Step[5500/6000], Loss: 0.1257
+Epochs [1/2], Step[0/6000], Loss: 0.2814
+Epochs [1/2], Step[500/6000], Loss: 0.1610
+Epochs [1/2], Step[1000/6000], Loss: 0.0195
+Epochs [1/2], Step[1500/6000], Loss: 0.3667
+Epochs [1/2], Step[2000/6000], Loss: 0.0791
+Epochs [1/2], Step[2500/6000], Loss: 0.2039
+Epochs [1/2], Step[3000/6000], Loss: 0.1522
+Epochs [1/2], Step[3500/6000], Loss: 0.0170
+Epochs [1/2], Step[4000/6000], Loss: 0.1872
+Epochs [1/2], Step[4500/6000], Loss: 0.0046
+Epochs [1/2], Step[5000/6000], Loss: 0.0341
+Epochs [1/2], Step[5500/6000], Loss: 0.0549
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1098,7 +1154,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0371
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:04&lt;00:00, 242.19it/s]
+100%|██████████| 1000/1000 [00:04&lt;00:00, 234.79it/s]
 </pre></div></div>
 </div>
 </section>
@@ -1156,9 +1212,9 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0371
       <th>0</th>
       <td>./repo\linear_nn</td>
       <td>0</td>
-      <td>2022-11-19T21:17:37.907731+00:00</td>
-      <td>1 minute after</td>
-      <td>0.9665</td>
+      <td>2022-07-31T17:02:50.341904+00:00</td>
+      <td>3 minutes after</td>
+      <td>0.9655</td>
       <td>784</td>
       <td>100</td>
       <td>10</td>
@@ -1170,9 +1226,9 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0371
       <th>1</th>
       <td>./repo\linear_nn</td>
       <td>1</td>
-      <td>2022-11-19T21:18:57.537938+00:00</td>
-      <td>1 minute after</td>
-      <td>0.9159</td>
+      <td>2022-07-31T17:06:06.581812+00:00</td>
+      <td>2 minutes after</td>
+      <td>0.9206</td>
       <td>784</td>
       <td>10</td>
       <td>10</td>
@@ -1184,9 +1240,9 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0371
       <th>2</th>
       <td>./repo\linear_nn</td>
       <td>2</td>
-      <td>2022-11-19T21:20:03.500543+00:00</td>
-      <td>1 minute after</td>
-      <td>0.9604</td>
+      <td>2022-07-31T17:08:52.144148+00:00</td>
+      <td>3 minutes after</td>
+      <td>0.9569</td>
       <td>784</td>
       <td>50</td>
       <td>10</td>
@@ -1198,9 +1254,65 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0371
       <th>3</th>
       <td>./repo\linear_nn</td>
       <td>3</td>
-      <td>2022-11-19T21:21:20.094144+00:00</td>
+      <td>2022-07-31T17:12:00.739810+00:00</td>
+      <td>3 minutes after</td>
+      <td>0.9644</td>
+      <td>784</td>
+      <td>100</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>./repo\linear_nn</td>
+      <td>4</td>
+      <td>2022-12-16T15:53:37.227100+00:00</td>
+      <td>2 minutes after</td>
+      <td>0.9701</td>
+      <td>784</td>
+      <td>100</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>./repo\linear_nn</td>
+      <td>5</td>
+      <td>2022-12-16T15:55:38.018522+00:00</td>
       <td>1 minute after</td>
-      <td>0.9639</td>
+      <td>0.9187</td>
+      <td>784</td>
+      <td>10</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>./repo\linear_nn</td>
+      <td>6</td>
+      <td>2022-12-16T15:57:08.604465+00:00</td>
+      <td>1 minute after</td>
+      <td>0.9562</td>
+      <td>784</td>
+      <td>50</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0.001</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>./repo\linear_nn</td>
+      <td>7</td>
+      <td>2022-12-16T15:58:54.604706+00:00</td>
+      <td>1 minute after</td>
+      <td>0.9647</td>
       <td>784</td>
       <td>100</td>
       <td>10</td>
@@ -1261,9 +1373,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0371
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         

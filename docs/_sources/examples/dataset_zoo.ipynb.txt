@@ -21,7 +21,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "0.8.0\n"
+      "0.9.0\n"
      ]
     }
    ],
@@ -71,7 +71,7 @@
     {
      "data": {
       "text/plain": [
-       "[{'name': '<cascade.data.dataset.Wrapper',\n",
+       "[{'name': 'cascade.data.dataset.Wrapper',\n",
        "  'type': 'dataset',\n",
        "  'len': 5,\n",
        "  'obj_type': \"<class 'list'>\"}]"
@@ -212,13 +212,13 @@
     {
      "data": {
       "text/plain": [
-       "[{'name': '<cascade.data.concatenator.Concatenator of\\n<cascade.data.dataset.Wrapper\\n<cascade.data.dataset.Wrapper',\n",
+       "[{'name': 'cascade.data.concatenator.Concatenator of\\ncascade.data.dataset.Wrapper\\ncascade.data.dataset.Wrapper',\n",
        "  'type': 'dataset',\n",
-       "  'data': [[{'name': '<cascade.data.dataset.Wrapper',\n",
+       "  'data': [[{'name': 'cascade.data.dataset.Wrapper',\n",
        "     'type': 'dataset',\n",
        "     'len': 5,\n",
        "     'obj_type': \"<class 'list'>\"}],\n",
-       "   [{'name': '<cascade.data.dataset.Wrapper',\n",
+       "   [{'name': 'cascade.data.dataset.Wrapper',\n",
        "     'type': 'dataset',\n",
        "     'len': 5,\n",
        "     'obj_type': \"<class 'list'>\"}]]}]"
@@ -245,15 +245,15 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 8,
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "0, 1, 2, 3, 4, 5, \n",
-      "6, 7, "
+      "0 1 2 3 4 5 \n",
+      "6 7 "
      ]
     }
    ],
@@ -280,22 +280,22 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 9,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "[{'name': '<cascade.data.range_sampler.RangeSampler',\n",
+       "[{'name': 'cascade.data.range_sampler.RangeSampler',\n",
        "  'type': 'dataset',\n",
        "  'len': 6},\n",
-       " {'name': '<cascade.data.dataset.Wrapper',\n",
+       " {'name': 'cascade.data.dataset.Wrapper',\n",
        "  'type': 'dataset',\n",
        "  'len': 8,\n",
        "  'obj_type': \"<class 'list'>\"}]"
       ]
      },
-     "execution_count": 3,
+     "execution_count": 9,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -316,7 +316,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 10,
    "metadata": {},
    "outputs": [
     {
@@ -325,7 +325,7 @@
        "[('A', 0), ('B', 1), ('C', 0), ('D', 1)]"
       ]
      },
-     "execution_count": 1,
+     "execution_count": 10,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -354,7 +354,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 11,
    "metadata": {},
    "outputs": [
     {
@@ -388,7 +388,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 58,
+   "execution_count": 12,
    "metadata": {},
    "outputs": [
     {
@@ -421,7 +421,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 59,
+   "execution_count": 13,
    "metadata": {},
    "outputs": [
     {
@@ -452,7 +452,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 10,
+   "execution_count": 14,
    "metadata": {},
    "outputs": [
     {
@@ -488,7 +488,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 61,
+   "execution_count": 15,
    "metadata": {},
    "outputs": [
     {
@@ -540,7 +540,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 62,
+   "execution_count": 16,
    "metadata": {},
    "outputs": [
     {
@@ -559,14 +559,14 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 63,
+   "execution_count": 17,
    "metadata": {},
    "outputs": [
     {
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "100%|██████████| 10/10 [00:00<00:00, 8336.92it/s]"
+      "100%|██████████| 10/10 [00:00<00:00, 26613.60it/s]\n"
      ]
     },
     {
@@ -574,13 +574,6 @@
      "output_type": "stream",
      "text": [
       "0 1 2 3 4 5 6 7 8 9 "
-     ]
-    },
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "\n"
      ]
     }
    ],
@@ -612,7 +605,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 64,
+   "execution_count": 18,
    "metadata": {},
    "outputs": [
     {
@@ -693,7 +686,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 19,
    "metadata": {},
    "outputs": [
     {
@@ -714,7 +707,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 20,
    "metadata": {},
    "outputs": [
     {
@@ -734,7 +727,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 5,
+   "execution_count": 21,
    "metadata": {},
    "outputs": [
     {
@@ -754,7 +747,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 22,
    "metadata": {},
    "outputs": [
     {
@@ -788,14 +781,14 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 6,
+   "execution_count": 23,
    "metadata": {},
    "outputs": [
     {
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "100%|██████████| 4/4 [00:00<00:00, 1971.93it/s]"
+      "100%|██████████| 4/4 [00:00<?, ?it/s]"
      ]
     },
     {
@@ -818,7 +811,7 @@
        "[('a', 0), ('b', 1), ('c', 1), ('d', 2), ('a', 0), ('d', 2)]"
       ]
      },
-     "execution_count": 6,
+     "execution_count": 23,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -841,14 +834,14 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 7,
+   "execution_count": 24,
    "metadata": {},
    "outputs": [
     {
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "100%|██████████| 4/4 [00:00<00:00, 3474.98it/s]"
+      "100%|██████████| 4/4 [00:00<00:00, 4020.42it/s]"
      ]
     },
     {
@@ -871,7 +864,7 @@
        "[('a', 0), ('b', 1), ('d', 2)]"
       ]
      },
-     "execution_count": 7,
+     "execution_count": 24,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -900,7 +893,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 25,
    "metadata": {},
    "outputs": [
     {
@@ -930,7 +923,7 @@
        "[('A', 0), ('B', 0), ('A', 0), ('B', 0), ('C', 1), ('C', 1), ('D', 2)]"
       ]
      },
-     "execution_count": 2,
+     "execution_count": 25,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -975,7 +968,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 9,
+   "execution_count": 26,
    "metadata": {},
    "outputs": [
     {
@@ -1026,7 +1019,7 @@
        "2022-11-07  2"
       ]
      },
-     "execution_count": 9,
+     "execution_count": 26,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1054,7 +1047,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 27,
    "metadata": {},
    "outputs": [
     {
@@ -1092,7 +1085,7 @@
        "Index: []"
       ]
      },
-     "execution_count": 12,
+     "execution_count": 27,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1118,7 +1111,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 29,
+   "execution_count": 28,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -1139,6 +1132,26 @@
   },
   {
    "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "2"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ds[2]"
+   ]
+  },
+  {
+   "cell_type": "code",
    "execution_count": 30,
    "metadata": {},
    "outputs": [
@@ -1154,7 +1167,14 @@
     }
    ],
    "source": [
-    "ds[2]"
+    "ds[datetime.datetime(2022, 11, 7)]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The slices are also available."
    ]
   },
   {
@@ -1164,8 +1184,50 @@
    "outputs": [
     {
      "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>0</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>2022-11-06</th>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-07</th>\n",
+       "      <td>2</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2022-11-08</th>\n",
+       "      <td>5</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
       "text/plain": [
-       "2"
+       "            0\n",
+       "2022-11-06  0\n",
+       "2022-11-07  2\n",
+       "2022-11-08  5"
       ]
      },
      "execution_count": 31,
@@ -1174,14 +1236,7 @@
     }
    ],
    "source": [
-    "ds[datetime.datetime(2022, 11, 7)]"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "The slices are also available."
+    "ds[1:].to_pandas() # Using integers"
    ]
   },
   {
@@ -1243,68 +1298,6 @@
     }
    ],
    "source": [
-    "ds[1:].to_pandas() # Using integers"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 33,
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<div>\n",
-       "<style scoped>\n",
-       "    .dataframe tbody tr th:only-of-type {\n",
-       "        vertical-align: middle;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe tbody tr th {\n",
-       "        vertical-align: top;\n",
-       "    }\n",
-       "\n",
-       "    .dataframe thead th {\n",
-       "        text-align: right;\n",
-       "    }\n",
-       "</style>\n",
-       "<table border=\"1\" class=\"dataframe\">\n",
-       "  <thead>\n",
-       "    <tr style=\"text-align: right;\">\n",
-       "      <th></th>\n",
-       "      <th>0</th>\n",
-       "    </tr>\n",
-       "  </thead>\n",
-       "  <tbody>\n",
-       "    <tr>\n",
-       "      <th>2022-11-06</th>\n",
-       "      <td>0</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2022-11-07</th>\n",
-       "      <td>2</td>\n",
-       "    </tr>\n",
-       "    <tr>\n",
-       "      <th>2022-11-08</th>\n",
-       "      <td>5</td>\n",
-       "    </tr>\n",
-       "  </tbody>\n",
-       "</table>\n",
-       "</div>"
-      ],
-      "text/plain": [
-       "            0\n",
-       "2022-11-06  0\n",
-       "2022-11-07  2\n",
-       "2022-11-08  5"
-      ]
-     },
-     "execution_count": 33,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
     "ds[datetime.datetime(2022, 11, 6):].to_pandas() # Or using time"
    ]
   },
@@ -1324,7 +1317,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 34,
+   "execution_count": 33,
    "metadata": {},
    "outputs": [
     {
@@ -1337,7 +1330,7 @@
        " array([1, 0, 2, 5]))"
       ]
      },
-     "execution_count": 34,
+     "execution_count": 33,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1348,16 +1341,16 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 35,
+   "execution_count": 34,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "[<matplotlib.lines.Line2D at 0x20371829660>]"
+       "[<matplotlib.lines.Line2D at 0x175e2cbcf70>]"
       ]
      },
-     "execution_count": 35,
+     "execution_count": 34,
      "metadata": {},
      "output_type": "execute_result"
     },
@@ -1389,7 +1382,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 36,
+   "execution_count": 35,
    "metadata": {},
    "outputs": [
     {
@@ -1398,7 +1391,7 @@
        "array([1, 0, 2, 5])"
       ]
      },
-     "execution_count": 36,
+     "execution_count": 35,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1418,7 +1411,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": 36,
    "metadata": {},
    "outputs": [
     {
@@ -1469,7 +1462,7 @@
        "2022-11-07  2.0"
       ]
      },
-     "execution_count": 26,
+     "execution_count": 36,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1488,7 +1481,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 19,
+   "execution_count": 37,
    "metadata": {},
    "outputs": [
     {
@@ -1518,28 +1511,28 @@
        "  <tbody>\n",
        "    <tr>\n",
        "      <th>2022-11-05</th>\n",
-       "      <td>0</td>\n",
+       "      <td>0.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2022-11-06</th>\n",
-       "      <td>1</td>\n",
+       "      <td>1.0</td>\n",
        "    </tr>\n",
        "    <tr>\n",
        "      <th>2022-11-07</th>\n",
-       "      <td>2</td>\n",
+       "      <td>2.0</td>\n",
        "    </tr>\n",
        "  </tbody>\n",
        "</table>\n",
        "</div>"
       ],
       "text/plain": [
-       "            0\n",
-       "2022-11-05  0\n",
-       "2022-11-06  1\n",
-       "2022-11-07  2"
+       "              0\n",
+       "2022-11-05  0.0\n",
+       "2022-11-06  1.0\n",
+       "2022-11-07  2.0"
       ]
      },
-     "execution_count": 19,
+     "execution_count": 37,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1557,7 +1550,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 20,
+   "execution_count": 38,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -1574,7 +1567,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 21,
+   "execution_count": 39,
    "metadata": {},
    "outputs": [
     {
@@ -1620,7 +1613,7 @@
        "2022-11-07 00:00:00+00:00  2.5"
       ]
      },
-     "execution_count": 21,
+     "execution_count": 39,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1631,7 +1624,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 22,
+   "execution_count": 40,
    "metadata": {},
    "outputs": [
     {
@@ -1672,7 +1665,7 @@
        "2022-11-08 00:00:00+00:00  3.0"
       ]
      },
-     "execution_count": 22,
+     "execution_count": 40,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1694,20 +1687,20 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 51,
+   "execution_count": 41,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "<cascade.utils.table_dataset.TableDataset\n",
+       "cascade.utils.table_dataset.TableDataset\n",
        "    0  1\n",
        "0  2  0\n",
        "1  1  0\n",
        "2  1  0"
       ]
      },
-     "execution_count": 51,
+     "execution_count": 41,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1728,13 +1721,13 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 52,
+   "execution_count": 42,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "[{'name': '<cascade.utils.table_dataset.TableDataset\\n    0  1\\n0  2  0\\n1  1  0\\n2  1  0',\n",
+       "[{'name': 'cascade.utils.table_dataset.TableDataset\\n    0  1\\n0  2  0\\n1  1  0\\n2  1  0',\n",
        "  'type': 'dataset',\n",
        "  'columns': [0, 1],\n",
        "  'len': 3,\n",
@@ -1756,7 +1749,7 @@
        "    'max': 0.0}}}]"
       ]
      },
-     "execution_count": 52,
+     "execution_count": 42,
      "metadata": {},
      "output_type": "execute_result"
     }
@@ -1774,7 +1767,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 53,
+   "execution_count": 43,
    "metadata": {},
    "outputs": [
     {
@@ -1791,13 +1784,13 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 54,
+   "execution_count": 44,
    "metadata": {},
    "outputs": [
     {
      "data": {
       "text/plain": [
-       "[{'name': '<cascade.utils.table_dataset.TableFilter\\n    0  1\\n1  1  0\\n2  1  0',\n",
+       "[{'name': 'cascade.utils.table_dataset.TableFilter\\n    0  1\\n1  1  0\\n2  1  0',\n",
        "  'type': 'dataset',\n",
        "  'len': 2,\n",
        "  'columns': [0, 1],\n",
@@ -1817,7 +1810,7 @@
        "    '50%': 0.0,\n",
        "    '75%': 0.0,\n",
        "    'max': 0.0}}},\n",
-       " {'name': '<cascade.utils.table_dataset.TableDataset\\n    0  1\\n0  2  0\\n1  1  0\\n2  1  0',\n",
+       " {'name': 'cascade.utils.table_dataset.TableDataset\\n    0  1\\n0  2  0\\n1  1  0\\n2  1  0',\n",
        "  'type': 'dataset',\n",
        "  'columns': [0, 1],\n",
        "  'len': 3,\n",
@@ -1839,7 +1832,7 @@
        "    'max': 0.0}}}]"
       ]
      },
-     "execution_count": 54,
+     "execution_count": 44,
      "metadata": {},
      "output_type": "execute_result"
     }

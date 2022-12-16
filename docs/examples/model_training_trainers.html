@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Data validation" href="data_validation.html" /><link rel="prev" title="Model training" href="model_training.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Model training using trainers - cascade 0.8.0 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Model training using trainers - cascade 0.9.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.8.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -158,20 +158,20 @@
   
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../quickstart.html">Quickstart</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline_building.html">Pipeline building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_training.html">Model training</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Model training using trainers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_validation.html">Data validation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">Cascade modules reference</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../cascade.base.html">cascade.base</a></li>
@@ -508,7 +508,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;0.8.0&#39;
+&#39;0.9.0&#39;
 </pre></div></div>
 </div>
 <section id="Defining-data-pipeline">
@@ -580,11 +580,11 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;cascade.data.cyclic_sampler.CyclicSampler&#39;,
+[{&#39;name&#39;: &#39;cascade.data.cyclic_sampler.CyclicSampler&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 10000},
- {&#39;name&#39;: &#39;&lt;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
- {&#39;name&#39;: &#39;&lt;cascade.data.dataset.Wrapper&#39;,
+ {&#39;name&#39;: &#39;__main__.NoiseModifier&#39;, &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000},
+ {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;,
   &#39;desc&#39;: &#39;This is MNIST dataset of handwritten images, TRAIN PART&#39;,
   &#39;type&#39;: &#39;dataset&#39;,
   &#39;len&#39;: 60000,
@@ -727,7 +727,7 @@ Item root[&#39;type&#39;] added to dictionary.
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The main method of course is train</span>
@@ -765,7 +765,7 @@ INFO:cascade.models.trainer:training will last 10 epochs
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 500/500 [00:01&lt;00:00, 260.61it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 231.91it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -773,7 +773,7 @@ INFO:cascade.models.trainer:training will last 10 epochs
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.869}
+INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.8686}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -782,7 +782,7 @@ INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.869}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:02&lt;00:00, 228.52it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 170.55it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -790,7 +790,7 @@ INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.869}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.9006}
+INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.885}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -799,7 +799,7 @@ INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.9006}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 282.50it/s]
+100%|██████████| 500/500 [00:03&lt;00:00, 128.58it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -807,7 +807,7 @@ INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.9006}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.9064}
+INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.9094}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -815,7 +815,7 @@ INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.9064}
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 500/500 [00:02&lt;00:00, 208.45it/s]
+100%|██████████| 500/500 [00:03&lt;00:00, 129.15it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -823,24 +823,7 @@ INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.9064}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.9134}
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-100%|██████████| 500/500 [00:02&lt;00:00, 234.89it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.9152}
+INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.9048}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -849,7 +832,7 @@ INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.9152}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 255.77it/s]
+100%|██████████| 500/500 [00:03&lt;00:00, 129.95it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -857,7 +840,7 @@ INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.9152}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 5: {&#39;acc&#39;: 0.9234}
+INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.922}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -866,7 +849,7 @@ INFO:cascade.models.trainer:Epoch 5: {&#39;acc&#39;: 0.9234}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 256.71it/s]
+100%|██████████| 500/500 [00:03&lt;00:00, 147.30it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -874,7 +857,7 @@ INFO:cascade.models.trainer:Epoch 5: {&#39;acc&#39;: 0.9234}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 6: {&#39;acc&#39;: 0.931}
+INFO:cascade.models.trainer:Epoch 5: {&#39;acc&#39;: 0.9264}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -883,7 +866,7 @@ INFO:cascade.models.trainer:Epoch 6: {&#39;acc&#39;: 0.931}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:02&lt;00:00, 230.01it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 222.09it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -891,7 +874,7 @@ INFO:cascade.models.trainer:Epoch 6: {&#39;acc&#39;: 0.931}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 7: {&#39;acc&#39;: 0.9268}
+INFO:cascade.models.trainer:Epoch 6: {&#39;acc&#39;: 0.93}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -900,7 +883,7 @@ INFO:cascade.models.trainer:Epoch 7: {&#39;acc&#39;: 0.9268}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 267.12it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 243.34it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -908,7 +891,7 @@ INFO:cascade.models.trainer:Epoch 7: {&#39;acc&#39;: 0.9268}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 8: {&#39;acc&#39;: 0.931}
+INFO:cascade.models.trainer:Epoch 7: {&#39;acc&#39;: 0.9344}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -917,7 +900,7 @@ INFO:cascade.models.trainer:Epoch 8: {&#39;acc&#39;: 0.931}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 252.12it/s]
+100%|██████████| 500/500 [00:01&lt;00:00, 252.77it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -925,7 +908,23 @@ INFO:cascade.models.trainer:Epoch 8: {&#39;acc&#39;: 0.931}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 9: {&#39;acc&#39;: 0.9322}
+INFO:cascade.models.trainer:Epoch 8: {&#39;acc&#39;: 0.9308}
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:02&lt;00:00, 222.57it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.models.trainer:Epoch 9: {&#39;acc&#39;: 0.9338}
 INFO:cascade.models.trainer:Training finished in 1 minute
 </pre></div></div>
 </div>
@@ -942,7 +941,7 @@ INFO:cascade.models.trainer:Training finished in 1 minute
 <h2>Results<a class="headerlink" href="#Results" title="Permalink to this heading">#</a></h2>
 <p>We can obtain the results of training from trainer’s meta data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -950,28 +949,28 @@ INFO:cascade.models.trainer:Training finished in 1 minute
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;cascade.models.trainer.BasicTrainer object at 0x000001B6D88C7B20&gt;&#39;,
-  &#39;train_start_at&#39;: DateTime(2022, 11, 20, 0, 10, 24, 555157, tzinfo=Timezone(&#39;Europe/Moscow&#39;)),
-  &#39;train_end_at&#39;: DateTime(2022, 11, 20, 0, 11, 53, 798564, tzinfo=Timezone(&#39;Europe/Moscow&#39;)),
-  &#39;metrics&#39;: [{&#39;acc&#39;: 0.869},
-   {&#39;acc&#39;: 0.9006},
-   {&#39;acc&#39;: 0.9064},
-   {&#39;acc&#39;: 0.9134},
-   {&#39;acc&#39;: 0.9152},
-   {&#39;acc&#39;: 0.9234},
-   {&#39;acc&#39;: 0.931},
-   {&#39;acc&#39;: 0.9268},
-   {&#39;acc&#39;: 0.931},
-   {&#39;acc&#39;: 0.9322}],
+[{&#39;name&#39;: &#39;&lt;cascade.models.trainer.BasicTrainer object at 0x000002711DA6C940&gt;&#39;,
+  &#39;train_start_at&#39;: DateTime(2022, 12, 16, 18, 49, 51, 486282, tzinfo=Timezone(&#39;Europe/Moscow&#39;)),
+  &#39;train_end_at&#39;: DateTime(2022, 12, 16, 18, 51, 45, 266312, tzinfo=Timezone(&#39;Europe/Moscow&#39;)),
+  &#39;metrics&#39;: [{&#39;acc&#39;: 0.8686},
+   {&#39;acc&#39;: 0.885},
+   {&#39;acc&#39;: 0.9094},
+   {&#39;acc&#39;: 0.9048},
+   {&#39;acc&#39;: 0.922},
+   {&#39;acc&#39;: 0.9264},
+   {&#39;acc&#39;: 0.93},
+   {&#39;acc&#39;: 0.9344},
+   {&#39;acc&#39;: 0.9308},
+   {&#39;acc&#39;: 0.9338}],
   &#39;repo&#39;: [{&#39;name&#39;: &#39;ModelRepo in trainer_repo of 1 lines&#39;,
     &#39;root&#39;: &#39;trainer_repo&#39;,
     &#39;len&#39;: 1,
-    &#39;updated_at&#39;: DateTime(2022, 11, 19, 21, 11, 54, 5433, tzinfo=Timezone(&#39;UTC&#39;)),
+    &#39;updated_at&#39;: DateTime(2022, 12, 16, 15, 51, 45, 356321, tzinfo=Timezone(&#39;UTC&#39;)),
     &#39;type&#39;: &#39;repo&#39;}]}]
 </pre></div></div>
 </div>
@@ -980,7 +979,7 @@ INFO:cascade.models.trainer:Training finished in 1 minute
 <h2>Start from checkpoint<a class="headerlink" href="#Start-from-checkpoint" title="Permalink to this heading">#</a></h2>
 <p>Let’s try continue learning where we finished using the same line as before.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
@@ -1018,7 +1017,7 @@ INFO:cascade.models.trainer:training will last 5 epochs
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 500/500 [00:01&lt;00:00, 277.23it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 231.92it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1026,7 +1025,7 @@ INFO:cascade.models.trainer:training will last 5 epochs
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.9258}
+INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.934}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1035,7 +1034,7 @@ INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.9258}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 269.51it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 244.55it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1043,7 +1042,7 @@ INFO:cascade.models.trainer:Epoch 0: {&#39;acc&#39;: 0.9258}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.9254}
+INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.9366}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1052,7 +1051,7 @@ INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.9254}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 268.92it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 245.53it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1060,7 +1059,7 @@ INFO:cascade.models.trainer:Epoch 1: {&#39;acc&#39;: 0.9254}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.931}
+INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.933}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1069,7 +1068,7 @@ INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.931}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 270.82it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 234.74it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1077,7 +1076,7 @@ INFO:cascade.models.trainer:Epoch 2: {&#39;acc&#39;: 0.931}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.927}
+INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.9346}
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1086,7 +1085,7 @@ INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.927}
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 
-100%|██████████| 500/500 [00:01&lt;00:00, 272.50it/s]
+100%|██████████| 500/500 [00:02&lt;00:00, 229.59it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1094,8 +1093,8 @@ INFO:cascade.models.trainer:Epoch 3: {&#39;acc&#39;: 0.927}
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.9302}
-INFO:cascade.models.trainer:Training finished in 40 seconds
+INFO:cascade.models.trainer:Epoch 4: {&#39;acc&#39;: 0.932}
+INFO:cascade.models.trainer:Training finished in 43 seconds
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1107,7 +1106,7 @@ INFO:cascade.models.trainer:Training finished in 40 seconds
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">metrics</span>
@@ -1115,26 +1114,26 @@ INFO:cascade.models.trainer:Training finished in 40 seconds
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;acc&#39;: 0.869},
- {&#39;acc&#39;: 0.9006},
- {&#39;acc&#39;: 0.9064},
- {&#39;acc&#39;: 0.9134},
- {&#39;acc&#39;: 0.9152},
- {&#39;acc&#39;: 0.9234},
- {&#39;acc&#39;: 0.931},
- {&#39;acc&#39;: 0.9268},
- {&#39;acc&#39;: 0.931},
- {&#39;acc&#39;: 0.9322},
- {&#39;acc&#39;: 0.9258},
- {&#39;acc&#39;: 0.9254},
- {&#39;acc&#39;: 0.931},
- {&#39;acc&#39;: 0.927},
- {&#39;acc&#39;: 0.9302}]
+[{&#39;acc&#39;: 0.8686},
+ {&#39;acc&#39;: 0.885},
+ {&#39;acc&#39;: 0.9094},
+ {&#39;acc&#39;: 0.9048},
+ {&#39;acc&#39;: 0.922},
+ {&#39;acc&#39;: 0.9264},
+ {&#39;acc&#39;: 0.93},
+ {&#39;acc&#39;: 0.9344},
+ {&#39;acc&#39;: 0.9308},
+ {&#39;acc&#39;: 0.9338},
+ {&#39;acc&#39;: 0.934},
+ {&#39;acc&#39;: 0.9366},
+ {&#39;acc&#39;: 0.933},
+ {&#39;acc&#39;: 0.9346},
+ {&#39;acc&#39;: 0.932}]
 </pre></div></div>
 </div>
 </section>
@@ -1186,9 +1185,7 @@ INFO:cascade.models.trainer:Training finished in 40 seconds
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
