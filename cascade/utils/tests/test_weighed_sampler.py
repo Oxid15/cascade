@@ -100,6 +100,7 @@ def test():
         (6, 1)
     ]
 
+
 def test_str_labels():
     ds = cdd.Wrapper(
         [
@@ -122,6 +123,7 @@ def test_str_labels():
         (2, 'foo'),
         (3, 'foo')
     ]
+
 
 def test_missing_class():
     ds = cdd.Wrapper(
