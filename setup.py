@@ -31,7 +31,6 @@ setuptools.setup(
         'pandas>=1.4.0',
         'deepdiff>=5.8.0',
         'pendulum>=2.1.2',
-        'plotly>=5.7.0',
         'flatten_json>=0.1.13',
         'pyyaml>=5.4.1'
     ]
