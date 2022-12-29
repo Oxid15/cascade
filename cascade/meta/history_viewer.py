@@ -20,9 +20,6 @@ import pendulum
 import pandas as pd
 from flatten_json import flatten
 from deepdiff import DeepDiff
-import plotly
-from plotly import express as px
-from plotly import graph_objects as go
 
 from ..models import ModelRepo
 from . import MetaViewer
@@ -123,6 +120,16 @@ class HistoryViewer:
         show: bool, optional
             Whether to return and show or just return figure
         """
+        try:
+            import plotly
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+                    Cannot import plotly. It is conditional
+                    dependency you can install it
+                    using the instructions from plotly official documentation''')
+        else:
+            from plotly import express as px
+            from plotly import graph_objects as go
 
         # After flatten 'metrics_' will be added to the metric name
         if not metric.startswith('metrics_'):
