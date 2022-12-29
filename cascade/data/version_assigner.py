@@ -117,7 +117,8 @@ class VersionAssigner(Modifier):
                     self._versions[pipe_hash][meta_hash] = {
                         'version': self.version,
                         'meta': meta,
-                        'pipeline': pipeline
+                        'pipeline': pipeline,
+                        'type': 'version_history'
                     }
             else:
                 last_ver = self._get_last_version()
@@ -128,7 +129,8 @@ class VersionAssigner(Modifier):
                 self._versions[pipe_hash][meta_hash] = {
                     'version': self.version,
                     'meta': meta,
-                    'pipeline': pipeline
+                    'pipeline': pipeline,
+                    'type': 'version_history'
                 }
 
             self._mh.write(self._root, self._versions)
@@ -138,7 +140,8 @@ class VersionAssigner(Modifier):
             self._versions[pipe_hash][meta_hash] = {
                 'version': self.version,
                 'meta': meta,
-                'pipeline': pipeline
+                'pipeline': pipeline,
+                'type': 'version_history'
             }
             self._mh.write(self._root, self._versions)
 
