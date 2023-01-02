@@ -29,7 +29,8 @@ More info on installation can be found in [documentation](https://oxid15.github.
 
 
 ## Usage
-This section is divided into blocks based on what problem you can solve using Cascade.
+This section is divided into blocks based on what problem you can solve using Cascade. These are the simplest examples
+of what the library is capable of. See more in documentation.
 
 ### ETL pipeline tracking
 Data processing pipelines need to be versioned and tracked as a part of model experiments.  
@@ -104,7 +105,7 @@ See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart
 
 
 ### Experiment tracking
-Not only data and pipelines changes over time. Model change more frequently and require special system to handle experiments and artifacts. 
+Not only data and pipelines changes over time. Models change more frequently and require special system to handle experiments and artifacts. 
 
 ```python
 from cascade import models as cdm
@@ -129,6 +130,7 @@ class BaselineModel(cdm.BasicModel):
         return [self.const for _ in range(len(x))]
 
     # Models define the way whey are trained loaded and saved
+    # we don't use these here, but they exist
     def fit(self, *args, **kwargs):
         pass
 
@@ -228,6 +230,8 @@ repo = cdm.ModelRepo('repos/use_case_repo')
 cme.MetricViewer(repo).serve()
 ```
 
+![metric-viewer](cascade/docs/imgs/metric-viewer.gif)
+
 `HistoryViewer` allows to see model's lineage, what parameters resulted in what metrics
 ```python
 from cascade import meta as cme
@@ -246,6 +250,7 @@ cme.HistoryViewer(repo).serve()
 
 See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
 
+![history-viewer](cascade/docs/imgs/history-viewer.gif)
 
 
 ## Contributing
