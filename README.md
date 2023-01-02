@@ -8,9 +8,6 @@ Flexible ML Engineering library with the aim to standardize the work with data a
 
 Cascade built for individuals or small teams that are in need of ML Engineering solution, but don't have time or resources to use large enterprise-level systems.  
 
-The main principle is that you should't pay for what you don't use.
-
-
 
 ## Installation
 
@@ -262,10 +259,10 @@ Small and fast-prototyping AI-teams could use it as a tradeoff between total mis
 ## Principles
 The key principles of Cascade are:
 
-* Elegancy - ML code should be about ML with minimum meta-code
-* Flexibility - to easily build prototypes and integrate existing project with Cascade
-* Reusability - code to be reused in similar projects with no effort
-* Traceability - everything should have meta-data
+* **Elegancy** - ML code should be about ML with minimum meta-code
+* **Flexibility** - to easily build prototypes and integrate existing projects with Cascade *(don't pay for what you don't use)*
+* **Reusability** - code to be reused in similar projects with no effort
+* **Traceability** - everything should have meta-data
 
 
 ## Contributing
