@@ -253,6 +253,21 @@ See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart
 ![history-viewer](cascade/docs/imgs/history-viewer.gif)
 
 
+
+## Who could find Cascade useful
+Small and fast-prototyping AI-teams could use it as a tradeoff between total missingness of any ML-Engineering framework and demanding enterprise solutions.
+
+
+
+## Principles
+The key principles of Cascade are:
+
+* Elegancy - ML code should be about ML with minimum meta-code
+* Flexibility - to easily build prototypes and integrate existing project with Cascade
+* Reusability - code to be reused in similar projects with no effort
+* Traceability - everything should have meta-data
+
+
 ## Contributing
 
 Pull requests and issues are welcome! For major changes, please open an issue first to discuss what you would like to change.
