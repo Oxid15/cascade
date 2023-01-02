@@ -22,4 +22,4 @@ from .history_viewer import HistoryViewer
 from .dataleak_validator import DataleakValidator
 from .hashes import numpy_md5
 from .utils import skeleton
-from .data_registrator import DataRegistrator
+from .data_registrator import Assessor, LabelingInfo, DataCard, DataRegistrator
