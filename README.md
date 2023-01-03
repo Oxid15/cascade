@@ -10,7 +10,6 @@ Cascade built for individuals or small teams that are in need of ML Engineering 
 
 
 ## Installation
-
 ```bash
 pip install cascade-ml
 ```
@@ -19,8 +18,6 @@ More info on installation can be found in [documentation](https://oxid15.github.
 
 
 ## Documentation
-
----
 [Go to Cascade documentation](https://oxid15.github.io/cascade/)
 
 
