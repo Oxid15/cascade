@@ -19,7 +19,6 @@ from typing import Union, List, Any, NoReturn
 
 import pendulum
 from flatten_json import flatten
-from plotly import graph_objects as go
 import pandas as pd
 
 from . import MetaViewer
@@ -103,6 +102,17 @@ class MetricViewer:
         """
         Uses plotly to graphically show table with metrics and parameters.
         """
+
+        try:
+            import plotly
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+                        Cannot import plotly. It is conditional
+                        dependency you can install it
+                        using the instructions from plotly official documentation''')
+        else:
+            from plotly import graph_objects as go
+
         data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
