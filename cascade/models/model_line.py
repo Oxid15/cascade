@@ -130,7 +130,7 @@ class ModelLine(Traceable):
             # Find anything that matches /path/model_folder/model*
             exact_filename = glob.glob(f'{full_path}*')
 
-            assert len(exact_filename) > 0, 'Model file was\'nt found.\n '
+            assert len(exact_filename) > 0, 'Model file wasn\'t found.\n '
             'It may be that Model didn\'t save itself when save() was called,'
             'or the name of the file didn\'t match "model*"'
 
