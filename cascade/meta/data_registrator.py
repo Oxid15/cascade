@@ -72,4 +72,4 @@ class DataRegistrator:
         try:
             self._mh.write(self._path, self._meta_log)
         except IOError as e:
-            raise IOError(f'Failed to read log file: {self._path}') from e
+            raise IOError(f'Failed to write log file: {self._path}') from e
