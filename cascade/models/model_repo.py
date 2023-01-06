@@ -21,7 +21,7 @@ import shutil
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats, Meta
+from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats, PipeMeta
 from .model import Model
 from .model_line import ModelLine
 
@@ -234,7 +234,7 @@ class ModelRepo(Repo):
         except IOError as e:
             warnings.warn(f'File writing error ignored: {e}')
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update({
             'root': self._root,

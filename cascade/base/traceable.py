@@ -16,9 +16,8 @@ limitations under the License.
 
 
 import warnings
-from typing import List, Dict, Union, Any
-
-from . import Meta
+from typing import Dict, Union, Any
+from . import PipeMeta, MetaFromFile
 
 
 class Traceable:
@@ -29,13 +28,13 @@ class Traceable:
     def __init__(
         self,
         *args: Any,
-        meta_prefix: Union[Meta, str, None] = None,
+        meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any
     ) -> None:
         """
         Parameters
         ----------
-        meta_prefix: Union[Dict, str], optional
+        meta_prefix: Union[Dict[Any, Any], str], optional
             The dictionary that is used to update object's meta in `get_meta` call.
             Due to the call of update can overwrite default values.
             If str - prefix assumed to be path and loaded using MetaHandler.
@@ -51,19 +50,22 @@ class Traceable:
         self._meta_prefix = meta_prefix
 
     @staticmethod
-    def _read_meta_from_file(path: str) -> Union[List[Any], Dict[Any, Any]]:
+    def _read_meta_from_file(path: str) -> MetaFromFile:
         from . import MetaHandler
         return MetaHandler().read(path)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> PipeMeta:
         """
         Returns
         -------
-        meta: List[Dict]
-            A list where last element is this object's metadata.
+        meta: PipeMeta
+            A list where first element is this object's metadata.
+            All other elements represent the other stages of pipeline if present.
+
             Meta can be anything that is worth to document about
             the object and its properties.
-            Meta is list to allow the formation of pipelines.
+
+            Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
         meta = {
             'name': repr(self)
@@ -74,7 +76,7 @@ class Traceable:
             self._warn_no_prefix()
         return [meta]
 
-    def update_meta(self, obj: Union[Dict, str]) -> None:
+    def update_meta(self, obj: Union[Dict[Any, Any], str]) -> None:
         """
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called

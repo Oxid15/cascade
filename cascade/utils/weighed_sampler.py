@@ -21,7 +21,7 @@ import numpy as np
 from tqdm import trange
 
 from ..data import SizedDataset, Sampler
-from ..base import Meta
+from ..base import PipeMeta
 
 
 class WeighedSampler(Sampler):
@@ -92,7 +92,7 @@ class WeighedSampler(Sampler):
         idx = self._indices[index]
         return self._dataset[idx]
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]['partitioning'] = self._partitioning
         return meta

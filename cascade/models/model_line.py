@@ -21,7 +21,7 @@ import pendulum
 import glob
 from hashlib import md5
 
-from ..base import Traceable, MetaHandler, supported_meta_formats, Meta
+from ..base import Traceable, MetaHandler, supported_meta_formats, PipeMeta
 from .model import Model
 
 
@@ -153,7 +153,7 @@ class ModelLine(Traceable):
     def __repr__(self) -> str:
         return f'ModelLine of {len(self)} models of {self._model_cls}'
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update({
             'root': self.root,
