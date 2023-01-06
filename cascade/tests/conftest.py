@@ -161,7 +161,8 @@ def empty_model():
     {
         'model_cls': DummyModel,
         'meta_fmt': '.yml'
-    }])
+    }
+])
 def model_line(request, tmp_path):
     line = ModelLine(str(tmp_path), **request.param)
     return line

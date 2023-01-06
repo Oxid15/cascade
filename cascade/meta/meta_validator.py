@@ -70,7 +70,7 @@ class MetaValidator(Validator):
     """
     def __init__(self, dataset: SizedDataset[T],
                  root: Union[str, None] = None,
-                 meta_fmt: Literal['.json', '.yml'] = '.json') -> None:
+                 meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json') -> None:
         """
         Parameters
         ----------

@@ -25,7 +25,7 @@ import numpy as np
 
 from . import Meta
 
-supported_meta_formats = ('.json', '.yml')
+supported_meta_formats = ('.json', '.yml', '.yaml')
 
 
 class CustomEncoder(JSONEncoder):
@@ -156,7 +156,7 @@ class MetaHandler:
     """
     Encapsulates the logic of reading and writing metadata to disk.
 
-    Supported read-write formats are `json` and `yml`. Other formats
+    Supported read-write formats are `.json` and `.yml` or `.yaml`. Other formats
     are supported as read-only. For example one can read meta from txt or md file.
 
     Examples
@@ -215,7 +215,7 @@ class MetaHandler:
         ext = os.path.splitext(path)[-1]
         if ext == '.json':
             return JSONHandler()
-        elif ext == '.yml':
+        elif ext in ('.yml', '.yaml'):
             return YAMLHandler()
         else:
             return TextHandler()
