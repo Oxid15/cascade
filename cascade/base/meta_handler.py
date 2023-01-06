@@ -61,7 +61,7 @@ class CustomEncoder(JSONEncoder):
 
         return super(CustomEncoder, self).default(obj)
 
-    def obj_to_dict(self, obj: Any) -> Dict:
+    def obj_to_dict(self, obj: Any) -> Any:
         return json.loads(self.encode(obj))
 
 

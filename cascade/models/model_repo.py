@@ -14,7 +14,6 @@ limitations under the License.
 import os
 import warnings
 import itertools
-import logging
 from typing import List, Iterable, Union, Any, Literal, Type, Generator
 import shutil
 
@@ -78,7 +77,10 @@ class ModelRepo(Repo):
         lines: Union[Iterable[ModelLine], None] = None,
         overwrite: bool = False,
         meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json',
-        model_cls: Type = Model, **kwargs: Any) -> None:
+        model_cls: Type = Model,
+        log_history: bool = True,
+        **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -103,6 +105,7 @@ class ModelRepo(Repo):
         self._model_cls = model_cls
         self._root = folder
         self._lines = dict()
+        self._log_history = log_history
 
         assert meta_fmt in supported_meta_formats, \
             f'Only {supported_meta_formats} are supported formats'
@@ -114,13 +117,43 @@ class ModelRepo(Repo):
 
         self._mh = MetaHandler()
         self._load_lines()
-        self._setup_logger()
 
         if lines is not None:
             for line in lines:
                 self.add_line(**line)
 
         self._update_meta()
+
+    def _log_meta(self, meta: PipeMeta) -> None:
+        log_path = os.path.join(self._root, 'history.yml')
+        if os.path.exists(log_path):
+            try:
+                log = self._mh.read(log_path)
+            except IOError as e:
+                warnings.warn(f'Failed to log history due to file reading error: {e}')
+                return
+        else:
+            log = {
+                'history': [],
+                'type': 'repo_history'
+            }
+
+        if not isinstance(log, dict):
+            warnings.warn('Failed to log meta due to unexpected object'
+                          ' format - it is not dict. Check your history.yml file')
+            return
+
+        if 'history' not in log:
+            warnings.warn('Failed to log meta due to unexpected object'
+                          ' format - "history" key is missing. Check your history.yml file')
+            return
+
+        log['history'].append(meta)
+
+        try:
+            self._mh.write(log_path, log)
+        except IOError as e:
+            warnings.warn(f'Failed to log history due to file writing error: {e}')
 
     def _load_lines(self) -> None:
         self._lines = {
@@ -131,7 +164,13 @@ class ModelRepo(Repo):
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))}
 
-    def add_line(self, name: str = None, *args, meta_fmt=None, **kwargs) -> ModelLine:
+    def add_line(
+            self,
+            name: Union[str, None] = None,
+            *args: Any,
+            meta_fmt: Union[str, None] = None,
+            **kwargs: Any
+    ) -> ModelLine:
         """
         Adds new line to repo if it doesn't exist and returns it.
         If line exists, defines it in repo with parameters provided.
@@ -205,13 +244,6 @@ class ModelRepo(Repo):
     def __repr__(self) -> str:
         return f'ModelRepo in {self._root} of {len(self)} lines'
 
-    def _setup_logger(self) -> None:
-        self.logger = logging.getLogger(self._root)
-        hdlr = logging.FileHandler(os.path.join(self._root, 'history.log'))
-        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
-        self.logger.addHandler(hdlr)
-        self.logger.setLevel('DEBUG')
-
     def _update_meta(self) -> None:
         # Reads meta if exists and updates it with new values
         # writes back to disk
@@ -224,9 +256,11 @@ class ModelRepo(Repo):
             except IOError as e:
                 warnings.warn(f'File reading error ignored: {e}')
 
-        self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
-        diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
-        self.logger.info(diff.pretty())
+        if self._log_history:
+            self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
+            diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
+            if len(diff) != 0:
+                self._log_meta(self_meta)
 
         meta.update(self.get_meta()[0])
         try:
@@ -250,13 +284,6 @@ class ModelRepo(Repo):
         """
         self._load_lines()
         self._update_meta()
-
-    def __del__(self) -> None:
-        # Release all files on destruction
-        if hasattr(self, 'logger'):
-            for handler in self.logger.handlers:
-                handler.close()
-                self.logger.removeHandler(handler)
 
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])
