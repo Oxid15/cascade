@@ -138,11 +138,17 @@ class ModelRepo(Repo):
                 'type': 'repo_history'
             }
 
-        if isinstance(log, dict):
-            log['history'].append(meta)
-        else:
+        if not isinstance(log, dict):
             warnings.warn('Failed to log meta due to unexpected object'
                           ' format - it is not dict. Check your history.yml file')
+            return
+
+        if 'history' not in log:
+            warnings.warn('Failed to log meta due to unexpected object'
+                          ' format - "history" key is missing. Check your history.yml file')
+            return
+
+        log['history'].append(meta)
 
         try:
             self._mh.write(log_path, log)
