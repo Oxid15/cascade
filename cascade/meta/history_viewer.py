@@ -109,7 +109,7 @@ class HistoryViewer:
                 arg_min = i
         return arg_min
 
-    def plot(self, metric: str, show: bool = False) -> plotly.graph_objects.Figure:
+    def plot(self, metric: str, show: bool = False) -> Any:
         """
         Plots training history of model versions using plotly.
 
