@@ -130,17 +130,24 @@ class ModelRepo(Repo):
             try:
                 log = self._mh.read(log_path)
             except IOError as e:
-                warnings.warn(f'Failed to log meta due to file reading error: {e}')
+                warnings.warn(f'Failed to log history due to file reading error: {e}')
                 return
         else:
-            log = []
+            log = {
+                'history': [],
+                'type': 'repo_history'
+            }
 
-        log.append(meta)
+        if isinstance(log, dict):
+            log['history'].append(meta)
+        else:
+            warnings.warn('Failed to log meta due to unexpected object'
+                          ' format - it is not dict. Check your history.yml file')
 
         try:
             self._mh.write(log_path, log)
         except IOError as e:
-            warnings.warn(f'Failed to log meta due to file writing error: {e}')
+            warnings.warn(f'Failed to log history due to file writing error: {e}')
 
     def _load_lines(self) -> None:
         self._lines = {
