@@ -25,7 +25,7 @@ default_keys = ['data', 'dataset']
 def skeleton(
     meta: Union[Meta, Dict[Any, Any]],
     keys: Union[List[str], None] = None
-) -> List[List[Dict[str, str]]]:
+) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
@@ -40,7 +40,7 @@ def skeleton(
 
     Returns
     -------
-    skeleton: List[List[Dict[str, str]]]
+    skeleton: List[List[Dict[Any, Any]]]
     """
 
     if keys is not None:

@@ -22,7 +22,7 @@ from deepdiff import DeepDiff
 
 from . import Validator, DataValidationException
 from ..data import SizedDataset, T
-from ..base import MetaHandler, supported_meta_formats, Meta
+from ..base import MetaHandler, supported_meta_formats, Meta, MetaFromFile
 
 
 class MetaValidator(Validator):
@@ -110,10 +110,10 @@ class MetaValidator(Validator):
         self._mh.write(name, meta)
         print(f'Saved as {name}!')
 
-    def _load(self, name: str) -> Meta:
+    def _load(self, name: str) -> MetaFromFile:
         return self._mh.read(name)
 
-    def _check(self, query_meta) -> None:
+    def _check(self, query_meta: Meta) -> None:
         diff = DeepDiff(self.base_meta, query_meta, verbose_level=2)
         if len(diff):
             print(diff.pretty())

@@ -14,10 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Dict, Any
+from typing import Union, List, Dict, Any
 
+"""
+This type is used when get_meta is called on any Traceable
+"""
 Meta = List[Dict[Any, Any]]
 
+"""
+This type described what we can get when reading previously written to meta object
+"""
+MetaFromFile = Union[List[Any], Dict[Any, Any]]
+
+
 from .meta_handler import MetaHandler, supported_meta_formats
-from .traceable import Traceable, Meta
+from .traceable import Traceable
 from .meta_handler import CustomEncoder as JSONEncoder

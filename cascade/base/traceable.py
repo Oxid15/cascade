@@ -16,9 +16,8 @@ limitations under the License.
 
 
 import warnings
-from typing import List, Dict, Union, Any
-
-from . import Meta
+from typing import Dict, Union, Any
+from . import Meta, MetaFromFile
 
 
 class Traceable:
@@ -29,7 +28,7 @@ class Traceable:
     def __init__(
         self,
         *args: Any,
-        meta_prefix: Union[Meta, str, None] = None,
+        meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any
     ) -> None:
         """
@@ -51,11 +50,11 @@ class Traceable:
         self._meta_prefix = meta_prefix
 
     @staticmethod
-    def _read_meta_from_file(path: str) -> Union[List[Any], Dict[Any, Any]]:
+    def _read_meta_from_file(path: str) -> MetaFromFile:
         from . import MetaHandler
         return MetaHandler().read(path)
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         """
         Returns
         -------
@@ -74,7 +73,7 @@ class Traceable:
             self._warn_no_prefix()
         return [meta]
 
-    def update_meta(self, obj: Union[Dict, str]) -> None:
+    def update_meta(self, obj: Union[Dict[Any, Any], str]) -> None:
         """
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called
