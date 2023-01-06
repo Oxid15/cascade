@@ -18,7 +18,7 @@ import warnings
 from typing import List, Dict, Any, Union
 import pendulum
 
-from ..base import Traceable, Meta
+from ..base import Traceable, PipeMeta
 
 
 class Model(Traceable):
@@ -27,7 +27,7 @@ class Model(Traceable):
     Used to provide unified interface to any model, store metadata including metrics.
     """
     def __init__(self, *args: Any,
-                 meta_prefix: Union[Meta, str, None] = None, **kwargs: Any) -> None:
+                 meta_prefix: Union[PipeMeta, str, None] = None, **kwargs: Any) -> None:
         """
         Should be called in any successor - initializes default meta needed.
         Arguments passed in it should be related to model's hyperparameters, architecture.
@@ -75,7 +75,7 @@ class Model(Traceable):
         """
         raise NotImplementedError()
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         # Successors may not call super().__init__
         # they may not have these default fields
 
@@ -121,6 +121,6 @@ class ModelModifier(Model):
         self._model = model
         super().__init__(*args, **kwargs)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         prev_meta = self._model.get_meta()
         return super().get_meta() + prev_meta

@@ -17,7 +17,7 @@ limitations under the License.
 
 import warnings
 from typing import Dict, Union, Any
-from . import Meta, MetaFromFile
+from . import PipeMeta, MetaFromFile
 
 
 class Traceable:
@@ -34,7 +34,7 @@ class Traceable:
         """
         Parameters
         ----------
-        meta_prefix: Union[Dict, str], optional
+        meta_prefix: Union[Dict[Any, Any], str], optional
             The dictionary that is used to update object's meta in `get_meta` call.
             Due to the call of update can overwrite default values.
             If str - prefix assumed to be path and loaded using MetaHandler.
@@ -54,11 +54,11 @@ class Traceable:
         from . import MetaHandler
         return MetaHandler().read(path)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         """
         Returns
         -------
-        meta: List[Dict]
+        meta: PipeMeta
             A list where last element is this object's metadata.
             Meta can be anything that is worth to document about
             the object and its properties.

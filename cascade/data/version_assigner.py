@@ -18,7 +18,7 @@ import os
 from hashlib import md5
 from typing import Any, Tuple
 from . import Dataset, Modifier, T
-from ..base import MetaHandler, supported_meta_formats, Meta
+from ..base import MetaHandler, supported_meta_formats, PipeMeta
 from ..meta import skeleton
 
 
@@ -172,7 +172,7 @@ class VersionAssigner(Modifier):
         versions = sorted(versions_flat)
         return versions[-1]
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]['version'] = self.version
         return meta

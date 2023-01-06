@@ -19,7 +19,7 @@ from typing import Any, Tuple
 
 import numpy as np
 from ..data import Dataset
-from ..base import Meta
+from ..base import PipeMeta
 
 
 class TextClassificationDataset(Dataset):
@@ -65,7 +65,7 @@ class TextClassificationDataset(Dataset):
         """
         return len(self._paths)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update({
             'name': repr(self),

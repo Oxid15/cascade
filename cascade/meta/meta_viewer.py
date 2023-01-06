@@ -18,7 +18,7 @@ import os
 import warnings
 from typing import Dict, Union, Any
 
-from ..base import MetaHandler, supported_meta_formats, Meta, MetaFromFile
+from ..base import MetaHandler, supported_meta_formats, MetaFromFile
 
 
 class MetaViewer:

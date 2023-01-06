@@ -18,7 +18,7 @@ from typing import List, Any
 
 import numpy as np
 from .dataset import SizedDataset, T
-from ..base import Meta
+from ..base import PipeMeta
 
 
 class Concatenator(SizedDataset):
@@ -71,7 +71,7 @@ class Concatenator(SizedDataset):
         rp = super().__repr__()
         return f'{rp} of\n' + '\n'.join(repr(ds) for ds in self._datasets)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         """
         Concatenator calls `get_meta()` of all its datasets
         """

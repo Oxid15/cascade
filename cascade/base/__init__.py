@@ -17,9 +17,19 @@ limitations under the License.
 from typing import Union, List, Dict, Any
 
 """
-This type is used when get_meta is called on any Traceable
+Single Meta of basic object is just a dict, however Cascade supports
+pipelines with lists of meta.
+
+Do not use Meta when returning from `get_meta` methods! Use PipeMeta instead.
+Meta type alias is designed for better readability and to explicitly state when the
+variable is meta.
 """
-Meta = List[Dict[Any, Any]]
+Meta = Dict[Any, Any]
+
+"""
+This type is used when `get_meta` is called on any Traceable
+"""
+PipeMeta = List[Meta]
 
 """
 This type described what we can get when reading previously written to meta object
