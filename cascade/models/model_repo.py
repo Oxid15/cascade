@@ -77,7 +77,7 @@ class ModelRepo(Repo):
         folder: str,
         lines: Union[Iterable[ModelLine], None] = None,
         overwrite: bool = False,
-        meta_fmt: Literal['.json', '.yml'] = '.json',
+        meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json',
         model_cls: Type = Model, **kwargs: Any) -> None:
         """
         Parameters
@@ -92,7 +92,7 @@ class ModelRepo(Repo):
             in that place
         meta_fmt: str
             extension of repo's metadata files and that will be assigned to the lines by default
-            `.json` and `.yml` are supported
+            `.json` and `.yml` or `.yaml` are supported
         model_cls:
             Default class for any ModelLine in repo
         See also

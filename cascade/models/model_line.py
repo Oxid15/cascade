@@ -32,7 +32,7 @@ class ModelLine(Traceable):
     but different epochs or using different data.
     """
     def __init__(self, folder: str, model_cls: Type = Model,
-                 meta_fmt: Literal['.json', '.yml'] ='.json', **kwargs: Any) -> None:
+                 meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json', **kwargs: Any) -> None:
         """
         All models in line should be instances of the same class.
 
