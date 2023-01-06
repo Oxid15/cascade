@@ -41,7 +41,7 @@ class Dataset(Generic[T], Traceable):
         """
         Returns
         -------
-        meta: Meta
+        meta: PipeMeta
             A list where last element is this dataset's metadata.
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.

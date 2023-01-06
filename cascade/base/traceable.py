@@ -59,10 +59,13 @@ class Traceable:
         Returns
         -------
         meta: PipeMeta
-            A list where last element is this object's metadata.
+            A list where first element is this object's metadata.
+            All other elements represent the other stages of pipeline if present.
+
             Meta can be anything that is worth to document about
             the object and its properties.
-            Meta is list to allow the formation of pipelines.
+
+            Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
         meta = {
             'name': repr(self)
