@@ -24,14 +24,14 @@ default_keys = ['data', 'dataset']
 
 def skeleton(
     meta: Union[PipeMeta, Meta],
-    keys: Union[List[str], None] = None
+    keys: Union[List[Any], None] = None
 ) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
     meta: Union[PipeMeta, Meta]
         Meta of the pipeline
-    keys: List[str], optional
+    keys: List[Any], optional
         The set of keys in meta where to search for previous dataset's meta.
         For example Concatenator when get_meta() is called stores meta of its
         datasets in the field called 'data'.

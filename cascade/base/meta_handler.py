@@ -17,7 +17,7 @@ limitations under the License.
 import os
 import json
 import datetime
-from typing import NoReturn, Union, List, Dict, Any
+from typing import NoReturn, Union, Dict, Any
 from json import JSONEncoder
 
 import yaml
@@ -97,7 +97,7 @@ class JSONHandler(BaseHandler):
                 self._raise_io_error(path, e)
             return meta
 
-    def write(self, path: str, obj: List[Dict], overwrite: bool = True) -> None:
+    def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         if not overwrite and os.path.exists(path):
             return
 
