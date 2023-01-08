@@ -8,18 +8,45 @@ from ..base import MetaHandler
 
 @dataclass
 class Assessor:
+    """
+    The container for the info on
+    the people who were in charge of
+    labeling process, their experience
+    and other properties.
+
+    This is a dataclass, so any additional
+    fields will not be recorded if added.
+    If it needs to be extended, please create
+    a new class instead.
+    """
     id: Union[str, None] = None
     position: Union[str, None] = None
 
 
 @dataclass
 class LabelingInfo:
+    """
+    The container for the information on labeling
+    process, people involved, description of the
+    process, documentation links.
+
+    This is a dataclass, so any additional
+    fields will not be recorded if added.
+    If it needs to be extended, please create
+    a new class instead.
+    """
     who: Union[List[Assessor], None] = None
     process_desc: Union[str, None] = None
     docs: Union[str, None] = None
 
 
 class DataCard:
+    """
+    The container for the information
+    on dataset. The set of fields here
+    is general and can be extended by providing
+    new keywords into __init__.
+    """
     def __init__(
         self,
         name: Union[str, None] = None,
@@ -32,6 +59,34 @@ class DataCard:
         schema: Union[Dict[Any, Any], None] = None,
         **kwargs: Any
     ) -> None:
+        """
+        Parameters
+        ----------
+        name: Union[str, None], optional
+            The name of dataset
+        desc: Union[str, None], optional
+            Short description
+        source: Union[str, None], optional
+            The source of data. Can be URL or textual
+            description of source
+        goal: Union[str, None], optional
+            The datasets have a goal - what should be achieved
+            using this data?
+        labeling_info: Union[LabelingInfo, None], optional
+            The instance of dataclass describing labeling process
+            placed here
+        size: Union[int, Tuple[int], None], optional
+            This can usually be done automatically - number of items
+            or shape of the table.
+        metrics: Union[Dict[str, Any], None], optional
+            Dictionary with names and values of metrics. Any quality metrics
+            can be included
+        schema: Union[Dict[Any, Any], None], optional
+            Schema dictionary describing table datasets,
+            their columns, data types, possible values, etc.
+            Panderas schema objects can be used when converted into
+            dictionaries
+        """
 
         self.data = dict(
             name=name,
@@ -47,6 +102,11 @@ class DataCard:
 
 
 class DataRegistrator:
+    """
+    A tool for tracking lineage of datasets.
+    I is useful if dataset is not a static object and
+    has some properties changed during the time.
+    """
     def __init__(self, path: str) -> None:
         self._path = path
         self._mh = MetaHandler()
@@ -61,12 +121,22 @@ class DataRegistrator:
 
     def register(
         self,
-        card: DataCard,
-        **kwargs: Any
+        card: DataCard
     ) -> None:
+        """
+        Each time this method is called - a new snapshot of
+        gived card is done in the log.
+        Call this method each time the dataset has changed automatically,
+        for example in data update script which is preferable way or
+        manually.
+
+        Parameters
+        ----------
+        card: DataCard
+            Container for all the info on data
+        """
         now = str(pendulum.now(tz='UTC'))
 
-        self._meta_log[now] = {**kwargs}
         self._meta_log[now].update(card.data)
 
         try:
