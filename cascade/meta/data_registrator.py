@@ -117,7 +117,7 @@ class DataRegistrator:
             except IOError as e:
                 raise IOError(f'Failed to read log file: {path}') from e
         else:
-            self._meta_log = {}
+            self._meta_log = []
 
     def register(
         self,
@@ -137,7 +137,8 @@ class DataRegistrator:
         """
         now = str(pendulum.now(tz='UTC'))
 
-        self._meta_log[now].update(card.data)
+        card.data['updated_at'] = now
+        self._meta_log.append(card.data)
 
         try:
             self._mh.write(self._path, self._meta_log)
