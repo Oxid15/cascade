@@ -82,3 +82,39 @@ cascade.meta
 |
 
 |
+
+.. autoclass:: cascade.meta.Assessor
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.LabelingInfo
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.DataCard
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.DataRegistrator
+    :members:
+
+|
+
+|
+
+|
