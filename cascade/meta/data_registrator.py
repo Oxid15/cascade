@@ -134,6 +134,11 @@ class DataRegistrator:
         ----------
         card: DataCard
             Container for all the info on data
+            see DataCard documentation for additional info.
+
+        See also
+        --------
+        cascade.meta.DataCard
         """
         now = str(pendulum.now(tz='UTC'))
 
