@@ -22,7 +22,7 @@ import pandas as pd
 @pytest.fixture(
     params=[
         cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])),
-        cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])), [0, 1, 0]),
+        cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])), [False, True, False]),
         cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24])
     ]
 )
