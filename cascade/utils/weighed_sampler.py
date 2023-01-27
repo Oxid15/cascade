@@ -60,6 +60,8 @@ class WeighedSampler(Sampler):
         """
         labels = np.asarray([dataset[i][1] for i in trange(len(dataset))])
         ulabels, counts = np.unique(labels, return_counts=True)
+        # Convert to lists to prevent serialization problems with metadata
+        ulabels, counts = ulabels.tolist(), counts.tolist()
 
         if partitioning is None:
             partitioning = {}
