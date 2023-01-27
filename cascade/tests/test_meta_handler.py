@@ -154,3 +154,20 @@ def test_empty_file(tmp_path, ext):
     with pytest.raises(IOError) as e:
         mh.read(filename)
     assert filename in e.value.args[0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml',
+        '.yaml'
+    ]
+)
+def test_random_pipeline_meta(tmp_path, dataset, ext):
+    tmp_path = str(tmp_path)
+    mh = MetaHandler()
+
+    filename = os.path.join(tmp_path, 'meta' + ext)
+
+    meta = dataset.get_meta()
+    mh.write(filename, meta)
