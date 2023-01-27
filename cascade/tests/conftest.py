@@ -31,7 +31,6 @@ from cascade.data import Dataset, Wrapper, Iterator, ApplyModifier, \
     BruteforceCacher, Composer, Concatenator, CyclicSampler, \
     RandomSampler, RangeSampler, SequentialCacher
 from cascade.models import Model, ModelLine, ModelRepo, BasicModel
-from cascade import utils as cdu
 
 
 class DummyModel(Model):
@@ -99,17 +98,6 @@ def f(x: int) -> int:
     ]
 )
 def dataset(request) -> Dataset:
-    return request.param
-
-
-@pytest.fixture(
-    params=[
-        cdu.TableDataset(t=pd.DataFrame()),
-        cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame()), []),
-        cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24])
-    ]
-)
-def utils_dataset(request) -> Dataset:
     return request.param
 
 
