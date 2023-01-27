@@ -14,7 +14,7 @@ limitations under the License.
 import pytest
 import datetime
 from cascade import utils as cdu
-from cascade.data import Dataset
+from cascade.data import Dataset, Wrapper
 
 import pandas as pd
 
@@ -23,7 +23,12 @@ import pandas as pd
     params=[
         cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])),
         cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])), [0, 1, 0]),
-        cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24])
+        cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24]),
+        cdu.OverSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
+        cdu.UnderSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
+        cdu.WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)]), {0: 1}),
+        cdu.WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)]), {0: 1, 1: 2}),
+        cdu.WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
     ]
 )
 def utils_dataset(request) -> Dataset:
