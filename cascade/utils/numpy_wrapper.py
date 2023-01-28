@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Dict, List, Any
+from typing import Any
 import numpy as np
 from ..data import Wrapper
-from ..base import Meta
+from ..base import PipeMeta
 
 
 class NumpyWrapper(Wrapper):
@@ -28,7 +28,7 @@ class NumpyWrapper(Wrapper):
         self._path = path
         super().__init__(np.load(path), *args, **kwargs)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]['root'] = self._path
         return meta

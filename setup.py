@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cascade-ml",
-    version='0.9.0',
+    version='0.10.0-alpha',
     author='Ilia Moiseev',
     author_email='ilia.moiseev.5@yandex.ru',
     license='Apache License 2.0',
@@ -31,7 +31,6 @@ setuptools.setup(
         'pandas>=1.4.0',
         'deepdiff>=5.8.0',
         'pendulum>=2.1.2',
-        'plotly>=5.7.0',
         'flatten_json>=0.1.13',
         'pyyaml>=5.4.1'
     ]
