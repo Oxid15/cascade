@@ -40,3 +40,4 @@ MetaFromFile = Union[List[Any], Dict[Any, Any]]
 from .meta_handler import MetaHandler, supported_meta_formats
 from .traceable import Traceable
 from .meta_handler import CustomEncoder as JSONEncoder
+from .history_logger import HistoryLogger
