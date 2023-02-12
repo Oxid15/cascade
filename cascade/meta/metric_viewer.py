@@ -198,6 +198,8 @@ class MetricServer:
             from dash import Output, Input
         except ModuleNotFoundError:
             self._raise_cannot_import()
+        else:
+            from plotly import graph_objects as go
 
         @_app.callback(
             Output(component_id='dependence-figure', component_property='figure'),
@@ -221,6 +223,8 @@ class MetricServer:
             from dash import html, dcc, dash_table
         except ModuleNotFoundError:
             self._raise_cannot_import()
+        else:
+            from plotly import graph_objects as go
 
         self._mv._repo.reload()
         self._mv.reload_table()
