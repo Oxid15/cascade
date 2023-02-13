@@ -20,11 +20,9 @@ from .meta_handler import MetaHandler
 
 
 class HistoryLogger:
-    def __init__(self, filepath: str,
-                 meta_fmt: Literal['.json', '.yml', '.yaml'] = '.yml') -> None:
+    def __init__(self, filepath: str) -> None:
         self._mh = MetaHandler()
         self._log_file = filepath
-        self._ext = meta_fmt
 
         if os.path.exists(self._log_file):
             try:
