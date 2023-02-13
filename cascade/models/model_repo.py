@@ -20,7 +20,8 @@ import shutil
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats, PipeMeta
+from ..base import (Traceable, MetaHandler, HistoryLogger,
+                    JSONEncoder, supported_meta_formats, PipeMeta)
 from .model import Model
 from .model_line import ModelLine
 
@@ -116,6 +117,7 @@ class ModelRepo(Repo):
         os.makedirs(self._root, exist_ok=True)
 
         self._mh = MetaHandler()
+        self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
         self._load_lines()
 
         if lines is not None:
@@ -123,37 +125,6 @@ class ModelRepo(Repo):
                 self.add_line(**line)
 
         self._update_meta()
-
-    def _log_meta(self, meta: PipeMeta) -> None:
-        log_path = os.path.join(self._root, 'history.yml')
-        if os.path.exists(log_path):
-            try:
-                log = self._mh.read(log_path)
-            except IOError as e:
-                warnings.warn(f'Failed to log history due to file reading error: {e}')
-                return
-        else:
-            log = {
-                'history': [],
-                'type': 'repo_history'
-            }
-
-        if not isinstance(log, dict):
-            warnings.warn('Failed to log meta due to unexpected object'
-                          ' format - it is not dict. Check your history.yml file')
-            return
-
-        if 'history' not in log:
-            warnings.warn('Failed to log meta due to unexpected object'
-                          ' format - "history" key is missing. Check your history.yml file')
-            return
-
-        log['history'].append(meta)
-
-        try:
-            self._mh.write(log_path, log)
-        except IOError as e:
-            warnings.warn(f'Failed to log history due to file writing error: {e}')
 
     def _load_lines(self) -> None:
         self._lines = {
@@ -260,7 +231,7 @@ class ModelRepo(Repo):
             self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
             diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
             if len(diff) != 0:
-                self._log_meta(self_meta)
+                self._hl.log(self_meta)
 
         meta.update(self.get_meta()[0])
         try:
