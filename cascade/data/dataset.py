@@ -31,7 +31,7 @@ class Dataset(Generic[T], Traceable):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: Any) -> T:
         """
         Abstract method - should be defined in every successor
         """
@@ -91,7 +91,7 @@ class Iterator(Dataset):
         super().__init__(*args, **kwargs)
         self._data = data
 
-    def __getitem__(self, item: int) -> T:
+    def __getitem__(self, item: Any) -> T:
         raise NotImplementedError()
 
     def __iter__(self) -> Iterable[T]:
@@ -112,7 +112,7 @@ class Wrapper(SizedDataset):
         self._data = obj
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: Any) -> T:
         return self._data[index]
 
     def __len__(self) -> int:
@@ -148,7 +148,7 @@ class Modifier(SizedDataset):
         self._dataset = dataset
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: Any) -> T:
         return self._dataset[index]
 
     def __iter__(self) -> T:
