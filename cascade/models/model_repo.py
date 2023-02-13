@@ -92,7 +92,7 @@ class ModelRepo(Repo):
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
-        meta_fmt: str
+        meta_fmt: Literal['.json', '.yml', '.yaml']
             extension of repo's metadata files and that will be assigned to the lines by default
             `.json` and `.yml` or `.yaml` are supported
         model_cls:
