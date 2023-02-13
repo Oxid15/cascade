@@ -151,7 +151,7 @@ class Modifier(SizedDataset):
     def __getitem__(self, index: Any) -> T:
         return self._dataset[index]
 
-    def __iter__(self) -> T:
+    def __iter__(self) -> Iterable[T]:
         for i in range(len(self)):
             yield self.__getitem__(i)
 
