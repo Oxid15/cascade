@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Literal, Any
+from typing import Any
 from .meta_handler import MetaHandler
 
 
@@ -26,14 +26,17 @@ class HistoryLogger:
 
         if os.path.exists(self._log_file):
             try:
-                self._log = self._mh.read(self._log_file )
+                self._log = self._mh.read(self._log_file)
                 if isinstance(self._log, list):
                     raise RuntimeError(
                         f'Failed to initialize history logger due to unexpected object'
-                        f' format - log is the instance of list and not dict. Check your {self._log_file} file')
+                        f' format - log is the instance of list and not dict.'
+                        f' Check your {self._log_file} file')
                 if 'history' not in self._log:
-                    raise RuntimeError(f'Failed to initialize history logger due to unexpected object'
-                                       f' format - "history" key is missing. Check your {self._log_file} file')
+                    raise RuntimeError(
+                        f'Failed to initialize history logger due to unexpected object'
+                        f' format - "history" key is missing.'
+                        f' Check your {self._log_file} file')
             except IOError as e:
                 raise IOError(f'Failed to read log file: {self._log_file }') from e
         else:
