@@ -1,9 +1,25 @@
+"""
+Copyright 2022 Ilia Moiseev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
 import os
 from dataclasses import dataclass, asdict
 from typing import List, Tuple, Dict, Union, Any
 import pendulum
 
-from ..base import MetaHandler
+from ..base import HistoryLogger
 
 
 @dataclass
@@ -107,17 +123,8 @@ class DataRegistrator:
     I is useful if dataset is not a static object and
     has some properties changed during the time.
     """
-    def __init__(self, path: str) -> None:
-        self._path = path
-        self._mh = MetaHandler()
-
-        if os.path.exists(path):
-            try:
-                self._meta_log = self._mh.read(path)
-            except IOError as e:
-                raise IOError(f'Failed to read log file: {path}') from e
-        else:
-            self._meta_log = []
+    def __init__(self, filepath: str) -> None:
+        self._logger = HistoryLogger(filepath)
 
     def register(
         self,
@@ -141,11 +148,6 @@ class DataRegistrator:
         cascade.meta.DataCard
         """
         now = str(pendulum.now(tz='UTC'))
-
         card.data['updated_at'] = now
-        self._meta_log.append(card.data)
 
-        try:
-            self._mh.write(self._path, self._meta_log)
-        except IOError as e:
-            raise IOError(f'Failed to write log file: {self._path}') from e
+        self._logger.log(card.data)
