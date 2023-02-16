@@ -1,7 +1,9 @@
+import json
 from typing import List, Any
-from cascade.base import MetaFromFile
-from cascade.meta import MetaViewer
-from cascade.models import ModelRepo
+from deepdiff import DeepDiff
+
+from ..base import MetaFromFile, JSONEncoder
+from ..meta import MetaViewer
 
 
 class DiffReader:
@@ -25,6 +27,7 @@ class DiffViewer:
 
     def serve(self, **kwargs: Any) -> None:
         objs = self._diff_reader.read_objects(self._path)
+        self._objs = {meta[0]['name']: meta for meta in objs}
 
         # Conditional import
         try:
@@ -35,7 +38,7 @@ class DiffViewer:
             dependency you can install it
             using the instructions from https://dash.plotly.com/installation''')
         else:
-            from dash import Input, Output, html, State, dcc
+            from dash import Input, Output, html, dcc
             from dash_renderjson import DashRenderjson
 
         app = dash.Dash()
@@ -49,20 +52,28 @@ class DiffViewer:
                     'font-family': 'Montserrat'
                 }
             ),
-            dcc.Dropdown(id='left-dropdown', options=[meta[0]['name'] for meta in objs]),
-            dcc.Dropdown(id='rigth-dropdown', options=[meta[0]['name'] for meta in objs]),
+            dcc.Dropdown(id='left-dropdown', options=list(self._objs.keys())),
+            dcc.Dropdown(id='rigth-dropdown', options=list(self._objs.keys())),
 
-            DashRenderjson(id=f'diff-json', data={'Nothing': 'Nothing is selected!'}),
+            DashRenderjson(id='diff-json', data={'Nothing': 'Nothing is selected!'}),
 
             html.Div(id='display', children=[
                 html.Details(children=[
-                    html.Summary(meta[0]['name']),
-                    DashRenderjson(id=f'data_{i}', data=meta)
-                ]) for i, meta in enumerate(objs)
+                    html.Summary(name),
+                    DashRenderjson(id=f'data_{i}', data={'': self._objs[name]})
+                ]) for i, name in enumerate(self._objs)
             ])
         ])
 
+        @app.callback(
+            Output(component_id='diff-json', component_property='data'),
+            Input(component_id='left-dropdown', component_property='value'),
+            Input(component_id='rigth-dropdown', component_property='value'))
+        def _update_diff(x, y):
+            if x is not None and y is not None:
+                diff = DeepDiff(self._objs[x], self._objs[y]).to_dict()
+                diff = JSONEncoder().encode(diff)
+                diff = json.loads(diff)
+                return diff
+
         app.run_server(use_reloader=False, **kwargs)
-
-
-dv = DiffViewer(r'C:\cascade_integration\repos\demo').serve()
