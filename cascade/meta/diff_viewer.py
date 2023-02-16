@@ -26,6 +26,19 @@ class DiffViewer:
         self._diff_reader = RepoDiffReader()
 
     def serve(self, **kwargs: Any) -> None:
+        style = {
+            'color': '#084c61',
+            'font-family': 'Open Sans, Montserrat'
+        }
+
+        theme = {
+            'base00': '#fefefe',  # background
+            'base03': '#cccccc',  # inactive key counter
+            'base09': '#FF5F9E',  # numeric values
+            'base0B': '#084c61',  # values text
+            'base0D': '#C92C6D',  # keys text
+        }
+
         objs = self._diff_reader.read_objects(self._path)
         self._objs = {meta[0]['name']: meta for meta in objs}
 
@@ -46,24 +59,18 @@ class DiffViewer:
         app.layout = html.Div([
             html.H1(
                 children=f'DiffViewer in {self._path}',
-                style={
-                    'textAlign': 'center',
-                    'color': '#084c61',
-                    'font-family': 'Montserrat'
-                }
+                style={'textAlign': 'center', **style}
             ),
             dcc.Dropdown(id='left-dropdown', options=list(self._objs.keys())),
             dcc.Dropdown(id='rigth-dropdown', options=list(self._objs.keys())),
-
-            DashRenderjson(id='diff-json', data={'Nothing': 'Nothing is selected!'}),
-
+            DashRenderjson(id='diff-json', data={'Nothing': 'Nothing is selected!'}, theme=theme),
             html.Div(id='display', children=[
                 html.Details(children=[
                     html.Summary(name),
-                    DashRenderjson(id=f'data_{i}', data={'': self._objs[name]})
+                    DashRenderjson(id=f'data_{i}', data={'': self._objs[name]}, theme=theme)
                 ]) for i, name in enumerate(self._objs)
             ])
-        ])
+        ], style={'margin': '5%', **style})
 
         @app.callback(
             Output(component_id='diff-json', component_property='data'),
