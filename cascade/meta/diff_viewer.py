@@ -1,8 +1,10 @@
+import os
+import glob
 import json
 from typing import List, Any
 from deepdiff import DeepDiff
 
-from ..base import MetaFromFile, JSONEncoder
+from ..base import MetaFromFile, JSONEncoder, MetaHandler
 from ..meta import Server, MetaViewer
 
 
@@ -12,8 +14,40 @@ class DiffReader:
 
 
 class RepoDiffReader(DiffReader):
+    def _check_path(self, path):
+        if not os.path.isdir(path):
+            raise ValueError(f'Path `{path}` is not a directory')
+
+        # Check that meta of repo or line exists
+        # do not restrict extensions because meta handler would fail with
+        # informative message anyway
+        metas = glob.glob(os.path.join(path, 'meta.*'))
+        if len(metas) == 0:
+            raise ValueError(
+                f'There is no meta file in the directory provided: {path}'
+            )
+
+        # No idea how to handle multiple metas
+        # and what it means
+        if len(metas) > 1:
+            raise ValueError(
+                f'Multiple meta files in the directory provided: {path}'
+            )
+
+        meta = MetaHandler().read(metas[0])
+
+        if not isinstance(meta, list):
+            raise ValueError(f'Something is wrong with meta in {metas[0]} - it is not a list')
+
+        if 'type' not in meta[0]:
+            raise ValueError(f'Something is wrong with meta in {metas[0]} - no type key in it')
+
+        if meta[0]['type'] not in ('repo', 'line'):
+            raise ValueError('The folder you provided is neither the repo nor line')
+
     def read_objects(self, path: str) -> List[MetaFromFile]:
-        # TODO: check for repo
+        self._check_path(path)
+
         mev = MetaViewer(path, filt={'type': 'model'})
         return [meta for meta in mev]
 
