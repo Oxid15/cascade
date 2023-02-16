@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from .server import Server
 from .utils import skeleton
 from .meta_viewer import MetaViewer
 from .metric_viewer import MetricViewer
