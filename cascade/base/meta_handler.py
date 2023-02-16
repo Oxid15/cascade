@@ -19,6 +19,7 @@ import json
 import datetime
 from typing import NoReturn, Union, Dict, Any
 from json import JSONEncoder
+import deepdiff
 
 import yaml
 import numpy as np
@@ -58,6 +59,9 @@ class CustomEncoder(JSONEncoder):
 
         elif isinstance(obj, np.void):
             return None
+
+        elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
+            return list(obj)
 
         return super(CustomEncoder, self).default(obj)
 

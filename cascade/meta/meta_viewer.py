@@ -86,10 +86,13 @@ class MetaViewer:
 
     def _filter(self, name: str) -> bool:
         meta = self._mh.read(name)
-        meta = meta[0]  # Takes first meta which is last model's meta
+        if isinstance(meta, list):
+            meta = meta[0]
+
         for key in self._filt:
             if key not in meta:
-                raise KeyError(f"'{key}' key is not in\n{meta}")
+                warnings.warn(f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}")
+                return False
 
             if self._filt[key] != meta[key]:
                 return False
