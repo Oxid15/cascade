@@ -230,6 +230,7 @@ class HistoryViewer:
 
         app.layout = html.Div([
             html.H1(
+                id='viewer-title',
                 children=f'HistoryViewer in {self._repo}',
                 style={
                     'textAlign': 'center',
@@ -245,8 +246,16 @@ class HistoryViewer:
                 interval=1000 * 3)
         ])
 
-        @app.callback(Output('history-figure', 'figure'),
-                      Input('history-interval', 'n_intervals'))
+        @app.callback(
+            Output('viewer-title', 'children'),
+            Input('history-interval', 'n_intervals')
+        )
+        def update_title(n_intervals):
+            return f'HistoryViewer in {self._repo}'
+
+        @app.callback(
+            Output('history-figure', 'figure'),
+            Input('history-interval', 'n_intervals'))
         def update_history(n_intervals):
             self._repo.reload()
             self._make_table()
