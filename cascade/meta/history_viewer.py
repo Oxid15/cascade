@@ -22,10 +22,10 @@ from flatten_json import flatten
 from deepdiff import DeepDiff
 
 from ..models import ModelRepo
-from . import MetaViewer
+from . import Server, MetaViewer
 
 
-class HistoryViewer:
+class HistoryViewer(Server):
     """
     The tool which allows user to visualize training history of model versions.
     Uses shows how metrics of models changed over time and how
@@ -133,10 +133,7 @@ class HistoryViewer:
         try:
             import plotly
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-                    Cannot import plotly. It is conditional
-                    dependency you can install it
-                    using the instructions from plotly official documentation''')
+            self._raise_cannot_import_plotly()
         else:
             from plotly import express as px
             from plotly import graph_objects as go
@@ -232,20 +229,14 @@ class HistoryViewer:
         try:
             import dash
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-            Cannot import dash. It is conditional
-            dependency you can install it
-            using the instructions from https://dash.plotly.com/installation''')
+            self._raise_cannot_import_dash()
         else:
             from dash import Input, Output, html, dcc
 
         try:
             import plotly
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-                    Cannot import plotly. It is conditional
-                    dependency you can install it
-                    using the instructions from plotly official documentation''')
+            self._raise_cannot_import_plotly()
         else:
             from plotly import graph_objects as go
 
