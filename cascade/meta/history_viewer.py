@@ -109,6 +109,16 @@ class HistoryViewer:
                 arg_min = i
         return arg_min
 
+    def _preprocess_metric(self, metric):
+        if not isinstance(metric, str):
+            raise ValueError(f'Metric {metric} is not a string')
+        # After flatten 'metrics_' will be added to the metric name
+        if not metric.startswith('metrics_'):
+            metric = 'metrics_' + metric
+        assert metric in self._table, f'Metric {metric.replace("metrics_", "")} is not in the repo'
+
+        return metric
+
     def plot(self, metric: str, show: bool = False) -> Any:
         """
         Plots training history of model versions using plotly.
@@ -131,10 +141,7 @@ class HistoryViewer:
             from plotly import express as px
             from plotly import graph_objects as go
 
-        # After flatten 'metrics_' will be added to the metric name
-        if not metric.startswith('metrics_'):
-            metric = 'metrics_' + metric
-        assert metric in self._table, f'Metric {metric.replace("metrics_", "")} is not in the repo'
+        metric = self._preprocess_metric(metric)
 
         # turn time into evenly spaced intervals
         time = [i for i in range(len(self._table))]
@@ -238,6 +245,12 @@ class HistoryViewer:
                     'font-family': 'Montserrat'
                 }
             ),
+            dcc.Dropdown(
+                id='metric-dropwdown',
+                options=[col.replace('metrics_', '')
+                         for col in self._table.columns if col.startswith('metrics_')],
+                value=metric
+            ),
             dcc.Graph(
                 id='history-figure',
                 figure=fig),
@@ -255,8 +268,10 @@ class HistoryViewer:
 
         @app.callback(
             Output('history-figure', 'figure'),
-            Input('history-interval', 'n_intervals'))
-        def update_history(n_intervals):
+            Input('history-interval', 'n_intervals'),
+            Input('metric-dropwdown', component_property='value'),
+            prevent_initial_call=True)
+        def update_history(n_intervals, metric):
             self._repo.reload()
             self._make_table()
             return self.plot(metric)
