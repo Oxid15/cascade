@@ -1,7 +1,7 @@
 import os
 import glob
 import json
-from typing import List, Any
+from typing import List, Any, Literal, Dict
 from deepdiff import DeepDiff
 
 from ..base import MetaFromFile, JSONEncoder, MetaHandler
@@ -45,18 +45,40 @@ class RepoDiffReader(DiffReader):
         if meta[0]['type'] not in ('repo', 'line'):
             raise ValueError('The folder you provided is neither the repo nor line')
 
-    def read_objects(self, path: str) -> List[MetaFromFile]:
+    def read_objects(self, path: str) -> Dict[str, MetaFromFile]:
         self._check_path(path)
 
         mev = MetaViewer(path, filt={'type': 'model'})
-        return [meta for meta in mev]
+        objs = [meta for meta in mev]
+        objs = {meta[0]['name']: meta for meta in objs}
+        return objs
+
+
+class DatasetVersionDiffReader(DiffReader):
+    def _check_path(self, path):
+        pass
+
+    def read_objects(self, path: str) -> Dict[str, MetaFromFile]:
+        self._check_path(path)
+
+        versions = MetaHandler().read(path)
+
+        version_dict = {}
+        for pipe_key in versions:
+            for meta_key in versions[pipe_key]:
+                version_dict.update({versions[pipe_key][meta_key]['version']: versions[pipe_key][meta_key]})
+        return version_dict
 
 
 class DiffViewer(Server):
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, type: Literal['repo', 'version']) -> None:
         self._path = path
-        self._diff_reader = RepoDiffReader()
-        self._objs = dict()
+        if type == 'repo':
+            self._diff_reader = RepoDiffReader()
+        elif type == 'version':
+            self._diff_reader = DatasetVersionDiffReader()
+        else:
+            raise ValueError(f'{type} is not repo or version')
 
         self._style = {
             'color': '#084c61',
@@ -70,10 +92,6 @@ class DiffViewer(Server):
             'base0B': '#084c61',  # values text
             'base0D': '#C92C6D',  # keys text
         }
-
-    def _read_objects(self):
-        objs = self._diff_reader.read_objects(self._path)
-        self._objs = {meta[0]['name']: meta for meta in objs}
 
     def _layout(self):
         try:
@@ -92,7 +110,7 @@ class DiffViewer(Server):
         else:
             from dash_renderjson import DashRenderjson
 
-        self._read_objects()
+        self._objs = self._diff_reader.read_objects(self._path)
 
         return html.Div([
             html.H1(
