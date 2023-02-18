@@ -213,10 +213,17 @@ class HistoryViewer:
 
         return fig
 
-    def serve(self, metric: str, **kwargs: Any) -> None:
+    def serve(self, metric: Union[str, None] = None, **kwargs: Any) -> None:
         """
-        Run dash-based server with HistoryViewer, updating plots in real-time.
+        Runs dash-based server with HistoryViewer, updating plots in real-time.
 
+        Parameters
+        ----------
+        metric, optional:
+            One of the metrics in the repo. May be left None and chosen later in
+            the interface
+        **kwargs
+            Arguments for app.run_server() for example port or host
         Note
         ----
         This feature needs `dash` to be installed.
@@ -232,8 +239,18 @@ class HistoryViewer:
         else:
             from dash import Input, Output, html, dcc
 
+        try:
+            import plotly
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+                    Cannot import plotly. It is conditional
+                    dependency you can install it
+                    using the instructions from plotly official documentation''')
+        else:
+            from plotly import graph_objects as go
+
         app = dash.Dash()
-        fig = self.plot(metric)
+        fig = self.plot(metric) if metric is not None else go.Figure()
 
         app.layout = html.Div([
             html.H1(
