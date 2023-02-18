@@ -22,10 +22,10 @@ from flatten_json import flatten
 from deepdiff import DeepDiff
 
 from ..models import ModelRepo
-from . import MetaViewer
+from . import Server, MetaViewer
 
 
-class HistoryViewer:
+class HistoryViewer(Server):
     """
     The tool which allows user to visualize training history of model versions.
     Uses shows how metrics of models changed over time and how
@@ -109,6 +109,16 @@ class HistoryViewer:
                 arg_min = i
         return arg_min
 
+    def _preprocess_metric(self, metric):
+        if not isinstance(metric, str):
+            raise ValueError(f'Metric {metric} is not a string')
+        # After flatten 'metrics_' will be added to the metric name
+        if not metric.startswith('metrics_'):
+            metric = 'metrics_' + metric
+        assert metric in self._table, f'Metric {metric.replace("metrics_", "")} is not in the repo'
+
+        return metric
+
     def plot(self, metric: str, show: bool = False) -> Any:
         """
         Plots training history of model versions using plotly.
@@ -123,18 +133,12 @@ class HistoryViewer:
         try:
             import plotly
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-                    Cannot import plotly. It is conditional
-                    dependency you can install it
-                    using the instructions from plotly official documentation''')
+            self._raise_cannot_import_plotly()
         else:
             from plotly import express as px
             from plotly import graph_objects as go
 
-        # After flatten 'metrics_' will be added to the metric name
-        if not metric.startswith('metrics_'):
-            metric = 'metrics_' + metric
-        assert metric in self._table, f'Metric {metric.replace("metrics_", "")} is not in the repo'
+        metric = self._preprocess_metric(metric)
 
         # turn time into evenly spaced intervals
         time = [i for i in range(len(self._table))]
@@ -206,10 +210,17 @@ class HistoryViewer:
 
         return fig
 
-    def serve(self, metric: str, **kwargs: Any) -> None:
+    def serve(self, metric: Union[str, None] = None, **kwargs: Any) -> None:
         """
-        Run dash-based server with HistoryViewer, updating plots in real-time.
+        Runs dash-based server with HistoryViewer, updating plots in real-time.
 
+        Parameters
+        ----------
+        metric, optional:
+            One of the metrics in the repo. May be left None and chosen later in
+            the interface
+        **kwargs
+            Arguments for app.run_server() for example port or host
         Note
         ----
         This feature needs `dash` to be installed.
@@ -218,15 +229,19 @@ class HistoryViewer:
         try:
             import dash
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
-            Cannot import dash. It is conditional
-            dependency you can install it
-            using the instructions from https://dash.plotly.com/installation''')
+            self._raise_cannot_import_dash()
         else:
             from dash import Input, Output, html, dcc
 
+        try:
+            import plotly
+        except ModuleNotFoundError:
+            self._raise_cannot_import_plotly()
+        else:
+            from plotly import graph_objects as go
+
         app = dash.Dash()
-        fig = self.plot(metric)
+        fig = self.plot(metric) if metric is not None else go.Figure()
 
         app.layout = html.Div([
             html.H1(
@@ -237,6 +252,12 @@ class HistoryViewer:
                     'color': '#084c61',
                     'font-family': 'Montserrat'
                 }
+            ),
+            dcc.Dropdown(
+                id='metric-dropwdown',
+                options=[col.replace('metrics_', '')
+                         for col in self._table.columns if col.startswith('metrics_')],
+                value=metric
             ),
             dcc.Graph(
                 id='history-figure',
@@ -255,8 +276,10 @@ class HistoryViewer:
 
         @app.callback(
             Output('history-figure', 'figure'),
-            Input('history-interval', 'n_intervals'))
-        def update_history(n_intervals):
+            Input('history-interval', 'n_intervals'),
+            Input('metric-dropwdown', component_property='value'),
+            prevent_initial_call=True)
+        def update_history(n_intervals, metric):
             self._repo.reload()
             self._make_table()
             return self.plot(metric)
