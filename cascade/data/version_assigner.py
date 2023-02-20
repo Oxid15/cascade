@@ -17,6 +17,8 @@ limitations under the License.
 import os
 from hashlib import md5
 from typing import Any, Tuple
+import pendulum
+
 from . import Dataset, Modifier, T
 from ..base import MetaHandler, supported_meta_formats, PipeMeta
 from ..meta import skeleton
@@ -110,7 +112,7 @@ class VersionAssigner(Modifier):
                         'version': self.version,
                         'meta': meta,
                         'pipeline': pipeline,
-                        'type': 'version_history'
+                        'updated_at': str(pendulum.now(tz='UTC'))
                     }
             else:
                 last_ver = self._get_last_version()
@@ -122,7 +124,7 @@ class VersionAssigner(Modifier):
                     'version': self.version,
                     'meta': meta,
                     'pipeline': pipeline,
-                    'type': 'version_history'
+                    'updated_at': str(pendulum.now(tz='UTC'))
                 }
 
             self._mh.write(self._root, self._versions)
@@ -133,7 +135,7 @@ class VersionAssigner(Modifier):
                 'version': self.version,
                 'meta': meta,
                 'pipeline': pipeline,
-                'type': 'version_history'
+                'updated_at': str(pendulum.now(tz='UTC'))
             }
             self._mh.write(self._root, self._versions)
 
