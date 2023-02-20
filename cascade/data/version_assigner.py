@@ -84,7 +84,10 @@ class VersionAssigner(Modifier):
         super().__init__(dataset, *args, **kwargs)
         self._mh = MetaHandler()
         self._assign_path(path)
-        self._versions = {}
+        self._versions = {
+            'versions': {},
+            'type': 'version_history'
+        }
 
         # get meta for info about pipeline
         meta = self._dataset.get_meta()
@@ -100,15 +103,15 @@ class VersionAssigner(Modifier):
         if os.path.exists(self._root):
             self._versions = self._mh.read(self._root)
 
-            if pipe_hash in self._versions:
-                if meta_hash in self._versions[pipe_hash]:
-                    self.version = self._versions[pipe_hash][meta_hash]['version']
+            if pipe_hash in self._versions['versions']:
+                if meta_hash in self._versions['versions'][pipe_hash]:
+                    self.version = self._versions['versions'][pipe_hash][meta_hash]['version']
                 else:
                     last_ver = self._get_last_version_from_pipe(pipe_hash)
                     major, minor = self._split_ver(last_ver)
                     minor += 1
                     self.version = self._join_ver(major, minor)
-                    self._versions[pipe_hash][meta_hash] = {
+                    self._versions['versions'][pipe_hash][meta_hash] = {
                         'version': self.version,
                         'meta': meta,
                         'pipeline': pipeline,
@@ -119,8 +122,8 @@ class VersionAssigner(Modifier):
                 major, minor = self._split_ver(last_ver)
                 major += 1
                 self.version = self._join_ver(major, minor)
-                self._versions[pipe_hash] = {}
-                self._versions[pipe_hash][meta_hash] = {
+                self._versions['versions'][pipe_hash] = {}
+                self._versions['versions'][pipe_hash][meta_hash] = {
                     'version': self.version,
                     'meta': meta,
                     'pipeline': pipeline,
@@ -130,8 +133,8 @@ class VersionAssigner(Modifier):
             self._mh.write(self._root, self._versions)
         else:
             self.version = '0.0'
-            self._versions[pipe_hash] = {}
-            self._versions[pipe_hash][meta_hash] = {
+            self._versions['versions'][pipe_hash] = {}
+            self._versions['versions'][pipe_hash][meta_hash] = {
                 'version': self.version,
                 'meta': meta,
                 'pipeline': pipeline,
@@ -158,14 +161,14 @@ class VersionAssigner(Modifier):
         return f'{major}.{minor}'
 
     def _get_last_version_from_pipe(self, pipe_hash: str) -> str:
-        versions = [item['version'] for item in self._versions[pipe_hash].values()]
+        versions = [item['version'] for item in self._versions['versions'][pipe_hash].values()]
         versions = sorted(versions)
         return versions[-1]
 
     def _get_last_version(self) -> str:
         versions_flat = []
-        for pipe_hash in self._versions:
-            versions_flat += [item['version'] for item in self._versions[pipe_hash].values()]
+        for pipe_hash in self._versions['versions']:
+            versions_flat += [item['version'] for item in self._versions['versions'][pipe_hash].values()]
         versions = sorted(versions_flat)
         return versions[-1]
 
