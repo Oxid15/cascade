@@ -1,10 +1,27 @@
+"""
+Copyright 2022 Ilia Moiseev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
 import os
 import glob
 import json
-from typing import List, Any, Literal, Dict
+from typing import List, Any, Dict
+
 from deepdiff import DeepDiff
 
-from ..base import MetaFromFile, JSONEncoder, MetaHandler
+from ..base import MetaFromFile, JSONEncoder, MetaHandler, supported_meta_formats
 from ..meta import Server, MetaViewer
 
 
@@ -71,14 +88,9 @@ class DatasetVersionDiffReader(DiffReader):
 
 
 class DiffViewer(Server):
-    def __init__(self, path: str, type: Literal['repo', 'version']) -> None:
+    def __init__(self, path: str) -> None:
         self._path = path
-        if type == 'repo':
-            self._diff_reader = RepoDiffReader()
-        elif type == 'version':
-            self._diff_reader = DatasetVersionDiffReader()
-        else:
-            raise ValueError(f'{type} is not repo or version')
+        self._diff_reader = self._get_reader(path)
 
         self._style = {
             'color': '#084c61',
@@ -92,6 +104,32 @@ class DiffViewer(Server):
             'base0B': '#084c61',  # values text
             'base0D': '#C92C6D',  # keys text
         }
+
+    def _get_reader(self, path: str) -> DiffReader:
+        '''
+        Determines the type of DiffReader and returns it
+        '''
+        if os.path.isdir(path):
+            return RepoDiffReader()
+        else:
+            _, ext = os.path.splitext(path)
+            if ext not in supported_meta_formats:
+                raise ValueError(
+                    f'{path} file extension is not in supported'
+                    f' meta formats: {supported_meta_formats}'
+                )
+
+            meta = MetaHandler().read(path)
+            if 'type' not in meta:
+                raise ValueError(
+                    f'Meta in file {path} has no `type` in its keys!'
+                    'It may be that you are using DiffViewer on old '
+                    'type of history logs before 0.10.0.'
+                )
+
+            if meta['type'] == 'version_history':
+                return DatasetVersionDiffReader()
+
 
     def _layout(self):
         try:
