@@ -67,14 +67,6 @@ class VersionAssigner(Modifier):
     something random or run-dependent like for example memory
     address of an object or time of creation, then the version will
     bump on every run.
-
-    Important
-    ---------
-    In current implementation counts only highest-level pipeline changes.
-    For example if final part of a pipeline is Concatenator will only
-    count it and not the structure of a pipelines before.
-    It is only applied to the major version changes and may be fixed in
-    following versions.
     """
     def __init__(self, dataset: Dataset[T], path: str, verbose: bool = False,
                  *args: Any, **kwargs: Any) -> None:
