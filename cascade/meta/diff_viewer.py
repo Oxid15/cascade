@@ -61,13 +61,13 @@ class DatasetVersionDiffReader(DiffReader):
     def read_objects(self, path: str) -> Dict[str, MetaFromFile]:
         self._check_path(path)
 
-        versions = MetaHandler().read(path)
+        versions = MetaHandler().read(path)['versions']
 
         version_dict = {}
         for pipe_key in versions:
             for meta_key in versions[pipe_key]:
                 version_dict.update({versions[pipe_key][meta_key]['version']: versions[pipe_key][meta_key]})
-        return version_dict
+        return {key: version_dict[key] for key in sorted(version_dict.keys())}
 
 
 class DiffViewer(Server):
