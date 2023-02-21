@@ -20,7 +20,16 @@ from .meta_handler import MetaHandler
 
 
 class HistoryLogger:
+    """
+    An interface to log meta into history files
+    """
     def __init__(self, filepath: str) -> None:
+        """
+        Parameters
+        ----------
+        filepath: str
+            Path to the history log file
+        """
         self._mh = MetaHandler()
         self._log_file = filepath
 
@@ -46,6 +55,14 @@ class HistoryLogger:
             }
 
     def log(self, obj: Any) -> None:
+        """
+        Logs the state of the object
+
+        Parameters
+        ----------
+        obj: Any
+            Meta data of the object
+        """
         self._log['history'].append(obj)
 
         try:

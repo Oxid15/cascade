@@ -17,7 +17,7 @@ limitations under the License.
 import os
 import glob
 import json
-from typing import List, Any, Dict, Union
+from typing import Any, Dict
 
 from deepdiff import DeepDiff
 
@@ -103,16 +103,30 @@ class HistoryDiffReader(DiffReader):
 
 
 class DiffViewer(Server):
+    '''
+    The dash-based server to view meta-data
+    and compare different snapshots using deep diff.
+
+    It can work with ModelRepo's, ModelLine's, files
+    that store version logs and history of entities
+    such as data registration logs.
+    '''
     def __init__(
         self,
         path: str
     ) -> None:
+        '''
+        Parameters
+        ----------
+        path: str
+            Path to the object which states to view
+        '''
         self._path = path
-        self._diff_reader = self._get_reader(path)
+        self._diff_reader = self._get_reader(self._path)
 
         if type(self._diff_reader) == RepoDiffReader:
             self._default_depth = 2
-            self._default_diff_depth = 1
+            self._default_diff_depth = 2
         elif type(self._diff_reader) == DatasetVersionDiffReader:
             self._default_depth = 9
             self._default_diff_depth = 8
@@ -167,7 +181,6 @@ class DiffViewer(Server):
                 'No reader found for this type of file. '
                 'Available types are: for Repo or Line, for DatasetVersion logs or for History log.'
             )
-
 
     def _layout(self):
         try:
@@ -232,6 +245,14 @@ class DiffViewer(Server):
                 return diff
 
     def serve(self, **kwargs: Any) -> None:
+        '''
+        Runs dash server
+
+        Parameters
+        ----------
+        **kwargs
+            Arguments for run_server for example port
+        '''
         try:
             import dash
         except ModuleNotFoundError:
