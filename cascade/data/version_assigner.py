@@ -17,6 +17,8 @@ limitations under the License.
 import os
 from hashlib import md5
 from typing import Any, Tuple
+import pendulum
+
 from . import Dataset, Modifier, T
 from ..base import MetaHandler, supported_meta_formats, PipeMeta
 from ..meta import skeleton
@@ -67,14 +69,6 @@ class VersionAssigner(Modifier):
     something random or run-dependent like for example memory
     address of an object or time of creation, then the version will
     bump on every run.
-
-    Important
-    ---------
-    In current implementation counts only highest-level pipeline changes.
-    For example if final part of a pipeline is Concatenator will only
-    count it and not the structure of a pipelines before.
-    It is only applied to the major version changes and may be fixed in
-    following versions.
     """
     def __init__(self, dataset: Dataset[T], path: str, verbose: bool = False,
                  *args: Any, **kwargs: Any) -> None:
@@ -90,7 +84,10 @@ class VersionAssigner(Modifier):
         super().__init__(dataset, *args, **kwargs)
         self._mh = MetaHandler()
         self._assign_path(path)
-        self._versions = {}
+        self._versions = {
+            'versions': {},
+            'type': 'version_history'
+        }
 
         # get meta for info about pipeline
         meta = self._dataset.get_meta()
@@ -106,42 +103,42 @@ class VersionAssigner(Modifier):
         if os.path.exists(self._root):
             self._versions = self._mh.read(self._root)
 
-            if pipe_hash in self._versions:
-                if meta_hash in self._versions[pipe_hash]:
-                    self.version = self._versions[pipe_hash][meta_hash]['version']
+            if pipe_hash in self._versions['versions']:
+                if meta_hash in self._versions['versions'][pipe_hash]:
+                    self.version = self._versions['versions'][pipe_hash][meta_hash]['version']
                 else:
                     last_ver = self._get_last_version_from_pipe(pipe_hash)
                     major, minor = self._split_ver(last_ver)
                     minor += 1
                     self.version = self._join_ver(major, minor)
-                    self._versions[pipe_hash][meta_hash] = {
+                    self._versions['versions'][pipe_hash][meta_hash] = {
                         'version': self.version,
                         'meta': meta,
                         'pipeline': pipeline,
-                        'type': 'version_history'
+                        'updated_at': str(pendulum.now(tz='UTC'))
                     }
             else:
                 last_ver = self._get_last_version()
                 major, minor = self._split_ver(last_ver)
                 major += 1
                 self.version = self._join_ver(major, minor)
-                self._versions[pipe_hash] = {}
-                self._versions[pipe_hash][meta_hash] = {
+                self._versions['versions'][pipe_hash] = {}
+                self._versions['versions'][pipe_hash][meta_hash] = {
                     'version': self.version,
                     'meta': meta,
                     'pipeline': pipeline,
-                    'type': 'version_history'
+                    'updated_at': str(pendulum.now(tz='UTC'))
                 }
 
             self._mh.write(self._root, self._versions)
         else:
             self.version = '0.0'
-            self._versions[pipe_hash] = {}
-            self._versions[pipe_hash][meta_hash] = {
+            self._versions['versions'][pipe_hash] = {}
+            self._versions['versions'][pipe_hash][meta_hash] = {
                 'version': self.version,
                 'meta': meta,
                 'pipeline': pipeline,
-                'type': 'version_history'
+                'updated_at': str(pendulum.now(tz='UTC'))
             }
             self._mh.write(self._root, self._versions)
 
@@ -164,14 +161,14 @@ class VersionAssigner(Modifier):
         return f'{major}.{minor}'
 
     def _get_last_version_from_pipe(self, pipe_hash: str) -> str:
-        versions = [item['version'] for item in self._versions[pipe_hash].values()]
+        versions = [item['version'] for item in self._versions['versions'][pipe_hash].values()]
         versions = sorted(versions)
         return versions[-1]
 
     def _get_last_version(self) -> str:
         versions_flat = []
-        for pipe_hash in self._versions:
-            versions_flat += [item['version'] for item in self._versions[pipe_hash].values()]
+        for pipe_hash in self._versions['versions']:
+            versions_flat += [item['version'] for item in self._versions['versions'][pipe_hash].values()]
         versions = sorted(versions_flat)
         return versions[-1]
 
