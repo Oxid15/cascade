@@ -17,7 +17,7 @@ limitations under the License.
 import os
 import glob
 import json
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Union
 
 from deepdiff import DeepDiff
 
@@ -26,12 +26,15 @@ from ..meta import Server, MetaViewer
 
 
 class DiffReader:
-    def read_objects(self, path: str) -> List[MetaFromFile]:
+    def _check_path(self, path: str) -> None:
+        pass
+
+    def read_objects(self, path: str) -> Dict[str, Any]:
         raise NotImplementedError()
 
 
 class RepoDiffReader(DiffReader):
-    def _check_path(self, path):
+    def _check_path(self, path: str) -> None:
         if not os.path.isdir(path):
             raise ValueError(f'Path `{path}` is not a directory')
 
@@ -75,7 +78,7 @@ class DatasetVersionDiffReader(DiffReader):
     def _check_path(self, path):
         pass
 
-    def read_objects(self, path: str) -> Dict[str, MetaFromFile]:
+    def read_objects(self, path: str) -> Dict[str, Any]:
         self._check_path(path)
 
         versions = MetaHandler().read(path)['versions']
@@ -87,10 +90,37 @@ class DatasetVersionDiffReader(DiffReader):
         return {key: version_dict[key] for key in sorted(version_dict.keys())}
 
 
+class HistoryDiffReader(DiffReader):
+    def _check_path(self, path: str) -> None:
+        pass
+
+    def read_objects(self, path: str) -> Dict[str, Any]:
+        self._check_path(path)
+
+        history = MetaHandler().read(path)['history']
+
+        return {item['updated_at']: item for item in history}
+
+
 class DiffViewer(Server):
-    def __init__(self, path: str) -> None:
+    def __init__(
+        self,
+        path: str
+    ) -> None:
         self._path = path
         self._diff_reader = self._get_reader(path)
+
+        if type(self._diff_reader) == RepoDiffReader:
+            self._default_depth = 2
+            self._default_diff_depth = 1
+        elif type(self._diff_reader) == DatasetVersionDiffReader:
+            self._default_depth = 9
+            self._default_diff_depth = 8
+        elif type(self._diff_reader) == HistoryDiffReader:
+            self._default_depth = 2
+            self._default_diff_depth = 1
+        else:
+            raise RuntimeError('Got the reader of illegal type from internal method')
 
         self._style = {
             'color': '#084c61',
@@ -130,6 +160,14 @@ class DiffViewer(Server):
             if meta['type'] == 'version_history':
                 return DatasetVersionDiffReader()
 
+            if meta['type'] == 'history':
+                return HistoryDiffReader()
+
+            raise ValueError(
+                'No reader found for this type of file. '
+                'Available types are: for Repo or Line, for DatasetVersion logs or for History log.'
+            )
+
 
     def _layout(self):
         try:
@@ -160,7 +198,8 @@ class DiffViewer(Server):
             DashRenderjson(
                 id='diff-json',
                 data={'Nothing': 'Nothing is selected!'},
-                theme=self._json_theme
+                theme=self._json_theme,
+                max_depth=self._default_diff_depth
             ),
             html.Div(id='display', children=[
                 html.Details(children=[
@@ -168,7 +207,8 @@ class DiffViewer(Server):
                     DashRenderjson(
                         id=f'data_{i}',
                         data={'': self._objs[name]},
-                        theme=self._json_theme
+                        theme=self._json_theme,
+                        max_depth=self._default_depth
                     )
                 ]) for i, name in enumerate(self._objs)
             ])
