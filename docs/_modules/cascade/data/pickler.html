@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cascade.data.pickler - cascade 0.9.0 documentation</title>
+    <link rel="shortcut icon" href="../../../100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>cascade.data.pickler - cascade 0.10.0-alpha documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.10.0-alpha documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -149,7 +149,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../../../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../../logo.png" alt="Logo"/>
@@ -157,7 +157,7 @@
   
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -237,14 +237,14 @@
 
 
 <div class="viewcode-block" id="Pickler"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.Pickler">[docs]</a><span class="k">class</span> <span class="nc">Pickler</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Pickles input dataset or unpickles one</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Pickler.__init__"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.Pickler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                  <span class="n">dataset</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dataset</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads pickled dataset or dumps one depending on parameters passed:</span>
 
 <span class="sd">        1. If only path is passed - loads dataset from path provided if path exists</span>
@@ -281,7 +281,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Pickler.ds"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.Pickler.ds">[docs]</a>    <span class="k">def</span> <span class="nf">ds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns pickled dataset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span></div></div>
@@ -305,9 +305,7 @@
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -320,9 +318,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../../" id="documentation_options" src="../../../documentation_options.js"></script>
-    <script src="../../../jquery.js"></script>
-    <script src="../../../underscore.js"></script>
-    <script src="../../../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../doctools.js"></script>
     <script src="../../../sphinx_highlight.js"></script>
     <script src="../../../scripts/furo.js"></script>

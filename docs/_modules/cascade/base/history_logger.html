@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <link rel="shortcut icon" href="../../../100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>cascade.data.apply_modifier - cascade 0.10.0 documentation</title>
+        <title>cascade.base.history_logger - cascade 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
@@ -213,7 +213,7 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for cascade.data.apply_modifier</h1><div class="highlight"><pre>
+          <h1>Source code for cascade.base.history_logger</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Copyright 2022 Ilia Moiseev</span>
 
@@ -230,41 +230,61 @@
 <span class="sd">limitations under the License.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Modifier</span><span class="p">,</span> <span class="n">T</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">.meta_handler</span> <span class="kn">import</span> <span class="n">MetaHandler</span>
 
 
-<div class="viewcode-block" id="ApplyModifier"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.ApplyModifier">[docs]</a><span class="k">class</span> <span class="nc">ApplyModifier</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
+<div class="viewcode-block" id="HistoryLogger"><a class="viewcode-back" href="../../../cascade.base.html#cascade.base.HistoryLogger">[docs]</a><span class="k">class</span> <span class="nc">HistoryLogger</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Modifier that maps a function to given dataset&#39;s items in a lazy way.</span>
+<span class="sd">    An interface to log meta into history files</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="ApplyModifier.__init__"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.ApplyModifier.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span>
-                 <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="HistoryLogger.__init__"><a class="viewcode-back" href="../../../cascade.base.html#cascade.base.HistoryLogger.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        dataset: Dataset</span>
-<span class="sd">            A dataset to modify</span>
-<span class="sd">        func: Callable</span>
-<span class="sd">            A function to be applied to every item of a dataset -</span>
-<span class="sd">            each `__getitem__` would call `func` on an item obtained from a previous dataset</span>
-
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; from cascade import data as cdd</span>
-<span class="sd">        &gt;&gt;&gt; ds = cdd.Wrapper([0, 1, 2, 3, 4])</span>
-<span class="sd">        &gt;&gt;&gt; ds = cdd.ApplyModifier(ds, lambda x: x ** 2)</span>
-
-<span class="sd">        Now function will only be applied when items are retrieved</span>
-
-<span class="sd">        &gt;&gt;&gt; assert [item for item in ds] == [0, 1, 4, 9, 16]</span>
+<span class="sd">        filepath: str</span>
+<span class="sd">            Path to the history log file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_func</span> <span class="o">=</span> <span class="n">func</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span> <span class="o">=</span> <span class="n">MetaHandler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span> <span class="o">=</span> <span class="n">filepath</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_func</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;Failed to initialize history logger due to unexpected object&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39; format - log is the instance of list and not dict.&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39; Check your </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="si">}</span><span class="s1"> file&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s1">&#39;history&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s1">&#39;Failed to initialize history logger due to unexpected object&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39; format - &quot;history&quot; key is missing.&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39; Check your </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="si">}</span><span class="s1"> file&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to read log file: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="w"> </span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;history&#39;</span>
+            <span class="p">}</span></div>
+
+<div class="viewcode-block" id="HistoryLogger.log"><a class="viewcode-back" href="../../../cascade.base.html#cascade.base.HistoryLogger.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Logs the state of the object</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj: Any</span>
+<span class="sd">            Meta data of the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">[</span><span class="s1">&#39;history&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to write log file: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div></div>
 </pre></div>
         </article>
       </div>

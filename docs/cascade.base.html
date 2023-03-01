@@ -2,11 +2,11 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="cascade.data" href="cascade.data.html" /><link rel="prev" title="Cascade modules reference" href="modules.html" />
 
-    <link rel="shortcut icon" href="100x100_logo.png"/><!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>cascade.base - cascade 0.9.0 documentation</title>
+    <link rel="shortcut icon" href="100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>cascade.base - cascade 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="pygments.css" />
     <link rel="stylesheet" type="text/css" href="styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
+      <a href="index.html"><div class="brand">cascade 0.10.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -150,7 +150,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="logo.png" alt="Logo"/>
@@ -219,15 +219,15 @@
 <h1>cascade.base<a class="headerlink" href="#cascade-base" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.base.Traceable">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.base.</span></span><span class="sig-name descname"><span class="pre">Traceable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.base.</span></span><span class="sig-name descname"><span class="pre">Traceable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable" title="Permalink to this definition">#</a></dt>
 <dd><p>Base class for everything that has metadata in cascade.
 Handles the logic of getting and updating internal meta prefix.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.base.Traceable.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.__init__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.__init__" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>meta_prefix</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The dictionary that is used to update object’s meta in <cite>get_meta</cite> call.
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>meta_prefix</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>Any</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The dictionary that is used to update object’s meta in <cite>get_meta</cite> call.
 Due to the call of update can overwrite default values.
 If str - prefix assumed to be path and loaded using MetaHandler.</p>
 </dd>
@@ -240,23 +240,25 @@ If str - prefix assumed to be path and loaded using MetaHandler.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.base.Traceable.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.get_meta" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.get_meta" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>meta</strong> – A list where last element is this object’s metadata.
-Meta can be anything that is worth to document about
-the object and its properties.
-Meta is list to allow the formation of pipelines.</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p><strong>meta</strong> – A list where first element is this object’s metadata.
+All other elements represent the other stages of pipeline if present.</p>
+<p>Meta can be anything that is worth to document about
+the object and its properties.</p>
+<p>Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.</p>
+</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>List[Dict]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>PipeMeta</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.base.Traceable.update_meta">
-<span class="sig-name descname"><span class="pre">update_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable.update_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.update_meta" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">update_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/base/traceable.html#Traceable.update_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.update_meta" title="Permalink to this definition">#</a></dt>
 <dd><p>Updates <cite>_meta_prefix</cite>, which then updates
 dataset’s meta when <cite>get_meta()</cite> is called</p>
 </dd></dl>
@@ -276,7 +278,7 @@ dataset’s meta when <cite>get_meta()</cite> is called</p>
 <dt class="sig sig-object py" id="cascade.base.MetaHandler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.base.</span></span><span class="sig-name descname"><span class="pre">MetaHandler</span></span><a class="reference internal" href="_modules/cascade/base/meta_handler.html#MetaHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.MetaHandler" title="Permalink to this definition">#</a></dt>
 <dd><p>Encapsulates the logic of reading and writing metadata to disk.</p>
-<p>Supported read-write formats are <cite>json</cite> and <cite>yml</cite>. Other formats
+<p>Supported read-write formats are <cite>.json</cite> and <cite>.yml</cite> or <cite>.yaml</cite>. Other formats
 are supported as read-only. For example one can read meta from txt or md file.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.base</span> <span class="kn">import</span> <span class="n">MetaHandler</span>
@@ -289,19 +291,19 @@ are supported as read-only. For example one can read meta from txt or md file.</
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.base.MetaHandler.read">
-<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/base/meta_handler.html#MetaHandler.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.MetaHandler.read" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/cascade/base/meta_handler.html#MetaHandler.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.MetaHandler.read" title="Permalink to this definition">#</a></dt>
 <dd><p>Reads object from path.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the object.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>obj</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Union[List[Any], Dict[Any, Any]]</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MetaFromFile</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>IOError</strong> – when decoding errors occur</p>
 </dd>
 </dl>
@@ -312,7 +314,7 @@ are supported as read-only. For example one can read meta from txt or md file.</
 <span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/base/meta_handler.html#MetaHandler.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.MetaHandler.write" title="Permalink to this definition">#</a></dt>
 <dd><p>Writes object to path.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> (<em>str</em>) – Path where to write object with name and extension</p></li>
 <li><p><strong>obj</strong> – An object to be serialized and saved</p></li>
@@ -320,8 +322,44 @@ are supported as read-only. For example one can read meta from txt or md file.</
 and file already exists will silently return without saving.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>IOError</strong> – when encoding errors occur</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="cascade.base.HistoryLogger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.base.</span></span><span class="sig-name descname"><span class="pre">HistoryLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cascade/base/history_logger.html#HistoryLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.HistoryLogger" title="Permalink to this definition">#</a></dt>
+<dd><p>An interface to log meta into history files</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.base.HistoryLogger.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/base/history_logger.html#HistoryLogger.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.HistoryLogger.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – Path to the history log file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.base.HistoryLogger.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/cascade/base/history_logger.html#HistoryLogger.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.HistoryLogger.log" title="Permalink to this definition">#</a></dt>
+<dd><p>Logs the state of the object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>Any</em>) – Meta data of the object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -406,6 +444,11 @@ and file already exists will silently return without saving.</p></li>
 <li><a class="reference internal" href="#cascade.base.MetaHandler.write"><code class="docutils literal notranslate"><span class="pre">MetaHandler.write()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#cascade.base.HistoryLogger"><code class="docutils literal notranslate"><span class="pre">HistoryLogger</span></code></a><ul>
+<li><a class="reference internal" href="#cascade.base.HistoryLogger.__init__"><code class="docutils literal notranslate"><span class="pre">HistoryLogger.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#cascade.base.HistoryLogger.log"><code class="docutils literal notranslate"><span class="pre">HistoryLogger.log()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -418,9 +461,6 @@ and file already exists will silently return without saving.</p></li>
     </aside>
   </div>
 </div><script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
-    <script src="jquery.js"></script>
-    <script src="underscore.js"></script>
-    <script src="_sphinx_javascript_frameworks_compat.js"></script>
     <script src="doctools.js"></script>
     <script src="sphinx_highlight.js"></script>
     <script src="scripts/furo.js"></script>

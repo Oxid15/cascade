@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <link rel="shortcut icon" href="../../../100x100_logo.png"/><meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>cascade.data.version_assigner - cascade 0.9.0 documentation</title>
+    <link rel="shortcut icon" href="../../../100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>cascade.data.version_assigner - cascade 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">cascade 0.10.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -149,7 +149,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../../../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../../../logo.png" alt="Logo"/>
@@ -157,7 +157,7 @@
   
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -232,14 +232,16 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">pendulum</span>
+
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Modifier</span><span class="p">,</span> <span class="n">T</span>
-<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">MetaHandler</span><span class="p">,</span> <span class="n">supported_meta_formats</span>
+<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">MetaHandler</span><span class="p">,</span> <span class="n">supported_meta_formats</span><span class="p">,</span> <span class="n">PipeMeta</span>
 <span class="kn">from</span> <span class="nn">..meta</span> <span class="kn">import</span> <span class="n">skeleton</span>
 
 
 <div class="viewcode-block" id="VersionAssigner"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.VersionAssigner">[docs]</a><span class="k">class</span> <span class="nc">VersionAssigner</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for automatic data versioning using metadata.</span>
 <span class="sd">    `VersionAssigner` is a simple `Modifier` that tracks changes in metadata and assigns</span>
 <span class="sd">    dataset a version considering changes in meta.</span>
@@ -283,18 +285,10 @@
 <span class="sd">    something random or run-dependent like for example memory</span>
 <span class="sd">    address of an object or time of creation, then the version will</span>
 <span class="sd">    bump on every run.</span>
-
-<span class="sd">    Important</span>
-<span class="sd">    ---------</span>
-<span class="sd">    In current implementation counts only highest-level pipeline changes.</span>
-<span class="sd">    For example if final part of a pipeline is Concatenator will only</span>
-<span class="sd">    count it and not the structure of a pipelines before.</span>
-<span class="sd">    It is only applied to the major version changes and may be fixed in</span>
-<span class="sd">    following versions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="VersionAssigner.__init__"><a class="viewcode-back" href="../../../cascade.data.html#cascade.data.VersionAssigner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">            dataset: Dataset</span>
@@ -306,7 +300,10 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span> <span class="o">=</span> <span class="n">MetaHandler</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assign_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;versions&#39;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;version_history&#39;</span>
+        <span class="p">}</span>
 
         <span class="c1"># get meta for info about pipeline</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -322,39 +319,42 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">pipe_hash</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">meta_hash</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pipe_hash</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">meta_hash</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">last_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_last_version_from_pipe</span><span class="p">(</span><span class="n">pipe_hash</span><span class="p">)</span>
                     <span class="n">major</span><span class="p">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_ver</span><span class="p">(</span><span class="n">last_ver</span><span class="p">)</span>
                     <span class="n">minor</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_join_ver</span><span class="p">(</span><span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                         <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
                         <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="n">meta</span><span class="p">,</span>
-                        <span class="s1">&#39;pipeline&#39;</span><span class="p">:</span> <span class="n">pipeline</span>
+                        <span class="s1">&#39;pipeline&#39;</span><span class="p">:</span> <span class="n">pipeline</span><span class="p">,</span>
+                        <span class="s1">&#39;updated_at&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">))</span>
                     <span class="p">}</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">last_ver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_last_version</span><span class="p">()</span>
                 <span class="n">major</span><span class="p">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_ver</span><span class="p">(</span><span class="n">last_ver</span><span class="p">)</span>
                 <span class="n">major</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_join_ver</span><span class="p">(</span><span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                     <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
                     <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="n">meta</span><span class="p">,</span>
-                    <span class="s1">&#39;pipeline&#39;</span><span class="p">:</span> <span class="n">pipeline</span>
+                    <span class="s1">&#39;pipeline&#39;</span><span class="p">:</span> <span class="n">pipeline</span><span class="p">,</span>
+                    <span class="s1">&#39;updated_at&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">))</span>
                 <span class="p">}</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">][</span><span class="n">meta_hash</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
                 <span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="n">meta</span><span class="p">,</span>
-                <span class="s1">&#39;pipeline&#39;</span><span class="p">:</span> <span class="n">pipeline</span>
+                <span class="s1">&#39;pipeline&#39;</span><span class="p">:</span> <span class="n">pipeline</span><span class="p">,</span>
+                <span class="s1">&#39;updated_at&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">))</span>
             <span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">)</span>
 
@@ -377,18 +377,18 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">major</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">minor</span><span class="si">}</span><span class="s1">&#39;</span>
 
     <span class="k">def</span> <span class="nf">_get_last_version_from_pipe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pipe_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="n">versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
         <span class="n">versions</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">versions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_get_last_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">versions_flat</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">pipe_hash</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">:</span>
-            <span class="n">versions_flat</span> <span class="o">+=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="n">pipe_hash</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+        <span class="k">for</span> <span class="n">pipe_hash</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">]:</span>
+            <span class="n">versions_flat</span> <span class="o">+=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_versions</span><span class="p">[</span><span class="s1">&#39;versions&#39;</span><span class="p">][</span><span class="n">pipe_hash</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
         <span class="n">versions</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">versions_flat</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">versions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PipeMeta</span><span class="p">:</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
         <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
         <span class="k">return</span> <span class="n">meta</span></div>
@@ -412,9 +412,7 @@
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -427,9 +425,6 @@
     </aside>
   </div>
 </div><script data-url_root="../../../" id="documentation_options" src="../../../documentation_options.js"></script>
-    <script src="../../../jquery.js"></script>
-    <script src="../../../underscore.js"></script>
-    <script src="../../../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../doctools.js"></script>
     <script src="../../../sphinx_highlight.js"></script>
     <script src="../../../scripts/furo.js"></script>

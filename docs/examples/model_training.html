@@ -2,11 +2,11 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Model training using trainers" href="model_training_trainers.html" /><link rel="prev" title="Pipeline building" href="pipeline_building.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>Model training - cascade 0.9.0 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>Model training - cascade 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.10.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -150,7 +150,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../logo.png" alt="Logo"/>
@@ -325,10 +325,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -430,6 +431,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -438,10 +440,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -453,12 +459,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -473,8 +482,16 @@ div.rendered_html tbody tr:hover {
 <div class="line">Previous part is the pipeline building and is taken without comments.</div>
 <div class="line">For more detailed description of it see Pipeline building example.</div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="ch">#!pip3 install torchvision</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cascade.data</span> <span class="k">as</span> <span class="nn">cdd</span>
@@ -491,17 +508,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torchvision\io\image.py:13: UserWarning: Failed to load image Python extension: [WinError 127] The specified procedure could not be found
-  warn(f&#34;Failed to load image Python extension: {e}&#34;)
-</pre></div></div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cascade</span>
@@ -510,19 +518,19 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;0.9.0&#39;
+&#39;0.10.0&#39;
 </pre></div></div>
 </div>
 <section id="Defining-data-pipeline">
 <h2>Defining data pipeline<a class="headerlink" href="#Defining-data-pipeline" title="Permalink to this heading">#</a></h2>
 <p>This part will be without comments</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MNIST_ROOT</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
@@ -532,7 +540,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NoiseModifier</span><span class="p">(</span><span class="n">cdd</span><span class="o">.</span><span class="n">Modifier</span><span class="p">):</span>
@@ -570,7 +578,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -578,7 +586,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -597,7 +605,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 <p>Before training we need to define our model. We need regular nn.Module and Cascade’s wrapper around it.</p>
 <p>Module defined without any specific changes in the original pytorch code, except now it accepts <code class="docutils literal notranslate"><span class="pre">*args</span></code> and <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> in <code class="docutils literal notranslate"><span class="pre">__init__</span></code></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SimpleNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -621,7 +629,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 <p>Next Cascade’s wrapper is defined. The most of the interaction with pytorch modules are already implemented in <code class="docutils literal notranslate"><span class="pre">cascade.utils.TorchModel</span></code> so we need to only define how to train and evaluate the model.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Classifier</span><span class="p">(</span><span class="n">cdu</span><span class="o">.</span><span class="n">TorchModel</span><span class="p">):</span>
@@ -674,7 +682,7 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 <div class="line">Additionally we pass keyword arguments that are connected to training. It is done to add them to the model’s metadata.</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">2</span>
@@ -702,30 +710,30 @@ c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\torc
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3324
-Epochs [0/2], Step[500/6000], Loss: 0.4537
-Epochs [0/2], Step[1000/6000], Loss: 0.6350
-Epochs [0/2], Step[1500/6000], Loss: 0.3816
-Epochs [0/2], Step[2000/6000], Loss: 0.3799
-Epochs [0/2], Step[2500/6000], Loss: 0.6853
-Epochs [0/2], Step[3000/6000], Loss: 0.3109
-Epochs [0/2], Step[3500/6000], Loss: 0.1745
-Epochs [0/2], Step[4000/6000], Loss: 0.5948
-Epochs [0/2], Step[4500/6000], Loss: 1.0893
-Epochs [0/2], Step[5000/6000], Loss: 0.4245
-Epochs [0/2], Step[5500/6000], Loss: 0.2368
-Epochs [1/2], Step[0/6000], Loss: 0.0109
-Epochs [1/2], Step[500/6000], Loss: 0.2031
-Epochs [1/2], Step[1000/6000], Loss: 0.0063
-Epochs [1/2], Step[1500/6000], Loss: 0.0358
-Epochs [1/2], Step[2000/6000], Loss: 0.9956
-Epochs [1/2], Step[2500/6000], Loss: 0.0183
-Epochs [1/2], Step[3000/6000], Loss: 0.0079
-Epochs [1/2], Step[3500/6000], Loss: 0.0503
-Epochs [1/2], Step[4000/6000], Loss: 0.1367
-Epochs [1/2], Step[4500/6000], Loss: 0.0920
-Epochs [1/2], Step[5000/6000], Loss: 0.0046
-Epochs [1/2], Step[5500/6000], Loss: 0.0358
+Epochs [0/2], Step[0/6000], Loss: 2.3479
+Epochs [0/2], Step[500/6000], Loss: 0.3280
+Epochs [0/2], Step[1000/6000], Loss: 0.0672
+Epochs [0/2], Step[1500/6000], Loss: 0.2628
+Epochs [0/2], Step[2000/6000], Loss: 0.0326
+Epochs [0/2], Step[2500/6000], Loss: 0.0659
+Epochs [0/2], Step[3000/6000], Loss: 0.4636
+Epochs [0/2], Step[3500/6000], Loss: 0.5428
+Epochs [0/2], Step[4000/6000], Loss: 0.0201
+Epochs [0/2], Step[4500/6000], Loss: 0.6801
+Epochs [0/2], Step[5000/6000], Loss: 0.2029
+Epochs [0/2], Step[5500/6000], Loss: 0.3559
+Epochs [1/2], Step[0/6000], Loss: 0.0673
+Epochs [1/2], Step[500/6000], Loss: 0.1033
+Epochs [1/2], Step[1000/6000], Loss: 0.0543
+Epochs [1/2], Step[1500/6000], Loss: 0.0273
+Epochs [1/2], Step[2000/6000], Loss: 0.3100
+Epochs [1/2], Step[2500/6000], Loss: 0.1334
+Epochs [1/2], Step[3000/6000], Loss: 0.0302
+Epochs [1/2], Step[3500/6000], Loss: 0.6858
+Epochs [1/2], Step[4000/6000], Loss: 0.0373
+Epochs [1/2], Step[4500/6000], Loss: 0.0214
+Epochs [1/2], Step[5000/6000], Loss: 0.6246
+Epochs [1/2], Step[5500/6000], Loss: 0.0711
 </pre></div></div>
 </div>
 </section>
@@ -736,7 +744,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0358
 <div class="line"><code class="docutils literal notranslate"><span class="pre">f(true,</span> <span class="pre">pred)</span> <span class="pre">-&gt;</span> <span class="pre">metric</span></code></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_dl</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;acc&#39;</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">})</span>
@@ -748,7 +756,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0358
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:07&lt;00:00, 132.87it/s]
+100%|██████████| 1000/1000 [00:01&lt;00:00, 915.46it/s]
 </pre></div></div>
 </div>
 </section>
@@ -756,7 +764,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0358
 <h2>Check the metadata<a class="headerlink" href="#Check-the-metadata" title="Permalink to this heading">#</a></h2>
 <p>Let’s examine metadata obtained from the model after training.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -764,14 +772,14 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0358
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x000002147DB6BC70&gt;&#39;,
-  &#39;created_at&#39;: DateTime(2022, 12, 16, 15, 53, 37, 227100, tzinfo=Timezone(&#39;UTC&#39;)),
-  &#39;metrics&#39;: {&#39;acc&#39;: 0.9701},
+[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x7f8ea2b61b10&gt;&#39;,
+  &#39;created_at&#39;: DateTime(2023, 3, 1, 21, 17, 42, 489049, tzinfo=Timezone(&#39;UTC&#39;)),
+  &#39;metrics&#39;: {&#39;acc&#39;: 0.968},
   &#39;params&#39;: {&#39;input_size&#39;: 784,
    &#39;hidden_size&#39;: 100,
    &#39;num_classes&#39;: 10,
@@ -794,7 +802,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0358
 <div class="line">It is called <code class="docutils literal notranslate"><span class="pre">ModelRepo</span></code>.</div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span> <span class="o">=</span> <span class="n">cdm</span><span class="o">.</span><span class="n">ModelRepo</span><span class="p">(</span><span class="s1">&#39;./repo&#39;</span><span class="p">)</span>
@@ -803,7 +811,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0358
 </div>
 <p>This is the repository of models. It manages a series of experiments over a sets of models of different architectures called model lines.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s1">&#39;linear_nn&#39;</span><span class="p">,</span> <span class="n">Classifier</span><span class="p">)</span>
@@ -811,7 +819,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0358
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -825,7 +833,7 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 <div class="line">Let’s update model’s meta with the field for train data.</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">update_meta</span><span class="p">({</span><span class="s1">&#39;train_data&#39;</span><span class="p">:</span> <span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()})</span>
@@ -834,12 +842,12 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x000002147DB6BC70&gt;&#39;,
+[{&#39;name&#39;: &#39;&lt;__main__.Classifier object at 0x7f8ea2b61b10&gt;&#39;,
   &#39;train_data&#39;: [{&#39;name&#39;: &#39;__main__.NoiseModifier&#39;,
     &#39;type&#39;: &#39;dataset&#39;,
     &#39;len&#39;: 60000},
@@ -848,8 +856,8 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
     &#39;type&#39;: &#39;dataset&#39;,
     &#39;len&#39;: 60000,
     &#39;obj_type&#39;: &#34;&lt;class &#39;torchvision.datasets.mnist.MNIST&#39;&gt;&#34;}],
-  &#39;created_at&#39;: DateTime(2022, 12, 16, 15, 53, 37, 227100, tzinfo=Timezone(&#39;UTC&#39;)),
-  &#39;metrics&#39;: {&#39;acc&#39;: 0.9701},
+  &#39;created_at&#39;: DateTime(2023, 3, 1, 21, 17, 42, 489049, tzinfo=Timezone(&#39;UTC&#39;)),
+  &#39;metrics&#39;: {&#39;acc&#39;: 0.968},
   &#39;params&#39;: {&#39;input_size&#39;: 784,
    &#39;hidden_size&#39;: 100,
    &#39;num_classes&#39;: 10,
@@ -862,7 +870,7 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </div>
 <p>Saving the model is as easy as this:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">repo</span><span class="p">[</span><span class="s1">&#39;linear_nn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
@@ -880,7 +888,7 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 <h2>Peeking inside repo<a class="headerlink" href="#Peeking-inside-repo" title="Permalink to this heading">#</a></h2>
 <p>To see model’s metrics and parameters we don’t need to manually go to the folders mentioned or print large metadata in console. Cascade has tools for conveniently show metrics. One of them is <code class="docutils literal notranslate"><span class="pre">MetricViewer</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="o">=</span> <span class="n">cde</span><span class="o">.</span><span class="n">MetricViewer</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
@@ -894,7 +902,7 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -932,11 +940,11 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
   <tbody>
     <tr>
       <th>0</th>
-      <td>./repo\linear_nn</td>
+      <td>./repo/linear_nn</td>
       <td>0</td>
-      <td>2022-07-31T17:02:50.341904+00:00</td>
-      <td>3 minutes after</td>
-      <td>0.9655</td>
+      <td>2023-03-01 21:17:42.489049+00:00</td>
+      <td>21 seconds after</td>
+      <td>0.968</td>
       <td>784</td>
       <td>100</td>
       <td>10</td>
@@ -1014,7 +1022,7 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 <div class="line">We define the set of parameters for our experiments and run them in loop every time saving the results.</div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="p">[</span>
@@ -1026,7 +1034,7 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
@@ -1045,30 +1053,30 @@ ModelLine of 4 models of &lt;class &#39;__main__.Classifier&#39;&gt;
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.4243
-Epochs [0/2], Step[500/6000], Loss: 0.6931
-Epochs [0/2], Step[1000/6000], Loss: 0.4575
-Epochs [0/2], Step[1500/6000], Loss: 0.2364
-Epochs [0/2], Step[2000/6000], Loss: 0.2601
-Epochs [0/2], Step[2500/6000], Loss: 0.4240
-Epochs [0/2], Step[3000/6000], Loss: 0.0305
-Epochs [0/2], Step[3500/6000], Loss: 0.2040
-Epochs [0/2], Step[4000/6000], Loss: 0.2186
-Epochs [0/2], Step[4500/6000], Loss: 0.1473
-Epochs [0/2], Step[5000/6000], Loss: 0.0370
-Epochs [0/2], Step[5500/6000], Loss: 0.1006
-Epochs [1/2], Step[0/6000], Loss: 0.9437
-Epochs [1/2], Step[500/6000], Loss: 0.0433
-Epochs [1/2], Step[1000/6000], Loss: 0.5475
-Epochs [1/2], Step[1500/6000], Loss: 0.0952
-Epochs [1/2], Step[2000/6000], Loss: 0.1831
-Epochs [1/2], Step[2500/6000], Loss: 0.0332
-Epochs [1/2], Step[3000/6000], Loss: 0.7178
-Epochs [1/2], Step[3500/6000], Loss: 0.3301
-Epochs [1/2], Step[4000/6000], Loss: 0.1956
-Epochs [1/2], Step[4500/6000], Loss: 0.1746
-Epochs [1/2], Step[5000/6000], Loss: 0.0644
-Epochs [1/2], Step[5500/6000], Loss: 0.8114
+Epochs [0/2], Step[0/6000], Loss: 2.4030
+Epochs [0/2], Step[500/6000], Loss: 0.9184
+Epochs [0/2], Step[1000/6000], Loss: 0.8407
+Epochs [0/2], Step[1500/6000], Loss: 0.1700
+Epochs [0/2], Step[2000/6000], Loss: 1.1738
+Epochs [0/2], Step[2500/6000], Loss: 0.3082
+Epochs [0/2], Step[3000/6000], Loss: 0.6153
+Epochs [0/2], Step[3500/6000], Loss: 0.3778
+Epochs [0/2], Step[4000/6000], Loss: 0.3321
+Epochs [0/2], Step[4500/6000], Loss: 0.3514
+Epochs [0/2], Step[5000/6000], Loss: 0.3847
+Epochs [0/2], Step[5500/6000], Loss: 0.2998
+Epochs [1/2], Step[0/6000], Loss: 0.3461
+Epochs [1/2], Step[500/6000], Loss: 0.6578
+Epochs [1/2], Step[1000/6000], Loss: 0.1339
+Epochs [1/2], Step[1500/6000], Loss: 0.1148
+Epochs [1/2], Step[2000/6000], Loss: 0.5948
+Epochs [1/2], Step[2500/6000], Loss: 0.4984
+Epochs [1/2], Step[3000/6000], Loss: 0.1020
+Epochs [1/2], Step[3500/6000], Loss: 0.2406
+Epochs [1/2], Step[4000/6000], Loss: 0.4933
+Epochs [1/2], Step[4500/6000], Loss: 0.8582
+Epochs [1/2], Step[5000/6000], Loss: 0.0959
+Epochs [1/2], Step[5500/6000], Loss: 1.0599
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1076,7 +1084,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.8114
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:04&lt;00:00, 233.41it/s]
+100%|██████████| 1000/1000 [00:01&lt;00:00, 934.60it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1084,30 +1092,30 @@ Epochs [1/2], Step[5500/6000], Loss: 0.8114
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3714
-Epochs [0/2], Step[500/6000], Loss: 0.3902
-Epochs [0/2], Step[1000/6000], Loss: 0.3610
-Epochs [0/2], Step[1500/6000], Loss: 0.0881
-Epochs [0/2], Step[2000/6000], Loss: 0.2079
-Epochs [0/2], Step[2500/6000], Loss: 0.0915
-Epochs [0/2], Step[3000/6000], Loss: 0.3039
-Epochs [0/2], Step[3500/6000], Loss: 0.0453
-Epochs [0/2], Step[4000/6000], Loss: 0.1484
-Epochs [0/2], Step[4500/6000], Loss: 0.0287
-Epochs [0/2], Step[5000/6000], Loss: 0.6291
-Epochs [0/2], Step[5500/6000], Loss: 0.6607
-Epochs [1/2], Step[0/6000], Loss: 0.1351
-Epochs [1/2], Step[500/6000], Loss: 0.3669
-Epochs [1/2], Step[1000/6000], Loss: 0.4014
-Epochs [1/2], Step[1500/6000], Loss: 0.5391
-Epochs [1/2], Step[2000/6000], Loss: 0.0285
-Epochs [1/2], Step[2500/6000], Loss: 0.0870
-Epochs [1/2], Step[3000/6000], Loss: 0.0924
-Epochs [1/2], Step[3500/6000], Loss: 0.0664
-Epochs [1/2], Step[4000/6000], Loss: 0.4767
-Epochs [1/2], Step[4500/6000], Loss: 0.1683
-Epochs [1/2], Step[5000/6000], Loss: 0.1860
-Epochs [1/2], Step[5500/6000], Loss: 0.0065
+Epochs [0/2], Step[0/6000], Loss: 2.3334
+Epochs [0/2], Step[500/6000], Loss: 0.4136
+Epochs [0/2], Step[1000/6000], Loss: 0.4991
+Epochs [0/2], Step[1500/6000], Loss: 0.7323
+Epochs [0/2], Step[2000/6000], Loss: 0.3884
+Epochs [0/2], Step[2500/6000], Loss: 0.0964
+Epochs [0/2], Step[3000/6000], Loss: 0.3577
+Epochs [0/2], Step[3500/6000], Loss: 0.0276
+Epochs [0/2], Step[4000/6000], Loss: 0.1680
+Epochs [0/2], Step[4500/6000], Loss: 0.0507
+Epochs [0/2], Step[5000/6000], Loss: 0.6252
+Epochs [0/2], Step[5500/6000], Loss: 0.0607
+Epochs [1/2], Step[0/6000], Loss: 0.1702
+Epochs [1/2], Step[500/6000], Loss: 0.0736
+Epochs [1/2], Step[1000/6000], Loss: 0.2258
+Epochs [1/2], Step[1500/6000], Loss: 0.1754
+Epochs [1/2], Step[2000/6000], Loss: 0.2483
+Epochs [1/2], Step[2500/6000], Loss: 0.3203
+Epochs [1/2], Step[3000/6000], Loss: 0.0468
+Epochs [1/2], Step[3500/6000], Loss: 0.3267
+Epochs [1/2], Step[4000/6000], Loss: 0.1223
+Epochs [1/2], Step[4500/6000], Loss: 0.5855
+Epochs [1/2], Step[5000/6000], Loss: 0.1427
+Epochs [1/2], Step[5500/6000], Loss: 0.0212
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1115,7 +1123,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0065
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:08&lt;00:00, 123.94it/s]
+100%|██████████| 1000/1000 [00:01&lt;00:00, 915.94it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1123,30 +1131,30 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0065
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Epochs [0/2], Step[0/6000], Loss: 2.3175
-Epochs [0/2], Step[500/6000], Loss: 0.5927
-Epochs [0/2], Step[1000/6000], Loss: 0.0942
-Epochs [0/2], Step[1500/6000], Loss: 0.0177
-Epochs [0/2], Step[2000/6000], Loss: 0.0794
-Epochs [0/2], Step[2500/6000], Loss: 0.1792
-Epochs [0/2], Step[3000/6000], Loss: 0.2164
-Epochs [0/2], Step[3500/6000], Loss: 0.1236
-Epochs [0/2], Step[4000/6000], Loss: 0.3817
-Epochs [0/2], Step[4500/6000], Loss: 0.1111
-Epochs [0/2], Step[5000/6000], Loss: 0.6958
-Epochs [0/2], Step[5500/6000], Loss: 0.1257
-Epochs [1/2], Step[0/6000], Loss: 0.2814
-Epochs [1/2], Step[500/6000], Loss: 0.1610
-Epochs [1/2], Step[1000/6000], Loss: 0.0195
-Epochs [1/2], Step[1500/6000], Loss: 0.3667
-Epochs [1/2], Step[2000/6000], Loss: 0.0791
-Epochs [1/2], Step[2500/6000], Loss: 0.2039
-Epochs [1/2], Step[3000/6000], Loss: 0.1522
-Epochs [1/2], Step[3500/6000], Loss: 0.0170
-Epochs [1/2], Step[4000/6000], Loss: 0.1872
-Epochs [1/2], Step[4500/6000], Loss: 0.0046
-Epochs [1/2], Step[5000/6000], Loss: 0.0341
-Epochs [1/2], Step[5500/6000], Loss: 0.0549
+Epochs [0/2], Step[0/6000], Loss: 2.2656
+Epochs [0/2], Step[500/6000], Loss: 0.4871
+Epochs [0/2], Step[1000/6000], Loss: 0.3666
+Epochs [0/2], Step[1500/6000], Loss: 0.5389
+Epochs [0/2], Step[2000/6000], Loss: 0.2955
+Epochs [0/2], Step[2500/6000], Loss: 0.1862
+Epochs [0/2], Step[3000/6000], Loss: 0.0579
+Epochs [0/2], Step[3500/6000], Loss: 0.3820
+Epochs [0/2], Step[4000/6000], Loss: 0.2179
+Epochs [0/2], Step[4500/6000], Loss: 0.0945
+Epochs [0/2], Step[5000/6000], Loss: 0.0139
+Epochs [0/2], Step[5500/6000], Loss: 0.0529
+Epochs [1/2], Step[0/6000], Loss: 0.0069
+Epochs [1/2], Step[500/6000], Loss: 0.2136
+Epochs [1/2], Step[1000/6000], Loss: 0.0488
+Epochs [1/2], Step[1500/6000], Loss: 0.2331
+Epochs [1/2], Step[2000/6000], Loss: 0.0735
+Epochs [1/2], Step[2500/6000], Loss: 0.0037
+Epochs [1/2], Step[3000/6000], Loss: 0.0182
+Epochs [1/2], Step[3500/6000], Loss: 0.0023
+Epochs [1/2], Step[4000/6000], Loss: 0.0255
+Epochs [1/2], Step[4500/6000], Loss: 0.0008
+Epochs [1/2], Step[5000/6000], Loss: 0.0103
+Epochs [1/2], Step[5500/6000], Loss: 0.0469
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1154,7 +1162,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1000/1000 [00:04&lt;00:00, 234.79it/s]
+100%|██████████| 1000/1000 [00:01&lt;00:00, 885.51it/s]
 </pre></div></div>
 </div>
 </section>
@@ -1162,7 +1170,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
 <h2>Results<a class="headerlink" href="#Results" title="Permalink to this heading">#</a></h2>
 <p>We can see the results of our experiments - all of them are present in the table and we can choose the best option.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="o">=</span> <span class="n">cde</span><span class="o">.</span><span class="n">MetricViewer</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
@@ -1172,7 +1180,7 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1210,11 +1218,11 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
   <tbody>
     <tr>
       <th>0</th>
-      <td>./repo\linear_nn</td>
+      <td>./repo/linear_nn</td>
       <td>0</td>
-      <td>2022-07-31T17:02:50.341904+00:00</td>
-      <td>3 minutes after</td>
-      <td>0.9655</td>
+      <td>2023-03-01 21:17:42.489049+00:00</td>
+      <td>21 seconds after</td>
+      <td>0.9680</td>
       <td>784</td>
       <td>100</td>
       <td>10</td>
@@ -1224,11 +1232,11 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
     </tr>
     <tr>
       <th>1</th>
-      <td>./repo\linear_nn</td>
+      <td>./repo/linear_nn</td>
       <td>1</td>
-      <td>2022-07-31T17:06:06.581812+00:00</td>
-      <td>2 minutes after</td>
-      <td>0.9206</td>
+      <td>2023-03-01 21:18:03.893347+00:00</td>
+      <td>18 seconds after</td>
+      <td>0.9062</td>
       <td>784</td>
       <td>10</td>
       <td>10</td>
@@ -1238,11 +1246,11 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
     </tr>
     <tr>
       <th>2</th>
-      <td>./repo\linear_nn</td>
+      <td>./repo/linear_nn</td>
       <td>2</td>
-      <td>2022-07-31T17:08:52.144148+00:00</td>
-      <td>3 minutes after</td>
-      <td>0.9569</td>
+      <td>2023-03-01 21:18:22.524721+00:00</td>
+      <td>20 seconds after</td>
+      <td>0.9546</td>
       <td>784</td>
       <td>50</td>
       <td>10</td>
@@ -1252,39 +1260,11 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
     </tr>
     <tr>
       <th>3</th>
-      <td>./repo\linear_nn</td>
+      <td>./repo/linear_nn</td>
       <td>3</td>
-      <td>2022-07-31T17:12:00.739810+00:00</td>
-      <td>3 minutes after</td>
-      <td>0.9644</td>
-      <td>784</td>
-      <td>100</td>
-      <td>10</td>
-      <td>2</td>
-      <td>0.001</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>./repo\linear_nn</td>
-      <td>4</td>
-      <td>2022-12-16T15:53:37.227100+00:00</td>
-      <td>2 minutes after</td>
-      <td>0.9701</td>
-      <td>784</td>
-      <td>100</td>
-      <td>10</td>
-      <td>2</td>
-      <td>0.001</td>
-      <td>10</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>./repo\linear_nn</td>
-      <td>5</td>
-      <td>2022-12-16T15:55:38.018522+00:00</td>
-      <td>1 minute after</td>
-      <td>0.9187</td>
+      <td>2023-03-01 21:18:42.572824+00:00</td>
+      <td>20 seconds after</td>
+      <td>0.9688</td>
       <td>784</td>
       <td>10</td>
       <td>10</td>
@@ -1414,9 +1394,6 @@ Epochs [1/2], Step[5500/6000], Loss: 0.0549
     </aside>
   </div>
 </div><script data-url_root="../" id="documentation_options" src="../documentation_options.js"></script>
-    <script src="../jquery.js"></script>
-    <script src="../underscore.js"></script>
-    <script src="../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../doctools.js"></script>
     <script src="../sphinx_highlight.js"></script>
     <script src="../scripts/furo.js"></script>

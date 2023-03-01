@@ -2,11 +2,11 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Pipeline building" href="pipeline_building.html" /><link rel="prev" title="Quickstart" href="../quickstart.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>Dataset Zoo - cascade 0.9.0 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>Dataset Zoo - cascade 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.10.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -150,7 +150,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../logo.png" alt="Logo"/>
@@ -325,10 +325,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -430,6 +431,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -438,10 +440,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -453,12 +459,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -482,7 +491,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.9.0
+0.10.0
 </pre></div></div>
 </div>
 <section id="Wrappers">
@@ -879,7 +888,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 10/10 [00:10&lt;00:00,  1.01s/it]
+100%|██████████| 10/10 [00:10&lt;00:00,  1.00s/it]
 </pre></div></div>
 </div>
 <p>Now we waited all loading process and cached everything. Since that all data is in memory and the loading is no problem. But what if we have a script that should be executed every time and then caching has no sense?</p>
@@ -903,7 +912,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 10/10 [00:10&lt;00:00,  1.01s/it]
+100%|██████████| 10/10 [00:10&lt;00:00,  1.00s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -924,7 +933,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 10/10 [00:00&lt;00:00, 26613.60it/s]
+100%|██████████| 10/10 [00:00&lt;00:00, 169125.16it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1129,7 +1138,7 @@ Dataset version: 0.1
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4/4 [00:00&lt;?, ?it/s]
+100%|██████████| 4/4 [00:00&lt;00:00, 131072.00it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1178,7 +1187,7 @@ Original length was 4 and new is 6
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4/4 [00:00&lt;00:00, 4020.42it/s]
+100%|██████████| 4/4 [00:00&lt;00:00, 52103.16it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1239,7 +1248,7 @@ Original length was 4 and new is 3
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4/4 [00:00&lt;?, ?it/s]
+100%|██████████| 4/4 [00:00&lt;00:00, 101067.57it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1558,8 +1567,17 @@ Original length was 4 and new is 7
  array([1, 0, 2, 5]))
 </pre></div></div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install matplotlib if required</span>
+<span class="c1"># !pip3 install matplotlib</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
@@ -1569,19 +1587,19 @@ Original length was 4 and new is 7
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x175e2cbcf70&gt;]
+[&lt;matplotlib.lines.Line2D at 0x7fd7a83ffbe0&gt;]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_dataset_zoo_62_1.png" src="../_images/examples_dataset_zoo_62_1.png" />
+<img alt="../_images/examples_dataset_zoo_63_1.png" src="../_images/examples_dataset_zoo_63_1.png" />
 </div>
 </div>
 <p>You can always get the data alone using <code class="docutils literal notranslate"><span class="pre">to_numpy()</span></code></p>
@@ -1605,7 +1623,7 @@ array([1, 0, 2, 5])
 <p>Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in <code class="docutils literal notranslate"><span class="pre">Modifier</span></code>.</p>
 <p>First - dataset is initialized with nan-value. Nan-value is <code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> because Interpolate uses pandas under-the-hood.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1621,7 +1639,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1664,7 +1682,7 @@ array([1, 0, 2, 5])
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">Interpolate</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">limit_direction</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span> <span class="c1"># These arguments are defaults</span>
@@ -1672,7 +1690,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1716,7 +1734,7 @@ array([1, 0, 2, 5])
 </div>
 <p>Averaging over some time-window is also a frequent task in work with time-series. Here in <code class="docutils literal notranslate"><span class="pre">Average</span></code> you can set the time grain and a quantity to average.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pendulum</span>
@@ -1732,7 +1750,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">Average</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;days&#39;</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
@@ -1740,7 +1758,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1779,7 +1797,7 @@ array([1, 0, 2, 5])
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">Align</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">[</span><span class="n">pendulum</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">)])</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
@@ -1787,7 +1805,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1827,7 +1845,7 @@ array([1, 0, 2, 5])
 <p><a class="reference external" href="../cascade.utils.html#cascade.utils.TableDataset">TableDataset documentation</a></p>
 <p>Frequently the work with tables is done. To track them efficiently using Cascade this wrapper was created.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -1838,7 +1856,7 @@ array([1, 0, 2, 5])
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1852,7 +1870,7 @@ cascade.utils.table_dataset.TableDataset
 </div>
 <p>The most important thing here is the extensive metadata that this wrapper holds.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -1860,7 +1878,7 @@ cascade.utils.table_dataset.TableDataset
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1889,7 +1907,7 @@ cascade.utils.table_dataset.TableDataset
 </div>
 <p>Filtering is common when using tables. This modifier accepts binary mask and records new stage in the pipeline’s metadata.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">TableFilter</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
@@ -1905,7 +1923,7 @@ Length before filtering: 3, length after: 2
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -1913,7 +1931,7 @@ Length before filtering: 3, length after: 2
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2057,9 +2075,6 @@ Length before filtering: 3, length after: 2
     </aside>
   </div>
 </div><script data-url_root="../" id="documentation_options" src="../documentation_options.js"></script>
-    <script src="../jquery.js"></script>
-    <script src="../underscore.js"></script>
-    <script src="../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../doctools.js"></script>
     <script src="../sphinx_highlight.js"></script>
     <script src="../scripts/furo.js"></script>

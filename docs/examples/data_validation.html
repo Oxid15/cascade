@@ -2,11 +2,11 @@
 <html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Concepts" href="../concepts.html" /><link rel="prev" title="Model training using trainers" href="model_training_trainers.html" />
 
-    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>Data validation - cascade 0.9.0 documentation</title>
+    <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
+        <title>Data validation - cascade 0.10.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.9.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.10.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -150,7 +150,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><a class="sidebar-brand centered" href="../index.html">
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   <div class="sidebar-logo-container">
     <img class="sidebar-logo" src="../logo.png" alt="Logo"/>
@@ -325,10 +325,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -430,6 +431,7 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -438,10 +440,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -453,12 +459,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -496,7 +505,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;0.9.0&#39;
+&#39;0.10.0&#39;
 </pre></div></div>
 </div>
 <section id="Validation-in-general">
@@ -784,7 +793,7 @@ cascade.meta.validator.AggregateValidator
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Saved as ./.cascade\a3d6bd5de325ec32c9ce499b153b43bb.yml!
+OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -873,28 +882,28 @@ cascade.meta.meta_validator.MetaValidator
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 33</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X44sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cde.PredicateValidator(digits_ds, lambda x: x[1] != 0)
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[15], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> cde.PredicateValidator(digits_ds, lambda x: x[1] != 0)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\meta\validator.py:98</span>, in <span class="ansi-cyan-fg">PredicateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
-<span class="ansi-green-fg">     96</span> bad_counts = [len(bad_items[i]) for i in range(len(self._func))]
-<span class="ansi-green-fg">     97</span> if any(bad_counts):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 98</span>     self._raise(bad_items)
-<span class="ansi-green-fg">     99</span> else:
-<span class="ansi-green-fg">    100</span>     print(&#39;OK!&#39;)
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.py:98</span>, in <span class="ansi-cyan-fg">PredicateValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, func, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     96</span> bad_counts = [len(bad_items[i]) for i in range(len(self._func))]
+<span class="ansi-green-intense-fg ansi-bold">     97</span> if any(bad_counts):
+<span class="ansi-green-fg">---&gt; 98</span>     self._raise(bad_items)
+<span class="ansi-green-intense-fg ansi-bold">     99</span> else:
+<span class="ansi-green-intense-fg ansi-bold">    100</span>     print(&#39;OK!&#39;)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\meta\validator.py:107</span>, in <span class="ansi-cyan-fg">PredicateValidator._raise</span><span class="ansi-blue-intense-fg ansi-bold">(self, items)</span>
-<span class="ansi-green-fg">    105</span> failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]
-<span class="ansi-green-fg">    106</span> failed_items = &#39;\n&#39;.join([f&#39;{i}: {prettify_items(items[i])}&#39; for i in items])
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 107</span> raise DataValidationException(
-<span class="ansi-green-fg">    108</span>     f&#39;Checks in positions {failed_checks} failed\n&#39;
-<span class="ansi-green-fg">    109</span>     f&#39;Items failed by check:\n&#39;
-<span class="ansi-green-fg">    110</span>     f&#39;{failed_items}&#39;
-<span class="ansi-green-fg">    111</span> )
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.py:107</span>, in <span class="ansi-cyan-fg">PredicateValidator._raise</span><span class="ansi-blue-fg">(self, items)</span>
+<span class="ansi-green-intense-fg ansi-bold">    105</span> failed_checks = [i for i in range(len(bad_counts)) if bad_counts[i]]
+<span class="ansi-green-intense-fg ansi-bold">    106</span> failed_items = &#39;\n&#39;.join([f&#39;{i}: {prettify_items(items[i])}&#39; for i in items])
+<span class="ansi-green-fg">--&gt; 107</span> raise DataValidationException(
+<span class="ansi-green-intense-fg ansi-bold">    108</span>     f&#39;Checks in positions {failed_checks} failed\n&#39;
+<span class="ansi-green-intense-fg ansi-bold">    109</span>     f&#39;Items failed by check:\n&#39;
+<span class="ansi-green-intense-fg ansi-bold">    110</span>     f&#39;{failed_items}&#39;
+<span class="ansi-green-intense-fg ansi-bold">    111</span> )
 
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: Checks in positions [0] failed
+<span class="ansi-red-fg">DataValidationException</span>: Checks in positions [0] failed
 Items failed by check:
 0: 0, 10, 20, 30, 36 ... 1739, 1745, 1746, 1768, 1793
 </pre></div></div>
@@ -913,19 +922,19 @@ Items failed by check:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 35</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X46sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cde.AggregateValidator(digits_ds, lambda ds: len(ds) &lt; 1000)
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[16], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> cde.AggregateValidator(digits_ds, lambda ds: len(ds) &lt; 1000)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\meta\validator.py:67</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
-<span class="ansi-green-fg">     64</span>         bad_results.append(i)
-<span class="ansi-green-fg">     66</span> if len(bad_results):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 67</span>     raise DataValidationException(f&#39;Checks in positions {bad_results} failed&#39;)
-<span class="ansi-green-fg">     68</span> else:
-<span class="ansi-green-fg">     69</span>     print(&#39;OK!&#39;)
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.py:67</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, func, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     64</span>         bad_results.append(i)
+<span class="ansi-green-intense-fg ansi-bold">     66</span> if len(bad_results):
+<span class="ansi-green-fg">---&gt; 67</span>     raise DataValidationException(f&#39;Checks in positions {bad_results} failed&#39;)
+<span class="ansi-green-intense-fg ansi-bold">     68</span> else:
+<span class="ansi-green-intense-fg ansi-bold">     69</span>     print(&#39;OK!&#39;)
 
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: Checks in positions [0] failed
+<span class="ansi-red-fg">DataValidationException</span>: Checks in positions [0] failed
 </pre></div></div>
 </div>
 <p>The exceptions provide info about what got wrong.</p>
@@ -972,26 +981,26 @@ Value of root[0][&#39;len&#39;] changed from 1797 to 1000.
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 39</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#X53sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cde.MetaValidator(digits_ds, meta_fmt=&#39;.yml&#39;)
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[18], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> cde.MetaValidator(digits_ds, meta_fmt=&#39;.yml&#39;)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\meta\meta_validator.py:105</span>, in <span class="ansi-cyan-fg">MetaValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, root, meta_fmt)</span>
-<span class="ansi-green-fg">    103</span> if os.path.exists(name):
-<span class="ansi-green-fg">    104</span>     self.base_meta = self._load(name)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 105</span>     self._check(meta)
-<span class="ansi-green-fg">    106</span> else:
-<span class="ansi-green-fg">    107</span>     self._save(meta, name)
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/meta_validator.py:105</span>, in <span class="ansi-cyan-fg">MetaValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, root, meta_fmt)</span>
+<span class="ansi-green-intense-fg ansi-bold">    103</span> if os.path.exists(name):
+<span class="ansi-green-intense-fg ansi-bold">    104</span>     self.base_meta = self._load(name)
+<span class="ansi-green-fg">--&gt; 105</span>     self._check(meta)
+<span class="ansi-green-intense-fg ansi-bold">    106</span> else:
+<span class="ansi-green-intense-fg ansi-bold">    107</span>     self._save(meta, name)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\meta\meta_validator.py:120</span>, in <span class="ansi-cyan-fg">MetaValidator._check</span><span class="ansi-blue-intense-fg ansi-bold">(self, query_meta)</span>
-<span class="ansi-green-fg">    118</span> if len(diff):
-<span class="ansi-green-fg">    119</span>     print(diff.pretty())
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 120</span>     raise DataValidationException(diff)
-<span class="ansi-green-fg">    121</span> else:
-<span class="ansi-green-fg">    122</span>     print(&#39;OK!&#39;)
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/meta_validator.py:120</span>, in <span class="ansi-cyan-fg">MetaValidator._check</span><span class="ansi-blue-fg">(self, query_meta)</span>
+<span class="ansi-green-intense-fg ansi-bold">    118</span> if len(diff):
+<span class="ansi-green-intense-fg ansi-bold">    119</span>     print(diff.pretty())
+<span class="ansi-green-fg">--&gt; 120</span>     raise DataValidationException(diff)
+<span class="ansi-green-intense-fg ansi-bold">    121</span> else:
+<span class="ansi-green-intense-fg ansi-bold">    122</span>     print(&#39;OK!&#39;)
 
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: {&#39;values_changed&#39;: {&#34;root[0][&#39;len&#39;]&#34;: {&#39;new_value&#39;: 1000, &#39;old_value&#39;: 1797}}}
+<span class="ansi-red-fg">DataValidationException</span>: {&#39;values_changed&#39;: {&#34;root[0][&#39;len&#39;]&#34;: {&#39;new_value&#39;: 1000, &#39;old_value&#39;: 1797}}}
 </pre></div></div>
 </div>
 <p>It provides detailed description of what values changed and how.</p>
@@ -1163,107 +1172,107 @@ cascade.utils.pa_schema_validator.PaSchemaValidator
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">SchemaError</span>                               Traceback (most recent call last)
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\utils\pa_schema_validator.py:54</span>, in <span class="ansi-cyan-fg">PaSchemaValidator._validate</span><span class="ansi-blue-intense-fg ansi-bold">(ds, schema)</span>
-<span class="ansi-green-fg">     53</span>         schema = paio.from_yaml(schema)
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 54</span>     schema.validate(ds._table)
-<span class="ansi-green-fg">     55</span> except SchemaError as e:
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">SchemaError</span>                               Traceback (most recent call last)
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/utils/pa_schema_validator.py:54</span>, in <span class="ansi-cyan-fg">PaSchemaValidator._validate</span><span class="ansi-blue-fg">(ds, schema)</span>
+<span class="ansi-green-intense-fg ansi-bold">     53</span>         schema = paio.from_yaml(schema)
+<span class="ansi-green-fg">---&gt; 54</span>     schema.validate(ds._table)
+<span class="ansi-green-intense-fg ansi-bold">     55</span> except SchemaError as e:
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:515</span>, in <span class="ansi-cyan-fg">DataFrameSchema.validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">    513</span>     return check_obj.pandera.add_schema(self)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 515</span> return self._validate(
-<span class="ansi-green-fg">    516</span>     check_obj=check_obj,
-<span class="ansi-green-fg">    517</span>     head=head,
-<span class="ansi-green-fg">    518</span>     tail=tail,
-<span class="ansi-green-fg">    519</span>     sample=sample,
-<span class="ansi-green-fg">    520</span>     random_state=random_state,
-<span class="ansi-green-fg">    521</span>     lazy=lazy,
-<span class="ansi-green-fg">    522</span>     inplace=inplace,
-<span class="ansi-green-fg">    523</span> )
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:534</span>, in <span class="ansi-cyan-fg">DataFrameSchema.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+<span class="ansi-green-intense-fg ansi-bold">    532</span>     return check_obj.pandera.add_schema(self)
+<span class="ansi-green-fg">--&gt; 534</span> return self._validate(
+<span class="ansi-green-intense-fg ansi-bold">    535</span>     check_obj=check_obj,
+<span class="ansi-green-intense-fg ansi-bold">    536</span>     head=head,
+<span class="ansi-green-intense-fg ansi-bold">    537</span>     tail=tail,
+<span class="ansi-green-intense-fg ansi-bold">    538</span>     sample=sample,
+<span class="ansi-green-intense-fg ansi-bold">    539</span>     random_state=random_state,
+<span class="ansi-green-intense-fg ansi-bold">    540</span>     lazy=lazy,
+<span class="ansi-green-intense-fg ansi-bold">    541</span>     inplace=inplace,
+<span class="ansi-green-intense-fg ansi-bold">    542</span> )
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:712</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">    711</span> except errors.SchemaError as err:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 712</span>     error_handler.collect_error(&#34;schema_component_check&#34;, err)
-<span class="ansi-green-fg">    713</span> except errors.SchemaErrors as err:
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:732</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+<span class="ansi-green-intense-fg ansi-bold">    731</span> except errors.SchemaError as err:
+<span class="ansi-green-fg">--&gt; 732</span>     error_handler.collect_error(&#34;schema_component_check&#34;, err)
+<span class="ansi-green-intense-fg ansi-bold">    733</span> except errors.SchemaErrors as err:
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-intense-fg ansi-bold">(self, reason_code, schema_error, original_exc)</span>
-<span class="ansi-green-fg">     31</span> if not self._lazy:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 32</span>     raise schema_error from original_exc
-<span class="ansi-green-fg">     34</span> # delete data of validated object from SchemaError object to prevent
-<span class="ansi-green-fg">     35</span> # storing copies of the validated DataFrame/Series for every
-<span class="ansi-green-fg">     36</span> # SchemaError collected.
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-fg">(self, reason_code, schema_error, original_exc)</span>
+<span class="ansi-green-intense-fg ansi-bold">     31</span> if not self._lazy:
+<span class="ansi-green-fg">---&gt; 32</span>     raise schema_error from original_exc
+<span class="ansi-green-intense-fg ansi-bold">     34</span> # delete data of validated object from SchemaError object to prevent
+<span class="ansi-green-intense-fg ansi-bold">     35</span> # storing copies of the validated DataFrame/Series for every
+<span class="ansi-green-intense-fg ansi-bold">     36</span> # SchemaError collected.
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:704</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">    703</span> try:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 704</span>     result = schema_component(
-<span class="ansi-green-fg">    705</span>         df_to_validate,
-<span class="ansi-green-fg">    706</span>         lazy=lazy,
-<span class="ansi-green-fg">    707</span>         # don&#39;t make a copy of the data
-<span class="ansi-green-fg">    708</span>         inplace=True,
-<span class="ansi-green-fg">    709</span>     )
-<span class="ansi-green-fg">    710</span>     check_results.append(check_utils.is_table(result))
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:724</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+<span class="ansi-green-intense-fg ansi-bold">    723</span> try:
+<span class="ansi-green-fg">--&gt; 724</span>     result = schema_component(
+<span class="ansi-green-intense-fg ansi-bold">    725</span>         df_to_validate,
+<span class="ansi-green-intense-fg ansi-bold">    726</span>         lazy=lazy,
+<span class="ansi-green-intense-fg ansi-bold">    727</span>         # don&#39;t make a copy of the data
+<span class="ansi-green-intense-fg ansi-bold">    728</span>         inplace=True,
+<span class="ansi-green-intense-fg ansi-bold">    729</span>     )
+<span class="ansi-green-intense-fg ansi-bold">    730</span>     check_results.append(check_utils.is_table(result))
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:2046</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.__call__</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">   2045</span> &#34;&#34;&#34;Alias for ``validate`` method.&#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 2046</span> return self.validate(
-<span class="ansi-green-fg">   2047</span>     check_obj, head, tail, sample, random_state, lazy, inplace
-<span class="ansi-green-fg">   2048</span> )
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2138</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.__call__</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2137</span> &#34;&#34;&#34;Alias for ``validate`` method.&#34;&#34;&#34;
+<span class="ansi-green-fg">-&gt; 2138</span> return self.validate(
+<span class="ansi-green-intense-fg ansi-bold">   2139</span>     check_obj, head, tail, sample, random_state, lazy, inplace
+<span class="ansi-green-intense-fg ansi-bold">   2140</span> )
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schema_components.py:214</span>, in <span class="ansi-cyan-fg">Column.validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">    213</span>     else:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 214</span>         validate_column(check_obj, column_name)
-<span class="ansi-green-fg">    216</span> return check_obj
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schema_components.py:223</span>, in <span class="ansi-cyan-fg">Column.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+<span class="ansi-green-intense-fg ansi-bold">    222</span>     else:
+<span class="ansi-green-fg">--&gt; 223</span>         validate_column(check_obj, column_name)
+<span class="ansi-green-intense-fg ansi-bold">    225</span> return check_obj
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schema_components.py:187</span>, in <span class="ansi-cyan-fg">Column.validate.&lt;locals&gt;.validate_column</span><span class="ansi-blue-intense-fg ansi-bold">(check_obj, column_name)</span>
-<span class="ansi-green-fg">    186</span> def validate_column(check_obj, column_name):
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 187</span>     super(Column, copy(self).set_name(column_name)).validate(
-<span class="ansi-green-fg">    188</span>         check_obj,
-<span class="ansi-green-fg">    189</span>         head,
-<span class="ansi-green-fg">    190</span>         tail,
-<span class="ansi-green-fg">    191</span>         sample,
-<span class="ansi-green-fg">    192</span>         random_state,
-<span class="ansi-green-fg">    193</span>         lazy,
-<span class="ansi-green-fg">    194</span>         inplace=inplace,
-<span class="ansi-green-fg">    195</span>     )
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schema_components.py:196</span>, in <span class="ansi-cyan-fg">Column.validate.&lt;locals&gt;.validate_column</span><span class="ansi-blue-fg">(check_obj, column_name)</span>
+<span class="ansi-green-intense-fg ansi-bold">    195</span> def validate_column(check_obj, column_name):
+<span class="ansi-green-fg">--&gt; 196</span>     super(Column, copy(self).set_name(column_name)).validate(
+<span class="ansi-green-intense-fg ansi-bold">    197</span>         check_obj,
+<span class="ansi-green-intense-fg ansi-bold">    198</span>         head,
+<span class="ansi-green-intense-fg ansi-bold">    199</span>         tail,
+<span class="ansi-green-intense-fg ansi-bold">    200</span>         sample,
+<span class="ansi-green-intense-fg ansi-bold">    201</span>         random_state,
+<span class="ansi-green-intense-fg ansi-bold">    202</span>         lazy,
+<span class="ansi-green-intense-fg ansi-bold">    203</span>         inplace=inplace,
+<span class="ansi-green-intense-fg ansi-bold">    204</span>     )
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:2004</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">   2003</span> except errors.SchemaError as err:
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 2004</span>     error_handler.collect_error(&#34;dataframe_check&#34;, err)
-<span class="ansi-green-fg">   2005</span> except Exception as err:  # pylint: disable=broad-except
-<span class="ansi-green-fg">   2006</span>     # catch other exceptions that may occur when executing the
-<span class="ansi-green-fg">   2007</span>     # Check
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2096</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2095</span> except errors.SchemaError as err:
+<span class="ansi-green-fg">-&gt; 2096</span>     error_handler.collect_error(&#34;dataframe_check&#34;, err)
+<span class="ansi-green-intense-fg ansi-bold">   2097</span> except Exception as err:  # pylint: disable=broad-except
+<span class="ansi-green-intense-fg ansi-bold">   2098</span>     # catch other exceptions that may occur when executing the
+<span class="ansi-green-intense-fg ansi-bold">   2099</span>     # Check
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-intense-fg ansi-bold">(self, reason_code, schema_error, original_exc)</span>
-<span class="ansi-green-fg">     31</span> if not self._lazy:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 32</span>     raise schema_error from original_exc
-<span class="ansi-green-fg">     34</span> # delete data of validated object from SchemaError object to prevent
-<span class="ansi-green-fg">     35</span> # storing copies of the validated DataFrame/Series for every
-<span class="ansi-green-fg">     36</span> # SchemaError collected.
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-fg">(self, reason_code, schema_error, original_exc)</span>
+<span class="ansi-green-intense-fg ansi-bold">     31</span> if not self._lazy:
+<span class="ansi-green-fg">---&gt; 32</span>     raise schema_error from original_exc
+<span class="ansi-green-intense-fg ansi-bold">     34</span> # delete data of validated object from SchemaError object to prevent
+<span class="ansi-green-intense-fg ansi-bold">     35</span> # storing copies of the validated DataFrame/Series for every
+<span class="ansi-green-intense-fg ansi-bold">     36</span> # SchemaError collected.
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:1999</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-intense-fg ansi-bold">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
-<span class="ansi-green-fg">   1997</span> try:
-<span class="ansi-green-fg">   1998</span>     check_results.append(
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 1999</span>         _handle_check_results(
-<span class="ansi-green-fg">   2000</span>             self, check_index, check, check_obj, *check_args
-<span class="ansi-green-fg">   2001</span>         )
-<span class="ansi-green-fg">   2002</span>     )
-<span class="ansi-green-fg">   2003</span> except errors.SchemaError as err:
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2091</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2089</span> try:
+<span class="ansi-green-intense-fg ansi-bold">   2090</span>     check_results.append(
+<span class="ansi-green-fg">-&gt; 2091</span>         _handle_check_results(
+<span class="ansi-green-intense-fg ansi-bold">   2092</span>             self, check_index, check, check_obj, *check_args
+<span class="ansi-green-intense-fg ansi-bold">   2093</span>         )
+<span class="ansi-green-intense-fg ansi-bold">   2094</span>     )
+<span class="ansi-green-intense-fg ansi-bold">   2095</span> except errors.SchemaError as err:
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\илья\AppData\Local\Programs\Python\Python310\lib\site-packages\pandera\schemas.py:2385</span>, in <span class="ansi-cyan-fg">_handle_check_results</span><span class="ansi-blue-intense-fg ansi-bold">(schema, check_index, check, check_obj, *check_args)</span>
-<span class="ansi-green-fg">   2384</span>         return True
-<span class="ansi-green-intense-fg ansi-bold">-&gt; 2385</span>     raise errors.SchemaError(
-<span class="ansi-green-fg">   2386</span>         schema,
-<span class="ansi-green-fg">   2387</span>         check_obj,
-<span class="ansi-green-fg">   2388</span>         error_msg,
-<span class="ansi-green-fg">   2389</span>         failure_cases=failure_cases,
-<span class="ansi-green-fg">   2390</span>         check=check,
-<span class="ansi-green-fg">   2391</span>         check_index=check_index,
-<span class="ansi-green-fg">   2392</span>         check_output=check_result.check_output,
-<span class="ansi-green-fg">   2393</span>     )
-<span class="ansi-green-fg">   2394</span> return check_result.check_passed
+File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2482</span>, in <span class="ansi-cyan-fg">_handle_check_results</span><span class="ansi-blue-fg">(schema, check_index, check, check_obj, *check_args)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2481</span>         return True
+<span class="ansi-green-fg">-&gt; 2482</span>     raise errors.SchemaError(
+<span class="ansi-green-intense-fg ansi-bold">   2483</span>         schema,
+<span class="ansi-green-intense-fg ansi-bold">   2484</span>         check_obj,
+<span class="ansi-green-intense-fg ansi-bold">   2485</span>         error_msg,
+<span class="ansi-green-intense-fg ansi-bold">   2486</span>         failure_cases=failure_cases,
+<span class="ansi-green-intense-fg ansi-bold">   2487</span>         check=check,
+<span class="ansi-green-intense-fg ansi-bold">   2488</span>         check_index=check_index,
+<span class="ansi-green-intense-fg ansi-bold">   2489</span>         check_output=check_result.check_output,
+<span class="ansi-green-intense-fg ansi-bold">   2490</span>     )
+<span class="ansi-green-intense-fg ansi-bold">   2491</span> return check_result.check_passed
 
-<span class="ansi-red-intense-fg ansi-bold">SchemaError</span>: &lt;Schema Column(name=sepal length (cm), type=DataType(float64))&gt; failed element-wise validator 0:
+<span class="ansi-red-fg">SchemaError</span>: &lt;Schema Column(name=sepal length (cm), type=DataType(float64))&gt; failed element-wise validator 0:
 &lt;Check greater_than: greater_than(0)&gt;
 failure cases:
      index  failure_case
@@ -1283,45 +1292,45 @@ failure cases:
 
 During handling of the above exception, another exception occurred:
 
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>                   Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">c:\cascade\cascade\docs\source\examples\data_validation.ipynb Cell 56</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/cascade/cascade/docs/source/examples/data_validation.ipynb#Y106sZmlsZQ%3D%3D?line=0&#39;&gt;1&lt;/a&gt;</span> cdu.PaSchemaValidator(iris_ds, &#39;./iris_schema.yml&#39;)
+<span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[28], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> cdu.PaSchemaValidator(iris_ds, &#39;./iris_schema.yml&#39;)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\utils\pa_schema_validator.py:47</span>, in <span class="ansi-cyan-fg">PaSchemaValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, schema, *args, **kwargs)</span>
-<span class="ansi-green-fg">     32</span> def __init__(self, dataset: TableDataset, schema, *args: Any, **kwargs: Any) -&gt; None:
-<span class="ansi-green-fg">     33</span>     &#34;&#34;&#34;
-<span class="ansi-green-fg">     34</span>     Parameters
-<span class="ansi-green-fg">     35</span>     ----------
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">     45</span>     DataValidationException
-<span class="ansi-green-fg">     46</span>     &#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 47</span>     super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/utils/pa_schema_validator.py:47</span>, in <span class="ansi-cyan-fg">PaSchemaValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, schema, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     32</span> def __init__(self, dataset: TableDataset, schema, *args: Any, **kwargs: Any) -&gt; None:
+<span class="ansi-green-intense-fg ansi-bold">     33</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">     34</span>     Parameters
+<span class="ansi-green-intense-fg ansi-bold">     35</span>     ----------
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">     45</span>     DataValidationException
+<span class="ansi-green-intense-fg ansi-bold">     46</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">---&gt; 47</span>     super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\meta\validator.py:63</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-intense-fg ansi-bold">(self, dataset, func, **kwargs)</span>
-<span class="ansi-green-fg">     61</span> bad_results = []
-<span class="ansi-green-fg">     62</span> for i, func in enumerate(self._func):
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 63</span>     if not func(self._dataset):
-<span class="ansi-green-fg">     64</span>         bad_results.append(i)
-<span class="ansi-green-fg">     66</span> if len(bad_results):
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.py:63</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, func, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     61</span> bad_results = []
+<span class="ansi-green-intense-fg ansi-bold">     62</span> for i, func in enumerate(self._func):
+<span class="ansi-green-fg">---&gt; 63</span>     if not func(self._dataset):
+<span class="ansi-green-intense-fg ansi-bold">     64</span>         bad_results.append(i)
+<span class="ansi-green-intense-fg ansi-bold">     66</span> if len(bad_results):
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\utils\pa_schema_validator.py:47</span>, in <span class="ansi-cyan-fg">PaSchemaValidator.__init__.&lt;locals&gt;.&lt;lambda&gt;</span><span class="ansi-blue-intense-fg ansi-bold">(x)</span>
-<span class="ansi-green-fg">     32</span> def __init__(self, dataset: TableDataset, schema, *args: Any, **kwargs: Any) -&gt; None:
-<span class="ansi-green-fg">     33</span>     &#34;&#34;&#34;
-<span class="ansi-green-fg">     34</span>     Parameters
-<span class="ansi-green-fg">     35</span>     ----------
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">     45</span>     DataValidationException
-<span class="ansi-green-fg">     46</span>     &#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 47</span>     super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/utils/pa_schema_validator.py:47</span>, in <span class="ansi-cyan-fg">PaSchemaValidator.__init__.&lt;locals&gt;.&lt;lambda&gt;</span><span class="ansi-blue-fg">(x)</span>
+<span class="ansi-green-intense-fg ansi-bold">     32</span> def __init__(self, dataset: TableDataset, schema, *args: Any, **kwargs: Any) -&gt; None:
+<span class="ansi-green-intense-fg ansi-bold">     33</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">     34</span>     Parameters
+<span class="ansi-green-intense-fg ansi-bold">     35</span>     ----------
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-intense-fg ansi-bold">     45</span>     DataValidationException
+<span class="ansi-green-intense-fg ansi-bold">     46</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">---&gt; 47</span>     super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
 
-File <span class="ansi-green-intense-fg ansi-bold">C:\cascade\cascade\utils\pa_schema_validator.py:56</span>, in <span class="ansi-cyan-fg">PaSchemaValidator._validate</span><span class="ansi-blue-intense-fg ansi-bold">(ds, schema)</span>
-<span class="ansi-green-fg">     54</span>     schema.validate(ds._table)
-<span class="ansi-green-fg">     55</span> except SchemaError as e:
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 56</span>     raise DataValidationException(e)
-<span class="ansi-green-fg">     57</span> else:
-<span class="ansi-green-fg">     58</span>     return True
+File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/utils/pa_schema_validator.py:56</span>, in <span class="ansi-cyan-fg">PaSchemaValidator._validate</span><span class="ansi-blue-fg">(ds, schema)</span>
+<span class="ansi-green-intense-fg ansi-bold">     54</span>     schema.validate(ds._table)
+<span class="ansi-green-intense-fg ansi-bold">     55</span> except SchemaError as e:
+<span class="ansi-green-fg">---&gt; 56</span>     raise DataValidationException(e)
+<span class="ansi-green-intense-fg ansi-bold">     57</span> else:
+<span class="ansi-green-intense-fg ansi-bold">     58</span>     return True
 
-<span class="ansi-red-intense-fg ansi-bold">DataValidationException</span>: &lt;Schema Column(name=sepal length (cm), type=DataType(float64))&gt; failed element-wise validator 0:
+<span class="ansi-red-fg">DataValidationException</span>: &lt;Schema Column(name=sepal length (cm), type=DataType(float64))&gt; failed element-wise validator 0:
 &lt;Check greater_than: greater_than(0)&gt;
 failure cases:
      index  failure_case
@@ -1428,9 +1437,6 @@ failure cases:
     </aside>
   </div>
 </div><script data-url_root="../" id="documentation_options" src="../documentation_options.js"></script>
-    <script src="../jquery.js"></script>
-    <script src="../underscore.js"></script>
-    <script src="../_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../doctools.js"></script>
     <script src="../sphinx_highlight.js"></script>
     <script src="../scripts/furo.js"></script>
