@@ -103,13 +103,12 @@ class DataCard:
             Panderas schema objects can be used when converted into
             dictionaries
         """
-
         self.data = dict(
             name=name,
             desc=desc,
             source=source,
             goal=goal,
-            labeling_info=asdict(labeling_info),
+            labeling_info=asdict(labeling_info) if labeling_info is not None else labeling_info,
             size=size,
             metrics=metrics,
             schema=schema,
