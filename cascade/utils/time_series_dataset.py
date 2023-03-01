@@ -21,7 +21,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from ..base import Meta
+from ..base import PipeMeta
 from ..data import Dataset, Modifier
 
 
@@ -157,7 +157,7 @@ class TimeSeriesDataset(Dataset):
     def __len__(self) -> int:
         return len(self._num_idx)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -202,7 +202,7 @@ class Average(TimeSeriesDataset, Modifier):
         super().__init__(dataset, time=reg_time,
                          data=reg_data, *args, **kwargs)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -241,7 +241,7 @@ class Interpolate(TimeSeriesDataset, Modifier):
         self._method = method
         self._limit_direction = limit_direction
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update(
             {

@@ -30,9 +30,15 @@ import cascade as csd
 from cascade import utils as csu
 
 
-def test_hash_check(tmp_path):
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml'
+    ]
+)
+def test_hash_check(tmp_path, ext):
     tmp_path = str(tmp_path)
-    repo = csd.models.ModelRepo(tmp_path, overwrite=True, meta_fmt='.yml')
+    repo = csd.models.ModelRepo(tmp_path, overwrite=True, meta_fmt=ext)
 
     tree = csu.SkModel(blocks=[
         DecisionTreeClassifier()

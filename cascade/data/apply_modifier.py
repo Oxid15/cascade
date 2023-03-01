@@ -23,7 +23,7 @@ class ApplyModifier(Modifier):
     Modifier that maps a function to given dataset's items in a lazy way.
     """
     def __init__(self, dataset: Dataset[T], func: Callable[[T], Any],
-                 *args: List[Any], **kwargs: Dict[Any, Any]) -> None:
+                 *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------

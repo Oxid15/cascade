@@ -12,7 +12,7 @@ limitations under the License.
 """
 
 from typing import Dict, Generic, Iterable, List, TypeVar, Any, Sized, Sequence
-from ..base import Traceable, Meta
+from ..base import Traceable, PipeMeta
 
 T = TypeVar('T')
 
@@ -31,17 +31,17 @@ class Dataset(Generic[T], Traceable):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: Any) -> T:
         """
         Abstract method - should be defined in every successor
         """
         raise NotImplementedError()
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         """
         Returns
         -------
-        meta: Meta
+        meta: PipeMeta
             A list where last element is this dataset's metadata.
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
@@ -91,14 +91,14 @@ class Iterator(Dataset):
         super().__init__(*args, **kwargs)
         self._data = data
 
-    def __getitem__(self, item: int) -> T:
+    def __getitem__(self, item: Any) -> T:
         raise NotImplementedError()
 
     def __iter__(self) -> Iterable[T]:
         for item in self._data:
             yield item
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]['obj_type'] = str(type(self._data))
         return meta
@@ -112,13 +112,13 @@ class Wrapper(SizedDataset):
         self._data = obj
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: Any) -> T:
         return self._data[index]
 
     def __len__(self) -> int:
         return len(self._data)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]['len'] = len(self)
         meta[0]['obj_type'] = str(type(self._data))
@@ -139,6 +139,7 @@ class Modifier(SizedDataset):
     def __init__(self, dataset: SizedDataset[T], *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
+
         Parameters
         ----------
         dataset: Dataset
@@ -147,17 +148,17 @@ class Modifier(SizedDataset):
         self._dataset = dataset
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def __getitem__(self, index: Any) -> T:
         return self._dataset[index]
 
-    def __iter__(self) -> T:
+    def __iter__(self) -> Iterable[T]:
         for i in range(len(self)):
             yield self.__getitem__(i)
 
     def __len__(self) -> int:
         return len(self._dataset)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         """
         Overrides base method enabling cascade-like calls to previous datasets.
         The metadata of a pipeline that consist of several modifiers can be easily
