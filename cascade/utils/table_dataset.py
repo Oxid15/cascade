@@ -20,7 +20,8 @@ from dask import dataframe as dd
 
 from ..meta import AggregateValidator, DataValidationException
 from ..data import Dataset, Modifier, Iterator, SequentialCacher
-from ..base import Meta
+from ..base import PipeMeta
+
 
 class TableDataset(Dataset):
     """
@@ -59,7 +60,7 @@ class TableDataset(Dataset):
         """
         return len(self._table)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update({
             'name': repr(self),

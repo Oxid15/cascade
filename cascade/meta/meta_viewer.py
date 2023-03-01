@@ -18,14 +18,14 @@ import os
 import warnings
 from typing import Dict, Union, Any
 
-from ..base import MetaHandler, supported_meta_formats, Meta
+from ..base import MetaHandler, supported_meta_formats, MetaFromFile
 
 
 class MetaViewer:
     """
     The class to view all metadata in folders and subfolders.
     """
-    def __init__(self, root: str, filt: Union[Dict[str, Any], None] = None) -> None:
+    def __init__(self, root: str, filt: Union[Dict[Any, Any], None] = None) -> None:
         """
         Parameters
         ----------
@@ -56,19 +56,19 @@ class MetaViewer:
         if filt is not None:
             self.names = list(filter(self._filter, self.names))
 
-    def __getitem__(self, index: int) -> Meta:
+    def __getitem__(self, index: int) -> MetaFromFile:
         """
         Returns
         -------
-        meta: List[Dict]
-            Meta object
+        meta: MetaFromFile
+            Meta object that was read from file
         """
         return self._mh.read(self.names[index])
 
     def __len__(self) -> int:
         return len(self.names)
 
-    def write(self, path: str, obj: Meta) -> None:
+    def write(self, path: str, obj: Any) -> None:
         """
         Dumps obj to path
         """
@@ -76,7 +76,7 @@ class MetaViewer:
             Consider using MetaHandler instead.')
         self._mh.write(path, obj)
 
-    def read(self, path: str) -> Meta:
+    def read(self, path: str) -> MetaFromFile:
         """
         Loads object from path
         """
@@ -86,10 +86,13 @@ class MetaViewer:
 
     def _filter(self, name: str) -> bool:
         meta = self._mh.read(name)
-        meta = meta[0]  # Takes first meta which is last model's meta
+        if isinstance(meta, list):
+            meta = meta[0]
+
         for key in self._filt:
             if key not in meta:
-                raise KeyError(f"'{key}' key is not in\n{meta}")
+                warnings.warn(f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}")
+                return False
 
             if self._filt[key] != meta[key]:
                 return False

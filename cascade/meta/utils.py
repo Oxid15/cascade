@@ -16,22 +16,22 @@ limitations under the License.
 
 from typing import Union, List, Dict, Any
 
-from ..base import Meta
+from ..base import Meta, PipeMeta
 
 
 default_keys = ['data', 'dataset']
 
 
 def skeleton(
-    meta: Union[Meta, Dict[Any, Any]],
-    keys: Union[List[str], None] = None
-) -> List[List[Dict[str, str]]]:
+    meta: Union[PipeMeta, Meta],
+    keys: Union[List[Any], None] = None
+) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
-    meta: Union[Meta, Dict[Any, Any]]
+    meta: Union[PipeMeta, Meta]
         Meta of the pipeline
-    keys: List[str], optional
+    keys: List[Any], optional
         The set of keys in meta where to search for previous dataset's meta.
         For example Concatenator when get_meta() is called stores meta of its
         datasets in the field called 'data'.
@@ -40,7 +40,7 @@ def skeleton(
 
     Returns
     -------
-    skeleton: List[List[Dict[str, str]]]
+    skeleton: List[List[Dict[Any, Any]]]
     """
 
     if keys is not None:

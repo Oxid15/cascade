@@ -14,14 +14,14 @@ limitations under the License.
 import os
 import warnings
 import itertools
-import logging
 from typing import List, Iterable, Union, Any, Literal, Type, Generator
 import shutil
 
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import Traceable, MetaHandler, JSONEncoder, supported_meta_formats, Meta
+from ..base import (Traceable, MetaHandler, HistoryLogger,
+                    JSONEncoder, supported_meta_formats, PipeMeta)
 from .model import Model
 from .model_line import ModelLine
 
@@ -77,8 +77,11 @@ class ModelRepo(Repo):
         folder: str,
         lines: Union[Iterable[ModelLine], None] = None,
         overwrite: bool = False,
-        meta_fmt: Literal['.json', '.yml'] = '.json',
-        model_cls: Type = Model, **kwargs: Any) -> None:
+        meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json',
+        model_cls: Type = Model,
+        log_history: bool = True,
+        **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -90,9 +93,9 @@ class ModelRepo(Repo):
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
-        meta_fmt: str
+        meta_fmt: Literal['.json', '.yml', '.yaml']
             extension of repo's metadata files and that will be assigned to the lines by default
-            `.json` and `.yml` are supported
+            `.json` and `.yml` or `.yaml` are supported
         model_cls:
             Default class for any ModelLine in repo
         See also
@@ -103,6 +106,7 @@ class ModelRepo(Repo):
         self._model_cls = model_cls
         self._root = folder
         self._lines = dict()
+        self._log_history = log_history
 
         assert meta_fmt in supported_meta_formats, \
             f'Only {supported_meta_formats} are supported formats'
@@ -113,8 +117,8 @@ class ModelRepo(Repo):
         os.makedirs(self._root, exist_ok=True)
 
         self._mh = MetaHandler()
+        self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
         self._load_lines()
-        self._setup_logger()
 
         if lines is not None:
             for line in lines:
@@ -131,7 +135,13 @@ class ModelRepo(Repo):
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))}
 
-    def add_line(self, name: str = None, *args, meta_fmt=None, **kwargs) -> ModelLine:
+    def add_line(
+            self,
+            name: Union[str, None] = None,
+            *args: Any,
+            meta_fmt: Union[str, None] = None,
+            **kwargs: Any
+    ) -> ModelLine:
         """
         Adds new line to repo if it doesn't exist and returns it.
         If line exists, defines it in repo with parameters provided.
@@ -205,13 +215,6 @@ class ModelRepo(Repo):
     def __repr__(self) -> str:
         return f'ModelRepo in {self._root} of {len(self)} lines'
 
-    def _setup_logger(self) -> None:
-        self.logger = logging.getLogger(self._root)
-        hdlr = logging.FileHandler(os.path.join(self._root, 'history.log'))
-        hdlr.setFormatter(logging.Formatter('\n%(asctime)s\n%(message)s'))
-        self.logger.addHandler(hdlr)
-        self.logger.setLevel('DEBUG')
-
     def _update_meta(self) -> None:
         # Reads meta if exists and updates it with new values
         # writes back to disk
@@ -224,9 +227,11 @@ class ModelRepo(Repo):
             except IOError as e:
                 warnings.warn(f'File reading error ignored: {e}')
 
-        self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
-        diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
-        self.logger.info(diff.pretty())
+        if self._log_history:
+            self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
+            diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
+            if len(diff) != 0:
+                self._hl.log(self_meta)
 
         meta.update(self.get_meta()[0])
         try:
@@ -234,7 +239,7 @@ class ModelRepo(Repo):
         except IOError as e:
             warnings.warn(f'File writing error ignored: {e}')
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update({
             'root': self._root,
@@ -250,13 +255,6 @@ class ModelRepo(Repo):
         """
         self._load_lines()
         self._update_meta()
-
-    def __del__(self) -> None:
-        # Release all files on destruction
-        if hasattr(self, 'logger'):
-            for handler in self.logger.handlers:
-                handler.close()
-                self.logger.removeHandler(handler)
 
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])

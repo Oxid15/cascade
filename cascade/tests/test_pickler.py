@@ -13,23 +13,16 @@ limitations under the License.
 
 import os
 import sys
-import datetime
 import pytest
-import pandas as pd
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import *
-from cascade import utils as cdu
 
 
 def test_data_coverage(dataset, tmp_path):
     Pickler(os.path.join(tmp_path, 'ds.pkl'), dataset)
-
-
-def test_utils_coverage(utils_dataset, tmp_path):
-    Pickler(os.path.join(tmp_path, 'ds.pkl'), utils_dataset)
 
 
 @pytest.mark.parametrize(

@@ -15,10 +15,10 @@ limitations under the License.
 """
 
 
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple, Any
 
 from . import SizedDataset
-from ..base import Meta
+from ..base import PipeMeta
 
 
 class Composer(SizedDataset):
@@ -62,7 +62,7 @@ class Composer(SizedDataset):
     def __len__(self) -> int:
         return self._len
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         """
         Composer calls `get_meta()` of all its datasets
         """
