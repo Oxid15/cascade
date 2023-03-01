@@ -17,7 +17,7 @@ limitations under the License.
 from typing import Type, Any
 import torch
 from ..models import Model
-from ..base import Meta
+from ..base import PipeMeta
 
 
 class TorchModel(Model):
@@ -56,7 +56,7 @@ class TorchModel(Model):
         with open(path, 'rb') as f:
             self._model = torch.load(f)
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]['module'] = repr(self._model)
         return meta

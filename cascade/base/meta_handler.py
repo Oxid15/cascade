@@ -17,15 +17,16 @@ limitations under the License.
 import os
 import json
 import datetime
-from typing import NoReturn, Union, List, Dict, Any
+from typing import NoReturn, Union, Dict, Any
 from json import JSONEncoder
+import deepdiff
 
 import yaml
 import numpy as np
 
-from . import Meta
+from . import MetaFromFile
 
-supported_meta_formats = ('.json', '.yml')
+supported_meta_formats = ('.json', '.yml', '.yaml')
 
 
 class CustomEncoder(JSONEncoder):
@@ -59,14 +60,17 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
+        elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
+            return list(obj)
+
         return super(CustomEncoder, self).default(obj)
 
-    def obj_to_dict(self, obj: Any) -> Dict:
+    def obj_to_dict(self, obj: Any) -> Any:
         return json.loads(self.encode(obj))
 
 
 class BaseHandler:
-    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
+    def read(self, path: str) -> MetaFromFile:
         raise NotImplementedError()
 
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
@@ -83,7 +87,7 @@ class BaseHandler:
 
 
 class JSONHandler(BaseHandler):
-    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
+    def read(self, path: str) -> MetaFromFile:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.json'
@@ -97,7 +101,7 @@ class JSONHandler(BaseHandler):
                 self._raise_io_error(path, e)
             return meta
 
-    def write(self, path: str, obj: List[Dict], overwrite: bool = True) -> None:
+    def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         if not overwrite and os.path.exists(path):
             return
 
@@ -106,7 +110,7 @@ class JSONHandler(BaseHandler):
 
 
 class YAMLHandler(BaseHandler):
-    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
+    def read(self, path: str) -> MetaFromFile:
         _, ext = os.path.splitext(path)
         if ext == '':
             path += '.yml'
@@ -156,7 +160,7 @@ class MetaHandler:
     """
     Encapsulates the logic of reading and writing metadata to disk.
 
-    Supported read-write formats are `json` and `yml`. Other formats
+    Supported read-write formats are `.json` and `.yml` or `.yaml`. Other formats
     are supported as read-only. For example one can read meta from txt or md file.
 
     Examples
@@ -168,7 +172,7 @@ class MetaHandler:
     >>> mh.write('meta.yml', {'hello': 'world'})
     >>> obj = mh.read('meta.yml')
     """
-    def read(self, path: str) -> Union[List[Any], Dict[Any, Any]]:
+    def read(self, path: str) -> MetaFromFile:
         """
         Reads object from path.
 
@@ -179,7 +183,7 @@ class MetaHandler:
 
         Returns
         -------
-            obj: Union[List[Any], Dict[Any, Any]]
+            obj: MetaFromFile
 
         Raises
         ------
@@ -215,7 +219,7 @@ class MetaHandler:
         ext = os.path.splitext(path)[-1]
         if ext == '.json':
             return JSONHandler()
-        elif ext == '.yml':
+        elif ext in ('.yml', '.yaml'):
             return YAMLHandler()
         else:
             return TextHandler()

@@ -15,14 +15,13 @@ limitations under the License.
 """
 
 import os
-from typing import Union, List, Any, NoReturn
+from typing import Union, List, Any
 
 import pendulum
 from flatten_json import flatten
-from plotly import graph_objects as go
 import pandas as pd
 
-from . import MetaViewer
+from . import Server, MetaViewer
 from ..models import Model, ModelRepo
 
 
@@ -103,6 +102,17 @@ class MetricViewer:
         """
         Uses plotly to graphically show table with metrics and parameters.
         """
+
+        try:
+            import plotly
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError('''
+                        Cannot import plotly. It is conditional
+                        dependency you can install it
+                        using the instructions from plotly official documentation''')
+        else:
+            from plotly import graph_objects as go
+
         data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
         fig = go.Figure(data=[
             go.Table(
@@ -173,7 +183,7 @@ class MetricViewer:
         server.serve(**kwargs)
 
 
-class MetricServer:
+class MetricServer(Server):
     def __init__(self, mv: MetricViewer,
                  page_size: int,
                  include: Union[List[str], None],
@@ -187,7 +197,9 @@ class MetricServer:
         try:
             from dash import Output, Input
         except ModuleNotFoundError:
-            self._raise_cannot_import()
+            self._raise_cannot_import_dash()
+        else:
+            from plotly import graph_objects as go
 
         @_app.callback(
             Output(component_id='dependence-figure', component_property='figure'),
@@ -210,7 +222,9 @@ class MetricServer:
         try:
             from dash import html, dcc, dash_table
         except ModuleNotFoundError:
-            self._raise_cannot_import()
+            self._raise_cannot_import_dash()
+        else:
+            from plotly import graph_objects as go
 
         self._mv._repo.reload()
         self._mv.reload_table()
@@ -266,15 +280,9 @@ class MetricServer:
         try:
             import dash
         except ModuleNotFoundError:
-            self._raise_cannot_import()
+            self._raise_cannot_import_dash()
 
         app = dash.Dash()
         app.layout = self._layout
         self._update_graph_callback(app)
         app.run_server(use_reloader=False, **kwargs)
-
-    def _raise_cannot_import(self) -> NoReturn:
-        raise ModuleNotFoundError('''
-                    Cannot import dash. It is conditional
-                    dependency you can install it
-                    using the instructions from https://dash.plotly.com/installation''')

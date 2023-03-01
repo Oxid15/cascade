@@ -18,7 +18,7 @@ import os
 
 from typing import Any
 from hashlib import md5
-from ..base import Meta
+from ..base import PipeMeta
 from .dataset import SizedDataset, T
 
 
@@ -48,7 +48,7 @@ class FolderDataset(SizedDataset):
     def __getitem__(self, item: int) -> T:
         raise NotImplementedError()
 
-    def get_meta(self) -> Meta:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update({
             'name': repr(self),

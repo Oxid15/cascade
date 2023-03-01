@@ -66,6 +66,7 @@ def test_order(tmp_path):
     # This checks that models were read in exactly same order as they were saved
     # real_num should be [0, 1, 2]
     for meta in mev:
-        if meta[0]['type'] == 'model':
+        # check that meta is list, because can be dict also
+        if isinstance(meta, list) and meta[0]['type'] == 'model':
             assert meta[0]['params']['real_num'] == k
             k += 1

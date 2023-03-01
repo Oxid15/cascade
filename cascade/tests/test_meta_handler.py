@@ -29,7 +29,8 @@ from cascade.base import MetaHandler
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test(tmp_path, ext):
@@ -52,7 +53,8 @@ def test(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_overwrite(tmp_path, ext):
@@ -96,6 +98,7 @@ def test_text(tmp_path, ext):
     'ext', [
         '.json',
         '.yml',
+        '.yaml',
         '.txt',
         '.md'
     ]
@@ -112,7 +115,8 @@ def test_not_exist(ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_read_fail(tmp_path, ext):
@@ -133,7 +137,8 @@ def test_read_fail(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_empty_file(tmp_path, ext):
@@ -149,3 +154,20 @@ def test_empty_file(tmp_path, ext):
     with pytest.raises(IOError) as e:
         mh.read(filename)
     assert filename in e.value.args[0]
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml',
+        '.yaml'
+    ]
+)
+def test_random_pipeline_meta(tmp_path, dataset, ext):
+    tmp_path = str(tmp_path)
+    mh = MetaHandler()
+
+    filename = os.path.join(tmp_path, 'meta' + ext)
+
+    meta = dataset.get_meta()
+    mh.write(filename, meta)

@@ -36,7 +36,7 @@ class BasicModel(Model):
     def save(self, filepath: str) -> None:
         raise NotImplementedError()
 
-    def predict(self, x: Any, *args: Any, **kwargs: Any):
+    def predict(self, x: Any, *args: Any, **kwargs: Any) -> Any:
         raise NotImplementedError()
 
     def evaluate(self, x: Any, y: Any,
