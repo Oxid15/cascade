@@ -11,13 +11,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
+import sys
 import pytest
 import datetime
-from cascade import utils as cdu
-from cascade.data import Dataset, Wrapper
 
 import pandas as pd
 
+MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade import utils as cdu
+from cascade.data import Dataset, Wrapper
 
 @pytest.fixture(
     params=[
