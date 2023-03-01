@@ -24,6 +24,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade import utils as cdu
 from cascade.data import Dataset, Wrapper
 
+
 @pytest.fixture(
     params=[
         cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])),

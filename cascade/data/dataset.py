@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Dict, Generic, Iterable, List, TypeVar, Any, Sized, Sequence
+from typing import Generic, Iterable, TypeVar, Any, Sized, Sequence
 from ..base import Traceable, PipeMeta
 
 T = TypeVar('T')

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 from dataclasses import dataclass, asdict
 from typing import List, Tuple, Dict, Union, Any
 import pendulum

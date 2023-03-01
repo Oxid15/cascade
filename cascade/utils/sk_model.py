@@ -18,7 +18,7 @@ import os
 import glob
 from hashlib import md5
 import pickle
-from typing import Any, Dict, List, Union, Any
+from typing import Any, List, Union
 from sklearn.pipeline import Pipeline
 
 from ..base import MetaHandler, PipeMeta
@@ -31,7 +31,7 @@ class SkModel(BasicModel):
     Accepts the name and block to form pipeline.
     Can fit, evaluate, predict save and load out of the box.
     """
-    def __init__(self, *args: Any, blocks: Union[List[Any], None]=None, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, blocks: Union[List[Any], None] = None, **kwargs: Any) -> None:
         """
         Parameters
         ----------

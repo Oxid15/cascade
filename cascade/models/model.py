@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import warnings
-from typing import List, Dict, Any, Union
+from typing import Any, Union
 import pendulum
 
 from ..base import Traceable, PipeMeta
@@ -33,7 +33,7 @@ class Model(Traceable):
         Arguments passed in it should be related to model's hyperparameters, architecture.
         All additional arguments should have defaults - to be able to create model and then load.
         Successors may pass all of their parameters to superclass for it to be able to
-        log them in meta. Everything that is worth to document about model and data 
+        log them in meta. Everything that is worth to document about model and data
         it was trained on can be either in params or meta_prefix.
         """
         # Model accepts meta_prefix explicitly to not to record it in 'params'

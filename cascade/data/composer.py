@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple, Any
 
 from . import SizedDataset
 from ..base import PipeMeta

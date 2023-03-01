@@ -22,6 +22,7 @@ from ..meta import AggregateValidator, DataValidationException
 from ..data import Dataset, Modifier, Iterator, SequentialCacher
 from ..base import PipeMeta
 
+
 class TableDataset(Dataset):
     """
     Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
