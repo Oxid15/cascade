@@ -20,7 +20,7 @@ import pandera.io as paio
 from pandera.errors import SchemaError
 
 from ..meta import AggregateValidator, DataValidationException
-from . import TableDataset
+from .tables import TableDataset
 
 
 class PaSchemaValidator(AggregateValidator):

@@ -124,9 +124,10 @@ class WeighedSampler(Sampler):
 
     Example
     -------
-    >>> from cascade import utils as cdu, data as cdd
+    >>> from cascade import data as cdd
+    >>> from cascade.utils.samplers import WeighedSampler
     >>> ds = cdd.Wrapper([('item1', 0), ('item2', 1)])
-    >>> ds = cdu.WeighedSampler(ds, {0: 2, 1: 1})
+    >>> ds = WeighedSampler(ds, {0: 2, 1: 1})
     >>> assert [item for item in ds] == [('item1', 0), ('item1', 0), ('item2', 1)]
 
     See also
