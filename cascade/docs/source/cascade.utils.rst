@@ -1,7 +1,11 @@
 cascade.utils
 ============== 
 
-.. autoclass:: cascade.utils.ConstantBaseline
+.. important::
+    Since 0.11.0 cascade.utils consists of several distinct submodules
+    which should be imported separately
+
+.. autoclass:: cascade.utils.baselines.ConstantBaseline
     :members:
 
 |
@@ -10,7 +14,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.FolderImageDataset
+.. autoclass:: cascade.utils.folder_image_dataset.FolderImageDataset
     :members:
 
 |
@@ -19,7 +23,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.NumpyWrapper
+.. autoclass:: cascade.utils.numpy_wrapper.NumpyWrapper
     :members:
 
 |
@@ -28,7 +32,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.OverSampler
+.. autoclass:: cascade.utils.samplers.OverSampler
     :members:
 
 |
@@ -37,7 +41,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.UnderSampler
+.. autoclass:: cascade.utils.samplers.UnderSampler
     :members:
 
 |
@@ -46,7 +50,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.PaSchemaValidator
+.. autoclass:: cascade.utils.pa_schema_validator.PaSchemaValidator
     :members:
 
 |
@@ -55,7 +59,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.SkModel
+.. autoclass:: cascade.utils.sk_model.SkModel
     :members:
 
 |
@@ -64,7 +68,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.TableDataset
+.. autoclass:: cascade.utils.table_dataset.TableDataset
     :members:
 
 |
@@ -73,7 +77,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.TextClassificationDataset
+.. autoclass:: cascade.utils.text_classification_dataset.TextClassificationDataset
     :members:
 
 |
@@ -82,7 +86,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.TableFilter
+.. autoclass:: cascade.utils.tables.TableFilter
     :members:
 
 |
@@ -91,7 +95,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.CSVDataset
+.. autoclass:: cascade.utils.tables.CSVDataset
     :members:
 
 |
@@ -101,7 +105,7 @@ cascade.utils
 |
 
 
-.. autoclass:: cascade.utils.PartedTableLoader
+.. autoclass:: cascade.utils.tables.PartedTableLoader
     :members:
 
 |
@@ -110,7 +114,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.TableIterator
+.. autoclass:: cascade.utils.tables.TableIterator
     :members:
 
 |
@@ -119,7 +123,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.LargeCSVDataset
+.. autoclass:: cascade.utils.tables.LargeCSVDataset
     :members:
 
 |
@@ -128,7 +132,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.NullValidator
+.. autoclass:: cascade.utils.tables.NullValidator
     :members:
 
 |
@@ -137,7 +141,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.TimeSeriesDataset
+.. autoclass:: cascade.utils.time_series.TimeSeriesDataset
     :members:
 
 |
@@ -146,7 +150,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.TorchModel
+.. autoclass:: cascade.utils.time_series.Average
     :members:
 
 |
@@ -155,7 +159,34 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.WeighedSampler
+.. autoclass:: cascade.utils.time_series.Interpolate
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.time_series.Align
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.torch_model.TorchModel
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.samplers.WeighedSampler
     :members:
 
 |

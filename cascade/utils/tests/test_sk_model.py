@@ -27,7 +27,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 
 import cascade as csd
-from cascade import utils as csu
+from cascade.utils.sk_model import SkModel
 
 
 @pytest.mark.parametrize(
@@ -40,15 +40,15 @@ def test_hash_check(tmp_path, ext):
     tmp_path = str(tmp_path)
     repo = csd.models.ModelRepo(tmp_path, overwrite=True, meta_fmt=ext)
 
-    tree = csu.SkModel(blocks=[
+    tree = SkModel(blocks=[
         DecisionTreeClassifier()
     ])
 
-    forest = csu.SkModel(blocks=[
+    forest = SkModel(blocks=[
         RandomForestClassifier()
     ])
 
-    line = repo.add_line('tree', csu.SkModel)
+    line = repo.add_line('tree', SkModel)
     line.save(tree)
     line.save(forest)
 

@@ -23,9 +23,10 @@ MODULE_PATH = os.path.dirname(
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper
-from cascade.utils import OverSampler
+from cascade.utils.samplers import OverSampler
 
 
+#TODO: test with str labels
 @pytest.mark.parametrize(
     'arr, res', [
         (

@@ -23,7 +23,7 @@ MODULE_PATH = os.path.dirname(
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 import cascade.data as cdd
-from cascade.utils import WeighedSampler
+from cascade.utils.samplers import WeighedSampler
 
 
 def test():

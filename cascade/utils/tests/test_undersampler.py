@@ -23,7 +23,7 @@ MODULE_PATH = os.path.dirname(
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper
-from cascade.utils import UnderSampler
+from cascade.utils.samplers import UnderSampler
 
 
 @pytest.mark.parametrize(
