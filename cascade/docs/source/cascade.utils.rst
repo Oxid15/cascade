@@ -1,6 +1,10 @@
 cascade.utils
 ============== 
 
+.. important::
+    Since 0.11.0 cascade.utils consists of several distinct submodules
+    which should be imported separately
+
 .. autoclass:: cascade.utils.baselines.ConstantBaseline
     :members:
 
