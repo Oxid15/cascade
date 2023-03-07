@@ -26,6 +26,7 @@ from cascade.data import Wrapper
 from cascade.utils import OverSampler
 
 
+#TODO: test with str labels
 @pytest.mark.parametrize(
     'arr, res', [
         (
