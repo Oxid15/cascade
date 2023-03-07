@@ -26,7 +26,7 @@ MODULE_PATH = os.path.dirname(
     os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils import TimeSeriesDataset, Average, Interpolate, Align
+from cascade.utils.time_series import TimeSeriesDataset, Average, Interpolate, Align
 
 
 @pytest.mark.parametrize(

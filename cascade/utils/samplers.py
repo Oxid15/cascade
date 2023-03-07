@@ -20,7 +20,7 @@ from itertools import cycle
 from ..base import PipeMeta
 from ..data import SizedDataset, Sampler
 
-from numpy import unique, max, min
+import numpy as np
 from tqdm import trange
 
 
@@ -43,8 +43,8 @@ class OverSampler(Sampler):
     """
     def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
-        ulabels, counts = unique(labels, return_counts=True)
-        how_much_add = max(counts) - counts
+        ulabels, counts = np.unique(labels, return_counts=True)
+        how_much_add = np.max(counts) - counts
 
         self._add_indices = []
         for label_idx, label in enumerate(ulabels):
@@ -89,8 +89,8 @@ class UnderSampler(Sampler):
     """
     def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
-        ulabels, counts = unique(labels, return_counts=True)
-        min_count = min(counts)
+        ulabels, counts = np.unique(labels, return_counts=True)
+        min_count = np.min(counts)
 
         self._rem_indices = []
         for label in ulabels:
