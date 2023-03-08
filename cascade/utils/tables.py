@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Union, Any, Literal
+from typing import List, Union, Any, Literal, Callable
 import pandas as pd
 from dask import dataframe as dd
 
@@ -112,7 +112,8 @@ class CSVDataset(TableDataset):
         csv_file_path:
             path to the .csv file
         """
-        t = pd.read_csv(csv_file_path, *args, **kwargs)
+        self._path = csv_file_path
+        t = pd.read_csv(self._path, *args, **kwargs)
         super().__init__(t=t, **kwargs)
 
 
@@ -205,3 +206,18 @@ class NullValidator(TableDataset, AggregateValidator):
                 f'By columns:\n'
                 f'{missing}'
             )
+
+
+class FeatureTable(CSVDataset):
+    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
+        super().__init__(csv_file_path, *args, **kwargs)
+        self._computed_features = dict()
+
+    def get_features(self, features: Union[str, List[str]]) -> pd.DataFrame:
+        pass
+
+    def add_feature(self, name: str, func: Callable[[pd.DataFrame], pd.Series]) -> None:
+        self._computed_features[name] = func
+
+    def get_meta(self) -> PipeMeta:
+        return super().get_meta()
