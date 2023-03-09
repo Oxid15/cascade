@@ -212,12 +212,41 @@ class FeatureTable(CSVDataset):
     def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(csv_file_path, *args, **kwargs)
         self._computed_features = dict()
+        self._computed_features_args = dict()
+        self._computed_features_kwargs = dict()
 
     def get_features(self, features: Union[str, List[str]]) -> pd.DataFrame:
-        pass
+        if isinstance(features, str):
+            features = [features]
 
-    def add_feature(self, name: str, func: Callable[[pd.DataFrame], pd.Series]) -> None:
+        # Check is all features are present
+        missing_features = []
+        for feat in features:
+            if feat not in self._computed_features and feat not in self._table.columns:
+                missing_features.append(feat)
+        if len(missing_features) > 0:
+            raise ValueError(f'Features {missing_features} was not found in table or list of computed features')
+
+        for feat in features:
+            if feat in self._computed_features:
+                self._table[feat] = self._computed_features[feat](
+                    self._table,
+                    *self._computed_features_args[feat],
+                    **self._computed_features_kwargs[feat]
+                )
+
+        return self._table[features].dropna(how='any')
+
+    def add_feature(
+        self,
+        name: str,
+        func: Callable[[pd.DataFrame], pd.Series[Any]],
+        *args: Any,
+        **kwargs: Any
+    ) -> None:
         self._computed_features[name] = func
+        self._computed_features_args[name] = args
+        self._computed_features_kwargs[name] = kwargs
 
     def get_meta(self) -> PipeMeta:
         return super().get_meta()
