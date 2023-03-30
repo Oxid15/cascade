@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 
-__version__ = '0.10.0'
+__version__ = '0.11.0'
 __author__ = 'Ilia Moiseev'
 __author_email__ = 'ilia.moiseev.5@yandex.ru'
 
@@ -27,6 +27,3 @@ from . import meta
 # from . import utils
 # because it will bring additional dependencies
 # that may not be needed by the user
-# if you need to use cascade.utils
-# you can install utils_requirements.txt and then
-# import as any other cascade module

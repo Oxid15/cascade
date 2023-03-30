@@ -14,14 +14,103 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, Union, Tuple
-
+from typing import Tuple, Any, Dict, Union
 from itertools import cycle
+
+from ..base import PipeMeta
+from ..data import SizedDataset, Sampler
+
 import numpy as np
 from tqdm import trange
 
-from ..data import SizedDataset, Sampler
-from ..base import PipeMeta
+
+class OverSampler(Sampler):
+    """
+    Accepts datasets which return tuples of objects and labels in the respected order.
+    Isn't lazy - runs through all the items ones to determine key order.
+    Doesn't store values afterwards.
+
+    To oversample it repeats items with minority labels for the amount
+    of times needed to make equal distribution.
+    Works for any number of classes.
+
+    Labels are considered to be in the second place of each item that a dataset returns.
+
+    Important
+    ---------
+    Sampler orders the items in the dataset.
+    Consider shuffling the dataset after sampling if label order is important.
+    """
+    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
+        labels = [int(dataset[i][1]) for i in trange(len(dataset))]
+        ulabels, counts = np.unique(labels, return_counts=True)
+        how_much_add = np.max(counts) - counts
+
+        self._add_indices = []
+        for label_idx, label in enumerate(ulabels):
+            k = 0
+            for _ in range(how_much_add[label_idx]):
+                while labels[k] != label:
+                    k += 1
+                self._add_indices.append(k)
+
+        ln = len(dataset) + len(self._add_indices)
+        print(f'Original length was {len(dataset)} and new is {ln}')
+
+        super().__init__(dataset, num_samples=ln, *args, **kwargs)
+
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+        if index < len(self._dataset):
+            return self._dataset[index]
+        else:
+            idx = self._add_indices[index - len(self._dataset)]
+            return self._dataset[idx]
+
+    def __len__(self) -> int:
+        return len(self._dataset) + len(self._add_indices)
+
+
+class UnderSampler(Sampler):
+    """
+    Accepts datasets which return tuples of objects and labels.
+    Isn't lazy - runs through all the items ones to determine key order.
+    Doesn't store values in memory afterwards.
+
+    To undersample it removes items of majority class for the amount
+    of times needed to make equal distribution.
+    Works for any number of classes.
+
+    Labels are considered to be in the second place of each item that a dataset returns.
+
+    Important
+    ---------
+    Sampler orders the items in the dataset.
+    Consider shuffling the dataset after sampling if label order is important.
+    """
+    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
+        labels = [int(dataset[i][1]) for i in trange(len(dataset))]
+        ulabels, counts = np.unique(labels, return_counts=True)
+        min_count = np.min(counts)
+
+        self._rem_indices = []
+        for label in ulabels:
+            k = 0
+            for _ in range(min_count):
+                while labels[k] != label:
+                    k += 1
+                self._rem_indices.append(k)
+                k += 1
+
+        ln = len(self._rem_indices)
+        print(f'Original length was {len(dataset)} and new is {ln}')
+        super().__init__(dataset, ln, *args, **kwargs)
+
+    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+        idx = self._rem_indices[index]
+        return self._dataset[idx]
+
+    def __len__(self) -> int:
+        return len(self._rem_indices)
 
 
 class WeighedSampler(Sampler):
@@ -35,9 +124,10 @@ class WeighedSampler(Sampler):
 
     Example
     -------
-    >>> from cascade import utils as cdu, data as cdd
+    >>> from cascade import data as cdd
+    >>> from cascade.utils.samplers import WeighedSampler
     >>> ds = cdd.Wrapper([('item1', 0), ('item2', 1)])
-    >>> ds = cdu.WeighedSampler(ds, {0: 2, 1: 1})
+    >>> ds = WeighedSampler(ds, {0: 2, 1: 1})
     >>> assert [item for item in ds] == [('item1', 0), ('item1', 0), ('item2', 1)]
 
     See also
