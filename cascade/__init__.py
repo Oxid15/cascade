@@ -27,6 +27,3 @@ from . import meta
 # from . import utils
 # because it will bring additional dependencies
 # that may not be needed by the user
-# if you need to use cascade.utils
-# you can install utils_requirements.txt and then use
-# it to import any submodule from it
