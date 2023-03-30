@@ -1,5 +1,5 @@
 """
-Copyright 2022 Ilia Moiseev
+Copyright 2022-2023 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +27,3 @@ from . import meta
 # from . import utils
 # because it will bring additional dependencies
 # that may not be needed by the user
-# if you need to use cascade.utils
-# you can install utils_requirements.txt and then use
-# it to import any submodule from it
