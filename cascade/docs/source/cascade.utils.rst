@@ -50,6 +50,15 @@ cascade.utils
 
 |
 
+.. autoclass:: cascade.utils.samplers.WeighedSampler
+    :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.utils.pa_schema_validator.PaSchemaValidator
     :members:
 
@@ -68,16 +77,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.table_dataset.TableDataset
-    :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.utils.text_classification_dataset.TextClassificationDataset
+.. autoclass:: cascade.utils.tables.TableDataset
     :members:
 
 |
@@ -186,7 +186,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.samplers.WeighedSampler
+.. autoclass:: cascade.utils.text_classification_dataset.TextClassificationDataset
     :members:
 
 |
