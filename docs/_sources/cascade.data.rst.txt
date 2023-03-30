@@ -7,7 +7,7 @@ cascade.data
 
 |
 
-|
+| 
 
 .. autoclass:: cascade.data.BruteforceCacher
     :members:
@@ -16,7 +16,7 @@ cascade.data
 
 |
 
-|
+| 
 
 .. autoclass:: cascade.data.Composer
     :members:
@@ -52,7 +52,7 @@ cascade.data
 
 |
 
-| 
+|
 
 .. autoclass:: cascade.data.Iterator
     :members:
@@ -61,7 +61,7 @@ cascade.data
 
 |
 
-| 
+|
 
 .. autoclass:: cascade.data.Wrapper
     :members:

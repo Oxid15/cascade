@@ -10,13 +10,9 @@ Install latest version using pip directly from main branch
     pip install cascade-ml
 
 .. note::
-    `cascade.utils` is also installed, but its requirements are optional and listed in the file `utils_requirements.txt`
-
-    If you want to use `cascade.utils`, install utils_requirements by cloning the repo or directly
-
-    .. code-block:: bash
-
-        pip install -r https://raw.githubusercontent.com/oxid15/cascade/main/utils_requirements.txt
+    Requirements of `cascade.utils` are optional and listed in the file `utils_requirements.txt`
+    Since 0.11.0 all submodules of utils made separate which means you are not longer in need to install all these 
+    dependencies at once to use some submodule.
 
 
 Use cases
@@ -34,4 +30,4 @@ Below are examples of usage of Cascade for some typical tasks.
     examples/data_validation.ipynb
 
 .. important::
-    New use-cases will be added soon!
+    New examples will be added soon!

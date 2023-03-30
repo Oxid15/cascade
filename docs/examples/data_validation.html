@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Concepts" href="../concepts.html" /><link rel="prev" title="Model training using trainers" href="model_training_trainers.html" />
 
     <link rel="shortcut icon" href="../100x100_logo.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2022.12.07 -->
-        <title>Data validation - cascade 0.10.0 documentation</title>
+        <title>Data validation - cascade 0.11.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
@@ -130,7 +130,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">cascade 0.10.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">cascade 0.11.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -484,14 +484,21 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cascade.data</span> <span class="k">as</span> <span class="nn">cdd</span>
-<span class="kn">import</span> <span class="nn">cascade.models</span> <span class="k">as</span> <span class="nn">cdm</span>
-<span class="kn">import</span> <span class="nn">cascade.utils</span> <span class="k">as</span> <span class="nn">cdu</span>
 <span class="kn">import</span> <span class="nn">cascade.meta</span> <span class="k">as</span> <span class="nn">cde</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.pa_schema_validator</span> <span class="kn">import</span> <span class="n">PaSchemaValidator</span>
+<span class="kn">from</span> <span class="nn">cascade.utils.tables</span> <span class="kn">import</span> <span class="n">TableDataset</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cascade</span>
@@ -500,12 +507,12 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;0.10.0&#39;
+&#39;0.11.0&#39;
 </pre></div></div>
 </div>
 <section id="Validation-in-general">
@@ -518,7 +525,7 @@ div.rendered_html tbody tr:hover {
 <h3>When everything is OK!<a class="headerlink" href="#When-everything-is-OK!" title="Permalink to this heading">#</a></h3>
 <p>Let’s load the data. Tabular datasets will be used in the later section, let’s now load the data for optical character recognition to demonstrate data validation features.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_digits</span>
@@ -529,7 +536,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>We need to encapsulate the data using Cascade’s default <code class="docutils literal notranslate"><span class="pre">Wrapper</span></code> to be able to use it later.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">digits_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([(</span><span class="n">item</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])])</span>
@@ -538,7 +545,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>This dataset will give tuples of data and labels, which will be useful for training the model.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">digits_ds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -546,7 +553,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -561,7 +568,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>To validate the data we need to state our assumptions about it. Let’s see the boundaries of values in images of digits.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
@@ -569,7 +576,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -582,7 +589,7 @@ array([ 0.,  1., 16.])
 <div class="line">Let’s apply <code class="docutils literal notranslate"><span class="pre">PredicateValidator</span></code>. We pass our dataset and a callable that returns boolean value. If every item in the dataset passes this check the exception will not be raised.</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check_of_data</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">16</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">0</span>
@@ -615,7 +622,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -625,7 +632,7 @@ cascade.meta.validator.PredicateValidator
 </div>
 <p>This check is more strong - we don’t want to add more labels by mistake, so let’s check them similarly!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">check_of_label</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span>
@@ -658,7 +665,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -668,7 +675,7 @@ cascade.meta.validator.PredicateValidator
 </div>
 <p>Validators are simple <code class="docutils literal notranslate"><span class="pre">Modifiers</span></code> that apply no transformation on dataset, so they can simply be chained.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">validated_digits_ds</span> <span class="o">=</span> <span class="n">cde</span><span class="o">.</span><span class="n">PredicateValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">check_of_data</span><span class="p">)</span>
@@ -718,7 +725,7 @@ OK!
 </div>
 <p>But if we chain two Validators, does it mean that we iterate over the whole dataset two times? Actually, yes, so for this the solutions exists. If your dataset is too big to iterate over multiple times, you can encapsulate your checks into one Validator.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">validated_digits_ds</span> <span class="o">=</span> <span class="n">cde</span><span class="o">.</span><span class="n">PredicateValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="p">[</span><span class="n">check_of_data</span><span class="p">,</span> <span class="n">check_of_label</span><span class="p">])</span>
@@ -751,7 +758,7 @@ OK!
 </div>
 <p>It’s time to check the dataset as a whole. To demonstrate the mechanic let’s check that dataset is big enough. Now our callable accepts the dataset and still returns boolean.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">AggregateValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">ds</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span>
@@ -767,7 +774,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -781,7 +788,7 @@ cascade.meta.validator.AggregateValidator
 <div class="line"><code class="docutils literal notranslate"><span class="pre">MetaValidator</span></code> works like the following. During first run it saves metadata into <code class="docutils literal notranslate"><span class="pre">./.cascade</span></code> folder. In the subsequent runs it checks whether some fields in meta changed and raises an exception if they did.</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.yml&#39;</span><span class="p">)</span>
@@ -797,7 +804,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -807,7 +814,7 @@ cascade.meta.meta_validator.MetaValidator
 </div>
 <p>Let’s see what values were saved by validator.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">digits_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
@@ -815,7 +822,7 @@ cascade.meta.meta_validator.MetaValidator
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -831,7 +838,7 @@ cascade.meta.meta_validator.MetaValidator
 <div class="line">Now let’s simulate second run.</div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.yml&#39;</span><span class="p">)</span>
@@ -847,7 +854,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -862,7 +869,7 @@ cascade.meta.meta_validator.MetaValidator
 <p>What if our hypotheses are false due to some errors? Validators will raise <code class="docutils literal notranslate"><span class="pre">cascade.meta.DataValidationException</span></code> with the detailed description of what gone wrong where it possible. Let’s see how it works.</p>
 <p>For the purpose of experiment, let’s suppose that we don’t wanna see zeros in labels. Let’s check for it.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">PredicateValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
@@ -884,7 +891,7 @@ cascade.meta.meta_validator.MetaValidator
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[15], line 1</span>
+Cell <span class="ansi-green-fg">In[16], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> cde.PredicateValidator(digits_ds, lambda x: x[1] != 0)
 
 File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.py:98</span>, in <span class="ansi-cyan-fg">PredicateValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, func, **kwargs)</span>
@@ -910,7 +917,7 @@ Items failed by check:
 </div>
 <p>In the exception items causing the error are listed. This can be helpful to identify the problem.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">AggregateValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">ds</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span>
@@ -924,7 +931,7 @@ Items failed by check:
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[16], line 1</span>
+Cell <span class="ansi-green-fg">In[17], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> cde.AggregateValidator(digits_ds, lambda ds: len(ds) &lt; 1000)
 
 File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.py:67</span>, in <span class="ansi-cyan-fg">AggregateValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, func, **kwargs)</span>
@@ -940,7 +947,7 @@ File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.p
 <p>The exceptions provide info about what got wrong.</p>
 <p>Now let’s simulate the change in meta data of dataset. Let’s manually change the length of it for example and see how <code class="docutils literal notranslate"><span class="pre">MetaValidator</span></code> works.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">digits_ds</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">digits_ds</span><span class="o">.</span><span class="n">_data</span><span class="p">[:</span><span class="mi">1000</span><span class="p">]</span>
@@ -949,7 +956,7 @@ File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.p
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -961,7 +968,7 @@ File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/validator.p
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cde</span><span class="o">.</span><span class="n">MetaValidator</span><span class="p">(</span><span class="n">digits_ds</span><span class="p">,</span> <span class="n">meta_fmt</span><span class="o">=</span><span class="s1">&#39;.yml&#39;</span><span class="p">)</span>
@@ -983,7 +990,7 @@ Value of root[0][&#39;len&#39;] changed from 1797 to 1000.
 <div class="highlight"><pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[18], line 1</span>
+Cell <span class="ansi-green-fg">In[19], line 1</span>
 <span class="ansi-green-fg">----&gt; 1</span> cde.MetaValidator(digits_ds, meta_fmt=&#39;.yml&#39;)
 
 File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/meta_validator.py:105</span>, in <span class="ansi-cyan-fg">MetaValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, root, meta_fmt)</span>
@@ -1013,7 +1020,7 @@ File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/meta_valida
 <div class="line">Now let’s load tabular data for this section.</div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
@@ -1023,7 +1030,7 @@ File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/meta_valida
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -1034,21 +1041,21 @@ File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/meta/meta_valida
 </div>
 <p>We will use <code class="docutils literal notranslate"><span class="pre">TableDataset</span></code> - special container for <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>s in Cascade.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris_ds</span> <span class="o">=</span> <span class="n">cdu</span><span class="o">.</span><span class="n">TableDataset</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris_ds</span> <span class="o">=</span> <span class="n">TableDataset</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 <span class="n">iris_ds</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-cascade.utils.table_dataset.TableDataset
+cascade.utils.tables.TableDataset
       sepal length (cm)  sepal width (cm)  petal length (cm)  petal width (cm)
 0                  5.1               3.5                1.4               0.2
 1                  4.9               3.0                1.4               0.2
@@ -1070,7 +1077,7 @@ cascade.utils.table_dataset.TableDataset
 <div class="line">For the documentation of Pandera’s classes, please see: <a class="reference external" href="https://pandera.readthedocs.io/en/stable/index.html">pandera docs</a>.</div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandera</span> <span class="k">as</span> <span class="nn">pa</span>
@@ -1079,7 +1086,7 @@ cascade.utils.table_dataset.TableDataset
 </div>
 <p>We add all columns and check that all values are greater than zero.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span> <span class="o">=</span> <span class="n">pa</span><span class="o">.</span><span class="n">DataFrameSchema</span><span class="p">({</span>
@@ -1092,10 +1099,10 @@ cascade.utils.table_dataset.TableDataset
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1108,7 +1115,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1118,7 +1125,7 @@ cascade.utils.pa_schema_validator.PaSchemaValidator
 </div>
 <p>For future uses we can save schema to yaml and use Validator with the path.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">schema</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">(</span><span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
@@ -1126,10 +1133,10 @@ cascade.utils.pa_schema_validator.PaSchemaValidator
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1142,7 +1149,7 @@ OK!
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1152,7 +1159,7 @@ cascade.utils.pa_schema_validator.PaSchemaValidator
 </div>
 <p>Let’s manually violate our assumption and see what will happen.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris_ds</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="s1">&#39;sepal length (cm)&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
@@ -1160,10 +1167,10 @@ cascade.utils.pa_schema_validator.PaSchemaValidator
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cdu</span><span class="o">.</span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PaSchemaValidator</span><span class="p">(</span><span class="n">iris_ds</span><span class="p">,</span> <span class="s1">&#39;./iris_schema.yml&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1179,7 +1186,7 @@ File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/utils/pa_schema_
 <span class="ansi-green-fg">---&gt; 54</span>     schema.validate(ds._table)
 <span class="ansi-green-intense-fg ansi-bold">     55</span> except SchemaError as e:
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:534</span>, in <span class="ansi-cyan-fg">DataFrameSchema.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:534</span>, in <span class="ansi-cyan-fg">DataFrameSchema.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-intense-fg ansi-bold">    532</span>     return check_obj.pandera.add_schema(self)
 <span class="ansi-green-fg">--&gt; 534</span> return self._validate(
 <span class="ansi-green-intense-fg ansi-bold">    535</span>     check_obj=check_obj,
@@ -1191,19 +1198,19 @@ File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-package
 <span class="ansi-green-intense-fg ansi-bold">    541</span>     inplace=inplace,
 <span class="ansi-green-intense-fg ansi-bold">    542</span> )
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:732</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:732</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-intense-fg ansi-bold">    731</span> except errors.SchemaError as err:
 <span class="ansi-green-fg">--&gt; 732</span>     error_handler.collect_error(&#34;schema_component_check&#34;, err)
 <span class="ansi-green-intense-fg ansi-bold">    733</span> except errors.SchemaErrors as err:
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-fg">(self, reason_code, schema_error, original_exc)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-fg">(self, reason_code, schema_error, original_exc)</span>
 <span class="ansi-green-intense-fg ansi-bold">     31</span> if not self._lazy:
 <span class="ansi-green-fg">---&gt; 32</span>     raise schema_error from original_exc
 <span class="ansi-green-intense-fg ansi-bold">     34</span> # delete data of validated object from SchemaError object to prevent
 <span class="ansi-green-intense-fg ansi-bold">     35</span> # storing copies of the validated DataFrame/Series for every
 <span class="ansi-green-intense-fg ansi-bold">     36</span> # SchemaError collected.
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:724</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:724</span>, in <span class="ansi-cyan-fg">DataFrameSchema._validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-intense-fg ansi-bold">    723</span> try:
 <span class="ansi-green-fg">--&gt; 724</span>     result = schema_component(
 <span class="ansi-green-intense-fg ansi-bold">    725</span>         df_to_validate,
@@ -1213,18 +1220,18 @@ File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-package
 <span class="ansi-green-intense-fg ansi-bold">    729</span>     )
 <span class="ansi-green-intense-fg ansi-bold">    730</span>     check_results.append(check_utils.is_table(result))
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2138</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.__call__</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2138</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.__call__</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-intense-fg ansi-bold">   2137</span> &#34;&#34;&#34;Alias for ``validate`` method.&#34;&#34;&#34;
 <span class="ansi-green-fg">-&gt; 2138</span> return self.validate(
 <span class="ansi-green-intense-fg ansi-bold">   2139</span>     check_obj, head, tail, sample, random_state, lazy, inplace
 <span class="ansi-green-intense-fg ansi-bold">   2140</span> )
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schema_components.py:223</span>, in <span class="ansi-cyan-fg">Column.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schema_components.py:223</span>, in <span class="ansi-cyan-fg">Column.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-intense-fg ansi-bold">    222</span>     else:
 <span class="ansi-green-fg">--&gt; 223</span>         validate_column(check_obj, column_name)
 <span class="ansi-green-intense-fg ansi-bold">    225</span> return check_obj
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schema_components.py:196</span>, in <span class="ansi-cyan-fg">Column.validate.&lt;locals&gt;.validate_column</span><span class="ansi-blue-fg">(check_obj, column_name)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schema_components.py:196</span>, in <span class="ansi-cyan-fg">Column.validate.&lt;locals&gt;.validate_column</span><span class="ansi-blue-fg">(check_obj, column_name)</span>
 <span class="ansi-green-intense-fg ansi-bold">    195</span> def validate_column(check_obj, column_name):
 <span class="ansi-green-fg">--&gt; 196</span>     super(Column, copy(self).set_name(column_name)).validate(
 <span class="ansi-green-intense-fg ansi-bold">    197</span>         check_obj,
@@ -1236,21 +1243,21 @@ File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-package
 <span class="ansi-green-intense-fg ansi-bold">    203</span>         inplace=inplace,
 <span class="ansi-green-intense-fg ansi-bold">    204</span>     )
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2096</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2096</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-intense-fg ansi-bold">   2095</span> except errors.SchemaError as err:
 <span class="ansi-green-fg">-&gt; 2096</span>     error_handler.collect_error(&#34;dataframe_check&#34;, err)
 <span class="ansi-green-intense-fg ansi-bold">   2097</span> except Exception as err:  # pylint: disable=broad-except
 <span class="ansi-green-intense-fg ansi-bold">   2098</span>     # catch other exceptions that may occur when executing the
 <span class="ansi-green-intense-fg ansi-bold">   2099</span>     # Check
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-fg">(self, reason_code, schema_error, original_exc)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/error_handlers.py:32</span>, in <span class="ansi-cyan-fg">SchemaErrorHandler.collect_error</span><span class="ansi-blue-fg">(self, reason_code, schema_error, original_exc)</span>
 <span class="ansi-green-intense-fg ansi-bold">     31</span> if not self._lazy:
 <span class="ansi-green-fg">---&gt; 32</span>     raise schema_error from original_exc
 <span class="ansi-green-intense-fg ansi-bold">     34</span> # delete data of validated object from SchemaError object to prevent
 <span class="ansi-green-intense-fg ansi-bold">     35</span> # storing copies of the validated DataFrame/Series for every
 <span class="ansi-green-intense-fg ansi-bold">     36</span> # SchemaError collected.
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2091</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2091</span>, in <span class="ansi-cyan-fg">SeriesSchemaBase.validate</span><span class="ansi-blue-fg">(self, check_obj, head, tail, sample, random_state, lazy, inplace)</span>
 <span class="ansi-green-intense-fg ansi-bold">   2089</span> try:
 <span class="ansi-green-intense-fg ansi-bold">   2090</span>     check_results.append(
 <span class="ansi-green-fg">-&gt; 2091</span>         _handle_check_results(
@@ -1259,7 +1266,7 @@ File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-package
 <span class="ansi-green-intense-fg ansi-bold">   2094</span>     )
 <span class="ansi-green-intense-fg ansi-bold">   2095</span> except errors.SchemaError as err:
 
-File <span class="ansi-green-fg">~/work/cascade/venv/lib/python3.10/site-packages/pandera/schemas.py:2482</span>, in <span class="ansi-cyan-fg">_handle_check_results</span><span class="ansi-blue-fg">(schema, check_index, check, check_obj, *check_args)</span>
+File <span class="ansi-green-fg">~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2482</span>, in <span class="ansi-cyan-fg">_handle_check_results</span><span class="ansi-blue-fg">(schema, check_index, check, check_obj, *check_args)</span>
 <span class="ansi-green-intense-fg ansi-bold">   2481</span>         return True
 <span class="ansi-green-fg">-&gt; 2482</span>     raise errors.SchemaError(
 <span class="ansi-green-intense-fg ansi-bold">   2483</span>         schema,
@@ -1293,8 +1300,8 @@ failure cases:
 During handling of the above exception, another exception occurred:
 
 <span class="ansi-red-fg">DataValidationException</span>                   Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[28], line 1</span>
-<span class="ansi-green-fg">----&gt; 1</span> cdu.PaSchemaValidator(iris_ds, &#39;./iris_schema.yml&#39;)
+Cell <span class="ansi-green-fg">In[29], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> PaSchemaValidator(iris_ds, &#39;./iris_schema.yml&#39;)
 
 File <span class="ansi-green-fg">~/work/cascade/cascade/cascade/utils/pa_schema_validator.py:47</span>, in <span class="ansi-cyan-fg">PaSchemaValidator.__init__</span><span class="ansi-blue-fg">(self, dataset, schema, *args, **kwargs)</span>
 <span class="ansi-green-intense-fg ansi-bold">     32</span> def __init__(self, dataset: TableDataset, schema, *args: Any, **kwargs: Any) -&gt; None:
@@ -1391,7 +1398,7 @@ failure cases:
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022, Ilia Moiseev
+                Copyright &#169; 2022-2023, Ilia Moiseev
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
