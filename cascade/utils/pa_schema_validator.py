@@ -1,5 +1,5 @@
 """
-Copyright 2022 Ilia Moiseev
+Copyright 2022-2023 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import pandera.io as paio
 from pandera.errors import SchemaError
 
 from ..meta import AggregateValidator, DataValidationException
-from . import TableDataset
+from .tables import TableDataset
 
 
 class PaSchemaValidator(AggregateValidator):

@@ -1,5 +1,5 @@
 """
-Copyright 2022 Ilia Moiseev
+Copyright 2022-2023 Ilia Moiseev
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -21,20 +21,22 @@ import pandas as pd
 MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade import utils as cdu
+from cascade.utils.tables import TableDataset, TableFilter
+from cascade.utils.time_series import TimeSeriesDataset
+from cascade.utils.samplers import OverSampler, UnderSampler, WeighedSampler
 from cascade.data import Dataset, Wrapper
 
 
 @pytest.fixture(
     params=[
-        cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])),
-        cdu.TableFilter(cdu.TableDataset(t=pd.DataFrame([[1, 2, 3]])), [0, 1, 0]),
-        cdu.TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24]),
-        cdu.OverSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
-        cdu.UnderSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
-        cdu.WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)]), {0: 1}),
-        cdu.WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)]), {0: 1, 1: 2}),
-        cdu.WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
+        TableDataset(t=pd.DataFrame([[1, 2, 3]])),
+        TableFilter(TableDataset(t=pd.DataFrame([[1, 2, 3]])), [0, 1, 0]),
+        TimeSeriesDataset(time=[datetime.datetime(2022, 12, 2)], data=[24]),
+        OverSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
+        UnderSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
+        WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)]), {0: 1}),
+        WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)]), {0: 1, 1: 2}),
+        WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
     ]
 )
 def utils_dataset(request) -> Dataset:

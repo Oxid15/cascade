@@ -19,8 +19,8 @@ import cascade
 # -- Project information -----------------------------------------------------
 
 project = 'cascade'
-copyright = '2022, Ilia Moiseev'
 author = 'Ilia Moiseev'
+copyright = f'2022-2023, {author}'
 
 # The full version, including alpha/beta/rc tags
 release = cascade.__version__

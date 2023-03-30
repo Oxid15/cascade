@@ -1,5 +1,5 @@
 """
-Copyright 2022 Ilia Moiseev
+Copyright 2022-2023 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ MODULE_PATH = os.path.dirname(
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 import cascade.data as cdd
-from cascade.utils import WeighedSampler
+from cascade.utils.samplers import WeighedSampler
 
 
 def test():
