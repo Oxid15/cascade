@@ -82,6 +82,11 @@ class SizedDataset(Dataset[T], Sized):
     def len(self) -> int:
         raise NotImplementedError()
 
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]['len'] = len(self)
+        return meta
+
 
 class Iterator(Dataset):
     """
@@ -120,7 +125,6 @@ class Wrapper(SizedDataset):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['len'] = len(self)
         meta[0]['obj_type'] = str(type(self._data))
         return meta
 
@@ -165,7 +169,6 @@ class Modifier(SizedDataset):
         obtained with `get_meta` of the last block.
         """
         self_meta = super().get_meta()
-        self_meta[0]['len'] = len(self)
         self_meta += self._dataset.get_meta()
         return self_meta
 
