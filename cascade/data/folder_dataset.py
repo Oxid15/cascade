@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 
-from typing import Any
+from typing import Any, List
 from hashlib import md5
 from ..base import PipeMeta
 from .dataset import SizedDataset, T
@@ -42,17 +42,27 @@ class FolderDataset(SizedDataset):
         self._root = os.path.abspath(root)
         if not os.path.exists(self._root):
             raise FileNotFoundError(self._root)
-        self._names = [os.path.join(self._root, name)
-                       for name in sorted(os.listdir(self._root)) if not os.path.isdir(name)]
 
-    def __getitem__(self, item: int) -> T:
+        self._names = sorted([os.path.join(self._root, name)
+                             for name in sorted(os.listdir(self._root))
+                             if not os.path.isdir(name)])
+
+    def __getitem__(self, item: Any) -> T:
         raise NotImplementedError()
 
+    def get_names(self) -> List[str]:
+        """
+        Returns a list of full paths to the files
+        """
+        return self._names
+
     def get_meta(self) -> PipeMeta:
+        """
+        Returns meta containing
+        """
         meta = super().get_meta()
         meta[0].update({
             'name': repr(self),
-            'len': len(self),
             'paths': self._names,
             'md5sums': []
         })
