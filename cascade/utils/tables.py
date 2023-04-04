@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Union, Any, Literal, Callable
+from typing import List, Union, Any, Literal, Callable, Tuple
 import pandas as pd
 from dask import dataframe as dd
+from tqdm import tqdm
 
 from ..meta import AggregateValidator, DataValidationException
 from ..data import Dataset, Modifier, Iterator, SequentialCacher
@@ -28,7 +29,7 @@ class TableDataset(Dataset):
     Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
     validation.
     """
-    def __init__(self, *args: Any, t: Union[pd.DataFrame, None] = None, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, t: Union[pd.DataFrame, 'TableDataset', None] = None, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -208,45 +209,124 @@ class NullValidator(TableDataset, AggregateValidator):
             )
 
 
-class FeatureTable(CSVDataset):
-    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
-        super().__init__(csv_file_path, *args, **kwargs)
+class FeatureTable(TableDataset):
+    def __init__(self, table: Union[TableDataset, pd.DataFrame], *args: Any, **kwargs: Any) -> None:
+        """
+        Table dataset which allows to easily define and compute features
+
+        Example
+        -------
+        ```python
+        >>> import pandas as pd
+        >>> from cascade.utils.tables import FeatureTable
+        >>> df = pd.read_csv(r'C:\cascade_integration\data\t.csv', index_col=0)
+        >>> df
+        id  count  name
+        0   0      1   aaa
+        1   1      5   bbb
+        2   2      0   ccc
+        >>> ft = FeatureTable(df)
+        >>> ft.get_features()
+        ['id', 'count', ' name']
+        >>> ft.add_feature('square', lambda df: df['count'] * df['count'])
+        >>> def counts(df):
+        >>>     return df['count'] * 2, df['count'] * 3
+
+        >>> ft.add_feature(('count_2', 'count_3'), counts)
+        >>> ft.get_features()
+        ['id', 'count', ' name', 'square', ('count_2', 'count_3')]
+        >>> ft.get_table(['count', ('count_2', 'count_3')])
+           count  count_2  count_3
+        0      1        2        3
+        1      5       10       15
+        2      0        0        0
+
+        ```
+
+        Parameters
+        ----------
+        table: Union[TableDataset, pd.DataFrame]
+            The table to wrap
+        """
+        super().__init__(t=table, *args, **kwargs)
         self._computed_features = dict()
         self._computed_features_args = dict()
         self._computed_features_kwargs = dict()
+        self._features = list(self._table.columns)
 
-    def get_features(self, features: Union[str, List[str]]) -> pd.DataFrame:
-        if isinstance(features, str):
-            features = [features]
-
-        # Check is all features are present
+    def _validate_features(self, features: List[Union[str, Tuple[str]]]):
         missing_features = []
         for feat in features:
             if feat not in self._computed_features and feat not in self._table.columns:
                 missing_features.append(feat)
+
         if len(missing_features) > 0:
-            raise ValueError(f'Features {missing_features} was not found in table or list of computed features')
+            raise ValueError(
+                f'Features {missing_features} was not found in table or list of computed features')
 
-        for feat in features:
+    def get_features(self) -> List[Union[str, Tuple[str]]]:
+        """
+        Returns the list of feature names with all computed
+        features added before
+
+        Returns
+        -------
+        List[str]
+            List of feature names
+        """
+        return list(self._features) + list(self._computed_features.keys())
+
+    def _compute_feature(self, feat: Union[str, Tuple[str]]) -> None:
+        func = self._computed_features[feat]
+        args = self._computed_features_args[feat]
+        kwargs = self._computed_features_kwargs[feat]
+
+        result = func(self._table, *args, **kwargs)
+
+        if isinstance(feat, str):
+            feat = (feat, )
+            result = (result, )
+
+        for name, res in zip(feat, result):
+            self._table[name] = res
+            self._features.append(name)
+
+    def get_table(self,
+                  features: Union[str, List[Union[Tuple[str], str]], None] = None,
+                  dropna: bool = False) -> pd.DataFrame:
+        if isinstance(features, str):
+            features = [features]
+        elif features is None:
+            features = self.get_features()
+
+        self._validate_features(features)
+
+        flat_features = []
+        for feat in tqdm(features, desc='Computing features'):
+            if isinstance(feat, str):
+                flat_features.append(feat)
+                if feat in self._table.columns:
+                    continue
+            else:
+                flat_features += [*feat]
+                if all([f in self._table.columns for f in feat]):
+                    continue
+
             if feat in self._computed_features:
-                self._table[feat] = self._computed_features[feat](
-                    self._table,
-                    *self._computed_features_args[feat],
-                    **self._computed_features_kwargs[feat]
-                )
+                self._compute_feature(feat)
 
-        return self._table[features].dropna(how='any')
+            if dropna:
+                self._table = self._table.dropna(how='any', subset=feat)
+
+        return self._table[flat_features]
 
     def add_feature(
         self,
-        name: str,
-        func: Callable[[pd.DataFrame], pd.Series[Any]],
+        name: Union[str, Tuple[str]],
+        func: Callable[[pd.DataFrame], Union[pd.Series, Tuple[str]]],
         *args: Any,
         **kwargs: Any
-    ) -> None:
+    ) -> None: # What if feature already exists?
         self._computed_features[name] = func
         self._computed_features_args[name] = args
         self._computed_features_kwargs[name] = kwargs
-
-    def get_meta(self) -> PipeMeta:
-        return super().get_meta()
