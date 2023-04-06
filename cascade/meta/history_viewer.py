@@ -150,7 +150,9 @@ class HistoryViewer(Server):
 
         self._table['time'] = time
         self._table['color'] = [line_cols[line] for line in self._table['line']]
-        table = self._table.fillna('')
+        
+        columns2fill = [col for col in self._table.columns if not col.startswith('metrics_')]
+        table = self._table.fillna({name: '' for name in columns2fill})
 
         # plot each model against metric
         # with all metadata on hover
