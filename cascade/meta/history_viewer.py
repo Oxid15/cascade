@@ -161,7 +161,7 @@ class HistoryViewer(Server):
             table,
             x='time',
             y=metric,
-            hover_data=[name for name in pd.DataFrame(self._params).columns],
+            hover_data=['saved_at'] + [name for name in pd.DataFrame(self._params).columns],
             color='line'
         )
 
