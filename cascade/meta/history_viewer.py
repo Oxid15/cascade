@@ -157,11 +157,14 @@ class HistoryViewer(Server):
         # plot each model against metric
         # with all metadata on hover
 
+        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        if 'saved_at' in table.columns:
+            hover_cols = ['saved_at'] + hover_cols
         fig = px.scatter(
             table,
             x='time',
             y=metric,
-            hover_data=['saved_at'] + [name for name in pd.DataFrame(self._params).columns],
+            hover_data=hover_cols,
             color='line'
         )
 
