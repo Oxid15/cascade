@@ -25,116 +25,12 @@ from ..base import MetaFromFile, JSONEncoder, MetaHandler, supported_meta_format
 from ..meta import Server, MetaViewer
 
 
-class DiffReader:
-    def _check_path(self, path: str) -> None:
-        pass
+class BaseDiffViewer(Server):
+    def __init__(self, path) -> None:
+        super().__init__()
 
-    def read_objects(self, path: str) -> Dict[str, Any]:
-        raise NotImplementedError()
-
-
-class RepoDiffReader(DiffReader):
-    def _check_path(self, path: str) -> None:
-        if not os.path.isdir(path):
-            raise ValueError(f'Path `{path}` is not a directory')
-
-        # Check that meta of repo or line exists
-        # do not restrict extensions because meta handler would fail with
-        # informative message anyway
-        metas = glob.glob(os.path.join(path, 'meta.*'))
-        if len(metas) == 0:
-            raise ValueError(
-                f'There is no meta file in the directory provided: {path}'
-            )
-
-        # No idea how to handle multiple metas
-        # and what it means
-        if len(metas) > 1:
-            raise ValueError(
-                f'Multiple meta files in the directory provided: {path}'
-            )
-
-        meta = MetaHandler().read(metas[0])
-
-        if not isinstance(meta, list):
-            raise ValueError(f'Something is wrong with meta in {metas[0]} - it is not a list')
-
-        if 'type' not in meta[0]:
-            raise ValueError(f'Something is wrong with meta in {metas[0]} - no type key in it')
-
-        if meta[0]['type'] not in ('repo', 'line'):
-            raise ValueError('The folder you provided is neither the repo nor line')
-
-    def read_objects(self, path: str) -> Dict[str, MetaFromFile]:
         self._check_path(path)
-
-        mev = MetaViewer(path, filt={'type': 'model'})
-        objs = [meta for meta in mev]
-        objs = {meta[0]['name']: meta for meta in objs}
-        return objs
-
-
-class DatasetVersionDiffReader(DiffReader):
-    def _check_path(self, path):
-        pass
-
-    def read_objects(self, path: str) -> Dict[str, Any]:
-        self._check_path(path)
-
-        versions = MetaHandler().read(path)['versions']
-
-        version_dict = {}
-        for pipe_key in versions:
-            for meta_key in versions[pipe_key]:
-                version_dict.update({versions[pipe_key][meta_key]['version']: versions[pipe_key][meta_key]})
-        return {key: version_dict[key] for key in sorted(version_dict.keys())}
-
-
-class HistoryDiffReader(DiffReader):
-    def _check_path(self, path: str) -> None:
-        pass
-
-    def read_objects(self, path: str) -> Dict[str, Any]:
-        self._check_path(path)
-
-        history = MetaHandler().read(path)['history']
-
-        return {item['updated_at']: item for item in history}
-
-
-class DiffViewer(Server):
-    '''
-    The dash-based server to view meta-data
-    and compare different snapshots using deep diff.
-
-    It can work with ModelRepo's, ModelLine's, files
-    that store version logs and history of entities
-    such as data registration logs.
-    '''
-    def __init__(
-        self,
-        path: str
-    ) -> None:
-        '''
-        Parameters
-        ----------
-        path: str
-            Path to the object which states to view
-        '''
         self._path = path
-        self._diff_reader = self._get_reader(self._path)
-
-        if type(self._diff_reader) == RepoDiffReader:
-            self._default_depth = 2
-            self._default_diff_depth = 2
-        elif type(self._diff_reader) == DatasetVersionDiffReader:
-            self._default_depth = 9
-            self._default_diff_depth = 8
-        elif type(self._diff_reader) == HistoryDiffReader:
-            self._default_depth = 2
-            self._default_diff_depth = 1
-        else:
-            raise RuntimeError('Got the reader of illegal type from internal method')
 
         self._style = {
             'color': '#084c61',
@@ -149,38 +45,11 @@ class DiffViewer(Server):
             'base0D': '#C92C6D',  # keys text
         }
 
-    def _get_reader(self, path: str) -> DiffReader:
-        '''
-        Determines the type of DiffReader and returns it
-        '''
-        if os.path.isdir(path):
-            return RepoDiffReader()
-        else:
-            _, ext = os.path.splitext(path)
-            if ext not in supported_meta_formats:
-                raise ValueError(
-                    f'{path} file extension is not in supported'
-                    f' meta formats: {supported_meta_formats}'
-                )
+    def _check_path(self, path):
+        pass
 
-            meta = MetaHandler().read(path)
-            if 'type' not in meta:
-                raise ValueError(
-                    f'Meta in file {path} has no `type` in its keys!'
-                    'It may be that you are using DiffViewer on old '
-                    'type of history logs before 0.10.0.'
-                )
-
-            if meta['type'] == 'version_history':
-                return DatasetVersionDiffReader()
-
-            if meta['type'] == 'history':
-                return HistoryDiffReader()
-
-            raise ValueError(
-                'No reader found for this type of file. '
-                'Available types are: for Repo or Line, for DatasetVersion logs or for History log.'
-            )
+    def _read_objects(self, path):
+        raise NotImplementedError()
 
     def _layout(self):
         try:
@@ -199,7 +68,7 @@ class DiffViewer(Server):
         else:
             from dash_renderjson import DashRenderjson
 
-        self._objs = self._diff_reader.read_objects(self._path)
+        self._objs = self._read_objects(self._path)
 
         return html.Div([
             html.H1(
@@ -262,3 +131,140 @@ class DiffViewer(Server):
         self._update_diff_callback(app)
         app.layout = self._layout
         app.run_server(use_reloader=False, **kwargs)
+
+
+class DatasetVersionDiffViewer(BaseDiffViewer):
+    def __init__(self, path: str) -> None:
+        super().__init__(path)
+        self._default_depth = 9
+        self._default_diff_depth = 8
+
+    def _read_objects(self, path: str) -> Dict[str, Any]:
+        self._check_path(path)
+
+        versions = MetaHandler().read(path)['versions']
+
+        version_dict = {}
+        for pipe_key in versions:
+            for meta_key in versions[pipe_key]:
+                version_dict.update({versions[pipe_key][meta_key]['version']: versions[pipe_key][meta_key]})
+        return {key: version_dict[key] for key in sorted(version_dict.keys())}
+
+
+class HistoryDiffViewer(BaseDiffViewer):
+    def __init__(self, path: str) -> None:
+        super().__init__(path)
+        self._default_depth = 2
+        self._default_diff_depth = 1
+
+    def _read_objects(self, path: str) -> Dict[str, Any]:
+        history = MetaHandler().read(path)['history']
+
+        return {item['updated_at']: item for item in history}
+
+
+class RepoDiffViewer(BaseDiffViewer):
+    def __init__(
+        self,
+        path
+    ) -> None:
+        '''
+        Parameters
+        ----------
+        path: str
+            Path to the object which states to view
+        '''
+        super().__init__(path)
+
+        self._default_depth = 2
+        self._default_diff_depth = 2
+
+    def _check_path(self, path: str) -> None:
+        if not os.path.isdir(path):
+            raise ValueError(f'Path `{path}` is not a directory')
+
+        # Check that meta of repo or line exists
+        # do not restrict extensions because meta handler would fail with
+        # informative message anyway
+        metas = glob.glob(os.path.join(path, 'meta.*'))
+        if len(metas) == 0:
+            raise ValueError(
+                f'There is no meta file in the directory provided: {path}'
+            )
+
+        # No idea how to handle multiple metas
+        # and what it means
+        if len(metas) > 1:
+            raise ValueError(
+                f'Multiple meta files in the directory provided: {path}'
+            )
+
+        meta = MetaHandler().read(metas[0])
+
+        if not isinstance(meta, list):
+            raise ValueError(f'Something is wrong with meta in {metas[0]} - it is not a list')
+
+        if 'type' not in meta[0]:
+            raise ValueError(f'Something is wrong with meta in {metas[0]} - no type key in it')
+
+        if meta[0]['type'] not in ('repo', 'line'):
+            raise ValueError('The folder you provided is neither the repo nor line')
+
+    def _read_objects(self, path: str) -> Dict[str, MetaFromFile]:
+        self._check_path(path)
+
+        mev = MetaViewer(path, filt={'type': 'model'})
+        objs = [meta for meta in mev]
+        objs = {meta[0]['name']: meta for meta in objs}
+        return objs
+
+
+class DiffViewer(Server):
+    '''
+    The dash-based server to view meta-data
+    and compare different snapshots using deep diff.
+
+    It can work with ModelRepo's, ModelLine's, files
+    that store version logs and history of entities
+    such as data registration logs.
+    '''
+    def __init__(self, path: str) -> None:
+        super().__init__()
+
+        self._diff_viewer = self._get_viewer(path)
+
+    def _get_viewer(self, path: str):
+        '''
+        Determines the type of DiffReader and returns it
+        '''
+        if os.path.isdir(path):
+            return RepoDiffViewer(path)
+        else:
+            _, ext = os.path.splitext(path)
+            if ext not in supported_meta_formats:
+                raise ValueError(
+                    f'{path} file extension is not in supported'
+                    f' meta formats: {supported_meta_formats}'
+                )
+
+            meta = MetaHandler().read(path)
+            if 'type' not in meta:
+                raise ValueError(
+                    f'Meta in file {path} has no `type` in its keys!'
+                    'It may be that you are using DiffViewer on old '
+                    'type of history logs before 0.10.0.'
+                )
+
+            if meta['type'] == 'version_history':
+                return DatasetVersionDiffViewer(path)
+
+            if meta['type'] == 'history':
+                return HistoryDiffViewer(path)
+
+            raise ValueError(
+                'No reader found for this type of file. '
+                'Available types are: for Repo or Line, for DatasetVersion logs or for History log.'
+            )
+
+    def serve(self, *args, **kwargs):
+        return self._diff_viewer.serve(*args, **kwargs)
