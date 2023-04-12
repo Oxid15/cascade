@@ -218,6 +218,78 @@ class RepoDiffViewer(BaseDiffViewer):
         objs = {meta[0]['name']: meta for meta in objs}
         return objs
 
+    def _layout(self):
+        def _table_row(i, name):
+            return html.Tr(children=[
+                    html.Th(self._objs[name][0]['created_at']),
+                    html.Th(
+                        html.Details(children=[
+                                html.Summary(name),
+                                DashRenderjson(
+                                    id=f'data_{i}',
+                                    data={'': self._objs[name]},
+                                    theme=self._json_theme,
+                                    max_depth=self._default_depth
+                                )
+                        ]
+                    )
+                    )
+                ],
+                style={
+                    'text-align': 'left'
+                }
+            )
+        try:
+            import dash
+        except ModuleNotFoundError:
+            self._raise_cannot_import_dash()
+        else:
+            from dash import html, dcc
+
+        try:
+            import dash_renderjson
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                'Cannot import dash_renderjson. It is optional dependency for DiffViewer'
+                ' and can be installed via `pip install dash_renderjson`')
+        else:
+            from dash_renderjson import DashRenderjson
+
+        self._objs = self._read_objects(self._path)
+
+        return html.Div([
+            html.H1(
+                children=f'DiffViewer in {self._path}',
+                style={'textAlign': 'center', **self._style}
+            ),
+            dcc.Dropdown(id='left-dropdown', options=list(self._objs.keys())),
+            dcc.Dropdown(id='rigth-dropdown', options=list(self._objs.keys())),
+            DashRenderjson(
+                id='diff-json',
+                data={'Nothing': 'Nothing is selected!'},
+                theme=self._json_theme,
+                max_depth=self._default_diff_depth
+            ),
+            html.Table(id='table', children=[_table_row(i, name) for i, name in enumerate(self._objs)])
+        ], style={'margin': '5%', **self._style})
+
+    def _update_diff_callback(self, _app) -> None:
+        try:
+            from dash import Output, Input
+        except ModuleNotFoundError:
+            self._raise_cannot_import_dash()
+
+        @_app.callback(
+            Output(component_id='diff-json', component_property='data'),
+            Input(component_id='left-dropdown', component_property='value'),
+            Input(component_id='rigth-dropdown', component_property='value'))
+        def _update_diff(x, y):
+            if x is not None and y is not None:
+                diff = DeepDiff(self._objs[x], self._objs[y]).to_dict()
+                diff = JSONEncoder().encode(diff)
+                diff = json.loads(diff)
+                return diff
+
 
 class DiffViewer(Server):
     '''
