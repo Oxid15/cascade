@@ -20,6 +20,7 @@ import json
 from typing import Any, Dict
 
 from deepdiff import DeepDiff
+import pendulum
 
 from ..base import MetaFromFile, JSONEncoder, MetaHandler, supported_meta_formats
 from ..meta import Server, MetaViewer
@@ -219,26 +220,53 @@ class RepoDiffViewer(BaseDiffViewer):
         return objs
 
     def _layout(self):
-        def _table_row(i, name):
+        def _table_row(name, prev_name):
+            date = self._objs[name][0]['created_at']
+            date = pendulum.parse(date).format('DD MMMM YYYY HH:mm:ss')
+
+            obj = self._objs[name]
+            prev_obj = self._objs[prev_name]
+            
+            diff = DeepDiff(prev_obj, obj).to_dict()
+
+            diff_str = ''
+            if 'dictionary_item_added' in diff:
+                diff_str += f'+{len(diff["dictionary_item_added"])}'
+            if 'values_changed' in diff:
+                diff_str += f'~{len(diff["values_changed"])}'
+            if 'dictionary_item_removed' in diff:
+                diff_str += f'-{len(diff["dictionary_item_removed"])}'
+            
             return html.Tr(children=[
-                    html.Th(self._objs[name][0]['created_at']),
+                    html.Th(date),
+                    html.Th(diff_str),
                     html.Th(
                         html.Details(children=[
                                 html.Summary(name),
-                                DashRenderjson(
-                                    id=f'data_{i}',
-                                    data={'': self._objs[name]},
-                                    theme=self._json_theme,
-                                    max_depth=self._default_depth
+                                    DashRenderjson(
+                                        id=f'{name}-data',
+                                        data={'': obj},
+                                        theme=self._json_theme,
+                                        max_depth=self._default_depth
                                 )
-                        ]
-                    )
+                            ]
+                        )
                     )
                 ],
-                style={
-                    'text-align': 'left'
-                }
+                style={'text-align': 'left'}
             )
+
+        def line_table(line):
+            children = []
+            keys = list(lines[line].keys())
+            for name, prev_name in zip(keys, [keys[0], *keys[:-1]]):
+                children.append(_table_row(name, prev_name))
+
+            return html.Div(children=[
+                html.H3(line, style={'color': '#C92C6D'}),
+                html.Table(id=f'table-{line}', children=children)
+            ],  style={'margin-bottom': '10px'})
+
         try:
             import dash
         except ModuleNotFoundError:
@@ -257,6 +285,18 @@ class RepoDiffViewer(BaseDiffViewer):
 
         self._objs = self._read_objects(self._path)
 
+        lines = dict()
+        for name in self._objs:
+            # /full/path/repo/line/model/file.ext
+            tail, _ = os.path.split(name)
+            tail, _ = os.path.split(tail)
+            _, line = os.path.split(tail)
+
+            if line in lines:
+                lines[line][name] = self._objs[name]
+            else:
+                lines[line] = {name: self._objs[name]}
+
         return html.Div([
             html.H1(
                 children=f'DiffViewer in {self._path}',
@@ -270,7 +310,7 @@ class RepoDiffViewer(BaseDiffViewer):
                 theme=self._json_theme,
                 max_depth=self._default_diff_depth
             ),
-            html.Table(id='table', children=[_table_row(i, name) for i, name in enumerate(self._objs)])
+            *[line_table(line) for line in lines],
         ], style={'margin': '5%', **self._style})
 
     def _update_diff_callback(self, _app) -> None:
