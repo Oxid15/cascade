@@ -64,7 +64,7 @@ class HistoryViewer(Server):
             line = self._repo[line_name]
             view = MetaViewer(line.root, filt={'type': 'model'})
 
-            for i in range(len(line))[:self._last_models]:
+            for i in range(len(line))[-self._last_models:]:
                 new_meta = {'line': line.root, 'num': i}
                 try:
                     # TODO: to take only first is not good...
