@@ -50,21 +50,6 @@ class Dataset(Generic[T], Traceable):
         meta[0]['type'] = 'dataset'
         return meta
 
-    def __repr__(self) -> str:
-        """
-        Returns
-        -------
-        repr: str
-            Representation of a Dataset. This repr used as a name for get_meta() method
-            by default gives the name of class from basic repr
-
-        See also
-        --------
-        cascade.data.Dataset.get_meta()
-        """
-        # Removes adress part of basic object repr and leading < symbol
-        return super().__repr__().split()[0][1:]
-
 
 class SizedDataset(Dataset[T], Sized):
     """
