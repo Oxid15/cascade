@@ -16,6 +16,7 @@ limitations under the License.
 
 
 from typing import Dict, Callable, Any
+from ..base import raise_not_implemented
 from .model import Model, ModelModifier
 
 
@@ -30,14 +31,11 @@ class BasicModel(Model):
     cascade.models.Model
     """
 
-    def load(self, filepath: str) -> None:
-        raise NotImplementedError()
-
-    def save(self, filepath: str) -> None:
-        raise NotImplementedError()
+    def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
+        raise_not_implemented('cascade.models.BasicModel', 'fit')
 
     def predict(self, x: Any, *args: Any, **kwargs: Any) -> Any:
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.BasicModel', 'predict')
 
     def evaluate(self, x: Any, y: Any,
                  metrics_dict: Dict[str, Callable], *args: Any, **kwargs: Any) -> None:
@@ -61,9 +59,6 @@ class BasicModel(Model):
         """
         preds = self.predict(x, *args, **kwargs)
         self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
-
-    def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
-        raise NotImplementedError()
 
 
 class BasicModelModifier(ModelModifier, BasicModel):
