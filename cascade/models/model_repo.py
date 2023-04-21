@@ -51,8 +51,8 @@ class ModelRepo(Repo):
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
 
-    Stores its meta-data in its root folder. With every run if the repo was already
-    created earlier, updates its meta and logs changes in human-readable format in file history.log
+    Stores its metadata in its root folder. With every run if the repo was already
+    created earlier, updates its meta and logs changes in human-readable format in history file
 
     Example
     -------
