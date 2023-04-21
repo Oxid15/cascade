@@ -79,7 +79,7 @@ class SizedDataset(Dataset[T], Sized):
     --------
     cascade.data.Dataset
     """
-    def len(self) -> int:
+    def __len__(self) -> int:
         raise_not_implemented('cascade.data.Dataset', '__len__')
 
 
