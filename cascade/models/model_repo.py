@@ -130,7 +130,6 @@ class ModelRepo(Repo):
         self._lines = {
             name: ModelLine(os.path.join(self._root, name),
                             model_cls=self._model_cls,
-                            meta_prefix=self._meta_prefix,
                             meta_fmt=self._meta_fmt)
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))}
@@ -177,7 +176,6 @@ class ModelRepo(Repo):
             meta_fmt = self._meta_fmt
         line = ModelLine(folder,
                          *args,
-                         meta_prefix=self._meta_prefix,
                          meta_fmt=meta_fmt,
                          **kwargs)
         self._lines[name] = line
