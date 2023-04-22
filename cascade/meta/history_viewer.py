@@ -152,25 +152,22 @@ class HistoryViewer(Server):
         cmap_len = len(px.colors.qualitative.Plotly)
         line_cols = {line: cmap[i % cmap_len] for i, line in enumerate(lines)}
 
-        self._table['time'] = time
-        self._table['color'] = [line_cols[line] for line in self._table['line']]
-        
-        columns2fill = [col for col in self._table.columns if not col.startswith('metrics_')]
-        table = self._table.fillna({name: '' for name in columns2fill})
+        self._table["time"] = time
+        self._table["color"] = [line_cols[line] for line in self._table["line"]]
+
+        columns2fill = [
+            col for col in self._table.columns if not col.startswith("metrics_")
+        ]
+        table = self._table.fillna({name: "" for name in columns2fill})
 
         # plot each model against metric
         # with all metadata on hover
 
         hover_cols = [name for name in pd.DataFrame(self._params).columns]
-        if 'saved_at' in table.columns:
-            hover_cols = ['saved_at'] + hover_cols
-        fig = px.scatter(
-            table,
-            x="time",
-            y=metric,
-            hover_data=hover_cols,
-            color='line'
-        )
+        if "saved_at" in table.columns:
+            hover_cols = ["saved_at"] + hover_cols
+        hover_cols = ["model"] + hover_cols
+        fig = px.scatter(table, x="time", y=metric, hover_data=hover_cols, color="line")
 
         # determine connections between models
         # plot each one with respected color
