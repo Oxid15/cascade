@@ -102,3 +102,18 @@ class Traceable:
             'This may mean super().__init__() wasn\'t'
             'called somewhere'
         )
+
+    def __repr__(self) -> str:
+        """
+        Returns
+        -------
+        repr: str
+            Representation of a Traceable. This repr used as a name for get_meta() method
+            by default gives the name of class from basic repr
+
+        See also
+        --------
+        cascade.data.Traceable.get_meta()
+        """
+        # Removes adress part of basic object repr and leading < symbol
+        return super().__repr__().split()[0][1:]
