@@ -282,6 +282,6 @@ class HistoryViewer(Server):
         def update_history(n_intervals, metric):
             self._repo.reload()
             self._make_table()
-            return self.plot(metric)
+            return self.plot(metric) if metric is not None else go.Figure()
 
         app.run_server(use_reloader=False, **kwargs)
