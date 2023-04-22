@@ -65,7 +65,7 @@ class HistoryViewer(Server):
             view = MetaViewer(line.root, filt={'type': 'model'})
 
             for i in range(len(line))[:self._last_models]:
-                new_meta = {'line': line.root, 'num': i}
+                new_meta = {'line': line.root, 'model': i}
                 try:
                     # TODO: to take only first is not good...
                     meta = view[i][0]
@@ -159,7 +159,7 @@ class HistoryViewer(Server):
             table,
             x='time',
             y=metric,
-            hover_data=[name for name in pd.DataFrame(self._params).columns],
+            hover_data=['model'] + [name for name in pd.DataFrame(self._params).columns],
             color='line'
         )
 
