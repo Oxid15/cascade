@@ -31,11 +31,13 @@ class HistoryViewer(Server):
     Uses shows how metrics of models changed over time and how
     models with different hyperparameters depend on each other.
     """
+
     def __init__(
-            self,
-            repo: ModelRepo,
-            last_lines: Union[int, None] = None,
-            last_models: Union[int, None] = None) -> None:
+        self,
+        repo: ModelRepo,
+        last_lines: Union[int, None] = None,
+        last_models: Union[int, None] = None,
+    ) -> None:
         """
         Parameters
         ----------
@@ -58,14 +60,14 @@ class HistoryViewer(Server):
         line_names = self._repo.get_line_names()
         if self._last_lines is not None:
             # Takes last N lines in correct order
-            line_names = line_names[-self._last_lines:]
+            line_names = line_names[-self._last_lines :]
 
         for line_name in line_names:
             line = self._repo[line_name]
-            view = MetaViewer(line.root, filt={'type': 'model'})
+            view = MetaViewer(line.root, filt={"type": "model"})
 
-            for i in range(len(line))[:self._last_models]:
-                new_meta = {'line': line.root, 'num': i}
+            for i in range(len(line))[: self._last_models]:
+                new_meta = {"line": line.root, "model": i}
                 try:
                     # TODO: to take only first is not good...
                     meta = view[i][0]
@@ -76,29 +78,29 @@ class HistoryViewer(Server):
                 metas.append(new_meta)
 
                 p = {
-                    'line': line.root,
+                    "line": line.root,
                 }
-                if 'params' in meta:
-                    if len(meta['params']) > 0:
-                        p.update(flatten({'params': meta['params']}))
+                if "params" in meta:
+                    if len(meta["params"]) > 0:
+                        p.update(flatten({"params": meta["params"]}))
                 params.append(p)
 
         self._table = pd.DataFrame(metas)
         self._params = params
-        if 'saved_at' in self._table:
-            self._table = self._table.sort_values('saved_at')
+        if "saved_at" in self._table:
+            self._table = self._table.sort_values("saved_at")
 
     @staticmethod
     def _diff(p1: Dict[Any, Any], params: Dict[Any, Any]) -> List:
         diff = [DeepDiff(p1, p2) for p2 in params]
         changed = [0 for _ in range(len(params))]
         for i in range(len(changed)):
-            if 'values_changed' in diff[i]:
-                changed[i] += len(diff[i]['values_changed'])
-            if 'dictionary_item_added' in diff[i]:
-                changed[i] += len(diff[i]['dictionary_item_added'])
-            if 'dictionary_item_removed' in diff[i]:
-                changed[i] += len(diff[i]['dictionary_item_removed'])
+            if "values_changed" in diff[i]:
+                changed[i] += len(diff[i]["values_changed"])
+            if "dictionary_item_added" in diff[i]:
+                changed[i] += len(diff[i]["dictionary_item_added"])
+            if "dictionary_item_removed" in diff[i]:
+                changed[i] += len(diff[i]["dictionary_item_removed"])
         return changed
 
     @staticmethod
@@ -111,11 +113,13 @@ class HistoryViewer(Server):
 
     def _preprocess_metric(self, metric):
         if not isinstance(metric, str):
-            raise ValueError(f'Metric {metric} is not a string')
+            raise ValueError(f"Metric {metric} is not a string")
         # After flatten 'metrics_' will be added to the metric name
-        if not metric.startswith('metrics_'):
-            metric = 'metrics_' + metric
-        assert metric in self._table, f'Metric {metric.replace("metrics_", "")} is not in the repo'
+        if not metric.startswith("metrics_"):
+            metric = "metrics_" + metric
+        assert (
+            metric in self._table
+        ), f'Metric {metric.replace("metrics_", "")} is not in the repo'
 
         return metric
 
@@ -142,37 +146,34 @@ class HistoryViewer(Server):
 
         # turn time into evenly spaced intervals
         time = [i for i in range(len(self._table))]
-        lines = self._table['line'].unique()
+        lines = self._table["line"].unique()
 
         cmap = px.colors.qualitative.Plotly
         cmap_len = len(px.colors.qualitative.Plotly)
         line_cols = {line: cmap[i % cmap_len] for i, line in enumerate(lines)}
 
-        self._table['time'] = time
-        self._table['color'] = [line_cols[line] for line in self._table['line']]
-        
-        columns2fill = [col for col in self._table.columns if not col.startswith('metrics_')]
-        table = self._table.fillna({name: '' for name in columns2fill})
+        self._table["time"] = time
+        self._table["color"] = [line_cols[line] for line in self._table["line"]]
+
+        columns2fill = [
+            col for col in self._table.columns if not col.startswith("metrics_")
+        ]
+        table = self._table.fillna({name: "" for name in columns2fill})
 
         # plot each model against metric
         # with all metadata on hover
 
         hover_cols = [name for name in pd.DataFrame(self._params).columns]
-        if 'saved_at' in table.columns:
-            hover_cols = ['saved_at'] + hover_cols
-        fig = px.scatter(
-            table,
-            x='time',
-            y=metric,
-            hover_data=hover_cols,
-            color='line'
-        )
+        if "saved_at" in table.columns:
+            hover_cols = ["saved_at"] + hover_cols
+        hover_cols = ["model"] + hover_cols
+        fig = px.scatter(table, x="time", y=metric, hover_data=hover_cols, color="line")
 
         # determine connections between models
         # plot each one with respected color
 
         for line in lines:
-            params = [p for p in self._params if p['line'] == line]
+            params = [p for p in self._params if p["line"] == line]
             edges = []
             for i in range(len(params)):
                 if i == 0:
@@ -184,32 +185,36 @@ class HistoryViewer(Server):
 
             xs = []
             ys = []
-            t = table.loc[table['line'] == line]
+            t = table.loc[table["line"] == line]
             for i, e in enumerate(edges):
-                xs += [t['time'].iloc[i], t['time'].iloc[e], None]
+                xs += [t["time"].iloc[i], t["time"].iloc[e], None]
                 ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
-            fig.add_trace(go.Scatter(
-                x=xs,
-                y=ys,
-                mode='lines',
-                marker={'color': t['color'].iloc[0]},
-                name=line,
-                hoverinfo='none'
-            ))
+            fig.add_trace(
+                go.Scatter(
+                    x=xs,
+                    y=ys,
+                    mode="lines",
+                    marker={"color": t["color"].iloc[0]},
+                    name=line,
+                    hoverinfo="none",
+                )
+            )
 
         # Create human-readable ticks
-        now = pendulum.now(tz='UTC')
-        time_text = table['saved_at']\
-            .apply(lambda t: t if t == '' else pendulum.parse(t).diff_for_humans(now))
+        now = pendulum.now(tz="UTC")
+        time_text = table["saved_at"].apply(
+            lambda t: t if t == "" else pendulum.parse(t).diff_for_humans(now)
+        )
 
         fig.update_layout(
-            hovermode='x',
+            hovermode="x",
             xaxis=dict(
-                tickmode='array',
+                tickmode="array",
                 tickvals=[i for i in range(len(time))],
-                ticktext=time_text
-            ))
+                ticktext=time_text,
+            ),
+        )
         if show:
             fig.show()
 
@@ -248,45 +253,57 @@ class HistoryViewer(Server):
         app = dash.Dash()
         fig = self.plot(metric) if metric is not None else go.Figure()
 
-        app.layout = html.Div([
-            html.H1(
-                id='viewer-title',
-                children=f'HistoryViewer in {self._repo}',
-                style={
-                    'textAlign': 'center',
-                    'color': '#084c61',
-                    'font-family': 'Montserrat'
-                }
-            ),
-            dcc.Dropdown(
-                id='metric-dropwdown',
-                options=[col.replace('metrics_', '')
-                         for col in self._table.columns if col.startswith('metrics_')],
-                value=metric
-            ),
-            dcc.Graph(
-                id='history-figure',
-                figure=fig),
-            dcc.Interval(
-                id='history-interval',
-                interval=1000 * 3)
-        ])
+        app.layout = html.Div(
+            [
+                html.H1(
+                    id="viewer-title",
+                    children=f"HistoryViewer in {self._repo}",
+                    style={
+                        "textAlign": "center",
+                        "color": "#084c61",
+                        "font-family": "Montserrat",
+                    },
+                ),
+                dcc.Dropdown(
+                    id="metric-dropwdown",
+                    options=[
+                        col.replace("metrics_", "")
+                        for col in self._table.columns
+                        if col.startswith("metrics_")
+                    ],
+                    value=metric,
+                ),
+                dcc.Graph(id="history-figure", figure=fig),
+                dcc.Interval(id="history-interval", interval=1000 * 3),
+            ]
+        )
 
         @app.callback(
-            Output('viewer-title', 'children'),
-            Input('history-interval', 'n_intervals')
+            Output("viewer-title", "children"), Input("history-interval", "n_intervals")
         )
         def update_title(n_intervals):
-            return f'HistoryViewer in {self._repo}'
+            return f"HistoryViewer in {self._repo}"
 
         @app.callback(
-            Output('history-figure', 'figure'),
-            Input('history-interval', 'n_intervals'),
-            Input('metric-dropwdown', component_property='value'),
-            prevent_initial_call=True)
+            Output("metric-dropwdown", "options"),
+            Input("history-interval", "n_intervals"),
+        )
+        def update_dropdown(n_intervals):
+            return [
+                col.replace("metrics_", "")
+                for col in self._table.columns
+                if col.startswith("metrics_")
+            ]
+
+        @app.callback(
+            Output("history-figure", "figure"),
+            Input("history-interval", "n_intervals"),
+            Input("metric-dropwdown", component_property="value"),
+            prevent_initial_call=True,
+        )
         def update_history(n_intervals, metric):
             self._repo.reload()
             self._make_table()
-            return self.plot(metric)
+            return self.plot(metric) if metric is not None else go.Figure()
 
         app.run_server(use_reloader=False, **kwargs)
