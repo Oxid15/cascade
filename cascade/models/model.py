@@ -18,7 +18,7 @@ import warnings
 from typing import Any, Union
 import pendulum
 
-from ..base import Traceable, PipeMeta
+from ..base import Traceable, PipeMeta, raise_not_implemented
 
 
 class Model(Traceable):
@@ -47,33 +47,33 @@ class Model(Traceable):
         Method to encapsulate training loops.
         May be provided with any training-related arguments.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'fit')
 
     def predict(self, *args: Any, **kwargs: Any) -> Any:
         """
         Method to encapsulate inference.
         May include preprocessing steps to make model self-sufficient.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'predict')
 
     def evaluate(self, *args: Any, **kwargs: Any) -> None:
         """
         Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'evaluate')
 
     def load(self, filepath: str, *args: Any, **kwargs: Any) -> None:
         """
         Loads model from provided filepath. May be unpickling process or reading json configs.
         Does not return any model, just restores internal state.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'load')
 
     def save(self, filepath: str, *args: Any, **kwargs: Any) -> None:
         """
         Saves model's state using provided filepath.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'save')
 
     def get_meta(self) -> PipeMeta:
         # Successors may not call super().__init__

@@ -18,7 +18,7 @@ import os
 
 from typing import Any, List
 from hashlib import md5
-from ..base import PipeMeta
+from ..base import PipeMeta, raise_not_implemented
 from .dataset import SizedDataset, T
 
 
@@ -48,7 +48,7 @@ class FolderDataset(SizedDataset):
                              if not os.path.isdir(name)])
 
     def __getitem__(self, item: Any) -> T:
-        raise NotImplementedError()
+        raise_not_implemented('cascade.data.FolderDataset', '__getitem__')
 
     def get_names(self) -> List[str]:
         """

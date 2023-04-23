@@ -117,7 +117,8 @@ class ModelRepo(Repo):
         os.makedirs(self._root, exist_ok=True)
 
         self._mh = MetaHandler()
-        self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
+        if self._log_history:
+            self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
         self._load_lines()
 
         if lines is not None:

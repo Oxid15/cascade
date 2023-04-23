@@ -66,7 +66,8 @@ class HistoryViewer(Server):
             line = self._repo[line_name]
             view = MetaViewer(line.root, filt={"type": "model"})
 
-            for i in range(len(line))[: self._last_models]:
+            last_models = self._last_models if self._last_models is not None else 0
+            for i in range(len(line))[-last_models:]:
                 new_meta = {"line": line.root, "model": i}
                 try:
                     # TODO: to take only first is not good...
@@ -154,6 +155,7 @@ class HistoryViewer(Server):
 
         self._table["time"] = time
         self._table["color"] = [line_cols[line] for line in self._table["line"]]
+        table = self._table.fillna("")
 
         columns2fill = [
             col for col in self._table.columns if not col.startswith("metrics_")

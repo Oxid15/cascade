@@ -15,9 +15,9 @@ limitations under the License.
 """
 
 
-__version__ = '0.11.0'
-__author__ = 'Ilia Moiseev'
-__author_email__ = 'ilia.moiseev.5@yandex.ru'
+__version__ = "0.11.1"
+__author__ = "Ilia Moiseev"
+__author_email__ = "ilia.moiseev.5@yandex.ru"
 
 from . import data
 from . import models
