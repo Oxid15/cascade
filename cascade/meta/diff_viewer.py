@@ -47,7 +47,8 @@ class BaseDiffViewer(Server):
         }
 
     def _check_path(self, path):
-        pass
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
 
     def _read_objects(self, path):
         raise NotImplementedError()
