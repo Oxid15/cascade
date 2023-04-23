@@ -8,28 +8,30 @@ Flexible ML Engineering library with the aim to standardize the work with data a
 
 Cascade built for individuals or small teams that are in need of ML Engineering solution, but don't have time or resources to use large enterprise-level systems.  
 
+**Included in [Model Lifecycle](https://github.com/kelvins/awesome-mlops#model-lifecycle) section of Awesome MLOps list**
 
 ## Installation
+
 ```bash
 pip install cascade-ml
 ```
+
 More info on installation can be found in [documentation](https://oxid15.github.io/cascade/quickstart.html#installation)
 
-
-
 ## Documentation
+
 [Go to Cascade documentation](https://oxid15.github.io/cascade/)
 
-
-
 ## Usage
+
 This section is divided into blocks based on what problem you can solve using Cascade. These are the simplest examples
 of what the library is capable of. See more in documentation.
 
 ### ETL pipeline tracking
+
 Data processing pipelines need to be versioned and tracked as a part of model experiments.  
 To track changes and version everything about data Cascade has Datasets - special wrappers
-that encapsulate changes that are done during preprocessing. 
+that encapsulate changes that are done during preprocessing.
 
 ```python
 from cascade import data as cdd
@@ -96,10 +98,9 @@ cdd.VersionAssigner(train_ds, 'version_log.yml')
 See all datasets in [zoo](https://oxid15.github.io/cascade/examples/dataset_zoo.html)  
 See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
 
-
-
 ### Experiment tracking
-Not only data and pipelines changes over time. Models change more frequently and require special system to handle experiments and artifacts. 
+
+Not only data and pipelines changes over time. Models change more frequently and require special system to handle experiments and artifacts.
 
 ```python
 from cascade import models as cdm
@@ -151,6 +152,7 @@ line.save(model, only_meta=True)
 from pprint import pprint
 pprint(model.get_meta())
 ```
+
 Let's see what is saved as meta data of this experiment.
 
 ```json
@@ -174,6 +176,7 @@ Let's see what is saved as meta data of this experiment.
 See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
 
 ### Data validation
+
 Validation is an important part of pipelines. Simple asserts can do the thing, but
 there is more useful validation tools.  
 Validators provide meaningful error messages and a way to perform many checks in one run over the dataset.
@@ -209,7 +212,8 @@ cme.PredicateValidator(
 See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
 
 ### Metadata analysis
-During experiments Cascade produces many metadata which can be analyzed later. 
+
+During experiments Cascade produces many metadata which can be analyzed later.
 `MetricViewer` is the tool that allows to see the relationship between parameters and
 metrics of all models in repository.
 
@@ -227,6 +231,7 @@ cme.MetricViewer(repo).serve()
 ![metric-viewer](cascade/docs/imgs/metric-viewer.gif)
 
 `HistoryViewer` allows to see model's lineage, what parameters resulted in what metrics
+
 ```python
 from cascade import meta as cme
 from cascade import models as cdm
@@ -246,14 +251,12 @@ See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart
 
 ![history-viewer](cascade/docs/imgs/history-viewer.gif)
 
-
-
 ## Who could find Cascade useful
+
 Small and fast-prototyping AI-teams could use it as a tradeoff between total missingness of any ML-Engineering framework and demanding enterprise solutions.
 
-
-
 ## Principles
+
 The key principles of Cascade are:
 
 * **Elegancy** - ML code should be about ML with minimum meta-code
@@ -261,24 +264,18 @@ The key principles of Cascade are:
 * **Reusability** - code to be reused in similar projects with no effort
 * **Traceability** - everything should have meta-data
 
-
 ## Contributing
 
 Pull requests and issues are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests and docs as appropriate.
 
-
-
 ## License
 
-[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/) 
-
-
+[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
 
 ## Versions
 
-This project uses Semantic Versioning - https://semver.org/
-
+This project uses Semantic Versioning - <https://semver.org/>
 
 ![footer](cascade/docs/imgs/footer.png)
