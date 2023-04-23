@@ -18,7 +18,7 @@ import os
 
 from typing import Any
 from hashlib import md5
-from ..base import PipeMeta
+from ..base import PipeMeta, raise_not_implemented
 from .dataset import SizedDataset, T
 
 
@@ -46,7 +46,7 @@ class FolderDataset(SizedDataset):
                        for name in sorted(os.listdir(self._root)) if not os.path.isdir(name)]
 
     def __getitem__(self, item: int) -> T:
-        raise NotImplementedError()
+        raise_not_implemented('cascade.data.FolderDataset', '__getitem__')
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

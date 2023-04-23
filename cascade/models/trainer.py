@@ -19,7 +19,7 @@ import logging
 from typing import Iterable, List, Dict, Union, Any
 
 import pendulum
-from ..base import Traceable
+from ..base import Traceable, raise_not_implemented
 from ..models import Model, ModelLine, ModelRepo
 
 
@@ -48,7 +48,7 @@ class Trainer(Traceable):
         super().__init__(*args, **kwargs)
 
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Trainer', 'train')
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
