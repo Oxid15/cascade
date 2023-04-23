@@ -58,7 +58,8 @@ class HistoryViewer(Server):
 
     def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
         mh = MetaHandler()
-        metas = []
+        valid_lines = []
+        updated_at = []
         for line in line_names:
             meta_paths = glob.glob(os.path.join(self._repo._root, line, "meta.*"))
             if len(meta_paths) > 1:
@@ -70,14 +71,14 @@ class HistoryViewer(Server):
                 continue
 
             meta = mh.read(meta_paths[0])
-            metas.append(meta)
+            updated_at.append(meta[0]["updated_at"])
+            valid_lines.append(line)
 
-        updated_at = [meta[0]["updated_at"] for meta in metas]
-        line_names = [
-            line for line, _ in sorted(zip(line_names, updated_at), key=lambda x: x[1])
+        valid_lines = [
+            line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
         ]
 
-        return line_names[-self._last_lines :]
+        return valid_lines[-self._last_lines :]
 
     def _make_table(self) -> None:
         metas = []
