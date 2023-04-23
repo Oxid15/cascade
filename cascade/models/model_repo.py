@@ -34,7 +34,7 @@ class Repo(Traceable):
     --------
     cascade.models.ModelRepo
     """
-    root = None
+    _root = None
 
     def reload(self) -> None:
         raise NotImplementedError()
