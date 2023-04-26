@@ -43,6 +43,37 @@ class Repo(Traceable):
         raise NotImplementedError()
 
     def __len__(self) -> int:
+        """
+        Returns
+        -------
+        num: int
+            a number of lines
+        """
+        return len(self._lines)
+
+    def __iter__(self) -> Generator[ModelLine, None, None]:
+        for line in self._lines:
+            yield self.__getitem__(line)
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0].update({
+            'root': self._root,
+            'len': len(self),
+            'type': 'repo'
+        })
+        return meta
+
+
+class SingleLineRepo(Repo):
+    def __init__(self, line, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._lines = line
+
+    def reload(self) -> None:
+        raise NotImplementedError()
+
+    def __getitem__(self, key: str) -> ModelLine:
         raise NotImplementedError()
 
 
@@ -198,19 +229,6 @@ class ModelRepo(Repo):
         else:
             raise TypeError(f'{type(key)} is not supported as key')
 
-    def __iter__(self) -> Generator[ModelLine, None, None]:
-        for line in self._lines:
-            yield self.__getitem__(line)
-
-    def __len__(self) -> int:
-        """
-        Returns
-        -------
-        num: int
-            a number of lines
-        """
-        return len(self._lines)
-
     def __repr__(self) -> str:
         return f'ModelRepo in {self._root} of {len(self)} lines'
 
@@ -240,12 +258,7 @@ class ModelRepo(Repo):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({
-            'root': self._root,
-            'len': len(self),
-            'updated_at': pendulum.now(tz='UTC'),
-            'type': 'repo'
-        })
+        meta[0].update({'updated_at': pendulum.now(tz='UTC')})
         return meta
 
     def reload(self) -> None:
