@@ -76,11 +76,14 @@ class Repo(Traceable):
 class SingleLineRepo(Repo):
     def __init__(self, line, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = [line]
+        self._lines = {os.path.split(line.root)[-1]: line}
         self._root = line.root
 
     def __getitem__(self, key: str) -> ModelLine:
         return self._lines[key]
+
+    def __repr__(self):
+        return f'SingleLine in {self._root}'
 
 
 class ModelRepo(Repo):
