@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import glob
+import os
 from typing import List, Union, Dict, Any
 
 import pendulum
@@ -21,6 +23,7 @@ import pandas as pd
 from flatten_json import flatten
 from deepdiff import DeepDiff
 
+from ..base import MetaHandler
 from ..models import ModelRepo, ModelLine, SingleLineRepo
 from . import Server, MetaViewer
 
@@ -55,14 +58,37 @@ class HistoryViewer(Server):
         self._last_models = last_models
         self._make_table()
 
+    def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
+        mh = MetaHandler()
+        valid_lines = []
+        updated_at = []
+        for line in line_names:
+            meta_paths = glob.glob(os.path.join(self._repo._root, line, "meta.*"))
+            if len(meta_paths) > 1:
+                raise RuntimeError(
+                    f"{len(meta_paths)} line meta files was found in "
+                    f"{os.path.join(self._repo._root, line)}. Should be exactly one"
+                )
+            elif len(meta_paths) == 0:
+                continue
+
+            meta = mh.read(meta_paths[0])
+            updated_at.append(meta[0]["updated_at"])
+            valid_lines.append(line)
+
+        valid_lines = [
+            line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
+        ]
+
+        return valid_lines[-self._last_lines :]
+
     def _make_table(self) -> None:
         metas = []
         params = []
 
         line_names = self._repo.get_line_names()
         if self._last_lines is not None:
-            # Takes last N lines in correct order
-            line_names = line_names[-self._last_lines :]
+            line_names = self._get_last_updated_lines(line_names)
 
         for line_name in line_names:
             line = self._repo[line_name]
@@ -308,6 +334,7 @@ class HistoryViewer(Server):
         )
         def update_history(n_intervals, metric):
             self._repo.reload()
+
             self._make_table()
             return self.plot(metric) if metric is not None else go.Figure()
 
