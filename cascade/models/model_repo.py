@@ -34,8 +34,11 @@ class Repo(Traceable):
     --------
     cascade.models.ModelRepo
     """
-    _root = None
     _lines = dict()
+    _root = None
+    
+    def get_root(self):
+        return self._root
 
     def reload(self) -> None:
         for line in self._lines:

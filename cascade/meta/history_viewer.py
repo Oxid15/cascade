@@ -66,11 +66,12 @@ class HistoryViewer(Server):
 
         for line_name in line_names:
             line = self._repo[line_name]
-            view = MetaViewer(line.root, filt={"type": "model"})
+            line_root = line.get_root()
+            view = MetaViewer(line_root, filt={"type": "model"})
 
             last_models = self._last_models if self._last_models is not None else 0
             for i in range(len(line))[-last_models:]:
-                new_meta = {"line": line.root, "model": i}
+                new_meta = {"line": line_root, "model": i}
                 try:
                     # TODO: to take only first is not good...
                     meta = view[i][0]
@@ -81,7 +82,7 @@ class HistoryViewer(Server):
                 metas.append(new_meta)
 
                 p = {
-                    "line": line.root,
+                    "line": line_root,
                 }
                 if "params" in meta:
                     if len(meta["params"]) > 0:
