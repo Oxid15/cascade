@@ -174,7 +174,7 @@ class ModelRepo(Repo):
         self._lines = {
             name: ModelLine(os.path.join(self._root, name),
                             model_cls=self._model_cls
-                            if isinstance(self._model_cls, str)
+                            if isinstance(self._model_cls, type)
                             else self._model_cls[name],
                             meta_fmt=self._meta_fmt)
             for name in sorted(os.listdir(self._root))
