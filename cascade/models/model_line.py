@@ -64,7 +64,7 @@ class ModelLine(Traceable):
         self._model_cls = model_cls
         self._root = folder
         self.model_names = []
-        if os.path.exists(self.root):
+        if os.path.exists(self._root):
             self._load()
         else:
             # No folder -> create
@@ -168,15 +168,15 @@ class ModelLine(Traceable):
         return meta
 
     def _load(self):
-        assert os.path.isdir(self.root), f'folder should be directory, got `{self.root}`'
+        assert os.path.isdir(self._root), f'folder should be directory, got `{self._root}`'
         self.model_names = sorted(
             [os.path.join(model_folder, 'model')
-                for model_folder in os.listdir(self.root)
-                if os.path.isdir(os.path.join(self.root, model_folder))])
+                for model_folder in os.listdir(self._root)
+                if os.path.isdir(os.path.join(self._root, model_folder))])
 
         if len(self.model_names) == 0:
             warnings.warn(
-                f'Model folders were not found by the line in {self.root}'
+                f'Model folders were not found by the line in {self._root}'
             )
 
     def reload(self):
