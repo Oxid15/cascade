@@ -27,12 +27,17 @@ from cascade.models import ModelRepo, BasicModel
 from cascade.meta import MetricViewer
 
 
-def test(model_repo, dummy_model):
+def test(repo_or_line, dummy_model):
     m = dummy_model
     m.evaluate()
-    model_repo['0'].save(m)
 
-    mtv = MetricViewer(model_repo)
+    if isinstance(repo_or_line, ModelRepo):
+        first = repo_or_line.get_line_names()[0]
+        repo_or_line[first].save(m)
+    else:
+        repo_or_line.save(m)
+
+    mtv = MetricViewer(repo_or_line)
     t = mtv.table
 
     for item in ['line', 'num', 'created_at', 'saved', 'acc']:
@@ -40,18 +45,19 @@ def test(model_repo, dummy_model):
 
 
 def test_show_table(model_repo, dummy_model):
+    first = model_repo.get_line_names()[0]
     for _ in range(len(model_repo)):
         m = dummy_model
         m.evaluate()
-        model_repo['0'].save(m)
+        model_repo[first].save(m)
 
     mtv = MetricViewer(model_repo)
     mtv.plot_table(show=True)
 
 
 @pytest.mark.skip
-def test_serve(model_repo):
-    mtv = MetricViewer(model_repo)
+def test_serve(repo_or_line):
+    mtv = MetricViewer(repo_or_line)
     mtv.serve()
 
 

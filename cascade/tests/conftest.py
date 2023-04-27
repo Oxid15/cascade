@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
 import os
 import sys
 import datetime
@@ -168,3 +167,18 @@ def model_repo(tmp_path):
             model_cls=DummyModel) for num in range(10)
     ])
     return repo
+
+
+@pytest.fixture(params=[
+    {
+        'repo_or_line': True
+    },
+    {
+        'repo_or_line': False
+    }
+])
+def repo_or_line(request, model_repo, model_line):
+    if request.param['repo_or_line']:
+        return model_repo
+    else:
+        return model_line
