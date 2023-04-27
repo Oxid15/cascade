@@ -30,6 +30,7 @@ class Trainer(Traceable):
     """
     A class that encapsulates training, evaluation and saving of models.
     """
+
     def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
@@ -42,18 +43,20 @@ class Trainer(Traceable):
         elif isinstance(repo, ModelRepo):
             self._repo = repo
         else:
-            raise TypeError(f'Repo should be either ModelRepo or path, got {type(repo)}')
+            raise TypeError(
+                f"Repo should be either ModelRepo or path, got {type(repo)}"
+            )
 
         self.metrics = []
         super().__init__(*args, **kwargs)
 
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
-        raise_not_implemented('cascade.models.Trainer', 'train')
+        raise_not_implemented("cascade.models.Trainer", "train")
 
     def get_meta(self) -> List[Dict]:
         meta = super().get_meta()
-        meta[0]['metrics'] = self.metrics
-        meta[0]['repo'] = self._repo.get_meta()
+        meta[0]["metrics"] = self.metrics
+        meta[0]["repo"] = self._repo.get_meta()
         return meta
 
 
@@ -63,33 +66,36 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
+
     @staticmethod
     def _find_last_model(model: Model, line: ModelLine) -> None:
         model_num = len(line) - 1
         while True:
-            path = os.path.join(line.root, line.model_names[model_num])
+            path = os.path.join(line.get_root(), line.model_names[model_num])
             try:
                 model.load(path)
                 break
             except FileNotFoundError as e:
-                logger.warning(f'Model {path} files were not found\n{e}')
+                logger.warning(f"Model {path} files were not found\n{e}")
                 model_num -= 1
 
                 if model_num == -1:
-                    raise FileNotFoundError(f'No model files were found in line {line}')
+                    raise FileNotFoundError(f"No model files were found in line {line}")
 
-    def train(self,
-              model: Model,
-              *args: Any,
-              train_data: Union[Iterable[Any], None] = None,
-              test_data: Union[Iterable[Any], None] = None,
-              train_kwargs: Union[Dict[Any, Any], None] = None,
-              test_kwargs: Union[Dict[Any, Any], None] = None,
-              epochs: int = 1,
-              start_from: Union[str, None] = None,
-              eval_strategy: Union[int, None] = None,
-              save_strategy: Union[int, None] = None,
-              **kwargs: Any) -> None:
+    def train(
+        self,
+        model: Model,
+        *args: Any,
+        train_data: Union[Iterable[Any], None] = None,
+        test_data: Union[Iterable[Any], None] = None,
+        train_kwargs: Union[Dict[Any, Any], None] = None,
+        test_kwargs: Union[Dict[Any, Any], None] = None,
+        epochs: int = 1,
+        start_from: Union[str, None] = None,
+        eval_strategy: Union[int, None] = None,
+        save_strategy: Union[int, None] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
 
@@ -122,36 +128,36 @@ class BasicTrainer(Trainer):
             test_kwargs = {}
 
         if eval_strategy is not None and test_data is None:
-            raise ValueError('Eval strategy is specified, but no test data provided')
+            raise ValueError("Eval strategy is specified, but no test data provided")
 
         if start_from is not None:
             line_name = start_from
         else:
-            line_name = f'{len(self._repo):0>5d}'
+            line_name = f"{len(self._repo):0>5d}"
             if line_name in self._repo.get_line_names():
                 # Name can appear in the repo if the user manually
                 # removed the lines from the middle of the repo
 
                 # This will be handled strictly
                 # until it will become clear that some solution needed
-                raise RuntimeError(f'Line {line_name} already exists in {self._repo}')
+                raise RuntimeError(f"Line {line_name} already exists in {self._repo}")
 
         self._repo.add_line(line_name, type(model))
         line = self._repo[line_name]
 
         if start_from is not None:
             if len(line) == 0:
-                raise RuntimeError(f'Cannot start from line {line_name} as it is empty')
+                raise RuntimeError(f"Cannot start from line {line_name} as it is empty")
             model_num = self._find_last_model(model, line)
 
         start_time = pendulum.now()
-        self._meta_prefix['train_start_at'] = start_time
-        logger.info(f'Training started with parameters:\n{train_kwargs}')
-        logger.info(f'repo is {self._repo}')
-        logger.info(f'line is {line_name}')
+        self._meta_prefix["train_start_at"] = start_time
+        logger.info(f"Training started with parameters:\n{train_kwargs}")
+        logger.info(f"repo is {self._repo}")
+        logger.info(f"line is {line_name}")
         if start_from is not None:
-            logger.info(f'started from model {model_num}')
-        logger.info(f'training will last {epochs} epochs')
+            logger.info(f"started from model {model_num}")
+        logger.info(f"training will last {epochs} epochs")
 
         for epoch in range(epochs):
             # Empty model's metrics to not to repeat them
@@ -176,8 +182,10 @@ class BasicTrainer(Trainer):
             # Record metrics:
             # no need to copy since don't reuse model's metrics dict
             self.metrics.append(model.metrics)
-            logger.info(f'Epoch {epoch}: {model.metrics}')
+            logger.info(f"Epoch {epoch}: {model.metrics}")
 
         end_time = pendulum.now()
-        self._meta_prefix['train_end_at'] = end_time
-        logger.info(f'Training finished in {end_time.diff_for_humans(start_time, True)}')
+        self._meta_prefix["train_end_at"] = end_time
+        logger.info(
+            f"Training finished in {end_time.diff_for_humans(start_time, True)}"
+        )
