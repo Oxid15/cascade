@@ -31,8 +31,14 @@ class ModelLine(Traceable):
     A line of models is typically a models with the same hyperparameters and architecture,
     but different epochs or using different data.
     """
-    def __init__(self, folder: str, model_cls: Type = Model,
-                 meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json', **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        folder: str,
+        model_cls: Type = Model,
+        meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
+        **kwargs: Any,
+    ) -> None:
         """
         All models in line should be instances of the same class.
 
@@ -51,27 +57,18 @@ class ModelLine(Traceable):
         """
         super().__init__(**kwargs)
 
-        assert meta_fmt in supported_meta_formats, \
-            f'Only {supported_meta_formats} are supported formats'
+        assert (
+            meta_fmt in supported_meta_formats
+        ), f"Only {supported_meta_formats} are supported formats"
         self._meta_fmt = meta_fmt
         self._model_cls = model_cls
-        self.root = folder
+        self._root = folder
         self.model_names = []
         if os.path.exists(self.root):
-            assert os.path.isdir(self.root), f'folder should be directory, got `{folder}`'
-            self.model_names = sorted(
-                [os.path.join(model_folder, 'model')
-                    for model_folder in os.listdir(self.root)
-                    if os.path.isdir(os.path.join(self.root, model_folder))])
-
-            if len(self.model_names) == 0:
-                warnings.warn(
-                    f'Model folders were not found by the line in {self.root}'
-                )
-
+            self._load()
         else:
             # No folder -> create
-            os.mkdir(self.root)
+            os.mkdir(self._root)
         self._mh = MetaHandler()
 
     def __getitem__(self, num: int) -> Model:
@@ -84,7 +81,7 @@ class ModelLine(Traceable):
                 a loaded model
         """
         model = self._model_cls()
-        model.load(os.path.join(self.root, self.model_names[num]))
+        model.load(os.path.join(self._root, self.model_names[num]))
         return model
 
     def __len__(self) -> int:
@@ -114,11 +111,11 @@ class ModelLine(Traceable):
             Flag, that indicates whether to save model's binaries. If True saves only metadata.
         """
         idx = len(self.model_names)
-        folder_name = f'{idx:0>5d}'
-        full_path = os.path.join(self.root, folder_name, 'model')
+        folder_name = f"{idx:0>5d}"
+        full_path = os.path.join(self._root, folder_name, "model")
 
         # Create model's folder if no
-        os.makedirs(os.path.join(self.root, folder_name), exist_ok=True)
+        os.makedirs(os.path.join(self._root, folder_name), exist_ok=True)
 
         # Prepare meta for saving
         meta = model.get_meta()
@@ -128,38 +125,62 @@ class ModelLine(Traceable):
             model.save(full_path)
 
             # Find anything that matches /path/model_folder/model*
-            exact_filename = glob.glob(f'{full_path}*')
+            exact_filename = glob.glob(f"{full_path}*")
 
-            assert len(exact_filename) > 0, 'Model file wasn\'t found.\n '
-            'It may be that Model didn\'t save itself when save() was called,'
+            assert len(exact_filename) > 0, "Model file wasn't found.\n "
+            "It may be that Model didn't save itself when save() was called,"
             'or the name of the file didn\'t match "model*"'
 
             exact_filename = exact_filename[0]
-            with open(exact_filename, 'rb') as f:
+            with open(exact_filename, "rb") as f:
                 md5sum = md5(f.read()).hexdigest()
 
-            meta[0]['name'] = exact_filename
-            meta[0]['md5sum'] = md5sum
+            meta[0]["name"] = exact_filename
+            meta[0]["md5sum"] = md5sum
 
-        meta[0]['saved_at'] = pendulum.now(tz='UTC')
-        self.model_names.append(os.path.join(folder_name, 'model'))
+        meta[0]["saved_at"] = pendulum.now(tz="UTC")
+        self.model_names.append(os.path.join(folder_name, "model"))
 
         # Save model's meta
-        self._mh.write(os.path.join(self.root, folder_name, 'meta' + self._meta_fmt), meta)
+        self._mh.write(
+            os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
+        )
 
         # Save updated line's meta
-        self._mh.write(os.path.join(self.root, 'meta' + self._meta_fmt), self.get_meta())
+        self._mh.write(
+            os.path.join(self._root, "meta" + self._meta_fmt), self.get_meta()
+        )
 
     def __repr__(self) -> str:
-        return f'ModelLine of {len(self)} models of {self._model_cls}'
+        return f"ModelLine of {len(self)} models of {self._model_cls}"
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({
-            'root': self.root,
-            'model_cls': repr(self._model_cls),
-            'len': len(self),
-            'updated_at': pendulum.now(tz='UTC'),
-            'type': 'line'
-        })
+        meta[0].update(
+            {
+                "root": self._root,
+                "model_cls": repr(self._model_cls),
+                "len": len(self),
+                "updated_at": pendulum.now(tz="UTC"),
+                "type": "line",
+            }
+        )
         return meta
+
+    def _load(self):
+        assert os.path.isdir(self.root), f'folder should be directory, got `{self.root}`'
+        self.model_names = sorted(
+            [os.path.join(model_folder, 'model')
+                for model_folder in os.listdir(self.root)
+                if os.path.isdir(os.path.join(self.root, model_folder))])
+
+        if len(self.model_names) == 0:
+            warnings.warn(
+                f'Model folders were not found by the line in {self.root}'
+            )
+
+    def reload(self):
+        self._load()
+
+    def get_root(self):
+        return self._root

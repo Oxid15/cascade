@@ -24,7 +24,7 @@ from flatten_json import flatten
 from deepdiff import DeepDiff
 
 from ..base import MetaHandler
-from ..models import ModelRepo
+from ..models import ModelRepo, ModelLine, SingleLineRepo
 from . import Server, MetaViewer
 
 
@@ -37,7 +37,7 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        repo: ModelRepo,
+        repo: Union[ModelRepo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
     ) -> None:
@@ -51,6 +51,8 @@ class HistoryViewer(Server):
         last_models: int, optional
             For each line constraints the number of models back from the last one to view
         """
+        if isinstance(repo, ModelLine):
+            repo = SingleLineRepo(repo)
         self._repo = repo
         self._last_lines = last_lines
         self._last_models = last_models
@@ -90,10 +92,12 @@ class HistoryViewer(Server):
 
         for line_name in line_names:
             line = self._repo[line_name]
-            view = MetaViewer(line.root, filt={"type": "model"})
+            line_root = line.get_root()
+            view = MetaViewer(line_root, filt={"type": "model"})
 
-            for i in range(len(line))[: self._last_models]:
-                new_meta = {"line": line.root, "model": i}
+            last_models = self._last_models if self._last_models is not None else 0
+            for i in range(len(line))[-last_models:]:
+                new_meta = {"line": line_root, "model": i}
                 try:
                     # TODO: to take only first is not good...
                     meta = view[i][0]
@@ -104,7 +108,7 @@ class HistoryViewer(Server):
                 metas.append(new_meta)
 
                 p = {
-                    "line": line.root,
+                    "line": line_root,
                 }
                 if "params" in meta:
                     if len(meta["params"]) > 0:
@@ -180,6 +184,7 @@ class HistoryViewer(Server):
 
         self._table["time"] = time
         self._table["color"] = [line_cols[line] for line in self._table["line"]]
+        table = self._table.fillna("")
 
         columns2fill = [
             col for col in self._table.columns if not col.startswith("metrics_")
