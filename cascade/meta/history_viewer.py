@@ -21,7 +21,7 @@ import pandas as pd
 from flatten_json import flatten
 from deepdiff import DeepDiff
 
-from ..models import ModelRepo
+from ..models import ModelRepo, ModelLine, SingleLineRepo
 from . import Server, MetaViewer
 
 
@@ -34,7 +34,7 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        repo: ModelRepo,
+        repo: Union[ModelRepo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
     ) -> None:
@@ -48,6 +48,8 @@ class HistoryViewer(Server):
         last_models: int, optional
             For each line constraints the number of models back from the last one to view
         """
+        if isinstance(repo, ModelLine):
+            repo = SingleLineRepo(repo)
         self._repo = repo
         self._last_lines = last_lines
         self._last_models = last_models
