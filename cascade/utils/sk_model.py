@@ -92,6 +92,9 @@ class SkModel(BasicModel):
         """
         Loads the model from path provided. If no extension, .pkl is added.
         """
+        if os.path.isdir(path):
+            path = os.path.join(path, "model.pkl")
+
         if os.path.splitext(path)[-1] != '.pkl':
             path += '.pkl'
 
@@ -104,11 +107,20 @@ class SkModel(BasicModel):
     def save(self, path: str) -> None:
         """
         Saves model to the path provided.
-        If no extension, then .pkl is added.
+        If path is a folder, then creates
+        it if not exists and saves there as
+        model.pkl
+        If path is a file, then saves it accordingly.
+        If no extension of file provided, then .pkl is added.
         """
-        if os.path.splitext(path)[-1] != '.pkl':
-            path += '.pkl'
-        with open(f'{path}', 'wb') as f:
+        if os.path.isdir(path):
+            os.makedirs(path, exist_ok=True)
+            path = os.path.join(path, "model.pkl")
+
+        if os.path.splitext(path)[-1] != ".pkl":
+            path += ".pkl"
+
+        with open(f"{path}", "wb") as f:
             pickle.dump(self._pipeline, f)
 
     def get_meta(self) -> PipeMeta:
