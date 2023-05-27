@@ -93,13 +93,19 @@ class SkModel(BasicModel):
 
     def load(self, path: str, check_hash: bool = True) -> None:
         """
-        Loads the model from path provided. If no extension, .pkl is added.
+        Loads the model from path provided. Path may be a folder,
+        if so, model.pkl is assumed.
+
+        If path is the file with no extension, .pkl is added.
         """
         if os.path.isdir(path):
             path = os.path.join(path, "model.pkl")
 
-        if os.path.splitext(path)[-1] != ".pkl":
-            path += ".pkl"
+        path, ext = os.path.splitext(path)
+        if ext == "":
+            ext += ".pkl"
+
+        path = path + ext
 
         if check_hash:
             self._check_model_hash(path)
@@ -120,8 +126,11 @@ class SkModel(BasicModel):
             os.makedirs(path, exist_ok=True)
             path = os.path.join(path, "model.pkl")
 
-        if os.path.splitext(path)[-1] != ".pkl":
-            path += ".pkl"
+        path, ext = os.path.splitext(path)
+        if ext == "":
+            ext += ".pkl"
+
+        path = path + ext
 
         with open(f"{path}", "wb") as f:
             pickle.dump(self._pipeline, f)
