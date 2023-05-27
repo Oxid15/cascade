@@ -62,3 +62,18 @@ def test_hash_check(tmp_path, ext):
 
     with pytest.raises(RuntimeError):
         tree.load(os.path.join(tmp_path, 'tree', '00000', 'model'))
+
+
+@pytest.mark.parametrize("postfix", ["", "model", "model.pkl"])
+def test_save_load(tmp_path, postfix):
+    tmp_path = str(tmp_path)
+
+    if postfix:
+        tmp_path = os.path.join(tmp_path, postfix)
+
+    model = SkModel(blocks=[RandomForestClassifier()])
+
+    model.save(tmp_path)
+
+    model = SkModel()
+    model.load(tmp_path)
