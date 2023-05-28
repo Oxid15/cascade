@@ -82,7 +82,6 @@ class VersionAssigner(Modifier):
                 meta format
         """
         super().__init__(dataset, *args, **kwargs)
-        MetaHandler = MetaHandler()
         self._assign_path(path)
         self._versions = {
             'versions': {},
