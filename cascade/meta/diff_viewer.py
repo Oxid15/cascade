@@ -70,7 +70,7 @@ class RepoDiffReader(DiffReader):
 
         mev = MetaViewer(path, filt={'type': 'model'})
         objs = [meta for meta in mev]
-        objs = {meta[0]['name']: meta for meta in objs}
+        objs = {f'Model {i:0>5d}': meta for i, meta in enumerate(objs)}
         return objs
 
 
