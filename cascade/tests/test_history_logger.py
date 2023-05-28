@@ -32,7 +32,6 @@ def test_repo(tmp_path, ext):
     tmp_path = str(tmp_path)
     tmp_path = os.path.join(tmp_path, 'history' + ext)
     hl = HistoryLogger(tmp_path)
-    mh = MetaHandler()
 
     obj = {
         'a': 0,
@@ -40,7 +39,7 @@ def test_repo(tmp_path, ext):
     }
 
     hl.log(obj)
-    obj_from_file = mh.read(tmp_path)
+    obj_from_file = MetaHandler.read(tmp_path)
 
     assert 'history' in obj_from_file
     assert 'type' in obj_from_file
@@ -51,7 +50,7 @@ def test_repo(tmp_path, ext):
     obj['a'] = 1
 
     hl.log(obj)
-    obj_from_file = mh.read(tmp_path)
+    obj_from_file = MetaHandler.read(tmp_path)
 
     assert 'history' in obj_from_file
     assert 'type' in obj_from_file

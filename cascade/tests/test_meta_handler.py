@@ -35,15 +35,14 @@ from cascade.base import MetaHandler
 )
 def test(tmp_path, ext):
     tmp_path = str(tmp_path)
-    mh = MetaHandler()
-    mh.write(os.path.join(tmp_path, 'meta' + ext), {
+    MetaHandler.write(os.path.join(tmp_path, 'meta' + ext), {
         'name': 'test_mh',
         'array': np.zeros(4),
         'none': None,
         'date': pendulum.now(tz='UTC')
     })
 
-    obj = mh.read(os.path.join(tmp_path, 'meta' + ext))
+    obj = MetaHandler.read(os.path.join(tmp_path, 'meta' + ext))
 
     assert (obj['name'] == 'test_mh')
     assert (obj['array'] == [0, 0, 0, 0])
@@ -60,18 +59,17 @@ def test(tmp_path, ext):
 def test_overwrite(tmp_path, ext):
     tmp_path = os.path.join(str(tmp_path), 'test_mh_ow' + ext)
 
-    mh = MetaHandler()
-    mh.write(
+    MetaHandler.write(
         tmp_path,
         {'name': 'first'},
         overwrite=False)
 
-    mh.write(
+    MetaHandler.write(
         tmp_path,
         {'name': 'second'},
         overwrite=False)
 
-    obj = mh.read(tmp_path)
+    obj = MetaHandler.read(tmp_path)
     assert (obj['name'] == 'first')
 
 
@@ -83,13 +81,12 @@ def test_overwrite(tmp_path, ext):
 )
 def test_text(tmp_path, ext):
     tmp_path = str(os.path.join(tmp_path, 'meta' + ext))
-    mh = MetaHandler()
 
     info = '#Meta\n\n\n this is object for testing text files'
     with open(tmp_path, 'w') as f:
         f.write(info)
 
-    obj = mh.read(tmp_path)
+    obj = MetaHandler.read(tmp_path)
 
     assert (obj[tmp_path] == info)
 
@@ -104,11 +101,10 @@ def test_text(tmp_path, ext):
     ]
 )
 def test_not_exist(ext):
-    mh = MetaHandler()
 
     # The case of non-existing file
     with pytest.raises(IOError) as e:
-        mh.read('this_file_does_not_exist' + ext)
+        MetaHandler.read('this_file_does_not_exist' + ext)
     assert e.typename == 'FileNotFoundError'
 
 
@@ -121,7 +117,6 @@ def test_not_exist(ext):
 )
 def test_read_fail(tmp_path, ext):
     tmp_path = str(tmp_path)
-    mh = MetaHandler()
 
     # Simulate broken syntax in file
     filename = os.path.join(tmp_path, 'meta' + ext)
@@ -130,7 +125,7 @@ def test_read_fail(tmp_path, ext):
 
     # Test that file path is in error message
     with pytest.raises(IOError) as e:
-        mh.read(filename)
+        MetaHandler.read(filename)
     assert filename in e.value.args[0]
 
 
@@ -143,7 +138,6 @@ def test_read_fail(tmp_path, ext):
 )
 def test_empty_file(tmp_path, ext):
     tmp_path = str(tmp_path)
-    mh = MetaHandler()
 
     # Simulate empty file
     filename = os.path.join(tmp_path, 'meta' + ext)
@@ -152,7 +146,7 @@ def test_empty_file(tmp_path, ext):
 
     # Test that file path is in error message
     with pytest.raises(IOError) as e:
-        mh.read(filename)
+        MetaHandler.read(filename)
     assert filename in e.value.args[0]
 
 
@@ -165,9 +159,8 @@ def test_empty_file(tmp_path, ext):
 )
 def test_random_pipeline_meta(tmp_path, dataset, ext):
     tmp_path = str(tmp_path)
-    mh = MetaHandler()
 
     filename = os.path.join(tmp_path, 'meta' + ext)
 
     meta = dataset.get_meta()
-    mh.write(filename, meta)
+    MetaHandler.write(filename, meta)

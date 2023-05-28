@@ -59,7 +59,6 @@ class HistoryViewer(Server):
         self._make_table()
 
     def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
-        mh = MetaHandler()
         valid_lines = []
         updated_at = []
         for line in line_names:
@@ -72,7 +71,7 @@ class HistoryViewer(Server):
             elif len(meta_paths) == 0:
                 continue
 
-            meta = mh.read(meta_paths[0])
+            meta = MetaHandler.read(meta_paths[0])
             updated_at.append(meta[0]["updated_at"])
             valid_lines.append(line)
 

@@ -36,7 +36,7 @@ def test(tmp_path):
     dr = DataRegistrator(tmp_path)
     dr.register(card)
 
-    meta = MetaHandler().read(tmp_path)
+    meta = MetaHandler.read(tmp_path)
 
     assert 'history' in meta
     assert len(meta['history']) == 1

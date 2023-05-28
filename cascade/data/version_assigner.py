@@ -82,7 +82,7 @@ class VersionAssigner(Modifier):
                 meta format
         """
         super().__init__(dataset, *args, **kwargs)
-        self._mh = MetaHandler()
+        MetaHandler = MetaHandler()
         self._assign_path(path)
         self._versions = {
             'versions': {},
@@ -101,7 +101,7 @@ class VersionAssigner(Modifier):
         pipe_hash = md5(str.encode(pipeline_str, 'utf-8')).hexdigest()
 
         if os.path.exists(self._root):
-            self._versions = self._mh.read(self._root)
+            self._versions = MetaHandler.read(self._root)
 
             if pipe_hash in self._versions['versions']:
                 if meta_hash in self._versions['versions'][pipe_hash]:
@@ -130,7 +130,7 @@ class VersionAssigner(Modifier):
                     'updated_at': str(pendulum.now(tz='UTC'))
                 }
 
-            self._mh.write(self._root, self._versions)
+            MetaHandler.write(self._root, self._versions)
         else:
             self.version = '0.0'
             self._versions['versions'][pipe_hash] = {}
@@ -140,7 +140,7 @@ class VersionAssigner(Modifier):
                 'pipeline': pipeline,
                 'updated_at': str(pendulum.now(tz='UTC'))
             }
-            self._mh.write(self._root, self._versions)
+            MetaHandler.write(self._root, self._versions)
 
         if verbose:
             print('Dataset version:', self.version)

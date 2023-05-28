@@ -166,11 +166,10 @@ class MetaHandler:
     Examples
     --------
     >>> from cascade.base import MetaHandler
-    >>> mh = MetaHandler()
-    >>> mh.write('meta.json', {'hello': 'world'})
-    >>> obj = mh.read('meta.json')
-    >>> mh.write('meta.yml', {'hello': 'world'})
-    >>> obj = mh.read('meta.yml')
+    >>> MetaHandler.write('meta.json', {'hello': 'world'})
+    >>> obj = MetaHandler.read('meta.json')
+    >>> MetaHandler.write('meta.yml', {'hello': 'world'})
+    >>> obj = MetaHandler.read('meta.yml')
     """
     @classmethod
     def read(cls, path: str) -> MetaFromFile:

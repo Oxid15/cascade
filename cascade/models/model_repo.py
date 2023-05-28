@@ -159,7 +159,6 @@ class ModelRepo(Repo):
 
         os.makedirs(self._root, exist_ok=True)
 
-        self._mh = MetaHandler()
         if self._log_history:
             self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
         self._load_lines()
@@ -254,7 +253,7 @@ class ModelRepo(Repo):
         meta = {}
         if os.path.exists(meta_path):
             try:
-                meta = self._mh.read(meta_path)[0]
+                meta = MetaHandler.read(meta_path)[0]
             except IOError as e:
                 warnings.warn(f'File reading error ignored: {e}')
 
@@ -266,7 +265,7 @@ class ModelRepo(Repo):
 
         meta.update(self.get_meta()[0])
         try:
-            self._mh.write(meta_path, [meta])
+            MetaHandler.write(meta_path, [meta])
         except IOError as e:
             warnings.warn(f'File writing error ignored: {e}')
 

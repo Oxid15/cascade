@@ -30,12 +30,11 @@ class HistoryLogger:
         filepath: str
             Path to the history log file
         """
-        self._mh = MetaHandler()
         self._log_file = filepath
 
         if os.path.exists(self._log_file):
             try:
-                self._log = self._mh.read(self._log_file)
+                self._log = MetaHandler.read(self._log_file)
                 if isinstance(self._log, list):
                     raise RuntimeError(
                         f'Failed to initialize history logger due to unexpected object'
@@ -66,6 +65,6 @@ class HistoryLogger:
         self._log['history'].append(obj)
 
         try:
-            self._mh.write(self._log_file, self._log)
+            MetaHandler.write(self._log_file, self._log)
         except IOError as e:
             raise IOError(f'Failed to write log file: {self._log_file}') from e
