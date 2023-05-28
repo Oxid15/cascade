@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
 from typing import Type, Any
 import torch
 from ..models import Model
@@ -44,15 +45,27 @@ class TorchModel(Model):
 
     def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Saves the model using `torch.save`. Args and kwargs are passed into torch.save
+        Saves the model using `torch.save`.
+        If path is the folder, then creates it and
+        saves as 'model'
+        Args and kwargs are passed into torch.save
         """
+        if os.path.isdir(path):
+            os.makedirs(path, exist_ok=True)
+            path = os.path.join(path, "model")
+
         with open(path, 'wb') as f:
             torch.save(self._model, f, *args, **kwargs)
 
     def load(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Loads the model using `torch.load`.
+        If path is folder, then tries to load 'model'
+        from it.
         """
+        if os.path.isdir(path):
+            path = os.path.join(path, "model")
+
         with open(path, 'rb') as f:
             self._model = torch.load(f)
 
