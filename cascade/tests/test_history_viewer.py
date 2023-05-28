@@ -43,7 +43,7 @@ def test_no_metric(repo_or_line, dummy_model):
     else:
         repo_or_line.save(dummy_model)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo_or_line)
     with pytest.raises(AssertionError):
         hv.plot('acc')
 
