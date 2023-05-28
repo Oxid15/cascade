@@ -172,7 +172,8 @@ class MetaHandler:
     >>> mh.write('meta.yml', {'hello': 'world'})
     >>> obj = mh.read('meta.yml')
     """
-    def read(self, path: str) -> MetaFromFile:
+    @classmethod
+    def read(cls, path: str) -> MetaFromFile:
         """
         Reads object from path.
 
@@ -190,10 +191,11 @@ class MetaHandler:
         IOError
             when decoding errors occur
         """
-        handler = self._get_handler(path)
+        handler = cls._get_handler(path)
         return handler.read(path)
 
-    def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
+    @classmethod
+    def write(cls, path: str, obj: Any, overwrite: bool = True) -> None:
         """
         Writes object to path.
 
@@ -212,10 +214,11 @@ class MetaHandler:
         IOError
             when encoding errors occur
         """
-        handler = self._get_handler(path)
+        handler = cls._get_handler(path)
         return handler.write(path, obj, overwrite=overwrite)
 
-    def _get_handler(self, path: str) -> BaseHandler:
+    @classmethod
+    def _get_handler(cls, path: str) -> BaseHandler:
         ext = os.path.splitext(path)[-1]
         if ext == '.json':
             return JSONHandler()
