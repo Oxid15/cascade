@@ -79,8 +79,7 @@ class ModelLine(Traceable):
             model: Model
                 a loaded model
         """
-        model = self._model_cls()
-        model.load(os.path.join(self._root, self.model_names[num]))
+        model = self._model_cls.load(os.path.join(self._root, self.model_names[num]))
         return model
 
     def __len__(self) -> int:
