@@ -69,7 +69,6 @@ class ModelLine(Traceable):
         else:
             # No folder -> create
             os.mkdir(self._root)
-        self._mh = MetaHandler()
 
     def __getitem__(self, num: int) -> Model:
         """
@@ -142,12 +141,12 @@ class ModelLine(Traceable):
         self.model_names.append(os.path.join(folder_name, "model"))
 
         # Save model's meta
-        self._mh.write(
+        MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
 
         # Save updated line's meta
-        self._mh.write(
+        MetaHandler.write(
             os.path.join(self._root, "meta" + self._meta_fmt), self.get_meta()
         )
 

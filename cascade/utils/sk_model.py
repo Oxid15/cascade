@@ -74,7 +74,7 @@ class SkModel(BasicModel):
         root = os.path.dirname(path)
         names = glob.glob(os.path.join(f"{root}", "meta.*"))
         if len(names) == 1:
-            meta = MetaHandler().read(names[0])
+            meta = MetaHandler.read(names[0])
             # Uses first meta in list
             # Usually the list is of unit length
             meta = meta[0]

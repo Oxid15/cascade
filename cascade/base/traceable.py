@@ -52,7 +52,7 @@ class Traceable:
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
         from . import MetaHandler
-        return MetaHandler().read(path)
+        return MetaHandler.read(path)
 
     def get_meta(self) -> PipeMeta:
         """
