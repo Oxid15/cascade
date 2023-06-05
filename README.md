@@ -234,4 +234,14 @@ If you used the code in your research, please cite it with:
   
 [![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
 
+```bibtex
+@software{ilia_moiseev_2023_8006995,
+  author       = {Ilia Moiseev},
+  title        = {Oxid15/cascade},
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.8006995},
+  url          = {https://doi.org/10.5281/zenodo.8006995}
+}
+```
+
 ![footer](cascade/docs/imgs/footer.png)
