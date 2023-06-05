@@ -229,3 +229,9 @@ Please make sure to update tests and docs as appropriate.
 This project uses Semantic Versioning - <https://semver.org/>
 
 ![footer](cascade/docs/imgs/footer.png)
+
+## Cite the code
+
+If you used the code in your research, please cite it with:  
+  
+[![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
