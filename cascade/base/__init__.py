@@ -38,9 +38,11 @@ MetaFromFile = Union[List[Any], Dict[Any, Any]]
 
 
 def raise_not_implemented(class_name: str, name: str) -> NoReturn:
-    raise NotImplementedError(f'Default {class_name} class "{name}()" '
-                              f'method called. May be you haven\'t '
-                              f'implemented it in the successor class')
+    raise NotImplementedError(
+        f"Default {class_name} class '{name}()' "
+        f"method called. May be you haven't "
+        f"implemented it in the successor class"
+    )
 
 
 from .meta_handler import MetaHandler, supported_meta_formats
