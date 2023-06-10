@@ -23,6 +23,7 @@ class HistoryLogger:
     """
     An interface to log meta into history files
     """
+
     def __init__(self, filepath: str) -> None:
         """
         Parameters
@@ -37,21 +38,20 @@ class HistoryLogger:
                 self._log = MetaHandler.read(self._log_file)
                 if isinstance(self._log, list):
                     raise RuntimeError(
-                        f'Failed to initialize history logger due to unexpected object'
-                        f' format - log is the instance of list and not dict.'
-                        f' Check your {self._log_file} file')
-                if 'history' not in self._log:
+                        f"Failed to initialize history logger due to unexpected object"
+                        f" format - log is the instance of list and not dict."
+                        f" Check your {self._log_file} file"
+                    )
+                if "history" not in self._log:
                     raise RuntimeError(
-                        f'Failed to initialize history logger due to unexpected object'
+                        f"Failed to initialize history logger due to unexpected object"
                         f' format - "history" key is missing.'
-                        f' Check your {self._log_file} file')
+                        f" Check your {self._log_file} file"
+                    )
             except IOError as e:
-                raise IOError(f'Failed to read log file: {self._log_file }') from e
+                raise IOError(f"Failed to read log file: {self._log_file }") from e
         else:
-            self._log = {
-                'history': [],
-                'type': 'history'
-            }
+            self._log = {"history": [], "type": "history"}
 
     def log(self, obj: Any) -> None:
         """
@@ -62,9 +62,9 @@ class HistoryLogger:
         obj: Any
             Meta data of the object
         """
-        self._log['history'].append(obj)
+        self._log["history"].append(obj)
 
         try:
             MetaHandler.write(self._log_file, self._log)
         except IOError as e:
-            raise IOError(f'Failed to write log file: {self._log_file}') from e
+            raise IOError(f"Failed to write log file: {self._log_file}") from e
