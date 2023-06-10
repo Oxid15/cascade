@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Type, Any
+from typing import Type, Any, Union
 import torch
 from ..models import Model
 from ..base import PipeMeta
@@ -25,21 +25,31 @@ class TorchModel(Model):
     """
     The wrapper around `nn.Module`s.
     """
-    def __init__(self, model_class: Type, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, model_class: Union[Type, None] = None,
+                 model: Union[torch.nn.Module, None] = None,
+                 **kwargs: Any) -> None:
         """
         Parameters
         ----------
-        model_class: type
+        model_class: type, optional
             The class created when new nn.Module was defined. Will be used
             to construct model. If any arguments needed, please pass them
-            into `args` and `kwargs`.
+            into `kwargs`.
+        model: torch.nn.Module, optional
+            The module that should be used as a model. Have higher priority
+            if provided. model_class and model cannot both be None.
         """
-        self._model = model_class(*args, **kwargs)
-        super().__init__(*args, **kwargs)
+        if model is not None:
+            self._model = model
+        elif model_class is not None:
+            self._model = model_class(**kwargs)
+        else:
+            raise ValueError('Either `model_class` or `model` should be not None')
+        super().__init__(**kwargs)
 
     def predict(self, *args, **kwargs) -> Any:
         """
-        Calls internal module with whatever arguments.
+        Calls internal module with arguments provided.
         """
         return self._model(*args, **kwargs)
 
@@ -57,7 +67,8 @@ class TorchModel(Model):
         with open(path, 'wb') as f:
             torch.save(self._model, f, *args, **kwargs)
 
-    def load(self, path: str, *args: Any, **kwargs: Any) -> None:
+    @classmethod
+    def load(cls, path: str, *args: Any, **kwargs: Any) -> "TorchModel":
         """
         Loads the model using `torch.load`.
         If path is folder, then tries to load 'model'
@@ -67,7 +78,9 @@ class TorchModel(Model):
             path = os.path.join(path, "model")
 
         with open(path, 'rb') as f:
-            self._model = torch.load(f)
+            torch_model = torch.load(f, *args, **kwargs)
+
+        return TorchModel(model=torch_model)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

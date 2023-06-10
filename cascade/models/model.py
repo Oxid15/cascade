@@ -30,11 +30,10 @@ class Model(Traceable):
                  meta_prefix: Union[PipeMeta, str, None] = None, **kwargs: Any) -> None:
         """
         Should be called in any successor - initializes default meta needed.
-        Arguments passed in it should be related to model's hyperparameters, architecture.
-        All additional arguments should have defaults - to be able to create model and then load.
+
         Successors may pass all of their parameters to superclass for it to be able to
         log them in meta. Everything that is worth to document about model and data
-        it was trained on can be either in params or meta_prefix.
+        it was trained on can be put either in params or meta_prefix.
         """
         # Model accepts meta_prefix explicitly to not to record it in 'params'
         self.metrics = {}
@@ -62,14 +61,14 @@ class Model(Traceable):
         """
         raise_not_implemented('cascade.models.Model', 'evaluate')
 
-    def load(self, filepath: str, *args: Any, **kwargs: Any) -> None:
+    @classmethod
+    def load(cls, path: str, *args: Any, **kwargs: Any) -> 'Model':
         """
-        Loads model from provided filepath. May be unpickling process or reading json configs.
-        Does not return any model, just restores internal state.
+        Loads model from provided path
         """
         raise_not_implemented('cascade.models.Model', 'load')
 
-    def save(self, filepath: str, *args: Any, **kwargs: Any) -> None:
+    def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Saves model's state using provided filepath.
         """
@@ -81,6 +80,7 @@ class Model(Traceable):
 
         meta = super().get_meta()
 
+        #TODO: can refactor this
         all_default_exist = True
         if hasattr(self, 'created_at'):
             meta[0]['created_at'] = self.created_at

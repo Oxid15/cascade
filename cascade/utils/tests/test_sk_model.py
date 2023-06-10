@@ -68,5 +68,4 @@ def test_save_load(tmp_path, postfix):
 
     model.save(tmp_path)
 
-    model = SkModel()
-    model.load(tmp_path)
+    model = SkModel.load(tmp_path)
