@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -24,6 +25,24 @@ import pandas as pd
 from cascade.utils.tables import FeatureTable
 
 
-def test_cycle():
+@pytest.fixture
+def ft():
+    df = pd.DataFrame([[1, 3], [2, 4], [3, 5]], columns=['a', 'b'])
+    ft = FeatureTable(df)
+    ft.add_feature('c', lambda df: df['a'] + df['b'])
+    return ft
 
-    ft = FeatureTable()
+
+def test_add_feature(ft):
+    names = ft.get_features()
+    assert names == ['a', 'b', 'c']
+
+
+def test_function(ft):
+    cdf = ft.get_table()
+    assert cdf['c'].tolist() == [4, 6, 8]
+
+
+def test_get_subset(ft):
+    df = ft.get_table(['a', 'b'])
+    assert list(df.columns) == ['a', 'b']
