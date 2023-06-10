@@ -19,6 +19,8 @@ import pandas as pd
 from dask import dataframe as dd
 from tqdm import tqdm
 
+from cascade.base import PipeMeta
+
 from ..meta import AggregateValidator, DataValidationException
 from ..data import Dataset, Modifier, Iterator, SequentialCacher
 from ..base import PipeMeta
@@ -326,7 +328,15 @@ class FeatureTable(TableDataset):
         func: Callable[[pd.DataFrame], Union[pd.Series, Tuple[str]]],
         *args: Any,
         **kwargs: Any
-    ) -> None: # What if feature already exists?
+    ) -> None:  # What if feature already exists?
         self._computed_features[name] = func
         self._computed_features_args[name] = args
         self._computed_features_kwargs[name] = kwargs
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]['computed_columns'] = list(self._computed_features.keys())
+        meta[0]['computed_functions'] = {key: str(self._computed_features[key]) for key in self._computed_features}
+        meta[0]['computed_functions_args'] = {key: str(self._computed_features_args[key]) for key in self._computed_features_args}
+        meta[0]['computed_functions_kwargs'] = {key: str(self._computed_features_kwargs[key]) for key in self._computed_features_kwargs}
+        return meta
