@@ -8,15 +8,11 @@ class DatasetClient(Dataset):
         self._host = host
 
     def __getitem__(self, idx):
-        res = requests.post(f'{self._host}/__getitem__',
-            json={
-                'idx': idx
-            }
-        )
+        res = requests.post(f"{self._host}/__getitem__", json={"idx": idx})
         data = res.json()
-        return data['item']
+        return data["item"]
 
     def __len__(self):
-        res = requests.post(f'{self._host}/__len__')
+        res = requests.post(f"{self._host}/__len__")
         data = res.json()
-        return data['len']
+        return data["len"]
