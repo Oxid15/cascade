@@ -10,14 +10,18 @@ class DatasetServer(Modifier):
         self.app = Flask(__name__)
 
         @self.app.route("/", methods=["POST"])
-        def method():
+        def attr():
             req = request.json
             attr = req.get("attr")
-            args = req.get("args")
-            kwargs = req.get("kwargs")
+            args = req.get("args", [])
+            kwargs = req.get("kwargs", {})
 
             attr = getattr(self._dataset, attr)
-            return {"result": self._serialize(attr(*args, **kwargs))}
+
+            if callable(attr):
+                return {"result": self._serialize(attr(*args, **kwargs))}
+            else:
+                return {"result": attr}
 
     def _serialize(self, obj):
         return json.loads(JSONEncoder().encode(obj))
