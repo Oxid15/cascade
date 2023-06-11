@@ -1,7 +1,9 @@
 import json
 from flask import Flask, request
+import pickle
 from ..data import Modifier
 from ..base import JSONEncoder
+from typing import Any
 
 
 class DatasetServer(Modifier):
@@ -21,10 +23,10 @@ class DatasetServer(Modifier):
             if callable(attr):
                 return {"result": self._serialize(attr(*args, **kwargs))}
             else:
-                return {"result": attr}
+                return {"result": self._serialize(attr)}
 
-    def _serialize(self, obj):
-        return json.loads(JSONEncoder().encode(obj))
+    def _serialize(self, obj: Any) -> str:
+        return pickle.dumps(obj).hex()
 
     def run(self, **kwargs):
         self.app.run(**kwargs)
