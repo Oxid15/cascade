@@ -18,7 +18,7 @@ import warnings
 from typing import Any, Union
 import pendulum
 
-from ..base import Traceable, PipeMeta
+from ..base import Traceable, PipeMeta, raise_not_implemented
 
 
 class Model(Traceable):
@@ -30,11 +30,10 @@ class Model(Traceable):
                  meta_prefix: Union[PipeMeta, str, None] = None, **kwargs: Any) -> None:
         """
         Should be called in any successor - initializes default meta needed.
-        Arguments passed in it should be related to model's hyperparameters, architecture.
-        All additional arguments should have defaults - to be able to create model and then load.
+
         Successors may pass all of their parameters to superclass for it to be able to
         log them in meta. Everything that is worth to document about model and data
-        it was trained on can be either in params or meta_prefix.
+        it was trained on can be put either in params or meta_prefix.
         """
         # Model accepts meta_prefix explicitly to not to record it in 'params'
         self.metrics = {}
@@ -47,33 +46,33 @@ class Model(Traceable):
         Method to encapsulate training loops.
         May be provided with any training-related arguments.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'fit')
 
     def predict(self, *args: Any, **kwargs: Any) -> Any:
         """
         Method to encapsulate inference.
         May include preprocessing steps to make model self-sufficient.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'predict')
 
     def evaluate(self, *args: Any, **kwargs: Any) -> None:
         """
         Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'evaluate')
 
-    def load(self, filepath: str, *args: Any, **kwargs: Any) -> None:
+    @classmethod
+    def load(cls, path: str, *args: Any, **kwargs: Any) -> 'Model':
         """
-        Loads model from provided filepath. May be unpickling process or reading json configs.
-        Does not return any model, just restores internal state.
+        Loads model from provided path
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'load')
 
-    def save(self, filepath: str, *args: Any, **kwargs: Any) -> None:
+    def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Saves model's state using provided filepath.
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.models.Model', 'save')
 
     def get_meta(self) -> PipeMeta:
         # Successors may not call super().__init__
@@ -81,6 +80,7 @@ class Model(Traceable):
 
         meta = super().get_meta()
 
+        #TODO: can refactor this
         all_default_exist = True
         if hasattr(self, 'created_at'):
             meta[0]['created_at'] = self.created_at

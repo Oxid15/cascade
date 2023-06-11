@@ -26,7 +26,7 @@ import numpy as np
 
 from . import MetaFromFile
 
-supported_meta_formats = ('.json', '.yml', '.yaml')
+supported_meta_formats = (".json", ".yml", ".yaml")
 
 
 class CustomEncoder(JSONEncoder):
@@ -40,16 +40,29 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, datetime.timedelta):
             return (datetime.datetime.min + obj).time().isoformat()
 
-        elif isinstance(obj, (np.int_, np.intc, np.intp, np.int8,
-                              np.int16, np.int32, np.int64, np.uint8,
-                              np.uint16, np.uint32, np.uint64)):
+        elif isinstance(
+            obj,
+            (
+                np.int_,
+                np.intc,
+                np.intp,
+                np.int8,
+                np.int16,
+                np.int32,
+                np.int64,
+                np.uint8,
+                np.uint16,
+                np.uint32,
+                np.uint64,
+            ),
+        ):
             return int(obj)
 
         elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
             return float(obj)
 
         elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):
-            return {'real': obj.real, 'imag': obj.imag}
+            return {"real": obj.real, "imag": obj.imag}
 
         elif isinstance(obj, (np.ndarray,)):
             return obj.tolist()
@@ -76,23 +89,25 @@ class BaseHandler:
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         raise NotImplementedError()
 
-    def _raise_io_error(self, path: str, exc: Union[Exception, None] = None) -> NoReturn:
+    def _raise_io_error(
+        self, path: str, exc: Union[Exception, None] = None
+    ) -> NoReturn:
         # Any file decoding errors will be
         # prepended with filepath for user
         # to be able to identify broken file
         if exc is not None:
-            raise IOError(f'Error while reading file `{path}`') from exc
+            raise IOError(f"Error while reading file `{path}`") from exc
         else:
-            raise IOError(f'Error while reading file `{path}`')
+            raise IOError(f"Error while reading file `{path}`")
 
 
 class JSONHandler(BaseHandler):
     def read(self, path: str) -> MetaFromFile:
         _, ext = os.path.splitext(path)
-        if ext == '':
-            path += '.json'
+        if ext == "":
+            path += ".json"
 
-        with open(path, 'r') as meta_file:
+        with open(path, "r") as meta_file:
             try:
                 meta = json.load(meta_file)
                 if isinstance(meta, str):
@@ -105,17 +120,17 @@ class JSONHandler(BaseHandler):
         if not overwrite and os.path.exists(path):
             return
 
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             json.dump(obj, f, cls=CustomEncoder, indent=4)
 
 
 class YAMLHandler(BaseHandler):
     def read(self, path: str) -> MetaFromFile:
         _, ext = os.path.splitext(path)
-        if ext == '':
-            path += '.yml'
+        if ext == "":
+            path += ".yml"
 
-        with open(path, 'r') as meta_file:
+        with open(path, "r") as meta_file:
             try:
                 meta = yaml.safe_load(meta_file)
 
@@ -131,7 +146,7 @@ class YAMLHandler(BaseHandler):
             return
 
         obj = CustomEncoder().obj_to_dict(obj)
-        with open(path, 'w') as f:
+        with open(path, "w") as f:
             yaml.safe_dump(obj, f)
 
 
@@ -147,13 +162,12 @@ class TextHandler(BaseHandler):
             Path to the file
         """
 
-        with open(path, 'r') as meta_file:
-            meta = {path: ''.join(meta_file.readlines())}
+        with open(path, "r") as meta_file:
+            meta = {path: "".join(meta_file.readlines())}
             return meta
 
     def write(self, path: str, obj: Any, overwrite: bool = True) -> NoReturn:
-        raise NotImplementedError(
-            'MetaHandler does not write text files, only reads')
+        raise NotImplementedError("MetaHandler does not write text files, only reads")
 
 
 class MetaHandler:
@@ -166,13 +180,14 @@ class MetaHandler:
     Examples
     --------
     >>> from cascade.base import MetaHandler
-    >>> mh = MetaHandler()
-    >>> mh.write('meta.json', {'hello': 'world'})
-    >>> obj = mh.read('meta.json')
-    >>> mh.write('meta.yml', {'hello': 'world'})
-    >>> obj = mh.read('meta.yml')
+    >>> MetaHandler.write('meta.json', {'hello': 'world'})
+    >>> obj = MetaHandler.read('meta.json')
+    >>> MetaHandler.write('meta.yml', {'hello': 'world'})
+    >>> obj = MetaHandler.read('meta.yml')
     """
-    def read(self, path: str) -> MetaFromFile:
+
+    @classmethod
+    def read(cls, path: str) -> MetaFromFile:
         """
         Reads object from path.
 
@@ -190,10 +205,11 @@ class MetaHandler:
         IOError
             when decoding errors occur
         """
-        handler = self._get_handler(path)
+        handler = cls._get_handler(path)
         return handler.read(path)
 
-    def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
+    @classmethod
+    def write(cls, path: str, obj: Any, overwrite: bool = True) -> None:
         """
         Writes object to path.
 
@@ -212,14 +228,15 @@ class MetaHandler:
         IOError
             when encoding errors occur
         """
-        handler = self._get_handler(path)
+        handler = cls._get_handler(path)
         return handler.write(path, obj, overwrite=overwrite)
 
-    def _get_handler(self, path: str) -> BaseHandler:
+    @classmethod
+    def _get_handler(cls, path: str) -> BaseHandler:
         ext = os.path.splitext(path)[-1]
-        if ext == '.json':
+        if ext == ".json":
             return JSONHandler()
-        elif ext in ('.yml', '.yaml'):
+        elif ext in (".yml", ".yaml"):
             return YAMLHandler()
         else:
             return TextHandler()

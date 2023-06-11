@@ -26,18 +26,24 @@ from cascade.models import ModelRepo
 from cascade.meta import HistoryViewer
 
 
-def test_run(model_repo, dummy_model):
+def test_run(repo_or_line, dummy_model):
     dummy_model.evaluate()
-    model_repo['0'].save(dummy_model)
+    if isinstance(repo_or_line, ModelRepo):
+        repo_or_line['0'].save(dummy_model)
+    else:
+        repo_or_line.save(dummy_model)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo_or_line)
     hv.plot('acc')
 
 
-def test_no_metric(model_repo, dummy_model):
-    model_repo['0'].save(dummy_model)
+def test_no_metric(repo_or_line, dummy_model):
+    if isinstance(repo_or_line, ModelRepo):
+        repo_or_line['0'].save(dummy_model)
+    else:
+        repo_or_line.save(dummy_model)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo_or_line)
     with pytest.raises(AssertionError):
         hv.plot('acc')
 

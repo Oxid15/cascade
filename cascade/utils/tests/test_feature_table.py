@@ -16,29 +16,33 @@ limitations under the License.
 
 import os
 import sys
-# import pytest
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler
-from cascade.meta import DataRegistrator, DataCard
+import pandas as pd
+from cascade.utils.tables import FeatureTable
 
 
-def test(tmp_path):
-    tmp_path = str(tmp_path)
-    tmp_path = tmp_path + '.yml'
+@pytest.fixture
+def ft():
+    df = pd.DataFrame([[1, 3], [2, 4], [3, 5]], columns=['a', 'b'])
+    ft = FeatureTable(df)
+    ft.add_feature('c', lambda df: df['a'] + df['b'])
+    return ft
 
-    card = DataCard(
-        name='name'
-    )
 
-    dr = DataRegistrator(tmp_path)
-    dr.register(card)
+def test_add_feature(ft):
+    names = ft.get_features()
+    assert names == ['a', 'b', 'c']
 
-    meta = MetaHandler.read(tmp_path)
 
-    assert 'history' in meta
-    assert len(meta['history']) == 1
-    assert 'name' in meta['history'][0]
-    assert meta['history'][0]['name'] == 'name'
+def test_function(ft):
+    cdf = ft.get_table()
+    assert cdf['c'].tolist() == [4, 6, 8]
+
+
+def test_get_subset(ft):
+    df = ft.get_table(['a', 'b'])
+    assert list(df.columns) == ['a', 'b']

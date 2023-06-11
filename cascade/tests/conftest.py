@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
 import os
 import sys
 import datetime
@@ -46,15 +45,14 @@ class DummyModel(Model):
     def evaluate(self, *args, **kwargs):
         self.metrics.update({'acc': np.random.random()})
 
-    def load(self, path):
-        if os.path.splitext(path)[-1] != '.bin':
-            path += '.bin'
+    @classmethod
+    def load(cls, path):
         with open(path, 'rb') as f:
-            self.model = str(f.read())
+            model = DummyModel()
+            model.model = str(f.read())
+            return model
 
     def save(self, path):
-        if os.path.splitext(path)[-1] != '.bin':
-            path += '.bin'
         with open(path, 'wb') as f:
             f.write(b'model')
 
@@ -68,8 +66,9 @@ class OnesModel(BasicModel):
     def predict(self, x, *args, **kwargs):
         return np.array([1 for _ in range(len(x))])
 
-    def load(self, filepath) -> None:
-        pass
+    @classmethod
+    def load(cls, filepath) -> "OnesModel":
+        return OnesModel()
 
     def save(self, filepath) -> None:
         pass
@@ -168,3 +167,18 @@ def model_repo(tmp_path):
             model_cls=DummyModel) for num in range(10)
     ])
     return repo
+
+
+@pytest.fixture(params=[
+    {
+        'repo_or_line': True
+    },
+    {
+        'repo_or_line': False
+    }
+])
+def repo_or_line(request, model_repo, model_line):
+    if request.param['repo_or_line']:
+        return model_repo
+    else:
+        return model_line

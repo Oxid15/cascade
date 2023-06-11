@@ -12,7 +12,7 @@ limitations under the License.
 """
 
 from typing import Generic, Iterable, TypeVar, Any, Sized, Sequence
-from ..base import Traceable, PipeMeta
+from ..base import Traceable, PipeMeta, raise_not_implemented
 
 T = TypeVar('T')
 
@@ -35,7 +35,7 @@ class Dataset(Generic[T], Traceable):
         """
         Abstract method - should be defined in every successor
         """
-        raise NotImplementedError()
+        raise_not_implemented('cascade.data.Dataset', '__getitem__')
 
     def get_meta(self) -> PipeMeta:
         """
@@ -49,21 +49,6 @@ class Dataset(Generic[T], Traceable):
         meta = super().get_meta()
         meta[0]['type'] = 'dataset'
         return meta
-
-    def __repr__(self) -> str:
-        """
-        Returns
-        -------
-        repr: str
-            Representation of a Dataset. This repr used as a name for get_meta() method
-            by default gives the name of class from basic repr
-
-        See also
-        --------
-        cascade.data.Dataset.get_meta()
-        """
-        # Removes adress part of basic object repr and leading < symbol
-        return super().__repr__().split()[0][1:]
 
 
 class SizedDataset(Dataset[T], Sized):
@@ -79,8 +64,8 @@ class SizedDataset(Dataset[T], Sized):
     --------
     cascade.data.Dataset
     """
-    def len(self) -> int:
-        raise NotImplementedError()
+    def __len__(self) -> int:
+        raise_not_implemented('cascade.data.Dataset', '__len__')
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
@@ -97,7 +82,8 @@ class Iterator(Dataset):
         self._data = data
 
     def __getitem__(self, item: Any) -> T:
-        raise NotImplementedError()
+        raise NotImplementedError('Iterator explicitly forbids __getitem__ method.'
+                                  'Please, consider the use of Wrapper instead.')
 
     def __iter__(self) -> Iterable[T]:
         for item in self._data:

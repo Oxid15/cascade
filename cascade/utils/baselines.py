@@ -50,7 +50,9 @@ class ConstantBaseline(BasicModel):
         with open(path, 'w') as f:
             json.dump({'constant': self._constant}, f)
 
-    def load(self, path: str) -> None:
+    @classmethod
+    def load(cls, path: str) -> "ConstantBaseline":
         with open(path, 'r') as f:
             obj = json.load(f)
-            self._constant = obj['constant']
+            model = ConstantBaseline(obj['constant'])
+            return model

@@ -25,6 +25,7 @@ class Traceable:
     Base class for everything that has metadata in cascade.
     Handles the logic of getting and updating internal meta prefix.
     """
+
     def __init__(
         self,
         *args: Any,
@@ -52,7 +53,8 @@ class Traceable:
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
         from . import MetaHandler
-        return MetaHandler().read(path)
+
+        return MetaHandler.read(path)
 
     def get_meta(self) -> PipeMeta:
         """
@@ -67,10 +69,8 @@ class Traceable:
 
             Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
-        meta = {
-            'name': repr(self)
-        }
-        if hasattr(self, '_meta_prefix'):
+        meta = {"name": repr(self)}
+        if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
             self._warn_no_prefix()
@@ -86,11 +86,12 @@ class Traceable:
 
         if isinstance(obj, list):
             raise RuntimeError(
-                'Object that was passed or read from path is a list.'
-                'There is no clear way how to update this object\'s meta'
-                'using list')
+                "Object that was passed or read from path is a list."
+                "There is no clear way how to update this object's meta"
+                "using list"
+            )
 
-        if hasattr(self, '_meta_prefix'):
+        if hasattr(self, "_meta_prefix"):
             self._meta_prefix.update(obj)
         else:
             self._warn_no_prefix()
@@ -98,7 +99,22 @@ class Traceable:
     @staticmethod
     def _warn_no_prefix() -> None:
         warnings.warn(
-            'Object doesn\'t have _meta_prefix. '
-            'This may mean super().__init__() wasn\'t'
-            'called somewhere'
+            "Object doesn't have _meta_prefix. "
+            "This may mean super().__init__() wasn't"
+            "called somewhere"
         )
+
+    def __repr__(self) -> str:
+        """
+        Returns
+        -------
+        repr: str
+            Representation of a Traceable. This repr used as a name for get_meta() method
+            by default gives the name of class from basic repr
+
+        See also
+        --------
+        cascade.data.Traceable.get_meta()
+        """
+        # Removes adress part of basic object repr and leading < symbol
+        return super().__repr__().split()[0][1:]

@@ -54,7 +54,7 @@ class RepoDiffReader(DiffReader):
                 f'Multiple meta files in the directory provided: {path}'
             )
 
-        meta = MetaHandler().read(metas[0])
+        meta = MetaHandler.read(metas[0])
 
         if not isinstance(meta, list):
             raise ValueError(f'Something is wrong with meta in {metas[0]} - it is not a list')
@@ -70,7 +70,7 @@ class RepoDiffReader(DiffReader):
 
         mev = MetaViewer(path, filt={'type': 'model'})
         objs = [meta for meta in mev]
-        objs = {meta[0]['name']: meta for meta in objs}
+        objs = {f'Model {i:0>5d}': meta for i, meta in enumerate(objs)}
         return objs
 
 
@@ -81,7 +81,7 @@ class DatasetVersionDiffReader(DiffReader):
     def read_objects(self, path: str) -> Dict[str, Any]:
         self._check_path(path)
 
-        versions = MetaHandler().read(path)['versions']
+        versions = MetaHandler.read(path)['versions']
 
         version_dict = {}
         for pipe_key in versions:
@@ -97,7 +97,7 @@ class HistoryDiffReader(DiffReader):
     def read_objects(self, path: str) -> Dict[str, Any]:
         self._check_path(path)
 
-        history = MetaHandler().read(path)['history']
+        history = MetaHandler.read(path)['history']
 
         return {item['updated_at']: item for item in history}
 
@@ -163,7 +163,7 @@ class DiffViewer(Server):
                     f' meta formats: {supported_meta_formats}'
                 )
 
-            meta = MetaHandler().read(path)
+            meta = MetaHandler.read(path)
             if 'type' not in meta:
                 raise ValueError(
                     f'Meta in file {path} has no `type` in its keys!'

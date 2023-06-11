@@ -16,29 +16,30 @@ limitations under the License.
 
 import os
 import sys
-# import pytest
+import torch
+import pytest
 
-MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+
+MODULE_PATH = os.path.dirname(
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler
-from cascade.meta import DataRegistrator, DataCard
+
+from cascade.utils.torch_model import TorchModel
 
 
-def test(tmp_path):
+@pytest.mark.parametrize("postfix", ["", "model", "model.pt"])
+def test_save_load(tmp_path, postfix):
     tmp_path = str(tmp_path)
-    tmp_path = tmp_path + '.yml'
 
-    card = DataCard(
-        name='name'
-    )
+    if postfix:
+        tmp_path = os.path.join(tmp_path, postfix)
 
-    dr = DataRegistrator(tmp_path)
-    dr.register(card)
+    model = TorchModel(torch.nn.Linear, in_features=10, out_features=2)
 
-    meta = MetaHandler.read(tmp_path)
+    model.save(tmp_path)
 
-    assert 'history' in meta
-    assert len(meta['history']) == 1
-    assert 'name' in meta['history'][0]
-    assert meta['history'][0]['name'] == 'name'
+    model = TorchModel.load(tmp_path)
+
+    assert str(model._model) == str(torch.nn.Linear(10, 2))

@@ -14,7 +14,7 @@ limitations under the License.
 import os
 import warnings
 import itertools
-from typing import List, Iterable, Union, Any, Literal, Type, Generator
+from typing import Any, Dict, List, Iterable, Union, Any, Literal, Type, Generator
 import shutil
 
 import pendulum
@@ -28,22 +28,65 @@ from .model_line import ModelLine
 
 class Repo(Traceable):
     """
-    Base interface for repos of models.
+    Base interface for repos of models. Repo is the collection of Lines.
 
     See also
     --------
     cascade.models.ModelRepo
     """
-    root = None
+    _lines = dict()
+    _root = None
+    
+    def get_root(self):
+        return self._root
 
     def reload(self) -> None:
-        raise NotImplementedError()
+        for line in self._lines:
+            self._lines[line].reload()
 
     def __getitem__(self, key: str) -> ModelLine:
         raise NotImplementedError()
 
     def __len__(self) -> int:
-        raise NotImplementedError()
+        """
+        Returns
+        -------
+        num: int
+            a number of lines
+        """
+        return len(self._lines)
+
+    def __iter__(self) -> Generator[ModelLine, None, None]:
+        for line in self._lines:
+            yield self.__getitem__(line)
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0].update({
+            'root': self._root,
+            'len': len(self),
+            'type': 'repo'
+        })
+        return meta
+
+    def get_line_names(self) -> List[str]:
+        """
+        Returns list of line names.
+        """
+        return list(self._lines.keys())
+
+
+class SingleLineRepo(Repo):
+    def __init__(self, line, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._lines = {os.path.split(line.get_root())[-1]: line}
+        self._root = line.get_root()
+
+    def __getitem__(self, key: str) -> ModelLine:
+        return self._lines[key]
+
+    def __repr__(self):
+        return f'SingleLine in {self._root}'
 
 
 class ModelRepo(Repo):
@@ -51,8 +94,8 @@ class ModelRepo(Repo):
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
 
-    Stores its meta-data in its root folder. With every run if the repo was already
-    created earlier, updates its meta and logs changes in human-readable format in file history.log
+    Stores its metadata in its root folder. With every run if the repo was already
+    created earlier, updates its meta and logs changes in human-readable format in history file
 
     Example
     -------
@@ -78,7 +121,7 @@ class ModelRepo(Repo):
         lines: Union[Iterable[ModelLine], None] = None,
         overwrite: bool = False,
         meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json',
-        model_cls: Type = Model,
+        model_cls: Union[Type, Dict[str, Type]] = Model,
         log_history: bool = True,
         **kwargs: Any
     ) -> None:
@@ -116,8 +159,8 @@ class ModelRepo(Repo):
 
         os.makedirs(self._root, exist_ok=True)
 
-        self._mh = MetaHandler()
-        self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
+        if self._log_history:
+            self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
         self._load_lines()
 
         if lines is not None:
@@ -129,8 +172,9 @@ class ModelRepo(Repo):
     def _load_lines(self) -> None:
         self._lines = {
             name: ModelLine(os.path.join(self._root, name),
-                            model_cls=self._model_cls,
-                            meta_prefix=self._meta_prefix,
+                            model_cls=self._model_cls
+                            if isinstance(self._model_cls, type)
+                            else self._model_cls[name],
                             meta_fmt=self._meta_fmt)
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))}
@@ -177,7 +221,6 @@ class ModelRepo(Repo):
             meta_fmt = self._meta_fmt
         line = ModelLine(folder,
                          *args,
-                         meta_prefix=self._meta_prefix,
                          meta_fmt=meta_fmt,
                          **kwargs)
         self._lines[name] = line
@@ -199,19 +242,6 @@ class ModelRepo(Repo):
         else:
             raise TypeError(f'{type(key)} is not supported as key')
 
-    def __iter__(self) -> Generator[ModelLine, None, None]:
-        for line in self._lines:
-            yield self.__getitem__(line)
-
-    def __len__(self) -> int:
-        """
-        Returns
-        -------
-        num: int
-            a number of lines
-        """
-        return len(self._lines)
-
     def __repr__(self) -> str:
         return f'ModelRepo in {self._root} of {len(self)} lines'
 
@@ -223,7 +253,7 @@ class ModelRepo(Repo):
         meta = {}
         if os.path.exists(meta_path):
             try:
-                meta = self._mh.read(meta_path)[0]
+                meta = MetaHandler.read(meta_path)[0]
             except IOError as e:
                 warnings.warn(f'File reading error ignored: {e}')
 
@@ -235,35 +265,24 @@ class ModelRepo(Repo):
 
         meta.update(self.get_meta()[0])
         try:
-            self._mh.write(meta_path, [meta])
+            MetaHandler.write(meta_path, [meta])
         except IOError as e:
             warnings.warn(f'File writing error ignored: {e}')
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({
-            'root': self._root,
-            'len': len(self),
-            'updated_at': pendulum.now(tz='UTC'),
-            'type': 'repo'
-        })
+        meta[0].update({'updated_at': pendulum.now(tz='UTC')})
         return meta
 
     def reload(self) -> None:
         """
         Updates internal state.
         """
-        self._load_lines()
+        super().reload()
         self._update_meta()
 
     def __add__(self, repo):
         return ModelRepoConcatenator([self, repo])
-
-    def get_line_names(self) -> List[str]:
-        """
-        Returns list of line names.
-        """
-        return list(self._lines.keys())
 
 
 class ModelRepoConcatenator(Repo):

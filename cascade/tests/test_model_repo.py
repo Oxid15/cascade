@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import glob
 import os
 import sys
 import pytest
@@ -389,3 +390,12 @@ def test_auto_line_name(tmp_path, ext):
     names = repo.get_line_names()
 
     assert names == ['00000', '00002', '00003', 'test']
+
+
+def test_no_logging(tmp_path):
+    tmp_path = str(tmp_path)
+    ModelRepo(tmp_path, log_history=False)
+
+    metas = glob.glob(os.path.join(tmp_path, 'history.*'))
+
+    assert len(metas) == 0
