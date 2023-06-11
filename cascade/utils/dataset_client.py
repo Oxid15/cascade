@@ -1,8 +1,9 @@
-import requests
-import pickle
 from typing import Any
 
+import requests
+
 from ..data import Dataset
+from .serializer import Serializer
 
 
 class DatasetClient(Dataset):
@@ -33,16 +34,17 @@ class DatasetClient(Dataset):
 
     def _build_attr(self, name: str):
         def attr(*args, **kwargs):
-            res = requests.post(
-                self._host, json={"attr": name, "args": args, "kwargs": kwargs}
-            )
+            request = {"attr": name}
+            if args:
+                request["args"] = Serializer.serialize(args)
+            if kwargs:
+                request["kwargs"] = Serializer.serialize(kwargs)
+
+            res = requests.post(self._host, json=request)
             data = res.json()
-            return self._deserialize(data["result"])
+            return Serializer.deserialize(data["result"])
 
         return attr
-
-    def _deserialize(self, obj: str):
-        return pickle.loads(bytes.fromhex(obj))
 
     def __getitem__(self, index: Any) -> Any:
         return self._build_attr("__getitem__")(index)
