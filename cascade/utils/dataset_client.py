@@ -3,7 +3,7 @@ from typing import Any
 from ..data import Dataset
 
 
-class DatasetClient(Dataset):
+class DatasetClient:
     """
     Client for DatasetServer
 
@@ -22,12 +22,18 @@ class DatasetClient(Dataset):
         super().__init__(**kwargs)
         self._host = host
 
-    def __getitem__(self, idx: Any):
-        res = requests.post("/".join((self._host, "__getitem__")), json={"idx": idx})
-        data = res.json()
-        return data["item"]
+    def __getattribute__(self, name: str):
+        if name == "_build_method" or name == "_host":
+            return object.__getattribute__(self, name)
+        return self._build_method(name)
 
-    def __len__(self):
-        res = requests.get("/".join((self._host, "__len__")))
-        data = res.json()
-        return data["len"]
+    def _build_method(self, name: str):
+        def method(*args, **kwargs):
+            res = requests.post(
+                self._host, json={"attr": name, "args": args, "kwargs": kwargs}
+            )
+            print(res.text)
+            data = res.json()
+            return data["result"]
+
+        return method
