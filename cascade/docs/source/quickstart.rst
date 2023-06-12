@@ -23,11 +23,8 @@ Below are examples of usage of Cascade for some typical tasks.
 .. toctree::
     :maxdepth: 1
 
-    examples/dataset_zoo.ipynb
     examples/pipeline_building.ipynb
+    examples/dataset_zoo.ipynb
     examples/model_training.ipynb
     examples/model_training_trainers.ipynb
     examples/data_validation.ipynb
-
-.. important::
-    New examples will be added soon!

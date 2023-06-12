@@ -2,8 +2,8 @@ API reference
 -------------------------
 
 .. toctree::
-    cascade.base
-    cascade.data
-    cascade.models
-    cascade.meta
-    cascade.utils
+    modules/cascade.base
+    modules/cascade.data
+    modules/cascade.models
+    modules/cascade.meta
+    modules/cascade.utils
