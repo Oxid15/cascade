@@ -1,4 +1,4 @@
-Cascade modules reference
+API reference
 -------------------------
 
 .. toctree::
