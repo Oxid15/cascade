@@ -39,7 +39,7 @@ Integration of Cascade in your existing workflow can be at different levels.
 The simplest case is the experiment tracking - store your models structured
 along with all meta data.
 
-.. code-block:: python3
+.. code-block:: python
 
     from cascade.models import Model, ModelRepo
     import random
@@ -77,7 +77,7 @@ What is saved as default meta data in ``classification/resnet/00000/meta.json``
 
     [
         {
-            "name": "<cascade.models.model.Model object at 0x7f4fb0391270>",
+            "name": "cascade.models.model.Model",
             "created_at": "2023-06-12T09:49:56.741950+00:00",
             "metrics": {
                 "f1": 0.4956132247067879
@@ -94,6 +94,70 @@ Meta data is a very flexible structure and you can save and modify whatever
 information you want.
 
 For more advanced usage of ``Model`` see :ref:`/examples/model_training.ipynb` page
+
+Build pipelines
+---------------
+
+The amount of work we put in the building data processing pipelines is
+proportional to the role clean and well prepared data plays in the final
+performance of ML solution.
+
+This is where Datasets come in. Consider this toy-example where the data would be
+a sequence of digits
+
+.. code-block:: python
+
+    from cascade import data as cdd
+
+
+    ds = cdd.Wrapper([0, 1, 2, 3, 4])
+
+    ds = cdd.ApplyModifier(ds, lambda x: x**2)
+    ds = cdd.RandomSampler(ds)
+    train_ds, test_ds = cdd.split(ds, 0.8)
+
+In this example our data goes through three stages that are defined
+(and will not be computed until accessed) above.
+
+Data is squared, randomly resampled and then divided into train and test sets.
+
+
+To get metadata of an object you do just:
+
+.. code-block:: python
+
+    train_ds.get_meta()
+
+.. code-block:: json
+    
+    [
+        {
+            'len': 4,
+            'name': 'cascade.data.range_sampler.RangeSampler',
+            'type': 'dataset'
+        },
+        {
+            'len': 5,
+            'name': 'cascade.data.random_sampler.RandomSampler',
+            'type': 'dataset'
+        },
+        {
+            'len': 5,
+            'name': 'cascade.data.apply_modifier.ApplyModifier',
+            'type': 'dataset'
+        },
+        {
+            'len': 5,
+            'name': 'cascade.data.dataset.Wrapper',
+            'obj_type': "<class 'list'>",
+            'type': 'dataset'
+        }
+    ]
+
+By default all `sized` objects will have length in their meta data.
+The more specific the transformation the richer meta will be.
+
+All datasets with examples can be found in :ref:`/examples/dataset_zoo.ipynb`
 
 .. toctree::
     :titlesonly:
