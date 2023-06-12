@@ -61,10 +61,7 @@ exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'furo'
+html_theme = 'pydata_sphinx_theme'
 html_logo = "../imgs/logo.png"
 html_favicon = "../imgs/100x100_logo.png"
 
@@ -74,13 +71,17 @@ html_favicon = "../imgs/100x100_logo.png"
 html_static_path = ['_static']
 
 html_theme_options = {
-    "sidebar_hide_name": True,
-    "light_css_variables": {
-        "color-brand-primary": "#084c61",
-        "color-brand-content": "#084c61"
-    },
-    "dark_css_variables": {
-        "color-brand-primary": "#db504a",
-        "color-brand-content": "#db504a"
-    },
+    "header_links_before_dropdown": 4,
+    "icon_links": [
+        {
+            # Label for this link
+            "name": "GitHub",
+            # URL where the link will redirect
+            "url": "https://github.com/oxid15/cascade",  # required
+            # Icon class (if "type": "fontawesome"), or path to local image (if "type": "local")
+            "icon": "fa-brands fa-github",
+            # The type of image to be used (see below for details)
+            "type": "fontawesome",
+        }
+    ]
 }
