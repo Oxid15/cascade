@@ -12,15 +12,16 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../..'))
+
+sys.path.insert(0, os.path.abspath("../../.."))
 
 import cascade
 
 # -- Project information -----------------------------------------------------
 
-project = 'cascade'
-author = 'Ilia Moiseev'
-copyright = f'2022-2023, {author}'
+project = "cascade"
+author = "Ilia Moiseev"
+copyright = f"2022-2023, {author}"
 
 # The full version, including alpha/beta/rc tags
 release = cascade.__version__
@@ -32,27 +33,24 @@ release = cascade.__version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
     "nbsphinx",
-    "sphinx_design"
+    "sphinx_design",
 ]
 
-autodoc_default_options = {
-    'special-members': '__init__',
-    'undoc-members': False
-}
+autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
 
 napoleon_include_special_with_doc = True
 # napoleon_use_admonition_for_notes = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -62,14 +60,14 @@ exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
-html_theme = 'pydata_sphinx_theme'
+html_theme = "pydata_sphinx_theme"
 html_logo = "../imgs/logo.png"
 html_favicon = "../imgs/100x100_logo.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 html_theme_options = {
     "header_links_before_dropdown": 4,
@@ -84,5 +82,5 @@ html_theme_options = {
             # The type of image to be used (see below for details)
             "type": "fontawesome",
         }
-    ]
+    ],
 }
