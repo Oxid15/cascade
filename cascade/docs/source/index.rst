@@ -132,25 +132,25 @@ To get metadata of an object you do just:
     
     [
         {
-            'len': 4,
-            'name': 'cascade.data.range_sampler.RangeSampler',
-            'type': 'dataset'
+            "len": 4,
+            "name": "cascade.data.range_sampler.RangeSampler",
+            "type": "dataset"
         },
         {
-            'len': 5,
-            'name': 'cascade.data.random_sampler.RandomSampler',
-            'type': 'dataset'
+            "len": 5,
+            "name": "cascade.data.random_sampler.RandomSampler",
+            "type": "dataset"
         },
         {
-            'len': 5,
-            'name': 'cascade.data.apply_modifier.ApplyModifier',
-            'type': 'dataset'
+            "len": 5,
+            "name": "cascade.data.apply_modifier.ApplyModifier",
+            "type": "dataset"
         },
         {
-            'len': 5,
-            'name': 'cascade.data.dataset.Wrapper',
-            'obj_type': "<class 'list'>",
-            'type': 'dataset'
+            "len": 5,
+            "name": "cascade.data.dataset.Wrapper",
+            "obj_type": "<class 'list'>",
+            "type": "dataset"
         }
     ]
 
