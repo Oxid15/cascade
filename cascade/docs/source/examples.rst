@@ -15,28 +15,28 @@ Examples
             :link: /examples/model_training.ipynb
             :link-type: ref
 
-            Learn how to build data processing pipelines with cascade.data module
+            See how you can conduct model training experiments
 
     .. grid-item::
         .. card:: Model Training with Trainer
             :link: /examples/model_training_trainers.ipynb
             :link-type: ref
 
-            Learn how to build data processing pipelines with cascade.data module
+            Make model training even easier with Trainers
 
     .. grid-item::
         .. card:: Dataset Zoo
             :link: /examples/dataset_zoo.ipynb
             :link-type: ref
 
-            Learn how to build data processing pipelines with cascade.data module
+            Find suitable ready-made data processing utilities in Zoo
 
     .. grid-item::
         .. card:: Data Validation
             :link: /examples/data_validation.ipynb
             :link-type: ref
 
-            Learn how to build data processing pipelines with cascade.data module
+            See how you can ensure data quality with data validation tools
 
 Contents
 --------
