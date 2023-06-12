@@ -39,7 +39,8 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
-    'nbsphinx'
+    "nbsphinx",
+    "sphinx_design"
 ]
 
 autodoc_default_options = {
