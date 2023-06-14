@@ -80,7 +80,7 @@ html_theme_options = {
         }
     ],
     "switcher": {
-        "json_url": "https://raw.githubusercontent.com/Oxid15/cascade/docs_update/cascade/docs/source/_static/switcher.json",
+        "json_url": "https://raw.githubusercontent.com/Oxid15/cascade/docs_update/cascade/docs/source/switcher.json",
         "version_match": "stable",
     },
     "navbar_start": ["navbar-logo", "version-switcher"],
