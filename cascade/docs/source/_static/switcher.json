@@ -3,5 +3,10 @@
         "name": "latest",
         "version": "develop",
         "url": "https://oxid15.github.io/cascade/latest/index.html"
+    },
+    {
+        "name": "stable",
+        "version": "v0.11.1 (stable)",
+        "url": "https://oxid15.github.io/cascade/v0.11.1/index.html"
     }
 ]
