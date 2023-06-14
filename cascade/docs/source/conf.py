@@ -12,15 +12,16 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../..'))
+
+sys.path.insert(0, os.path.abspath("../../.."))
 
 import cascade
 
 # -- Project information -----------------------------------------------------
 
-project = 'cascade'
-author = 'Ilia Moiseev'
-copyright = f'2022-2023, {author}'
+project = "cascade"
+author = "Ilia Moiseev"
+copyright = f"2022-2023, {author}"
 
 # The full version, including alpha/beta/rc tags
 release = cascade.__version__
@@ -32,26 +33,24 @@ release = cascade.__version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
     "sphinx_copybutton",
-    'nbsphinx'
+    "nbsphinx",
+    "sphinx_design",
 ]
 
-autodoc_default_options = {
-    'special-members': '__init__',
-    'undoc-members': False
-}
+autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
 
 napoleon_include_special_with_doc = True
 # napoleon_use_admonition_for_notes = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -61,26 +60,28 @@ exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'furo'
+html_theme = "pydata_sphinx_theme"
 html_logo = "../imgs/logo.png"
 html_favicon = "../imgs/100x100_logo.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 html_theme_options = {
-    "sidebar_hide_name": True,
-    "light_css_variables": {
-        "color-brand-primary": "#084c61",
-        "color-brand-content": "#084c61"
+    "header_links_before_dropdown": 4,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/oxid15/cascade",  # required
+            "icon": "fa-brands fa-github",
+            "type": "fontawesome",
+        }
+    ],
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/Oxid15/cascade/docs_update/cascade/docs/source/_static/switcher.json",
+        "version_match": "stable",
     },
-    "dark_css_variables": {
-        "color-brand-primary": "#db504a",
-        "color-brand-content": "#db504a"
-    },
+    "navbar_start": ["navbar-logo", "version-switcher"],
 }
