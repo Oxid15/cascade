@@ -83,4 +83,9 @@ html_theme_options = {
             "type": "fontawesome",
         }
     ],
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/Oxid15/cascade/docs_update/cascade/docs/source/_static/switcher.json",
+        "version_match": "stable",
+    },
+    "navbar_start": ["navbar-logo", "version-switcher"],
 }
