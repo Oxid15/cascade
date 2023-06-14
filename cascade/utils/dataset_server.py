@@ -1,13 +1,34 @@
 from typing import Any
 
-from flask import Flask, request
+from flask import Flask, request, Response
 
-from ..data import Modifier
+from ..data import T, Dataset, Modifier
 from .serializer import Serializer
 
 
 class DatasetServer(Modifier):
-    def __init__(self, dataset, **kwargs: Any) -> None:
+    """
+    Wraps any Dataset into Flask app that
+    accepts calls to root route with name of
+    the attribute and optional arguments if
+    it is a function.
+
+    Server receives the attribute name and tries
+    to get it from the underlying dataset.
+    If it is a function, then it calls it.
+    If it is something else just gets it.
+    The results is serialized using pickle and
+    sent in hex encoding to the client.
+
+    To access any methods from the wrapped
+    object one needs to access them from DatasetClient.
+
+    See also
+    --------
+    cascade.utils.dataset_client.DatasetClient
+    """
+
+    def __init__(self, dataset: Dataset[T], **kwargs: Any) -> None:
         super().__init__(dataset, **kwargs)
         self.app = Flask(__name__)
 
@@ -24,12 +45,31 @@ class DatasetServer(Modifier):
             if kwargs:
                 kwargs = Serializer.deserialize(kwargs)
 
-            attr = getattr(self._dataset, attr)
+            try:
+                attr = getattr(self._dataset, attr)
+            except AttributeError as e:
+                return {"error": str(e)}, 404
 
             if callable(attr):
-                return {"result": Serializer.serialize(attr(*args, **kwargs))}
+                try:
+                    result = attr(*args, **kwargs)
+                except Exception as e:
+                    return {"error": str(e)}, 500
+                try:
+                    result = Serializer.serialize(result)
+                except Exception as e:
+                    return {"error": str(e)}, 500
             else:
-                return {"result": Serializer.serialize(attr)}
+                try:
+                    result = Serializer.serialize(attr)
+                except Exception as e:
+                    return {"error": str(e)}, 500
 
-    def run(self, **kwargs):
-        self.app.run(**kwargs)
+            return {"result": result}, 200
+
+    def run(self, *args: Any, **kwargs: Any):
+        """
+        Runs the server, all args and kwargs passed to
+        Flask app.run()
+        """
+        self.app.run(*args, **kwargs)

@@ -8,7 +8,47 @@ from .serializer import Serializer
 
 class DatasetClient(Dataset):
     """
-    Client for DatasetServer
+    Client for DatasetServer.
+
+    DatasetClient is an interface for a dataset
+    that lies under the DatasetServer.
+
+    For every field or method call the client sends
+    its name and arguments to the server to get the
+    result.
+
+    One can call any method that exists on the underlying
+    dataset from the client and if the results are serializable
+    should be able to receive results.
+
+    Example
+    -------
+    This is how server can look - we wrap `FeatureTable` into the `DatasetServer`.
+
+    ```python
+    >>> from cascade.utils.dataset_server import DatasetServer
+    >>> from cascade.utils.tables import FeatureTable
+    >>> from cascade.data import Wrapper
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> ds = FeatureTable(pd.DataFrame([[1, 2, 3], [4, 5, 6]], columns=["a", "b", "c"]))
+    >>> ds = DatasetServer(ds)
+    >>> ds.run()
+    ```
+
+    This is what needs to be done on the client side.
+
+    ```python
+    from cascade.utils.dataset_client import DatasetClient
+
+    >>> ds = DatasetClient('http://localhost:5000')
+    >>> ds.get_meta()
+    ```
+
+    This call will be done on the side of the server in `FeatureTable`,
+    the result is pickled, sent, then unpickled and returned on the cliend side.
+
+    You can access any methods on server using client as long as return values can be pickled.
 
     See also
     --------
@@ -26,7 +66,7 @@ class DatasetClient(Dataset):
         self._host = host
 
     def __getattribute__(self, name: str):
-        ALLOWED_NAMES = ["_deserialize", "_build_attr", "_host"]
+        ALLOWED_NAMES = ["_deserialize", "_build_attr", "_host", "__dict__"]
 
         if name in ALLOWED_NAMES:
             return object.__getattribute__(self, name)
@@ -41,8 +81,17 @@ class DatasetClient(Dataset):
                 request["kwargs"] = Serializer.serialize(kwargs)
 
             res = requests.post(self._host, json=request)
-            data = res.json()
-            return Serializer.deserialize(data["result"])
+
+            try:
+                data = res.json()
+            except requests.exceptions.JSONDecodeError as e:
+                raise RuntimeError(res.text) from e
+
+            if res.ok:
+                return Serializer.deserialize(data["result"])
+            else:
+                if res.status_code == 404:
+                    raise AttributeError(data.get("error"))
 
         return attr
 
