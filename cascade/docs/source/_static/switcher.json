@@ -2,11 +2,6 @@
     {
         "name": "latest",
         "version": "develop",
-        "url": "https://oxid15.github.io/cascade/en/latest/index.html"
-    },
-    {
-        "name": "stable",
-        "version": "v0.11.1 (stable)",
-        "url": "https://oxid15.github.io/cascade/en/v0.11.1/index.html"
+        "url": "https://oxid15.github.io/cascade/en/latest/"
     }
 ]
