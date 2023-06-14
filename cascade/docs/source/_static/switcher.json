@@ -1,7 +1,7 @@
 [
     {
         "name": "test_name",
-        "version": "test_ver",
+        "version": "0.12.0",
         "url": "https://pydata-sphinx-theme.readthedocs.io/en/latest/"
     }
 ]
