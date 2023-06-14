@@ -1,7 +1,7 @@
 [
     {
-        "name": "test_name",
-        "version": "0.12.0",
-        "url": "https://pydata-sphinx-theme.readthedocs.io/en/latest/"
+        "name": "latest",
+        "version": "develop",
+        "url": "https://oxid15.github.io/cascade/latest/index.html"
     }
 ]
