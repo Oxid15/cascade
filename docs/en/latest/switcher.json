@@ -1,7 +1,7 @@
 [
     {
-        "name": "latest",
-        "version": "develop",
+        "name": "develop",
+        "version": "latest",
         "url": "https://oxid15.github.io/cascade/en/latest/"
     },
     {
