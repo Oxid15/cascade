@@ -52,7 +52,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'cascade.models';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.11.1';
     </script>
     <link rel="shortcut icon" href="100x100_logo.png" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -718,7 +718,8 @@
                                             </dt>
                                             <dd>
                                                 <p>Creates a model of <cite>model_cls</cite> and loads it using Model’s
-                                                    <cite>load</cite> method.</p>
+                                                    <cite>load</cite> method.
+                                                </p>
                                                 <dl class="field-list simple">
                                                     <dt class="field-odd">Returns</dt>
                                                     <dd class="field-odd">
@@ -1036,7 +1037,8 @@
                                                     <dt class="field-odd">Returns</dt>
                                                     <dd class="field-odd">
                                                         <p><strong>line</strong> – existing line of the name passed in
-                                                            <cite>key</cite></p>
+                                                            <cite>key</cite>
+                                                        </p>
                                                     </dd>
                                                     <dt class="field-even">Return type</dt>
                                                     <dd class="field-even">
@@ -1099,7 +1101,8 @@
                                                                     (<em>List</em><em>[</em><em>Dict</em><em>]</em>) – A
                                                                     list with parameters of model lines to add at
                                                                     creation or to initialize (alias for
-                                                                    <cite>add_model</cite>)</p>
+                                                                    <cite>add_model</cite>)
+                                                                </p>
                                                             </li>
                                                             <li>
                                                                 <p><strong>overwrite</strong> (<em>bool</em>) – if True
@@ -1983,14 +1986,16 @@
                                                                 <p><strong>eval_strategy</strong> – int, optional
                                                                     Evaluation will take place every
                                                                     <cite>eval_strategy</cite> epochs. If None - the
-                                                                    strategy is ‘no evaluation’.</p>
+                                                                    strategy is ‘no evaluation’.
+                                                                </p>
                                                             </li>
                                                             <li>
                                                                 <p><strong>save_strategy</strong> – int, optional
                                                                     Saving will take place every
                                                                     <cite>save_strategy</cite> epochs. Meta will be
                                                                     saved anyway.
-                                                                    If None - the strategy is ‘save only meta’.</p>
+                                                                    If None - the strategy is ‘save only meta’.
+                                                                </p>
                                                             </li>
                                                         </ul>
                                                     </dd>
