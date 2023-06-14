@@ -160,8 +160,8 @@ The more specific the transformation the richer meta will be.
 All datasets with examples can be found in :ref:`/examples/dataset_zoo.ipynb`
 
 .. toctree::
-    :titlesonly:
     :maxdepth: 1
+    :hidden:
 
     quickstart
     examples
