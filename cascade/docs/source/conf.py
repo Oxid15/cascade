@@ -61,7 +61,7 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = "pydata_sphinx_theme"
-html_logo = "../imgs/logo.png"
+html_logo = "../imgs/logo.svg"
 html_favicon = "../imgs/logo_sq.svg"
 
 # Add any paths that contain custom static files (such as style sheets) here,
