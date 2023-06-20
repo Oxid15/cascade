@@ -15,9 +15,11 @@ limitations under the License.
 """
 
 
+import os
 import warnings
-from typing import Dict, Union, Any
-from . import PipeMeta, MetaFromFile
+from typing import Dict, Union, Any, Literal
+import pendulum
+from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 
 class Traceable:
@@ -121,16 +123,25 @@ class Traceable:
 
 
 class TraceableOnDisk(Traceable):
-    def __init__(self, root: str, *args: Any,
+    def __init__(self, root: str, meta_fmt: Literal['.json', '.yml', '.yaml'], *args: Any,
                  meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._root = root
+        if meta_fmt not in supported_meta_formats:
+            raise ValueError(f'Only {supported_meta_formats} are supported formats')
+        self._meta_fmt = meta_fmt
 
-    def reload(self) -> None:
+    def _create_meta(self) -> None:
+        meta = self.get_meta()
+        meta[0].update({
+            "created_at": str(pendulum.now())
+        })
+
+        from . import MetaHandler
+        MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+
+    def _update_meta(self) -> None:
         raise NotImplementedError()
 
     def get_root(self) -> str:
         return self._root
-
-    def _update_meta(self) -> None:
-        raise NotImplementedError()
