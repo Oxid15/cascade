@@ -12,16 +12,21 @@ limitations under the License.
 """
 
 import os
-import warnings
 import itertools
-from typing import Any, Dict, List, Iterable, Union, Any, Literal, Type, Generator
+from typing import Any, Dict, List, Iterable, Union, Literal, Type, Generator
 import shutil
 
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import (Traceable, MetaHandler, HistoryLogger,
-                    JSONEncoder, supported_meta_formats, PipeMeta)
+from ..base import (
+    Traceable,
+    TraceableOnDisk,
+    MetaHandler,
+    HistoryLogger,
+    JSONEncoder,
+    PipeMeta,
+)
 from .model import Model
 from .model_line import ModelLine
 
@@ -34,11 +39,15 @@ class Repo(Traceable):
     --------
     cascade.models.ModelRepo
     """
-    _lines = dict()
-    _root = None
-    
-    def get_root(self):
-        return self._root
+
+    def __init__(
+        self,
+        *args: Any,
+        meta_prefix: Union[Dict[Any, Any], str, None] = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._lines = dict()
 
     def reload(self) -> None:
         for line in self._lines:
@@ -62,11 +71,7 @@ class Repo(Traceable):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({
-            'root': self._root,
-            'len': len(self),
-            'type': 'repo'
-        })
+        meta[0].update({"root": self._root, "len": len(self), "type": "repo"})
         return meta
 
     def get_line_names(self) -> List[str]:
@@ -77,19 +82,25 @@ class Repo(Traceable):
 
 
 class SingleLineRepo(Repo):
-    def __init__(self, line, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        line: ModelLine,
+        *args: Any,
+        meta_prefix: Union[Dict[Any, Any], str, None] = None,
+        **kwargs: Any,
+    ) -> None:
+        self._line_root = line.get_root()
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(line.get_root())[-1]: line}
-        self._root = line.get_root()
+        self._lines = {os.path.split(self._line_root)[-1]: line}
 
     def __getitem__(self, key: str) -> ModelLine:
         return self._lines[key]
 
-    def __repr__(self):
-        return f'SingleLine in {self._root}'
+    def __repr__(self) -> str:
+        return f"SingleLine in {self._line_root}"
 
 
-class ModelRepo(Repo):
+class ModelRepo(Repo, TraceableOnDisk):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
@@ -115,15 +126,17 @@ class ModelRepo(Repo):
     >>> model.fit()
     >>> repo['constant'].save(model)
     """
+
     def __init__(
         self,
         folder: str,
+        *args: Any,
         lines: Union[Iterable[ModelLine], None] = None,
         overwrite: bool = False,
-        meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json',
+        meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
         model_cls: Union[Type, Dict[str, Type]] = Model,
         log_history: bool = True,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """
         Parameters
@@ -145,46 +158,44 @@ class ModelRepo(Repo):
         --------
         cascade.models.ModelLine
         """
-        super().__init__(**kwargs)
+        super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls
-        self._root = folder
-        self._lines = dict()
         self._log_history = log_history
 
-        assert meta_fmt in supported_meta_formats, \
-            f'Only {supported_meta_formats} are supported formats'
-        self._meta_fmt = meta_fmt
         if overwrite and os.path.exists(self._root):
             shutil.rmtree(self._root)
 
         os.makedirs(self._root, exist_ok=True)
 
         if self._log_history:
-            self._hl = HistoryLogger(os.path.join(self._root, 'history.yml'))
+            self._hl = HistoryLogger(os.path.join(self._root, "history.yml"))
         self._load_lines()
 
         if lines is not None:
             for line in lines:
                 self.add_line(**line)
 
-        self._update_meta()
+        self._create_meta()
 
     def _load_lines(self) -> None:
         self._lines = {
-            name: ModelLine(os.path.join(self._root, name),
-                            model_cls=self._model_cls
-                            if isinstance(self._model_cls, type)
-                            else self._model_cls[name],
-                            meta_fmt=self._meta_fmt)
+            name: ModelLine(
+                os.path.join(self._root, name),
+                model_cls=self._model_cls
+                if isinstance(self._model_cls, type)
+                else self._model_cls[name],
+                meta_fmt=self._meta_fmt,
+            )
             for name in sorted(os.listdir(self._root))
-            if os.path.isdir(os.path.join(self._root, name))}
+            if os.path.isdir(os.path.join(self._root, name))
+        }
 
     def add_line(
-            self,
-            name: Union[str, None] = None,
-            *args: Any,
-            meta_fmt: Union[str, None] = None,
-            **kwargs: Any
+        self,
+        name: Union[str, None] = None,
+        *args: Any,
+        meta_fmt: Union[str, None] = None,
+        **kwargs: Any,
     ) -> ModelLine:
         """
         Adds new line to repo if it doesn't exist and returns it.
@@ -204,25 +215,22 @@ class ModelRepo(Repo):
         See also
         --------
             cascade.models.ModelLine
-       """
+        """
         # TODO: use default model_cls
         if name is None:
-            name = f'{len(self):0>5d}'
+            name = f"{len(self):0>5d}"
             if name in self.get_line_names():
                 # Name can appear in the repo if the user manually
                 # removed the lines from the middle of the repo
 
                 # This will be handled strictly
                 # until it will become clear that some solution needed
-                raise RuntimeError(f'Line {name} already exists in {self}')
+                raise RuntimeError(f"Line {name} already exists in {self}")
 
         folder = os.path.join(self._root, name)
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
-        line = ModelLine(folder,
-                         *args,
-                         meta_fmt=meta_fmt,
-                         **kwargs)
+        line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
         self._lines[name] = line
 
         self._update_meta()
@@ -240,38 +248,26 @@ class ModelRepo(Repo):
         elif isinstance(key, int):
             return self._lines[list(self._lines.keys())[key]]
         else:
-            raise TypeError(f'{type(key)} is not supported as key')
+            raise TypeError(f"{type(key)} is not supported as key")
 
     def __repr__(self) -> str:
-        return f'ModelRepo in {self._root} of {len(self)} lines'
+        return f"ModelRepo in {self._root} of {len(self)} lines"
 
     def _update_meta(self) -> None:
-        # Reads meta if exists and updates it with new values
-        # writes back to disk
-        meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
-
-        meta = {}
-        if os.path.exists(meta_path):
-            try:
-                meta = MetaHandler.read(meta_path)[0]
-            except IOError as e:
-                warnings.warn(f'File reading error ignored: {e}')
-
+        super()._update_meta()
         if self._log_history:
+            meta_path = os.path.join(self._root, "meta" + self._meta_fmt)
+            meta = MetaHandler.read(meta_path)[0]
             self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
-            diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
+            diff = DeepDiff(
+                meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"]
+            )
             if len(diff) != 0:
                 self._hl.log(self_meta)
 
-        meta.update(self.get_meta()[0])
-        try:
-            MetaHandler.write(meta_path, [meta])
-        except IOError as e:
-            warnings.warn(f'File writing error ignored: {e}')
-
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({'updated_at': pendulum.now(tz='UTC')})
+        meta[0].update({"updated_at": pendulum.now(tz="UTC")})
         return meta
 
     def reload(self) -> None:
@@ -281,7 +277,7 @@ class ModelRepo(Repo):
         super().reload()
         self._update_meta()
 
-    def __add__(self, repo):
+    def __add__(self, repo) -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
 
@@ -291,17 +287,20 @@ class ModelRepoConcatenator(Repo):
     For the ease of use please, don't use it directly.
     Just do `repo = repo_1 + repo_2` to unify two or more repos.
     """
+
     def __init__(self, repos: Iterable[Repo], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._repos = repos
 
     def __getitem__(self, key) -> ModelLine:
-        pair = key.split('_')
+        pair = key.split("_")
         if len(pair) <= 2:
-            raise KeyError(f'Key {key} is not in required format \
+            raise KeyError(
+                f"Key {key} is not in required format \
             `<repo_idx>_..._<line_name>`. \
-            Please, use the key in this format. For example `0_line_1`')
-        idx, line_name = pair[0], '_'.join(pair[1:])
+            Please, use the key in this format. For example `0_line_1`"
+            )
+        idx, line_name = pair[0], "_".join(pair[1:])
         idx = int(idx)
 
         return self._repos[idx][line_name]
@@ -318,7 +317,7 @@ class ModelRepoConcatenator(Repo):
         return ModelRepoConcatenator([self, repo])
 
     def __repr__(self) -> str:
-        return f'ModelRepoConcatenator of {len(self._repos)} repos, {len(self)} lines total'
+        return f"ModelRepoConcatenator of {len(self._repos)} repos, {len(self)} lines total"
 
     def reload(self) -> None:
         for repo in self._repos:

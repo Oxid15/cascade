@@ -15,9 +15,11 @@ limitations under the License.
 """
 
 
+import os
 import warnings
-from typing import Dict, Union, Any
-from . import PipeMeta, MetaFromFile
+from typing import Dict, Union, Any, Literal
+import pendulum
+from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 
 class Traceable:
@@ -118,3 +120,47 @@ class Traceable:
         """
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
+
+
+class TraceableOnDisk(Traceable):
+    def __init__(self, root: str, meta_fmt: Literal['.json', '.yml', '.yaml'], *args: Any,
+                 meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._root = root
+        if meta_fmt not in supported_meta_formats:
+            raise ValueError(f'Only {supported_meta_formats} are supported formats')
+        self._meta_fmt = meta_fmt
+
+    def _create_meta(self) -> None:
+        created = str(pendulum.now(tz='UTC'))
+        meta = self.get_meta()
+        meta[0].update({
+            "created_at": created
+        })
+
+        from . import MetaHandler
+        MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+
+    def _update_meta(self) -> None:
+        """
+        Reads meta if exists and updates it with new values
+        writes back to disk
+        """
+        from . import MetaHandler
+        meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
+
+        meta = {}
+        if os.path.exists(meta_path):
+            try:
+                meta = MetaHandler.read(meta_path)[0]
+            except IOError as e:
+                warnings.warn(f'File reading error ignored: {e}')
+
+        meta.update(self.get_meta()[0])
+        try:
+            MetaHandler.write(meta_path, [meta])
+        except IOError as e:
+            warnings.warn(f'File writing error ignored: {e}')
+
+    def get_root(self) -> str:
+        return self._root

@@ -46,6 +46,6 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
 
 
 from .meta_handler import MetaHandler, supported_meta_formats
-from .traceable import Traceable
+from .traceable import Traceable, TraceableOnDisk
 from .meta_handler import CustomEncoder as JSONEncoder
 from .history_logger import HistoryLogger
