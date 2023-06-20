@@ -118,3 +118,19 @@ class Traceable:
         """
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
+
+
+class TraceableOnDisk(Traceable):
+    def __init__(self, root: str, *args: Any,
+                 meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._root = root
+
+    def reload(self) -> None:
+        raise NotImplementedError()
+
+    def get_root(self) -> None:
+        raise NotImplementedError()
+
+    def _update_meta(self) -> None:
+        raise NotImplementedError()

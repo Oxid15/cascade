@@ -21,11 +21,11 @@ import pendulum
 import glob
 from hashlib import md5
 
-from ..base import Traceable, MetaHandler, supported_meta_formats, PipeMeta
+from ..base import TraceableOnDisk, MetaHandler, supported_meta_formats, PipeMeta
 from .model import Model
 
 
-class ModelLine(Traceable):
+class ModelLine(TraceableOnDisk):
     """
     A manager for a line of models. Used by ModelRepo for access to models on disk.
     A line of models is typically a models with the same hyperparameters and architecture,
@@ -177,8 +177,5 @@ class ModelLine(Traceable):
                 f'Model folders were not found by the line in {self._root}'
             )
 
-    def reload(self):
+    def reload(self) -> None:
         self._load()
-
-    def get_root(self):
-        return self._root

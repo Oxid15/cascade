@@ -20,13 +20,13 @@ import shutil
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import (Traceable, MetaHandler, HistoryLogger,
+from ..base import (TraceableOnDisk, MetaHandler, HistoryLogger,
                     JSONEncoder, supported_meta_formats, PipeMeta)
 from .model import Model
 from .model_line import ModelLine
 
 
-class Repo(Traceable):
+class Repo(TraceableOnDisk):
     """
     Base interface for repos of models. Repo is the collection of Lines.
 
@@ -34,11 +34,9 @@ class Repo(Traceable):
     --------
     cascade.models.ModelRepo
     """
-    _lines = dict()
-    _root = None
-    
-    def get_root(self):
-        return self._root
+    def __init__(self, root: str, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(root, *args, meta_prefix=meta_prefix, **kwargs)
+        self._lines = dict()
 
     def reload(self) -> None:
         for line in self._lines:
@@ -77,15 +75,15 @@ class Repo(Traceable):
 
 
 class SingleLineRepo(Repo):
-    def __init__(self, line, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(line.get_root())[-1]: line}
-        self._root = line.get_root()
+    def __init__(self, line: ModelLine, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        root = line.get_root()
+        super().__init__(root, *args, meta_prefix=meta_prefix, **kwargs)
+        self._lines = {os.path.split(root)[-1]: line}
 
     def __getitem__(self, key: str) -> ModelLine:
         return self._lines[key]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'SingleLine in {self._root}'
 
 
@@ -118,6 +116,7 @@ class ModelRepo(Repo):
     def __init__(
         self,
         folder: str,
+        *args: Any,
         lines: Union[Iterable[ModelLine], None] = None,
         overwrite: bool = False,
         meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json',
@@ -145,9 +144,8 @@ class ModelRepo(Repo):
         --------
         cascade.models.ModelLine
         """
-        super().__init__(**kwargs)
+        super().__init__(folder, *args, **kwargs)
         self._model_cls = model_cls
-        self._root = folder
         self._lines = dict()
         self._log_history = log_history
 
