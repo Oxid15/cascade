@@ -20,13 +20,13 @@ import shutil
 import pendulum
 from deepdiff.diff import DeepDiff
 
-from ..base import (TraceableOnDisk, MetaHandler, HistoryLogger,
-                    JSONEncoder, supported_meta_formats, PipeMeta)
+from ..base import (Traceable, TraceableOnDisk, MetaHandler, HistoryLogger,
+                    JSONEncoder, PipeMeta)
 from .model import Model
 from .model_line import ModelLine
 
 
-class Repo(TraceableOnDisk):
+class Repo(Traceable):
     """
     Base interface for repos of models. Repo is the collection of Lines.
 
@@ -34,8 +34,8 @@ class Repo(TraceableOnDisk):
     --------
     cascade.models.ModelRepo
     """
-    def __init__(self, root: str, meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json', *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
-        super().__init__(root, meta_fmt, *args, meta_prefix=meta_prefix, **kwargs)
+    def __init__(self, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._lines = dict()
 
     def reload(self) -> None:
@@ -76,18 +76,18 @@ class Repo(TraceableOnDisk):
 
 class SingleLineRepo(Repo):
     def __init__(self, line: ModelLine, meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json', *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
-        root = line.get_root()
-        super().__init__(root, meta_fmt, *args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(root)[-1]: line}
+        self._line_root = line.get_root()
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._lines = {os.path.split(self._line_root)[-1]: line}
 
     def __getitem__(self, key: str) -> ModelLine:
         return self._lines[key]
 
     def __repr__(self) -> str:
-        return f'SingleLine in {self._root}'
+        return f'SingleLine in {self._line_root}'
 
 
-class ModelRepo(Repo):
+class ModelRepo(Repo, TraceableOnDisk):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
@@ -146,7 +146,6 @@ class ModelRepo(Repo):
         """
         super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls
-        self._lines = dict()
         self._log_history = log_history
 
         if overwrite and os.path.exists(self._root):
@@ -287,7 +286,7 @@ class ModelRepoConcatenator(Repo):
     Just do `repo = repo_1 + repo_2` to unify two or more repos.
     """
     def __init__(self, repos: Iterable[Repo], *args: Any, **kwargs: Any) -> None:
-        super().__init__(None, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._repos = repos
 
     def __getitem__(self, key) -> ModelLine:
