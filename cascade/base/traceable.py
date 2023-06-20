@@ -132,9 +132,10 @@ class TraceableOnDisk(Traceable):
         self._meta_fmt = meta_fmt
 
     def _create_meta(self) -> None:
+        created = str(pendulum.now())
         meta = self.get_meta()
         meta[0].update({
-            "created_at": str(pendulum.now())
+            "created_at": created
         })
 
         from . import MetaHandler
