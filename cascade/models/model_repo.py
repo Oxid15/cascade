@@ -12,7 +12,6 @@ limitations under the License.
 """
 
 import os
-import warnings
 import itertools
 from typing import Any, Dict, List, Iterable, Union, Any, Literal, Type, Generator
 import shutil
@@ -75,7 +74,7 @@ class Repo(Traceable):
 
 
 class SingleLineRepo(Repo):
-    def __init__(self, line: ModelLine, meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json', *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+    def __init__(self, line: ModelLine, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
         self._line_root = line.get_root()
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._lines = {os.path.split(self._line_root)[-1]: line}
@@ -240,28 +239,14 @@ class ModelRepo(Repo, TraceableOnDisk):
         return f'ModelRepo in {self._root} of {len(self)} lines'
 
     def _update_meta(self) -> None:
-        # Reads meta if exists and updates it with new values
-        # writes back to disk
-        meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
-
-        meta = {}
-        if os.path.exists(meta_path):
-            try:
-                meta = MetaHandler.read(meta_path)[0]
-            except IOError as e:
-                warnings.warn(f'File reading error ignored: {e}')
-
+        super()._update_meta()
         if self._log_history:
+            meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
+            meta = MetaHandler.read(meta_path)[0]
             self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
             diff = DeepDiff(meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"])
             if len(diff) != 0:
                 self._hl.log(self_meta)
-
-        meta.update(self.get_meta()[0])
-        try:
-            MetaHandler.write(meta_path, [meta])
-        except IOError as e:
-            warnings.warn(f'File writing error ignored: {e}')
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
@@ -275,7 +260,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         super().reload()
         self._update_meta()
 
-    def __add__(self, repo):
+    def __add__(self, repo) -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
 

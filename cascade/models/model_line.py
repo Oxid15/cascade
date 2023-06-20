@@ -21,7 +21,7 @@ import pendulum
 import glob
 from hashlib import md5
 
-from ..base import TraceableOnDisk, MetaHandler, supported_meta_formats, PipeMeta
+from ..base import TraceableOnDisk, MetaHandler, PipeMeta
 from .model import Model
 
 
@@ -49,7 +49,7 @@ class ModelLine(TraceableOnDisk):
             If folder does not exist, creates it
         model_cls: type, optional
             A class of models in line. ModelLine uses this class to reconstruct a model
-        meta_fmt: str, optional
+        meta_fmt: Literal[".json", ".yml", ".yaml"], optional
             Format in which to store meta data.
         See also
         --------
@@ -142,10 +142,7 @@ class ModelLine(TraceableOnDisk):
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
 
-        # Save updated line's meta
-        MetaHandler.write(
-            os.path.join(self._root, "meta" + self._meta_fmt), self.get_meta()
-        )
+        self._update_meta()
 
     def __repr__(self) -> str:
         return f"ModelLine of {len(self)} models of {self._model_cls}"

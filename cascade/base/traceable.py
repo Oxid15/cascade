@@ -132,7 +132,7 @@ class TraceableOnDisk(Traceable):
         self._meta_fmt = meta_fmt
 
     def _create_meta(self) -> None:
-        created = str(pendulum.now())
+        created = str(pendulum.now(tz='UTC'))
         meta = self.get_meta()
         meta[0].update({
             "created_at": created
@@ -142,7 +142,25 @@ class TraceableOnDisk(Traceable):
         MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
 
     def _update_meta(self) -> None:
-        raise NotImplementedError()
+        """
+        Reads meta if exists and updates it with new values
+        writes back to disk
+        """
+        from . import MetaHandler
+        meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
+
+        meta = {}
+        if os.path.exists(meta_path):
+            try:
+                meta = MetaHandler.read(meta_path)[0]
+            except IOError as e:
+                warnings.warn(f'File reading error ignored: {e}')
+
+        meta.update(self.get_meta()[0])
+        try:
+            MetaHandler.write(meta_path, [meta])
+        except IOError as e:
+            warnings.warn(f'File writing error ignored: {e}')
 
     def get_root(self) -> str:
         return self._root
