@@ -129,8 +129,8 @@ class TraceableOnDisk(Traceable):
     def reload(self) -> None:
         raise NotImplementedError()
 
-    def get_root(self) -> None:
-        raise NotImplementedError()
+    def get_root(self) -> str:
+        return self._root
 
     def _update_meta(self) -> None:
         raise NotImplementedError()
