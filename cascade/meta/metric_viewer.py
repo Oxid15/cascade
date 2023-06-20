@@ -22,7 +22,7 @@ from flatten_json import flatten
 import pandas as pd
 
 from . import Server, MetaViewer
-from ..models import Model, ModelRepo, ModelLine, SingleLineRepo
+from ..models import Repo, Model, ModelRepo, ModelLine, SingleLineRepo
 
 
 class MetricViewer:
@@ -32,7 +32,7 @@ class MetricViewer:
     As metrics it uses data from `metrics` field in models'
     meta and as parameters it uses `params` field.
     """
-    def __init__(self, repo: Union[ModelRepo, ModelLine], scope: Union[int, str, slice, None] = None) -> None:
+    def __init__(self, repo: Union[Repo, ModelLine], scope: Union[int, str, slice, None] = None) -> None:
         """
         Parameters
         ----------

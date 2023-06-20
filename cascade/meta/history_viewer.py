@@ -24,7 +24,7 @@ from flatten_json import flatten
 from deepdiff import DeepDiff
 
 from ..base import MetaHandler
-from ..models import ModelRepo, ModelLine, SingleLineRepo
+from ..models import Repo, ModelLine, SingleLineRepo
 from . import Server, MetaViewer
 
 
@@ -37,7 +37,7 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        repo: Union[ModelRepo, ModelLine],
+        repo: Union[Repo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
     ) -> None:
