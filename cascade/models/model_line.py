@@ -55,7 +55,7 @@ class ModelLine(TraceableOnDisk):
         --------
         cascade.models.ModelRepo
         """
-        super().__init__(**kwargs)
+        super().__init__(folder, **kwargs)
 
         assert (
             meta_fmt in supported_meta_formats
