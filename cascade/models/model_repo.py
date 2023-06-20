@@ -34,8 +34,8 @@ class Repo(TraceableOnDisk):
     --------
     cascade.models.ModelRepo
     """
-    def __init__(self, root: str, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
-        super().__init__(root, *args, meta_prefix=meta_prefix, **kwargs)
+    def __init__(self, root: str, meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json', *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(root, meta_fmt, *args, meta_prefix=meta_prefix, **kwargs)
         self._lines = dict()
 
     def reload(self) -> None:
@@ -75,9 +75,9 @@ class Repo(TraceableOnDisk):
 
 
 class SingleLineRepo(Repo):
-    def __init__(self, line: ModelLine, *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+    def __init__(self, line: ModelLine, meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json', *args: Any, meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
         root = line.get_root()
-        super().__init__(root, *args, meta_prefix=meta_prefix, **kwargs)
+        super().__init__(root, meta_fmt, *args, meta_prefix=meta_prefix, **kwargs)
         self._lines = {os.path.split(root)[-1]: line}
 
     def __getitem__(self, key: str) -> ModelLine:
@@ -144,14 +144,11 @@ class ModelRepo(Repo):
         --------
         cascade.models.ModelLine
         """
-        super().__init__(folder, *args, **kwargs)
+        super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls
         self._lines = dict()
         self._log_history = log_history
 
-        assert meta_fmt in supported_meta_formats, \
-            f'Only {supported_meta_formats} are supported formats'
-        self._meta_fmt = meta_fmt
         if overwrite and os.path.exists(self._root):
             shutil.rmtree(self._root)
 
@@ -165,7 +162,7 @@ class ModelRepo(Repo):
             for line in lines:
                 self.add_line(**line)
 
-        self._update_meta()
+        self._create_meta()
 
     def _load_lines(self) -> None:
         self._lines = {
@@ -290,7 +287,7 @@ class ModelRepoConcatenator(Repo):
     Just do `repo = repo_1 + repo_2` to unify two or more repos.
     """
     def __init__(self, repos: Iterable[Repo], *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(None, *args, **kwargs)
         self._repos = repos
 
     def __getitem__(self, key) -> ModelLine:

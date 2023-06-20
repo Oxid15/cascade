@@ -55,12 +55,8 @@ class ModelLine(TraceableOnDisk):
         --------
         cascade.models.ModelRepo
         """
-        super().__init__(folder, **kwargs)
 
-        assert (
-            meta_fmt in supported_meta_formats
-        ), f"Only {supported_meta_formats} are supported formats"
-        self._meta_fmt = meta_fmt
+        super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
         self._root = folder
         self.model_names = []
@@ -69,6 +65,8 @@ class ModelLine(TraceableOnDisk):
         else:
             # No folder -> create
             os.mkdir(self._root)
+
+        self._create_meta()
 
     def __getitem__(self, num: int) -> Model:
         """
