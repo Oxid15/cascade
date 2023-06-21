@@ -11,6 +11,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import glob
 import os
 import itertools
 from typing import Any, Dict, List, Iterable, Union, Literal, Type, Generator
@@ -255,9 +256,9 @@ class ModelRepo(Repo, TraceableOnDisk):
 
     def _update_meta(self) -> None:
         super()._update_meta()
-        if self._log_history:
-            meta_path = os.path.join(self._root, "meta" + self._meta_fmt)
-            meta = MetaHandler.read(meta_path)[0]
+        meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
+        if self._log_history and len(meta_path) == 1:
+            meta = MetaHandler.read(meta_path[0])[0]
             self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
             diff = DeepDiff(
                 meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"]
