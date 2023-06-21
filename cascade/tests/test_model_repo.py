@@ -399,3 +399,22 @@ def test_no_logging(tmp_path):
     metas = glob.glob(os.path.join(tmp_path, 'history.*'))
 
     assert len(metas) == 0
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml',
+        '.yaml'
+    ]
+)
+def test_change_of_format(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    ModelRepo(tmp_path, meta_fmt=ext)
+
+    assert os.path.exists(os.path.join(tmp_path, 'meta' + ext))
+
+    ModelRepo(tmp_path)
+
+    # Check that no other meta is created
+    assert len(glob.glob(os.path.join(tmp_path, 'meta.*'))) == 1
