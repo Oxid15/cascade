@@ -133,6 +133,12 @@ class TraceableOnDisk(Traceable):
         self._meta_fmt = meta_fmt
 
     def _create_meta(self) -> None:
+        meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
+        # Object was created before -> update
+        if len(meta_path) > 0:
+            self._update_meta()
+            return
+
         created = str(pendulum.now(tz='UTC'))
         meta = self.get_meta()
         meta[0].update({
