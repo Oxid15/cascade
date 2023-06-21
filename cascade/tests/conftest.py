@@ -149,7 +149,9 @@ def empty_model():
         'meta_fmt': '.yml'
     }
 ])
-def model_line(request, tmp_path):
+def model_line(request, tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp('line-', numbered=True)
+    tmp_path = os.path.join(tmp_path, 'line')
     line = ModelLine(str(tmp_path), **request.param)
     return line
 
@@ -160,7 +162,9 @@ def ones_model():
 
 
 @pytest.fixture
-def model_repo(tmp_path):
+def model_repo(tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp('repo-', numbered=True)
+    tmp_path = os.path.join(tmp_path, 'repo')
     repo = ModelRepo(str(tmp_path), lines=[
         dict(
             name=str(num),
