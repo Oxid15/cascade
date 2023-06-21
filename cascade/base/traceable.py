@@ -16,6 +16,7 @@ limitations under the License.
 
 
 import os
+import glob
 import warnings
 from typing import Dict, Union, Any, Literal
 import pendulum
@@ -145,16 +146,29 @@ class TraceableOnDisk(Traceable):
         """
         Reads meta if exists and updates it with new values
         writes back to disk
+
+        If meta file exists and is only one, then reads it
+        and writes back in the same format
         """
-        from . import MetaHandler
-        meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
+
+        meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
+
+        if len(meta_path) == 0:
+            return
+
+        if len(meta_path) > 1:
+            warnings.warn(
+                f"There are {len(meta_path)} meta files in {self._root}, failed to update meta")
+            return
 
         meta = {}
-        if os.path.exists(meta_path):
-            try:
-                meta = MetaHandler.read(meta_path)[0]
-            except IOError as e:
-                warnings.warn(f'File reading error ignored: {e}')
+        from . import MetaHandler
+
+        meta_path = meta_path[0]
+        try:
+            meta = MetaHandler.read(meta_path)[0]
+        except IOError as e:
+            warnings.warn(f'File reading error ignored: {e}')
 
         meta.update(self.get_meta()[0])
         try:
