@@ -266,11 +266,6 @@ class ModelRepo(Repo, TraceableOnDisk):
             if len(diff) != 0:
                 self._hl.log(self_meta)
 
-    def get_meta(self) -> PipeMeta:
-        meta = super().get_meta()
-        meta[0].update({"updated_at": pendulum.now(tz="UTC")})
-        return meta
-
     def reload(self) -> None:
         """
         Updates internal state.

@@ -109,3 +109,4 @@ def test_on_disk_recreate(tmp_path, ext):
 
     assert list(meta[0].keys()) == list(new_meta[0].keys())
     assert meta[0]['created_at'] == new_meta[0]['created_at']
+    assert meta[0]['updated_at'] != new_meta[0]['updated_at']

@@ -20,6 +20,8 @@ import glob
 import warnings
 from typing import Dict, Union, Any, Literal
 import pendulum
+
+from cascade.base import PipeMeta
 from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 
@@ -187,3 +189,8 @@ class TraceableOnDisk(Traceable):
 
     def get_root(self) -> str:
         return self._root
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]['updated_at'] = pendulum.now(tz="UTC")
+        return meta
