@@ -146,7 +146,10 @@ class TraceableOnDisk(Traceable):
         })
 
         from . import MetaHandler
-        MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+        try:
+            MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+        except IOError as e:
+            warnings.warn(f'File writing error ignored: {e}')
 
     def _update_meta(self) -> None:
         """
