@@ -78,6 +78,7 @@ def test_update_meta_from_file(tmp_path):
     ]
 )
 def test_on_disk_create(tmp_path, ext):
+    tmp_path = str(tmp_path)
     trd = TraceableOnDisk(tmp_path, ext)
     trd._create_meta()
 
@@ -95,6 +96,7 @@ def test_on_disk_create(tmp_path, ext):
     ]
 )
 def test_on_disk_recreate(tmp_path, ext):
+    tmp_path = str(tmp_path)
     trd = TraceableOnDisk(tmp_path, ext)
     trd._create_meta()
 
