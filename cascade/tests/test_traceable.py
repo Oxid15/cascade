@@ -18,11 +18,12 @@ import datetime
 import os
 import json
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import Traceable
+from cascade.base import MetaHandler, Traceable, TraceableOnDisk
 
 
 def test_meta():
@@ -67,3 +68,42 @@ def test_update_meta_from_file(tmp_path):
 
     assert 'a' in meta[0]
     assert meta[0]['a'] == 1
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml',
+        '.yaml'
+    ]
+)
+def test_on_disk_create(tmp_path, ext):
+    trd = TraceableOnDisk(tmp_path, ext)
+    trd._create_meta()
+
+    meta_path = os.path.join(tmp_path, 'meta' + ext)
+
+    assert os.path.exists(meta_path)
+    assert trd.get_root() == os.path.dirname(meta_path)
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml',
+        '.yaml'
+    ]
+)
+def test_on_disk_recreate(tmp_path, ext):
+    trd = TraceableOnDisk(tmp_path, ext)
+    trd._create_meta()
+
+    meta_path = os.path.join(tmp_path, 'meta' + ext)
+    meta = MetaHandler.read(meta_path)
+
+    trd._create_meta()
+
+    new_meta = MetaHandler.read(meta_path)
+
+    assert list(meta[0].keys()) == list(new_meta[0].keys())
+    assert meta[0]['created_at'] == new_meta[0]['created_at']
