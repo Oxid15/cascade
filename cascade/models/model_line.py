@@ -121,6 +121,7 @@ class ModelLine(TraceableOnDisk):
             model.save(full_path)
 
             # Find anything that matches /path/model_folder/model*
+            # TODO: need to review this
             exact_filename = glob.glob(f"{full_path}*")
 
             assert len(exact_filename) > 0, "Model file wasn't found.\n "
