@@ -111,8 +111,9 @@ def test_get_best_by(tmp_path, ext):
 )
 def test_get_best_by_non_sortable(tmp_path, ext):
     class ModelComplexMetric(BasicModel):
-        def load(self, *args, **kwargs):
-            pass
+        @classmethod
+        def load(cls, *args, **kwargs) -> "ModelComplexMetric":
+            return ModelComplexMetric()
 
         def predict(self, *args, **kwargs):
             return None

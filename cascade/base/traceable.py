@@ -15,9 +15,11 @@ limitations under the License.
 """
 
 
+import os
 import warnings
-from typing import Dict, Union, Any
-from . import PipeMeta, MetaFromFile
+from typing import Dict, Union, Any, Literal
+import pendulum
+from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 
 class Traceable:
@@ -25,6 +27,7 @@ class Traceable:
     Base class for everything that has metadata in cascade.
     Handles the logic of getting and updating internal meta prefix.
     """
+
     def __init__(
         self,
         *args: Any,
@@ -52,7 +55,8 @@ class Traceable:
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
         from . import MetaHandler
-        return MetaHandler().read(path)
+
+        return MetaHandler.read(path)
 
     def get_meta(self) -> PipeMeta:
         """
@@ -67,10 +71,8 @@ class Traceable:
 
             Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
-        meta = {
-            'name': repr(self)
-        }
-        if hasattr(self, '_meta_prefix'):
+        meta = {"name": repr(self)}
+        if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
             self._warn_no_prefix()
@@ -86,11 +88,12 @@ class Traceable:
 
         if isinstance(obj, list):
             raise RuntimeError(
-                'Object that was passed or read from path is a list.'
-                'There is no clear way how to update this object\'s meta'
-                'using list')
+                "Object that was passed or read from path is a list."
+                "There is no clear way how to update this object's meta"
+                "using list"
+            )
 
-        if hasattr(self, '_meta_prefix'):
+        if hasattr(self, "_meta_prefix"):
             self._meta_prefix.update(obj)
         else:
             self._warn_no_prefix()
@@ -98,9 +101,9 @@ class Traceable:
     @staticmethod
     def _warn_no_prefix() -> None:
         warnings.warn(
-            'Object doesn\'t have _meta_prefix. '
-            'This may mean super().__init__() wasn\'t'
-            'called somewhere'
+            "Object doesn't have _meta_prefix. "
+            "This may mean super().__init__() wasn't"
+            "called somewhere"
         )
 
     def __repr__(self) -> str:
@@ -117,3 +120,47 @@ class Traceable:
         """
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
+
+
+class TraceableOnDisk(Traceable):
+    def __init__(self, root: str, meta_fmt: Literal['.json', '.yml', '.yaml'], *args: Any,
+                 meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        self._root = root
+        if meta_fmt not in supported_meta_formats:
+            raise ValueError(f'Only {supported_meta_formats} are supported formats')
+        self._meta_fmt = meta_fmt
+
+    def _create_meta(self) -> None:
+        created = str(pendulum.now(tz='UTC'))
+        meta = self.get_meta()
+        meta[0].update({
+            "created_at": created
+        })
+
+        from . import MetaHandler
+        MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+
+    def _update_meta(self) -> None:
+        """
+        Reads meta if exists and updates it with new values
+        writes back to disk
+        """
+        from . import MetaHandler
+        meta_path = os.path.join(self._root, 'meta' + self._meta_fmt)
+
+        meta = {}
+        if os.path.exists(meta_path):
+            try:
+                meta = MetaHandler.read(meta_path)[0]
+            except IOError as e:
+                warnings.warn(f'File reading error ignored: {e}')
+
+        meta.update(self.get_meta()[0])
+        try:
+            MetaHandler.write(meta_path, [meta])
+        except IOError as e:
+            warnings.warn(f'File writing error ignored: {e}')
+
+    def get_root(self) -> str:
+        return self._root

@@ -45,15 +45,14 @@ class DummyModel(Model):
     def evaluate(self, *args, **kwargs):
         self.metrics.update({'acc': np.random.random()})
 
-    def load(self, path):
-        if os.path.splitext(path)[-1] != '.bin':
-            path += '.bin'
+    @classmethod
+    def load(cls, path):
         with open(path, 'rb') as f:
-            self.model = str(f.read())
+            model = DummyModel()
+            model.model = str(f.read())
+            return model
 
     def save(self, path):
-        if os.path.splitext(path)[-1] != '.bin':
-            path += '.bin'
         with open(path, 'wb') as f:
             f.write(b'model')
 
@@ -67,8 +66,9 @@ class OnesModel(BasicModel):
     def predict(self, x, *args, **kwargs):
         return np.array([1 for _ in range(len(x))])
 
-    def load(self, filepath) -> None:
-        pass
+    @classmethod
+    def load(cls, filepath) -> "OnesModel":
+        return OnesModel()
 
     def save(self, filepath) -> None:
         pass

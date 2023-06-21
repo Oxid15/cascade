@@ -70,11 +70,12 @@ class SkModel(BasicModel):
         """
         return self._pipeline.predict_proba(x, *args, **kwargs)
 
-    def _check_model_hash(self, path: str) -> None:
+    @classmethod
+    def _check_model_hash(cls, path: str) -> None:
         root = os.path.dirname(path)
         names = glob.glob(os.path.join(f"{root}", "meta.*"))
         if len(names) == 1:
-            meta = MetaHandler().read(names[0])
+            meta = MetaHandler.read(names[0])
             # Uses first meta in list
             # Usually the list is of unit length
             meta = meta[0]
@@ -91,7 +92,8 @@ class SkModel(BasicModel):
         elif len(names) > 1:
             raise RuntimeError(f"Multiple possible meta-files found: {names}")
 
-    def load(self, path: str, check_hash: bool = True) -> None:
+    @classmethod
+    def load(cls, path: str, check_hash: bool = True) -> 'SkModel':
         """
         Loads the model from path provided. Path may be a folder,
         if so, model.pkl is assumed.
@@ -108,10 +110,12 @@ class SkModel(BasicModel):
         path = path + ext
 
         if check_hash:
-            self._check_model_hash(path)
+            cls._check_model_hash(path)
 
         with open(path, "rb") as f:
-            self._pipeline = pickle.load(f)
+            model = pickle.load(f)
+
+        return model
 
     def save(self, path: str) -> None:
         """
@@ -133,7 +137,7 @@ class SkModel(BasicModel):
         path = path + ext
 
         with open(f"{path}", "wb") as f:
-            pickle.dump(self._pipeline, f)
+            pickle.dump(self.__dict__, f)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

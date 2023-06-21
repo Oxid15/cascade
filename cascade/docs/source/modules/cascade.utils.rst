@@ -194,3 +194,21 @@ cascade.utils
 |
 
 |
+
+.. autoclass:: cascade.utils.dataset_server.DatasetServer
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.dataset_client.DatasetClient
+    :members:
+
+|
+
+|
+
+|

@@ -87,7 +87,6 @@ class MetaValidator(Validator):
         cascade.meta.DataValidationException
         """
         super().__init__(dataset, lambda x: True)
-        self._mh = MetaHandler()
         if root is None:
             root = './.cascade'
             os.makedirs(root, exist_ok=True)
@@ -107,11 +106,11 @@ class MetaValidator(Validator):
             self._save(meta, name)
 
     def _save(self, meta: PipeMeta, name: str) -> None:
-        self._mh.write(name, meta)
+        MetaHandler.write(name, meta)
         print(f'Saved as {name}!')
 
     def _load(self, name: str) -> MetaFromFile:
-        return self._mh.read(name)
+        return MetaHandler.read(name)
 
     def _check(self, query_meta: PipeMeta) -> None:
         diff = DeepDiff(self.base_meta, query_meta, verbose_level=2)

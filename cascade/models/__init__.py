@@ -16,6 +16,6 @@ limitations under the License.
 
 from .model import Model, ModelModifier
 from .basic_model import BasicModel, BasicModelModifier
-from .model_repo import ModelRepo, SingleLineRepo
+from .model_repo import Repo, ModelRepo, SingleLineRepo
 from .model_line import ModelLine
 from .trainer import Trainer, BasicTrainer

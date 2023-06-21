@@ -24,7 +24,7 @@ from flatten_json import flatten
 from deepdiff import DeepDiff
 
 from ..base import MetaHandler
-from ..models import ModelRepo, ModelLine, SingleLineRepo
+from ..models import Repo, ModelLine, SingleLineRepo
 from . import Server, MetaViewer
 
 
@@ -37,7 +37,7 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        repo: Union[ModelRepo, ModelLine],
+        repo: Union[Repo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
     ) -> None:
@@ -59,7 +59,6 @@ class HistoryViewer(Server):
         self._make_table()
 
     def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
-        mh = MetaHandler()
         valid_lines = []
         updated_at = []
         for line in line_names:
@@ -72,7 +71,7 @@ class HistoryViewer(Server):
             elif len(meta_paths) == 0:
                 continue
 
-            meta = mh.read(meta_paths[0])
+            meta = MetaHandler.read(meta_paths[0])
             updated_at.append(meta[0]["updated_at"])
             valid_lines.append(line)
 

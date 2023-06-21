@@ -21,11 +21,11 @@ import pendulum
 import glob
 from hashlib import md5
 
-from ..base import Traceable, MetaHandler, supported_meta_formats, PipeMeta
+from ..base import TraceableOnDisk, MetaHandler, PipeMeta
 from .model import Model
 
 
-class ModelLine(Traceable):
+class ModelLine(TraceableOnDisk):
     """
     A manager for a line of models. Used by ModelRepo for access to models on disk.
     A line of models is typically a models with the same hyperparameters and architecture,
@@ -49,18 +49,14 @@ class ModelLine(Traceable):
             If folder does not exist, creates it
         model_cls: type, optional
             A class of models in line. ModelLine uses this class to reconstruct a model
-        meta_fmt: str, optional
+        meta_fmt: Literal[".json", ".yml", ".yaml"], optional
             Format in which to store meta data.
         See also
         --------
         cascade.models.ModelRepo
         """
-        super().__init__(**kwargs)
 
-        assert (
-            meta_fmt in supported_meta_formats
-        ), f"Only {supported_meta_formats} are supported formats"
-        self._meta_fmt = meta_fmt
+        super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
         self._root = folder
         self.model_names = []
@@ -69,7 +65,8 @@ class ModelLine(Traceable):
         else:
             # No folder -> create
             os.mkdir(self._root)
-        self._mh = MetaHandler()
+
+        self._create_meta()
 
     def __getitem__(self, num: int) -> Model:
         """
@@ -80,8 +77,7 @@ class ModelLine(Traceable):
             model: Model
                 a loaded model
         """
-        model = self._model_cls()
-        model.load(os.path.join(self._root, self.model_names[num]))
+        model = self._model_cls.load(os.path.join(self._root, self.model_names[num]))
         return model
 
     def __len__(self) -> int:
@@ -142,14 +138,11 @@ class ModelLine(Traceable):
         self.model_names.append(os.path.join(folder_name, "model"))
 
         # Save model's meta
-        self._mh.write(
+        MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
 
-        # Save updated line's meta
-        self._mh.write(
-            os.path.join(self._root, "meta" + self._meta_fmt), self.get_meta()
-        )
+        self._update_meta()
 
     def __repr__(self) -> str:
         return f"ModelLine of {len(self)} models of {self._model_cls}"
@@ -179,8 +172,5 @@ class ModelLine(Traceable):
                 f'Model folders were not found by the line in {self._root}'
             )
 
-    def reload(self):
+    def reload(self) -> None:
         self._load()
-
-    def get_root(self):
-        return self._root
