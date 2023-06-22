@@ -20,6 +20,8 @@ import glob
 import warnings
 from typing import Dict, Union, Any, Literal
 import pendulum
+
+from cascade.base import PipeMeta
 from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 
@@ -133,6 +135,12 @@ class TraceableOnDisk(Traceable):
         self._meta_fmt = meta_fmt
 
     def _create_meta(self) -> None:
+        meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
+        # Object was created before -> update
+        if len(meta_path) > 0:
+            self._update_meta()
+            return
+
         created = str(pendulum.now(tz='UTC'))
         meta = self.get_meta()
         meta[0].update({
@@ -140,7 +148,10 @@ class TraceableOnDisk(Traceable):
         })
 
         from . import MetaHandler
-        MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+        try:
+            MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+        except IOError as e:
+            warnings.warn(f'File writing error ignored: {e}')
 
     def _update_meta(self) -> None:
         """
@@ -178,3 +189,8 @@ class TraceableOnDisk(Traceable):
 
     def get_root(self) -> str:
         return self._root
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]['updated_at'] = pendulum.now(tz="UTC")
+        return meta

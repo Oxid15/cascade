@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import glob
 import os
 import sys
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.conftest import DummyModel
+from cascade.tests.conftest import DummyModel, ModelLine
 
 
 def test_save_load(model_line, dummy_model):
@@ -37,3 +39,22 @@ def test_meta(model_line, dummy_model):
 
     assert meta[0]['model_cls'] == repr(DummyModel)
     assert meta[0]['len'] == 1
+
+
+@pytest.mark.parametrize(
+    'ext', [
+        '.json',
+        '.yml',
+        '.yaml'
+    ]
+)
+def test_change_of_format(tmp_path, ext):
+    tmp_path = str(tmp_path)
+    ModelLine(tmp_path, meta_fmt=ext)
+
+    assert os.path.exists(os.path.join(tmp_path, 'meta' + ext))
+
+    ModelLine(tmp_path)
+
+    # Check that no other meta is created
+    assert len(glob.glob(os.path.join(tmp_path, 'meta.*'))) == 1

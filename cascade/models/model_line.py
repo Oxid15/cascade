@@ -155,7 +155,6 @@ class ModelLine(TraceableOnDisk):
                 "root": self._root,
                 "model_cls": repr(self._model_cls),
                 "len": len(self),
-                "updated_at": pendulum.now(tz="UTC"),
                 "type": "line",
             }
         )
