@@ -135,6 +135,7 @@ class BaseDiffViewer(Server):
         objs = {f'Model {i:0>5d}': meta for i, meta in enumerate(objs)}
         return objs
 
+
 class DatasetVersionDiffViewer(BaseDiffViewer):
     def __init__(self, path: str) -> None:
         super().__init__(path)
@@ -203,13 +204,13 @@ class RepoDiffViewer(BaseDiffViewer):
                 f'Multiple meta files in the directory provided: {path}'
             )
 
-            meta = MetaHandler.read(path)
-            if 'type' not in meta:
-                raise ValueError(
-                    f'Meta in file {path} has no `type` in its keys!'
-                    'It may be that you are using DiffViewer on old '
-                    'type of history logs before 0.10.0.'
-                )
+        meta = MetaHandler.read(metas[0])
+        if 'type' not in meta[0]:
+            raise ValueError(
+                f'Meta in file {metas[0]} has no `type` in its keys! '
+                'It may be that you are using DiffViewer on old '
+                'type of history logs before 0.10.0.'
+            )
 
         if not isinstance(meta, list):
             raise ValueError(f'Something is wrong with meta in {metas[0]} - it is not a list')
