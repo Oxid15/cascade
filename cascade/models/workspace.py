@@ -1,35 +1,52 @@
 import os
 import glob
-from typing import Any, Dict, Union
+from typing import Any, Union, Literal
 import warnings
-from ..base import Traceable, MetaHandler
+
+from ..base import PipeMeta, TraceableOnDisk, MetaHandler
 from ..models import ModelRepo
 
 
-class Workspace(Traceable):
+class Workspace(TraceableOnDisk):
     def __init__(
         self,
         path: str,
+        meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
         default_repo: Union[str, None] = None,
         *args: Any,
         **kwargs: Any
     ) -> None:
-        super().__init__(*args, **kwargs)
+        super().__init__(path, meta_fmt, *args, **kwargs)
         self._root = path
         self._default = default_repo
-        dirs = [name for name in os.listdir(self._root) if os.path.isdir(name)]
+
+        abs_root = os.path.abspath(self._root)
+        dirs = [name for name in os.listdir(abs_root)
+                if os.path.isdir(os.path.join(abs_root, name))]
         self._repo_names = []
         for d in dirs:
-            meta_path = sorted(glob.glob(os.path.join(d, 'meta.*')))
+            meta_path = sorted(glob.glob(os.path.join(abs_root, d, 'meta.*')))
             if len(meta_path) == 1:
                 meta = MetaHandler.read(meta_path[0])
-                if meta[0]['type'] == 'repo':
+                if meta[0].get('type') == 'repo':
                     self._repo_names.append(d)
             else:
                 warnings.warn(f'Found {len(meta_path)} meta files in {d}')
 
-    def __getitem__(self, key: Any) -> ModelRepo:
-        pass
+        self._create_meta()
 
-    def __len__(self):
+    def __getitem__(self, key: str) -> ModelRepo:
+        if key in self._repo_names:
+            return ModelRepo(os.path.join(self._root, key), log_history=False)
+        else:
+            raise KeyError(f"{key} repo does not exist in workspace {self._root}")
+
+    def __len__(self) -> int:
         return len(self._repo_names)
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]["root"] = self._root
+        meta[0]["len"] = len(self)
+        meta[0]["type"] = "workspace"
+        return meta
