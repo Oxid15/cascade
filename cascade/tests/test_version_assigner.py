@@ -27,7 +27,8 @@ from cascade.data import Wrapper, ApplyModifier, VersionAssigner, Concatenator
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test(tmp_path, ext):
@@ -55,7 +56,8 @@ def test(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_deep_changes(tmp_path, ext):

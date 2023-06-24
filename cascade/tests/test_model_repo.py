@@ -47,7 +47,8 @@ def test_save_load(tmp_path, dummy_model):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_overwrite(tmp_path, ext):
@@ -81,7 +82,8 @@ def test_add_line(tmp_path):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_reusage(tmp_path, ext):
@@ -102,7 +104,8 @@ def test_reusage(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_reusage_init_alias(tmp_path, ext):
@@ -125,7 +128,8 @@ def test_reusage_init_alias(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_meta(tmp_path, ext):
@@ -184,7 +188,8 @@ def test_add(tmp_path):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_missing_repo_meta(tmp_path, ext):
@@ -209,7 +214,8 @@ def test_missing_repo_meta(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_missing_line_meta(tmp_path, ext):
@@ -234,7 +240,8 @@ def test_missing_line_meta(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_missing_model_meta(tmp_path, ext):
@@ -259,7 +266,8 @@ def test_missing_model_meta(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_failed_repo_meta(tmp_path, ext):
@@ -286,7 +294,8 @@ def test_failed_repo_meta(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_failed_line_meta(tmp_path, ext):
@@ -313,7 +322,8 @@ def test_failed_line_meta(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_failed_model_meta(tmp_path, ext):
@@ -340,7 +350,8 @@ def test_failed_model_meta(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_get_line_names(tmp_path, ext):
@@ -355,7 +366,8 @@ def test_get_line_names(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_integer_indices(tmp_path, ext):
@@ -372,7 +384,8 @@ def test_integer_indices(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_auto_line_name(tmp_path, ext):

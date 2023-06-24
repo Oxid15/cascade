@@ -74,7 +74,8 @@ def test_many_lines(model_repo, dummy_model):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_missing_model_meta(tmp_path, dummy_model, ext):

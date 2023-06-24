@@ -64,7 +64,8 @@ def test_serve(repo_or_line):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_missing_model_meta(tmp_path, dummy_model, ext):
@@ -83,7 +84,8 @@ def test_missing_model_meta(tmp_path, dummy_model, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_get_best_by(tmp_path, ext):
@@ -106,7 +108,8 @@ def test_get_best_by(tmp_path, ext):
 @pytest.mark.parametrize(
     'ext', [
         '.json',
-        '.yml'
+        '.yml',
+        '.yaml'
     ]
 )
 def test_get_best_by_non_sortable(tmp_path, ext):
