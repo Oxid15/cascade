@@ -98,19 +98,6 @@ class BaseDiffViewer(Server):
             ])
         ], style={'margin': '5%', **self._style})
 
-        meta = MetaHandler.read(metas[0])
-
-        @_app.callback(
-            Output(component_id='diff-json', component_property='data'),
-            Input(component_id='left-dropdown', component_property='value'),
-            Input(component_id='rigth-dropdown', component_property='value'))
-        def _update_diff(x, y):
-            if x is not None and y is not None:
-                diff = DeepDiff(self._objs[x], self._objs[y]).to_dict()
-                diff = JSONEncoder().encode(diff)
-                diff = json.loads(diff)
-                return diff
-
     def serve(self, **kwargs: Any) -> None:
         '''
         Runs dash server
@@ -134,6 +121,23 @@ class BaseDiffViewer(Server):
         objs = [meta for meta in mev]
         objs = {f'Model {i:0>5d}': meta for i, meta in enumerate(objs)}
         return objs
+
+    def _update_diff_callback(self, _app) -> None:
+        try:
+            from dash import Output, Input
+        except ModuleNotFoundError:
+            self._raise_cannot_import_dash()
+
+        @_app.callback(
+            Output(component_id='diff-json', component_property='data'),
+            Input(component_id='left-dropdown', component_property='value'),
+            Input(component_id='rigth-dropdown', component_property='value'))
+        def _update_diff(x, y):
+            if x is not None and y is not None:
+                diff = DeepDiff(self._objs[x], self._objs[y]).to_dict()
+                diff = JSONEncoder().encode(diff)
+                diff = json.loads(diff)
+                return diff
 
 
 class DatasetVersionDiffViewer(BaseDiffViewer):
@@ -160,7 +164,7 @@ class HistoryDiffViewer(BaseDiffViewer):
         self._default_depth = 2
         self._default_diff_depth = 1
 
-    def read_objects(self, path: str) -> Dict[str, Any]:
+    def _read_objects(self, path: str) -> Dict[str, Any]:
         self._check_path(path)
 
         history = MetaHandler.read(path)['history']
@@ -323,142 +327,19 @@ class RepoDiffViewer(BaseDiffViewer):
             *[line_table(line) for line in lines],
         ], style={'margin': '5%', **self._style})
 
-    def _update_diff_callback(self, _app) -> None:
-        try:
-            from dash import Output, Input
-        except ModuleNotFoundError:
-            self._raise_cannot_import_dash()
 
-        @_app.callback(
-            Output(component_id='diff-json', component_property='data'),
-            Input(component_id='left-dropdown', component_property='value'),
-            Input(component_id='rigth-dropdown', component_property='value'))
-        def _update_diff(x, y):
-            if x is not None and y is not None:
-                diff = DeepDiff(self._objs[x], self._objs[y]).to_dict()
-                diff = JSONEncoder().encode(diff)
-                diff = json.loads(diff)
-                return diff
+# class WorkspaceDiffViewer(RepoDiffViewer):
+#     def __init__(
+#         self,
+#         path: str
+#     ) -> None:
+#         super().__init__(path)
 
+#         self._default_depth = 2
+#         self._default_diff_depth = 2
 
-class WorkspaceDiffViewer(RepoDiffViewer):
-    def __init__(
-        self,
-        path: str
-    ) -> None:
-        '''
-        Parameters
-        ----------
-        path: str
-            Path to the object which states to view
-        '''
-        super().__init__(path)
-
-        self._default_depth = 2
-        self._default_diff_depth = 2
-
-    def _layout(self):
-        def _table_row(name, prev_name):
-            date = self._objs[name][0]['created_at']
-            date = pendulum.parse(date).format('DD MMMM YYYY HH:mm:ss')
-
-            obj = self._objs[name]
-            prev_obj = self._objs[prev_name]
-
-            diff = DeepDiff(prev_obj, obj).to_dict()
-
-            diff_str = ''
-            if 'dictionary_item_added' in diff:
-                diff_str += f'+{len(diff["dictionary_item_added"])}'
-            if 'values_changed' in diff:
-                diff_str += f'~{len(diff["values_changed"])}'
-            if 'dictionary_item_removed' in diff:
-                diff_str += f'-{len(diff["dictionary_item_removed"])}'
-
-            return html.Tr(children=[
-                    html.Th(date),
-                    html.Th(diff_str),
-                    html.Th(
-                        html.Details(children=[
-                                html.Summary(name),
-                                    DashRenderjson(
-                                        id=f'{name}-data',
-                                        data={'': obj},
-                                        theme=self._json_theme,
-                                        max_depth=self._default_depth
-                                )
-                            ]
-                        )
-                    )
-                ],
-                style={'text-align': 'left'}
-            )
-
-        def line_table(line):
-            children = []
-            keys = list(lines[line].keys())
-            for name, prev_name in zip(keys, [keys[0], *keys[:-1]]):
-                children.append(_table_row(name, prev_name))
-
-            return html.Div(children=[
-                html.H3(line, style={'color': '#C92C6D'}),
-                html.Table(id=f'table-{line}', children=children)
-            ], style={'margin-bottom': '10px'})
-
-        try:
-            import dash
-        except ModuleNotFoundError:
-            self._raise_cannot_import_dash()
-        else:
-            from dash import html, dcc
-
-        try:
-            import dash_renderjson
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                'Cannot import dash_renderjson. It is optional dependency for DiffViewer'
-                ' and can be installed via `pip install dash_renderjson`')
-        else:
-            from dash_renderjson import DashRenderjson
-
-        self._objs = self._read_objects(self._path)
-
-        lines = dict()
-        for name in self._objs:
-            # /full/path/repo/line/model/file.ext
-            tail, _ = os.path.split(name)
-            tail, _ = os.path.split(tail)
-            _, line = os.path.split(tail)
-
-            if line in lines:
-                lines[line][name] = self._objs[name]
-            else:
-                lines[line] = {name: self._objs[name]}
-
-        return html.Div([
-            html.Div([
-                html.Div(
-                    html.H1(
-                        children='DiffViewer',
-                        style={'textAlign': 'center', **self._style}
-                    ), style={'flex': 1}
-                ),
-                html.Div(
-                    dcc.Dropdown(id='repo-dropdown', value=self._path,
-                                 options=list(self._objs.keys())),
-                    style={'flex': 1}
-                )
-            ], style={'margin': '5%', 'display': 'flex', 'flex-direction': 'row', **self._style}),
-            dcc.Dropdown(id='left-dropdown', options=list(self._objs.keys())),
-            dcc.Dropdown(id='rigth-dropdown', options=list(self._objs.keys())),
-            DashRenderjson(
-                id='diff-json',
-                data={'Nothing': 'Nothing is selected!'},
-                theme=self._json_theme,
-                max_depth=self._default_diff_depth
-            ),
-            *[line_table(line) for line in lines],
-        ], style={'margin': '5%', **self._style})
+#     def _update_diff_callback(self, app):
+#         pass
 
 
 class DiffViewer(Server):
