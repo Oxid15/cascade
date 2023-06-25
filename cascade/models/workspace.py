@@ -50,3 +50,6 @@ class Workspace(TraceableOnDisk):
         meta[0]["len"] = len(self)
         meta[0]["type"] = "workspace"
         return meta
+
+    def get_repo_names(self) -> List[str]:
+        return self._repo_names
