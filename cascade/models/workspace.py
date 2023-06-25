@@ -62,3 +62,12 @@ class Workspace(TraceableOnDisk):
             return self[self._default]
         else:
             return self[self._repo_names[0]]
+
+    def set_default(self, repo: str) -> None:
+        if repo in self._repo_names:
+            self._default = repo
+        else:
+            raise KeyError(f"Repo {repo} does not exist in Workspace {self._root}")
+
+    def reload(self) -> None:
+        pass

@@ -51,6 +51,7 @@ class Repo(Traceable):
         self._lines = dict()
 
     def reload(self) -> None:
+        # TODO: implement full reload
         for line in self._lines:
             self._lines[line].reload()
 
