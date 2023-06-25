@@ -73,7 +73,7 @@ class RepoDiffViewer(BaseDiffViewer):
                 f"Something is wrong with meta in {metas[0]} - no type key in it"
             )
 
-        if meta[0]["type"] in meta_type:
+        if meta[0]["type"] not in meta_type:
             raise ValueError("The folder you provided is neither the repo nor line")
 
     def _read_objects(self, path: str) -> Dict[str, MetaFromFile]:
