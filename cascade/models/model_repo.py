@@ -100,6 +100,9 @@ class SingleLineRepo(Repo):
     def __repr__(self) -> str:
         return f"SingleLine in {self._line_root}"
 
+    def get_root(self):
+        return self._line_root
+
 
 class ModelRepo(Repo, TraceableOnDisk):
     """
