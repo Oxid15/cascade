@@ -47,7 +47,7 @@ class DiffViewer(Server):
         if os.path.isdir(path):
             meta_path = sorted(glob.glob(os.path.join(path, "meta.*")))
             if len(meta_path) != 1:
-                raise RuntimeError(f"Found {len(meta_path)} files in {path}")
+                raise RuntimeError(f"Found {len(meta_path)} meta files in {path}")
             meta = MetaHandler().read(meta_path[0])
 
             if meta[0]["type"] == "repo":
