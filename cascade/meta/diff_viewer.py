@@ -17,7 +17,7 @@ limitations under the License.
 import os
 import glob
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Literal, Union, Tuple
 
 from deepdiff import DeepDiff
 import pendulum
@@ -46,7 +46,7 @@ class BaseDiffViewer(Server):
             'base0D': '#C92C6D',  # keys text
         }
 
-    def _check_path(self, path):
+    def _check_path(self, path, meta_type):
         if not os.path.exists(path):
             raise FileNotFoundError(path)
 
@@ -147,7 +147,7 @@ class DatasetVersionDiffViewer(BaseDiffViewer):
         self._default_diff_depth = 8
 
     def _read_objects(self, path: str) -> Dict[str, Any]:
-        self._check_path(path)
+        self._check_path(path, 'version_history')
 
         versions = MetaHandler.read(path)['versions']
 
@@ -165,7 +165,7 @@ class HistoryDiffViewer(BaseDiffViewer):
         self._default_diff_depth = 1
 
     def _read_objects(self, path: str) -> Dict[str, Any]:
-        self._check_path(path)
+        self._check_path(path, ('history',))
 
         history = MetaHandler.read(path)['history']
 
@@ -188,7 +188,7 @@ class RepoDiffViewer(BaseDiffViewer):
         self._default_depth = 2
         self._default_diff_depth = 2
 
-    def _check_path(self, path: str) -> None:
+    def _check_path(self, path: str, meta_type: Tuple) -> None:
         if not os.path.isdir(path):
             raise ValueError(f'Path `{path}` is not a directory')
 
@@ -222,11 +222,11 @@ class RepoDiffViewer(BaseDiffViewer):
         if 'type' not in meta[0]:
             raise ValueError(f'Something is wrong with meta in {metas[0]} - no type key in it')
 
-        if meta[0]['type'] not in ('repo', 'line'):
+        if meta[0]['type'] in meta_type:
             raise ValueError('The folder you provided is neither the repo nor line')
 
     def _read_objects(self, path: str) -> Dict[str, MetaFromFile]:
-        self._check_path(path)
+        self._check_path(path, ('repo', 'line'))
 
         mev = MetaViewer(path, filt={'type': 'model'})
         objs = [meta for meta in mev]
@@ -328,18 +328,17 @@ class RepoDiffViewer(BaseDiffViewer):
         ], style={'margin': '5%', **self._style})
 
 
-# class WorkspaceDiffViewer(RepoDiffViewer):
-#     def __init__(
-#         self,
-#         path: str
-#     ) -> None:
-#         super().__init__(path)
+class WorkspaceDiffViewer(BaseDiffViewer):
+    def __init__(
+        self,
+        path: str
+    ) -> None:
+        super().__init__(path)
 
-#         self._default_depth = 2
-#         self._default_diff_depth = 2
+        self._default_depth = 2
+        self._default_diff_depth = 2
 
-#     def _update_diff_callback(self, app):
-#         pass
+    # def 
 
 
 class DiffViewer(Server):
