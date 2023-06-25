@@ -31,6 +31,7 @@ class BaseDiffViewer(Server):
 
         # self._check_path(path)
         self._path = path
+        self._callbacks = [self._update_diff_callback]
 
         self._style = {"color": "#084c61", "font-family": "Open Sans, Montserrat"}
 
@@ -119,7 +120,9 @@ class BaseDiffViewer(Server):
             self._raise_cannot_import_dash()
 
         app = dash.Dash()
-        self._update_diff_callback(app)
+        for callback in self._callbacks:
+            callback(app)
+
         app.layout = self._layout
         app.run_server(use_reloader=False, **kwargs)
 
