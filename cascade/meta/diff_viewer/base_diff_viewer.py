@@ -1,5 +1,6 @@
 from typing import Any
 import json
+import os
 
 from deepdiff import DeepDiff
 
@@ -12,7 +13,7 @@ class BaseDiffViewer(Server):
     def __init__(self, path) -> None:
         super().__init__()
 
-        self._check_path(path)  # TODO: comment this
+        # self._check_path(path)
         self._path = path
 
         self._style = {"color": "#084c61", "font-family": "Open Sans, Montserrat"}
