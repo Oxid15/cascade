@@ -1,6 +1,6 @@
 import os
 import glob
-from typing import Any, Union, Literal
+from typing import Any, Union, Literal, List
 import warnings
 
 from ..base import PipeMeta, TraceableOnDisk, MetaHandler
@@ -14,24 +14,27 @@ class Workspace(TraceableOnDisk):
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
         default_repo: Union[str, None] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         super().__init__(path, meta_fmt, *args, **kwargs)
         self._root = path
         self._default = default_repo
 
         abs_root = os.path.abspath(self._root)
-        dirs = [name for name in os.listdir(abs_root)
-                if os.path.isdir(os.path.join(abs_root, name))]
+        dirs = [
+            name
+            for name in os.listdir(abs_root)
+            if os.path.isdir(os.path.join(abs_root, name))
+        ]
         self._repo_names = []
         for d in dirs:
-            meta_path = sorted(glob.glob(os.path.join(abs_root, d, 'meta.*')))
+            meta_path = sorted(glob.glob(os.path.join(abs_root, d, "meta.*")))
             if len(meta_path) == 1:
                 meta = MetaHandler.read(meta_path[0])
-                if meta[0].get('type') == 'repo':
+                if meta[0].get("type") == "repo":
                     self._repo_names.append(d)
             else:
-                warnings.warn(f'Found {len(meta_path)} meta files in {d}')
+                warnings.warn(f"Found {len(meta_path)} meta files in {d}")
 
         self._create_meta()
 
