@@ -19,6 +19,10 @@ import glob
 
 from ...base import MetaHandler, supported_meta_formats
 from ...meta import Server
+from .history_diff_viewer import HistoryDiffViewer
+from .dataset_version_diff_viewer import DatasetVersionDiffViewer
+from .repo_diff_viewer import RepoDiffViewer
+from .workspace_diff_viewer import WorkspaceDiffViewer
 
 
 class DiffViewer(Server):
