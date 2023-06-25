@@ -13,6 +13,7 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -22,20 +23,15 @@ from cascade.data import *
 
 
 def test_data_coverage(dataset, tmp_path):
-    Pickler(os.path.join(tmp_path, 'ds.pkl'), dataset)
+    Pickler(os.path.join(tmp_path, "ds.pkl"), dataset)
 
 
 @pytest.mark.parametrize(
-    'ds',
-    [
-        Wrapper([1, 2, 3, 4, 5]),
-        Wrapper([1]),
-        Sampler(Modifier(Wrapper([1])), 1)
-    ]
+    "ds", [Wrapper([1, 2, 3, 4, 5]), Wrapper([1]), Sampler(Modifier(Wrapper([1])), 1)]
 )
 def test_integrity(ds, tmp_path):
-    _ = Pickler(os.path.join(tmp_path, 'ds.pkl'), ds)
-    loaded_ds = Pickler(os.path.join(tmp_path, 'ds.pkl'))
+    _ = Pickler(os.path.join(tmp_path, "ds.pkl"), ds)
+    loaded_ds = Pickler(os.path.join(tmp_path, "ds.pkl"))
 
     true = []
     for i in range(len(ds)):

@@ -11,20 +11,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import datetime
 import os
 import sys
-import pytest
-import datetime
 
 import pandas as pd
+import pytest
 
-MODULE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+MODULE_PATH = os.path.dirname(
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.data import Dataset, Wrapper
+from cascade.utils.samplers import OverSampler, UnderSampler, WeighedSampler
 from cascade.utils.tables import TableDataset, TableFilter
 from cascade.utils.time_series import TimeSeriesDataset
-from cascade.utils.samplers import OverSampler, UnderSampler, WeighedSampler
-from cascade.data import Dataset, Wrapper
 
 
 @pytest.fixture(

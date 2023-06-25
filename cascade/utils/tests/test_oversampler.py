@@ -16,36 +16,33 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(
-    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper
 from cascade.utils.samplers import OverSampler
 
 
-#TODO: test with str labels
+# TODO: test with str labels
 @pytest.mark.parametrize(
-    'arr, res', [
-        (
-            [(1, 0), (2, 0)],
-            [(1, 0), (2, 0)]
-        ),
-        (
-            [(1, 0), (2, 0), (3, 1)],
-            [(1, 0), (2, 0), (3, 1), (3, 1)]
-        ),
+    "arr, res",
+    [
+        ([(1, 0), (2, 0)], [(1, 0), (2, 0)]),
+        ([(1, 0), (2, 0), (3, 1)], [(1, 0), (2, 0), (3, 1), (3, 1)]),
         (
             [(1, 0), (2, 0), (3, 1), (4, 2)],
-            [(1, 0), (2, 0), (3, 1), (4, 2), (3, 1), (4, 2)]
+            [(1, 0), (2, 0), (3, 1), (4, 2), (3, 1), (4, 2)],
         ),
         (
             [(1, 2), (2, 2), (3, 2), (4, 1)],
-            [(1, 2), (2, 2), (3, 2), (4, 1), (4, 1), (4, 1)]
-        )
-    ]
+            [(1, 2), (2, 2), (3, 2), (4, 1), (4, 1), (4, 1)],
+        ),
+    ],
 )
 def test(arr, res):
     ds = Wrapper(arr)

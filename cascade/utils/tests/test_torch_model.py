@@ -16,9 +16,9 @@ limitations under the License.
 
 import os
 import sys
-import torch
-import pytest
 
+import pytest
+import torch
 
 MODULE_PATH = os.path.dirname(
     os.path.dirname(os.path.abspath(os.path.dirname(__file__)))

@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import random
 import sys
+
 import numpy as np
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -45,13 +46,11 @@ def test_basic_model_with_concrete_case(ones_model):
     model.evaluate(
         [random.randint(0, 255) for _ in range(3)],
         np.array([0, 1, 1]),
-        metrics_dict={
-            'precision': precision,
-            'recall': recall
-        })
+        metrics_dict={"precision": precision, "recall": recall},
+    )
 
-    assert model.metrics['precision'] == 2 / 3
-    assert model.metrics['recall'] == 1
+    assert model.metrics["precision"] == 2 / 3
+    assert model.metrics["recall"] == 1
 
 
 def test_modifier(ones_model):
