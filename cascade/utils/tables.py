@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Union, Any, Literal, Callable, Tuple
+from typing import Any, Callable, List, Literal, Tuple, Union
+
 import pandas as pd
 from dask import dataframe as dd
 from tqdm import tqdm
 
 from cascade.base import PipeMeta
 
-from ..meta import AggregateValidator, DataValidationException
-from ..data import Dataset, Modifier, Iterator, SequentialCacher
 from ..base import PipeMeta
+from ..data import Dataset, Iterator, Modifier, SequentialCacher
+from ..meta import AggregateValidator, DataValidationException
 
 
 class TableDataset(Dataset):
@@ -31,7 +32,13 @@ class TableDataset(Dataset):
     Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
     validation.
     """
-    def __init__(self, *args: Any, t: Union[pd.DataFrame, 'TableDataset', None] = None, **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        *args: Any,
+        t: Union[pd.DataFrame, "TableDataset", None] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Parameters
         ----------
@@ -46,7 +53,7 @@ class TableDataset(Dataset):
         elif t is None:
             self._table = pd.DataFrame()
         else:
-            raise TypeError('Input table is not a pandas.DataFrame nor TableDataset')
+            raise TypeError("Input table is not a pandas.DataFrame nor TableDataset")
 
     def __getitem__(self, index: int) -> pd.Series:
         """
@@ -55,7 +62,7 @@ class TableDataset(Dataset):
         return self._table.iloc[index]
 
     def __repr__(self) -> str:
-        return f'{super().__repr__()}\n {repr(self._table)}'
+        return f"{super().__repr__()}\n {repr(self._table)}"
 
     def __len__(self) -> int:
         """
@@ -65,12 +72,14 @@ class TableDataset(Dataset):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({
-            'name': repr(self),
-            'columns': list(self._table.columns),
-            'len': len(self),
-            'info': self._table.describe().to_dict()
-        })
+        meta[0].update(
+            {
+                "name": repr(self),
+                "columns": list(self._table.columns),
+                "len": len(self),
+                "info": self._table.describe().to_dict(),
+            }
+        )
         return meta
 
     def to_csv(self, path: str, **kwargs: Any) -> None:
@@ -85,8 +94,10 @@ class TableFilter(TableDataset, Modifier):
     """
     Filter for table values
     """
-    def __init__(self, dataset: TableDataset,
-                 mask: List[bool], *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, dataset: TableDataset, mask: List[bool], *args: Any, **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -99,13 +110,14 @@ class TableFilter(TableDataset, Modifier):
         init_len = len(dataset)
 
         self._table = self._table[mask]
-        print(f'Length before filtering: {init_len}, length after: {len(self._table)}')
+        print(f"Length before filtering: {init_len}, length after: {len(self._table)}")
 
 
 class CSVDataset(TableDataset):
     """
     Wrapper for .csv files.
     """
+
     def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         """
         Passes all args and kwargs to `pd.read_csv`
@@ -129,6 +141,7 @@ class PartedTableLoader(Dataset):
     --------
     cascade.utils.CSVDataset
     """
+
     def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._table = dd.read_csv(csv_file_path, *args, **kwargs)
@@ -150,8 +163,10 @@ class TableIterator(Iterator):
     """
     Iterates over the table from path by the chunks.
     """
-    def __init__(self, csv_file_path: str, *args: Any,
-                 chunk_size: int = 1000, **kwargs: Any) -> None:
+
+    def __init__(
+        self, csv_file_path: str, *args: Any, chunk_size: int = 1000, **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -161,8 +176,7 @@ class TableIterator(Iterator):
             number of rows to return in one __next__
         """
         self.chunk_size = chunk_size
-        super().__init__(pd.read_csv(csv_file_path,
-                         iterator=True, *args, **kwargs))
+        super().__init__(pd.read_csv(csv_file_path, iterator=True, *args, **kwargs))
 
     def __next__(self):
         return self._data.get_chunk(self.chunk_size)
@@ -173,6 +187,7 @@ class LargeCSVDataset(SequentialCacher):
     SequentialCacher over large .csv file.
     Loads table by partitions.
     """
+
     def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         dataset = PartedTableLoader(csv_file_path, *args, **kwargs)
         self._ln = len(dataset._table)
@@ -191,9 +206,9 @@ class NullValidator(TableDataset, AggregateValidator):
     """
     Checks that there are no null values in the table.
     """
+
     def __init__(self, dataset: TableDataset, *args: Any, **kwargs: Any) -> None:
-        super().__init__(dataset, self._check_nulls,
-                         *args, t=dataset._table, **kwargs)
+        super().__init__(dataset, self._check_nulls, *args, t=dataset._table, **kwargs)
 
     def _check_nulls(self, x: TableDataset) -> Literal[True]:
         mask = x._table.isnull().values
@@ -202,17 +217,21 @@ class NullValidator(TableDataset, AggregateValidator):
         else:
             total = mask.sum()
             by_columns = mask.sum(axis=0)
-            missing = pd.DataFrame(by_columns.reshape(1, len(by_columns)), columns=x._table.columns)
+            missing = pd.DataFrame(
+                by_columns.reshape(1, len(by_columns)), columns=x._table.columns
+            )
             raise DataValidationException(
-                f'There were NaN-values in {repr(self._dataset)}\n'
-                f'Total count: {total}\n'
-                f'By columns:\n'
-                f'{missing}'
+                f"There were NaN-values in {repr(self._dataset)}\n"
+                f"Total count: {total}\n"
+                f"By columns:\n"
+                f"{missing}"
             )
 
 
 class FeatureTable(TableDataset):
-    def __init__(self, table: Union[TableDataset, pd.DataFrame], *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self, table: Union[TableDataset, pd.DataFrame], *args: Any, **kwargs: Any
+    ) -> None:
         """
         Table dataset which allows to easily define and compute features
 
@@ -264,7 +283,8 @@ class FeatureTable(TableDataset):
 
         if len(missing_features) > 0:
             raise ValueError(
-                f'Features {missing_features} was not found in table or list of computed features')
+                f"Features {missing_features} was not found in table or list of computed features"
+            )
 
     def get_features(self) -> List[Union[str, Tuple[str]]]:
         """
@@ -286,16 +306,18 @@ class FeatureTable(TableDataset):
         result = func(self._table, *args, **kwargs)
 
         if isinstance(feat, str):
-            feat = (feat, )
-            result = (result, )
+            feat = (feat,)
+            result = (result,)
 
         for name, res in zip(feat, result):
             self._table[name] = res
             self._features.append(name)
 
-    def get_table(self,
-                  features: Union[str, List[Union[Tuple[str], str]], None] = None,
-                  dropna: bool = False) -> pd.DataFrame:
+    def get_table(
+        self,
+        features: Union[str, List[Union[Tuple[str], str]], None] = None,
+        dropna: bool = False,
+    ) -> pd.DataFrame:
         if isinstance(features, str):
             features = [features]
         elif features is None:
@@ -304,7 +326,7 @@ class FeatureTable(TableDataset):
         self._validate_features(features)
 
         flat_features = []
-        for feat in tqdm(features, desc='Computing features'):
+        for feat in tqdm(features, desc="Computing features"):
             if isinstance(feat, str):
                 flat_features.append(feat)
                 if feat in self._table.columns:
@@ -318,7 +340,7 @@ class FeatureTable(TableDataset):
                 self._compute_feature(feat)
 
             if dropna:
-                self._table = self._table.dropna(how='any', subset=feat)
+                self._table = self._table.dropna(how="any", subset=feat)
 
         return self._table[flat_features]
 
@@ -327,7 +349,7 @@ class FeatureTable(TableDataset):
         name: Union[str, Tuple[str]],
         func: Callable[[pd.DataFrame], Union[pd.Series, Tuple[str]]],
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:  # What if feature already exists?
         self._computed_features[name] = func
         self._computed_features_args[name] = args
@@ -335,8 +357,16 @@ class FeatureTable(TableDataset):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['computed_columns'] = list(self._computed_features.keys())
-        meta[0]['computed_functions'] = {key: str(self._computed_features[key]) for key in self._computed_features}
-        meta[0]['computed_functions_args'] = {key: str(self._computed_features_args[key]) for key in self._computed_features_args}
-        meta[0]['computed_functions_kwargs'] = {key: str(self._computed_features_kwargs[key]) for key in self._computed_features_kwargs}
+        meta[0]["computed_columns"] = list(self._computed_features.keys())
+        meta[0]["computed_functions"] = {
+            key: str(self._computed_features[key]) for key in self._computed_features
+        }
+        meta[0]["computed_functions_args"] = {
+            key: str(self._computed_features_args[key])
+            for key in self._computed_features_args
+        }
+        meta[0]["computed_functions_kwargs"] = {
+            key: str(self._computed_features_kwargs[key])
+            for key in self._computed_features_kwargs
+        }
         return meta

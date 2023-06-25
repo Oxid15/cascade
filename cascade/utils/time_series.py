@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Iterable, Any, Union, Tuple
-
-import pendulum
 from datetime import datetime
+from typing import Any, Iterable, Tuple, Union
+
 import numpy as np
 import pandas as pd
+import pendulum
 
 from ..base import PipeMeta
 from ..data import Dataset, Modifier
@@ -32,10 +32,14 @@ class TimeSeriesDataset(Dataset):
     and implements access by index and by datetime also.
     More than that, slices with indices and with datetimes can also be used.
     """
-    def __init__(self, *args: Any,
-                 time: Union[Iterable[datetime], None] = None,
-                 data: Union[Iterable[Any], None] = None,
-                 **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        *args: Any,
+        time: Union[Iterable[datetime], None] = None,
+        data: Union[Iterable[Any], None] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Parameters
         ----------
@@ -54,12 +58,17 @@ class TimeSeriesDataset(Dataset):
             data = np.array([])
             time = np.array([])
 
-        assert len(time) == len(data), f'Time and data should have same \
-            length, got {len(time)} and {len(data)}'
-        assert len(data.shape) == 1, f'series must be 1d, \
-            got shape {data.shape}'
-        assert all([isinstance(t, datetime) for t in time]), \
-            'time elements should be instances of datetime.datetime'
+        assert len(time) == len(
+            data
+        ), f"Time and data should have same \
+            length, got {len(time)} and {len(data)}"
+        assert (
+            len(data.shape) == 1
+        ), f"series must be 1d, \
+            got shape {data.shape}"
+        assert all(
+            [isinstance(t, datetime) for t in time]
+        ), "time elements should be instances of datetime.datetime"
 
         # Time can be non-monotonic (don't increase or decrease on every step)
         # check for monotonicity seems to be more expensive than sort
@@ -69,8 +78,7 @@ class TimeSeriesDataset(Dataset):
 
         self._time = time
         self._num_idx = [i for i in range(len(data))]
-        index = pd.MultiIndex.from_frame(
-            pd.DataFrame(self._time, self._num_idx))
+        index = pd.MultiIndex.from_frame(pd.DataFrame(self._time, self._num_idx))
         self._table = pd.DataFrame(data, index=index)
         super().__init__(*args, **kwargs)
 
@@ -105,13 +113,17 @@ class TimeSeriesDataset(Dataset):
 
     def _get_slice(self, index: int):
         # If date slice
-        if isinstance(index.start, datetime) or \
-                isinstance(index.stop, datetime):
-
-            start = np.where(self._time == index.start)[0][0] \
-                if index.start is not None else None
-            stop = np.where(self._time == index.stop)[0][0] \
-                if index.stop is not None else None
+        if isinstance(index.start, datetime) or isinstance(index.stop, datetime):
+            start = (
+                np.where(self._time == index.start)[0][0]
+                if index.start is not None
+                else None
+            )
+            stop = (
+                np.where(self._time == index.stop)[0][0]
+                if index.stop is not None
+                else None
+            )
             if stop is not None:
                 stop += 1
 
@@ -151,7 +163,7 @@ class TimeSeriesDataset(Dataset):
             return self._get_where(index)
         else:
             raise NotImplementedError(
-                f'__getitem__ is not implemented for {type(index)}'
+                f"__getitem__ is not implemented for {type(index)}"
             )
 
     def __len__(self) -> int:
@@ -161,9 +173,9 @@ class TimeSeriesDataset(Dataset):
         meta = super().get_meta()
         meta[0].update(
             {
-                'time_from': self._time[0],
-                'time_to': self._time[-1],
-                'info': self._table.describe().to_dict()
+                "time_from": self._time[0],
+                "time_to": self._time[-1],
+                "info": self._table.describe().to_dict(),
             }
         )
         return meta
@@ -173,9 +185,15 @@ class Average(TimeSeriesDataset, Modifier):
     """
     Averages values over some time step.
     """
-    def __init__(self, dataset: TimeSeriesDataset,
-                 unit: str = 'years',
-                 amount: int = 1, *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        dataset: TimeSeriesDataset,
+        unit: str = "years",
+        amount: int = 1,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         """
         Parameters
         ----------
@@ -188,28 +206,23 @@ class Average(TimeSeriesDataset, Modifier):
             `unit='months'` and `amount=6`.
         """
         time, data = dataset.get_data()
-        reg_time = [d for d in pendulum
-                    .period(time[0], time[-1])
-                    .range(unit, amount=amount)]
+        reg_time = [
+            d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)
+        ]
 
         reg_data = self._avg(data, time, reg_time)
-        assert len(reg_data) > 1, 'Please, provide unit that ' \
-                                  'would get more than one period'
+        assert len(reg_data) > 1, (
+            "Please, provide unit that " "would get more than one period"
+        )
 
         self._unit = unit
         self._amount = amount
 
-        super().__init__(dataset, time=reg_time,
-                         data=reg_data, *args, **kwargs)
+        super().__init__(dataset, time=reg_time, data=reg_data, *args, **kwargs)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update(
-            {
-                'unit': self._unit,
-                'amount': self._amount
-            }
-        )
+        meta[0].update({"unit": self._unit, "amount": self._amount})
         return meta
 
     @staticmethod
@@ -228,10 +241,14 @@ class Interpolate(TimeSeriesDataset, Modifier):
     """
     The wrapper around pd.Series.interpolate.
     """
-    def __init__(self, dataset: TimeSeriesDataset,
-                 method: str = 'linear',
-                 limit_direction: str = 'both',
-                 **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        dataset: TimeSeriesDataset,
+        method: str = "linear",
+        limit_direction: str = "both",
+        **kwargs: Any,
+    ) -> None:
         t = dataset.to_pandas()
         time, _ = dataset.get_data()
         t.index = pd.Index(time)
@@ -244,10 +261,7 @@ class Interpolate(TimeSeriesDataset, Modifier):
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update(
-            {
-                'method': self._method,
-                'limit_direction': self._limit_direction
-            }
+            {"method": self._method, "limit_direction": self._limit_direction}
         )
         return meta
 
@@ -259,7 +273,12 @@ class Align(TimeSeriesDataset, Modifier):
     only if dataset has data in given points
     in time.
     """
-    def __init__(self, dataset: TimeSeriesDataset,
-                 time: Iterable[datetime], *args: Any, **kwargs: Any) -> None:
-        super().__init__(dataset, time=time,
-                         data=dataset[time], *args, **kwargs)
+
+    def __init__(
+        self,
+        dataset: TimeSeriesDataset,
+        time: Iterable[datetime],
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(dataset, time=time, data=dataset[time], *args, **kwargs)

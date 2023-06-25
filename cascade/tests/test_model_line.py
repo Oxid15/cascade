@@ -17,6 +17,7 @@ limitations under the License.
 import glob
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -37,24 +38,18 @@ def test_meta(model_line, dummy_model):
     model_line.save(dummy_model)
     meta = model_line.get_meta()
 
-    assert meta[0]['model_cls'] == repr(DummyModel)
-    assert meta[0]['len'] == 1
+    assert meta[0]["model_cls"] == repr(DummyModel)
+    assert meta[0]["len"] == 1
 
 
-@pytest.mark.parametrize(
-    'ext', [
-        '.json',
-        '.yml',
-        '.yaml'
-    ]
-)
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_change_of_format(tmp_path, ext):
     tmp_path = str(tmp_path)
     ModelLine(tmp_path, meta_fmt=ext)
 
-    assert os.path.exists(os.path.join(tmp_path, 'meta' + ext))
+    assert os.path.exists(os.path.join(tmp_path, "meta" + ext))
 
     ModelLine(tmp_path)
 
     # Check that no other meta is created
-    assert len(glob.glob(os.path.join(tmp_path, 'meta.*'))) == 1
+    assert len(glob.glob(os.path.join(tmp_path, "meta.*"))) == 1

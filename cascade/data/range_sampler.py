@@ -15,7 +15,8 @@ limitations under the License.
 """
 
 from typing import Any, Union
-from . import T, SizedDataset, Sampler
+
+from . import Sampler, SizedDataset, T
 
 
 class RangeSampler(Sampler):
@@ -42,13 +43,16 @@ class RangeSampler(Sampler):
     2
     3
     """
+
     def __init__(
-            self,
-            dataset: SizedDataset[T],
-            start: Union[int, None] = None,
-            stop: Union[int, None] = None,
-            step: Union[int, None] = 1,
-            *args: Any, **kwargs: Any) -> None:
+        self,
+        dataset: SizedDataset[T],
+        start: Union[int, None] = None,
+        stop: Union[int, None] = None,
+        step: Union[int, None] = 1,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         """
         Parameters
         ----------
@@ -82,8 +86,8 @@ class RangeSampler(Sampler):
 
         if len(self._indices) == 0:
             raise ValueError(
-                f'Given combination of start, stop and step'
-                f'produced empty dataset. Got start = {start}, stop = {stop}, step = {step}'
+                f"Given combination of start, stop and step"
+                f"produced empty dataset. Got start = {start}, stop = {stop}, step = {step}"
             )
 
         super().__init__(dataset, len(self._indices), *args, **kwargs)

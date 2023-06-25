@@ -17,11 +17,12 @@ limitations under the License.
 import os
 from hashlib import md5
 from typing import Any, Tuple
+
 import pendulum
 
-from . import Dataset, Modifier, T
-from ..base import MetaHandler, supported_meta_formats, PipeMeta
+from ..base import MetaHandler, PipeMeta, supported_meta_formats
 from ..meta import skeleton
+from . import Dataset, Modifier, T
 
 
 class VersionAssigner(Modifier):
@@ -70,8 +71,15 @@ class VersionAssigner(Modifier):
     address of an object or time of creation, then the version will
     bump on every run.
     """
-    def __init__(self, dataset: Dataset[T], path: str, verbose: bool = False,
-                 *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        dataset: Dataset[T],
+        path: str,
+        verbose: bool = False,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         """
         Parameters
         ----------
@@ -83,10 +91,7 @@ class VersionAssigner(Modifier):
         """
         super().__init__(dataset, *args, **kwargs)
         self._assign_path(path)
-        self._versions = {
-            'versions': {},
-            'type': 'version_history'
-        }
+        self._versions = {"versions": {}, "type": "version_history"}
 
         # get meta for info about pipeline
         meta = self._dataset.get_meta()
@@ -96,82 +101,91 @@ class VersionAssigner(Modifier):
         pipeline_str = str(pipeline)
 
         # identify pipeline
-        meta_hash = md5(str.encode(meta_str, 'utf-8')).hexdigest()
-        pipe_hash = md5(str.encode(pipeline_str, 'utf-8')).hexdigest()
+        meta_hash = md5(str.encode(meta_str, "utf-8")).hexdigest()
+        pipe_hash = md5(str.encode(pipeline_str, "utf-8")).hexdigest()
 
         if os.path.exists(self._root):
             self._versions = MetaHandler.read(self._root)
 
-            if pipe_hash in self._versions['versions']:
-                if meta_hash in self._versions['versions'][pipe_hash]:
-                    self.version = self._versions['versions'][pipe_hash][meta_hash]['version']
+            if pipe_hash in self._versions["versions"]:
+                if meta_hash in self._versions["versions"][pipe_hash]:
+                    self.version = self._versions["versions"][pipe_hash][meta_hash][
+                        "version"
+                    ]
                 else:
                     last_ver = self._get_last_version_from_pipe(pipe_hash)
                     major, minor = self._split_ver(last_ver)
                     minor += 1
                     self.version = self._join_ver(major, minor)
-                    self._versions['versions'][pipe_hash][meta_hash] = {
-                        'version': self.version,
-                        'meta': meta,
-                        'pipeline': pipeline,
-                        'updated_at': str(pendulum.now(tz='UTC'))
+                    self._versions["versions"][pipe_hash][meta_hash] = {
+                        "version": self.version,
+                        "meta": meta,
+                        "pipeline": pipeline,
+                        "updated_at": str(pendulum.now(tz="UTC")),
                     }
             else:
                 last_ver = self._get_last_version()
                 major, minor = self._split_ver(last_ver)
                 major += 1
                 self.version = self._join_ver(major, minor)
-                self._versions['versions'][pipe_hash] = {}
-                self._versions['versions'][pipe_hash][meta_hash] = {
-                    'version': self.version,
-                    'meta': meta,
-                    'pipeline': pipeline,
-                    'updated_at': str(pendulum.now(tz='UTC'))
+                self._versions["versions"][pipe_hash] = {}
+                self._versions["versions"][pipe_hash][meta_hash] = {
+                    "version": self.version,
+                    "meta": meta,
+                    "pipeline": pipeline,
+                    "updated_at": str(pendulum.now(tz="UTC")),
                 }
 
             MetaHandler.write(self._root, self._versions)
         else:
-            self.version = '0.0'
-            self._versions['versions'][pipe_hash] = {}
-            self._versions['versions'][pipe_hash][meta_hash] = {
-                'version': self.version,
-                'meta': meta,
-                'pipeline': pipeline,
-                'updated_at': str(pendulum.now(tz='UTC'))
+            self.version = "0.0"
+            self._versions["versions"][pipe_hash] = {}
+            self._versions["versions"][pipe_hash][meta_hash] = {
+                "version": self.version,
+                "meta": meta,
+                "pipeline": pipeline,
+                "updated_at": str(pendulum.now(tz="UTC")),
             }
             MetaHandler.write(self._root, self._versions)
 
         if verbose:
-            print('Dataset version:', self.version)
+            print("Dataset version:", self.version)
 
     def _assign_path(self, path: str) -> None:
         _, ext = os.path.splitext(path)
-        if ext == '':
-            raise ValueError(f'Provided path {path} has no extension')
+        if ext == "":
+            raise ValueError(f"Provided path {path} has no extension")
 
-        assert ext in supported_meta_formats, f'Only {supported_meta_formats} are supported formats'
+        assert (
+            ext in supported_meta_formats
+        ), f"Only {supported_meta_formats} are supported formats"
         self._root = path
 
     def _split_ver(self, ver: str) -> Tuple[int, int]:
-        major, minor = ver.split('.')
+        major, minor = ver.split(".")
         return int(major), int(minor)
 
     def _join_ver(self, major: int, minor: int) -> str:
-        return f'{major}.{minor}'
+        return f"{major}.{minor}"
 
     def _get_last_version_from_pipe(self, pipe_hash: str) -> str:
-        versions = [item['version'] for item in self._versions['versions'][pipe_hash].values()]
+        versions = [
+            item["version"] for item in self._versions["versions"][pipe_hash].values()
+        ]
         versions = sorted(versions)
         return versions[-1]
 
     def _get_last_version(self) -> str:
         versions_flat = []
-        for pipe_hash in self._versions['versions']:
-            versions_flat += [item['version'] for item in self._versions['versions'][pipe_hash].values()]
+        for pipe_hash in self._versions["versions"]:
+            versions_flat += [
+                item["version"]
+                for item in self._versions["versions"][pipe_hash].values()
+            ]
         versions = sorted(versions_flat)
         return versions[-1]
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['version'] = self.version
+        meta[0]["version"] = self.version
         return meta

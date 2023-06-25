@@ -17,4 +17,4 @@ from cascade.data import Pickler
 
 
 def test_utils_coverage(utils_dataset, tmp_path):
-    Pickler(os.path.join(tmp_path, 'ds.pkl'), utils_dataset)
+    Pickler(os.path.join(tmp_path, "ds.pkl"), utils_dataset)

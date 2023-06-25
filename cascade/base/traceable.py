@@ -35,7 +35,7 @@ class Traceable:
         self,
         *args: Any,
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """
         Parameters
@@ -126,12 +126,18 @@ class Traceable:
 
 
 class TraceableOnDisk(Traceable):
-    def __init__(self, root: str, meta_fmt: Literal['.json', '.yml', '.yaml'], *args: Any,
-                 meta_prefix: Union[Dict[Any, Any], str, None] = None, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        root: str,
+        meta_fmt: Literal[".json", ".yml", ".yaml"],
+        *args: Any,
+        meta_prefix: Union[Dict[Any, Any], str, None] = None,
+        **kwargs: Any,
+    ) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._root = root
         if meta_fmt not in supported_meta_formats:
-            raise ValueError(f'Only {supported_meta_formats} are supported formats')
+            raise ValueError(f"Only {supported_meta_formats} are supported formats")
         self._meta_fmt = meta_fmt
 
     def _create_meta(self) -> None:
@@ -141,17 +147,16 @@ class TraceableOnDisk(Traceable):
             self._update_meta()
             return
 
-        created = str(pendulum.now(tz='UTC'))
+        created = str(pendulum.now(tz="UTC"))
         meta = self.get_meta()
-        meta[0].update({
-            "created_at": created
-        })
+        meta[0].update({"created_at": created})
 
         from . import MetaHandler
+
         try:
-            MetaHandler.write(os.path.join(self._root, 'meta' + self._meta_fmt), meta)
+            MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
         except IOError as e:
-            warnings.warn(f'File writing error ignored: {e}')
+            warnings.warn(f"File writing error ignored: {e}")
 
     def _update_meta(self) -> None:
         """
@@ -169,7 +174,8 @@ class TraceableOnDisk(Traceable):
 
         if len(meta_path) > 1:
             warnings.warn(
-                f"There are {len(meta_path)} meta files in {self._root}, failed to update meta")
+                f"There are {len(meta_path)} meta files in {self._root}, failed to update meta"
+            )
             return
 
         meta = {}
@@ -179,18 +185,18 @@ class TraceableOnDisk(Traceable):
         try:
             meta = MetaHandler.read(meta_path)[0]
         except IOError as e:
-            warnings.warn(f'File reading error ignored: {e}')
+            warnings.warn(f"File reading error ignored: {e}")
 
         meta.update(self.get_meta()[0])
         try:
             MetaHandler.write(meta_path, [meta])
         except IOError as e:
-            warnings.warn(f'File writing error ignored: {e}')
+            warnings.warn(f"File writing error ignored: {e}")
 
     def get_root(self) -> str:
         return self._root
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['updated_at'] = pendulum.now(tz="UTC")
+        meta[0]["updated_at"] = pendulum.now(tz="UTC")
         return meta

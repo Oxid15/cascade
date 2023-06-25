@@ -16,8 +16,8 @@ limitations under the License.
 
 from typing import Any, Dict
 
-from .base_diff_viewer import BaseDiffViewer
 from ...base import MetaHandler
+from .base_diff_viewer import BaseDiffViewer
 
 
 class DatasetVersionDiffViewer(BaseDiffViewer):

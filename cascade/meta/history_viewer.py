@@ -16,16 +16,16 @@ limitations under the License.
 
 import glob
 import os
-from typing import List, Union, Dict, Any
+from typing import Any, Dict, List, Union
 
-import pendulum
 import pandas as pd
-from flatten_json import flatten
+import pendulum
 from deepdiff import DeepDiff
+from flatten_json import flatten
 
 from ..base import MetaHandler
-from ..models import Workspace, ModelRepo, ModelLine, SingleLineRepo
-from . import Server, MetaViewer
+from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
+from . import MetaViewer, Server
 
 
 class HistoryViewer(Server):
@@ -273,7 +273,7 @@ class HistoryViewer(Server):
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
-            from dash import Input, Output, html, dcc
+            from dash import Input, Output, dcc, html
 
         try:
             import plotly

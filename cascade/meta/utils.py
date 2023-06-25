@@ -14,17 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Union, List, Dict, Any
+from typing import Any, Dict, List, Union
 
 from ..base import Meta, PipeMeta
 
-
-default_keys = ['data', 'dataset']
+default_keys = ["data", "dataset"]
 
 
 def skeleton(
-    meta: Union[PipeMeta, Meta],
-    keys: Union[List[Any], None] = None
+    meta: Union[PipeMeta, Meta], keys: Union[List[Any], None] = None
 ) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
@@ -57,14 +55,14 @@ def skeleton(
     # The dataset is given - add it to the list and search for any
     # additional info in it
     elif isinstance(meta, dict):
-        if 'name' in meta:
-            s = {'name': meta['name']}
+        if "name" in meta:
+            s = {"name": meta["name"]}
         else:
-            raise KeyError('Name not in meta')
+            raise KeyError("Name not in meta")
 
         for key in keys:
             if key in meta:
-                prev = skeleton(meta['data'])
+                prev = skeleton(meta["data"])
                 s[key] = prev
         skel.append(s)
     return skel

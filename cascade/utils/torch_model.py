@@ -15,19 +15,25 @@ limitations under the License.
 """
 
 import os
-from typing import Type, Any, Union
+from typing import Any, Type, Union
+
 import torch
-from ..models import Model
+
 from ..base import PipeMeta
+from ..models import Model
 
 
 class TorchModel(Model):
     """
     The wrapper around `nn.Module`s.
     """
-    def __init__(self, model_class: Union[Type, None] = None,
-                 model: Union[torch.nn.Module, None] = None,
-                 **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        model_class: Union[Type, None] = None,
+        model: Union[torch.nn.Module, None] = None,
+        **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -44,7 +50,7 @@ class TorchModel(Model):
         elif model_class is not None:
             self._model = model_class(**kwargs)
         else:
-            raise ValueError('Either `model_class` or `model` should be not None')
+            raise ValueError("Either `model_class` or `model` should be not None")
         super().__init__(**kwargs)
 
     def predict(self, *args, **kwargs) -> Any:
@@ -64,7 +70,7 @@ class TorchModel(Model):
             os.makedirs(path, exist_ok=True)
             path = os.path.join(path, "model")
 
-        with open(path, 'wb') as f:
+        with open(path, "wb") as f:
             torch.save(self._model, f, *args, **kwargs)
 
     @classmethod
@@ -77,12 +83,12 @@ class TorchModel(Model):
         if os.path.isdir(path):
             path = os.path.join(path, "model")
 
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             torch_model = torch.load(f, *args, **kwargs)
 
         return TorchModel(model=torch_model)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['module'] = repr(self._model)
+        meta[0]["module"] = repr(self._model)
         return meta

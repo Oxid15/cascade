@@ -15,11 +15,12 @@ limitations under the License.
 """
 
 import os
-import sys
 import shutil
+import sys
+
 import pytest
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 MODULE_PATH = os.path.dirname(
     os.path.dirname(os.path.abspath(os.path.dirname(__file__)))

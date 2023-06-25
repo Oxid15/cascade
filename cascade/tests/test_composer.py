@@ -16,29 +16,30 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper
-from cascade.data import Composer
+from cascade.data import Composer, Wrapper
 
 
 def test_meta():
     n1 = Wrapper([0, 1, 2, 3])
     n2 = Wrapper([2, 3, 4, 5])
 
-    c = Composer([n1, n2], meta_prefix={'num': 1})
-    assert c.get_meta()[0]['num'] == 1
-    assert len(c.get_meta()[0]['data']) == 2
+    c = Composer([n1, n2], meta_prefix={"num": 1})
+    assert c.get_meta()[0]["num"] == 1
+    assert len(c.get_meta()[0]["data"]) == 2
 
 
 @pytest.mark.parametrize(
-    'datasets', [
+    "datasets",
+    [
         (Wrapper([0]), Wrapper([0]), Wrapper([0])),
-        (Wrapper([1, 2, 3, 4]), Wrapper([2, 3, 4, 5]))
-    ]
+        (Wrapper([1, 2, 3, 4]), Wrapper([2, 3, 4, 5])),
+    ],
 )
 def test_composition(datasets):
     c = Composer(datasets)
@@ -47,11 +48,12 @@ def test_composition(datasets):
 
 
 @pytest.mark.parametrize(
-    'datasets', [
+    "datasets",
+    [
         (Wrapper([0]), Wrapper([0, 1, 2]), Wrapper([0])),
         (Wrapper([1, 2, 3, 4]), Wrapper([4, 5])),
-        (Wrapper([1, 2, 3, 4]), Wrapper([1, 2, 3, 4]), Wrapper([1, 2, 3]))
-    ]
+        (Wrapper([1, 2, 3, 4]), Wrapper([1, 2, 3, 4]), Wrapper([1, 2, 3])),
+    ],
 )
 def test_different_lengths(datasets):
     with pytest.raises(ValueError):

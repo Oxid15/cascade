@@ -16,9 +16,10 @@ limitations under the License.
 
 import warnings
 from typing import Any, Union
+
 import pendulum
 
-from ..base import Traceable, PipeMeta, raise_not_implemented
+from ..base import PipeMeta, Traceable, raise_not_implemented
 
 
 class Model(Traceable):
@@ -26,8 +27,10 @@ class Model(Traceable):
     Base class for any model.
     Used to provide unified interface to any model, store metadata including metrics.
     """
-    def __init__(self, *args: Any,
-                 meta_prefix: Union[PipeMeta, str, None] = None, **kwargs: Any) -> None:
+
+    def __init__(
+        self, *args: Any, meta_prefix: Union[PipeMeta, str, None] = None, **kwargs: Any
+    ) -> None:
         """
         Should be called in any successor - initializes default meta needed.
 
@@ -38,7 +41,7 @@ class Model(Traceable):
         # Model accepts meta_prefix explicitly to not to record it in 'params'
         self.metrics = {}
         self.params = kwargs
-        self.created_at = pendulum.now(tz='UTC')
+        self.created_at = pendulum.now(tz="UTC")
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
 
     def fit(self, *args: Any, **kwargs: Any) -> None:
@@ -46,33 +49,33 @@ class Model(Traceable):
         Method to encapsulate training loops.
         May be provided with any training-related arguments.
         """
-        raise_not_implemented('cascade.models.Model', 'fit')
+        raise_not_implemented("cascade.models.Model", "fit")
 
     def predict(self, *args: Any, **kwargs: Any) -> Any:
         """
         Method to encapsulate inference.
         May include preprocessing steps to make model self-sufficient.
         """
-        raise_not_implemented('cascade.models.Model', 'predict')
+        raise_not_implemented("cascade.models.Model", "predict")
 
     def evaluate(self, *args: Any, **kwargs: Any) -> None:
         """
         Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.
         """
-        raise_not_implemented('cascade.models.Model', 'evaluate')
+        raise_not_implemented("cascade.models.Model", "evaluate")
 
     @classmethod
-    def load(cls, path: str, *args: Any, **kwargs: Any) -> 'Model':
+    def load(cls, path: str, *args: Any, **kwargs: Any) -> "Model":
         """
         Loads model from provided path
         """
-        raise_not_implemented('cascade.models.Model', 'load')
+        raise_not_implemented("cascade.models.Model", "load")
 
     def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Saves model's state using provided filepath.
         """
-        raise_not_implemented('cascade.models.Model', 'save')
+        raise_not_implemented("cascade.models.Model", "save")
 
     def get_meta(self) -> PipeMeta:
         # Successors may not call super().__init__
@@ -80,29 +83,30 @@ class Model(Traceable):
 
         meta = super().get_meta()
 
-        #TODO: can refactor this
+        # TODO: can refactor this
         all_default_exist = True
-        if hasattr(self, 'created_at'):
-            meta[0]['created_at'] = self.created_at
+        if hasattr(self, "created_at"):
+            meta[0]["created_at"] = self.created_at
         else:
             all_default_exist = False
 
-        if hasattr(self, 'metrics'):
-            meta[0]['metrics'] = self.metrics
+        if hasattr(self, "metrics"):
+            meta[0]["metrics"] = self.metrics
         else:
             all_default_exist = False
 
-        if hasattr(self, 'params'):
-            meta[0]['params'] = self.params
+        if hasattr(self, "params"):
+            meta[0]["params"] = self.params
         else:
             all_default_exist = False
 
         if not all_default_exist:
             warnings.warn(
-                'Model\'s meta is incomplete, '
-                'maybe you haven\'t call super().__init__ in subclass?')
+                "Model's meta is incomplete, "
+                "maybe you haven't call super().__init__ in subclass?"
+            )
 
-        meta[0]['type'] = 'model'
+        meta[0]["type"] = "model"
         return meta
 
 
@@ -111,6 +115,7 @@ class ModelModifier(Model):
     Analog of dataset's Modifier. Can be used to chain
     two models in one.
     """
+
     def __init__(self, model: Model, *args: Any, **kwargs: Any) -> None:
         """
         Parameters

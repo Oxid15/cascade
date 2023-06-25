@@ -15,8 +15,10 @@ limitations under the License.
 """
 
 from typing import Any, Union
+
 from numpy.random import random_integers, shuffle
-from . import SizedDataset, Sampler, T
+
+from . import Sampler, SizedDataset, T
 
 
 class RandomSampler(Sampler):
@@ -24,8 +26,14 @@ class RandomSampler(Sampler):
     Shuffles dataset. Can randomly sample from dataset
     if num_samples is not None and less than length of dataset.
     """
-    def __init__(self, dataset: SizedDataset[T], num_samples: Union[int, None] = None,
-                 *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self,
+        dataset: SizedDataset[T],
+        num_samples: Union[int, None] = None,
+        *args: Any,
+        **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------

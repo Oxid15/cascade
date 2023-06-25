@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 import glob
-from hashlib import md5
+import os
 import pickle
+from hashlib import md5
 from typing import Any, List, Union
+
 from sklearn.pipeline import Pipeline
 
 from ..base import MetaHandler, PipeMeta
@@ -93,7 +94,7 @@ class SkModel(BasicModel):
             raise RuntimeError(f"Multiple possible meta-files found: {names}")
 
     @classmethod
-    def load(cls, path: str, check_hash: bool = True) -> 'SkModel':
+    def load(cls, path: str, check_hash: bool = True) -> "SkModel":
         """
         Loads the model from path provided. Path may be a folder,
         if so, model.pkl is assumed.

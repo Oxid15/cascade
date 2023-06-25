@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import json
 import os
 import sys
-import json
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -29,34 +29,34 @@ from cascade.tests import DummyModel
 
 def test(tmp_path):
     tmp_path = str(tmp_path)
-    os.mkdir(os.path.join(tmp_path, 'model'))
+    os.mkdir(os.path.join(tmp_path, "model"))
 
     # Write the file with pure json
-    with open(os.path.join(tmp_path, 'test0.json'), 'w') as f:
-        json.dump({'name': 'test0'}, f)
+    with open(os.path.join(tmp_path, "test0.json"), "w") as f:
+        json.dump({"name": "test0"}, f)
 
-    MetaHandler.write(os.path.join(tmp_path, 'model', 'test1.json'), {'name': 'test1'})
+    MetaHandler.write(os.path.join(tmp_path, "model", "test1.json"), {"name": "test1"})
 
     mev = MetaViewer(tmp_path)
 
     assert len(mev) == 2
-    assert 'name' in mev[0]
-    assert 'name' in mev[1]
+    assert "name" in mev[0]
+    assert "name" in mev[1]
 
     # This order is due to sorting by path
     # .../model/test1.json is less than .../test0.json
-    assert mev[0]['name'] == 'test1'
-    assert mev[1]['name'] == 'test0'
+    assert mev[0]["name"] == "test1"
+    assert mev[1]["name"] == "test0"
 
 
 def test_order(tmp_path):
     tmp_path = str(tmp_path)
     repo = ModelRepo(tmp_path)
-    repo.add_line('line1', DummyModel)
+    repo.add_line("line1", DummyModel)
 
     for i in range(3):
         model = DummyModel(real_num=i)
-        repo['line1'].save(model)
+        repo["line1"].save(model)
 
     mev = MetaViewer(tmp_path)
     k = 0
@@ -65,6 +65,6 @@ def test_order(tmp_path):
     # real_num should be [0, 1, 2]
     for meta in mev:
         # check that meta is list, because can be dict also
-        if isinstance(meta, list) and meta[0]['type'] == 'model':
-            assert meta[0]['params']['real_num'] == k
+        if isinstance(meta, list) and meta[0]["type"] == "model":
+            assert meta[0]["params"]["real_num"] == k
             k += 1

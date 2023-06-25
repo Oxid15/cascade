@@ -15,8 +15,10 @@ limitations under the License.
 """
 
 import json
-from typing import Union, List, Any
+from typing import Any, List, Union
+
 import numpy as np
+
 from ..models import BasicModel
 
 Number = Union[int, float, complex, np.number]
@@ -28,7 +30,10 @@ class ConstantBaseline(BasicModel):
     any classification task. It returns only one class
     (for example it can be majority class)
     """
-    def __init__(self, constant: Union[List[Any], Number, None] = None, **kwargs: Any) -> None:
+
+    def __init__(
+        self, constant: Union[List[Any], Number, None] = None, **kwargs: Any
+    ) -> None:
         super().__init__(**kwargs)
         self._constant = constant
 
@@ -47,12 +52,12 @@ class ConstantBaseline(BasicModel):
         return np.asarray([self._constant for _ in range(len(x))])
 
     def save(self, path: str) -> None:
-        with open(path, 'w') as f:
-            json.dump({'constant': self._constant}, f)
+        with open(path, "w") as f:
+            json.dump({"constant": self._constant}, f)
 
     @classmethod
     def load(cls, path: str) -> "ConstantBaseline":
-        with open(path, 'r') as f:
+        with open(path, "r") as f:
             obj = json.load(f)
-            model = ConstantBaseline(obj['constant'])
+            model = ConstantBaseline(obj["constant"])
             return model

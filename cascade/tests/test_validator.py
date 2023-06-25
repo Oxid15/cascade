@@ -16,12 +16,18 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.meta import DataValidationException, Validator, AggregateValidator, PredicateValidator
+from cascade.meta import (
+    AggregateValidator,
+    DataValidationException,
+    PredicateValidator,
+    Validator,
+)
 
 
 def test_modifier_interface(number_dataset):
@@ -39,24 +45,32 @@ def test_aggregate_negative(number_dataset):
 
 
 def test_predicate_positive(number_dataset):
-    ds = PredicateValidator(number_dataset, lambda x: x < float('inf'))
+    ds = PredicateValidator(number_dataset, lambda x: x < float("inf"))
 
 
 def test_predicate_negative(number_dataset):
     with pytest.raises(DataValidationException):
-        ds = PredicateValidator(number_dataset, lambda x: x > float('inf'))
+        ds = PredicateValidator(number_dataset, lambda x: x > float("inf"))
 
 
 def test_predicate_list_positive(number_dataset):
-    ds = PredicateValidator(number_dataset, [
-        lambda x: x < float('inf'),
-        lambda x: x < float('inf'),
-        lambda x: x < float('inf')])
+    ds = PredicateValidator(
+        number_dataset,
+        [
+            lambda x: x < float("inf"),
+            lambda x: x < float("inf"),
+            lambda x: x < float("inf"),
+        ],
+    )
 
 
 def test_predicate_list_negative(number_dataset):
     with pytest.raises(DataValidationException):
-        ds = PredicateValidator(number_dataset, [
-            lambda x: x > float('inf'),
-            lambda x: x > float('inf'),
-            lambda x: x > float('inf')])
+        ds = PredicateValidator(
+            number_dataset,
+            [
+                lambda x: x > float("inf"),
+                lambda x: x > float("inf"),
+                lambda x: x > float("inf"),
+            ],
+        )
