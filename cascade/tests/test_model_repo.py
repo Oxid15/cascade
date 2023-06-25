@@ -52,9 +52,6 @@ def test_overwrite(tmp_path, ext):
     repo.add_line("vgg16", DummyModel)
     repo.add_line("resnet", DummyModel)
 
-    # should delete repo to release loggers and be able to remove folder
-    del repo
-
     repo = ModelRepo(tmp_path, overwrite=True)
     repo.add_line("densenet", DummyModel)
     repo.add_line("efficientnet", DummyModel)
