@@ -21,11 +21,13 @@ class Workspace(TraceableOnDisk):
         self._default = default_repo
 
         abs_root = os.path.abspath(self._root)
-        dirs = [
-            name
-            for name in os.listdir(abs_root)
-            if os.path.isdir(os.path.join(abs_root, name))
-        ]
+        dirs = sorted(
+            [
+                name
+                for name in os.listdir(abs_root)
+                if os.path.isdir(os.path.join(abs_root, name))
+            ]
+        )
         self._repo_names = []
         for d in dirs:
             meta_path = sorted(glob.glob(os.path.join(abs_root, d, "meta.*")))
