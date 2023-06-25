@@ -107,18 +107,26 @@ class ModelLine(TraceableOnDisk):
         only_meta: bool, optional
             Flag, that indicates whether to save model's binaries. If True saves only metadata.
         """
+
         idx = len(self.model_names)
-        folder_name = f"{idx:0>5d}"
-        full_path = os.path.join(self._root, folder_name, "model")
+        # If models in the middle were deleted
+        # length might not be equal to the latest index
+        while True:
+            folder_name = f"{idx:0>5d}"
+            model_folder = os.path.join(self._root, folder_name)
+            if os.path.exists(model_folder):
+                idx += 1
+                continue
 
-        # Create model's folder if no
-        os.makedirs(os.path.join(self._root, folder_name), exist_ok=True)
+            # Create model's folder if no
+            os.makedirs(model_folder)
+            break
 
-        # Prepare meta for saving
         meta = model.get_meta()
 
         if not only_meta:
             # Save model
+            full_path = os.path.join(self._root, folder_name, "model")
             model.save(full_path)
 
             # Find anything that matches /path/model_folder/model*
@@ -139,7 +147,6 @@ class ModelLine(TraceableOnDisk):
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
         self.model_names.append(os.path.join(folder_name, "model"))
 
-        # Save model's meta
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )

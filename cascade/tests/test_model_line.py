@@ -16,6 +16,7 @@ limitations under the License.
 
 import glob
 import os
+import shutil
 import sys
 
 import pytest
@@ -53,3 +54,15 @@ def test_change_of_format(tmp_path, ext):
 
     # Check that no other meta is created
     assert len(glob.glob(os.path.join(tmp_path, "meta.*"))) == 1
+
+
+def test_same_index_check(model_line, dummy_model):
+    for _ in range(3):
+        dummy_model.evaluate()
+        model_line.save(dummy_model)
+
+    shutil.rmtree(os.path.join(model_line.get_root(), "00001"))
+
+    model_line.save(dummy_model)
+
+    assert os.path.exists(os.path.join(model_line.get_root(), "00003"))
