@@ -15,7 +15,8 @@ limitations under the License.
 """
 
 
-from typing import Dict, Callable, Any
+from typing import Any, Callable, Dict
+
 from ..base import raise_not_implemented
 from .model import Model, ModelModifier
 
@@ -32,13 +33,19 @@ class BasicModel(Model):
     """
 
     def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
-        raise_not_implemented('cascade.models.BasicModel', 'fit')
+        raise_not_implemented("cascade.models.BasicModel", "fit")
 
     def predict(self, x: Any, *args: Any, **kwargs: Any) -> Any:
-        raise_not_implemented('cascade.models.BasicModel', 'predict')
+        raise_not_implemented("cascade.models.BasicModel", "predict")
 
-    def evaluate(self, x: Any, y: Any,
-                 metrics_dict: Dict[str, Callable], *args: Any, **kwargs: Any) -> None:
+    def evaluate(
+        self,
+        x: Any,
+        y: Any,
+        metrics_dict: Dict[str, Callable],
+        *args: Any,
+        **kwargs: Any
+    ) -> None:
         """
         Receives x and y validation sequences. Passes x to the model's predict
         method along with any args or kwargs needed.

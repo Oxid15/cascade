@@ -16,8 +16,8 @@ limitations under the License.
 
 import os
 
-from deepdiff import DeepDiff
 import pendulum
+from deepdiff import DeepDiff
 
 from ...models import Workspace
 from .repo_diff_viewer import RepoDiffViewer

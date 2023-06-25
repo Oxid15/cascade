@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 import logging
-from typing import Iterable, List, Dict, Union, Any
+import os
+from typing import Any, Dict, Iterable, List, Union
 
 import pendulum
+
 from ..base import Traceable, raise_not_implemented
 from ..models import Model, ModelLine, ModelRepo
-
 
 logger = logging.getLogger(__name__)
 

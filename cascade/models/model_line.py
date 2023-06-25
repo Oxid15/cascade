@@ -14,14 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import glob
 import os
 import warnings
-from typing import Type, Literal, Any
-import pendulum
-import glob
 from hashlib import md5
+from typing import Any, Literal, Type
 
-from ..base import TraceableOnDisk, MetaHandler, PipeMeta
+import pendulum
+
+from ..base import MetaHandler, PipeMeta, TraceableOnDisk
 from .model import Model
 
 
@@ -161,16 +162,19 @@ class ModelLine(TraceableOnDisk):
         return meta
 
     def _load(self):
-        assert os.path.isdir(self._root), f'folder should be directory, got `{self._root}`'
+        assert os.path.isdir(
+            self._root
+        ), f"folder should be directory, got `{self._root}`"
         self.model_names = sorted(
-            [os.path.join(model_folder, 'model')
+            [
+                os.path.join(model_folder, "model")
                 for model_folder in os.listdir(self._root)
-                if os.path.isdir(os.path.join(self._root, model_folder))])
+                if os.path.isdir(os.path.join(self._root, model_folder))
+            ]
+        )
 
         if len(self.model_names) == 0:
-            warnings.warn(
-                f'Model folders were not found by the line in {self._root}'
-            )
+            warnings.warn(f"Model folders were not found by the line in {self._root}")
 
     def reload(self) -> None:
         self._load()

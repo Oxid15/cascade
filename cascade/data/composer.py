@@ -15,10 +15,10 @@ limitations under the License.
 """
 
 
-from typing import List, Tuple, Any
+from typing import Any, List, Tuple
 
-from . import SizedDataset
 from ..base import PipeMeta
+from . import SizedDataset
 
 
 class Composer(SizedDataset):
@@ -33,7 +33,10 @@ class Composer(SizedDataset):
     >>> ds = cdd.Composer((items, labels))
     >>> assert ds[0] == (0, 1)
     """
-    def __init__(self, datasets: List[SizedDataset[Any]], *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, datasets: List[SizedDataset[Any]], *args: Any, **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -52,8 +55,8 @@ class Composer(SizedDataset):
         first = lengths[0]
         if not all([ln == first for ln in lengths]):
             raise ValueError(
-                f'The datasets passed should be of the same length\n'
-                f'Actual lengths: {lengths}'
+                f"The datasets passed should be of the same length\n"
+                f"Actual lengths: {lengths}"
             )
 
     def __getitem__(self, index: int) -> Tuple[Any]:
@@ -67,5 +70,5 @@ class Composer(SizedDataset):
         Composer calls `get_meta()` of all its datasets
         """
         meta = super().get_meta()
-        meta[0]['data'] = [ds.get_meta() for ds in self._datasets]
+        meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
         return meta

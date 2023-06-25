@@ -11,10 +11,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Generic, Iterable, TypeVar, Any, Sized, Sequence
-from ..base import Traceable, PipeMeta, raise_not_implemented
+from typing import Any, Generic, Iterable, Sequence, Sized, TypeVar
 
-T = TypeVar('T')
+from ..base import PipeMeta, Traceable, raise_not_implemented
+
+T = TypeVar("T")
 
 
 class Dataset(Generic[T], Traceable):
@@ -28,6 +29,7 @@ class Dataset(Generic[T], Traceable):
     --------
     cascade.base.Traceable
     """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
 
@@ -35,7 +37,7 @@ class Dataset(Generic[T], Traceable):
         """
         Abstract method - should be defined in every successor
         """
-        raise_not_implemented('cascade.data.Dataset', '__getitem__')
+        raise_not_implemented("cascade.data.Dataset", "__getitem__")
 
     def get_meta(self) -> PipeMeta:
         """
@@ -47,7 +49,7 @@ class Dataset(Generic[T], Traceable):
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
         meta = super().get_meta()
-        meta[0]['type'] = 'dataset'
+        meta[0]["type"] = "dataset"
         return meta
 
 
@@ -64,12 +66,13 @@ class SizedDataset(Dataset[T], Sized):
     --------
     cascade.data.Dataset
     """
+
     def __len__(self) -> int:
-        raise_not_implemented('cascade.data.Dataset', '__len__')
+        raise_not_implemented("cascade.data.Dataset", "__len__")
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['len'] = len(self)
+        meta[0]["len"] = len(self)
         return meta
 
 
@@ -77,13 +80,16 @@ class Iterator(Dataset):
     """
     Wraps Dataset around any Iterable. Does not have map-like interface.
     """
+
     def __init__(self, data: Iterable[T], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._data = data
 
     def __getitem__(self, item: Any) -> T:
-        raise NotImplementedError('Iterator explicitly forbids __getitem__ method.'
-                                  'Please, consider the use of Wrapper instead.')
+        raise NotImplementedError(
+            "Iterator explicitly forbids __getitem__ method."
+            "Please, consider the use of Wrapper instead."
+        )
 
     def __iter__(self) -> Iterable[T]:
         for item in self._data:
@@ -91,7 +97,7 @@ class Iterator(Dataset):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['obj_type'] = str(type(self._data))
+        meta[0]["obj_type"] = str(type(self._data))
         return meta
 
 
@@ -99,6 +105,7 @@ class Wrapper(SizedDataset):
     """
     Wraps Dataset around any list-like object.
     """
+
     def __init__(self, obj: Sequence[T], *args: Any, **kwargs: Any) -> None:
         self._data = obj
         super().__init__(*args, **kwargs)
@@ -111,7 +118,7 @@ class Wrapper(SizedDataset):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['obj_type'] = str(type(self._data))
+        meta[0]["obj_type"] = str(type(self._data))
         return meta
 
 
@@ -126,6 +133,7 @@ class Modifier(SizedDataset):
     in a lazy manner on each `__getitem__` call.
     Applies no transformation if `__getitem__` is not overridden.
     """
+
     def __init__(self, dataset: SizedDataset[T], *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Modifier. Makes no transformations in initialization.
@@ -170,8 +178,10 @@ class Sampler(Modifier):
     cascade.data.RandomSampler
     cascade.data.RangeSampler
     """
-    def __init__(self, dataset: SizedDataset[T], num_samples: int,
-                 *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, dataset: SizedDataset[T], num_samples: int, *args: Any, **kwargs: Any
+    ) -> None:
         """
         Constructs a Sampler.
 
@@ -182,7 +192,7 @@ class Sampler(Modifier):
             num_samples: int
                 The number of samples
         """
-        assert num_samples > 0, 'The number of samples should be positive'
+        assert num_samples > 0, "The number of samples should be positive"
         super().__init__(dataset, *args, **kwargs)
         self._num_samples = num_samples
 

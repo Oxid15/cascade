@@ -15,13 +15,13 @@ limitations under the License.
 """
 
 import glob
-from typing import Dict, Tuple
 import os
+from typing import Dict, Tuple
 
 import pendulum
 from deepdiff import DeepDiff
 
-from ...base import MetaHandler, MetaFromFile
+from ...base import MetaFromFile, MetaHandler
 from ..meta_viewer import MetaViewer
 from .base_diff_viewer import BaseDiffViewer
 

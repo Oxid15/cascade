@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Tuple, Any, Dict, Union
 from itertools import cycle
-
-from ..base import PipeMeta
-from ..data import SizedDataset, Sampler
+from typing import Any, Dict, Tuple, Union
 
 import numpy as np
 from tqdm import trange
+
+from ..base import PipeMeta
+from ..data import Sampler, SizedDataset
 
 
 class OverSampler(Sampler):
@@ -41,7 +41,10 @@ class OverSampler(Sampler):
     Sampler orders the items in the dataset.
     Consider shuffling the dataset after sampling if label order is important.
     """
-    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
+    ) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels, counts = np.unique(labels, return_counts=True)
         how_much_add = np.max(counts) - counts
@@ -55,7 +58,7 @@ class OverSampler(Sampler):
                 self._add_indices.append(k)
 
         ln = len(dataset) + len(self._add_indices)
-        print(f'Original length was {len(dataset)} and new is {ln}')
+        print(f"Original length was {len(dataset)} and new is {ln}")
 
         super().__init__(dataset, num_samples=ln, *args, **kwargs)
 
@@ -87,7 +90,10 @@ class UnderSampler(Sampler):
     Sampler orders the items in the dataset.
     Consider shuffling the dataset after sampling if label order is important.
     """
-    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
+    ) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels, counts = np.unique(labels, return_counts=True)
         min_count = np.min(counts)
@@ -102,7 +108,7 @@ class UnderSampler(Sampler):
                 k += 1
 
         ln = len(self._rem_indices)
-        print(f'Original length was {len(dataset)} and new is {ln}')
+        print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln, *args, **kwargs)
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
@@ -136,8 +142,12 @@ class WeighedSampler(Sampler):
     cascade.utils.UnderSampler
     cascade.data.RandomSampler
     """
-    def __init__(self, dataset: SizedDataset[Tuple[Any, Any]],
-                 partitioning: Union[Dict[Any, int], None] = None) -> None:
+
+    def __init__(
+        self,
+        dataset: SizedDataset[Tuple[Any, Any]],
+        partitioning: Union[Dict[Any, int], None] = None,
+    ) -> None:
         """
         Parameters
         ----------
@@ -175,9 +185,10 @@ class WeighedSampler(Sampler):
                 count += 1
 
         ln = len(self._indices)
-        assert ln == sum(partitioning.values()), \
-            'The length should be equal to the sum of partitions - something went wrong'
-        print(f'Original length was {len(dataset)} and new is {ln}')
+        assert ln == sum(
+            partitioning.values()
+        ), "The length should be equal to the sum of partitions - something went wrong"
+        print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln)
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
@@ -186,14 +197,16 @@ class WeighedSampler(Sampler):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]['partitioning'] = self._partitioning
+        meta[0]["partitioning"] = self._partitioning
         return meta
 
     def _check_partitioning(self, ulabels, partitioning) -> None:
-        '''
+        """
         Checks if all labels that were passed in partitioning
         are present in dataset's unique labels
-        '''
+        """
         for label in partitioning:
             if label not in ulabels:
-                raise ValueError(f'Label {label} was not found in dataset\'s labels: {ulabels}')
+                raise ValueError(
+                    f"Label {label} was not found in dataset's labels: {ulabels}"
+                )

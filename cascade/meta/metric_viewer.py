@@ -15,14 +15,14 @@ limitations under the License.
 """
 
 import os
-from typing import Union, List, Any
+from typing import Any, List, Union
 
+import pandas as pd
 import pendulum
 from flatten_json import flatten
-import pandas as pd
 
-from . import Server, MetaViewer
-from ..models import Repo, Model, ModelRepo, ModelLine, SingleLineRepo
+from ..models import Model, ModelLine, ModelRepo, Repo, SingleLineRepo
+from . import MetaViewer, Server
 
 
 class MetricViewer:
@@ -32,7 +32,10 @@ class MetricViewer:
     As metrics it uses data from `metrics` field in models'
     meta and as parameters it uses `params` field.
     """
-    def __init__(self, repo: Union[Repo, ModelLine], scope: Union[int, str, slice, None] = None) -> None:
+
+    def __init__(
+        self, repo: Union[Repo, ModelLine], scope: Union[int, str, slice, None] = None
+    ) -> None:
         """
         Parameters
         ----------
@@ -206,7 +209,7 @@ class MetricServer(Server):
 
     def _update_graph_callback(self, _app) -> None:
         try:
-            from dash import Output, Input
+            from dash import Input, Output
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
@@ -230,7 +233,7 @@ class MetricServer(Server):
 
     def _layout(self):
         try:
-            from dash import html, dcc, dash_table
+            from dash import dash_table, dcc, html
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:

@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 import glob
+import os
 
 from ...base import MetaHandler, supported_meta_formats
 from ...meta import Server
-from .history_diff_viewer import HistoryDiffViewer
 from .dataset_version_diff_viewer import DatasetVersionDiffViewer
+from .history_diff_viewer import HistoryDiffViewer
 from .repo_diff_viewer import RepoDiffViewer
 from .workspace_diff_viewer import WorkspaceDiffViewer
 

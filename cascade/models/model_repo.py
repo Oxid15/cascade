@@ -12,21 +12,20 @@ limitations under the License.
 """
 
 import glob
-import os
 import itertools
-from typing import Any, Dict, List, Iterable, Union, Literal, Type, Generator
+import os
 import shutil
+from typing import Any, Dict, Generator, Iterable, List, Literal, Type, Union
 
-import pendulum
 from deepdiff.diff import DeepDiff
 
 from ..base import (
-    Traceable,
-    TraceableOnDisk,
-    MetaHandler,
     HistoryLogger,
     JSONEncoder,
+    MetaHandler,
     PipeMeta,
+    Traceable,
+    TraceableOnDisk,
 )
 from .model import Model
 from .model_line import ModelLine

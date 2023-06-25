@@ -14,27 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Callable, Union, Any
+from typing import Any, Callable, Union
+
 from tqdm import tqdm
 
-from . import Validator, DataValidationException
-from .validator import prettify_items
 from ..data import Dataset, T
+from . import DataValidationException, Validator
+from .validator import prettify_items
 
 
 class DataleakValidator(Validator):
     def __init__(
-            self,
-            train_ds: Dataset[T],
-            test_ds: Dataset[T],
-            hash_fn: Union[Callable[[Any], str], None] = None,
-            **kwargs: Any
+        self,
+        train_ds: Dataset[T],
+        test_ds: Dataset[T],
+        hash_fn: Union[Callable[[Any], str], None] = None,
+        **kwargs: Any,
     ) -> None:
         if hash_fn is None:
             hash_fn = hash
 
-        train_hashes = [hash_fn(item) for item in tqdm(train_ds, desc='Retrieve train data')]
-        test_hashes = [hash_fn(item) for item in tqdm(test_ds, desc='Retrieve test data')]
+        train_hashes = [
+            hash_fn(item) for item in tqdm(train_ds, desc="Retrieve train data")
+        ]
+        test_hashes = [
+            hash_fn(item) for item in tqdm(test_ds, desc="Retrieve test data")
+        ]
 
         train_repeating_idx = []
         test_repeating_idx = []
@@ -47,11 +52,11 @@ class DataleakValidator(Validator):
         size = len(train_repeating_idx)
         if size > 0:
             raise DataValidationException(
-                f'Train and test datasets have {size} common items\n'
-                f'Train indices: {prettify_items(train_repeating_idx)}\n'
-                f'Test indices: {prettify_items(test_repeating_idx)}'
+                f"Train and test datasets have {size} common items\n"
+                f"Train indices: {prettify_items(train_repeating_idx)}\n"
+                f"Test indices: {prettify_items(test_repeating_idx)}"
             )
         else:
-            print('OK!')
+            print("OK!")
 
         super().__init__(self, train_ds, **kwargs)
