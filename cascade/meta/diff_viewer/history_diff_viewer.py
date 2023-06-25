@@ -14,9 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .model import Model, ModelModifier
-from .basic_model import BasicModel, BasicModelModifier
-from .model_repo import Repo, ModelRepo, SingleLineRepo
-from .model_line import ModelLine
-from .trainer import Trainer, BasicTrainer
-from .workspace import Workspace
+from typing import Any, Dict
+
+from .base_diff_viewer import BaseDiffViewer
+from ...base import MetaHandler
+
+
+class HistoryDiffViewer(BaseDiffViewer):
+    def __init__(self, path: str) -> None:
+        super().__init__(path)
+        self._default_depth = 2
+        self._default_diff_depth = 1
+
+    def _read_objects(self, path: str) -> Dict[str, Any]:
+        self._check_path(path, ("history",))
+
+        history = MetaHandler.read(path)["history"]
+
+        return {item["updated_at"]: item for item in history}

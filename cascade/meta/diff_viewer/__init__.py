@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .model import Model, ModelModifier
-from .basic_model import BasicModel, BasicModelModifier
-from .model_repo import Repo, ModelRepo, SingleLineRepo
-from .model_line import ModelLine
-from .trainer import Trainer, BasicTrainer
-from .workspace import Workspace
+from .base_diff_viewer import BaseDiffViewer
+from .dataset_version_diff_viewer import DatasetVersionDiffViewer
+from .diff_viewer import DiffViewer
+from .history_diff_viewer import HistoryDiffViewer
+from .repo_diff_viewer import RepoDiffViewer
+from .workspace_diff_viewer import WorkspaceDiffViewer

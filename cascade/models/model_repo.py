@@ -51,6 +51,7 @@ class Repo(Traceable):
         self._lines = dict()
 
     def reload(self) -> None:
+        # TODO: implement full reload
         for line in self._lines:
             self._lines[line].reload()
 
@@ -99,6 +100,9 @@ class SingleLineRepo(Repo):
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._line_root}"
+
+    def get_root(self):
+        return self._line_root
 
 
 class ModelRepo(Repo, TraceableOnDisk):
