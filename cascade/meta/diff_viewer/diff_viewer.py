@@ -46,18 +46,46 @@ class DiffViewer(Server):
         """
         if os.path.isdir(path):
             meta_path = sorted(glob.glob(os.path.join(path, "meta.*")))
-            if len(meta_path) != 1:
+            if len(meta_path) > 1:
                 raise RuntimeError(f"Found {len(meta_path)} meta files in {path}")
-            meta = MetaHandler().read(meta_path[0])
 
-            if meta[0]["type"] == "repo":
-                return RepoDiffViewer(path)
-            elif meta[0]["type"] == "workspace":
-                return WorkspaceDiffViewer(path)
+            if len(meta_path) == 1:
+                meta = MetaHandler().read(meta_path[0])
+
+                if meta[0]["type"] == "repo":
+                    return RepoDiffViewer(path)
+                elif meta[0]["type"] == "workspace":
+                    return WorkspaceDiffViewer(path)
+                else:
+                    raise ValueError(
+                        f"No viewer found for meta with type {meta[0]['type']}"
+                    )
             else:
-                raise ValueError(
-                    f"No viewer found for meta with type {meta[0]['type']}"
+                # In this case should check internal folder
+                # I suppose that this could be folder
+                # that can be Workspace but doesn't have meta
+                abs_path = os.path.abspath(path)
+                folders = sorted(
+                    [
+                        path
+                        for path in os.listdir(abs_path)
+                        if os.path.isdir(os.path.join(abs_path, path))
+                    ]
                 )
+                for folder in folders:
+                    folder_meta = sorted(
+                        glob.glob(os.path.join(path, folder, "meta.*"))
+                    )
+                    if len(folder_meta) == 1:
+                        meta = MetaHandler.read(folder_meta[0])
+                        if meta[0]["type"] == "repo":
+                            return WorkspaceDiffViewer(path)
+                        elif meta[0]["type"] == "line":
+                            return RepoDiffViewer(path)
+                        else:
+                            raise ValueError(
+                                f"No viewer found for folder with objects of type {meta[0]['type']}"
+                            )
         else:
             _, ext = os.path.splitext(path)
             if ext not in supported_meta_formats:
