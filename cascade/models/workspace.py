@@ -56,3 +56,9 @@ class Workspace(TraceableOnDisk):
 
     def get_repo_names(self) -> List[str]:
         return self._repo_names
+
+    def get_default(self) -> ModelRepo:
+        if self._default is not None:
+            return self[self._default]
+        else:
+            return self[self._repo_names[0]]
