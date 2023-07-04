@@ -114,7 +114,8 @@ class SkModel(BasicModel):
             cls._check_model_hash(path)
 
         with open(path, "rb") as f:
-            model = pickle.load(f)
+            pipeline = pickle.load(f)
+            model = SkModel(blocks=pipeline)
 
         return model
 
@@ -138,7 +139,7 @@ class SkModel(BasicModel):
         path = path + ext
 
         with open(f"{path}", "wb") as f:
-            pickle.dump(self.__dict__, f)
+            pickle.dump(self._pipeline, f)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
