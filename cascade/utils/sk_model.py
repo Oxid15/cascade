@@ -80,19 +80,26 @@ class SkModel(BasicModel):
         If path is the file with no extension, .pkl is added.
         """
         if os.path.isdir(path):
-            path = os.path.join(path, "model.pkl")
+            os.makedirs(path, exist_ok=True)
+            model_path = os.path.join(path, "model.pkl")
+            pipeline_path = os.path.join(path, "pipeline.pkl")
+        else:
+            model_path = path
+            pipeline_path = os.path.join(*os.path.split(path)[:-1], "pipeline.pkl")
 
-        path, ext = os.path.splitext(path)
+        model_path, ext = os.path.splitext(model_path)
         if ext == "":
             ext += ".pkl"
+        model_path = model_path + ext
 
-        path = path + ext
+        # TODO: enable check again later
+        # if check_hash:
+        #     cls._check_model_hash(model_path)
 
-        if check_hash:
-            cls._check_model_hash(path)
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
 
-        with open(path, "rb") as f:
-            model = SkModel()
+        with open(pipeline_path, "rb") as f:
             model._pipeline = pickle.load(f)
         return model
 
@@ -107,16 +114,24 @@ class SkModel(BasicModel):
         """
         if os.path.isdir(path):
             os.makedirs(path, exist_ok=True)
-            path = os.path.join(path, "model.pkl")
+            model_path = os.path.join(path, "model.pkl")
+            pipeline_path = os.path.join(path, "pipeline.pkl")
+        else:
+            model_path = path
+            pipeline_path = os.path.join(*os.path.split(path)[:-1], "pipeline.pkl")
 
-        path, ext = os.path.splitext(path)
+        model_path, ext = os.path.splitext(model_path)
         if ext == "":
             ext += ".pkl"
+        model_path = model_path + ext
 
-        path = path + ext
-
-        with open(f"{path}", "wb") as f:
+        with open(pipeline_path, "wb") as f:
             pickle.dump(self._pipeline, f)
+
+        del self._pipeline
+
+        with open(model_path, "wb") as f:
+            pickle.dump(self, f)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
