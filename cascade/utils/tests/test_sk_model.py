@@ -61,12 +61,9 @@ def test_hash_check(tmp_path, ext):
 @pytest.mark.parametrize("postfix", ["", "model", "model.pkl"])
 def test_save_load(tmp_path, postfix):
     tmp_path = str(tmp_path)
-
     if postfix:
         tmp_path = os.path.join(tmp_path, postfix)
 
     model = SkModel(blocks=[RandomForestClassifier()])
-
     model.save(tmp_path)
-
     model = SkModel.load(tmp_path)
