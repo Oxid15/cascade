@@ -114,9 +114,8 @@ class SkModel(BasicModel):
             cls._check_model_hash(path)
 
         with open(path, "rb") as f:
-            pipeline = pickle.load(f)
-            model = SkModel(blocks=pipeline)
-
+            model = SkModel()
+            model._pipeline = pickle.load(f)
         return model
 
     def save(self, path: str) -> None:
