@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import pickle
 import os
 from typing import Any, Type, Union
 
@@ -65,28 +66,53 @@ class TorchModel(Model):
         If path is the folder, then creates it and
         saves as 'model'
         Args and kwargs are passed into torch.save
+
+        The model is saved in two parts - the wrapper
+        and the actual torch model as checkpoint separately.
+        This is done for artifact portability - you can use checkpoint in
+        deployments directly without the need to bring additional dependency
+        with the wrapper. At the same time additional params can still be loaded
+        using wrapper that is saved nearby.
         """
         if os.path.isdir(path):
             os.makedirs(path, exist_ok=True)
-            path = os.path.join(path, "model")
+            model_path = os.path.join(path, "model.pkl")
+            checkpoint_path = os.path.join(path, "checkpoint.pt")
+        else:
+            model_path = path
+            checkpoint_path = os.path.join(*os.path.split(path)[:-1], "checkpoint.pt")
 
-        with open(path, "wb") as f:
+        with open(checkpoint_path, "wb") as f:
             torch.save(self._model, f, *args, **kwargs)
+
+        del self._model
+
+        with open(model_path, "wb") as f:
+            pickle.dump(self, f)
 
     @classmethod
     def load(cls, path: str, *args: Any, **kwargs: Any) -> "TorchModel":
         """
         Loads the model using `torch.load`.
-        If path is folder, then tries to load 'model'
+        If path is folder, then tries to load 'checkpoint.pt'
         from it.
         """
         if os.path.isdir(path):
-            path = os.path.join(path, "model")
+            os.makedirs(path, exist_ok=True)
+            model_path = os.path.join(path, "model.pkl")
+            checkpoint_path = os.path.join(path, "checkpoint.pt")
+        else:
+            model_path = path
+            checkpoint_path = os.path.join(*os.path.split(path)[:-1], "checkpoint.pt")
 
-        with open(path, "rb") as f:
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
+
+        with open(checkpoint_path, "rb") as f:
             torch_model = torch.load(f, *args, **kwargs)
 
-        return TorchModel(model=torch_model)
+        model._model = torch_model
+        return model
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
