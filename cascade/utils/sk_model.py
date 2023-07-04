@@ -111,6 +111,13 @@ class SkModel(BasicModel):
         model.pkl
         If path is a file, then saves it accordingly.
         If no extension of file provided, then .pkl is added.
+
+        The model is saved in two parts - the wrapper without pipeline
+        and the actual sklearn model as pipeline separately.
+        This is done for artifact portability - you can use pipeline in
+        deployments directly without the need to bring additional dependency
+        with the wrapper. At the same time additional params can still be loaded
+        using wrapper that is saved nearby.
         """
         if os.path.isdir(path):
             os.makedirs(path, exist_ok=True)
