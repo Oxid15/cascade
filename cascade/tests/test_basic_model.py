@@ -18,12 +18,13 @@ import os
 import random
 import sys
 
+import pytest
 import numpy as np
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.models import BasicModelModifier
+from cascade.models import BasicModelModifier, BasicModel
 
 
 def test_basic_model_with_concrete_case(ones_model):
@@ -75,3 +76,16 @@ def test_modifier(ones_model):
 
     assert all(y == [2, 2, 2])
     assert len(meta) == 2
+
+
+@pytest.mark.parametrize("postfix", ["", "model", "model.pkl"])
+def test_save_load(tmp_path, postfix):
+    tmp_path = str(tmp_path)
+
+    if postfix:
+        tmp_path = os.path.join(tmp_path, postfix)
+
+    model = BasicModel(a=10)
+    model.save(tmp_path)
+    model = BasicModel.load(tmp_path)
+    assert model.params.get('a') == 10

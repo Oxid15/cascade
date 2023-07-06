@@ -15,9 +15,12 @@ limitations under the License.
 """
 
 
-from typing import Any, Callable, Dict
+import glob
+import pickle
+import os
 
-from ..base import raise_not_implemented
+from typing import Dict, Callable, Any
+from ..base import raise_not_implemented, MetaHandler
 from .model import Model, ModelModifier
 
 
@@ -44,7 +47,7 @@ class BasicModel(Model):
         y: Any,
         metrics_dict: Dict[str, Callable],
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """
         Receives x and y validation sequences. Passes x to the model's predict
@@ -66,6 +69,60 @@ class BasicModel(Model):
         """
         preds = self.predict(x, *args, **kwargs)
         self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
+
+    @classmethod
+    def _check_model_hash(cls, path: str) -> None:
+        root = os.path.dirname(path)
+        names = glob.glob(os.path.join(f"{root}", "meta.*"))
+        if len(names) == 1:
+            meta = MetaHandler.read(names[0])
+            # Uses first meta in list
+            # Usually the list is of unit length
+            meta = meta[0]
+            if "md5sum" in meta:
+                with open(path, "rb") as f:
+                    file_hash = md5(f.read()).hexdigest()
+                if file_hash != meta["md5sum"]:
+                    raise RuntimeError(
+                        f".pkl model hash check failed "
+                        f"it may be that model's .pkl file was corrupted\n"
+                        f'hash from {names[0]}: {meta["md5sum"]}\n'
+                        f"hash of {path}: {file_hash}"
+                    )
+        elif len(names) > 1:
+            raise RuntimeError(f"Multiple possible meta-files found: {names}")
+
+    @classmethod
+    def load(cls, path: str, check_hash: bool = True) -> "BasicModel":
+        """
+        Loads the model from path provided. Path may be a folder,
+        if so, `model` is assumed.
+        """
+        if os.path.isdir(path):
+            path = os.path.join(path, "model")
+
+        # TODO: enable hash check later
+        # if check_hash:
+        #     cls._check_model_hash(path)
+
+        with open(path, "rb") as f:
+            model = pickle.load(f)
+        return model
+
+    def save(self, path: str) -> None:
+        """
+        Saves model to the path provided.
+        If path is a folder, then creates
+        it if not exists and saves there as
+        `model`
+        If path is a file, then saves it accordingly.
+        """
+        if os.path.isdir(path):
+            os.makedirs(path, exist_ok=True)
+            path = os.path.join(path, "model")
+
+        with open(path, "wb") as f:
+            pickle.dump(self, f)
 
 
 class BasicModelModifier(ModelModifier, BasicModel):
