@@ -19,8 +19,8 @@ from typing import Any, Type, Union
 
 import torch
 
-from ..base import PipeMeta
-from ..models import Model
+from ...base import PipeMeta
+from ...models import Model
 
 
 class TorchModel(Model):

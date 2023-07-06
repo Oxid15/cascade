@@ -26,7 +26,7 @@ MODULE_PATH = os.path.dirname(
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 
-from cascade.utils.torch_model import TorchModel
+from cascade.utils.torch import TorchModel
 
 
 @pytest.mark.parametrize("postfix", ["", "model", "model.pt"])
