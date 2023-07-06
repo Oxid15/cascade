@@ -47,7 +47,7 @@ class BasicModel(Model):
         y: Any,
         metrics_dict: Dict[str, Callable],
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """
         Receives x and y validation sequences. Passes x to the model's predict
@@ -96,21 +96,14 @@ class BasicModel(Model):
     def load(cls, path: str, check_hash: bool = True) -> "BasicModel":
         """
         Loads the model from path provided. Path may be a folder,
-        if so, model.pkl is assumed.
-
-        If path is the file with no extension, .pkl is added.
+        if so, `model` is assumed.
         """
         if os.path.isdir(path):
-            path = os.path.join(path, "model.pkl")
+            path = os.path.join(path, "model")
 
-        path, ext = os.path.splitext(path)
-        if ext == "":
-            ext += ".pkl"
-
-        path = path + ext
-
-        if check_hash:
-            cls._check_model_hash(path)
+        # TODO: enable hash check later
+        # if check_hash:
+        #     cls._check_model_hash(path)
 
         with open(path, "rb") as f:
             model = pickle.load(f)
@@ -121,19 +114,12 @@ class BasicModel(Model):
         Saves model to the path provided.
         If path is a folder, then creates
         it if not exists and saves there as
-        model.pkl
+        `model`
         If path is a file, then saves it accordingly.
-        If no extension of file provided, then .pkl is added.
         """
         if os.path.isdir(path):
             os.makedirs(path, exist_ok=True)
-            path = os.path.join(path, "model.pkl")
-
-        path, ext = os.path.splitext(path)
-        if ext == "":
-            ext += ".pkl"
-
-        path = path + ext
+            path = os.path.join(path, "model")
 
         with open(path, "wb") as f:
             pickle.dump(self, f)
