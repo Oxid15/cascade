@@ -22,8 +22,8 @@ from typing import Any, List, Union
 
 from sklearn.pipeline import Pipeline
 
-from ..base import MetaHandler, PipeMeta
-from ..models import BasicModel
+from ...base import MetaHandler, PipeMeta
+from ...models import BasicModel
 
 
 class SkModel(BasicModel):

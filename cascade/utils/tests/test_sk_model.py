@@ -29,7 +29,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 
 import cascade as csd
-from cascade.utils.sk_model import SkModel
+from cascade.utils.sklearn import SkModel
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml"])
