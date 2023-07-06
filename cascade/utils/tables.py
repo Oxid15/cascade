@@ -21,6 +21,7 @@ from dask import dataframe as dd
 from tqdm import tqdm
 
 from cascade.base import PipeMeta
+from cascade.utils.tables import TableDataset
 
 from ..base import PipeMeta
 from ..data import Dataset, Iterator, Modifier, SequentialCacher
@@ -132,33 +133,6 @@ class CSVDataset(TableDataset):
         super().__init__(t=t, **kwargs)
 
 
-class PartedTableLoader(Dataset):
-    """
-    Works like CSVDataset, but uses dask to load tables
-    and returns partitions on `__getitem__`.
-
-    See also
-    --------
-    cascade.utils.CSVDataset
-    """
-
-    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        self._table = dd.read_csv(csv_file_path, *args, **kwargs)
-
-    def __getitem__(self, index: int):
-        """
-        Returns partition under the index.
-        """
-        return self._table.get_partition(index).compute()
-
-    def __len__(self) -> int:
-        """
-        Returns the number of partitions.
-        """
-        return self._table.npartitions
-
-
 class TableIterator(Iterator):
     """
     Iterates over the table from path by the chunks.
@@ -180,26 +154,6 @@ class TableIterator(Iterator):
 
     def __next__(self):
         return self._data.get_chunk(self.chunk_size)
-
-
-class LargeCSVDataset(SequentialCacher):
-    """
-    SequentialCacher over large .csv file.
-    Loads table by partitions.
-    """
-
-    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
-        dataset = PartedTableLoader(csv_file_path, *args, **kwargs)
-        self._ln = len(dataset._table)
-        self.num_batches = dataset._table.npartitions
-        self.bs = self._ln // self.num_batches
-        super().__init__(dataset, self.bs)
-
-    def _load(self, index: int) -> None:
-        self._batch = TableDataset(t=self._dataset[index])
-
-    def __len__(self) -> int:
-        return self._ln
 
 
 class NullValidator(TableDataset, AggregateValidator):
@@ -240,7 +194,7 @@ class FeatureTable(TableDataset):
         ```python
         >>> import pandas as pd
         >>> from cascade.utils.tables import FeatureTable
-        >>> df = pd.read_csv(r'C:\cascade_integration\data\t.csv', index_col=0)
+        >>> df = pd.read_csv(r'data\t.csv', index_col=0)
         >>> df
         id  count  name
         0   0      1   aaa
@@ -370,3 +324,13 @@ class FeatureTable(TableDataset):
             for key in self._computed_features_kwargs
         }
         return meta
+
+
+class PartedTableLoader(TableDataset):
+    def __init__(self, *args: Any, t = None, **kwargs: Any) -> None:
+        raise ImportError("PartedTableLoader was removed since 0.12.0, consider using older version")
+
+
+class LargeCSVDataset(TableDataset):
+    def __init__(self, *args: Any, t = None, **kwargs: Any) -> None:
+        raise ImportError("LargeCSVDataset was removed since 0.12.0, consider using older version")
