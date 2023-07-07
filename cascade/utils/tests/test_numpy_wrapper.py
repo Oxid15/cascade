@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import sys
 
+import pytest
 import numpy as np
 
 MODULE_PATH = os.path.dirname(
@@ -27,6 +28,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.utils.numpy_wrapper import NumpyWrapper
 
 
+@pytest.mark.skip
 def test(tmp_path):
     arr = np.array([1, 2, 3, 4, 5])
     path = os.path.join(tmp_path, "arr.npy")

@@ -19,7 +19,7 @@ from typing import Any, List, Union
 
 import numpy as np
 
-from ..models import BasicModel
+from ...models import BasicModel
 
 Number = Union[int, float, complex, np.number]
 
