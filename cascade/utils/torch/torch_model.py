@@ -84,11 +84,11 @@ class TorchModel(Model):
 
         with open(checkpoint_path, "wb") as f:
             torch.save(self._model, f, *args, **kwargs)
-
+        model = self._model
         del self._model
-
         with open(model_path, "wb") as f:
             pickle.dump(self, f)
+        self._model = model
 
     @classmethod
     def load(cls, path: str, *args: Any, **kwargs: Any) -> "TorchModel":

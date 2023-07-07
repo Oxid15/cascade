@@ -66,6 +66,9 @@ def test_save_load(tmp_path, postfix):
 
     model = SkModel(blocks=[RandomForestClassifier(n_estimators=2)], custom_param=42)
     model.save(tmp_path)
+
+    assert model._pipeline
+
     model = SkModel.load(tmp_path)
 
     assert model.params.get("custom_param") == 42

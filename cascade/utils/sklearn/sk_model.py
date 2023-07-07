@@ -134,11 +134,11 @@ class SkModel(BasicModel):
 
         with open(pipeline_path, "wb") as f:
             pickle.dump(self._pipeline, f)
-
+        pipeline = self._pipeline
         del self._pipeline
-
         with open(model_path, "wb") as f:
             pickle.dump(self, f)
+        self._pipeline = pipeline
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

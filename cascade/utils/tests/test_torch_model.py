@@ -40,6 +40,8 @@ def test_save_load(tmp_path, postfix):
 
     model.save(tmp_path)
 
+    assert model._model
+
     model = TorchModel.load(tmp_path)
 
     assert str(model._model) == str(torch.nn.Linear(10, 2))
