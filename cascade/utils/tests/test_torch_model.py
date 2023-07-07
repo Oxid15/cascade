@@ -43,3 +43,5 @@ def test_save_load(tmp_path, postfix):
     model = TorchModel.load(tmp_path)
 
     assert str(model._model) == str(torch.nn.Linear(10, 2))
+    assert model.params.get("in_features") == 10
+    assert model.params.get("out_features") == 2

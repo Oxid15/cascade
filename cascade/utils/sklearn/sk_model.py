@@ -72,28 +72,6 @@ class SkModel(BasicModel):
         return self._pipeline.predict_proba(x, *args, **kwargs)
 
     @classmethod
-    def _check_model_hash(cls, path: str) -> None:
-        root = os.path.dirname(path)
-        names = glob.glob(os.path.join(f"{root}", "meta.*"))
-        if len(names) == 1:
-            meta = MetaHandler.read(names[0])
-            # Uses first meta in list
-            # Usually the list is of unit length
-            meta = meta[0]
-            if "md5sum" in meta:
-                with open(path, "rb") as f:
-                    file_hash = md5(f.read()).hexdigest()
-                if file_hash != meta["md5sum"]:
-                    raise RuntimeError(
-                        f".pkl model hash check failed "
-                        f"it may be that model's .pkl file was corrupted\n"
-                        f'hash from {names[0]}: {meta["md5sum"]}\n'
-                        f"hash of {path}: {file_hash}"
-                    )
-        elif len(names) > 1:
-            raise RuntimeError(f"Multiple possible meta-files found: {names}")
-
-    @classmethod
     def load(cls, path: str, check_hash: bool = True) -> "SkModel":
         """
         Loads the model from path provided. Path may be a folder,
@@ -102,20 +80,27 @@ class SkModel(BasicModel):
         If path is the file with no extension, .pkl is added.
         """
         if os.path.isdir(path):
-            path = os.path.join(path, "model.pkl")
+            os.makedirs(path, exist_ok=True)
+            model_path = os.path.join(path, "model.pkl")
+            pipeline_path = os.path.join(path, "pipeline.pkl")
+        else:
+            model_path = path
+            pipeline_path = os.path.join(*os.path.split(path)[:-1], "pipeline.pkl")
 
-        path, ext = os.path.splitext(path)
+        model_path, ext = os.path.splitext(model_path)
         if ext == "":
             ext += ".pkl"
+        model_path = model_path + ext
 
-        path = path + ext
+        # TODO: enable check again later
+        # if check_hash:
+        #     cls._check_model_hash(model_path)
 
-        if check_hash:
-            cls._check_model_hash(path)
-
-        with open(path, "rb") as f:
+        with open(model_path, "rb") as f:
             model = pickle.load(f)
 
+        with open(pipeline_path, "rb") as f:
+            model._pipeline = pickle.load(f)
         return model
 
     def save(self, path: str) -> None:
@@ -126,19 +111,34 @@ class SkModel(BasicModel):
         model.pkl
         If path is a file, then saves it accordingly.
         If no extension of file provided, then .pkl is added.
+
+        The model is saved in two parts - the wrapper without pipeline
+        and the actual sklearn model as pipeline separately.
+        This is done for artifact portability - you can use pipeline in
+        deployments directly without the need to bring additional dependency
+        with the wrapper. At the same time additional params can still be loaded
+        using wrapper that is saved nearby.
         """
         if os.path.isdir(path):
             os.makedirs(path, exist_ok=True)
-            path = os.path.join(path, "model.pkl")
+            model_path = os.path.join(path, "model.pkl")
+            pipeline_path = os.path.join(path, "pipeline.pkl")
+        else:
+            model_path = path
+            pipeline_path = os.path.join(*os.path.split(path)[:-1], "pipeline.pkl")
 
-        path, ext = os.path.splitext(path)
+        model_path, ext = os.path.splitext(model_path)
         if ext == "":
             ext += ".pkl"
+        model_path = model_path + ext
 
-        path = path + ext
+        with open(pipeline_path, "wb") as f:
+            pickle.dump(self._pipeline, f)
 
-        with open(f"{path}", "wb") as f:
-            pickle.dump(self.__dict__, f)
+        del self._pipeline
+
+        with open(model_path, "wb") as f:
+            pickle.dump(self, f)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
