@@ -3,6 +3,7 @@
 ![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
 ![build](https://github.com/oxid15/cascade/actions/workflows/python-package.yml/badge.svg)
 [![Downloads](https://pepy.tech/badge/cascade-ml)](https://pepy.tech/project/cascade-ml)
+[![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
 
 Flexible ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development faster.  
 
@@ -16,11 +17,11 @@ Cascade built for individuals or small teams that are in need of ML Engineering 
 pip install cascade-ml
 ```
 
-More info on installation can be found in [documentation](https://oxid15.github.io/cascade/quickstart.html#installation)
+More info on installation can be found in [documentation](https://oxid15.github.io/cascade/en/latest/quickstart.html#installation)
 
 ## Documentation
 
-[Go to Cascade documentation](https://oxid15.github.io/cascade/)
+[Go to Cascade documentation](https://oxid15.github.io/cascade/en/latest)
 
 ## Usage
 
@@ -34,34 +35,25 @@ To track changes and version everything about data Cascade has Datasets - specia
 that encapsulate changes that are done during preprocessing.
 
 ```python
+from pprint import pprint
 from cascade import data as cdd
-
 from sklearn.datasets import load_digits
 import numpy as np
 
 
-# Load dataset
 X, y = load_digits(return_X_y=True)
 pairs = [(x, y) for (x, y) in zip(X, y)]
 
-# To track all preparation stages we wrap cdd.Dataset over
-# collection of items and targets
+# To track all preparation stages we wrap cdd.Dataset
 ds = cdd.Wrapper(pairs)
 
-# Let's make a pipeline - shuffle the dataset
+# This creates pipeline
 ds = cdd.RandomSampler(ds)
-
-# Splitting the data is also tracked in pipeline's metadata
 train_ds, test_ds = cdd.split(ds)
-
-# Add small noise to images
 train_ds = cdd.ApplyModifier(
     train_ds,
     lambda pair: pair + np.random.random() * 0.1 - 0.05
 )
-
-# Let's see the metadata we got
-from pprint import pprint
 
 pprint(train_ds.get_meta())
 ```
@@ -95,62 +87,29 @@ Cascade has a solution for this.
 cdd.VersionAssigner(train_ds, 'version_log.yml')
 ```
 
-See all datasets in [zoo](https://oxid15.github.io/cascade/examples/dataset_zoo.html)  
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/examples/dataset_zoo.html)  
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Experiment tracking
 
 Not only data and pipelines changes over time. Models change more frequently and require special system to handle experiments and artifacts.
 
 ```python
+import random
 from cascade import models as cdm
 from cascade import data as cdd
 
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score
-
-
-X, y = load_breast_cancer(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(X, y)
-
-# Define the simple model that using
-# basic methods from cdm.BasicModel
-class BaselineModel(cdm.BasicModel):
-    def __init__(self, const=0, *args, **kwargs) -> None:
-        self.const = const
-        super().__init__(const=const, *args, **kwargs)
-
-    def predict(self, x, *args, **kwargs):
-        return [self.const for _ in range(len(x))]
-
-    # Models define the way whey are trained loaded and saved
-    # we don't use these here, but they exist
-    def fit(self, *args, **kwargs):
-        pass
-
-    def save(self, path):
-        pass
-
-
-model = BaselineModel(1)
-
-# Fit and evaluate do not return anything
-model.fit(X_train, y_train)
-model.evaluate(X_test, y_test, {'acc': accuracy_score, 'f1': f1_score})
-
-# Model repository is the solution for experiment and artifact storage
-repo = cdm.ModelRepo('repos/use_case_repo')
+model = cdm.Model()
+model.metrics.update({
+    'acc': random.random()
+})
 
 # Repo is the collection of model lines
+repo = cdm.ModelRepo('repos/use_case_repo')
+
 # Line can be a bunch of experiments on one model type
 line = repo.add_line('baseline')
-
-# We save the model - everything is held automatically
 line.save(model, only_meta=True)
-
-from pprint import pprint
-pprint(model.get_meta())
 ```
 
 Let's see what is saved as meta data of this experiment.
@@ -158,22 +117,19 @@ Let's see what is saved as meta data of this experiment.
 ```json
 [
     {
-        "name": "<__main__.BaselineModel object at 0x000001F69F493820>",
-        "created_at": "2023-01-02T16:36:59.041979+00:00",
+        "name": "cascade.models.model.Model",
+        "created_at": "2023-05-29T21:06:23.341752+00:00",
         "metrics": {
-            "acc": 0.6293706293706294,
-            "f1": 0.7725321888412017
+            "acc": 0.6745652975946803
         },
-        "params": {
-            "const": 1
-        },
+        "params": {},
         "type": "model",
-        "saved_at": "2023-01-02T16:36:59.103781+00:00"
+        "saved_at": "2023-05-29T21:06:25.977728+00:00"
     }
 ]
 ```
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Data validation
 
@@ -189,16 +145,13 @@ from sklearn.datasets import load_digits
 import numpy as np
 
 
-# Load data
 X, y = load_digits(return_X_y=True)
 pairs = [(x, y) for (x, y) in zip(X, y)]
 
-# Let's define a pipeline
 ds = cdd.Wrapper(pairs)
 ds = cdd.RandomSampler(ds)
 train_ds, test_ds = cdd.split(ds)
 
-# Validate using this tool
 cme.PredicateValidator(
     train_ds,
     [
@@ -206,10 +159,9 @@ cme.PredicateValidator(
         lambda pair: pair[1] in (i for i in range(10))
     ]
 )
-
 ```
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Metadata analysis
 
@@ -221,7 +173,6 @@ metrics of all models in repository.
 from cascade import meta as cme
 from cascade import models as cdm
 
-# Open the existing repo
 repo = cdm.ModelRepo('repos/use_case_repo')
 
 # This runs web-server that relies on optional dependency
@@ -244,10 +195,9 @@ cme.HistoryViewer(repo).plot()
 
 # This runs a server ans allows to see changes in real time (for example while models are trained)
 cme.HistoryViewer(repo).serve()
-
 ```
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ![history-viewer](cascade/docs/imgs/history-viewer.gif)
 
@@ -277,5 +227,23 @@ Please make sure to update tests and docs as appropriate.
 ## Versions
 
 This project uses Semantic Versioning - <https://semver.org/>
+
+## Cite the code
+
+If you used the code in your research, please cite it with:  
+  
+[![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
+
+```bibtex
+@software{ilia_moiseev_2023_8006995,
+  author       = {Ilia Moiseev},
+  title        = {Oxid15/cascade: Lightweight ML Engineering library},
+  month        = jun,
+  year         = 2023,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.8006995},
+  url          = {https://doi.org/10.5281/zenodo.8006995}
+}
+```
 
 ![footer](cascade/docs/imgs/footer.png)
