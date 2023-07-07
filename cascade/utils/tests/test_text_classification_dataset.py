@@ -22,7 +22,7 @@ MODULE_PATH = os.path.dirname(
 )
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils.text_classification_dataset import TextClassificationDataset
+from cascade.utils.nlp import TextClassificationFolder
 
 
 def test_create(tmp_path):
@@ -38,7 +38,7 @@ def test_create(tmp_path):
         with open(os.path.join(path, "text_2.txt"), "w") as f:
             f.write("hello")
 
-    ds = TextClassificationDataset(tmp_path)
+    ds = TextClassificationFolder(tmp_path)
     meta = ds.get_meta()[0]
 
     assert meta["size"] == 6

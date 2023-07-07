@@ -14,18 +14,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any
-
-import numpy as np
-
-from ..base import PipeMeta
-from ..data import Wrapper
-
-
-class NumpyWrapper(Wrapper):
-    """
-    A wrapper around .npy files. Loads file in `__init__`.
-    """
-
-    def __init__(self, path: str, *args: Any, **kwargs: Any) -> None:
-        raise ImportError("NumpyWrapper was removed since 0.12.0, consider using older version")
+from .torch_model import TorchModel
