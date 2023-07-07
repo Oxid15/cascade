@@ -26,7 +26,7 @@ MODULE_PATH = os.path.dirname(
 )
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils.folder_image_dataset import FolderImageDataset
+from cascade.utils.vision import FolderImageDataset
 
 
 @pytest.fixture

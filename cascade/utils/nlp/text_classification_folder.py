@@ -19,16 +19,17 @@ from typing import Any, Tuple
 
 import numpy as np
 
-from ..base import PipeMeta
-from ..data import Dataset
+from ...base import PipeMeta
+from ...data import Dataset
 
 
-class TextClassificationDataset(Dataset):
+class TextClassificationFolder(Dataset):
     """
     Dataset to simplify loading of data for text classification.
     Texts of different classes should be placed in different folders.
     """
 
+    # TODO: can be implemented to be ClassificationFolder and share this functionality with images?
     def __init__(
         self, path: str, encoding: str = "utf-8", *args: Any, **kwargs: Any
     ) -> None:

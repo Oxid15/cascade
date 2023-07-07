@@ -16,7 +16,7 @@ limitations under the License.
 
 import cv2
 
-from ..data import FolderDataset
+from ...data import FolderDataset
 
 
 class FolderImageDataset(FolderDataset):
@@ -30,6 +30,8 @@ class FolderImageDataset(FolderDataset):
         name = self._names[index]
         img = cv2.imread(f"{name}")
         if img is not None:
+            # TODO: allow to use another io backend
             return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         else:
+            # TODO: change exception type
             raise RuntimeError(f"cv2 cannot read {name}")
