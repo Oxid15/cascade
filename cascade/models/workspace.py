@@ -79,7 +79,10 @@ class Workspace(TraceableOnDisk):
         if self._default is not None:
             return self[self._default]
         else:
-            return self[self._repo_names[0]]
+            if len(self._repo_names) > 0:
+                return self[self._repo_names[0]]
+            else:
+                raise RuntimeError("Tried to get the default repo when the workspace is empty")
 
     def set_default(self, repo: str) -> None:
         if repo in self._repo_names:
