@@ -25,6 +25,10 @@ from ..data import Wrapper
 class NumpyWrapper(Wrapper):
     """
     A wrapper around .npy files. Loads file in `__init__`.
+
+    Important
+    ---------
+    This is removed since 0.12.0
     """
 
     def __init__(self, path: str, *args: Any, **kwargs: Any) -> None:
