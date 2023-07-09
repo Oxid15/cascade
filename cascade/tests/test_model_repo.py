@@ -303,7 +303,6 @@ def test_integer_indices(tmp_path, ext):
     assert last_line == repo[-1]
 
 
-# TODO: update list of extensions
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_auto_line_name(tmp_path, ext):
     repo = ModelRepo(str(tmp_path), meta_fmt=ext)
