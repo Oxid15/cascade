@@ -14,9 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import cv2
+from typing import Any, Literal, Union
 
 from ...data import FolderDataset
+
+
+class ImageBackend:
+    def read(self, path: str) -> Any:
+        raise NotImplementedError()
+
+
+class CV2Backend(ImageBackend):
+    def __init__(self) -> None:
+        super().__init__()
+        try:
+            import cv2
+        except ImportError as e:
+            raise ImportError("cv2 backend requires opencv-python package") from e
+        self._cv2 = cv2
+
+    def read(self, path: str) -> "np.ndarray":
+        img = self._cv2.imread(path)
+        if img is not None:
+            return self._cv2.cvtColor(img, self._cv2.COLOR_BGR2RGB)
+        else:
+            raise IOError(f"cv2 failed to read {path}")
+
+
+class PILBackend(ImageBackend):
+    def __init__(self) -> None:
+        super().__init__()
+        try:
+            from PIL import Image
+        except ImportError as e:
+            raise ImportError("PIL backend requires opencv-python package") from e
+        self._image = Image
+
+    def read(self, path: str) -> "PIL.Image":
+        try:
+            img = self._image.open(path)
+        except Exception as e:
+            raise IOError(f"PIL failed to read {path}") from e
+        return img
 
 
 class FolderImageDataset(FolderDataset):
@@ -24,14 +63,19 @@ class FolderImageDataset(FolderDataset):
     Simple dataset for image folder with lazy loading.
     Accepts the path to the folder with images. In each __getitem__ call
     invokes opencv imread on image and returns it if it exists.
+
+    Supports opencv or pillow backends
     """
 
-    def __getitem__(self, index: int) -> cv2.Mat:
+    def __init__(self, root: str, backend: Literal["cv2", "PIL"], *args: Any, **kwargs: Any) -> None:
+        super().__init__(root, *args, **kwargs)
+
+        if backend == "cv2":
+            self._backend = CV2Backend()
+        elif backend == "PIL":
+            self._backend = PILBackend()
+
+    def __getitem__(self, index: int) -> Union["np.ndarray", "PIL.Image"]:
         name = self._names[index]
-        img = cv2.imread(f"{name}")
-        if img is not None:
-            # TODO: allow to use another io backend
-            return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        else:
-            # TODO: change exception type
-            raise RuntimeError(f"cv2 cannot read {name}")
+        img = self._backend.read(name)
+        return img
