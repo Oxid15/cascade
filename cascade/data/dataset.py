@@ -101,6 +101,33 @@ class Iterator(Dataset):
         return meta
 
 
+class ItModifier(Dataset):
+    """
+    The Modifier for Iterator datasets
+
+    See also
+    --------
+    cascade.data.Modifier
+    """
+    def __init__(self, dataset: Iterator, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._dataset = dataset
+
+    def __iter__(self) -> Iterable[T]:
+        for item in self._dataset:
+            yield item
+
+    def get_meta(self) -> PipeMeta:
+        """
+        Overrides base method enabling cascade-like calls to previous datasets.
+        The metadata of a pipeline that consist of several modifiers can be easily
+        obtained with `get_meta` of the last block.
+        """
+        self_meta = super().get_meta()
+        self_meta += self._dataset.get_meta()
+        return self_meta
+
+
 class Wrapper(SizedDataset):
     """
     Wraps Dataset around any list-like object.

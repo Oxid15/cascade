@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .dataset import Dataset, Iterator, Modifier, Sampler, SizedDataset, T, Wrapper
+from .dataset import Dataset, Iterator, ItModifier, Modifier, Sampler, SizedDataset, T, Wrapper
 
 from .apply_modifier import ApplyModifier
 from .bruteforce_cacher import BruteforceCacher
