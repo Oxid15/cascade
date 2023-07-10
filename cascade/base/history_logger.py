@@ -22,6 +22,14 @@ from .meta_handler import MetaHandler
 class HistoryLogger:
     """
     An interface to log meta into history files
+
+    Example
+    -------
+    from cascade.base import HistoryLogger
+    from cascade.data import Wrapper
+    hl = HistoryLogger("wrapper_history_log.yml")
+    ds = Wrapper([0, 1, 2])
+    hl.log(ds.get_meta())
     """
 
     def __init__(self, filepath: str) -> None:

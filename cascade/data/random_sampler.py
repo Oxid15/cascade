@@ -23,8 +23,7 @@ from . import Sampler, SizedDataset, T
 
 class RandomSampler(Sampler):
     """
-    Shuffles dataset. Can randomly sample from dataset
-    if num_samples is not None and less than length of dataset.
+    Shuffles a dataset
     """
 
     def __init__(
@@ -40,9 +39,9 @@ class RandomSampler(Sampler):
         dataset: Dataset
             Input dataset to sample from
         num_samples: int, optional
-            If less or equal than len(dataset) samples without repetitions (shuffles indices).
-            If more than len(dataset) generates random integers as indices.
-            If None, then just shuffles the dataset.
+            If less or equal than len(dataset) samples without repetitions (shuffles indices)
+            If more than len(dataset) generates random integers as indices
+            If None, then just shuffles the dataset
         """
         if num_samples is None:
             num_samples = len(dataset)

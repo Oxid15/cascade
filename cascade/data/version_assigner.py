@@ -43,26 +43,26 @@ class VersionAssigner(Modifier):
     >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
     >>> ds = VersionAssigner(ds, 'data_log.yml') # can be any supported meta format
     >>> print(ds.version)
-    ... 0.0
+        0.0
 
     >>> # Changes its structure - add new modifier
     >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
     >>> ds = cdd.RangeSampler(ds, 0, len(ds), 2)
     >>> ds = VersionAssigner(ds, 'data_log.yml')
     >>> print(ds.version)
-    ... 1.0
+        1.0
 
     >>> # Revert changes - version downgrades back
     >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
     >>> ds = VersionAssigner(ds, 'data_log.yml')
     >>> print(ds.version)
-    ... 0.0
+        0.0
 
     >>> # Update input data - minor update
     >>> ds = cdd.Wrapper([0, 1, 2, 3, 4, 5])
     >>> ds = VersionAssigner(ds, 'data_log.yml')
     >>> print(ds.version)
-    ... 0.1
+        0.1
 
     Note
     ----

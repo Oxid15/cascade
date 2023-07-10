@@ -64,6 +64,24 @@ class DataCard:
     on dataset. The set of fields here
     is general and can be extended by providing
     new keywords into __init__.
+
+    Example
+    -------
+    >>> from cascade.meta import DataCard, Assessor, LabelingInfo, DataRegistrator
+    >>> person = Assessor(id=0, position="Assessor")
+    >>> info = LabelingInfo(who=[person], process_desc="Labeling description")
+    >>> dc = DataCard(
+    ...     name="Dataset",
+    ...     desc="Example dataset",
+    ...     source="Database",
+    ...     goal="Every dataset should have a goal",
+    ...     labeling_info=info,
+    ...     size=100,
+    ...     metrics={"quality": 100},
+    ...     schema={"label": "value"},
+    ...     custom_field="hello")
+    >>> dr = DataRegistrator('data_log.yml')
+    >>> dr.register(dc)
     """
 
     def __init__(

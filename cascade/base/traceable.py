@@ -27,8 +27,8 @@ from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 class Traceable:
     """
-    Base class for everything that has metadata in cascade.
-    Handles the logic of getting and updating internal meta prefix.
+    Base class for everything that has metadata in Cascade
+    Handles the logic of getting and updating internal meta prefix
     """
 
     def __init__(
@@ -126,6 +126,10 @@ class Traceable:
 
 
 class TraceableOnDisk(Traceable):
+    """
+    Common interface for Traceables that have
+    their meta-data written on disk
+    """
     def __init__(
         self,
         root: str,
