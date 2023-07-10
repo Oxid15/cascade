@@ -139,7 +139,6 @@ class ModelRepo(Repo, TraceableOnDisk):
         overwrite: bool = False,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
         model_cls: Union[Type, Dict[str, Type]] = Model,
-        log_history: bool = True,
         **kwargs: Any,
     ) -> None:
         """
@@ -164,15 +163,11 @@ class ModelRepo(Repo, TraceableOnDisk):
         """
         super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls
-        self._log_history = log_history
 
         if overwrite and os.path.exists(self._root):
             shutil.rmtree(self._root)
 
         os.makedirs(self._root, exist_ok=True)
-
-        if self._log_history:
-            self._hl = HistoryLogger(os.path.join(self._root, "history.yml"))
         self._load_lines()
 
         if lines is not None:
@@ -256,18 +251,6 @@ class ModelRepo(Repo, TraceableOnDisk):
 
     def __repr__(self) -> str:
         return f"ModelRepo in {self._root} of {len(self)} lines"
-
-    def _update_meta(self) -> None:
-        super()._update_meta()
-        meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
-        if self._log_history and len(meta_path) == 1:
-            meta = MetaHandler.read(meta_path[0])[0]
-            self_meta = JSONEncoder().obj_to_dict(self.get_meta()[0])
-            diff = DeepDiff(
-                meta, self_meta, exclude_paths=["root['name']", "root['updated_at']"]
-            )
-            if len(diff) != 0:
-                self._hl.log(self_meta)
 
     def reload(self) -> None:
         """
