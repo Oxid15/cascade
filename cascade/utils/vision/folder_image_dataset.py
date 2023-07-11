@@ -53,6 +53,8 @@ class PILBackend(ImageBackend):
     def read(self, path: str) -> "PIL.Image":
         try:
             img = self._image.open(path)
+            if img.mode != "RGB":
+                img = img.convert('RGB')
         except Exception as e:
             raise IOError(f"PIL failed to read {path}") from e
         return img
@@ -67,7 +69,15 @@ class FolderImageDataset(FolderDataset):
     Supports opencv or pillow backends
     """
 
-    def __init__(self, root: str, backend: Literal["cv2", "PIL"], *args: Any, **kwargs: Any) -> None:
+    def __init__(self, root: str, backend: Literal["cv2", "PIL"] = "PIL", *args: Any, **kwargs: Any) -> None:
+        """
+        Parameters
+        ----------
+        root : str
+            The folder with images. Should contain image files only
+        backend : Literal["cv2", "PIL"], optional
+            What library to use to load images, by default "PIL"
+        """
         super().__init__(root, *args, **kwargs)
 
         if backend == "cv2":
