@@ -69,7 +69,15 @@ class FolderImageDataset(FolderDataset):
     Supports opencv or pillow backends
     """
 
-    def __init__(self, root: str, backend: Literal["cv2", "PIL"], *args: Any, **kwargs: Any) -> None:
+    def __init__(self, root: str, backend: Literal["cv2", "PIL"] = "PIL", *args: Any, **kwargs: Any) -> None:
+        """
+        Parameters
+        ----------
+        root : str
+            The folder with images. Should contain image files only
+        backend : Literal["cv2", "PIL"], optional
+            What library to use to load images, by default "PIL"
+        """
         super().__init__(root, *args, **kwargs)
 
         if backend == "cv2":
