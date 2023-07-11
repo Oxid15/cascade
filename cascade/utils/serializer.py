@@ -14,21 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import cv2
-from ..data import FolderDataset
+import pickle
+from typing import Any
 
 
-class FolderImageDataset(FolderDataset):
-    """
-    Simple dataset for image folder with lazy loading.
-    Accepts the path to the folder with images. In each __getitem__ call
-    invokes opencv imread on image and returns it if it exists.
-    """
+class Serializer:
+    @staticmethod
+    def deserialize(obj: str):
+        return pickle.loads(bytes.fromhex(obj))
 
-    def __getitem__(self, index: int) -> cv2.Mat:
-        name = self._names[index]
-        img = cv2.imread(f'{name}')
-        if img is not None:
-            return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        else:
-            raise RuntimeError(f'cv2 cannot read {name}')
+    @staticmethod
+    def serialize(obj: Any) -> str:
+        return pickle.dumps(obj).hex()

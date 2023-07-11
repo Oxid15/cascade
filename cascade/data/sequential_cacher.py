@@ -16,8 +16,9 @@ limitations under the License.
 
 from typing import Any
 
-from . import SizedDataset, Modifier, T
 from numpy import ceil
+
+from . import Modifier, SizedDataset, T
 
 
 class SequentialCacher(Modifier):
@@ -32,11 +33,10 @@ class SequentialCacher(Modifier):
     --------
     BruteforceCacher
     """
+
     def __init__(
-            self,
-            dataset: SizedDataset[T],
-            batch_size: int = 2,
-            *args: Any, **kwargs: Any) -> None:
+        self, dataset: SizedDataset[T], batch_size: int = 2, *args: Any, **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -46,7 +46,7 @@ class SequentialCacher(Modifier):
             A number of items to load and keep in each moment
         """
 
-        assert hasattr(dataset, '__len__'), 'Dataset should have __len__'
+        assert hasattr(dataset, "__len__"), "Dataset should have __len__"
         super().__init__(dataset, *args, **kwargs)
         self._bs = batch_size
         self._num_batches = int(ceil(len(self._dataset) / self._bs))

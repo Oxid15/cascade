@@ -16,8 +16,9 @@ limitations under the License.
 
 import os
 import sys
-import pytest
+
 import numpy as np
+import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -27,13 +28,13 @@ from cascade import meta as cme
 
 
 def test_simple_hash():
-    train_ds = cdd.Wrapper(['a', 'b', 'c'])
-    test_ds = cdd.Wrapper(['d', 'e', 'f'])
+    train_ds = cdd.Wrapper(["a", "b", "c"])
+    test_ds = cdd.Wrapper(["d", "e", "f"])
 
     cme.DataleakValidator(train_ds, test_ds)
 
-    train_ds = cdd.Wrapper(['a', 'b', 'c'])
-    test_ds = cdd.Wrapper(['c', 'd', 'e'])
+    train_ds = cdd.Wrapper(["a", "b", "c"])
+    test_ds = cdd.Wrapper(["c", "d", "e"])
 
     with pytest.raises(cme.DataValidationException):
         cme.DataleakValidator(train_ds, test_ds)

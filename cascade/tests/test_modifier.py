@@ -20,15 +20,31 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Modifier, Wrapper
+from cascade.data import Modifier, Wrapper, Iterator, ItModifier
 
 
-def test_iter():
+def test_iter_of_modifier():
     d = Wrapper([1, 2, 3, 4, 5])
     m = Modifier(d)
 
     result1 = []
+    for item in d:
+        result1.append(item)
+
+    result2 = []
     for item in m:
+        result2.append(item)
+
+    assert [1, 2, 3, 4, 5] == result1
+    assert [1, 2, 3, 4, 5] == result2
+
+
+def test_iter_of_itmodifier():
+    d = Iterator([1, 2, 3, 4, 5])
+    m = ItModifier(d)
+
+    result1 = []
+    for item in d:
         result1.append(item)
 
     result2 = []

@@ -15,50 +15,61 @@ limitations under the License.
 """
 
 import os
-import sys
 import shutil
+import sys
+
 import pytest
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 MODULE_PATH = os.path.dirname(
-    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 
 import cascade as csd
-from cascade.utils.sk_model import SkModel
+from cascade.utils.sklearn import SkModel
 
 
-@pytest.mark.parametrize(
-    'ext', [
-        '.json',
-        '.yml'
-    ]
-)
+@pytest.mark.parametrize("ext", [".json", ".yml"])
 def test_hash_check(tmp_path, ext):
     tmp_path = str(tmp_path)
     repo = csd.models.ModelRepo(tmp_path, overwrite=True, meta_fmt=ext)
 
-    tree = SkModel(blocks=[
-        DecisionTreeClassifier()
-    ])
+    tree = SkModel(blocks=[DecisionTreeClassifier()])
 
-    forest = SkModel(blocks=[
-        RandomForestClassifier()
-    ])
+    forest = SkModel(blocks=[RandomForestClassifier()])
 
-    line = repo.add_line('tree', SkModel)
+    line = repo.add_line("tree", SkModel)
     line.save(tree)
     line.save(forest)
 
     # This should pass
-    tree.load(os.path.join(tmp_path, 'tree', '00000', 'model'))
+    tree.load(os.path.join(tmp_path, "tree", "00000", "model"))
 
     # This should fail
     shutil.move(
-        os.path.join(tmp_path, 'tree', '00001', 'model.pkl'),
-        os.path.join(tmp_path, 'tree', '00000', 'model.pkl'))
+        os.path.join(tmp_path, "tree", "00001", "model.pkl"),
+        os.path.join(tmp_path, "tree", "00000", "model.pkl"),
+    )
 
     with pytest.raises(RuntimeError):
-        tree.load(os.path.join(tmp_path, 'tree', '00000', 'model'))
+        tree.load(os.path.join(tmp_path, "tree", "00000", "model"))
+
+
+@pytest.mark.parametrize("postfix", ["", "model", "model.pkl"])
+def test_save_load(tmp_path, postfix):
+    tmp_path = str(tmp_path)
+    if postfix:
+        tmp_path = os.path.join(tmp_path, postfix)
+
+    model = SkModel(blocks=[RandomForestClassifier(n_estimators=2)], custom_param=42)
+    model.save(tmp_path)
+
+    assert model._pipeline
+
+    model = SkModel.load(tmp_path)
+
+    assert model.params.get("custom_param") == 42
+    assert model._pipeline[0].n_estimators == 2

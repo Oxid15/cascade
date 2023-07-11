@@ -14,28 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
+import datetime
 import os
 import sys
-import datetime
-import pendulum
-from dateutil import tz
+
 import numpy as np
+import pendulum
 import pytest
+from dateutil import tz
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, Wrapper, Iterator, ApplyModifier, \
-    BruteforceCacher, Composer, Concatenator, CyclicSampler, \
-    RandomSampler, RangeSampler, SequentialCacher
-from cascade.models import Model, ModelLine, ModelRepo, BasicModel
+from cascade.data import (
+    ApplyModifier,
+    BruteforceCacher,
+    Composer,
+    Concatenator,
+    CyclicSampler,
+    Dataset,
+    Iterator,
+    RandomSampler,
+    RangeSampler,
+    SequentialCacher,
+    Wrapper,
+)
+from cascade.models import BasicModel, Model, ModelLine, ModelRepo
 
 
 class DummyModel(Model):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.model = b'model'
+        self.model = b"model"
 
     def fit(self, *args, **kwargs):
         pass
@@ -44,19 +54,18 @@ class DummyModel(Model):
         pass
 
     def evaluate(self, *args, **kwargs):
-        self.metrics.update({'acc': np.random.random()})
+        self.metrics.update({"acc": np.random.random()})
 
-    def load(self, path):
-        if os.path.splitext(path)[-1] != '.bin':
-            path += '.bin'
-        with open(path, 'rb') as f:
-            self.model = str(f.read())
+    @classmethod
+    def load(cls, path):
+        with open(path, "rb") as f:
+            model = DummyModel()
+            model.model = str(f.read())
+            return model
 
     def save(self, path):
-        if os.path.splitext(path)[-1] != '.bin':
-            path += '.bin'
-        with open(path, 'wb') as f:
-            f.write(b'model')
+        with open(path, "wb") as f:
+            f.write(b"model")
 
 
 class EmptyModel(DummyModel):
@@ -68,8 +77,9 @@ class OnesModel(BasicModel):
     def predict(self, x, *args, **kwargs):
         return np.array([1 for _ in range(len(x))])
 
-    def load(self, filepath) -> None:
-        pass
+    @classmethod
+    def load(cls, filepath) -> "OnesModel":
+        return OnesModel()
 
     def save(self, filepath) -> None:
         pass
@@ -93,44 +103,40 @@ def f(x: int) -> int:
         CyclicSampler(Wrapper([0]), 1),
         RandomSampler(Wrapper([1, 2, 3]), 2),
         RangeSampler(Wrapper([0, 1, 2, 3]), 0, 3, 1),
-        SequentialCacher(Wrapper([0, 1, 2, 3]))
+        SequentialCacher(Wrapper([0, 1, 2, 3])),
     ]
 )
 def dataset(request) -> Dataset:
     return request.param
 
 
-@pytest.fixture(params=[
-    [1, 2, 3, 4, 5],
-    [0],
-    [0, 0, 0, 0],
-    [-i for i in range(0, 100)]
-])
+@pytest.fixture(
+    params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(0, 100)]]
+)
 def number_dataset(request):
     return Wrapper(request.param)
 
 
-@pytest.fixture(params=[
-    [1, 2, 3, 4, 5],
-    [0],
-    [0, 0, 0, 0],
-    [-i for i in range(100, 0)]
-])
+@pytest.fixture(
+    params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(100, 0)]]
+)
 def number_iterator(request):
     return Iterator(request.param)
 
 
-@pytest.fixture(params=[
-    {'a': 0},
-    {'b': 1},
-    {'a': 0, 'b': 'alala'},
-    {'c': np.array([1, 2]), 'd': {'a': 0}},
-    {'e': datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz('Europe / Moscow'))},
-    {'f': pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, 'Europe/Moscow')},
-    {'g': {}},
-    {'h': []},
-    {'i': None}
-])
+@pytest.fixture(
+    params=[
+        {"a": 0},
+        {"b": 1},
+        {"a": 0, "b": "alala"},
+        {"c": np.array([1, 2]), "d": {"a": 0}},
+        {"e": datetime.datetime(2022, 7, 8, 16, 4, 3, 5, tz.gettz("Europe / Moscow"))},
+        {"f": pendulum.datetime(2022, 7, 8, 16, 4, 3, 5, "Europe/Moscow")},
+        {"g": {}},
+        {"h": []},
+        {"i": None},
+    ]
+)
 def dummy_model(request):
     return DummyModel(**request.param)
 
@@ -140,17 +146,15 @@ def empty_model():
     return EmptyModel()
 
 
-@pytest.fixture(params=[
-    {
-        'model_cls': DummyModel,
-        'meta_fmt': '.json'
-    },
-    {
-        'model_cls': DummyModel,
-        'meta_fmt': '.yml'
-    }
-])
-def model_line(request, tmp_path):
+@pytest.fixture(
+    params=[
+        {"model_cls": DummyModel, "meta_fmt": ".json"},
+        {"model_cls": DummyModel, "meta_fmt": ".yml"},
+    ]
+)
+def model_line(request, tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("line-", numbered=True)
+    tmp_path = os.path.join(tmp_path, "line")
     line = ModelLine(str(tmp_path), **request.param)
     return line
 
@@ -161,10 +165,19 @@ def ones_model():
 
 
 @pytest.fixture
-def model_repo(tmp_path):
-    repo = ModelRepo(str(tmp_path), lines=[
-        dict(
-            name=str(num),
-            model_cls=DummyModel) for num in range(10)
-    ])
+def model_repo(tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("repo-", numbered=True)
+    tmp_path = os.path.join(tmp_path, "repo")
+    repo = ModelRepo(
+        str(tmp_path),
+        lines=[dict(name=str(num), model_cls=DummyModel) for num in range(10)],
+    )
     return repo
+
+
+@pytest.fixture(params=[{"repo_or_line": True}, {"repo_or_line": False}])
+def repo_or_line(request, model_repo, model_line):
+    if request.param["repo_or_line"]:
+        return model_repo
+    else:
+        return model_line

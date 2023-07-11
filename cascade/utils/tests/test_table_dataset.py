@@ -16,11 +16,13 @@ limitations under the License.
 
 import os
 import sys
+
 import pandas as pd
 import pytest
 
 MODULE_PATH = os.path.dirname(
-    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.utils.tables import TableDataset
@@ -34,4 +36,4 @@ def test_create(tmp_path):
     assert len(ds) == 0
 
     with pytest.raises(TypeError):
-        ds = TableDataset(t='Hello')
+        ds = TableDataset(t="Hello")

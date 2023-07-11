@@ -15,11 +15,9 @@ limitations under the License.
 """
 
 import json
-from typing import Union, List, Any
-import numpy as np
-from ..models import BasicModel
+from typing import Any, List
 
-Number = Union[int, float, complex, np.number]
+from ...models import BasicModel
 
 
 class ConstantBaseline(BasicModel):
@@ -28,29 +26,28 @@ class ConstantBaseline(BasicModel):
     any classification task. It returns only one class
     (for example it can be majority class)
     """
-    def __init__(self, constant: Union[List[Any], Number, None] = None, **kwargs: Any) -> None:
+
+    def __init__(self, constant: Any = None, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._constant = constant
 
     def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
         pass
 
-    # Should be able to:
-    # give constant of desired shape
-    # give any number of given constant vectors as output
-    def predict(self, x: Any, *args: Any, **kwargs: Any) -> np.ndarray:
+    def predict(self, x: Any, *args: Any, **kwargs: Any) -> List[Any]:
         """
         Returns the array of the same shape as input full of
         given constant.
         """
-        # TODO: make more universal when work with input shape
-        return np.asarray([self._constant for _ in range(len(x))])
+        return [self._constant for _ in range(len(x))]
 
     def save(self, path: str) -> None:
-        with open(path, 'w') as f:
-            json.dump({'constant': self._constant}, f)
+        with open(path, "w") as f:
+            json.dump({"constant": self._constant}, f)
 
-    def load(self, path: str) -> None:
-        with open(path, 'r') as f:
+    @classmethod
+    def load(cls, path: str) -> "ConstantBaseline":
+        with open(path, "r") as f:
             obj = json.load(f)
-            self._constant = obj['constant']
+            model = ConstantBaseline(obj["constant"])
+            return model

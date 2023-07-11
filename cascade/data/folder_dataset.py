@@ -15,9 +15,9 @@ limitations under the License.
 """
 
 import os
-
-from typing import Any
 from hashlib import md5
+from typing import Any, List
+
 from ..base import PipeMeta, raise_not_implemented
 from .dataset import SizedDataset, T
 
@@ -31,6 +31,7 @@ class FolderDataset(SizedDataset):
     --------
     cascade.utils.FolderImageDataset
     """
+
     def __init__(self, root: str, *args: Any, **kwargs: Any) -> None:
         """
         Parameters
@@ -42,24 +43,34 @@ class FolderDataset(SizedDataset):
         self._root = os.path.abspath(root)
         if not os.path.exists(self._root):
             raise FileNotFoundError(self._root)
-        self._names = [os.path.join(self._root, name)
-                       for name in sorted(os.listdir(self._root)) if not os.path.isdir(name)]
 
-    def __getitem__(self, item: int) -> T:
-        raise_not_implemented('cascade.data.FolderDataset', '__getitem__')
+        self._names = sorted(
+            [
+                os.path.join(self._root, name)
+                for name in sorted(os.listdir(self._root))
+                if not os.path.isdir(name)
+            ]
+        )
+
+    def __getitem__(self, item: Any) -> T:
+        raise_not_implemented("cascade.data.FolderDataset", "__getitem__")
+
+    def get_names(self) -> List[str]:
+        """
+        Returns a list of full paths to the files
+        """
+        return self._names
 
     def get_meta(self) -> PipeMeta:
+        """
+        Returns meta containing
+        """
         meta = super().get_meta()
-        meta[0].update({
-            'name': repr(self),
-            'len': len(self),
-            'paths': self._names,
-            'md5sums': []
-        })
+        meta[0].update({"name": repr(self), "paths": self._names, "md5sums": []})
 
         for name in self._names:
-            with open(os.path.join(self._root, name), 'rb') as f:
-                meta[0]['md5sums'].append(md5(f.read()).hexdigest())
+            with open(os.path.join(self._root, name), "rb") as f:
+                meta[0]["md5sums"].append(md5(f.read()).hexdigest())
         return meta
 
     def __len__(self) -> int:
