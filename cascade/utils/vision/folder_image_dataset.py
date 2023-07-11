@@ -33,7 +33,7 @@ class CV2Backend(ImageBackend):
             raise ImportError("cv2 backend requires opencv-python package") from e
         self._cv2 = cv2
 
-    def read(self, path: str) -> "np.ndarray":
+    def read(self, path: str):
         img = self._cv2.imread(path)
         if img is not None:
             return self._cv2.cvtColor(img, self._cv2.COLOR_BGR2RGB)
@@ -50,7 +50,7 @@ class PILBackend(ImageBackend):
             raise ImportError("PIL backend requires opencv-python package") from e
         self._image = Image
 
-    def read(self, path: str) -> "PIL.Image":
+    def read(self, path: str):
         try:
             img = self._image.open(path)
             if img.mode != "RGB":
@@ -85,7 +85,7 @@ class FolderImageDataset(FolderDataset):
         elif backend == "PIL":
             self._backend = PILBackend()
 
-    def __getitem__(self, index: int) -> Union["np.ndarray", "PIL.Image"]:
+    def __getitem__(self, index: int):
         name = self._names[index]
         img = self._backend.read(name)
         return img
