@@ -53,6 +53,8 @@ class PILBackend(ImageBackend):
     def read(self, path: str) -> "PIL.Image":
         try:
             img = self._image.open(path)
+            if img.mode != "RGB":
+                img = img.convert('RGB')
         except Exception as e:
             raise IOError(f"PIL failed to read {path}") from e
         return img
