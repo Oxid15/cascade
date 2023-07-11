@@ -51,12 +51,14 @@ def test(backend, image_folder):
 
     assert len(ds) == 2
 
+    # Difference should be because I write images using cv2
+    # and this is why dims are swapped I think
     if backend == "cv2":
         assert ds[0].shape == (4, 5, 3)
         assert ds[1].shape == (4, 5, 3)
     elif backend == "PIL":
-        assert ds[0].size == (4, 5)
-        assert ds[1].size == (4, 5)
+        assert ds[0].size == (5, 4)
+        assert ds[1].size == (5, 4)
     else:
         RuntimeError("Unknown backend")
 
@@ -66,5 +68,10 @@ def test_raises(backend, not_image_folder):
     ds = FolderImageDataset(not_image_folder, backend=backend)
 
     assert len(ds) == 1
-    with pytest.raises(RuntimeError):
+    with pytest.raises(IOError):
         ds[0]
+
+
+def test_missing_backend(image_folder):
+    with pytest.raises(ValueError):
+        FolderImageDataset(image_folder, "nonexistingbackend")

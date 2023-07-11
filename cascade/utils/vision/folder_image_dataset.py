@@ -84,6 +84,8 @@ class FolderImageDataset(FolderDataset):
             self._backend = CV2Backend()
         elif backend == "PIL":
             self._backend = PILBackend()
+        else:
+            raise ValueError(f"Only cv2 or PIL backends are supported, got: {backend}")
 
     def __getitem__(self, index: int):
         name = self._names[index]
