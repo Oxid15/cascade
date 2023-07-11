@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="cascade-ml",
-    version="0.12.0-alpha",
+    version="0.12.0",
     author="Ilia Moiseev",
     author_email="ilia.moiseev.5@yandex.ru",
     license="Apache License 2.0",
