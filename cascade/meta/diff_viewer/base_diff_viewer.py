@@ -126,7 +126,7 @@ class BaseDiffViewer(Server):
         app.layout = self._layout
         app.run_server(use_reloader=False, **kwargs)
 
-        mev = MetaViewer(path, filt={"type": "model"})
+        mev = MetaViewer(self._path, filt={"type": "model"})
         objs = [meta for meta in mev]
         objs = {f"Model {i:0>5d}": meta for i, meta in enumerate(objs)}
         return objs
