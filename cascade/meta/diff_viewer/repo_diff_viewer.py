@@ -81,7 +81,7 @@ class RepoDiffViewer(BaseDiffViewer):
 
         mev = MetaViewer(path, filt={"type": "model"})
         objs = [meta for meta in mev]
-        objs = {meta[0]["name"]: meta for meta in objs}
+        objs = {meta[0]["path"]: meta for meta in objs}
         return objs
 
     def _layout(self):

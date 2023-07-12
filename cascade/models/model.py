@@ -20,6 +20,7 @@ from typing import Any, Union
 import pendulum
 
 from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base.utils import generate_slug
 
 
 class Model(Traceable):
@@ -39,6 +40,7 @@ class Model(Traceable):
         it was trained on can be put either in params or meta_prefix.
         """
         # Model accepts meta_prefix explicitly to not to record it in 'params'
+        self.slug = generate_slug("model")
         self.metrics = {}
         self.params = kwargs
         self.created_at = pendulum.now(tz="UTC")
@@ -82,23 +84,14 @@ class Model(Traceable):
         # they may not have these default fields
 
         meta = super().get_meta()
+        meta[0]["type"] = "model"
 
-        # TODO: can refactor this
         all_default_exist = True
-        if hasattr(self, "created_at"):
-            meta[0]["created_at"] = self.created_at
-        else:
-            all_default_exist = False
-
-        if hasattr(self, "metrics"):
-            meta[0]["metrics"] = self.metrics
-        else:
-            all_default_exist = False
-
-        if hasattr(self, "params"):
-            meta[0]["params"] = self.params
-        else:
-            all_default_exist = False
+        for attr in ("slug", "created_at", "metrics", "params"):
+            if hasattr(self, attr):
+                meta[0][attr] = self.__getattribute__(attr)
+            else:
+                all_default_exist = False
 
         if not all_default_exist:
             warnings.warn(
@@ -106,7 +99,6 @@ class Model(Traceable):
                 "maybe you haven't call super().__init__ in subclass?"
             )
 
-        meta[0]["type"] = "model"
         return meta
 
 
