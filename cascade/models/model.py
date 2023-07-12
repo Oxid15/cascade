@@ -39,11 +39,11 @@ class Model(Traceable):
         log them in meta. Everything that is worth to document about model and data
         it was trained on can be put either in params or meta_prefix.
         """
-        # Model accepts meta_prefix explicitly to not to record it in 'params'
-        self.slug = generate_slug("model")
+        self.slug = generate_slug()
         self.metrics = {}
         self.params = kwargs
         self.created_at = pendulum.now(tz="UTC")
+        # Model accepts meta_prefix explicitly to not to record it in 'params'
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
 
     def fit(self, *args: Any, **kwargs: Any) -> None:
