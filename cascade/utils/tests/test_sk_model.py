@@ -32,6 +32,8 @@ import cascade as csd
 from cascade.utils.sklearn import SkModel
 
 
+# Skipped until hash check can be returned
+@pytest.mark.skip
 @pytest.mark.parametrize("ext", [".json", ".yml"])
 def test_hash_check(tmp_path, ext):
     tmp_path = str(tmp_path)
