@@ -48,5 +48,11 @@ def status():
         click.echo(f"There are {len(meta_paths)} meta objects here")
 
 
+@cli.command()
+@click.option("--desc", prompt="Description: ")
+def desc(desc: str):
+    click.echo(f"{desc}")
+
+
 if __name__ == "__main__":
     cli()
