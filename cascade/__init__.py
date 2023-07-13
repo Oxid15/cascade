@@ -19,9 +19,34 @@ __version__ = "0.13.0-alpha"
 __author__ = "Ilia Moiseev"
 __author_email__ = "ilia.moiseev.5@yandex.ru"
 
-from . import data, meta, models
+import os
+import glob
+import click
+from .base import MetaHandler, supported_meta_formats
 
-# cascade does not have
-# from . import utils
-# because it will bring additional dependencies
-# that may not be needed by the user
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+def status():
+    current_dir_full = os.getcwd()
+    current_dir = os.path.split(current_dir_full)[-1]
+    click.echo(f"Cascade {__version__} in ./{current_dir}")
+    meta_paths = glob.glob(os.path.join(current_dir_full, "meta.*"))
+    meta_paths = [path for path in meta_paths
+                           if os.path.splitext(path)[-1] in supported_meta_formats]
+
+    if len(meta_paths) == 0:
+        click.echo("There is no cascade objects here")
+    elif len(meta_paths) == 1:
+        meta = MetaHandler.read(meta_paths[0])
+        click.echo(f"This is {meta[0]['type']} of len {meta[0]['len']}")
+    else:
+        click.echo(f"There are {len(meta_paths)} meta objects here")
+
+
+if __name__ == "__main__":
+    cli()
