@@ -66,11 +66,11 @@ class FolderDataset(SizedDataset):
         Returns meta containing
         """
         meta = super().get_meta()
-        meta[0].update({"name": repr(self), "paths": self._names, "md5sums": []})
-
-        for name in self._names:
-            with open(os.path.join(self._root, name), "rb") as f:
-                meta[0]["md5sums"].append(md5(f.read()).hexdigest())
+        meta[0].update(
+            {
+                "root": self._root
+            }
+        )
         return meta
 
     def __len__(self) -> int:

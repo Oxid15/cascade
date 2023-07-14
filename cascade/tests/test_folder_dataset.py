@@ -37,10 +37,6 @@ def test(tmp_path):
     assert len(ds) == 2
     assert "name" in meta
     assert "len" in meta
-    assert "paths" in meta
-    assert "md5sums" in meta
-    assert len(meta["paths"]) == 2
-    assert len(meta["md5sums"]) == 2
 
 
 def test_names(tmp_path):
