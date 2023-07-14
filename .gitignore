@@ -15,3 +15,6 @@ build/
 
 # Sphinx
 docs/build
+
+# VSCode
+.vscode/

@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Any
+from typing import Any, List
 
 import numpy as np
-from .dataset import SizedDataset, T
+
 from ..base import PipeMeta
+from .dataset import SizedDataset, T
 
 
 class Concatenator(SizedDataset):
@@ -33,7 +34,10 @@ class Concatenator(SizedDataset):
     >>> ds = Concatenator((ds_1, ds_2))
     >>> assert [item for item in ds] == [0, 1, 2, 2, 1, 0]
     """
-    def __init__(self, datasets: List[SizedDataset[T]], *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, datasets: List[SizedDataset[T]], *args: Any, **kwargs: Any
+    ) -> None:
         """
         Creates concatenated dataset from the list of datasets provided
 
@@ -69,12 +73,12 @@ class Concatenator(SizedDataset):
         ...
         """
         rp = super().__repr__()
-        return f'{rp} of\n' + '\n'.join(repr(ds) for ds in self._datasets)
+        return f"{rp} of\n" + "\n".join(repr(ds) for ds in self._datasets)
 
     def get_meta(self) -> PipeMeta:
         """
         Concatenator calls `get_meta()` of all its datasets
         """
         meta = super().get_meta()
-        meta[0]['data'] = [ds.get_meta() for ds in self._datasets]
+        meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
         return meta

@@ -15,14 +15,14 @@ limitations under the License.
 """
 
 import os
-from typing import Union, List, Any
+from typing import Any, List, Union
 
+import pandas as pd
 import pendulum
 from flatten_json import flatten
-import pandas as pd
 
-from . import Server, MetaViewer
-from ..models import Model, ModelRepo
+from ..models import Model, ModelLine, ModelRepo, Repo, SingleLineRepo
+from . import MetaViewer, Server
 
 
 class MetricViewer:
@@ -32,7 +32,10 @@ class MetricViewer:
     As metrics it uses data from `metrics` field in models'
     meta and as parameters it uses `params` field.
     """
-    def __init__(self, repo: ModelRepo, scope: Union[int, str, slice, None] = None) -> None:
+
+    def __init__(
+        self, repo: Union[Repo, ModelLine], scope: Union[int, str, slice, None] = None
+    ) -> None:
         """
         Parameters
         ----------
@@ -41,6 +44,8 @@ class MetricViewer:
         scope: Union[int, str, slice]
             Index or a name of line to view. Can be set using `__getitem__`
         """
+        if isinstance(repo, ModelLine):
+            repo = SingleLineRepo(repo)
         self._repo = repo
         self._scope = scope
         self._metrics = []
@@ -64,9 +69,9 @@ class MetricViewer:
 
         for name in selected_names:
             line = self._repo[name]
-            viewer_root = line.root
+            viewer_root = line.get_root()
 
-            view = MetaViewer(viewer_root, filt={'type': 'model'})
+            view = MetaViewer(viewer_root, filt={"type": "model"})
 
             for i in range(len(line.model_names)):
                 try:
@@ -74,23 +79,19 @@ class MetricViewer:
                 except IndexError:
                     meta = {}
 
-                metric = {
-                    'line': viewer_root,
-                    'num': i
-                }
+                metric = {"line": viewer_root, "num": i}
 
-                if 'created_at' in meta:
-                    metric['created_at'] = \
-                        pendulum.parse(meta['created_at'])
-                    if 'saved_at' in meta:
-                        metric['saved'] = \
-                            pendulum.parse(meta['saved_at']) \
-                            .diff_for_humans(metric['created_at'])
+                if "created_at" in meta:
+                    metric["created_at"] = pendulum.parse(meta["created_at"])
+                    if "saved_at" in meta:
+                        metric["saved"] = pendulum.parse(
+                            meta["saved_at"]
+                        ).diff_for_humans(metric["created_at"])
 
-                if 'metrics' in meta:
-                    metric.update(meta['metrics'])
-                if 'params' in meta:
-                    metric.update(meta['params'])
+                if "metrics" in meta:
+                    metric.update(meta["metrics"])
+                if "params" in meta:
+                    metric.update(meta["params"])
 
                 self._metrics.append(metric)
         self.table = pd.DataFrame(self._metrics)
@@ -106,24 +107,30 @@ class MetricViewer:
         try:
             import plotly
         except ModuleNotFoundError:
-            raise ModuleNotFoundError('''
+            raise ModuleNotFoundError(
+                """
                         Cannot import plotly. It is conditional
                         dependency you can install it
-                        using the instructions from plotly official documentation''')
+                        using the instructions from plotly official documentation"""
+            )
         else:
             from plotly import graph_objects as go
 
-        data = pd.DataFrame(map(flatten, self.table.to_dict('records')))
-        fig = go.Figure(data=[
-            go.Table(
-                header=dict(values=list(data.columns),
-                            fill_color='#f4c9c7',
-                            align='left'),
-                cells=dict(values=[data[col] for col in data.columns],
-                           fill_color='#bcced4',
-                           align='left')
-            )
-        ])
+        data = pd.DataFrame(map(flatten, self.table.to_dict("records")))
+        fig = go.Figure(
+            data=[
+                go.Table(
+                    header=dict(
+                        values=list(data.columns), fill_color="#f4c9c7", align="left"
+                    ),
+                    cells=dict(
+                        values=[data[col] for col in data.columns],
+                        fill_color="#bcced4",
+                        align="left",
+                    ),
+                )
+            ]
+        )
         if show:
             fig.show()
         return fig
@@ -145,25 +152,26 @@ class MetricViewer:
         TypeError if metric objects cannot be sorted. If only one model in repo, then
         returns it without error since no sorting involved.
         """
-        assert metric in self.table, f'{metric} is not in {self.table.columns}'
+        assert metric in self.table, f"{metric} is not in {self.table.columns}"
         t = self.table.loc[self.table[metric].notna()]
 
         try:
             t = t.sort_values(metric, ascending=maximize)
         except TypeError as e:
-            raise TypeError(f'Metric {metric} objects cannot be sorted') from e
+            raise TypeError(f"Metric {metric} objects cannot be sorted") from e
 
         best_row = t.iloc[-1]
-        name = os.path.split(best_row['line'])[-1]
-        num = best_row['num']
+        name = os.path.split(best_row["line"])[-1]
+        num = best_row["num"]
         return self._repo[name][num]
 
     def serve(
-            self,
-            page_size: int = 50,
-            include: Union[List[str], None] = None,
-            exclude: Union[List[str], None] = None,
-            **kwargs: Any) -> None:
+        self,
+        page_size: int = 50,
+        include: Union[List[str], None] = None,
+        exclude: Union[List[str], None] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Runs dash-based server with interactive table of metrics and parameters
 
@@ -179,15 +187,21 @@ class MetricViewer:
         **kwargs:
             Arguments of dash app. Can be ip or port for example
         """
-        server = MetricServer(self, page_size=page_size, include=include, exclude=exclude)
+        server = MetricServer(
+            self, page_size=page_size, include=include, exclude=exclude
+        )
         server.serve(**kwargs)
 
 
 class MetricServer(Server):
-    def __init__(self, mv: MetricViewer,
-                 page_size: int,
-                 include: Union[List[str], None],
-                 exclude: Union[List[str], None], **kwargs: Any) -> None:
+    def __init__(
+        self,
+        mv: MetricViewer,
+        page_size: int,
+        include: Union[List[str], None],
+        exclude: Union[List[str], None],
+        **kwargs: Any,
+    ) -> None:
         self._mv = mv
         self._page_size = page_size
         self._include = include
@@ -195,32 +209,31 @@ class MetricServer(Server):
 
     def _update_graph_callback(self, _app) -> None:
         try:
-            from dash import Output, Input
+            from dash import Input, Output
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
             from plotly import graph_objects as go
 
         @_app.callback(
-            Output(component_id='dependence-figure', component_property='figure'),
-            Input(component_id='dropdown-x', component_property='value'),
-            Input(component_id='dropdown-y', component_property='value'))
+            Output(component_id="dependence-figure", component_property="figure"),
+            Input(component_id="dropdown-x", component_property="value"),
+            Input(component_id="dropdown-y", component_property="value"),
+        )
         def _update_graph(x, y):
             fig = go.Figure()
             if x is not None and y is not None:
                 fig.add_trace(
                     go.Scatter(
-                        x=self._df_flatten[x],
-                        y=self._df_flatten[y],
-                        mode='markers'
+                        x=self._df_flatten[x], y=self._df_flatten[y], mode="markers"
                     )
                 )
-                fig.update_layout(title=f'{x} to {y} relation')
+                fig.update_layout(title=f"{x} to {y} relation")
             return fig
 
     def _layout(self):
         try:
-            from dash import html, dcc, dash_table
+            from dash import dash_table, dcc, html
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
@@ -234,46 +247,45 @@ class MetricServer(Server):
             df = df.drop(self._exclude, axis=1)
 
         if self._include is not None:
-            df = df[['line', 'num'] + self._include]
+            df = df[["line", "num"] + self._include]
 
-        self._df_flatten = pd.DataFrame(map(flatten, df.to_dict('records')))
+        self._df_flatten = pd.DataFrame(map(flatten, df.to_dict("records")))
         dep_fig = go.Figure()
 
-        return html.Div([
-            html.H1(
-                children=f'MetricViewer in {self._mv._repo}',
-                style={
-                    'textAlign': 'center',
-                    'color': '#084c61',
-                    'font-family': 'Montserrat'
-                }
-            ),
-            dcc.Dropdown(
-                list(self._df_flatten.columns),
-                id='dropdown-x',
-                multi=False),
-            dcc.Dropdown(
-                list(self._df_flatten.columns),
-                id='dropdown-y',
-                multi=False),
-            dcc.Graph(
-                id='dependence-figure',
-                figure=dep_fig),
-            dash_table.DataTable(
-                columns=[
-                    {'name': col, 'id': col, 'selectable': True} for col in self._df_flatten.columns
-                ],
-                data=self._df_flatten.to_dict('records'),
-                filter_action="native",
-                sort_action="native",
-                sort_mode="multi",
-                selected_columns=[],
-                selected_rows=[],
-                page_action="native",
-                page_current=0,
-                page_size=self._page_size,
-            )
-        ])
+        return html.Div(
+            [
+                html.H1(
+                    children=f"MetricViewer in {self._mv._repo}",
+                    style={
+                        "textAlign": "center",
+                        "color": "#084c61",
+                        "font-family": "Montserrat",
+                    },
+                ),
+                dcc.Dropdown(
+                    list(self._df_flatten.columns), id="dropdown-x", multi=False
+                ),
+                dcc.Dropdown(
+                    list(self._df_flatten.columns), id="dropdown-y", multi=False
+                ),
+                dcc.Graph(id="dependence-figure", figure=dep_fig),
+                dash_table.DataTable(
+                    columns=[
+                        {"name": col, "id": col, "selectable": True}
+                        for col in self._df_flatten.columns
+                    ],
+                    data=self._df_flatten.to_dict("records"),
+                    filter_action="native",
+                    sort_action="native",
+                    sort_mode="multi",
+                    selected_columns=[],
+                    selected_rows=[],
+                    page_action="native",
+                    page_current=0,
+                    page_size=self._page_size,
+                ),
+            ]
+        )
 
     def serve(self, **kwargs: Any) -> None:
         # Conditional import

@@ -16,31 +16,32 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Wrapper
-from cascade.data import Concatenator
+from cascade.data import Concatenator, Wrapper
 
 
 def test_meta():
     n1 = Wrapper([0, 1])
     n2 = Wrapper([2, 3, 4, 5])
 
-    c = Concatenator([n1, n2], meta_prefix={'num': 1})
-    assert c.get_meta()[0]['num'] == 1
-    assert len(c.get_meta()[0]['data']) == 2
+    c = Concatenator([n1, n2], meta_prefix={"num": 1})
+    assert c.get_meta()[0]["num"] == 1
+    assert len(c.get_meta()[0]["data"]) == 2
 
 
 @pytest.mark.parametrize(
-    'arrs', [
+    "arrs",
+    [
         (Wrapper([0]), Wrapper([0]), Wrapper([0])),
         (Wrapper([1, 2, 3, 4]), Wrapper([11])),
         (Wrapper([1]),),
-        (Wrapper([1, 2, 3, 4]), Wrapper([]))
-    ]
+        (Wrapper([1, 2, 3, 4]), Wrapper([])),
+    ],
 )
 def test_concatenation(arrs):
     c = Concatenator([*arrs])

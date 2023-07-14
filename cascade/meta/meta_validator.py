@@ -15,14 +15,14 @@ limitations under the License.
 """
 
 import os
-from typing import Union, Literal
-
 from hashlib import md5
+from typing import Literal, Union
+
 from deepdiff import DeepDiff
 
-from . import Validator, DataValidationException
+from ..base import MetaFromFile, MetaHandler, PipeMeta, supported_meta_formats
 from ..data import SizedDataset, T
-from ..base import MetaHandler, supported_meta_formats, PipeMeta, MetaFromFile
+from . import DataValidationException, Validator
 
 
 class MetaValidator(Validator):
@@ -68,9 +68,13 @@ class MetaValidator(Validator):
     --------
     cascade.data.Modifier
     """
-    def __init__(self, dataset: SizedDataset[T],
-                 root: Union[str, None] = None,
-                 meta_fmt: Literal['.json', '.yml', '.yaml'] = '.json') -> None:
+
+    def __init__(
+        self,
+        dataset: SizedDataset[T],
+        root: Union[str, None] = None,
+        meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
+    ) -> None:
         """
         Parameters
         ----------
@@ -87,16 +91,16 @@ class MetaValidator(Validator):
         cascade.meta.DataValidationException
         """
         super().__init__(dataset, lambda x: True)
-        self._mh = MetaHandler()
         if root is None:
-            root = './.cascade'
+            root = "./.cascade"
             os.makedirs(root, exist_ok=True)
         self._root = root
-        assert meta_fmt in supported_meta_formats, \
-            f'Only {supported_meta_formats} are supported formats'
+        assert (
+            meta_fmt in supported_meta_formats
+        ), f"Only {supported_meta_formats} are supported formats"
 
         meta = self._dataset.get_meta()
-        name = md5(str.encode(' '.join([m['name'] for m in meta]), 'utf-8')).hexdigest()
+        name = md5(str.encode(" ".join([m["name"] for m in meta]), "utf-8")).hexdigest()
         name += meta_fmt
         name = os.path.join(self._root, name)
 
@@ -107,11 +111,11 @@ class MetaValidator(Validator):
             self._save(meta, name)
 
     def _save(self, meta: PipeMeta, name: str) -> None:
-        self._mh.write(name, meta)
-        print(f'Saved as {name}!')
+        MetaHandler.write(name, meta)
+        print(f"Saved as {name}!")
 
     def _load(self, name: str) -> MetaFromFile:
-        return self._mh.read(name)
+        return MetaHandler.read(name)
 
     def _check(self, query_meta: PipeMeta) -> None:
         diff = DeepDiff(self.base_meta, query_meta, verbose_level=2)
@@ -119,4 +123,4 @@ class MetaValidator(Validator):
             print(diff.pretty())
             raise DataValidationException(diff)
         else:
-            print('OK!')
+            print("OK!")

@@ -15,15 +15,16 @@ limitations under the License.
 """
 
 import datetime
-import os
 import json
+import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, Iterator, Wrapper, Modifier, Sampler
+from cascade.data import Dataset, Iterator, Modifier, Sampler, Wrapper
 
 
 def test_getitem():
@@ -34,34 +35,34 @@ def test_getitem():
 
 def test_meta():
     now = datetime.datetime.now()
-    ds = Dataset(meta_prefix={'time': now})
+    ds = Dataset(meta_prefix={"time": now})
     meta = ds.get_meta()
 
     assert type(meta) == list
     assert len(meta) == 1
     assert type(meta[0]) == dict
-    assert meta[0]['time'] == now
-    assert 'name' in meta[0]
+    assert meta[0]["time"] == now
+    assert "name" in meta[0]
 
 
 def test_update_meta():
-    ds = Dataset(meta_prefix={'a': 1, 'b': 2})
-    ds.update_meta({'b': 3})
+    ds = Dataset(meta_prefix={"a": 1, "b": 2})
+    ds.update_meta({"b": 3})
     meta = ds.get_meta()
 
-    assert meta[0]['a'] == 1
-    assert meta[0]['b'] == 3
+    assert meta[0]["a"] == 1
+    assert meta[0]["b"] == 3
 
 
 def test_meta_from_file(tmp_path):
-    with open(os.path.join(tmp_path, 'test_meta_from_file.json'), 'w') as f:
-        json.dump({'a': 1}, f)
+    with open(os.path.join(tmp_path, "test_meta_from_file.json"), "w") as f:
+        json.dump({"a": 1}, f)
 
-    ds = Dataset(meta_prefix=os.path.join(tmp_path, 'test_meta_from_file.json'))
+    ds = Dataset(meta_prefix=os.path.join(tmp_path, "test_meta_from_file.json"))
     meta = ds.get_meta()
 
-    assert 'a' in meta[0]
-    assert meta[0]['a'] == 1
+    assert "a" in meta[0]
+    assert meta[0]["a"] == 1
 
 
 def test_iterator():

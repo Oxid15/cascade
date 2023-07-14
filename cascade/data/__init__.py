@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .dataset import Dataset, Modifier, Sampler, T, Wrapper, Iterator, SizedDataset
+from .dataset import Dataset, Iterator, ItModifier, Modifier, Sampler, SizedDataset, T, Wrapper
 
 from .apply_modifier import ApplyModifier
 from .bruteforce_cacher import BruteforceCacher
-from .sequential_cacher import SequentialCacher
 from .composer import Composer
 from .concatenator import Concatenator
 from .cyclic_sampler import CyclicSampler
-from .random_sampler import RandomSampler
-from .pickler import Pickler
 from .folder_dataset import FolderDataset
+from .pickler import Pickler
+from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
-from .version_assigner import VersionAssigner
-
+from .sequential_cacher import SequentialCacher
+from .simple_dataloader import SimpleDataloader
 from .utils import split
+from .version_assigner import VersionAssigner

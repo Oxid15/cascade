@@ -17,27 +17,32 @@ limitations under the License.
 import os
 import sys
 from datetime import datetime
+
+import numpy as np
+import pandas as pd
 import pendulum
 import pytest
-import pandas as pd
-import numpy as np
 
 MODULE_PATH = os.path.dirname(
-    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils.time_series import TimeSeriesDataset, Average, Interpolate, Align
+from cascade.utils.time_series import Align, Average, Interpolate, TimeSeriesDataset
 
 
 @pytest.mark.parametrize(
-    'arr', [
-        [d.to_pydatetime() for d in pd.date_range(
-            datetime(2000, 1, 1),
-            datetime(2000, 1, 10),
-            freq='1d')],
+    "arr",
+    [
+        [
+            d.to_pydatetime()
+            for d in pd.date_range(
+                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1d"
+            )
+        ],
         [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],
-        [datetime(1922, 1, 2)]
-    ]
+        [datetime(1922, 1, 2)],
+    ],
 )
 def test_create_lists(arr):
     # Lists of datetime
@@ -47,17 +52,19 @@ def test_create_lists(arr):
 
 
 @pytest.mark.parametrize(
-    'arr', [
-        np.array([d.to_pydatetime() for d in pd.date_range(
-            datetime(2000, 1, 1),
-            datetime(2000, 1, 10),
-            freq='1d')]),
-        np.array([
-            datetime(1922, 1, 2),
-            datetime(2022, 1, 5),
-            datetime(2045, 1, 10)]),
-        np.array([datetime(1922, 1, 2)])
-    ]
+    "arr",
+    [
+        np.array(
+            [
+                d.to_pydatetime()
+                for d in pd.date_range(
+                    datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1d"
+                )
+            ]
+        ),
+        np.array([datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)]),
+        np.array([datetime(1922, 1, 2)]),
+    ],
 )
 def test_create_arrays(arr):
     # Arrays of datetime
@@ -67,14 +74,17 @@ def test_create_arrays(arr):
 
 
 @pytest.mark.parametrize(
-    'arr', [
-        [d.to_pydatetime() for d in pd.date_range(
-            datetime(2000, 1, 1),
-            datetime(2000, 1, 10),
-            freq='1d')],
+    "arr",
+    [
+        [
+            d.to_pydatetime()
+            for d in pd.date_range(
+                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1d"
+            )
+        ],
         [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],
-        [datetime(1922, 1, 2)]
-    ]
+        [datetime(1922, 1, 2)],
+    ],
 )
 def test_unsorted_time(arr):
     # Unsorted datetime
@@ -102,27 +112,21 @@ def test_no_datetime():
 
 
 def test_length_check():
-    time = np.array([datetime(2000, 1, 1),
-                     datetime(2000, 1, 2),
-                     datetime(2000, 1, 3)])
+    time = np.array([datetime(2000, 1, 1), datetime(2000, 1, 2), datetime(2000, 1, 3)])
     data = np.array([1, 2])
     with pytest.raises(AssertionError):
         ts = TimeSeriesDataset(time=time, data=data)
 
 
 def test_shape_check():
-    time = np.array([datetime(2000, 1, 1),
-                     datetime(2000, 1, 2),
-                     datetime(2000, 1, 3)])
+    time = np.array([datetime(2000, 1, 1), datetime(2000, 1, 2), datetime(2000, 1, 3)])
     data = np.array([[1, 2], [1, 2], [1, 2]])
     with pytest.raises(AssertionError):
         ts = TimeSeriesDataset(time=time, data=data)
 
 
 def test_get_int():
-    time = np.array([datetime(2001, 1, 1),
-                     datetime(2002, 2, 2),
-                     datetime(2003, 3, 3)])
+    time = np.array([datetime(2001, 1, 1), datetime(2002, 2, 2), datetime(2003, 3, 3)])
     data = np.array([1, 2, 3])
     ts = TimeSeriesDataset(time=time, data=data)
 
@@ -133,28 +137,26 @@ def test_get_int():
 
 
 def test_get_datetime():
-    time = np.array([datetime(2001, 1, 1),
-                     datetime(2002, 2, 2),
-                     datetime(2003, 3, 3)])
+    time = np.array([datetime(2001, 1, 1), datetime(2002, 2, 2), datetime(2003, 3, 3)])
     data = np.array([1, 2, 3])
     ts = TimeSeriesDataset(time=time, data=data)
 
     items = []
-    for t in [
-        datetime(2001, 1, 1),
-        datetime(2002, 2, 2),
-        datetime(2003, 3, 3)
-    ]:
+    for t in [datetime(2001, 1, 1), datetime(2002, 2, 2), datetime(2003, 3, 3)]:
         items.append(ts[t])
     assert items == [1, 2, 3]
 
 
 def test_slice_int():
-    time = np.array([datetime(2001, 1, 1),
-                     datetime(2001, 1, 2),
-                     datetime(2001, 1, 3),
-                     datetime(2001, 1, 4),
-                     datetime(2001, 1, 5)])
+    time = np.array(
+        [
+            datetime(2001, 1, 1),
+            datetime(2001, 1, 2),
+            datetime(2001, 1, 3),
+            datetime(2001, 1, 4),
+            datetime(2001, 1, 5),
+        ]
+    )
     data = np.array([1, 2, 3, 4, 5])
     ts = TimeSeriesDataset(time=time, data=data)
 
@@ -178,15 +180,19 @@ def test_slice_int():
 
 
 def test_slice_datetime():
-    time = np.array([datetime(2001, 1, 1),
-                     datetime(2001, 1, 2),
-                     datetime(2001, 1, 3),
-                     datetime(2001, 1, 4),
-                     datetime(2001, 1, 5)])
+    time = np.array(
+        [
+            datetime(2001, 1, 1),
+            datetime(2001, 1, 2),
+            datetime(2001, 1, 3),
+            datetime(2001, 1, 4),
+            datetime(2001, 1, 5),
+        ]
+    )
     data = np.array([1, 2, 3, 4, 5])
     ts = TimeSeriesDataset(time=time, data=data)
 
-    sl = ts[datetime(2001, 1, 2): datetime(2001, 1, 4)]
+    sl = ts[datetime(2001, 1, 2) : datetime(2001, 1, 4)]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])
@@ -198,7 +204,7 @@ def test_slice_datetime():
         items.append(sl[i])
     assert items == [1, 2]
 
-    sl = ts[datetime(2001, 1, 3):]
+    sl = ts[datetime(2001, 1, 3) :]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])
@@ -206,11 +212,15 @@ def test_slice_datetime():
 
 
 def test_where_datetime():
-    time = np.array([datetime(2001, 1, 1),
-                     datetime(2001, 1, 2),
-                     datetime(2001, 1, 3),
-                     datetime(2001, 1, 4),
-                     datetime(2001, 1, 5)])
+    time = np.array(
+        [
+            datetime(2001, 1, 1),
+            datetime(2001, 1, 2),
+            datetime(2001, 1, 3),
+            datetime(2001, 1, 4),
+            datetime(2001, 1, 5),
+        ]
+    )
     data = np.array([1, 2, 3, 4, 5])
     ts = TimeSeriesDataset(time=time, data=data)
 
@@ -222,12 +232,16 @@ def test_where_datetime():
 
 
 def test_avg_offset_aware():
-    time = np.array([pendulum.datetime(2001, 1, 1),
-                     pendulum.datetime(2001, 1, 2),
-                     pendulum.datetime(2001, 1, 3),
-                     pendulum.datetime(2002, 1, 1),
-                     pendulum.datetime(2002, 1, 2),
-                     pendulum.datetime(2002, 1, 3)])
+    time = np.array(
+        [
+            pendulum.datetime(2001, 1, 1),
+            pendulum.datetime(2001, 1, 2),
+            pendulum.datetime(2001, 1, 3),
+            pendulum.datetime(2002, 1, 1),
+            pendulum.datetime(2002, 1, 2),
+            pendulum.datetime(2002, 1, 3),
+        ]
+    )
     data = np.array([1, 2, 3, 3, 2, 1])
     ts = TimeSeriesDataset(time=time, data=data)
     ts = Average(ts)
@@ -236,10 +250,14 @@ def test_avg_offset_aware():
 
 
 def test_interpolate():
-    time = np.array([pendulum.datetime(2001, 1, 1),
-                     pendulum.datetime(2001, 1, 2),
-                     pendulum.datetime(2001, 1, 3)])
-    data = np.array([1., np.nan, 3.])
+    time = np.array(
+        [
+            pendulum.datetime(2001, 1, 1),
+            pendulum.datetime(2001, 1, 2),
+            pendulum.datetime(2001, 1, 3),
+        ]
+    )
+    data = np.array([1.0, np.nan, 3.0])
     ts = TimeSeriesDataset(time=time, data=data)
     ts = Interpolate(ts)
 
@@ -247,14 +265,15 @@ def test_interpolate():
 
 
 def test_align():
-    time = np.array([pendulum.datetime(2001, 1, 1),
-                     pendulum.datetime(2001, 1, 2),
-                     pendulum.datetime(2001, 1, 3)])
-    data = np.array([1., np.nan, 3.])
+    time = np.array(
+        [
+            pendulum.datetime(2001, 1, 1),
+            pendulum.datetime(2001, 1, 2),
+            pendulum.datetime(2001, 1, 3),
+        ]
+    )
+    data = np.array([1.0, np.nan, 3.0])
     ts = TimeSeriesDataset(time=time, data=data)
-    ts = Align(ts, [
-        pendulum.datetime(2001, 1, 1),
-        pendulum.datetime(2001, 1, 3)
-    ])
+    ts = Align(ts, [pendulum.datetime(2001, 1, 1), pendulum.datetime(2001, 1, 3)])
 
     assert [ts[i] for i in range(len(ts))] == [1, 3]

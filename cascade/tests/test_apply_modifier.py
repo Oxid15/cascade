@@ -16,7 +16,9 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
+
 from cascade.data import ApplyModifier
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -26,11 +28,12 @@ from cascade.data import Wrapper
 
 
 @pytest.mark.parametrize(
-    'arr, func', [
+    "arr, func",
+    [
         ([1, 2, 3, 4, 5], lambda x: x * 2),
-        ([1], lambda x: x ** 2),
-        ([1, 2, -3], lambda x: x)
-    ]
+        ([1], lambda x: x**2),
+        ([1, 2, -3], lambda x: x),
+    ],
 )
 def test_apply_modifier(arr, func):
     ds = Wrapper(arr)

@@ -16,15 +16,16 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Dict, Union, Any
+from typing import Any, Dict, Union
 
-from ..base import MetaHandler, supported_meta_formats, MetaFromFile
+from ..base import MetaFromFile, MetaHandler, supported_meta_formats
 
 
 class MetaViewer:
     """
     The class to view all metadata in folders and subfolders.
     """
+
     def __init__(self, root: str, filt: Union[Dict[Any, Any], None] = None) -> None:
         """
         Parameters
@@ -44,13 +45,14 @@ class MetaViewer:
 
         self._root = root
         self._filt = filt
-        self._mh = MetaHandler()
 
         self.names = []
         for root, _, files in os.walk(self._root):
-            self.names += [os.path.join(root, name)
-                           for name in files
-                           if os.path.splitext(name)[-1] in supported_meta_formats]
+            self.names += [
+                os.path.join(root, name)
+                for name in files
+                if os.path.splitext(name)[-1] in supported_meta_formats
+            ]
         self.names = sorted(self.names)
 
         if filt is not None:
@@ -63,7 +65,7 @@ class MetaViewer:
         meta: MetaFromFile
             Meta object that was read from file
         """
-        return self._mh.read(self.names[index])
+        return MetaHandler.read(self.names[index])
 
     def __len__(self) -> int:
         return len(self.names)
@@ -72,26 +74,32 @@ class MetaViewer:
         """
         Dumps obj to path
         """
-        warnings.warn('This method will be deprecated in future versions. \
-            Consider using MetaHandler instead.')
-        self._mh.write(path, obj)
+        warnings.warn(
+            "This method will be deprecated in future versions. \
+            Consider using MetaHandler instead."
+        )
+        MetaHandler.write(path, obj)
 
     def read(self, path: str) -> MetaFromFile:
         """
         Loads object from path
         """
-        warnings.warn('This method will be deprecated in future versions. \
-            Consider using MetaHandler instead.')
-        return self._mh.read(path)
+        warnings.warn(
+            "This method will be deprecated in future versions. \
+            Consider using MetaHandler instead."
+        )
+        return MetaHandler.read(path)
 
     def _filter(self, name: str) -> bool:
-        meta = self._mh.read(name)
+        meta = MetaHandler.read(name)
         if isinstance(meta, list):
             meta = meta[0]
 
         for key in self._filt:
             if key not in meta:
-                warnings.warn(f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}")
+                warnings.warn(
+                    f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}"
+                )
                 return False
 
             if self._filt[key] != meta[key]:

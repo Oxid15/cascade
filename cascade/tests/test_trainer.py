@@ -22,9 +22,9 @@ from cascade.models.trainer import BasicTrainer
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.conftest import DummyModel
-from cascade.models import Trainer, ModelRepo
 from cascade.data import Wrapper
+from cascade.models import ModelRepo, Trainer
+from cascade.tests.conftest import DummyModel
 
 
 def test_base(tmp_path, model_repo):
@@ -32,15 +32,15 @@ def test_base(tmp_path, model_repo):
     meta = t.get_meta()
 
     assert len(meta) == 1
-    assert 'repo' in meta[0]
-    assert 'metrics' in meta[0]
+    assert "repo" in meta[0]
+    assert "metrics" in meta[0]
 
     t = Trainer(model_repo)
     meta = t.get_meta()
 
     assert len(meta) == 1
-    assert 'repo' in meta[0]
-    assert 'metrics' in meta[0]
+    assert "repo" in meta[0]
+    assert "metrics" in meta[0]
 
 
 def test_basic_trainer(tmp_path):
@@ -49,13 +49,8 @@ def test_basic_trainer(tmp_path):
 
     model = DummyModel()
 
-    t.train(
-        model,
-        Wrapper([0, 1, 2, 3, 4]),
-        Wrapper([0, 1, 2, 3, 4]),
-        epochs=5
-    )
+    t.train(model, Wrapper([0, 1, 2, 3, 4]), Wrapper([0, 1, 2, 3, 4]), epochs=5)
 
     assert len(repo) == 1
-    assert len(repo['00000']) == 5
+    assert len(repo["00000"]) == 5
     assert len(t.metrics) == 5

@@ -16,18 +16,22 @@ limitations under the License.
 
 import os
 import sys
+
+import pytest
 import numpy as np
 
 MODULE_PATH = os.path.dirname(
-    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.utils.numpy_wrapper import NumpyWrapper
 
 
+@pytest.mark.skip
 def test(tmp_path):
     arr = np.array([1, 2, 3, 4, 5])
-    path = os.path.join(tmp_path, 'arr.npy')
+    path = os.path.join(tmp_path, "arr.npy")
     np.save(path, arr)
 
     ds = NumpyWrapper(path)

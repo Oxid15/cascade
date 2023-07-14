@@ -14,13 +14,14 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import Wrapper
-from cascade.meta import MetaValidator, DataValidationException
+from cascade.meta import DataValidationException, MetaValidator
 
 
 def pipeline_run(ds, root):

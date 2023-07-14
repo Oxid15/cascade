@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 from numpy import random
 
@@ -28,11 +29,8 @@ from cascade.data import RandomSampler, Wrapper
 
 
 @pytest.mark.parametrize(
-    'arr, result', [
-        ([1, 2, 3, 4, 5], [3, 1, 2, 4, 5]),
-        ([1, 5], [5, 1]),
-        ([1, 2, -3], [-3, 2, 1])
-    ]
+    "arr, result",
+    [([1, 2, 3, 4, 5], [3, 1, 2, 4, 5]), ([1, 5], [5, 1]), ([1, 2, -3], [-3, 2, 1])],
 )
 def test(arr, result):
     random.seed(SEED)
@@ -45,11 +43,8 @@ def test(arr, result):
 
 
 @pytest.mark.parametrize(
-    'arr, result', [
-        ([1, 2, 3, 4, 5], [3, 1, 2]),
-        ([1, 5], [1, 5, 5]),
-        ([1, 2, -3], [-3, 2, 1])
-    ],
+    "arr, result",
+    [([1, 2, 3, 4, 5], [3, 1, 2]), ([1, 5], [1, 5, 5]), ([1, 2, -3], [-3, 2, 1])],
 )
 def test_over_and_under(arr, result):
     random.seed(SEED)
