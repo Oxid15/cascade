@@ -1,0 +1,934 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Data validation\n",
+    "   \n",
+    "    \n",
+    "This use-case is about validation of the data before model training.  \n",
+    "The scenarios are numerous and by using Cascade you can easily implement solution for any case.  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import cascade.data as cdd\n",
+    "import cascade.meta as cde"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from cascade.utils.pandera import PaSchemaValidator\n",
+    "from cascade.utils.tables import TableDataset"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'0.12.0-alpha'"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import cascade\n",
+    "cascade.__version__"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Validation in general\n",
+    "Cascade has basic validation building blocks as it has some specific validation solutions. In this section general cases will be explained.  \n",
+    "In general one having a dataset can validate either all elements in the dataset one by one or a dataset as a whole. For these purposes Cascade has `PredicateValidator` and `AggregateValidator` classes. Let's see them on a real example."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### When everything is OK!"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's load the data. Tabular datasets will be used in the later section, let's now load the data for optical character recognition to demonstrate data validation features.\n",
+    "  \n",
+    "  \n",
+    "  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.datasets import load_digits\n",
+    "\n",
+    "data = load_digits()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "\n",
+    "We need to encapsulate the data using Cascade's default `Wrapper` to be able to use it later.  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "digits_ds = cdd.Wrapper([(item, label) for item, label in zip(data['data'], data['target'])])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "    \n",
+    "  \n",
+    "This dataset will give tuples of data and labels, which will be useful for training the model.\n",
+    "  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(array([ 0.,  0.,  5., 13.,  9.,  1.,  0.,  0.,  0.,  0., 13., 15., 10.,\n",
+       "        15.,  5.,  0.,  0.,  3., 15.,  2.,  0., 11.,  8.,  0.,  0.,  4.,\n",
+       "        12.,  0.,  0.,  8.,  8.,  0.,  0.,  5.,  8.,  0.,  0.,  9.,  8.,\n",
+       "         0.,  0.,  4., 11.,  0.,  1., 12.,  7.,  0.,  0.,  2., 14.,  5.,\n",
+       "        10., 12.,  0.,  0.,  0.,  0.,  6., 13., 10.,  0.,  0.,  0.]),\n",
+       " 0)"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "digits_ds[0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To validate the data we need to state our assumptions about it. Let's see the boundaries of values in images of digits."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([ 0.,  1., 16.])"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "np.percentile(data['data'], [0, 50, 100])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We see that the values are not lower than 0 and not higher than 16. Assume that we don't want future data to be outside these boundaries. We don't want new values silently breaking our pipeline.  \n",
+    "Let's apply `PredicateValidator`. We pass our dataset and a callable that returns boolean value. If every item in the dataset passes this check the exception will not be raised."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                            "
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\r"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "cascade.meta.validator.PredicateValidator"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "check_of_data = lambda x: x[0].max() <= 16 and x[0].min() >= 0\n",
+    "cde.PredicateValidator(digits_ds, check_of_data)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This check is more strong - we don't want to add more labels by mistake, so let's check them similarly!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                            "
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\r"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "cascade.meta.validator.PredicateValidator"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "check_of_label = lambda x: x[1] >= 0 and x[1] < 10\n",
+    "cde.PredicateValidator(digits_ds, check_of_label)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Validators are simple `Modifiers` that apply no transformation on dataset, so they can simply be chained."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                            \r"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                            "
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\r"
+     ]
+    }
+   ],
+   "source": [
+    "validated_digits_ds = cde.PredicateValidator(digits_ds, check_of_data)\n",
+    "validated_digits_ds = cde.PredicateValidator(validated_digits_ds, check_of_label)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "But if we chain two Validators, does it mean that we iterate over the whole dataset two times? Actually, yes, so for this the solutions exists. If your dataset is too big to iterate over multiple times, you can encapsulate your checks into one Validator."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                            "
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\r"
+     ]
+    }
+   ],
+   "source": [
+    "validated_digits_ds = cde.PredicateValidator(digits_ds, [check_of_data, check_of_label])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It's time to check the dataset as a whole. To demonstrate the mechanic let's check that dataset is big enough. Now our callable accepts the dataset and still returns boolean."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "cascade.meta.validator.AggregateValidator"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cde.AggregateValidator(digits_ds, lambda ds: len(ds) > 1000)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "But what if we want to check that our dataset (or pipeline) is **the same in different runs**? Can we do this by not specifying each parameter in the `AggregateValidator`?  \n",
+    "Cascade has a special solution for this. It is `MetaValidator`.  \n",
+    "`MetaValidator` works like the following. During first run it saves metadata into `./.cascade` folder. In the subsequent runs it checks whether some fields in meta changed and raises an exception if they did."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Saved as ./.cascade/a3d6bd5de325ec32c9ce499b153b43bb.yml!\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "cascade.meta.meta_validator.MetaValidator"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cde.MetaValidator(digits_ds, meta_fmt='.yml')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's see what values were saved by validator."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': 'cascade.data.dataset.Wrapper',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 1797,\n",
+       "  'obj_type': \"<class 'list'>\"}]"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "digits_ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It is not much, but we can add to the meta everything we want before the first run of validator and it will be recorded in meta and checked.  \n",
+    "Now let's simulate second run."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "cascade.meta.meta_validator.MetaValidator"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "cde.MetaValidator(digits_ds, meta_fmt='.yml')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Everything is ok, meta is unchanged. But what if we change the pipeline? MetaValidator works for unique pipelines. If we add new stage to it, it will make another record and will validate against it in the future. To identify pipelines It uses the list of dataset names."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### When everything is not OK\n",
+    "What if our hypotheses are false due to some errors? Validators will raise `cascade.meta.DataValidationException` with the detailed description of what gone wrong where it possible. Let's see how it works."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "For the purpose of experiment, let's suppose that we don't wanna see zeros in labels. Let's check for it."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "                            \r"
+     ]
+    },
+    {
+     "ename": "DataValidationException",
+     "evalue": "Checks in positions [0] failed\nItems failed by check:\n0: 0, 10, 20, 30, 36 ... 1739, 1745, 1746, 1768, 1793",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mDataValidationException\u001b[0m                   Traceback (most recent call last)",
+      "Cell \u001b[0;32mIn[17], line 1\u001b[0m\n\u001b[0;32m----> 1\u001b[0m cde\u001b[39m.\u001b[39;49mPredicateValidator(digits_ds, \u001b[39mlambda\u001b[39;49;00m x: x[\u001b[39m1\u001b[39;49m] \u001b[39m!=\u001b[39;49m \u001b[39m0\u001b[39;49m)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/meta/validator.py:108\u001b[0m, in \u001b[0;36mPredicateValidator.__init__\u001b[0;34m(self, dataset, func, **kwargs)\u001b[0m\n\u001b[1;32m    106\u001b[0m bad_counts \u001b[39m=\u001b[39m [\u001b[39mlen\u001b[39m(bad_items[i]) \u001b[39mfor\u001b[39;00m i \u001b[39min\u001b[39;00m \u001b[39mrange\u001b[39m(\u001b[39mlen\u001b[39m(\u001b[39mself\u001b[39m\u001b[39m.\u001b[39m_func))]\n\u001b[1;32m    107\u001b[0m \u001b[39mif\u001b[39;00m \u001b[39many\u001b[39m(bad_counts):\n\u001b[0;32m--> 108\u001b[0m     \u001b[39mself\u001b[39;49m\u001b[39m.\u001b[39;49m_raise(bad_items)\n\u001b[1;32m    109\u001b[0m \u001b[39melse\u001b[39;00m:\n\u001b[1;32m    110\u001b[0m     \u001b[39mprint\u001b[39m(\u001b[39m\"\u001b[39m\u001b[39mOK!\u001b[39m\u001b[39m\"\u001b[39m)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/meta/validator.py:117\u001b[0m, in \u001b[0;36mPredicateValidator._raise\u001b[0;34m(self, items)\u001b[0m\n\u001b[1;32m    115\u001b[0m failed_checks \u001b[39m=\u001b[39m [i \u001b[39mfor\u001b[39;00m i \u001b[39min\u001b[39;00m \u001b[39mrange\u001b[39m(\u001b[39mlen\u001b[39m(bad_counts)) \u001b[39mif\u001b[39;00m bad_counts[i]]\n\u001b[1;32m    116\u001b[0m failed_items \u001b[39m=\u001b[39m \u001b[39m\"\u001b[39m\u001b[39m\\n\u001b[39;00m\u001b[39m\"\u001b[39m\u001b[39m.\u001b[39mjoin([\u001b[39mf\u001b[39m\u001b[39m\"\u001b[39m\u001b[39m{\u001b[39;00mi\u001b[39m}\u001b[39;00m\u001b[39m: \u001b[39m\u001b[39m{\u001b[39;00mprettify_items(items[i])\u001b[39m}\u001b[39;00m\u001b[39m\"\u001b[39m \u001b[39mfor\u001b[39;00m i \u001b[39min\u001b[39;00m items])\n\u001b[0;32m--> 117\u001b[0m \u001b[39mraise\u001b[39;00m DataValidationException(\n\u001b[1;32m    118\u001b[0m     \u001b[39mf\u001b[39m\u001b[39m\"\u001b[39m\u001b[39mChecks in positions \u001b[39m\u001b[39m{\u001b[39;00mfailed_checks\u001b[39m}\u001b[39;00m\u001b[39m failed\u001b[39m\u001b[39m\\n\u001b[39;00m\u001b[39m\"\u001b[39m\n\u001b[1;32m    119\u001b[0m     \u001b[39mf\u001b[39m\u001b[39m\"\u001b[39m\u001b[39mItems failed by check:\u001b[39m\u001b[39m\\n\u001b[39;00m\u001b[39m\"\u001b[39m\n\u001b[1;32m    120\u001b[0m     \u001b[39mf\u001b[39m\u001b[39m\"\u001b[39m\u001b[39m{\u001b[39;00mfailed_items\u001b[39m}\u001b[39;00m\u001b[39m\"\u001b[39m\n\u001b[1;32m    121\u001b[0m )\n",
+      "\u001b[0;31mDataValidationException\u001b[0m: Checks in positions [0] failed\nItems failed by check:\n0: 0, 10, 20, 30, 36 ... 1739, 1745, 1746, 1768, 1793"
+     ]
+    }
+   ],
+   "source": [
+    "cde.PredicateValidator(digits_ds, lambda x: x[1] != 0)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the exception items causing the error are listed. This can be helpful to identify the problem."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "DataValidationException",
+     "evalue": "Checks in positions [0] failed",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mDataValidationException\u001b[0m                   Traceback (most recent call last)",
+      "Cell \u001b[0;32mIn[18], line 1\u001b[0m\n\u001b[0;32m----> 1\u001b[0m cde\u001b[39m.\u001b[39;49mAggregateValidator(digits_ds, \u001b[39mlambda\u001b[39;49;00m ds: \u001b[39mlen\u001b[39;49m(ds) \u001b[39m<\u001b[39;49m \u001b[39m1000\u001b[39;49m)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/meta/validator.py:75\u001b[0m, in \u001b[0;36mAggregateValidator.__init__\u001b[0;34m(self, dataset, func, **kwargs)\u001b[0m\n\u001b[1;32m     72\u001b[0m         bad_results\u001b[39m.\u001b[39mappend(i)\n\u001b[1;32m     74\u001b[0m \u001b[39mif\u001b[39;00m \u001b[39mlen\u001b[39m(bad_results):\n\u001b[0;32m---> 75\u001b[0m     \u001b[39mraise\u001b[39;00m DataValidationException(\u001b[39mf\u001b[39m\u001b[39m\"\u001b[39m\u001b[39mChecks in positions \u001b[39m\u001b[39m{\u001b[39;00mbad_results\u001b[39m}\u001b[39;00m\u001b[39m failed\u001b[39m\u001b[39m\"\u001b[39m)\n\u001b[1;32m     76\u001b[0m \u001b[39melse\u001b[39;00m:\n\u001b[1;32m     77\u001b[0m     \u001b[39mprint\u001b[39m(\u001b[39m\"\u001b[39m\u001b[39mOK!\u001b[39m\u001b[39m\"\u001b[39m)\n",
+      "\u001b[0;31mDataValidationException\u001b[0m: Checks in positions [0] failed"
+     ]
+    }
+   ],
+   "source": [
+    "cde.AggregateValidator(digits_ds, lambda ds: len(ds) < 1000)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The exceptions provide info about what got wrong."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now let's simulate the change in meta data of dataset. Let's manually change the length of it for example and see how `MetaValidator` works."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': 'cascade.data.dataset.Wrapper',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 1000,\n",
+       "  'obj_type': \"<class 'list'>\"}]"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "digits_ds._data = digits_ds._data[:1000]\n",
+    "digits_ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Value of root[0]['len'] changed from 1797 to 1000.\n"
+     ]
+    },
+    {
+     "ename": "DataValidationException",
+     "evalue": "{'values_changed': {\"root[0]['len']\": {'new_value': 1000, 'old_value': 1797}}}",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mDataValidationException\u001b[0m                   Traceback (most recent call last)",
+      "Cell \u001b[0;32mIn[20], line 1\u001b[0m\n\u001b[0;32m----> 1\u001b[0m cde\u001b[39m.\u001b[39;49mMetaValidator(digits_ds, meta_fmt\u001b[39m=\u001b[39;49m\u001b[39m'\u001b[39;49m\u001b[39m.yml\u001b[39;49m\u001b[39m'\u001b[39;49m)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/meta/meta_validator.py:109\u001b[0m, in \u001b[0;36mMetaValidator.__init__\u001b[0;34m(self, dataset, root, meta_fmt)\u001b[0m\n\u001b[1;32m    107\u001b[0m \u001b[39mif\u001b[39;00m os\u001b[39m.\u001b[39mpath\u001b[39m.\u001b[39mexists(name):\n\u001b[1;32m    108\u001b[0m     \u001b[39mself\u001b[39m\u001b[39m.\u001b[39mbase_meta \u001b[39m=\u001b[39m \u001b[39mself\u001b[39m\u001b[39m.\u001b[39m_load(name)\n\u001b[0;32m--> 109\u001b[0m     \u001b[39mself\u001b[39;49m\u001b[39m.\u001b[39;49m_check(meta)\n\u001b[1;32m    110\u001b[0m \u001b[39melse\u001b[39;00m:\n\u001b[1;32m    111\u001b[0m     \u001b[39mself\u001b[39m\u001b[39m.\u001b[39m_save(meta, name)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/meta/meta_validator.py:124\u001b[0m, in \u001b[0;36mMetaValidator._check\u001b[0;34m(self, query_meta)\u001b[0m\n\u001b[1;32m    122\u001b[0m \u001b[39mif\u001b[39;00m \u001b[39mlen\u001b[39m(diff):\n\u001b[1;32m    123\u001b[0m     \u001b[39mprint\u001b[39m(diff\u001b[39m.\u001b[39mpretty())\n\u001b[0;32m--> 124\u001b[0m     \u001b[39mraise\u001b[39;00m DataValidationException(diff)\n\u001b[1;32m    125\u001b[0m \u001b[39melse\u001b[39;00m:\n\u001b[1;32m    126\u001b[0m     \u001b[39mprint\u001b[39m(\u001b[39m\"\u001b[39m\u001b[39mOK!\u001b[39m\u001b[39m\"\u001b[39m)\n",
+      "\u001b[0;31mDataValidationException\u001b[0m: {'values_changed': {\"root[0]['len']\": {'new_value': 1000, 'old_value': 1797}}}"
+     ]
+    }
+   ],
+   "source": [
+    "cde.MetaValidator(digits_ds, meta_fmt='.yml')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It provides detailed description of what values changed and how."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Validation of tables\n",
+    "Validation of tabular data is more specific case and is more developed. For this purpose Cascade can use already made solutions in the familiar form of the `Validator`.  \n",
+    "Now let's load tabular data for this section."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.datasets import load_iris\n",
+    "\n",
+    "data = load_iris()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "\n",
+    "df = pd.DataFrame(data['data'], columns=data['feature_names'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We will use `TableDataset` - special container for `pandas.DataFrame`s in Cascade."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "cascade.utils.tables.tables.TableDataset\n",
+       "      sepal length (cm)  sepal width (cm)  petal length (cm)  petal width (cm)\n",
+       "0                  5.1               3.5                1.4               0.2\n",
+       "1                  4.9               3.0                1.4               0.2\n",
+       "2                  4.7               3.2                1.3               0.2\n",
+       "3                  4.6               3.1                1.5               0.2\n",
+       "4                  5.0               3.6                1.4               0.2\n",
+       "..                 ...               ...                ...               ...\n",
+       "145                6.7               3.0                5.2               2.3\n",
+       "146                6.3               2.5                5.0               1.9\n",
+       "147                6.5               3.0                5.2               2.0\n",
+       "148                6.2               3.4                5.4               2.3\n",
+       "149                5.9               3.0                5.1               1.8\n",
+       "\n",
+       "[150 rows x 4 columns]"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "iris_ds = TableDataset(t=df)\n",
+    "iris_ds"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "  \n",
+    "For the purpose of tabular data validation Cascade uses Pandera. The workflow is simple - you define schema of the table and the checks that should be made. Then you run `PaSchemaValidator` and that's all!  \n",
+    "For the documentation of Pandera's classes, please see: [pandera docs](https://pandera.readthedocs.io/en/stable/index.html).\n",
+    "  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandera as pa"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We add all columns and check that all values are greater than zero."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "schema = pa.DataFrameSchema({\n",
+    "    \"sepal length (cm)\": pa.Column(float, checks=pa.Check.gt(0)),\n",
+    "    \"sepal width (cm)\": pa.Column(float, checks=pa.Check.gt(0)),\n",
+    "    \"petal length (cm)\": pa.Column(float, checks=pa.Check.gt(0)),\n",
+    "    \"petal width (cm)\": pa.Column(float, checks=pa.Check.gt(0)),\n",
+    "})"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "cascade.utils.pandera.pa_schema_validator.PaSchemaValidator"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "PaSchemaValidator(iris_ds, schema)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "For future uses we can save schema to yaml and use Validator with the path."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "schema.to_yaml('./iris_schema.yml')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "OK!\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "cascade.utils.pandera.pa_schema_validator.PaSchemaValidator"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "PaSchemaValidator(iris_ds, './iris_schema.yml')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's manually violate our assumption and see what will happen."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "iris_ds._table['sepal length (cm)'] *= -1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "DataValidationException",
+     "evalue": "<Schema Column(name=sepal length (cm), type=DataType(float64))> failed element-wise validator 0:\n<Check greater_than: greater_than(0)>\nfailure cases:\n     index  failure_case\n0        0          -5.1\n1        1          -4.9\n2        2          -4.7\n3        3          -4.6\n4        4          -5.0\n..     ...           ...\n145    145          -6.7\n146    146          -6.3\n147    147          -6.5\n148    148          -6.2\n149    149          -5.9\n\n[150 rows x 2 columns]",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mSchemaError\u001b[0m                               Traceback (most recent call last)",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/utils/pandera/pa_schema_validator.py:54\u001b[0m, in \u001b[0;36mPaSchemaValidator._validate\u001b[0;34m(ds, schema)\u001b[0m\n\u001b[1;32m     53\u001b[0m         schema \u001b[39m=\u001b[39m paio\u001b[39m.\u001b[39mfrom_yaml(schema)\n\u001b[0;32m---> 54\u001b[0m     schema\u001b[39m.\u001b[39;49mvalidate(ds\u001b[39m.\u001b[39;49m_table)\n\u001b[1;32m     55\u001b[0m \u001b[39mexcept\u001b[39;00m SchemaError \u001b[39mas\u001b[39;00m e:\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:534\u001b[0m, in \u001b[0;36mDataFrameSchema.validate\u001b[0;34m(self, check_obj, head, tail, sample, random_state, lazy, inplace)\u001b[0m\n\u001b[1;32m    532\u001b[0m     \u001b[39mreturn\u001b[39;00m check_obj\u001b[39m.\u001b[39mpandera\u001b[39m.\u001b[39madd_schema(\u001b[39mself\u001b[39m)\n\u001b[0;32m--> 534\u001b[0m \u001b[39mreturn\u001b[39;00m \u001b[39mself\u001b[39;49m\u001b[39m.\u001b[39;49m_validate(\n\u001b[1;32m    535\u001b[0m     check_obj\u001b[39m=\u001b[39;49mcheck_obj,\n\u001b[1;32m    536\u001b[0m     head\u001b[39m=\u001b[39;49mhead,\n\u001b[1;32m    537\u001b[0m     tail\u001b[39m=\u001b[39;49mtail,\n\u001b[1;32m    538\u001b[0m     sample\u001b[39m=\u001b[39;49msample,\n\u001b[1;32m    539\u001b[0m     random_state\u001b[39m=\u001b[39;49mrandom_state,\n\u001b[1;32m    540\u001b[0m     lazy\u001b[39m=\u001b[39;49mlazy,\n\u001b[1;32m    541\u001b[0m     inplace\u001b[39m=\u001b[39;49minplace,\n\u001b[1;32m    542\u001b[0m )\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:732\u001b[0m, in \u001b[0;36mDataFrameSchema._validate\u001b[0;34m(self, check_obj, head, tail, sample, random_state, lazy, inplace)\u001b[0m\n\u001b[1;32m    731\u001b[0m \u001b[39mexcept\u001b[39;00m errors\u001b[39m.\u001b[39mSchemaError \u001b[39mas\u001b[39;00m err:\n\u001b[0;32m--> 732\u001b[0m     error_handler\u001b[39m.\u001b[39;49mcollect_error(\u001b[39m\"\u001b[39;49m\u001b[39mschema_component_check\u001b[39;49m\u001b[39m\"\u001b[39;49m, err)\n\u001b[1;32m    733\u001b[0m \u001b[39mexcept\u001b[39;00m errors\u001b[39m.\u001b[39mSchemaErrors \u001b[39mas\u001b[39;00m err:\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/error_handlers.py:32\u001b[0m, in \u001b[0;36mSchemaErrorHandler.collect_error\u001b[0;34m(self, reason_code, schema_error, original_exc)\u001b[0m\n\u001b[1;32m     31\u001b[0m \u001b[39mif\u001b[39;00m \u001b[39mnot\u001b[39;00m \u001b[39mself\u001b[39m\u001b[39m.\u001b[39m_lazy:\n\u001b[0;32m---> 32\u001b[0m     \u001b[39mraise\u001b[39;00m schema_error \u001b[39mfrom\u001b[39;00m \u001b[39moriginal_exc\u001b[39;00m\n\u001b[1;32m     34\u001b[0m \u001b[39m# delete data of validated object from SchemaError object to prevent\u001b[39;00m\n\u001b[1;32m     35\u001b[0m \u001b[39m# storing copies of the validated DataFrame/Series for every\u001b[39;00m\n\u001b[1;32m     36\u001b[0m \u001b[39m# SchemaError collected.\u001b[39;00m\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:724\u001b[0m, in \u001b[0;36mDataFrameSchema._validate\u001b[0;34m(self, check_obj, head, tail, sample, random_state, lazy, inplace)\u001b[0m\n\u001b[1;32m    723\u001b[0m \u001b[39mtry\u001b[39;00m:\n\u001b[0;32m--> 724\u001b[0m     result \u001b[39m=\u001b[39m schema_component(\n\u001b[1;32m    725\u001b[0m         df_to_validate,\n\u001b[1;32m    726\u001b[0m         lazy\u001b[39m=\u001b[39;49mlazy,\n\u001b[1;32m    727\u001b[0m         \u001b[39m# don't make a copy of the data\u001b[39;49;00m\n\u001b[1;32m    728\u001b[0m         inplace\u001b[39m=\u001b[39;49m\u001b[39mTrue\u001b[39;49;00m,\n\u001b[1;32m    729\u001b[0m     )\n\u001b[1;32m    730\u001b[0m     check_results\u001b[39m.\u001b[39mappend(check_utils\u001b[39m.\u001b[39mis_table(result))\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2138\u001b[0m, in \u001b[0;36mSeriesSchemaBase.__call__\u001b[0;34m(self, check_obj, head, tail, sample, random_state, lazy, inplace)\u001b[0m\n\u001b[1;32m   2137\u001b[0m \u001b[39m\u001b[39m\u001b[39m\"\"\"Alias for ``validate`` method.\"\"\"\u001b[39;00m\n\u001b[0;32m-> 2138\u001b[0m \u001b[39mreturn\u001b[39;00m \u001b[39mself\u001b[39;49m\u001b[39m.\u001b[39;49mvalidate(\n\u001b[1;32m   2139\u001b[0m     check_obj, head, tail, sample, random_state, lazy, inplace\n\u001b[1;32m   2140\u001b[0m )\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schema_components.py:223\u001b[0m, in \u001b[0;36mColumn.validate\u001b[0;34m(self, check_obj, head, tail, sample, random_state, lazy, inplace)\u001b[0m\n\u001b[1;32m    222\u001b[0m     \u001b[39melse\u001b[39;00m:\n\u001b[0;32m--> 223\u001b[0m         validate_column(check_obj, column_name)\n\u001b[1;32m    225\u001b[0m \u001b[39mreturn\u001b[39;00m check_obj\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schema_components.py:196\u001b[0m, in \u001b[0;36mColumn.validate.<locals>.validate_column\u001b[0;34m(check_obj, column_name)\u001b[0m\n\u001b[1;32m    195\u001b[0m \u001b[39mdef\u001b[39;00m \u001b[39mvalidate_column\u001b[39m(check_obj, column_name):\n\u001b[0;32m--> 196\u001b[0m     \u001b[39msuper\u001b[39;49m(Column, copy(\u001b[39mself\u001b[39;49m)\u001b[39m.\u001b[39;49mset_name(column_name))\u001b[39m.\u001b[39;49mvalidate(\n\u001b[1;32m    197\u001b[0m         check_obj,\n\u001b[1;32m    198\u001b[0m         head,\n\u001b[1;32m    199\u001b[0m         tail,\n\u001b[1;32m    200\u001b[0m         sample,\n\u001b[1;32m    201\u001b[0m         random_state,\n\u001b[1;32m    202\u001b[0m         lazy,\n\u001b[1;32m    203\u001b[0m         inplace\u001b[39m=\u001b[39;49minplace,\n\u001b[1;32m    204\u001b[0m     )\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2096\u001b[0m, in \u001b[0;36mSeriesSchemaBase.validate\u001b[0;34m(self, check_obj, head, tail, sample, random_state, lazy, inplace)\u001b[0m\n\u001b[1;32m   2095\u001b[0m \u001b[39mexcept\u001b[39;00m errors\u001b[39m.\u001b[39mSchemaError \u001b[39mas\u001b[39;00m err:\n\u001b[0;32m-> 2096\u001b[0m     error_handler\u001b[39m.\u001b[39;49mcollect_error(\u001b[39m\"\u001b[39;49m\u001b[39mdataframe_check\u001b[39;49m\u001b[39m\"\u001b[39;49m, err)\n\u001b[1;32m   2097\u001b[0m \u001b[39mexcept\u001b[39;00m \u001b[39mException\u001b[39;00m \u001b[39mas\u001b[39;00m err:  \u001b[39m# pylint: disable=broad-except\u001b[39;00m\n\u001b[1;32m   2098\u001b[0m     \u001b[39m# catch other exceptions that may occur when executing the\u001b[39;00m\n\u001b[1;32m   2099\u001b[0m     \u001b[39m# Check\u001b[39;00m\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/error_handlers.py:32\u001b[0m, in \u001b[0;36mSchemaErrorHandler.collect_error\u001b[0;34m(self, reason_code, schema_error, original_exc)\u001b[0m\n\u001b[1;32m     31\u001b[0m \u001b[39mif\u001b[39;00m \u001b[39mnot\u001b[39;00m \u001b[39mself\u001b[39m\u001b[39m.\u001b[39m_lazy:\n\u001b[0;32m---> 32\u001b[0m     \u001b[39mraise\u001b[39;00m schema_error \u001b[39mfrom\u001b[39;00m \u001b[39moriginal_exc\u001b[39;00m\n\u001b[1;32m     34\u001b[0m \u001b[39m# delete data of validated object from SchemaError object to prevent\u001b[39;00m\n\u001b[1;32m     35\u001b[0m \u001b[39m# storing copies of the validated DataFrame/Series for every\u001b[39;00m\n\u001b[1;32m     36\u001b[0m \u001b[39m# SchemaError collected.\u001b[39;00m\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2091\u001b[0m, in \u001b[0;36mSeriesSchemaBase.validate\u001b[0;34m(self, check_obj, head, tail, sample, random_state, lazy, inplace)\u001b[0m\n\u001b[1;32m   2089\u001b[0m \u001b[39mtry\u001b[39;00m:\n\u001b[1;32m   2090\u001b[0m     check_results\u001b[39m.\u001b[39mappend(\n\u001b[0;32m-> 2091\u001b[0m         _handle_check_results(\n\u001b[1;32m   2092\u001b[0m             \u001b[39mself\u001b[39;49m, check_index, check, check_obj, \u001b[39m*\u001b[39;49mcheck_args\n\u001b[1;32m   2093\u001b[0m         )\n\u001b[1;32m   2094\u001b[0m     )\n\u001b[1;32m   2095\u001b[0m \u001b[39mexcept\u001b[39;00m errors\u001b[39m.\u001b[39mSchemaError \u001b[39mas\u001b[39;00m err:\n",
+      "File \u001b[0;32m~/work/cascade/cascade_full_env/lib/python3.10/site-packages/pandera/schemas.py:2482\u001b[0m, in \u001b[0;36m_handle_check_results\u001b[0;34m(schema, check_index, check, check_obj, *check_args)\u001b[0m\n\u001b[1;32m   2481\u001b[0m         \u001b[39mreturn\u001b[39;00m \u001b[39mTrue\u001b[39;00m\n\u001b[0;32m-> 2482\u001b[0m     \u001b[39mraise\u001b[39;00m errors\u001b[39m.\u001b[39mSchemaError(\n\u001b[1;32m   2483\u001b[0m         schema,\n\u001b[1;32m   2484\u001b[0m         check_obj,\n\u001b[1;32m   2485\u001b[0m         error_msg,\n\u001b[1;32m   2486\u001b[0m         failure_cases\u001b[39m=\u001b[39mfailure_cases,\n\u001b[1;32m   2487\u001b[0m         check\u001b[39m=\u001b[39mcheck,\n\u001b[1;32m   2488\u001b[0m         check_index\u001b[39m=\u001b[39mcheck_index,\n\u001b[1;32m   2489\u001b[0m         check_output\u001b[39m=\u001b[39mcheck_result\u001b[39m.\u001b[39mcheck_output,\n\u001b[1;32m   2490\u001b[0m     )\n\u001b[1;32m   2491\u001b[0m \u001b[39mreturn\u001b[39;00m check_result\u001b[39m.\u001b[39mcheck_passed\n",
+      "\u001b[0;31mSchemaError\u001b[0m: <Schema Column(name=sepal length (cm), type=DataType(float64))> failed element-wise validator 0:\n<Check greater_than: greater_than(0)>\nfailure cases:\n     index  failure_case\n0        0          -5.1\n1        1          -4.9\n2        2          -4.7\n3        3          -4.6\n4        4          -5.0\n..     ...           ...\n145    145          -6.7\n146    146          -6.3\n147    147          -6.5\n148    148          -6.2\n149    149          -5.9\n\n[150 rows x 2 columns]",
+      "\nDuring handling of the above exception, another exception occurred:\n",
+      "\u001b[0;31mDataValidationException\u001b[0m                   Traceback (most recent call last)",
+      "Cell \u001b[0;32mIn[30], line 1\u001b[0m\n\u001b[0;32m----> 1\u001b[0m PaSchemaValidator(iris_ds, \u001b[39m'\u001b[39;49m\u001b[39m./iris_schema.yml\u001b[39;49m\u001b[39m'\u001b[39;49m)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/utils/pandera/pa_schema_validator.py:47\u001b[0m, in \u001b[0;36mPaSchemaValidator.__init__\u001b[0;34m(self, dataset, schema, *args, **kwargs)\u001b[0m\n\u001b[1;32m     32\u001b[0m \u001b[39mdef\u001b[39;00m \u001b[39m__init__\u001b[39m(\u001b[39mself\u001b[39m, dataset: TableDataset, schema, \u001b[39m*\u001b[39margs: Any, \u001b[39m*\u001b[39m\u001b[39m*\u001b[39mkwargs: Any) \u001b[39m-\u001b[39m\u001b[39m>\u001b[39m \u001b[39mNone\u001b[39;00m:\n\u001b[1;32m     33\u001b[0m \u001b[39m    \u001b[39m\u001b[39m\"\"\"\u001b[39;00m\n\u001b[1;32m     34\u001b[0m \u001b[39m    Parameters\u001b[39;00m\n\u001b[1;32m     35\u001b[0m \u001b[39m    ----------\u001b[39;00m\n\u001b[0;32m   (...)\u001b[0m\n\u001b[1;32m     45\u001b[0m \u001b[39m    DataValidationException\u001b[39;00m\n\u001b[1;32m     46\u001b[0m \u001b[39m    \"\"\"\u001b[39;00m\n\u001b[0;32m---> 47\u001b[0m     \u001b[39msuper\u001b[39;49m()\u001b[39m.\u001b[39;49m\u001b[39m__init__\u001b[39;49m(dataset, \u001b[39m*\u001b[39;49margs, func\u001b[39m=\u001b[39;49m\u001b[39mlambda\u001b[39;49;00m x: \u001b[39mself\u001b[39;49m\u001b[39m.\u001b[39;49m_validate(x, schema), \u001b[39m*\u001b[39;49m\u001b[39m*\u001b[39;49mkwargs)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/meta/validator.py:71\u001b[0m, in \u001b[0;36mAggregateValidator.__init__\u001b[0;34m(self, dataset, func, **kwargs)\u001b[0m\n\u001b[1;32m     69\u001b[0m bad_results \u001b[39m=\u001b[39m []\n\u001b[1;32m     70\u001b[0m \u001b[39mfor\u001b[39;00m i, func \u001b[39min\u001b[39;00m \u001b[39menumerate\u001b[39m(\u001b[39mself\u001b[39m\u001b[39m.\u001b[39m_func):\n\u001b[0;32m---> 71\u001b[0m     \u001b[39mif\u001b[39;00m \u001b[39mnot\u001b[39;00m func(\u001b[39mself\u001b[39;49m\u001b[39m.\u001b[39;49m_dataset):\n\u001b[1;32m     72\u001b[0m         bad_results\u001b[39m.\u001b[39mappend(i)\n\u001b[1;32m     74\u001b[0m \u001b[39mif\u001b[39;00m \u001b[39mlen\u001b[39m(bad_results):\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/utils/pandera/pa_schema_validator.py:47\u001b[0m, in \u001b[0;36mPaSchemaValidator.__init__.<locals>.<lambda>\u001b[0;34m(x)\u001b[0m\n\u001b[1;32m     32\u001b[0m \u001b[39mdef\u001b[39;00m \u001b[39m__init__\u001b[39m(\u001b[39mself\u001b[39m, dataset: TableDataset, schema, \u001b[39m*\u001b[39margs: Any, \u001b[39m*\u001b[39m\u001b[39m*\u001b[39mkwargs: Any) \u001b[39m-\u001b[39m\u001b[39m>\u001b[39m \u001b[39mNone\u001b[39;00m:\n\u001b[1;32m     33\u001b[0m \u001b[39m    \u001b[39m\u001b[39m\"\"\"\u001b[39;00m\n\u001b[1;32m     34\u001b[0m \u001b[39m    Parameters\u001b[39;00m\n\u001b[1;32m     35\u001b[0m \u001b[39m    ----------\u001b[39;00m\n\u001b[0;32m   (...)\u001b[0m\n\u001b[1;32m     45\u001b[0m \u001b[39m    DataValidationException\u001b[39;00m\n\u001b[1;32m     46\u001b[0m \u001b[39m    \"\"\"\u001b[39;00m\n\u001b[0;32m---> 47\u001b[0m     \u001b[39msuper\u001b[39m()\u001b[39m.\u001b[39m\u001b[39m__init__\u001b[39m(dataset, \u001b[39m*\u001b[39margs, func\u001b[39m=\u001b[39m\u001b[39mlambda\u001b[39;00m x: \u001b[39mself\u001b[39;49m\u001b[39m.\u001b[39;49m_validate(x, schema), \u001b[39m*\u001b[39m\u001b[39m*\u001b[39mkwargs)\n",
+      "File \u001b[0;32m~/work/cascade/cascade/cascade/utils/pandera/pa_schema_validator.py:56\u001b[0m, in \u001b[0;36mPaSchemaValidator._validate\u001b[0;34m(ds, schema)\u001b[0m\n\u001b[1;32m     54\u001b[0m     schema\u001b[39m.\u001b[39mvalidate(ds\u001b[39m.\u001b[39m_table)\n\u001b[1;32m     55\u001b[0m \u001b[39mexcept\u001b[39;00m SchemaError \u001b[39mas\u001b[39;00m e:\n\u001b[0;32m---> 56\u001b[0m     \u001b[39mraise\u001b[39;00m DataValidationException(e)\n\u001b[1;32m     57\u001b[0m \u001b[39melse\u001b[39;00m:\n\u001b[1;32m     58\u001b[0m     \u001b[39mreturn\u001b[39;00m \u001b[39mTrue\u001b[39;00m\n",
+      "\u001b[0;31mDataValidationException\u001b[0m: <Schema Column(name=sepal length (cm), type=DataType(float64))> failed element-wise validator 0:\n<Check greater_than: greater_than(0)>\nfailure cases:\n     index  failure_case\n0        0          -5.1\n1        1          -4.9\n2        2          -4.7\n3        3          -4.6\n4        4          -5.0\n..     ...           ...\n145    145          -6.7\n146    146          -6.3\n147    147          -6.5\n148    148          -6.2\n149    149          -5.9\n\n[150 rows x 2 columns]"
+     ]
+    }
+   ],
+   "source": [
+    "PaSchemaValidator(iris_ds, './iris_schema.yml')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We obtained large traceback which shows which values violate our assumptions."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Data validation is an important part of any established ML-pipeline. Simple checks can speed up problem identification. By using Cascade one can easily develop own dataset checks and use already made solutions."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.6"
+  },
+  "orig_nbformat": 4,
+  "vscode": {
+   "interpreter": {
+    "hash": "a7e4c7ddca4e80f84259a9dcdb1a6d355d930135a502a2e974de3e84b36f38a6"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

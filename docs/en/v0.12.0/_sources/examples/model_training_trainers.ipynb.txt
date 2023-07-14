@@ -1,0 +1,831 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Model training using trainers\n",
+    "This use-case is model training - the same, but now the usage of Trainer will be shown."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#!pip3 install torchvision"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import cascade.data as cdd\n",
+    "import cascade.models as cdm\n",
+    "from cascade.utils.torch_model import TorchModel\n",
+    "\n",
+    "from tqdm import tqdm\n",
+    "import torch\n",
+    "import torchvision\n",
+    "from torchvision.transforms import functional as F\n",
+    "from torch import nn\n",
+    "from sklearn.metrics import accuracy_score"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'0.11.0'"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import cascade\n",
+    "cascade.__version__"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Defining data pipeline\n",
+    "This part will be without comments. For more detailed explanations, please see [pipeline building example](https://oxid15.github.io/cascade/examples/pipeline_building.html)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "MNIST_ROOT = 'data'\n",
+    "INPUT_SIZE = 784\n",
+    "BATCH_SIZE = 10"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz\n",
+      "Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to data/MNIST/raw/train-images-idx3-ubyte.gz\n"
+     ]
+    },
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "e9fd0ce67ae44a0990cd7591aa898316",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "  0%|          | 0/9912422 [00:00<?, ?it/s]"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Extracting data/MNIST/raw/train-images-idx3-ubyte.gz to data/MNIST/raw\n",
+      "\n",
+      "Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz\n",
+      "Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz to data/MNIST/raw/train-labels-idx1-ubyte.gz\n"
+     ]
+    },
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "8f9cce878ea643df870907734ce97287",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "  0%|          | 0/28881 [00:00<?, ?it/s]"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Extracting data/MNIST/raw/train-labels-idx1-ubyte.gz to data/MNIST/raw\n",
+      "\n",
+      "Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz\n",
+      "Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz to data/MNIST/raw/t10k-images-idx3-ubyte.gz\n"
+     ]
+    },
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "e7eed182323547178111d8b36db90a69",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "  0%|          | 0/1648877 [00:00<?, ?it/s]"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Extracting data/MNIST/raw/t10k-images-idx3-ubyte.gz to data/MNIST/raw\n",
+      "\n",
+      "Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz\n",
+      "Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz to data/MNIST/raw/t10k-labels-idx1-ubyte.gz\n"
+     ]
+    },
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "3a725377fa4a4aa3a1a61dfafd1f8f81",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "  0%|          | 0/4542 [00:00<?, ?it/s]"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Extracting data/MNIST/raw/t10k-labels-idx1-ubyte.gz to data/MNIST/raw\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "class NoiseModifier(cdd.Modifier):\n",
+    "    def __getitem__(self, index):\n",
+    "        img, label = self._dataset[index]\n",
+    "        img += torch.rand_like(img) * 0.1\n",
+    "        img = torch.clip(img, 0, 255)\n",
+    "        return img, label\n",
+    "\n",
+    "\n",
+    "train_ds = torchvision.datasets.MNIST(root=MNIST_ROOT,\n",
+    "                                     train=True, \n",
+    "                                     transform=F.to_tensor,\n",
+    "                                     download=True)\n",
+    "test_ds = torchvision.datasets.MNIST(root=MNIST_ROOT, \n",
+    "                                    train=False, \n",
+    "                                    transform=F.to_tensor)\n",
+    "\n",
+    "train_ds = cdd.Wrapper(train_ds, \n",
+    "    meta_prefix={\n",
+    "        'desc': 'This is MNIST dataset of handwritten images, TRAIN PART'\n",
+    "    })\n",
+    "test_ds = cdd.Wrapper(test_ds)\n",
+    "\n",
+    "train_ds = NoiseModifier(train_ds)\n",
+    "test_ds = NoiseModifier(test_ds)\n",
+    "\n",
+    "# We will constraint the number of samples to speed up learning in example\n",
+    "train_ds = cdd.CyclicSampler(train_ds, 10000)\n",
+    "test_ds = cdd.CyclicSampler(test_ds, 5000)\n",
+    "\n",
+    "train_dl = torch.utils.data.DataLoader(dataset=train_ds, \n",
+    "                                       batch_size=BATCH_SIZE,\n",
+    "                                       shuffle=True)\n",
+    "test_dl = torch.utils.data.DataLoader(dataset=test_ds,\n",
+    "                                      batch_size=BATCH_SIZE,\n",
+    "                                      shuffle=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': 'cascade.data.cyclic_sampler.CyclicSampler',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 10000},\n",
+       " {'name': '__main__.NoiseModifier', 'type': 'dataset', 'len': 60000},\n",
+       " {'name': 'cascade.data.dataset.Wrapper',\n",
+       "  'desc': 'This is MNIST dataset of handwritten images, TRAIN PART',\n",
+       "  'type': 'dataset',\n",
+       "  'len': 60000,\n",
+       "  'obj_type': \"<class 'torchvision.datasets.mnist.MNIST'>\"}]"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "train_ds.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Model definition\n",
+    "Before training we need to define our model. We need regular nn.Module and Cascade's wrapper around it.  \n",
+    "  \n",
+    "Module defined without any specific changes in the original pytorch code, except now it accepts `*args` and `**kwargs` in `__init__`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class SimpleNN(nn.Module):\n",
+    "    def __init__(self, input_size, hidden_size, num_classes, *args, **kwargs):\n",
+    "        super().__init__()\n",
+    "\n",
+    "        self.input_size = input_size\n",
+    "        self.hidden_size = hidden_size\n",
+    "        self.l1 = nn.Linear(input_size, hidden_size)\n",
+    "        self.l2 = nn.Linear(hidden_size, num_classes)\n",
+    "        self.relu = nn.ReLU()\n",
+    "\n",
+    "    def forward(self, y):\n",
+    "         out = self.l1(y)\n",
+    "         out = self.relu(out)\n",
+    "         out = self.l2(out)\n",
+    "\n",
+    "         return out"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Next Cascade's wrapper is defined. The most of the interaction with pytorch modules are already implemented in `cascade.utils.TorchModel` so we need to only define how to train and evaluate the model.  \n",
+    "  \n",
+    "The difference between previous example and this in the `fit` function - now it only fits one epoch per call and doesn't need additional logging - Trainer will cover this functionality."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class Classifier(TorchModel):\n",
+    "    # In train we copy-paste regular pytorch trainloop, \n",
+    "    # but use self._model, where our SimpleNN is placed\n",
+    "    def fit(self, train_dl, lr, *args, **kwargs):\n",
+    "        criterion = nn.CrossEntropyLoss()\n",
+    "        optim = torch.optim.Adam(self._model.parameters(), lr=lr)\n",
+    "\n",
+    "        ds_size = len(train_dl)\n",
+    "        for x, (imgs, labels) in enumerate(train_dl): \n",
+    "            imgs = imgs.reshape(-1, self._model.input_size)\n",
+    "\n",
+    "            out = self._model(imgs)\n",
+    "            loss = criterion(out, labels)\n",
+    "\n",
+    "            optim.zero_grad()\n",
+    "            loss.backward()\n",
+    "            optim.step() \n",
+    "\n",
+    "\n",
+    "    # Evaluate function takes the metrics from arguments\n",
+    "    # and populates self.metrics without returning anything\n",
+    "    def evaluate(self, test_dl, metrics_dict, *args, **kwargs):\n",
+    "        pred = []\n",
+    "        gt = []\n",
+    "        for imgs, labels in tqdm(test_dl): \n",
+    "            imgs = imgs.reshape(-1, self._model.input_size)\n",
+    "            out = torch.argmax(self._model(imgs, *args, **kwargs), -1)\n",
+    "\n",
+    "            pred.append(out)\n",
+    "            gt.append(labels)\n",
+    "\n",
+    "        pred = torch.concat(pred).detach().numpy()\n",
+    "        gt = torch.concat(gt).detach().numpy()\n",
+    "\n",
+    "        for metric_name in metrics_dict:\n",
+    "            self.metrics[metric_name] = metrics_dict[metric_name](gt, pred)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Model initialization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "NUM_EPOCHS = 10\n",
+    "LR = 1e-3\n",
+    "\n",
+    "# Classifier will initialize SimpleNN with all the parameters passed\n",
+    "# but some of them are not for the SimpleNN, but to be recorded in metadata\n",
+    "model = Classifier(SimpleNN,\n",
+    "    # These arguments are needed by SimpleNN, \n",
+    "    # but passed as keywords to be recorded in meta\n",
+    "    input_size=INPUT_SIZE,\n",
+    "    hidden_size=100,\n",
+    "    num_classes=10,\n",
+    "    # These arguments will be skipped by SimpleNN,\n",
+    "    # but will be added to meta\n",
+    "    num_epochs=NUM_EPOCHS,\n",
+    "    lr=LR,\n",
+    "    bs=BATCH_SIZE)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Set up trainer\n",
+    "Let's set up logging first to catch trainer's logs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import sys\n",
+    "import logging\n",
+    "logging.basicConfig(\n",
+    "    handlers=[logging.StreamHandler(sys.stdout)],\n",
+    "    level='INFO'\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Trainer accepts ModelRepo object or just a path \n",
+    "trainer = cdm.BasicTrainer('trainer_repo')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Training started with parameters:\n",
+      "{'lr': 0.001, 'bs': 10}\n",
+      "INFO:cascade.models.trainer:repo is ModelRepo in trainer_repo of 1 lines\n",
+      "INFO:cascade.models.trainer:line is 00000\n",
+      "INFO:cascade.models.trainer:training will last 10 epochs\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 500/500 [00:00<00:00, 836.31it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 0: {'acc': 0.874}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 827.84it/s]\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 1: {'acc': 0.8978}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 500/500 [00:00<00:00, 845.85it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 2: {'acc': 0.9092}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 866.87it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 3: {'acc': 0.9258}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 889.91it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 4: {'acc': 0.919}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 802.18it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 5: {'acc': 0.9164}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 834.14it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 6: {'acc': 0.9268}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 865.22it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 7: {'acc': 0.9328}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 835.19it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 8: {'acc': 0.9294}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 871.34it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 9: {'acc': 0.9282}\n",
+      "INFO:cascade.models.trainer:Training finished in 22 seconds\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "# The main method of course is train\n",
+    "# It will do all the stuff needed for us\n",
+    "# including training, evaluating, saving and logging\n",
+    "trainer.train(\n",
+    "    model,\n",
+    "    train_data=train_dl,\n",
+    "    test_data=test_dl,\n",
+    "    train_kwargs={'lr': LR, 'bs': BATCH_SIZE}, # will be passed into model.fit()\n",
+    "    test_kwargs={'metrics_dict': {'acc': accuracy_score}}, # will be passed into model.evaluate()\n",
+    "    epochs=NUM_EPOCHS,\n",
+    "    start_from=None, # can start from checkpoint if line is specified,\n",
+    "    save_strategy=2,\n",
+    "    eval_strategy=1\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Results\n",
+    "We can obtain the results of training from trainer's meta data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '<cascade.models.trainer.BasicTrainer object at 0x7f820f40beb0>',\n",
+       "  'train_start_at': DateTime(2023, 3, 30, 10, 44, 51, 579370, tzinfo=Timezone('Europe/Moscow')),\n",
+       "  'train_end_at': DateTime(2023, 3, 30, 10, 45, 14, 547613, tzinfo=Timezone('Europe/Moscow')),\n",
+       "  'metrics': [{'acc': 0.874},\n",
+       "   {'acc': 0.8978},\n",
+       "   {'acc': 0.9092},\n",
+       "   {'acc': 0.9258},\n",
+       "   {'acc': 0.919},\n",
+       "   {'acc': 0.9164},\n",
+       "   {'acc': 0.9268},\n",
+       "   {'acc': 0.9328},\n",
+       "   {'acc': 0.9294},\n",
+       "   {'acc': 0.9282}],\n",
+       "  'repo': [{'name': 'ModelRepo in trainer_repo of 1 lines',\n",
+       "    'root': 'trainer_repo',\n",
+       "    'len': 1,\n",
+       "    'updated_at': DateTime(2023, 3, 30, 7, 45, 14, 570552, tzinfo=Timezone('UTC')),\n",
+       "    'type': 'repo'}]}]"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "trainer.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Start from checkpoint\n",
+    "Let's try continue learning where we finished using the same line as before."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "WARNING:cascade.models.trainer:Model trainer_repo/00000/00009/model files were not found\n",
+      "[Errno 2] No such file or directory: 'trainer_repo/00000/00009/model'\n",
+      "INFO:cascade.models.trainer:Training started with parameters:\n",
+      "{'lr': 0.001, 'bs': 10}\n",
+      "INFO:cascade.models.trainer:repo is ModelRepo in trainer_repo of 1 lines\n",
+      "INFO:cascade.models.trainer:line is 00000\n",
+      "INFO:cascade.models.trainer:started from model None\n",
+      "INFO:cascade.models.trainer:training will last 5 epochs\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 500/500 [00:00<00:00, 851.19it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 0: {'acc': 0.9396}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 850.32it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 1: {'acc': 0.9384}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 881.03it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 2: {'acc': 0.9378}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 858.31it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 3: {'acc': 0.941}\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "100%|██████████| 500/500 [00:00<00:00, 878.11it/s]"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:cascade.models.trainer:Epoch 4: {'acc': 0.9162}\n",
+      "INFO:cascade.models.trainer:Training finished in 11 seconds\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "trainer.train(\n",
+    "    model,\n",
+    "    train_data=train_dl,\n",
+    "    test_data=test_dl,\n",
+    "    train_kwargs={'lr': LR, 'bs': BATCH_SIZE},\n",
+    "    test_kwargs={'metrics_dict': {'acc': accuracy_score}},\n",
+    "    epochs=5,\n",
+    "    start_from='00000',\n",
+    "    save_strategy=4,\n",
+    "    eval_strategy=1\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'acc': 0.874},\n",
+       " {'acc': 0.8978},\n",
+       " {'acc': 0.9092},\n",
+       " {'acc': 0.9258},\n",
+       " {'acc': 0.919},\n",
+       " {'acc': 0.9164},\n",
+       " {'acc': 0.9268},\n",
+       " {'acc': 0.9328},\n",
+       " {'acc': 0.9294},\n",
+       " {'acc': 0.9282},\n",
+       " {'acc': 0.9396},\n",
+       " {'acc': 0.9384},\n",
+       " {'acc': 0.9378},\n",
+       " {'acc': 0.941},\n",
+       " {'acc': 0.9162}]"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "trainer.metrics"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## See also:\n",
+    "- [Pipeline building](pipeline_building.html)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "cascade_full_env",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.6"
+  },
+  "orig_nbformat": 4,
+  "vscode": {
+   "interpreter": {
+    "hash": "faab9700dd378963078e8736d2f2a2135ebae0340eb64481dd59710303e6f8c4"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
