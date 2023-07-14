@@ -14,7 +14,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.folder_image_dataset.FolderImageDataset
+.. autoclass:: cascade.utils.vision.FolderImageDataset
     :members:
 
 |
@@ -59,7 +59,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.pa_schema_validator.PaSchemaValidator
+.. autoclass:: cascade.utils.pandera.PaSchemaValidator
     :members:
 
 |
@@ -68,7 +68,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.sk_model.SkModel
+.. autoclass:: cascade.utils.sklearn.SkModel
     :members:
 
 |
@@ -177,7 +177,7 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.torch_model.TorchModel
+.. autoclass:: cascade.utils.torch.TorchModel
     :members:
 
 |
@@ -186,7 +186,34 @@ cascade.utils
 
 |
 
-.. autoclass:: cascade.utils.text_classification_dataset.TextClassificationDataset
+.. autoclass:: cascade.utils.nlp.TextClassificationDataset
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.dataset_server.DatasetServer
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.dataset_client.DatasetClient
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.utils.serializer.Serializer
     :members:
 
 |

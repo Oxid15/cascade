@@ -1,42 +1,41 @@
+
+
 <!DOCTYPE html>
 
 
-<html>
+<html >
 
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cascade.base.traceable &#8212; cascade 0.11.1 documentation</title>
+    <title>cascade.base.traceable &#8212; cascade 0.12.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
-
-
-    <script data-cfasync="false">
-        document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-        document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
-    </script>
-
-    <!-- Loaded before other Sphinx assets -->
-    <link href="../../../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-    <link href="../../../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-    <link href="../../../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-
-
-    <link href="../../../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-        href="../../../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-        href="../../../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-        href="../../../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  
+  <link href="../../../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-
-    <!-- Pre-loaded scripts that we'll load fully later -->
-    <link rel="preload" as="script" href="../../../scripts/bootstrap.js?digest=e353d410970836974a52" />
-    <link rel="preload" as="script" href="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../" id="documentation_options" src="../../../documentation_options.js"></script>
     <script src="../../../jquery.js"></script>
@@ -45,79 +44,89 @@
     <script src="../../../clipboard.min.js"></script>
     <script src="../../../copybutton.js"></script>
     <script src="../../../design-tabs.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA="
-        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/cascade/base/traceable';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
-    </script>
-    <link rel="shortcut icon" href="../../../100x100_logo.png" />
+        </script>
+    <link rel="shortcut icon" href="../../../logo_sq.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None" />
-</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="None"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-
-<body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%"
-    data-default-mode="">
-
-
-
-    <a class="skip-link" href="#main-content">Skip to main content</a>
-
-    <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary" />
-    <label class="overlay overlay-primary" for="__primary"></label>
-
-    <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary" />
-    <label class="overlay overlay-secondary" for="__secondary"></label>
-
-    <div class="search-button__wrapper">
-        <div class="search-button__overlay"></div>
-        <div class="search-button__search-container">
-            <form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..."
-                    aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off"
-                    spellcheck="false" />
-                <span class="search-button__kbd-shortcut"><kbd
-                        class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-            </form>
-        </div>
-    </div>
-
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
     <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-        <div class="bd-header__inner bd-page-width">
-            <label class="sidebar-toggle primary-toggle" for="__primary">
-                <span class="fa-solid fa-bars"></span>
-            </label>
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
-            <div class="navbar-header-items__start">
-
-                <div class="navbar-item">
-
-
-                    <a class="navbar-brand logo" href="../../../index.html">
-
-
-
-
-
-
-
-
-
-                        <img src="../../../logo.png" class="logo__image only-light" alt="Logo image" />
-                        <script>document.write(`<img src="../../../logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
-
-
-                    </a>
-                </div>
-
-                <div class="navbar-item">
-                    <script>
-                        document.write(`
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../logo.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../../logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
       latest  <!-- this text may get changed later by javascript -->
@@ -128,273 +137,260 @@
     </div>
   </div>
 `);
-                    </script>
-                </div>
+</script></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
 
-            </div>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../concepts.html">
+                        Concepts
+                      </a>
+                    </li>
+                
 
-            <div class="col-lg-9 navbar-header-items">
-
-                <div class="me-auto navbar-header-items__center">
-
-                    <div class="navbar-item">
-                        <nav class="navbar-nav">
-                            <p class="sidebar-header-items__title" role="heading" aria-level="1"
-                                aria-label="Site Navigation">
-                                Site Navigation
-                            </p>
-                            <ul class="bd-navbar-elements navbar-nav">
-
-                                <li class="nav-item">
-                                    <a class="nav-link nav-internal" href="../../../quickstart.html">
-                                        Quickstart
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link nav-internal" href="../../../examples.html">
-                                        Examples
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link nav-internal" href="../../../concepts.html">
-                                        Concepts
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link nav-internal" href="../../../modules.html">
-                                        API reference
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </nav>
-                    </div>
-
-                </div>
-
-
-                <div class="navbar-header-items__end">
-
-                    <div class="navbar-item navbar-persistent--container">
-
-                        <script>
-                            document.write(`
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-                        </script>
-                    </div>
-
-
-                    <div class="navbar-item">
-                        <script>
-                            document.write(`
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-                        </script>
-                    </div>
-
-                    <div class="navbar-item">
-                        <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
-                            <li class="nav-item">
-
-
-
-
-
-
-
-
-                                <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
-                                    rel="noopener" target="_blank" data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-                                    <label class="sr-only">GitHub</label></a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="navbar-persistent--mobile">
-                <script>
-                    document.write(`
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-                </script>
-            </div>
+</script>
+    </div>
+  
 
-
-
-        </div>
+  
+</div>
 
     </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
 
-    <div class="bd-container">
-        <div class="bd-container__inner bd-page-width">
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
 
-            <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../concepts.html">
+                        Concepts
+                      </a>
+                    </li>
+                
 
-
-                <div class="sidebar-header-items sidebar-primary__section">
-
-
-                    <div class="sidebar-header-items__center">
-
-                        <div class="navbar-item">
-                            <nav class="navbar-nav">
-                                <p class="sidebar-header-items__title" role="heading" aria-level="1"
-                                    aria-label="Site Navigation">
-                                    Site Navigation
-                                </p>
-                                <ul class="bd-navbar-elements navbar-nav">
-
-                                    <li class="nav-item">
-                                        <a class="nav-link nav-internal" href="../../../quickstart.html">
-                                            Quickstart
-                                        </a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a class="nav-link nav-internal" href="../../../examples.html">
-                                            Examples
-                                        </a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a class="nav-link nav-internal" href="../../../concepts.html">
-                                            Concepts
-                                        </a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a class="nav-link nav-internal" href="../../../modules.html">
-                                            API reference
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </nav>
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="sidebar-header-items__end">
-
-                        <div class="navbar-item">
-                            <script>
-                                document.write(`
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-                            </script>
-                        </div>
-
-                        <div class="navbar-item">
-                            <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
-                                <li class="nav-item">
-
-
-
-
-
-
-
-
-                                    <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
-                                        rel="noopener" target="_blank" data-bs-toggle="tooltip"
-                                        data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-                                        <label class="sr-only">GitHub</label></a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="sidebar-primary-items__end sidebar-primary__section">
-                </div>
-
-                <div id="rtd-footer-container"></div>
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-            </div>
-
-            <main id="main-content" class="bd-main">
-
-
-                <div class="bd-content">
-                    <div class="bd-article-container">
-
-                        <div class="bd-header-article">
-                            <div class="header-article-items header-article__inner">
-
-                                <div class="header-article-items__start">
-
-                                    <div class="header-article-item">
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
 
 
 
-                                        <nav aria-label="Breadcrumbs">
-                                            <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
-
-                                                <li class="breadcrumb-item breadcrumb-home">
-                                                    <a href="../../../index.html" class="nav-link" aria-label="Home">
-                                                        <i class="fa-solid fa-home"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li class="breadcrumb-item"><a href="../../index.html"
-                                                        class="nav-link">Module code</a></li>
-
-                                                <li class="breadcrumb-item active" aria-current="page">
-                                                    cascade.base.traceable</li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-                        </div>
-
-
-
-
-                        <div id="searchbox"></div>
-                        <article class="bd-article" role="main">
-
-                            <h1>Source code for cascade.base.traceable</h1>
-                            <div class="highlight">
-                                <pre>
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">cascade.base.traceable</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for cascade.base.traceable</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Copyright 2022-2023 Ilia Moiseev</span>
 
@@ -412,21 +408,27 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">PipeMeta</span><span class="p">,</span> <span class="n">MetaFromFile</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
+<span class="kn">import</span> <span class="nn">pendulum</span>
+
+<span class="kn">from</span> <span class="nn">cascade.base</span> <span class="kn">import</span> <span class="n">PipeMeta</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">PipeMeta</span><span class="p">,</span> <span class="n">MetaFromFile</span><span class="p">,</span> <span class="n">supported_meta_formats</span>
 
 
 <div class="viewcode-block" id="Traceable"><a class="viewcode-back" href="../../../modules/cascade.base.html#cascade.base.Traceable">[docs]</a><span class="k">class</span> <span class="nc">Traceable</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Base class for everything that has metadata in cascade.</span>
-<span class="sd">    Handles the logic of getting and updating internal meta prefix.</span>
+<span class="sd">    Base class for everything that has metadata in Cascade</span>
+<span class="sd">    Handles the logic of getting and updating internal meta prefix</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Traceable.__init__"><a class="viewcode-back" href="../../../modules/cascade.base.html#cascade.base.Traceable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
         <span class="n">meta_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
@@ -449,7 +451,8 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_read_meta_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MetaFromFile</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">MetaHandler</span>
-        <span class="k">return</span> <span class="n">MetaHandler</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">MetaHandler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Traceable.get_meta"><a class="viewcode-back" href="../../../modules/cascade.base.html#cascade.base.Traceable.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PipeMeta</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -464,10 +467,8 @@
 
 <span class="sd">            Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_meta_prefix&#39;</span><span class="p">):</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)}</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_meta_prefix&quot;</span><span class="p">):</span>
             <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_warn_no_prefix</span><span class="p">()</span>
@@ -483,11 +484,12 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s1">&#39;Object that was passed or read from path is a list.&#39;</span>
-                <span class="s1">&#39;There is no clear way how to update this object</span><span class="se">\&#39;</span><span class="s1">s meta&#39;</span>
-                <span class="s1">&#39;using list&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;Object that was passed or read from path is a list.&quot;</span>
+                <span class="s2">&quot;There is no clear way how to update this object&#39;s meta&quot;</span>
+                <span class="s2">&quot;using list&quot;</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_meta_prefix&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_meta_prefix&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_warn_no_prefix</span><span class="p">()</span></div>
@@ -495,86 +497,176 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_warn_no_prefix</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s1">&#39;Object doesn</span><span class="se">\&#39;</span><span class="s1">t have _meta_prefix. &#39;</span>
-            <span class="s1">&#39;This may mean super().__init__() wasn</span><span class="se">\&#39;</span><span class="s1">t&#39;</span>
-            <span class="s1">&#39;called somewhere&#39;</span>
-        <span class="p">)</span></div>
-</pre>
-                            </div>
+            <span class="s2">&quot;Object doesn&#39;t have _meta_prefix. &quot;</span>
+            <span class="s2">&quot;This may mean super().__init__() wasn&#39;t&quot;</span>
+            <span class="s2">&quot;called somewhere&quot;</span>
+        <span class="p">)</span>
 
-                        </article>
+<div class="viewcode-block" id="Traceable.__repr__"><a class="viewcode-back" href="../../../modules/cascade.base.html#cascade.base.Traceable.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        repr: str</span>
+<span class="sd">            Representation of a Traceable. This repr used as a name for get_meta() method</span>
+<span class="sd">            by default gives the name of class from basic repr</span>
 
-
-
-                        <footer class="bd-footer-article">
-
-                            <div class="footer-article-items footer-article__inner">
-
-                                <div class="footer-article-item"><!-- Previous / next buttons -->
-                                    <div class="prev-next-area">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </footer>
-
-                    </div>
+<span class="sd">        See also</span>
+<span class="sd">        --------</span>
+<span class="sd">        cascade.data.Traceable.get_meta()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Removes adress part of basic object repr and leading &lt; symbol</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span></div></div>
 
 
+<span class="k">class</span> <span class="nc">TraceableOnDisk</span><span class="p">(</span><span class="n">Traceable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Common interface for Traceables that have</span>
+<span class="sd">    their meta-data written on disk</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">meta_fmt</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yaml&quot;</span><span class="p">],</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">meta_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="o">=</span><span class="n">meta_prefix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="k">if</span> <span class="n">meta_fmt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_meta_formats</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Only </span><span class="si">{</span><span class="n">supported_meta_formats</span><span class="si">}</span><span class="s2"> are supported formats&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_meta_fmt</span> <span class="o">=</span> <span class="n">meta_fmt</span>
 
+    <span class="k">def</span> <span class="nf">_create_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">meta_path</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="s2">&quot;meta.*&quot;</span><span class="p">)))</span>
+        <span class="c1"># Object was created before -&gt; update</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta_path</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_meta</span><span class="p">()</span>
+            <span class="k">return</span>
 
-                </div>
-                <footer class="bd-footer-content">
+        <span class="n">created</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s2">&quot;UTC&quot;</span><span class="p">))</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="n">created</span><span class="p">})</span>
+
+        <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">MetaHandler</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">MetaHandler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="s2">&quot;meta&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_fmt</span><span class="p">),</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File writing error ignored: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_update_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads meta if exists and updates it with new values</span>
+<span class="sd">        writes back to disk</span>
+
+<span class="sd">        If meta file exists and is only one, then reads it</span>
+<span class="sd">        and writes back in the same format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">meta_path</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="s2">&quot;meta.*&quot;</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta_path</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta_path</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">meta_path</span><span class="p">)</span><span class="si">}</span><span class="s2"> meta files in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="si">}</span><span class="s2">, failed to update meta&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">MetaHandler</span>
+
+        <span class="n">meta_path</span> <span class="o">=</span> <span class="n">meta_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">MetaHandler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">meta_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File reading error ignored: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">MetaHandler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">meta_path</span><span class="p">,</span> <span class="p">[</span><span class="n">meta</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File writing error ignored: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_root</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span>
+
+    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PipeMeta</span><span class="p">:</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;updated_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pendulum</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">meta</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
 
                 </footer>
-
-            </main>
-        </div>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-    <!-- Scripts loaded after <body> so the DOM is not blocked -->
-    <script src="../../../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-    <script src="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2023, Ilia Moiseev.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
 
-    <footer class="bd-footer">
-        <div class="bd-footer__inner bd-page-width">
-
-            <div class="footer-items__start">
-
-                <div class="footer-item">
-                    <p class="copyright">
-
-                        © Copyright 2022-2023, Ilia Moiseev.
-                        <br />
-
-                    </p>
-                </div>
-
-                <div class="footer-item">
-                    <p class="sphinx-version">
-                        Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
-                        <br />
-                    </p>
-                </div>
-
-            </div>
-
-
-            <div class="footer-items__end">
-
-                <div class="footer-item">
-                    <p class="theme-version">
-                        Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData
-                            Sphinx Theme</a> 0.13.3.
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-
-    </footer>
-</body>
-
+  </footer>
+  </body>
 </html>
