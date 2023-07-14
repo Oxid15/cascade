@@ -25,7 +25,9 @@ from cascade.data import BruteforceCacher, Wrapper
 
 def test_ds(number_dataset):
     ds = BruteforceCacher(number_dataset)
-    assert [number_dataset[i] for i in range(len(number_dataset))] == [item for item in ds]
+    assert [number_dataset[i] for i in range(len(number_dataset))] == [
+        item for item in ds
+    ]
 
 
 def test_it(number_iterator):

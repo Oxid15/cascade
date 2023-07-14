@@ -16,10 +16,12 @@ limitations under the License.
 
 import os
 import sys
+
 import numpy as np
 
 MODULE_PATH = os.path.dirname(
-    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.utils.baselines import ConstantBaseline
@@ -27,12 +29,15 @@ from cascade.utils.baselines import ConstantBaseline
 
 def test():
     model = ConstantBaseline(constant=1)
-    assert np.all(model.predict([0, 0, 0]) == np.array([1, 1, 1]))
+    assert np.all(model.predict([0, 0, 0]) == [1, 1, 1])
 
     model = ConstantBaseline(constant=[1, 0])
-    assert np.all(model.predict([0, 0, 0]) == np.array([[1, 0], [1, 0], [1, 0]]))
+    assert np.all(model.predict([0, 0, 0]) == [[1, 0], [1, 0], [1, 0]])
 
     model = ConstantBaseline(constant=[[1, 0], [0, 1]])
-    assert np.all(
-        model.predict([0, 0, 0]) == np.array([[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]])
+    assert np.all(model.predict([0, 0, 0])
+                  == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]]
     )
+
+    model = ConstantBaseline(constant=None)
+    assert np.all(model.predict([1]) == [None])

@@ -16,39 +16,46 @@ limitations under the License.
 
 import os
 import sys
+
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.tests.conftest import EmptyModel, DummyModel
-from cascade.models import ModelRepo
 from cascade.meta import HistoryViewer
+from cascade.models import ModelRepo
+from cascade.tests.conftest import DummyModel, EmptyModel
 
 
-def test_run(model_repo, dummy_model):
+def test_run(repo_or_line, dummy_model):
     dummy_model.evaluate()
-    model_repo['0'].save(dummy_model)
+    if isinstance(repo_or_line, ModelRepo):
+        repo_or_line["0"].save(dummy_model)
+    else:
+        repo_or_line.save(dummy_model)
 
-    hv = HistoryViewer(model_repo)
-    hv.plot('acc')
+    hv = HistoryViewer(repo_or_line)
+    hv.plot("acc")
 
 
-def test_no_metric(model_repo, dummy_model):
-    model_repo['0'].save(dummy_model)
+def test_no_metric(repo_or_line, dummy_model):
+    if isinstance(repo_or_line, ModelRepo):
+        repo_or_line["0"].save(dummy_model)
+    else:
+        repo_or_line.save(dummy_model)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo_or_line)
     with pytest.raises(AssertionError):
-        hv.plot('acc')
+        hv.plot("acc")
 
 
 def test_empty_model(model_repo, empty_model):
-    model_repo.add_line('test', EmptyModel)
-    empty_model.metrics = {'acc': 0.9}
-    model_repo['test'].save(empty_model)
+    model_repo.add_line("test", EmptyModel)
+    empty_model.metrics = {"acc": 0.9}
+    model_repo["test"].save(empty_model)
 
     hv = HistoryViewer(model_repo)
-    hv.plot('acc')
+    hv.plot("acc")
 
 
 def test_many_lines(model_repo, dummy_model):
@@ -58,27 +65,22 @@ def test_many_lines(model_repo, dummy_model):
     model1 = dummy_model
     model1.evaluate()
 
-    model_repo['0'].save(model0)
-    model_repo['1'].save(model1)
+    model_repo["0"].save(model0)
+    model_repo["1"].save(model1)
 
     hv = HistoryViewer(model_repo)
-    hv.plot('acc')
+    hv.plot("acc")
 
 
-@pytest.mark.parametrize(
-    'ext', [
-        '.json',
-        '.yml'
-    ]
-)
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_missing_model_meta(tmp_path, dummy_model, ext):
     model_repo = ModelRepo(str(tmp_path))
-    model_repo.add_line('test', model_cls=DummyModel, meta_fmt=ext)
+    model_repo.add_line("test", model_cls=DummyModel, meta_fmt=ext)
     dummy_model.evaluate()
-    model_repo['test'].save(dummy_model)
-    model_repo['test'].save(dummy_model)
+    model_repo["test"].save(dummy_model)
+    model_repo["test"].save(dummy_model)
 
-    os.remove(os.path.join(tmp_path, 'test', '00000', 'meta' + ext))
+    os.remove(os.path.join(tmp_path, "test", "00000", "meta" + ext))
 
     hv = HistoryViewer(model_repo)
-    hv.plot('acc')
+    hv.plot("acc")

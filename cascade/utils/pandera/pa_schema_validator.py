@@ -19,8 +19,8 @@ from typing import Any
 import pandera.io as paio
 from pandera.errors import SchemaError
 
-from ..meta import AggregateValidator, DataValidationException
-from .tables import TableDataset
+from ...meta import AggregateValidator, DataValidationException
+from ..tables import TableDataset
 
 
 class PaSchemaValidator(AggregateValidator):

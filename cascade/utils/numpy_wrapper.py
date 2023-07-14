@@ -15,20 +15,21 @@ limitations under the License.
 """
 
 from typing import Any
+
 import numpy as np
-from ..data import Wrapper
+
 from ..base import PipeMeta
+from ..data import Wrapper
 
 
 class NumpyWrapper(Wrapper):
     """
     A wrapper around .npy files. Loads file in `__init__`.
-    """
-    def __init__(self, path: str, *args: Any, **kwargs: Any) -> None:
-        self._path = path
-        super().__init__(np.load(path), *args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
-        meta = super().get_meta()
-        meta[0]['root'] = self._path
-        return meta
+    Important
+    ---------
+    This is removed since 0.12.0
+    """
+
+    def __init__(self, path: str, *args: Any, **kwargs: Any) -> None:
+        raise ImportError("NumpyWrapper was removed since 0.12.0, consider using older version")

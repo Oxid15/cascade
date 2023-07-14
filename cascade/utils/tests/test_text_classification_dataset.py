@@ -18,27 +18,28 @@ import os
 import sys
 
 MODULE_PATH = os.path.dirname(
-    os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+)
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils.text_classification_dataset import TextClassificationDataset
+from cascade.utils.nlp import TextClassificationFolder
 
 
 def test_create(tmp_path):
     tmp_path = str(tmp_path)
-    paths = [f'class_{i}' for i in range(3)]
+    paths = [f"class_{i}" for i in range(3)]
 
     for path in paths:
         path = os.path.join(tmp_path, path)
         os.mkdir(path)
 
-        with open(os.path.join(path, 'text_1.txt'), 'w') as f:
-            f.write('hello')
-        with open(os.path.join(path, 'text_2.txt'), 'w') as f:
-            f.write('hello')
+        with open(os.path.join(path, "text_1.txt"), "w") as f:
+            f.write("hello")
+        with open(os.path.join(path, "text_2.txt"), "w") as f:
+            f.write("hello")
 
-    ds = TextClassificationDataset(tmp_path)
+    ds = TextClassificationFolder(tmp_path)
     meta = ds.get_meta()[0]
 
-    assert meta['size'] == 6
-    assert len(meta['labels']) == 3
+    assert meta["size"] == 6
+    assert len(meta["labels"]) == 3

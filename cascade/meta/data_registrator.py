@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from dataclasses import dataclass, asdict
-from typing import List, Tuple, Dict, Union, Any
+from dataclasses import asdict, dataclass
+from typing import Any, Dict, List, Tuple, Union
+
 import pendulum
 
 from ..base import HistoryLogger
@@ -34,6 +35,7 @@ class Assessor:
     If it needs to be extended, please create
     a new class instead.
     """
+
     id: Union[str, None] = None
     position: Union[str, None] = None
 
@@ -50,6 +52,7 @@ class LabelingInfo:
     If it needs to be extended, please create
     a new class instead.
     """
+
     who: Union[List[Assessor], None] = None
     process_desc: Union[str, None] = None
     docs: Union[str, None] = None
@@ -61,7 +64,26 @@ class DataCard:
     on dataset. The set of fields here
     is general and can be extended by providing
     new keywords into __init__.
+
+    Example
+    -------
+    >>> from cascade.meta import DataCard, Assessor, LabelingInfo, DataRegistrator
+    >>> person = Assessor(id=0, position="Assessor")
+    >>> info = LabelingInfo(who=[person], process_desc="Labeling description")
+    >>> dc = DataCard(
+    ...     name="Dataset",
+    ...     desc="Example dataset",
+    ...     source="Database",
+    ...     goal="Every dataset should have a goal",
+    ...     labeling_info=info,
+    ...     size=100,
+    ...     metrics={"quality": 100},
+    ...     schema={"label": "value"},
+    ...     custom_field="hello")
+    >>> dr = DataRegistrator('data_log.yml')
+    >>> dr.register(dc)
     """
+
     def __init__(
         self,
         name: Union[str, None] = None,
@@ -107,7 +129,9 @@ class DataCard:
             desc=desc,
             source=source,
             goal=goal,
-            labeling_info=asdict(labeling_info) if labeling_info is not None else labeling_info,
+            labeling_info=asdict(labeling_info)
+            if labeling_info is not None
+            else labeling_info,
             size=size,
             metrics=metrics,
             schema=schema,
@@ -121,13 +145,11 @@ class DataRegistrator:
     I is useful if dataset is not a static object and
     has some properties changed during the time.
     """
+
     def __init__(self, filepath: str) -> None:
         self._logger = HistoryLogger(filepath)
 
-    def register(
-        self,
-        card: DataCard
-    ) -> None:
+    def register(self, card: DataCard) -> None:
         """
         Each time this method is called - a new snapshot of
         gived card is done in the log.
@@ -145,7 +167,7 @@ class DataRegistrator:
         --------
         cascade.meta.DataCard
         """
-        now = str(pendulum.now(tz='UTC'))
-        card.data['updated_at'] = now
+        now = str(pendulum.now(tz="UTC"))
+        card.data["updated_at"] = now
 
         self._logger.log(card.data)

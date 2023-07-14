@@ -25,16 +25,29 @@ from cascade.data import FolderDataset
 
 def test(tmp_path):
     tmp_path = str(tmp_path)
-    with open(os.path.join(tmp_path, '0.txt'), 'w') as w:
-        w.write('hello')
+    with open(os.path.join(tmp_path, "a.txt"), "w") as w:
+        w.write("hello")
+
+    with open(os.path.join(tmp_path, "b.txt"), "w") as w:
+        w.write("hello")
 
     ds = FolderDataset(tmp_path)
     meta = ds.get_meta()[0]
 
-    assert len(ds) == 1
-    assert 'name' in meta
-    assert 'len' in meta
-    assert 'paths' in meta
-    assert 'md5sums' in meta
-    assert len(meta['paths']) == 1
-    assert len(meta['md5sums']) == 1
+    assert len(ds) == 2
+    assert "name" in meta
+    assert "len" in meta
+
+
+def test_names(tmp_path):
+    tmp_path = str(tmp_path)
+    with open(os.path.join(tmp_path, "a.txt"), "w") as w:
+        w.write("hello")
+
+    with open(os.path.join(tmp_path, "b.txt"), "w") as w:
+        w.write("hello")
+
+    ds = FolderDataset(tmp_path)
+    names = ds.get_names()
+    assert os.path.split(names[0])[-1] == "a.txt"
+    assert os.path.split(names[1])[-1] == "b.txt"

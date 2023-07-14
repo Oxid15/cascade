@@ -17,11 +17,11 @@ Cascade built for individuals or small teams that are in need of ML Engineering 
 pip install cascade-ml
 ```
 
-More info on installation can be found in [documentation](https://oxid15.github.io/cascade/quickstart.html#installation)
+More info on installation can be found in [documentation](https://oxid15.github.io/cascade/en/latest/quickstart.html#installation)
 
 ## Documentation
 
-[Go to Cascade documentation](https://oxid15.github.io/cascade/)
+[Go to Cascade documentation](https://oxid15.github.io/cascade/en/latest)
 
 ## Usage
 
@@ -87,8 +87,8 @@ Cascade has a solution for this.
 cdd.VersionAssigner(train_ds, 'version_log.yml')
 ```
 
-See all datasets in [zoo](https://oxid15.github.io/cascade/examples/dataset_zoo.html)  
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/examples/dataset_zoo.html)  
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Experiment tracking
 
@@ -129,7 +129,7 @@ Let's see what is saved as meta data of this experiment.
 ]
 ```
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Data validation
 
@@ -161,7 +161,7 @@ cme.PredicateValidator(
 )
 ```
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Metadata analysis
 
@@ -197,7 +197,7 @@ cme.HistoryViewer(repo).plot()
 cme.HistoryViewer(repo).serve()
 ```
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/quickstart.html)
+See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ![history-viewer](cascade/docs/imgs/history-viewer.gif)
 
@@ -237,7 +237,9 @@ If you used the code in your research, please cite it with:
 ```bibtex
 @software{ilia_moiseev_2023_8006995,
   author       = {Ilia Moiseev},
-  title        = {Oxid15/cascade},
+  title        = {Oxid15/cascade: Lightweight ML Engineering library},
+  month        = jun,
+  year         = 2023,
   publisher    = {Zenodo},
   doi          = {10.5281/zenodo.8006995},
   url          = {https://doi.org/10.5281/zenodo.8006995}

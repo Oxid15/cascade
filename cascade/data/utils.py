@@ -16,12 +16,14 @@ limitations under the License.
 
 from math import floor
 from typing import Tuple, Union
-from . import SizedDataset, RangeSampler, T
+
+from . import RangeSampler, SizedDataset, T
 
 
-def split(ds: SizedDataset[T], frac: Union[float, None] = 0.5,
-          num: Union[int, None] = None) -> Tuple[SizedDataset, SizedDataset]:
-    '''
+def split(
+    ds: SizedDataset[T], frac: Union[float, None] = 0.5, num: Union[int, None] = None
+) -> Tuple[SizedDataset, SizedDataset]:
+    """
     Splits dataset into two cascade.data.RangeSampler`s
 
     Parameters
@@ -58,9 +60,9 @@ def split(ds: SizedDataset[T], frac: Union[float, None] = 0.5,
     [0, 1, 2, 3]
     >>> print([item for item in ds2])
     [4]
-    '''
+    """
     if num is None and frac is None:
-        raise ValueError('Either num or frac must be specified. Got both None')
+        raise ValueError("Either num or frac must be specified. Got both None")
 
     if num is None:
         num = floor(len(ds) * frac)

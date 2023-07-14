@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .model import Model, ModelModifier
 from .basic_model import BasicModel, BasicModelModifier
-from .model_repo import ModelRepo
+from .model import Model, ModelModifier
 from .model_line import ModelLine
-from .trainer import Trainer, BasicTrainer
+from .model_repo import ModelRepo, Repo, SingleLineRepo
+from .trainer import BasicTrainer, Trainer
+from .workspace import Workspace

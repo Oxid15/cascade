@@ -14,15 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import List, Union, Dict, Any
+import glob
+import os
+from typing import Any, Dict, List, Union
 
-import pendulum
 import pandas as pd
-from flatten_json import flatten
+import pendulum
 from deepdiff import DeepDiff
+from flatten_json import flatten
 
-from ..models import ModelRepo
-from . import Server, MetaViewer
+from ..base import MetaHandler
+from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
+from . import MetaViewer, Server
 
 
 class HistoryViewer(Server):
@@ -34,24 +37,66 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        repo: ModelRepo,
+        container: Union[Workspace, ModelRepo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
     ) -> None:
         """
         Parameters
         ----------
-        repo: cascade.models.ModelRepo
-            Repo to be viewed
+        container: Union[Workspace, ModelRepo, ModelLine]
+            Container of models to be viewed
         last_lines: int, optional
             Constraints the number of lines back from the last one to view
         last_models: int, optional
             For each line constraints the number of models back from the last one to view
         """
-        self._repo = repo
+        self._container = container
         self._last_lines = last_lines
         self._last_models = last_models
+
+        self._reload()
         self._make_table()
+
+    def _reload(self) -> None:
+        repo = self._container
+        if isinstance(self._container, ModelLine):
+            repo = SingleLineRepo(self._container)
+
+        repos = [repo]
+        if isinstance(self._container, Workspace):
+            self._container.reload()
+            repos = [self._container[name] for name in self._container.get_repo_names()]
+            repo = self._container.get_default()
+        else:
+            for repo in repos:
+                repo.reload()
+
+        self._repo = repo
+        self._repos = {repo.get_root(): repo for repo in repos}
+
+    def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
+        valid_lines = []
+        updated_at = []
+        for line in line_names:
+            meta_paths = glob.glob(os.path.join(self._repo.get_root(), line, "meta.*"))
+            if len(meta_paths) > 1:
+                raise RuntimeError(
+                    f"{len(meta_paths)} line meta files was found in "
+                    f"{os.path.join(self._repo.get_root(), line)}. Should be exactly one"
+                )
+            elif len(meta_paths) == 0:
+                continue
+
+            meta = MetaHandler.read(meta_paths[0])
+            updated_at.append(meta[0]["updated_at"])
+            valid_lines.append(line)
+
+        valid_lines = [
+            line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
+        ]
+
+        return valid_lines[-self._last_lines :]
 
     def _make_table(self) -> None:
         metas = []
@@ -59,16 +104,16 @@ class HistoryViewer(Server):
 
         line_names = self._repo.get_line_names()
         if self._last_lines is not None:
-            # Takes last N lines in correct order
-            line_names = line_names[-self._last_lines :]
+            line_names = self._get_last_updated_lines(line_names)
 
         for line_name in line_names:
             line = self._repo[line_name]
-            view = MetaViewer(line.root, filt={"type": "model"})
+            line_root = line.get_root()
+            view = MetaViewer(line_root, filt={"type": "model"})
 
             last_models = self._last_models if self._last_models is not None else 0
             for i in range(len(line))[-last_models:]:
-                new_meta = {"line": line.root, "num": i}
+                new_meta = {"line": line_root, "model": i}
                 try:
                     # TODO: to take only first is not good...
                     meta = view[i][0]
@@ -79,7 +124,7 @@ class HistoryViewer(Server):
                 metas.append(new_meta)
 
                 p = {
-                    "line": line.root,
+                    "line": line_root,
                 }
                 if "params" in meta:
                     if len(meta["params"]) > 0:
@@ -157,16 +202,19 @@ class HistoryViewer(Server):
         self._table["color"] = [line_cols[line] for line in self._table["line"]]
         table = self._table.fillna("")
 
+        columns2fill = [
+            col for col in self._table.columns if not col.startswith("metrics_")
+        ]
+        table = self._table.fillna({name: "" for name in columns2fill})
+
         # plot each model against metric
         # with all metadata on hover
 
-        fig = px.scatter(
-            table,
-            x="time",
-            y=metric,
-            hover_data=[name for name in pd.DataFrame(self._params).columns],
-            color="line",
-        )
+        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        if "saved_at" in table.columns:
+            hover_cols = ["saved_at"] + hover_cols
+        hover_cols = ["model"] + hover_cols
+        fig = px.scatter(table, x="time", y=metric, hover_data=hover_cols, color="line")
 
         # determine connections between models
         # plot each one with respected color
@@ -219,28 +267,13 @@ class HistoryViewer(Server):
 
         return fig
 
-    def serve(self, metric: Union[str, None] = None, **kwargs: Any) -> None:
-        """
-        Runs dash-based server with HistoryViewer, updating plots in real-time.
-
-        Parameters
-        ----------
-        metric, optional:
-            One of the metrics in the repo. May be left None and chosen later in
-            the interface
-        **kwargs
-            Arguments for app.run_server() for example port or host
-        Note
-        ----
-        This feature needs `dash` to be installed.
-        """
-        # Conditional import
+    def _layout(self, metric):
         try:
             import dash
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
-            from dash import Input, Output, html, dcc
+            from dash import Input, Output, dcc, html
 
         try:
             import plotly
@@ -249,11 +282,15 @@ class HistoryViewer(Server):
         else:
             from plotly import graph_objects as go
 
-        app = dash.Dash()
         fig = self.plot(metric) if metric is not None else go.Figure()
 
-        app.layout = html.Div(
+        return html.Div(
             [
+                dcc.Dropdown(
+                    id="repo-dropdown",
+                    options=list(self._repos.keys()),
+                    value=self._repo.get_root(),
+                ),
                 html.H1(
                     id="viewer-title",
                     children=f"HistoryViewer in {self._repo}",
@@ -277,11 +314,55 @@ class HistoryViewer(Server):
             ]
         )
 
+    def serve(self, metric: Union[str, None] = None, **kwargs: Any) -> None:
+        """
+        Runs dash-based server with HistoryViewer, updating plots in real-time.
+
+        Parameters
+        ----------
+        metric, optional:
+            One of the metrics in the repo. May be left None and chosen later in
+            the interface
+        **kwargs
+            Arguments for app.run_server() for example port or host
+        Note
+        ----
+        This feature needs `dash` to be installed.
+        """
+        # Conditional import
+        try:
+            import dash
+        except ModuleNotFoundError:
+            self._raise_cannot_import_dash()
+        else:
+            from dash import Input, Output
+
+        try:
+            import plotly
+        except ModuleNotFoundError:
+            self._raise_cannot_import_plotly()
+        else:
+            from plotly import graph_objects as go
+
+        app = dash.Dash()
+        app.layout = self._layout(metric)
+
         @app.callback(
             Output("viewer-title", "children"), Input("history-interval", "n_intervals")
         )
         def update_title(n_intervals):
             return f"HistoryViewer in {self._repo}"
+
+        @app.callback(
+            Output("metric-dropwdown", "options"),
+            Input("history-interval", "n_intervals"),
+        )
+        def update_dropdown(n_intervals):
+            return [
+                col.replace("metrics_", "")
+                for col in self._table.columns
+                if col.startswith("metrics_")
+            ]
 
         @app.callback(
             Output("history-figure", "figure"),
@@ -290,8 +371,20 @@ class HistoryViewer(Server):
             prevent_initial_call=True,
         )
         def update_history(n_intervals, metric):
-            self._repo.reload()
+            self._reload()
+
             self._make_table()
-            return self.plot(metric)
+            return self.plot(metric) if metric is not None else go.Figure()
+
+        @app.callback(
+            Output("metric-dropwdown", "value"),
+            Input("repo-dropdown", component_property="value"),
+            prevent_initial_call=True,
+        )
+        def update_repos(name):
+            if isinstance(self._container, Workspace):
+                self._container.set_default(os.path.split(name)[-1])
+
+            return None
 
         app.run_server(use_reloader=False, **kwargs)
