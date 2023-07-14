@@ -1,42 +1,44 @@
-
-
 <!DOCTYPE html>
 
 
-<html >
+<html>
 
-  <head>
+<head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>cascade.base &#8212; cascade 0.12.0 documentation</title>
-  
-  
-  
-  <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
-  </script>
-  
-  <!-- Loaded before other Sphinx assets -->
-  <link href="../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
-  
-  <link href="../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+
+    <script data-cfasync="false">
+        document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+        document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    </script>
+
+    <!-- Loaded before other Sphinx assets -->
+    <link href="../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+    <link href="../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+    <link href="../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+
+    <link href="../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../pygments.css" />
     <link rel="stylesheet" type="text/css" href="../styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-  
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <!-- Pre-loaded scripts that we'll load fully later -->
+    <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=e353d410970836974a52" />
+    <link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../" id="documentation_options" src="../documentation_options.js"></script>
     <script src="../jquery.js"></script>
@@ -45,91 +47,81 @@
     <script src="../clipboard.min.js"></script>
     <script src="../copybutton.js"></script>
     <script src="../design-tabs.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA="
+        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/cascade.base';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
-        </script>
-    <link rel="shortcut icon" href="../logo_sq.svg"/>
+    </script>
+    <link rel="shortcut icon" href="../logo_sq.svg" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="cascade.data" href="cascade.data.html" />
     <link rel="prev" title="API reference" href="../modules.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
-  </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None" />
+</head>
 
-  
-  
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
-<form class="bd-search d-flex align-items-center"
-      action="../search.html"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search the docs ..."
-         aria-label="Search the docs ..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
-  
+
+<body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%"
+    data-default-mode="">
+
+
+
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary" />
+    <label class="overlay overlay-primary" for="__primary"></label>
+
+    <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary" />
+    <label class="overlay overlay-secondary" for="__secondary"></label>
+
+    <div class="search-button__wrapper">
+        <div class="search-button__overlay"></div>
+        <div class="search-button__search-container">
+            <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..."
+                    aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off"
+                    spellcheck="false" />
+                <span class="search-button__kbd-shortcut"><kbd
+                        class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+            </form>
+        </div>
+    </div>
+
     <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-<div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
-    <span class="fa-solid fa-bars"></span>
-  </label>
-  
-  <div class="navbar-header-items__start">
-    
-      <div class="navbar-item">
-  
+        <div class="bd-header__inner bd-page-width">
+            <label class="sidebar-toggle primary-toggle" for="__primary">
+                <span class="fa-solid fa-bars"></span>
+            </label>
 
-<a class="navbar-brand logo" href="../index.html">
-  
-  
-  
-  
-    
-    
-      
-    
-    
-    <img src="../logo.svg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
-  
-  
-</a></div>
-    
-      <div class="navbar-item">
-<script>
-document.write(`
+            <div class="navbar-header-items__start">
+
+                <div class="navbar-item">
+
+
+                    <a class="navbar-brand logo" href="../index.html">
+
+
+
+
+
+
+
+
+
+                        <img src="../logo.svg" class="logo__image only-light" alt="Logo image" />
+                        <script>document.write(`<img src="../logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+
+
+                    </a>
+                </div>
+
+                <div class="navbar-item">
+                    <script>
+                        document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
       latest  <!-- this text may get changed later by javascript -->
@@ -140,562 +132,892 @@ document.write(`
     </div>
   </div>
 `);
-</script></div>
-    
-  </div>
-  
-  
-  <div class="col-lg-9 navbar-header-items">
-    
-    <div class="me-auto navbar-header-items__center">
-      
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
-  <ul class="bd-navbar-elements navbar-nav">
-    
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../quickstart.html">
-                        Quickstart
-                      </a>
-                    </li>
-                
+                    </script>
+                </div>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../examples.html">
-                        Examples
-                      </a>
-                    </li>
-                
+            </div>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../concepts.html">
-                        Concepts
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../modules.html">
-                        API reference
-                      </a>
-                    </li>
-                
-  </ul>
-</nav></div>
-      
-    </div>
-    
-    
-    <div class="navbar-header-items__end">
-      
-        <div class="navbar-item navbar-persistent--container">
-          
-<script>
-document.write(`
+            <div class="col-lg-9 navbar-header-items">
+
+                <div class="me-auto navbar-header-items__center">
+
+                    <div class="navbar-item">
+                        <nav class="navbar-nav">
+                            <p class="sidebar-header-items__title" role="heading" aria-level="1"
+                                aria-label="Site Navigation">
+                                Site Navigation
+                            </p>
+                            <ul class="bd-navbar-elements navbar-nav">
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-internal" href="../quickstart.html">
+                                        Quickstart
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-internal" href="../examples.html">
+                                        Examples
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-internal" href="../concepts.html">
+                                        Concepts
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item current active">
+                                    <a class="nav-link nav-internal" href="../modules.html">
+                                        API reference
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+
+
+                <div class="navbar-header-items__end">
+
+                    <div class="navbar-item navbar-persistent--container">
+
+                        <script>
+                            document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-</script>
-        </div>
-      
-      
-        <div class="navbar-item">
-<script>
-document.write(`
+                        </script>
+                    </div>
+
+
+                    <div class="navbar-item">
+                        <script>
+                            document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-</script></div>
-      
-        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
-    aria-label="Icon Links">
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
-        </li>
-</ul></div>
-      
-    </div>
-    
-  </div>
-  
-  
-    <div class="navbar-persistent--mobile">
-<script>
-document.write(`
+                        </script>
+                    </div>
+
+                    <div class="navbar-item">
+                        <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
+                            <li class="nav-item">
+
+
+
+
+
+
+
+
+                                <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
+                                    rel="noopener" target="_blank" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+                                    <label class="sr-only">GitHub</label></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="navbar-persistent--mobile">
+                <script>
+                    document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-</script>
-    </div>
-  
+                </script>
+            </div>
 
-  
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
-      <span class="fa-solid fa-outdent"></span>
-    </label>
-  
-</div>
+
+
+            <label class="sidebar-toggle secondary-toggle" for="__secondary">
+                <span class="fa-solid fa-outdent"></span>
+            </label>
+
+        </div>
 
     </nav>
-  
-  <div class="bd-container">
-    <div class="bd-container__inner bd-page-width">
-      
-      <div class="bd-sidebar-primary bd-sidebar">
-        
 
-  
-  <div class="sidebar-header-items sidebar-primary__section">
-    
-    
-      <div class="sidebar-header-items__center">
-        
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
-  <ul class="bd-navbar-elements navbar-nav">
-    
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../quickstart.html">
-                        Quickstart
-                      </a>
-                    </li>
-                
+    <div class="bd-container">
+        <div class="bd-container__inner bd-page-width">
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../examples.html">
-                        Examples
-                      </a>
-                    </li>
-                
+            <div class="bd-sidebar-primary bd-sidebar">
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../concepts.html">
-                        Concepts
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../modules.html">
-                        API reference
-                      </a>
-                    </li>
-                
-  </ul>
-</nav></div>
-        
-      </div>
-    
-    
-    
-      <div class="sidebar-header-items__end">
-        
-          <div class="navbar-item">
-<script>
-document.write(`
+
+                <div class="sidebar-header-items sidebar-primary__section">
+
+
+                    <div class="sidebar-header-items__center">
+
+                        <div class="navbar-item">
+                            <nav class="navbar-nav">
+                                <p class="sidebar-header-items__title" role="heading" aria-level="1"
+                                    aria-label="Site Navigation">
+                                    Site Navigation
+                                </p>
+                                <ul class="bd-navbar-elements navbar-nav">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-internal" href="../quickstart.html">
+                                            Quickstart
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-internal" href="../examples.html">
+                                            Examples
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-internal" href="../concepts.html">
+                                            Concepts
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item current active">
+                                        <a class="nav-link nav-internal" href="../modules.html">
+                                            API reference
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="sidebar-header-items__end">
+
+                        <div class="navbar-item">
+                            <script>
+                                document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-</script></div>
-        
-          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
-    aria-label="Icon Links">
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
-        </li>
-</ul></div>
-        
-      </div>
-    
-  </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">cascade.base</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cascade.utils.html">cascade.utils</a></li>
-</ul>
-</div>
-</nav></div>
-    </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
-  </div>
-  
-  <div id="rtd-footer-container"></div>
+                            </script>
+                        </div>
 
-
-      </div>
-      
-      <main id="main-content" class="bd-main">
-        
-        
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article">
-<div class="header-article-items header-article__inner">
-  
-    <div class="header-article-items__start">
-      
-        <div class="header-article-item">
+                        <div class="navbar-item">
+                            <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
+                                <li class="nav-item">
 
 
 
-<nav aria-label="Breadcrumbs">
-  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
-    
-    <li class="breadcrumb-item breadcrumb-home">
-      <a href="../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
-      </a>
-    </li>
-    
-    <li class="breadcrumb-item"><a href="../modules.html" class="nav-link">API reference</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page">cascade.base</li>
-  </ul>
-</nav>
-</div>
-      
-    </div>
-  
-  
-</div>
-</div>
-              
-              
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article" role="main">
-                  
-  <section id="cascade-base">
-<h1>cascade.base<a class="headerlink" href="#cascade-base" title="Permalink to this headline">#</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.base.Traceable">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cascade.base.</span></span><span class="sig-name descname"><span class="pre">Traceable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/base/traceable.html#Traceable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable" title="Permalink to this definition">#</a></dt>
-<dd><p>Base class for everything that has metadata in Cascade
-Handles the logic of getting and updating internal meta prefix</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.Traceable.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_prefix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/base/traceable.html#Traceable.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>meta_prefix</strong> (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>Any</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The dictionary that is used to update object’s meta in <cite>get_meta</cite> call.
-Due to the call of update can overwrite default values.
-If str - prefix assumed to be path and loaded using MetaHandler.</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#cascade.base.MetaHandler" title="cascade.base.MetaHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.base.MetaHandler</span></code></a></p>
-</div>
-</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.Traceable.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/cascade/base/traceable.html#Traceable.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.__repr__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>repr</strong> – Representation of a Traceable. This repr used as a name for get_meta() method
-by default gives the name of class from basic repr</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.data.Traceable.get_meta</span></code></p>
-</div>
-</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.Traceable.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/cascade/base/traceable.html#Traceable.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.get_meta" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><p><strong>meta</strong> – A list where first element is this object’s metadata.
-All other elements represent the other stages of pipeline if present.</p>
-<p>Meta can be anything that is worth to document about
-the object and its properties.</p>
-<p>Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.</p>
-</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>PipeMeta</p>
-</dd>
-</dl>
-</dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.Traceable.update_meta">
-<span class="sig-name descname"><span class="pre">update_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/base/traceable.html#Traceable.update_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.Traceable.update_meta" title="Permalink to this definition">#</a></dt>
-<dd><p>Updates <cite>_meta_prefix</cite>, which then updates
-dataset’s meta when <cite>get_meta()</cite> is called</p>
-</dd></dl>
 
-</dd></dl>
 
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.base.MetaHandler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cascade.base.</span></span><span class="sig-name descname"><span class="pre">MetaHandler</span></span><a class="reference internal" href="../_modules/cascade/base/meta_handler.html#MetaHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.MetaHandler" title="Permalink to this definition">#</a></dt>
-<dd><p>Encapsulates the logic of reading and writing metadata to disk.</p>
-<p>Supported read-write formats are <cite>.json</cite> and <cite>.yml</cite> or <cite>.yaml</cite>. Other formats
-are supported as read-only. For example one can read meta from txt or md file.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.base</span> <span class="kn">import</span> <span class="n">MetaHandler</span>
+                                    <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
+                                        rel="noopener" target="_blank" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+                                        <label class="sr-only">GitHub</label></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="sidebar-primary-items__start sidebar-primary__section">
+                    <div class="sidebar-primary-item">
+                        <nav class="bd-docs-nav bd-links" aria-label="Section Navigation">
+                            <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+                            <div class="bd-toc-item navbar-nav">
+                                <ul class="current nav bd-sidenav">
+                                    <li class="toctree-l1 current active"><a class="current reference internal"
+                                            href="#">cascade.base</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                            href="cascade.data.html">cascade.data</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                            href="cascade.models.html">cascade.models</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                            href="cascade.meta.html">cascade.meta</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                            href="cascade.utils.html">cascade.utils</a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+
+
+                <div class="sidebar-primary-items__end sidebar-primary__section">
+                </div>
+
+                <div id="rtd-footer-container"></div>
+
+
+            </div>
+
+            <main id="main-content" class="bd-main">
+
+
+                <div class="bd-content">
+                    <div class="bd-article-container">
+
+                        <div class="bd-header-article">
+                            <div class="header-article-items header-article__inner">
+
+                                <div class="header-article-items__start">
+
+                                    <div class="header-article-item">
+
+
+
+                                        <nav aria-label="Breadcrumbs">
+                                            <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+
+                                                <li class="breadcrumb-item breadcrumb-home">
+                                                    <a href="../index.html" class="nav-link" aria-label="Home">
+                                                        <i class="fa-solid fa-home"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li class="breadcrumb-item"><a href="../modules.html"
+                                                        class="nav-link">API reference</a></li>
+
+                                                <li class="breadcrumb-item active" aria-current="page">cascade.base</li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div id="searchbox"></div>
+                        <article class="bd-article" role="main">
+
+                            <section id="cascade-base">
+                                <h1>cascade.base<a class="headerlink" href="#cascade-base"
+                                        title="Permalink to this headline">#</a></h1>
+                                <dl class="py class">
+                                    <dt class="sig sig-object py" id="cascade.base.Traceable">
+                                        <em class="property"><span class="pre">class</span> </em><span
+                                            class="sig-prename descclassname"><span
+                                                class="pre">cascade.base.</span></span><span
+                                            class="sig-name descname"><span class="pre">Traceable</span></span><span
+                                            class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                                                    class="pre">*</span></span><span class="n"><span
+                                                    class="pre">args</span></span><span class="p"><span
+                                                    class="pre">:</span></span> <span class="n"><span
+                                                    class="pre">Any</span></span></em>, <em class="sig-param"><span
+                                                class="n"><span class="pre">meta_prefix</span></span><span
+                                                class="p"><span class="pre">:</span></span> <span class="n"><span
+                                                    class="pre">Optional</span><span class="p"><span
+                                                        class="pre">[</span></span><span class="pre">Union</span><span
+                                                    class="p"><span class="pre">[</span></span><span
+                                                    class="pre">Dict</span><span class="p"><span
+                                                        class="pre">[</span></span><span class="pre">Any</span><span
+                                                    class="p"><span class="pre">,</span> </span><span
+                                                    class="pre">Any</span><span class="p"><span
+                                                        class="pre">]</span></span><span class="p"><span
+                                                        class="pre">,</span> </span><span class="pre">str</span><span
+                                                    class="p"><span class="pre">]</span></span><span class="p"><span
+                                                        class="pre">]</span></span></span> <span class="o"><span
+                                                    class="pre">=</span></span> <span class="default_value"><span
+                                                    class="pre">None</span></span></em>, <em class="sig-param"><span
+                                                class="o"><span class="pre">**</span></span><span class="n"><span
+                                                    class="pre">kwargs</span></span><span class="p"><span
+                                                    class="pre">:</span></span> <span class="n"><span
+                                                    class="pre">Any</span></span></em><span class="sig-paren">)</span><a
+                                            class="reference internal"
+                                            href="../_modules/cascade/base/traceable.html#Traceable"><span
+                                                class="viewcode-link"><span class="pre">[source]</span></span></a><a
+                                            class="headerlink" href="#cascade.base.Traceable"
+                                            title="Permalink to this definition">#</a>
+                                    </dt>
+                                    <dd>
+                                        <p>Base class for everything that has metadata in Cascade
+                                            Handles the logic of getting and updating internal meta prefix</p>
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.Traceable.__init__">
+                                                <span class="sig-name descname"><span
+                                                        class="pre">__init__</span></span><span
+                                                    class="sig-paren">(</span><em class="sig-param"><span
+                                                        class="o"><span class="pre">*</span></span><span class="n"><span
+                                                            class="pre">args</span></span><span class="p"><span
+                                                            class="pre">:</span></span> <span class="n"><span
+                                                            class="pre">Any</span></span></em>, <em
+                                                    class="sig-param"><span class="n"><span
+                                                            class="pre">meta_prefix</span></span><span class="p"><span
+                                                            class="pre">:</span></span> <span class="n"><span
+                                                            class="pre">Optional</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Union</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Dict</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">,</span> </span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">]</span></span><span class="p"><span
+                                                                class="pre">,</span> </span><span
+                                                            class="pre">str</span><span class="p"><span
+                                                                class="pre">]</span></span><span class="p"><span
+                                                                class="pre">]</span></span></span> <span class="o"><span
+                                                            class="pre">=</span></span> <span
+                                                        class="default_value"><span class="pre">None</span></span></em>,
+                                                <em class="sig-param"><span class="o"><span
+                                                            class="pre">**</span></span><span class="n"><span
+                                                            class="pre">kwargs</span></span><span class="p"><span
+                                                            class="pre">:</span></span> <span class="n"><span
+                                                            class="pre">Any</span></span></em><span
+                                                    class="sig-paren">)</span> <span class="sig-return"><span
+                                                        class="sig-return-icon">&#x2192;</span> <span
+                                                        class="sig-return-typehint"><span
+                                                            class="pre">None</span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/traceable.html#Traceable.__init__"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.Traceable.__init__"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Parameters</dt>
+                                                    <dd class="field-odd">
+                                                        <p><strong>meta_prefix</strong>
+                                                            (<em>Union</em><em>[</em><em>Dict</em><em>[</em><em>Any</em><em>,
+                                                            </em><em>Any</em><em>]</em><em>,
+                                                            </em><em>str</em><em>]</em><em>, </em><em>optional</em>) –
+                                                            The dictionary that is used to update object’s meta in
+                                                            <cite>get_meta</cite> call.
+                                                            Due to the call of update can overwrite default values.
+                                                            If str - prefix assumed to be path and loaded using
+                                                            MetaHandler.</p>
+                                                    </dd>
+                                                </dl>
+                                                <div class="admonition seealso">
+                                                    <p class="admonition-title">See also</p>
+                                                    <p><a class="reference internal" href="#cascade.base.MetaHandler"
+                                                            title="cascade.base.MetaHandler"><code
+                                                                class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.base.MetaHandler</span></code></a>
+                                                    </p>
+                                                </div>
+                                            </dd>
+                                        </dl>
+
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.Traceable.__repr__">
+                                                <span class="sig-name descname"><span
+                                                        class="pre">__repr__</span></span><span
+                                                    class="sig-paren">(</span><span class="sig-paren">)</span> <span
+                                                    class="sig-return"><span class="sig-return-icon">&#x2192;</span>
+                                                    <span class="sig-return-typehint"><span
+                                                            class="pre">str</span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/traceable.html#Traceable.__repr__"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.Traceable.__repr__"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Returns</dt>
+                                                    <dd class="field-odd">
+                                                        <p><strong>repr</strong> – Representation of a Traceable. This
+                                                            repr used as a name for get_meta() method
+                                                            by default gives the name of class from basic repr</p>
+                                                    </dd>
+                                                    <dt class="field-even">Return type</dt>
+                                                    <dd class="field-even">
+                                                        <p>str</p>
+                                                    </dd>
+                                                </dl>
+                                                <div class="admonition seealso">
+                                                    <p class="admonition-title">See also</p>
+                                                    <p><code
+                                                            class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.data.Traceable.get_meta</span></code>
+                                                    </p>
+                                                </div>
+                                            </dd>
+                                        </dl>
+
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.Traceable.get_meta">
+                                                <span class="sig-name descname"><span
+                                                        class="pre">get_meta</span></span><span
+                                                    class="sig-paren">(</span><span class="sig-paren">)</span> <span
+                                                    class="sig-return"><span class="sig-return-icon">&#x2192;</span>
+                                                    <span class="sig-return-typehint"><span class="pre">List</span><span
+                                                            class="p"><span class="pre">[</span></span><span
+                                                            class="pre">Dict</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">,</span> </span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">]</span></span><span class="p"><span
+                                                                class="pre">]</span></span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/traceable.html#Traceable.get_meta"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.Traceable.get_meta"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Returns</dt>
+                                                    <dd class="field-odd">
+                                                        <p>
+                                                        <p><strong>meta</strong> – A list where first element is this
+                                                            object’s metadata.
+                                                            All other elements represent the other stages of pipeline if
+                                                            present.</p>
+                                                        <p>Meta can be anything that is worth to document about
+                                                            the object and its properties.</p>
+                                                        <p>Meta is a list (see PipeMeta type alias) to allow the
+                                                            formation of pipelines.</p>
+                                                        </p>
+                                                    </dd>
+                                                    <dt class="field-even">Return type</dt>
+                                                    <dd class="field-even">
+                                                        <p>PipeMeta</p>
+                                                    </dd>
+                                                </dl>
+                                            </dd>
+                                        </dl>
+
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.Traceable.update_meta">
+                                                <span class="sig-name descname"><span
+                                                        class="pre">update_meta</span></span><span
+                                                    class="sig-paren">(</span><em class="sig-param"><span
+                                                        class="n"><span class="pre">obj</span></span><span
+                                                        class="p"><span class="pre">:</span></span> <span
+                                                        class="n"><span class="pre">Union</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Dict</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">,</span> </span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">]</span></span><span class="p"><span
+                                                                class="pre">,</span> </span><span
+                                                            class="pre">str</span><span class="p"><span
+                                                                class="pre">]</span></span></span></em><span
+                                                    class="sig-paren">)</span> <span class="sig-return"><span
+                                                        class="sig-return-icon">&#x2192;</span> <span
+                                                        class="sig-return-typehint"><span
+                                                            class="pre">None</span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/traceable.html#Traceable.update_meta"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.Traceable.update_meta"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <p>Updates <cite>_meta_prefix</cite>, which then updates
+                                                    dataset’s meta when <cite>get_meta()</cite> is called</p>
+                                            </dd>
+                                        </dl>
+
+                                    </dd>
+                                </dl>
+
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <dl class="py class">
+                                    <dt class="sig sig-object py" id="cascade.base.MetaHandler">
+                                        <em class="property"><span class="pre">class</span> </em><span
+                                            class="sig-prename descclassname"><span
+                                                class="pre">cascade.base.</span></span><span
+                                            class="sig-name descname"><span class="pre">MetaHandler</span></span><a
+                                            class="reference internal"
+                                            href="../_modules/cascade/base/meta_handler.html#MetaHandler"><span
+                                                class="viewcode-link"><span class="pre">[source]</span></span></a><a
+                                            class="headerlink" href="#cascade.base.MetaHandler"
+                                            title="Permalink to this definition">#</a>
+                                    </dt>
+                                    <dd>
+                                        <p>Encapsulates the logic of reading and writing metadata to disk.</p>
+                                        <p>Supported read-write formats are <cite>.json</cite> and <cite>.yml</cite> or
+                                            <cite>.yaml</cite>. Other formats
+                                            are supported as read-only. For example one can read meta from txt or md
+                                            file.</p>
+                                        <p class="rubric">Examples</p>
+                                        <div class="doctest highlight-default notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cascade.base</span> <span class="kn">import</span> <span class="n">MetaHandler</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MetaHandler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;meta.json&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">MetaHandler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;meta.json&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MetaHandler</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;meta.yml&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;hello&#39;</span><span class="p">:</span> <span class="s1">&#39;world&#39;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="n">MetaHandler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;meta.yml&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.MetaHandler.read">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/cascade/base/meta_handler.html#MetaHandler.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.MetaHandler.read" title="Permalink to this definition">#</a></dt>
-<dd><p>Reads object from path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the object.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>obj</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>MetaFromFile</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>IOError</strong> – when decoding errors occur</p>
-</dd>
-</dl>
-</dd></dl>
+</pre>
+                                            </div>
+                                        </div>
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.MetaHandler.read">
+                                                <em class="property"><span class="pre">classmethod</span> </em><span
+                                                    class="sig-name descname"><span class="pre">read</span></span><span
+                                                    class="sig-paren">(</span><em class="sig-param"><span
+                                                        class="n"><span class="pre">path</span></span><span
+                                                        class="p"><span class="pre">:</span></span> <span
+                                                        class="n"><span class="pre">str</span></span></em><span
+                                                    class="sig-paren">)</span> <span class="sig-return"><span
+                                                        class="sig-return-icon">&#x2192;</span> <span
+                                                        class="sig-return-typehint"><span class="pre">Union</span><span
+                                                            class="p"><span class="pre">[</span></span><span
+                                                            class="pre">List</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">]</span></span><span class="p"><span
+                                                                class="pre">,</span> </span><span
+                                                            class="pre">Dict</span><span class="p"><span
+                                                                class="pre">[</span></span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">,</span> </span><span
+                                                            class="pre">Any</span><span class="p"><span
+                                                                class="pre">]</span></span><span class="p"><span
+                                                                class="pre">]</span></span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/meta_handler.html#MetaHandler.read"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.MetaHandler.read"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <p>Reads object from path.</p>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Parameters</dt>
+                                                    <dd class="field-odd">
+                                                        <p><strong>path</strong> (<em>str</em>) – Path to the object.
+                                                        </p>
+                                                    </dd>
+                                                    <dt class="field-even">Returns</dt>
+                                                    <dd class="field-even">
+                                                        <p><strong>obj</strong></p>
+                                                    </dd>
+                                                    <dt class="field-odd">Return type</dt>
+                                                    <dd class="field-odd">
+                                                        <p>MetaFromFile</p>
+                                                    </dd>
+                                                    <dt class="field-even">Raises</dt>
+                                                    <dd class="field-even">
+                                                        <p><strong>IOError</strong> – when decoding errors occur</p>
+                                                    </dd>
+                                                </dl>
+                                            </dd>
+                                        </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.MetaHandler.write">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/base/meta_handler.html#MetaHandler.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.MetaHandler.write" title="Permalink to this definition">#</a></dt>
-<dd><p>Writes object to path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>str</em>) – Path where to write object with name and extension</p></li>
-<li><p><strong>obj</strong> – An object to be serialized and saved</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to overwrite the file if it already exists. If False
-and file already exists will silently return without saving.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>IOError</strong> – when encoding errors occur</p>
-</dd>
-</dl>
-</dd></dl>
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.MetaHandler.write">
+                                                <em class="property"><span class="pre">classmethod</span> </em><span
+                                                    class="sig-name descname"><span class="pre">write</span></span><span
+                                                    class="sig-paren">(</span><em class="sig-param"><span
+                                                        class="n"><span class="pre">path</span></span><span
+                                                        class="p"><span class="pre">:</span></span> <span
+                                                        class="n"><span class="pre">str</span></span></em>, <em
+                                                    class="sig-param"><span class="n"><span
+                                                            class="pre">obj</span></span><span class="p"><span
+                                                            class="pre">:</span></span> <span class="n"><span
+                                                            class="pre">Any</span></span></em>, <em
+                                                    class="sig-param"><span class="n"><span
+                                                            class="pre">overwrite</span></span><span class="p"><span
+                                                            class="pre">:</span></span> <span class="n"><span
+                                                            class="pre">bool</span></span> <span class="o"><span
+                                                            class="pre">=</span></span> <span
+                                                        class="default_value"><span
+                                                            class="pre">True</span></span></em><span
+                                                    class="sig-paren">)</span> <span class="sig-return"><span
+                                                        class="sig-return-icon">&#x2192;</span> <span
+                                                        class="sig-return-typehint"><span
+                                                            class="pre">None</span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/meta_handler.html#MetaHandler.write"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.MetaHandler.write"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <p>Writes object to path.</p>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Parameters</dt>
+                                                    <dd class="field-odd">
+                                                        <ul class="simple">
+                                                            <li>
+                                                                <p><strong>path</strong> (<em>str</em>) – Path where to
+                                                                    write object with name and extension</p>
+                                                            </li>
+                                                            <li>
+                                                                <p><strong>obj</strong> – An object to be serialized and
+                                                                    saved</p>
+                                                            </li>
+                                                            <li>
+                                                                <p><strong>overwrite</strong> (<em>bool</em><em>,
+                                                                    </em><em>optional</em>) – Whether to overwrite the
+                                                                    file if it already exists. If False
+                                                                    and file already exists will silently return without
+                                                                    saving.</p>
+                                                            </li>
+                                                        </ul>
+                                                    </dd>
+                                                    <dt class="field-even">Raises</dt>
+                                                    <dd class="field-even">
+                                                        <p><strong>IOError</strong> – when encoding errors occur</p>
+                                                    </dd>
+                                                </dl>
+                                            </dd>
+                                        </dl>
 
-</dd></dl>
+                                    </dd>
+                                </dl>
 
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.base.HistoryLogger">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">cascade.base.</span></span><span class="sig-name descname"><span class="pre">HistoryLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/base/history_logger.html#HistoryLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.HistoryLogger" title="Permalink to this definition">#</a></dt>
-<dd><p>An interface to log meta into history files</p>
-<p class="rubric">Example</p>
-<p>from cascade.base import HistoryLogger
-from cascade.data import Wrapper
-hl = HistoryLogger(“wrapper_history_log.yml”)
-ds = Wrapper([0, 1, 2])
-hl.log(ds.get_meta())</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.HistoryLogger.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/base/history_logger.html#HistoryLogger.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.HistoryLogger.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – Path to the history log file</p>
-</dd>
-</dl>
-</dd></dl>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <dl class="py class">
+                                    <dt class="sig sig-object py" id="cascade.base.HistoryLogger">
+                                        <em class="property"><span class="pre">class</span> </em><span
+                                            class="sig-prename descclassname"><span
+                                                class="pre">cascade.base.</span></span><span
+                                            class="sig-name descname"><span class="pre">HistoryLogger</span></span><span
+                                            class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                                                    class="pre">filepath</span></span><span class="p"><span
+                                                    class="pre">:</span></span> <span class="n"><span
+                                                    class="pre">str</span></span></em><span class="sig-paren">)</span><a
+                                            class="reference internal"
+                                            href="../_modules/cascade/base/history_logger.html#HistoryLogger"><span
+                                                class="viewcode-link"><span class="pre">[source]</span></span></a><a
+                                            class="headerlink" href="#cascade.base.HistoryLogger"
+                                            title="Permalink to this definition">#</a>
+                                    </dt>
+                                    <dd>
+                                        <p>An interface to log meta into history files</p>
+                                        <p class="rubric">Example</p>
+                                        <p>from cascade.base import HistoryLogger
+                                            from cascade.data import Wrapper
+                                            hl = HistoryLogger(“wrapper_history_log.yml”)
+                                            ds = Wrapper([0, 1, 2])
+                                            hl.log(ds.get_meta())</p>
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.HistoryLogger.__init__">
+                                                <span class="sig-name descname"><span
+                                                        class="pre">__init__</span></span><span
+                                                    class="sig-paren">(</span><em class="sig-param"><span
+                                                        class="n"><span class="pre">filepath</span></span><span
+                                                        class="p"><span class="pre">:</span></span> <span
+                                                        class="n"><span class="pre">str</span></span></em><span
+                                                    class="sig-paren">)</span> <span class="sig-return"><span
+                                                        class="sig-return-icon">&#x2192;</span> <span
+                                                        class="sig-return-typehint"><span
+                                                            class="pre">None</span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/history_logger.html#HistoryLogger.__init__"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.HistoryLogger.__init__"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Parameters</dt>
+                                                    <dd class="field-odd">
+                                                        <p><strong>filepath</strong> (<em>str</em>) – Path to the
+                                                            history log file</p>
+                                                    </dd>
+                                                </dl>
+                                            </dd>
+                                        </dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.base.HistoryLogger.log">
-<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/base/history_logger.html#HistoryLogger.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.base.HistoryLogger.log" title="Permalink to this definition">#</a></dt>
-<dd><p>Logs the state of the object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>obj</strong> (<em>Any</em>) – Meta data of the object</p>
-</dd>
-</dl>
-</dd></dl>
+                                        <dl class="py method">
+                                            <dt class="sig sig-object py" id="cascade.base.HistoryLogger.log">
+                                                <span class="sig-name descname"><span class="pre">log</span></span><span
+                                                    class="sig-paren">(</span><em class="sig-param"><span
+                                                        class="n"><span class="pre">obj</span></span><span
+                                                        class="p"><span class="pre">:</span></span> <span
+                                                        class="n"><span class="pre">Any</span></span></em><span
+                                                    class="sig-paren">)</span> <span class="sig-return"><span
+                                                        class="sig-return-icon">&#x2192;</span> <span
+                                                        class="sig-return-typehint"><span
+                                                            class="pre">None</span></span></span><a
+                                                    class="reference internal"
+                                                    href="../_modules/cascade/base/history_logger.html#HistoryLogger.log"><span
+                                                        class="viewcode-link"><span
+                                                            class="pre">[source]</span></span></a><a class="headerlink"
+                                                    href="#cascade.base.HistoryLogger.log"
+                                                    title="Permalink to this definition">#</a>
+                                            </dt>
+                                            <dd>
+                                                <p>Logs the state of the object</p>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Parameters</dt>
+                                                    <dd class="field-odd">
+                                                        <p><strong>obj</strong> (<em>Any</em>) – Meta data of the object
+                                                        </p>
+                                                    </dd>
+                                                </dl>
+                                            </dd>
+                                        </dl>
 
-</dd></dl>
+                                    </dd>
+                                </dl>
 
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</section>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                                <div class="line-block">
+                                    <div class="line"><br /></div>
+                                </div>
+                            </section>
 
 
-                </article>
-              
-              
-              
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="../modules.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">API reference</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="cascade.data.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">cascade.data</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div></div>
-  
-</div>
+                        </article>
+
+
+
+                        <footer class="bd-footer-article">
+
+                            <div class="footer-article-items footer-article__inner">
+
+                                <div class="footer-article-item"><!-- Previous / next buttons -->
+                                    <div class="prev-next-area">
+                                        <a class="left-prev" href="../modules.html" title="previous page">
+                                            <i class="fa-solid fa-angle-left"></i>
+                                            <div class="prev-next-info">
+                                                <p class="prev-next-subtitle">previous</p>
+                                                <p class="prev-next-title">API reference</p>
+                                            </div>
+                                        </a>
+                                        <a class="right-next" href="cascade.data.html" title="next page">
+                                            <div class="prev-next-info">
+                                                <p class="prev-next-subtitle">next</p>
+                                                <p class="prev-next-title">cascade.data</p>
+                                            </div>
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </footer>
+
+                    </div>
+
+
+
+                    <div class="bd-sidebar-secondary bd-toc">
+                        <div class="sidebar-secondary-items sidebar-secondary__inner">
+
+                            <div class="sidebar-secondary-item">
+                                <div class="tocsection sourcelink">
+                                    <a href="../_sources/modules/cascade.base.rst.txt">
+                                        <i class="fa-solid fa-file-lines"></i> Show Source
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <footer class="bd-footer-content">
 
                 </footer>
-              
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts loaded after <body> so the DOM is not blocked -->
+    <script src="../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+    <script src="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+    <footer class="bd-footer">
+        <div class="bd-footer__inner bd-page-width">
+
+            <div class="footer-items__start">
+
+                <div class="footer-item">
+                    <p class="copyright">
+
+                        © Copyright 2022-2023, Ilia Moiseev.
+                        <br />
+
+                    </p>
+                </div>
+
+                <div class="footer-item">
+                    <p class="sphinx-version">
+                        Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+                        <br />
+                    </p>
+                </div>
+
             </div>
-            
-            
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-  <div class="sidebar-secondary-item">
-  <div class="tocsection sourcelink">
-    <a href="../_sources/modules/cascade.base.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
 
-</div></div>
-              
-            
-          </div>
-          <footer class="bd-footer-content">
-            
-          </footer>
-        
-      </main>
-    </div>
-  </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+            <div class="footer-items__end">
 
-  <footer class="bd-footer">
-<div class="bd-footer__inner bd-page-width">
-  
-    <div class="footer-items__start">
-      
-        <div class="footer-item">
-  <p class="copyright">
-    
-      © Copyright 2022-2023, Ilia Moiseev.
-      <br/>
-    
-  </p>
-</div>
-      
-        <div class="footer-item">
-  <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
-    <br/>
-  </p>
-</div>
-      
-    </div>
-  
-  
-    <div class="footer-items__end">
-      
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
-</p></div>
-      
-    </div>
-  
-</div>
+                <div class="footer-item">
+                    <p class="theme-version">
+                        Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData
+                            Sphinx Theme</a> 0.13.3.
+                    </p>
+                </div>
 
-  </footer>
-  </body>
+            </div>
+
+        </div>
+
+    </footer>
+</body>
+
 </html>

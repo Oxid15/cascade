@@ -1,42 +1,44 @@
-
-
 <!DOCTYPE html>
 
 
-<html >
+<html>
 
-  <head>
+<head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
     <title>Welcome to Cascade! &#8212; cascade 0.12.0 documentation</title>
-  
-  
-  
-  <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
-  </script>
-  
-  <!-- Loaded before other Sphinx assets -->
-  <link href="styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
-  
-  <link href="vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+
+    <script data-cfasync="false">
+        document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+        document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    </script>
+
+    <!-- Loaded before other Sphinx assets -->
+    <link href="styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+    <link href="styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+    <link href="styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+
+    <link href="vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+        href="vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="pygments.css" />
     <link rel="stylesheet" type="text/css" href="styles/pydata-sphinx-theme.css" />
     <link rel="stylesheet" type="text/css" href="copybutton.css" />
     <link rel="stylesheet" type="text/css" href="design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-  
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <!-- Pre-loaded scripts that we'll load fully later -->
+    <link rel="preload" as="script" href="scripts/bootstrap.js?digest=e353d410970836974a52" />
+    <link rel="preload" as="script" href="scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="./" id="documentation_options" src="documentation_options.js"></script>
     <script src="jquery.js"></script>
@@ -45,90 +47,80 @@
     <script src="clipboard.min.js"></script>
     <script src="copybutton.js"></script>
     <script src="design-tabs.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA="
+        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
-        </script>
-    <link rel="shortcut icon" href="logo_sq.svg"/>
+    </script>
+    <link rel="shortcut icon" href="logo_sq.svg" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Quickstart" href="quickstart.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="None"/>
-  </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None" />
+</head>
 
-  
-  
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
-<form class="bd-search d-flex align-items-center"
-      action="search.html"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search the docs ..."
-         aria-label="Search the docs ..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
-  
+
+<body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%"
+    data-default-mode="">
+
+
+
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary" />
+    <label class="overlay overlay-primary" for="__primary"></label>
+
+    <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary" />
+    <label class="overlay overlay-secondary" for="__secondary"></label>
+
+    <div class="search-button__wrapper">
+        <div class="search-button__overlay"></div>
+        <div class="search-button__search-container">
+            <form class="bd-search d-flex align-items-center" action="search.html" method="get">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..."
+                    aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off"
+                    spellcheck="false" />
+                <span class="search-button__kbd-shortcut"><kbd
+                        class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+            </form>
+        </div>
+    </div>
+
     <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-<div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
-    <span class="fa-solid fa-bars"></span>
-  </label>
-  
-  <div class="navbar-header-items__start">
-    
-      <div class="navbar-item">
-  
+        <div class="bd-header__inner bd-page-width">
+            <label class="sidebar-toggle primary-toggle" for="__primary">
+                <span class="fa-solid fa-bars"></span>
+            </label>
 
-<a class="navbar-brand logo" href="#">
-  
-  
-  
-  
-    
-    
-      
-    
-    
-    <img src="logo.svg" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
-  
-  
-</a></div>
-    
-      <div class="navbar-item">
-<script>
-document.write(`
+            <div class="navbar-header-items__start">
+
+                <div class="navbar-item">
+
+
+                    <a class="navbar-brand logo" href="#">
+
+
+
+
+
+
+
+
+
+                        <img src="logo.svg" class="logo__image only-light" alt="Logo image" />
+                        <script>document.write(`<img src="logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+
+
+                    </a>
+                </div>
+
+                <div class="navbar-item">
+                    <script>
+                        document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
       latest  <!-- this text may get changed later by javascript -->
@@ -139,271 +131,307 @@ document.write(`
     </div>
   </div>
 `);
-</script></div>
-    
-  </div>
-  
-  
-  <div class="col-lg-9 navbar-header-items">
-    
-    <div class="me-auto navbar-header-items__center">
-      
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
-  <ul class="bd-navbar-elements navbar-nav">
-    
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="quickstart.html">
-                        Quickstart
-                      </a>
-                    </li>
-                
+                    </script>
+                </div>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="examples.html">
-                        Examples
-                      </a>
-                    </li>
-                
+            </div>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="concepts.html">
-                        Concepts
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="modules.html">
-                        API reference
-                      </a>
-                    </li>
-                
-  </ul>
-</nav></div>
-      
-    </div>
-    
-    
-    <div class="navbar-header-items__end">
-      
-        <div class="navbar-item navbar-persistent--container">
-          
-<script>
-document.write(`
+            <div class="col-lg-9 navbar-header-items">
+
+                <div class="me-auto navbar-header-items__center">
+
+                    <div class="navbar-item">
+                        <nav class="navbar-nav">
+                            <p class="sidebar-header-items__title" role="heading" aria-level="1"
+                                aria-label="Site Navigation">
+                                Site Navigation
+                            </p>
+                            <ul class="bd-navbar-elements navbar-nav">
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-internal" href="quickstart.html">
+                                        Quickstart
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-internal" href="examples.html">
+                                        Examples
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-internal" href="concepts.html">
+                                        Concepts
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a class="nav-link nav-internal" href="modules.html">
+                                        API reference
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+
+
+                <div class="navbar-header-items__end">
+
+                    <div class="navbar-item navbar-persistent--container">
+
+                        <script>
+                            document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-</script>
-        </div>
-      
-      
-        <div class="navbar-item">
-<script>
-document.write(`
+                        </script>
+                    </div>
+
+
+                    <div class="navbar-item">
+                        <script>
+                            document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-</script></div>
-      
-        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
-    aria-label="Icon Links">
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
-        </li>
-</ul></div>
-      
-    </div>
-    
-  </div>
-  
-  
-    <div class="navbar-persistent--mobile">
-<script>
-document.write(`
+                        </script>
+                    </div>
+
+                    <div class="navbar-item">
+                        <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
+                            <li class="nav-item">
+
+
+
+
+
+
+
+
+                                <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
+                                    rel="noopener" target="_blank" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+                                    <label class="sr-only">GitHub</label></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="navbar-persistent--mobile">
+                <script>
+                    document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-</script>
-    </div>
-  
+                </script>
+            </div>
 
-  
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
-      <span class="fa-solid fa-outdent"></span>
-    </label>
-  
-</div>
+
+
+            <label class="sidebar-toggle secondary-toggle" for="__secondary">
+                <span class="fa-solid fa-outdent"></span>
+            </label>
+
+        </div>
 
     </nav>
-  
-  <div class="bd-container">
-    <div class="bd-container__inner bd-page-width">
-      
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
-        
 
-  
-  <div class="sidebar-header-items sidebar-primary__section">
-    
-    
-      <div class="sidebar-header-items__center">
-        
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
-  <ul class="bd-navbar-elements navbar-nav">
-    
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="quickstart.html">
-                        Quickstart
-                      </a>
-                    </li>
-                
+    <div class="bd-container">
+        <div class="bd-container__inner bd-page-width">
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="examples.html">
-                        Examples
-                      </a>
-                    </li>
-                
+            <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="concepts.html">
-                        Concepts
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="modules.html">
-                        API reference
-                      </a>
-                    </li>
-                
-  </ul>
-</nav></div>
-        
-      </div>
-    
-    
-    
-      <div class="sidebar-header-items__end">
-        
-          <div class="navbar-item">
-<script>
-document.write(`
+
+                <div class="sidebar-header-items sidebar-primary__section">
+
+
+                    <div class="sidebar-header-items__center">
+
+                        <div class="navbar-item">
+                            <nav class="navbar-nav">
+                                <p class="sidebar-header-items__title" role="heading" aria-level="1"
+                                    aria-label="Site Navigation">
+                                    Site Navigation
+                                </p>
+                                <ul class="bd-navbar-elements navbar-nav">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-internal" href="quickstart.html">
+                                            Quickstart
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-internal" href="examples.html">
+                                            Examples
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-internal" href="concepts.html">
+                                            Concepts
+                                        </a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link nav-internal" href="modules.html">
+                                            API reference
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="sidebar-header-items__end">
+
+                        <div class="navbar-item">
+                            <script>
+                                document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-</script></div>
-        
-          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
-    aria-label="Icon Links">
-        <li class="nav-item">
-          
-          
-          
-          
-          
-          
-          
-          
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
-        </li>
-</ul></div>
-        
-      </div>
-    
-  </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
-  </div>
-  
-  <div id="rtd-footer-container"></div>
+                            </script>
+                        </div>
+
+                        <div class="navbar-item">
+                            <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
+                                <li class="nav-item">
 
 
-      </div>
-      
-      <main id="main-content" class="bd-main">
-        
-        
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article"></div>
-              
-              
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article" role="main">
-                  
-  <section id="welcome-to-cascade">
-<h1>Welcome to Cascade!<a class="headerlink" href="#welcome-to-cascade" title="Permalink to this headline">#</a></h1>
-<p>ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.</p>
-<p>This project is an attempt to build a bundle of tools for ML-Engineer, certain standards and guides for
-workflow, a set of templates for typical tasks.</p>
-<section id="who-could-find-it-useful">
-<h2>Who could find it useful<a class="headerlink" href="#who-could-find-it-useful" title="Permalink to this headline">#</a></h2>
-<p>Small and fast-prototyping ML-teams and especially single ML developers
-could use it as a tradeoff between total absence of any MLOps
-framework and demanding enterprise solutions.</p>
-</section>
-<section id="key-principles">
-<h2>Key Principles<a class="headerlink" href="#key-principles" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>Elegancy - ML-pipelines code should be about ML with minimum meta-code</p></li>
-<li><p>Agility - it should be easy to build new prototypes and integrate existing project with Cascade</p></li>
-<li><p>Reusability - code should have an ability to be reused in similar projects with little or no effort</p></li>
-<li><p>Traceability - everything should have meta data</p></li>
-</ul>
-</section>
-<section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
-<p>Cascade is built for small teams and individuals and does not require any
-complex setups. To start use it you just need to install the python package.</p>
-<section id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml
-</pre></div>
-</div>
-<p>More info on installation can be found in <a class="reference internal" href="quickstart.html"><span class="std std-ref">Quickstart</span></a> page.</p>
-</section>
-<section id="track-your-first-experiment">
-<h3>Track your first experiment<a class="headerlink" href="#track-your-first-experiment" title="Permalink to this headline">#</a></h3>
-<p>Integration of Cascade in your existing workflow can be at different levels.
-The simplest case is the experiment tracking - store your models structured
-along with all meta data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">ModelRepo</span>
+
+
+
+
+
+
+                                    <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
+                                        rel="noopener" target="_blank" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+                                        <label class="sr-only">GitHub</label></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sidebar-primary-items__end sidebar-primary__section">
+                </div>
+
+                <div id="rtd-footer-container"></div>
+
+
+            </div>
+
+            <main id="main-content" class="bd-main">
+
+
+                <div class="bd-content">
+                    <div class="bd-article-container">
+
+                        <div class="bd-header-article"></div>
+
+
+
+
+                        <div id="searchbox"></div>
+                        <article class="bd-article" role="main">
+
+                            <section id="welcome-to-cascade">
+                                <h1>Welcome to Cascade!<a class="headerlink" href="#welcome-to-cascade"
+                                        title="Permalink to this headline">#</a></h1>
+                                <p>ML Engineering library with the aim to standardize the work with data and models,
+                                    make experiments more reproducible, ML development more fast.</p>
+                                <p>This project is an attempt to build a bundle of tools for ML-Engineer, certain
+                                    standards and guides for
+                                    workflow, a set of templates for typical tasks.</p>
+                                <section id="who-could-find-it-useful">
+                                    <h2>Who could find it useful<a class="headerlink" href="#who-could-find-it-useful"
+                                            title="Permalink to this headline">#</a></h2>
+                                    <p>Small and fast-prototyping ML-teams and especially single ML developers
+                                        could use it as a tradeoff between total absence of any MLOps
+                                        framework and demanding enterprise solutions.</p>
+                                </section>
+                                <section id="key-principles">
+                                    <h2>Key Principles<a class="headerlink" href="#key-principles"
+                                            title="Permalink to this headline">#</a></h2>
+                                    <ul class="simple">
+                                        <li>
+                                            <p>Elegancy - ML-pipelines code should be about ML with minimum meta-code
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <p>Agility - it should be easy to build new prototypes and integrate
+                                                existing project with Cascade</p>
+                                        </li>
+                                        <li>
+                                            <p>Reusability - code should have an ability to be reused in similar
+                                                projects with little or no effort</p>
+                                        </li>
+                                        <li>
+                                            <p>Traceability - everything should have meta data</p>
+                                        </li>
+                                    </ul>
+                                </section>
+                                <section id="introduction">
+                                    <h2>Introduction<a class="headerlink" href="#introduction"
+                                            title="Permalink to this headline">#</a></h2>
+                                    <p>Cascade is built for small teams and individuals and does not require any
+                                        complex setups. To start use it you just need to install the python package.</p>
+                                    <section id="installation">
+                                        <h3>Installation<a class="headerlink" href="#installation"
+                                                title="Permalink to this headline">#</a></h3>
+                                        <div class="highlight-bash notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml
+</pre>
+                                            </div>
+                                        </div>
+                                        <p>More info on installation can be found in <a class="reference internal"
+                                                href="quickstart.html"><span class="std std-ref">Quickstart</span></a>
+                                            page.</p>
+                                    </section>
+                                    <section id="track-your-first-experiment">
+                                        <h3>Track your first experiment<a class="headerlink"
+                                                href="#track-your-first-experiment"
+                                                title="Permalink to this headline">#</a></h3>
+                                        <p>Integration of Cascade in your existing workflow can be at different levels.
+                                            The simplest case is the experiment tracking - store your models structured
+                                            along with all meta data.</p>
+                                        <div class="highlight-python notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">ModelRepo</span>
 <span class="kn">import</span> <span class="nn">random</span>
 
 
@@ -417,23 +445,34 @@ along with all meta data.</p>
 <span class="n">repo</span> <span class="o">=</span> <span class="n">ModelRepo</span><span class="p">(</span><span class="s1">&#39;classification&#39;</span><span class="p">)</span>
 <span class="n">line</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s1">&#39;resnet&#39;</span><span class="p">)</span>
 <span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">only_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This brief example shows that you can easily start experiment tracking
-from your current setup.
-Cascade allows you to abstract from structuring your model storage. Note
-that in this example <code class="docutils literal notranslate"><span class="pre">only_meta</span></code> is stored. We haven’t define <code class="docutils literal notranslate"><span class="pre">save()</span></code>
-method of our model and cannot save it. Let’s see what is saved.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">|-</span> <span class="n">classification</span>         <span class="c1"># Repo folder</span>
+</pre>
+                                            </div>
+                                        </div>
+                                        <p>This brief example shows that you can easily start experiment tracking
+                                            from your current setup.
+                                            Cascade allows you to abstract from structuring your model storage. Note
+                                            that in this example <code
+                                                class="docutils literal notranslate"><span class="pre">only_meta</span></code>
+                                            is stored. We haven’t define <code
+                                                class="docutils literal notranslate"><span class="pre">save()</span></code>
+                                            method of our model and cannot save it. Let’s see what is saved.</p>
+                                        <div class="highlight-default notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span><span class="o">|-</span> <span class="n">classification</span>         <span class="c1"># Repo folder</span>
 <span class="o">|</span>  <span class="o">|-</span> <span class="n">resnet</span>              <span class="c1"># Line folder</span>
 <span class="o">|</span>  <span class="o">|</span>  <span class="o">|-</span> <span class="mi">00000</span>            <span class="c1"># Model folder</span>
 <span class="o">|</span>  <span class="o">|</span>  <span class="o">|</span>  <span class="o">|-</span> <span class="n">meta</span><span class="o">.</span><span class="n">json</span>
 <span class="o">|</span>  <span class="o">|</span>  <span class="o">|-</span> <span class="n">meta</span><span class="o">.</span><span class="n">json</span>
 <span class="o">|</span>  <span class="o">|-</span> <span class="n">meta</span><span class="o">.</span><span class="n">json</span>
-</pre></div>
-</div>
-<p>What is saved as default meta data in <code class="docutils literal notranslate"><span class="pre">classification/resnet/00000/meta.json</span></code></p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+</pre>
+                                            </div>
+                                        </div>
+                                        <p>What is saved as default meta data in <code
+                                                class="docutils literal notranslate"><span class="pre">classification/resnet/00000/meta.json</span></code>
+                                        </p>
+                                        <div class="highlight-json notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span><span class="p">[</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cascade.models.model.Model&quot;</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;created_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-06-12T09:49:56.741950+00:00&quot;</span><span class="p">,</span>
@@ -447,20 +486,28 @@ method of our model and cannot save it. Let’s see what is saved.</p>
 <span class="w">        </span><span class="nt">&quot;saved_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-06-12T09:55:15.865675+00:00&quot;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">]</span>
-</pre></div>
-</div>
-<p>Meta data is a very flexible structure and you can save and modify whatever
-information you want.</p>
-<p>For more advanced usage of <code class="docutils literal notranslate"><span class="pre">Model</span></code> see <a class="reference internal" href="examples/model_training.html"><span class="std std-ref">Model training</span></a> page</p>
-</section>
-<section id="build-pipelines">
-<h3>Build pipelines<a class="headerlink" href="#build-pipelines" title="Permalink to this headline">#</a></h3>
-<p>The amount of work we put in the building data processing pipelines is
-proportional to the role clean and well prepared data plays in the final
-performance of ML solution.</p>
-<p>This is where Datasets come in. Consider this toy-example where the data would be
-a sequence of digits</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+</pre>
+                                            </div>
+                                        </div>
+                                        <p>Meta data is a very flexible structure and you can save and modify whatever
+                                            information you want.</p>
+                                        <p>For more advanced usage of <code
+                                                class="docutils literal notranslate"><span class="pre">Model</span></code>
+                                            see <a class="reference internal" href="examples/model_training.html"><span
+                                                    class="std std-ref">Model training</span></a> page</p>
+                                    </section>
+                                    <section id="build-pipelines">
+                                        <h3>Build pipelines<a class="headerlink" href="#build-pipelines"
+                                                title="Permalink to this headline">#</a></h3>
+                                        <p>The amount of work we put in the building data processing pipelines is
+                                            proportional to the role clean and well prepared data plays in the final
+                                            performance of ML solution.</p>
+                                        <p>This is where Datasets come in. Consider this toy-example where the data
+                                            would be
+                                            a sequence of digits</p>
+                                        <div class="highlight-python notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
@@ -468,16 +515,23 @@ a sequence of digits</p>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">ApplyModifier</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">RandomSampler</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 <span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>In this example our data goes through three stages that are defined
-(and will not be computed until accessed) above.</p>
-<p>Data is squared, randomly resampled and then divided into train and test sets.</p>
-<p>To get metadata of an object you do just:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+</pre>
+                                            </div>
+                                        </div>
+                                        <p>In this example our data goes through three stages that are defined
+                                            (and will not be computed until accessed) above.</p>
+                                        <p>Data is squared, randomly resampled and then divided into train and test
+                                            sets.</p>
+                                        <p>To get metadata of an object you do just:</p>
+                                        <div class="highlight-python notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+</pre>
+                                            </div>
+                                        </div>
+                                        <div class="highlight-json notranslate">
+                                            <div class="highlight">
+                                                <pre><span></span><span class="p">[</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="nt">&quot;len&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
 <span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cascade.data.range_sampler.RangeSampler&quot;</span><span class="p">,</span>
@@ -500,124 +554,145 @@ a sequence of digits</p>
 <span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dataset&quot;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">]</span>
-</pre></div>
-</div>
-<p>By default all <cite>sized</cite> objects will have length in their meta data.
-The more specific the transformation the richer meta will be.</p>
-<p>All datasets with examples can be found in <a class="reference internal" href="examples/dataset_zoo.html"><span class="std std-ref">Dataset Zoo</span></a></p>
-<div class="toctree-wrapper compound">
-</div>
-</section>
-</section>
-</section>
+</pre>
+                                            </div>
+                                        </div>
+                                        <p>By default all <cite>sized</cite> objects will have length in their meta
+                                            data.
+                                            The more specific the transformation the richer meta will be.</p>
+                                        <p>All datasets with examples can be found in <a class="reference internal"
+                                                href="examples/dataset_zoo.html"><span class="std std-ref">Dataset
+                                                    Zoo</span></a></p>
+                                        <div class="toctree-wrapper compound">
+                                        </div>
+                                    </section>
+                                </section>
+                            </section>
 
 
-                </article>
-              
-              
-              
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
-<div class="prev-next-area">
-    <a class="right-next"
-       href="quickstart.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Quickstart</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div></div>
-  
-</div>
+                        </article>
+
+
+
+                        <footer class="bd-footer-article">
+
+                            <div class="footer-article-items footer-article__inner">
+
+                                <div class="footer-article-item"><!-- Previous / next buttons -->
+                                    <div class="prev-next-area">
+                                        <a class="right-next" href="quickstart.html" title="next page">
+                                            <div class="prev-next-info">
+                                                <p class="prev-next-subtitle">next</p>
+                                                <p class="prev-next-title">Quickstart</p>
+                                            </div>
+                                            <i class="fa-solid fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </footer>
+
+                    </div>
+
+
+
+                    <div class="bd-sidebar-secondary bd-toc">
+                        <div class="sidebar-secondary-items sidebar-secondary__inner">
+
+                            <div class="sidebar-secondary-item">
+                                <div class="page-toc tocsection onthispage">
+                                    <i class="fa-solid fa-list"></i> On this page
+                                </div>
+                                <nav class="bd-toc-nav page-toc">
+                                    <ul class="visible nav section-nav flex-column">
+                                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                                                href="#who-could-find-it-useful">Who could find it useful</a></li>
+                                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                                                href="#key-principles">Key Principles</a></li>
+                                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                                                href="#introduction">Introduction</a>
+                                            <ul class="nav section-nav flex-column">
+                                                <li class="toc-h3 nav-item toc-entry"><a
+                                                        class="reference internal nav-link"
+                                                        href="#installation">Installation</a></li>
+                                                <li class="toc-h3 nav-item toc-entry"><a
+                                                        class="reference internal nav-link"
+                                                        href="#track-your-first-experiment">Track your first
+                                                        experiment</a></li>
+                                                <li class="toc-h3 nav-item toc-entry"><a
+                                                        class="reference internal nav-link"
+                                                        href="#build-pipelines">Build pipelines</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                            <div class="sidebar-secondary-item">
+                                <div class="tocsection sourcelink">
+                                    <a href="_sources/index.rst.txt">
+                                        <i class="fa-solid fa-file-lines"></i> Show Source
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <footer class="bd-footer-content">
 
                 </footer>
-              
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts loaded after <body> so the DOM is not blocked -->
+    <script src="scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+    <script src="scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+    <footer class="bd-footer">
+        <div class="bd-footer__inner bd-page-width">
+
+            <div class="footer-items__start">
+
+                <div class="footer-item">
+                    <p class="copyright">
+
+                        © Copyright 2022-2023, Ilia Moiseev.
+                        <br />
+
+                    </p>
+                </div>
+
+                <div class="footer-item">
+                    <p class="sphinx-version">
+                        Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+                        <br />
+                    </p>
+                </div>
+
             </div>
-            
-            
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-could-find-it-useful">Who could find it useful</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-principles">Key Principles</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#track-your-first-experiment">Track your first experiment</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-pipelines">Build pipelines</a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
 
-  <div class="sidebar-secondary-item">
-  <div class="tocsection sourcelink">
-    <a href="_sources/index.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+            <div class="footer-items__end">
 
-</div></div>
-              
-            
-          </div>
-          <footer class="bd-footer-content">
-            
-          </footer>
-        
-      </main>
-    </div>
-  </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+                <div class="footer-item">
+                    <p class="theme-version">
+                        Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData
+                            Sphinx Theme</a> 0.13.3.
+                    </p>
+                </div>
 
-  <footer class="bd-footer">
-<div class="bd-footer__inner bd-page-width">
-  
-    <div class="footer-items__start">
-      
-        <div class="footer-item">
-  <p class="copyright">
-    
-      © Copyright 2022-2023, Ilia Moiseev.
-      <br/>
-    
-  </p>
-</div>
-      
-        <div class="footer-item">
-  <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
-    <br/>
-  </p>
-</div>
-      
-    </div>
-  
-  
-    <div class="footer-items__end">
-      
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
-</p></div>
-      
-    </div>
-  
-</div>
+            </div>
 
-  </footer>
-  </body>
+        </div>
+
+    </footer>
+</body>
+
 </html>
