@@ -15,8 +15,7 @@ limitations under the License.
 """
 
 import logging
-import os
-from typing import Any, Dict, Iterable, List, Union
+from typing import Any, Dict, Iterable, List, Union, Tuple
 
 import pendulum
 
@@ -68,15 +67,14 @@ class BasicTrainer(Trainer):
     """
 
     @staticmethod
-    def _find_last_model(model: Model, line: ModelLine) -> None:
+    def _load_last_model(line: ModelLine) -> Tuple[Model, int]:
         model_num = len(line) - 1
         while True:
-            path = os.path.join(line.get_root(), line.model_names[model_num])
             try:
-                model.load(path)
-                break
-            except FileNotFoundError as e:
-                logger.warning(f"Model {path} files were not found\n{e}")
+                model = line.load(model_num, only_meta=False)
+                return model, model_num
+            except Exception as e:
+                logger.warning(f"Model {model_num} files were not found\n{e}")
                 model_num -= 1
 
                 if model_num == -1:
@@ -148,7 +146,7 @@ class BasicTrainer(Trainer):
         if start_from is not None:
             if len(line) == 0:
                 raise RuntimeError(f"Cannot start from line {line_name} as it is empty")
-            model_num = self._find_last_model(model, line)
+            model, model_num = self._load_last_model(line)
 
         start_time = pendulum.now()
         self._meta_prefix["train_start_at"] = start_time
