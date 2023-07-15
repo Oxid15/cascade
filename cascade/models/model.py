@@ -75,9 +75,21 @@ class Model(Traceable):
 
     def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Saves model's state using provided filepath.
+        Saves model wrapper's state using provided filepath
         """
         raise_not_implemented("cascade.models.Model", "save")
+
+    def load_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Loads standalone model's artifact using provided filepath and sets it inside the model
+        """
+        raise_not_implemented("cascade.models.Model", "load_artifact")
+
+    def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Saves standalone model's artifact using provided filepath
+        """
+        raise_not_implemented("cascade.models.Model", "save_artifact")
 
     def get_meta(self) -> PipeMeta:
         # Successors may not call super().__init__

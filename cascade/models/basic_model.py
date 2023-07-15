@@ -133,6 +133,13 @@ class BasicModel(Model):
         """
         pass
 
+    def load_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        BasicModel implements this for compatibility.
+        This method does nothing since there are no internal artifacts in BasicModel
+        """
+        pass
+
 
 class BasicModelModifier(ModelModifier, BasicModel):
     """
