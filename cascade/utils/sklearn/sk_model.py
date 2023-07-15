@@ -95,6 +95,7 @@ class SkModel(BasicModel):
             pickle.dump(self, f)
         self._pipeline = pipeline
 
+    # TODO: pass args to pickle
     def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Saves sklearn pipeline
@@ -134,7 +135,7 @@ class SkModel(BasicModel):
             raise ValueError(f"Error when loading an artifact - {path} is not a folder")
 
         pipeline_path = os.path.join(path, "pipeline.pkl")
-        with open(pipeline_path, "wb") as f:
+        with open(pipeline_path, "rb") as f:
             self._pipeline = pickle.load(f)
 
     def get_meta(self) -> PipeMeta:

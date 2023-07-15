@@ -50,8 +50,7 @@ class TorchModel(Model):
             self._model = model
         elif model_class is not None:
             self._model = model_class(**kwargs)
-        else:
-            raise ValueError("Either `model_class` or `model` should be not None")
+
         super().__init__(**kwargs)
 
     def predict(self, *args, **kwargs) -> Any:
@@ -125,7 +124,7 @@ class TorchModel(Model):
             raise ValueError(f"Error when loading an artifact - {path} is not a folder")
 
         checkpoint_path = os.path.join(path, "checkpoint.pt")
-        with open(checkpoint_path, "wb") as f:
+        with open(checkpoint_path, "rb") as f:
             self._model = torch.load(f, *args, **kwargs)
 
     def get_meta(self) -> PipeMeta:
