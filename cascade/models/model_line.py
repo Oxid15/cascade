@@ -123,11 +123,13 @@ class ModelLine(TraceableOnDisk):
             os.makedirs(model_folder)
             break
 
-        meta = model.get_meta()
+        model.save(os.path.join(self._root, folder_name))
 
+        meta = model.get_meta()
         if not only_meta:
-            # Save model
-            model.save(os.path.join(self._root, folder_name))
+            artifacts_folder = os.path.join(self._root, folder_name, "artifacts")
+            os.makedirs(artifacts_folder, exist_ok=True)
+            model.save_artifact(artifacts_folder)
 
         #     exact_filename = exact_filename[0]
         #     with open(exact_filename, "rb") as f:
