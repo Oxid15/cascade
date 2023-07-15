@@ -21,10 +21,10 @@ from typing import Any, Type, Union
 import torch
 
 from ...base import PipeMeta
-from ...models import Model
+from ...models import BasicModel
 
 
-class TorchModel(Model):
+class TorchModel(BasicModel):
     """
     The wrapper around `nn.Module`s.
     """
@@ -58,6 +58,9 @@ class TorchModel(Model):
         Calls internal module with arguments provided.
         """
         return self._model(*args, **kwargs)
+
+    def evaluate(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
+        raise NotImplementedError()
 
     def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
