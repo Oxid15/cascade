@@ -26,33 +26,49 @@ from .base import MetaHandler, supported_meta_formats
 
 
 @click.group()
-def cli():
-    pass
+@click.pass_context
+def cli(ctx):
+    ctx.ensure_object(dict)
 
-
-@cli.command()
-def status():
     current_dir_full = os.getcwd()
     current_dir = os.path.split(current_dir_full)[-1]
     click.echo(f"Cascade {__version__} in ./{current_dir}")
     meta_paths = glob.glob(os.path.join(current_dir_full, "meta.*"))
     meta_paths = [path for path in meta_paths
-                           if os.path.splitext(path)[-1] in supported_meta_formats]
+                  if os.path.splitext(path)[-1] in supported_meta_formats]
 
     if len(meta_paths) == 0:
-        click.echo("There is no cascade objects here")
+        click.echo("It seems that there is no cascade objects here")
     elif len(meta_paths) == 1:
         meta = MetaHandler.read(meta_paths[0])
-        click.echo(f"This is {meta[0]['type']} of len {meta[0]['len']}")
+        ctx.obj["meta"] = meta
     else:
         click.echo(f"There are {len(meta_paths)} meta objects here")
 
 
 @cli.command()
-@click.option("--desc", prompt="Description: ")
-def desc(desc: str):
-    click.echo(f"{desc}")
+@click.pass_context
+def status(ctx):
+    """
+    Prints short description of what is present in the current folder
+    """
+    if ctx.obj:
+        output = f"This is {ctx.obj['meta'][0]['type']}"
+        if ctx.obj['meta'][0].get("len"):
+            output += f" of len {ctx.obj['meta'][0]['len']}"
+        click.echo(output)
+
+
+@cli.command()
+@click.pass_context
+def cat(ctx):
+    """
+    Prints full meta data of the current object
+    """
+    from pprint import pformat
+    if ctx.obj:
+        click.echo(pformat(ctx.obj["meta"]))
 
 
 if __name__ == "__main__":
-    cli()
+    cli(obj={})
