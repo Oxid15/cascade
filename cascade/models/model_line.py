@@ -125,18 +125,9 @@ class ModelLine(TraceableOnDisk):
 
         meta = model.get_meta()
 
-        # if not only_meta:
-        #     # Save model
-        #     full_path = os.path.join(self._root, folder_name, "model")
-        #     model.save(full_path)
-
-        #     # Find anything that matches /path/model_folder/model*
-        #     # TODO: need to review this
-        #     exact_filename = glob.glob(f"{full_path}*")
-
-        #     assert len(exact_filename) > 0, "Model file wasn't found.\n "
-        #     "It may be that Model didn't save itself when save() was called,"
-        #     'or the name of the file didn\'t match "model*"'
+        if not only_meta:
+            # Save model
+            model.save(os.path.join(self._root, folder_name))
 
         #     exact_filename = exact_filename[0]
         #     with open(exact_filename, "rb") as f:
