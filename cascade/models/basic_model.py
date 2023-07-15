@@ -97,10 +97,11 @@ class BasicModel(Model):
     def load(cls, path: str, check_hash: bool = True) -> "BasicModel":
         """
         Loads the model from path provided. Path may be a folder,
-        if so, `model` is assumed.
+        if so, `model.pkl` is assumed.
         """
-        if os.path.isdir(path):
-            path = os.path.join(path, "model")
+        if not os.path.isdir(path):
+            raise ValueError(f"Error when loading a model - {path} is not a folder")
+        path = os.path.join(path, "model.pkl")
 
         # TODO: enable hash check later
         # if check_hash:
@@ -112,18 +113,25 @@ class BasicModel(Model):
 
     def save(self, path: str) -> None:
         """
-        Saves model to the path provided.
-        If path is a folder, then creates
-        it if not exists and saves there as
-        `model`
-        If path is a file, then saves it accordingly.
+        Saves model to the path provided
+        Path should be a folder, which will be created
+        if not exists and saves there as `model.pkl`
         """
-        if os.path.isdir(path):
-            os.makedirs(path, exist_ok=True)
-            path = os.path.join(path, "model")
+        if not os.path.isdir(path):
+            raise ValueError(f"Error when saving a model - {path} is not a folder")
+
+        os.makedirs(path, exist_ok=True)
+        path = os.path.join(path, "model.pkl")
 
         with open(path, "wb") as f:
             pickle.dump(self, f)
+
+    def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        BasicModel implements this for compatibility.
+        This method does nothing since there are no internal artifacts in BasicModel
+        """
+        pass
 
 
 class BasicModelModifier(ModelModifier, BasicModel):

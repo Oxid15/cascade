@@ -42,7 +42,7 @@ from cascade.data import (
 from cascade.models import BasicModel, Model, ModelLine, ModelRepo
 
 
-class DummyModel(Model):
+class DummyModel(BasicModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model = b"model"
@@ -56,17 +56,6 @@ class DummyModel(Model):
     def evaluate(self, *args, **kwargs):
         self.metrics.update({"acc": np.random.random()})
 
-    @classmethod
-    def load(cls, path):
-        with open(path, "rb") as f:
-            model = DummyModel()
-            model.model = str(f.read())
-            return model
-
-    def save(self, path):
-        with open(path, "wb") as f:
-            f.write(b"model")
-
 
 class EmptyModel(DummyModel):
     def __init__(self):
@@ -76,13 +65,6 @@ class EmptyModel(DummyModel):
 class OnesModel(BasicModel):
     def predict(self, x, *args, **kwargs):
         return np.array([1 for _ in range(len(x))])
-
-    @classmethod
-    def load(cls, filepath) -> "OnesModel":
-        return OnesModel()
-
-    def save(self, filepath) -> None:
-        pass
 
     def fit(self, x, y, *args, **kwargs) -> None:
         pass

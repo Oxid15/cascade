@@ -28,11 +28,15 @@ from cascade.tests.conftest import DummyModel, ModelLine
 
 
 def test_save_load(model_line, dummy_model):
+    dummy_model.a = 0
+    dummy_model.params.update({"b": "test"})
+
     model_line.save(dummy_model)
     model = model_line[0]
 
     assert len(model_line) == 1
-    assert model.model == "b'model'"
+    assert model.a == 0
+    assert model.params["b"] == "test"
 
 
 def test_meta(model_line, dummy_model):
