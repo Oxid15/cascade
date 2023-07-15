@@ -107,10 +107,12 @@ class ModelLine(TraceableOnDisk):
         only_meta: bool, optional
             Flag, that indicates whether to save model's binaries. If True saves only metadata.
         """
+        if len(self.model_names) == 0:
+            idx = 0
+        else:
+            idx = int(max(self.model_names)) + 1
 
-        idx = len(self.model_names)
-        # If models in the middle were deleted
-        # length might not be equal to the latest index
+        # Should check just in case
         while True:
             folder_name = f"{idx:0>5d}"
             model_folder = os.path.join(self._root, folder_name)
@@ -118,7 +120,6 @@ class ModelLine(TraceableOnDisk):
                 idx += 1
                 continue
 
-            # Create model's folder if no
             os.makedirs(model_folder)
             break
 
@@ -146,7 +147,7 @@ class ModelLine(TraceableOnDisk):
 
         meta[0]["path"] = os.path.join(self._root, folder_name)
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
-        self.model_names.append(os.path.join(folder_name, "model"))
+        self.model_names.append(folder_name)
 
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
@@ -175,7 +176,7 @@ class ModelLine(TraceableOnDisk):
         ), f"folder should be directory, got `{self._root}`"
         self.model_names = sorted(
             [
-                os.path.join(model_folder, "model")
+                model_folder
                 for model_folder in os.listdir(self._root)
                 if os.path.isdir(os.path.join(self._root, model_folder))
             ]
