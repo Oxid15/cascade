@@ -70,6 +70,11 @@ class OnesModel(BasicModel):
         pass
 
 
+class ModelComplexMetric(BasicModel):
+    def predict(self, *args, **kwargs):
+        return None
+
+
 def f(x: int) -> int:
     return 2 * x
 
