@@ -33,7 +33,7 @@ class TorchModel(Model):
         self,
         model_class: Union[Type, None] = None,
         model: Union[torch.nn.Module, None] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """
         Parameters
@@ -62,57 +62,71 @@ class TorchModel(Model):
 
     def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Saves the model using `torch.save`.
-        If path is the folder, then creates it and
-        saves as 'model'
-        Args and kwargs are passed into torch.save
+        Saves model to the path provided.
+        Path should be a folder. Creates
+        it if not exists and saves there as
+        model.pkl
 
-        The model is saved in two parts - the wrapper
-        and the actual torch model as checkpoint separately.
-        This is done for artifact portability - you can use checkpoint in
-        deployments directly without the need to bring additional dependency
-        with the wrapper. At the same time additional params can still be loaded
-        using wrapper that is saved nearby.
+        When saving using this method only wrapper is saved
+        if you want to save torch module use save_artifact
+
+        See also
+        --------
+        cascade.utils.torch.TorchModel.save_artifact
         """
-        if os.path.isdir(path):
-            os.makedirs(path, exist_ok=True)
-            model_path = os.path.join(path, "model.pkl")
-            checkpoint_path = os.path.join(path, "checkpoint.pt")
-        else:
-            model_path = path
-            checkpoint_path = os.path.join(*os.path.split(path)[:-1], "checkpoint.pt")
+        if not os.path.isdir(path):
+            raise ValueError(f"Error when saving a model - {path} is not a folder")
 
-        with open(checkpoint_path, "wb") as f:
-            torch.save(self._model, f, *args, **kwargs)
+        os.makedirs(path, exist_ok=True)
+        model_path = os.path.join(path, "model.pkl")
+
         model = self._model
         del self._model
         with open(model_path, "wb") as f:
             pickle.dump(self, f)
         self._model = model
 
-    @classmethod
-    def load(cls, path: str, *args: Any, **kwargs: Any) -> "TorchModel":
+    def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Loads the model using `torch.load`.
-        If path is folder, then tries to load 'checkpoint.pt'
-        from it.
+        Saves torch module. Additional args and kwargs are passed to torch.save
+
+        Parameters
+        ----------
+        path : str
+            the folder in which to save checkpoint.pt
+
+        Raises
+        ------
+        ValueError
+            if the path is not a valid directory
         """
-        if os.path.isdir(path):
-            os.makedirs(path, exist_ok=True)
-            model_path = os.path.join(path, "model.pkl")
-            checkpoint_path = os.path.join(path, "checkpoint.pt")
-        else:
-            model_path = path
-            checkpoint_path = os.path.join(*os.path.split(path)[:-1], "checkpoint.pt")
+        if not os.path.isdir(path):
+            raise ValueError(f"Error when saving an artifact - {path} is not a folder")
 
-        with open(model_path, "rb") as f:
-            model = pickle.load(f)
+        checkpoint_path = os.path.join(path, "checkpoint.pt")
+        with open(checkpoint_path, "wb") as f:
+            torch.save(self._model, f, *args, **kwargs)
 
-        with open(checkpoint_path, "rb") as f:
-            torch_model = torch.load(f, *args, **kwargs)
+    def load_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Loads torch module. Additional args and kwargs are passed to torch.load
 
-        model._model = torch_model
-        return model
+        Parameters
+        ----------
+        path : str
+            the folder from which to load pipeline.pkl
+
+        Raises
+        ------
+        ValueError
+            if the path is not a valid directory
+        """
+        if not os.path.isdir(path):
+            raise ValueError(f"Error when loading an artifact - {path} is not a folder")
+
+        checkpoint_path = os.path.join(path, "checkpoint.pt")
+        with open(checkpoint_path, "wb") as f:
+            self._model = torch.load(f, *args, **kwargs)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

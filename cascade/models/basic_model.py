@@ -96,8 +96,7 @@ class BasicModel(Model):
     @classmethod
     def load(cls, path: str, check_hash: bool = True) -> "BasicModel":
         """
-        Loads the model from path provided. Path may be a folder,
-        if so, `model.pkl` is assumed.
+        Loads the model from path provided. Path should be a folder
         """
         if not os.path.isdir(path):
             raise ValueError(f"Error when loading a model - {path} is not a folder")
