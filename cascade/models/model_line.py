@@ -105,7 +105,7 @@ class ModelLine(TraceableOnDisk):
         model: Model
             Model to be saved
         only_meta: bool, optional
-            Flag, that indicates whether to save model's binaries. If True saves only metadata.
+            Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
         """
         if len(self.model_names) == 0:
             idx = 0
@@ -164,9 +164,9 @@ class ModelLine(TraceableOnDisk):
         return meta
 
     def _load(self):
-        assert os.path.isdir(
-            self._root
-        ), f"folder should be directory, got `{self._root}`"
+        if not os.path.isdir(self._root):
+            raise ValueError(f"folder should be directory, got `{self._root}`")
+
         self.model_names = sorted(
             [
                 model_folder
