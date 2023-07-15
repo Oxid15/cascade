@@ -60,11 +60,8 @@ def test_hash_check(tmp_path, ext):
         tree.load(os.path.join(tmp_path, "tree", "00000", "model"))
 
 
-@pytest.mark.parametrize("postfix", ["", "model", "model.pkl"])
-def test_save_load(tmp_path, postfix):
+def test_save_load(tmp_path):
     tmp_path = str(tmp_path)
-    if postfix:
-        tmp_path = os.path.join(tmp_path, postfix)
 
     model = SkModel(blocks=[RandomForestClassifier(n_estimators=2)], custom_param=42)
     model.save(tmp_path)
@@ -74,4 +71,17 @@ def test_save_load(tmp_path, postfix):
     model = SkModel.load(tmp_path)
 
     assert model.params.get("custom_param") == 42
+
+
+def test_model_artifacts(tmp_path):
+    tmp_path = str(tmp_path)
+
+    model = SkModel(blocks=[RandomForestClassifier(n_estimators=2)], custom_param=42)
+    model.save_artifact(tmp_path)
+
+    assert os.path.exists(os.path.join(tmp_path, "pipeline.pkl"))
+    assert not os.path.exists(os.path.join(tmp_path, "model.pkl"))
+
+    model = SkModel()
+    model.load_artifact(tmp_path)
     assert model._pipeline[0].n_estimators == 2
