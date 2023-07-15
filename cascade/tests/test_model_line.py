@@ -57,12 +57,14 @@ def test_change_of_format(tmp_path, ext):
 
 
 def test_same_index_check(model_line, dummy_model):
-    for _ in range(3):
+    for _ in range(5):
         dummy_model.evaluate()
         model_line.save(dummy_model)
 
     shutil.rmtree(os.path.join(model_line.get_root(), "00001"))
+    shutil.rmtree(os.path.join(model_line.get_root(), "00002"))
+    shutil.rmtree(os.path.join(model_line.get_root(), "00003"))
 
     model_line.save(dummy_model)
 
-    assert os.path.exists(os.path.join(model_line.get_root(), "00003"))
+    assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
