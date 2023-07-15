@@ -71,14 +71,14 @@ class ModelLine(TraceableOnDisk):
 
     def __getitem__(self, num: int) -> Model:
         """
-        Creates a model of `model_cls` and loads it using Model's `load` method.
+        Loads the model using `load` method of a given class
 
         Returns
         -------
             model: Model
                 a loaded model
         """
-        model = self._model_cls.load(os.path.join(self._root, self.model_names[num]))
+        model = self.load(num, only_meta=True)
         return model
 
     def __len__(self) -> int:
@@ -89,13 +89,33 @@ class ModelLine(TraceableOnDisk):
         """
         return len(self.model_names)
 
+    def load(self, num: int, only_meta: bool = False) -> Model:
+        """
+        Loads a model
+
+        Parameters
+        ----------
+        num : int
+            Model number in line
+        only_meta : bool, optional
+            If True doesn't load model's artifacts, by default False
+        """
+        model = self._model_cls.load(os.path.join(self._root, self.model_names[num]))
+        if not only_meta:
+            model.load_artifact(
+                os.path.join(self._root, self.model_names[num], "artifacts")
+            )
+
+        return model
+
     def save(self, model: Model, only_meta: bool = False) -> None:
         """
         Saves a model and its metadata to a line's folder.
+
         Model is automatically assigned a number and a model is saved
         using Model's method `save` in its own folder.
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
-        The name passed to model's save is just "model" without extension.
+
         It is Model's responsibility to correctly  assign extension and save its own state.
 
         Additionally, saves ModelLine's meta to the Line's root.
@@ -105,12 +125,14 @@ class ModelLine(TraceableOnDisk):
         model: Model
             Model to be saved
         only_meta: bool, optional
-            Flag, that indicates whether to save model's binaries. If True saves only metadata.
+            Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
         """
+        if len(self.model_names) == 0:
+            idx = 0
+        else:
+            idx = int(max(self.model_names)) + 1
 
-        idx = len(self.model_names)
-        # If models in the middle were deleted
-        # length might not be equal to the latest index
+        # Should check just in case
         while True:
             folder_name = f"{idx:0>5d}"
             model_folder = os.path.join(self._root, folder_name)
@@ -118,24 +140,16 @@ class ModelLine(TraceableOnDisk):
                 idx += 1
                 continue
 
-            # Create model's folder if no
             os.makedirs(model_folder)
             break
 
+        model.save(os.path.join(self._root, folder_name))
+
         meta = model.get_meta()
-
-        # if not only_meta:
-        #     # Save model
-        #     full_path = os.path.join(self._root, folder_name, "model")
-        #     model.save(full_path)
-
-        #     # Find anything that matches /path/model_folder/model*
-        #     # TODO: need to review this
-        #     exact_filename = glob.glob(f"{full_path}*")
-
-        #     assert len(exact_filename) > 0, "Model file wasn't found.\n "
-        #     "It may be that Model didn't save itself when save() was called,"
-        #     'or the name of the file didn\'t match "model*"'
+        if not only_meta:
+            artifacts_folder = os.path.join(self._root, folder_name, "artifacts")
+            os.makedirs(artifacts_folder)
+            model.save_artifact(artifacts_folder)
 
         #     exact_filename = exact_filename[0]
         #     with open(exact_filename, "rb") as f:
@@ -146,7 +160,7 @@ class ModelLine(TraceableOnDisk):
 
         meta[0]["path"] = os.path.join(self._root, folder_name)
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
-        self.model_names.append(os.path.join(folder_name, "model"))
+        self.model_names.append(folder_name)
 
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
@@ -170,12 +184,12 @@ class ModelLine(TraceableOnDisk):
         return meta
 
     def _load(self):
-        assert os.path.isdir(
-            self._root
-        ), f"folder should be directory, got `{self._root}`"
+        if not os.path.isdir(self._root):
+            raise ValueError(f"folder should be directory, got `{self._root}`")
+
         self.model_names = sorted(
             [
-                os.path.join(model_folder, "model")
+                model_folder
                 for model_folder in os.listdir(self._root)
                 if os.path.isdir(os.path.join(self._root, model_folder))
             ]

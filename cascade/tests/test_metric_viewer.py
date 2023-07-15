@@ -25,7 +25,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.meta import MetricViewer
 from cascade.models import BasicModel, ModelRepo
-from cascade.tests.conftest import DummyModel
+from cascade.tests.conftest import DummyModel, ModelComplexMetric
 
 
 def test(repo_or_line, dummy_model):
@@ -94,14 +94,6 @@ def test_get_best_by(tmp_path, ext):
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_get_best_by_non_sortable(tmp_path, ext):
-    class ModelComplexMetric(BasicModel):
-        @classmethod
-        def load(cls, *args, **kwargs) -> "ModelComplexMetric":
-            return ModelComplexMetric()
-
-        def predict(self, *args, **kwargs):
-            return None
-
     repo = ModelRepo(str(tmp_path), meta_fmt=ext, model_cls=ModelComplexMetric)
     line = repo.add_line("00001", model_cls=ModelComplexMetric)
 

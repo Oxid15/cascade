@@ -27,12 +27,17 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.tests.conftest import DummyModel, ModelLine
 
 
-def test_save_load(model_line, dummy_model):
-    model_line.save(dummy_model)
+@pytest.mark.parametrize("only_meta", [True, False])
+def test_save_load(model_line, dummy_model, only_meta):
+    dummy_model.a = 0
+    dummy_model.params.update({"b": "test"})
+
+    model_line.save(dummy_model, only_meta=only_meta)
     model = model_line[0]
 
     assert len(model_line) == 1
-    assert model.model == "b'model'"
+    assert model.a == 0
+    assert model.params["b"] == "test"
 
 
 def test_meta(model_line, dummy_model):
@@ -57,12 +62,14 @@ def test_change_of_format(tmp_path, ext):
 
 
 def test_same_index_check(model_line, dummy_model):
-    for _ in range(3):
+    for _ in range(5):
         dummy_model.evaluate()
         model_line.save(dummy_model)
 
     shutil.rmtree(os.path.join(model_line.get_root(), "00001"))
+    shutil.rmtree(os.path.join(model_line.get_root(), "00002"))
+    shutil.rmtree(os.path.join(model_line.get_root(), "00003"))
 
     model_line.save(dummy_model)
 
-    assert os.path.exists(os.path.join(model_line.get_root(), "00003"))
+    assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
