@@ -71,14 +71,14 @@ class ModelLine(TraceableOnDisk):
 
     def __getitem__(self, num: int) -> Model:
         """
-        Creates a model of `model_cls` and loads it using Model's `load` method.
+        Loads the model using `load` method of a given class
 
         Returns
         -------
             model: Model
                 a loaded model
         """
-        model = self._model_cls.load(os.path.join(self._root, self.model_names[num]))
+        model = self.load(num, only_meta=True)
         return model
 
     def __len__(self) -> int:
@@ -89,13 +89,33 @@ class ModelLine(TraceableOnDisk):
         """
         return len(self.model_names)
 
+    def load(self, num: int, only_meta: bool = False) -> Model:
+        """
+        Loads a model
+
+        Parameters
+        ----------
+        num : int
+            Model number in line
+        only_meta : bool, optional
+            If True doesn't load model's artifacts, by default False
+        """
+        model = self._model_cls.load(os.path.join(self._root, self.model_names[num]))
+        if not only_meta:
+            model.load_artifact(
+                os.path.join(self._root, self.model_names[num], "artifacts")
+            )
+
+        return model
+
     def save(self, model: Model, only_meta: bool = False) -> None:
         """
         Saves a model and its metadata to a line's folder.
+
         Model is automatically assigned a number and a model is saved
         using Model's method `save` in its own folder.
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
-        The name passed to model's save is just "model" without extension.
+
         It is Model's responsibility to correctly  assign extension and save its own state.
 
         Additionally, saves ModelLine's meta to the Line's root.
@@ -128,7 +148,7 @@ class ModelLine(TraceableOnDisk):
         meta = model.get_meta()
         if not only_meta:
             artifacts_folder = os.path.join(self._root, folder_name, "artifacts")
-            os.makedirs(artifacts_folder, exist_ok=True)
+            os.makedirs(artifacts_folder)
             model.save_artifact(artifacts_folder)
 
         #     exact_filename = exact_filename[0]
