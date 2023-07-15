@@ -67,6 +67,7 @@ class TableDataset(Dataset):
         """
         return len(self._table)
 
+    #TODO: remove defaults
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update(

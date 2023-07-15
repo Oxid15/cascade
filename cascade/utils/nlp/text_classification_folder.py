@@ -71,6 +71,7 @@ class TextClassificationFolder(Dataset):
         """
         return len(self._paths)
 
+    #TODO: remove defaults
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update(
