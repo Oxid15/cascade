@@ -87,7 +87,7 @@ def test_save_load(tmp_path):
     assert model.params.get("a") == 10
 
 
-def test_model_artifacts():
+def test_model_artifacts(tmp_path):
     tmp_path = str(tmp_path)
 
     model = BasicModel(a=10)
