@@ -76,12 +76,10 @@ class TorchModel(BasicModel):
         --------
         cascade.utils.torch.TorchModel.save_artifact
         """
-        if not os.path.isdir(path):
-            raise ValueError(f"Error when saving a model - {path} is not a folder")
-
-        os.makedirs(path, exist_ok=True)
+        super().save(path)
         model_path = os.path.join(path, "model.pkl")
 
+        # Save without torch artifact
         model = self._model
         del self._model
         with open(model_path, "wb") as f:

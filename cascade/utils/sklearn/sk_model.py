@@ -83,10 +83,7 @@ class SkModel(BasicModel):
         --------
         cascade.utils.sklearn.SkModel.save_artifact
         """
-        if not os.path.isdir(path):
-            raise ValueError(f"Error when saving a model - {path} is not a folder")
-
-        os.makedirs(path, exist_ok=True)
+        super().save(path)
         model_path = os.path.join(path, "model.pkl")
 
         pipeline = self._pipeline
@@ -104,11 +101,6 @@ class SkModel(BasicModel):
         ----------
         path : str
             the folder in which to save pipeline.pkl
-
-        Raises
-        ------
-        ValueError
-            if the path is not a valid directory
         """
         if not os.path.isdir(path):
             raise ValueError(f"Error when saving an artifact - {path} is not a folder")
