@@ -143,21 +143,7 @@ class ModelLine(TraceableOnDisk):
             os.makedirs(model_folder)
             break
 
-        model.save(os.path.join(self._root, folder_name))
-
         meta = model.get_meta()
-        if not only_meta:
-            artifacts_folder = os.path.join(self._root, folder_name, "artifacts")
-            os.makedirs(artifacts_folder)
-            model.save_artifact(artifacts_folder)
-
-        #     exact_filename = exact_filename[0]
-        #     with open(exact_filename, "rb") as f:
-        #         md5sum = md5(f.read()).hexdigest()
-
-        #     meta[0]["name"] = exact_filename
-        #     meta[0]["md5sum"] = md5sum
-
         meta[0]["path"] = os.path.join(self._root, folder_name)
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
         self.model_names.append(folder_name)
@@ -165,6 +151,13 @@ class ModelLine(TraceableOnDisk):
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
+
+        model.save(os.path.join(self._root, folder_name))
+
+        if not only_meta:
+            artifacts_folder = os.path.join(self._root, folder_name, "artifacts")
+            os.makedirs(artifacts_folder)
+            model.save_artifact(artifacts_folder)
 
         self._update_meta()
 
