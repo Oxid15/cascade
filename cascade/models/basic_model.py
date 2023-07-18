@@ -113,13 +113,13 @@ class BasicModel(Model):
     def save(self, path: str) -> None:
         """
         Saves model to the path provided
+        Also copies any additional files in the model folder.
+
         Path should be a folder, which will be created
         if not exists and saves there as `model.pkl`
         """
-        if not os.path.isdir(path):
-            raise ValueError(f"Error when saving a model - {path} is not a folder")
+        super().save(path)
 
-        os.makedirs(path, exist_ok=True)
         path = os.path.join(path, "model.pkl")
 
         with open(path, "wb") as f:
