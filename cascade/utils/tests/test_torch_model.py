@@ -29,12 +29,8 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.utils.torch import TorchModel
 
 
-@pytest.mark.parametrize("postfix", ["", "model", "model.pt"])
-def test_save_load(tmp_path, postfix):
+def test_save_load(tmp_path):
     tmp_path = str(tmp_path)
-
-    if postfix:
-        tmp_path = os.path.join(tmp_path, postfix)
 
     model = TorchModel(torch.nn.Linear, in_features=10, out_features=2)
 
@@ -44,6 +40,18 @@ def test_save_load(tmp_path, postfix):
 
     model = TorchModel.load(tmp_path)
 
-    assert str(model._model) == str(torch.nn.Linear(10, 2))
     assert model.params.get("in_features") == 10
     assert model.params.get("out_features") == 2
+
+
+def test_model_artifacts(tmp_path):
+    tmp_path = str(tmp_path)
+
+    model = TorchModel(torch.nn.Linear, in_features=10, out_features=2)
+
+    model.save_artifact(tmp_path)
+
+    model = TorchModel()
+    model.load_artifact(tmp_path)
+
+    assert str(model._model) == str(torch.nn.Linear(10, 2))

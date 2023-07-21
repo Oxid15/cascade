@@ -33,6 +33,7 @@ setuptools.setup(
         "pendulum>=2.1.2",
         "flatten_json>=0.1.13",
         "pyyaml>=5.4.1",
+        "coolname>=2.0.0",
         "click>=8.0.0",
     ],
 )

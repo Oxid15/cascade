@@ -78,14 +78,20 @@ def test_modifier(ones_model):
     assert len(meta) == 2
 
 
-@pytest.mark.parametrize("postfix", ["", "model", "model.pkl"])
-def test_save_load(tmp_path, postfix):
+def test_save_load(tmp_path):
     tmp_path = str(tmp_path)
-
-    if postfix:
-        tmp_path = os.path.join(tmp_path, postfix)
 
     model = BasicModel(a=10)
     model.save(tmp_path)
     model = BasicModel.load(tmp_path)
-    assert model.params.get('a') == 10
+    assert model.params.get("a") == 10
+
+
+def test_model_artifacts(tmp_path):
+    tmp_path = str(tmp_path)
+
+    model = BasicModel(a=10)
+
+    # Those should work, but do nothing
+    model.save_artifact(tmp_path)
+    model.load_artifact(tmp_path)

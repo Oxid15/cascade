@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import json
 from typing import Any, List
 
+from ...base import PipeMeta
 from ...models import BasicModel
 
 
@@ -41,13 +41,7 @@ class ConstantBaseline(BasicModel):
         """
         return [self._constant for _ in range(len(x))]
 
-    def save(self, path: str) -> None:
-        with open(path, "w") as f:
-            json.dump({"constant": self._constant}, f)
-
-    @classmethod
-    def load(cls, path: str) -> "ConstantBaseline":
-        with open(path, "r") as f:
-            obj = json.load(f)
-            model = ConstantBaseline(obj["constant"])
-            return model
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]["constant"] = self._constant
+        return meta
