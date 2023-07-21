@@ -25,7 +25,7 @@ import click
 from .base import MetaHandler, supported_meta_formats
 
 
-@click.group()
+@click.group
 @click.pass_context
 def cli(ctx):
     """
@@ -34,6 +34,7 @@ def cli(ctx):
     ctx.ensure_object(dict)
 
     current_dir_full = os.getcwd()
+    ctx.obj["cwd"] = current_dir_full
     current_dir = os.path.split(current_dir_full)[-1]
     click.echo(f"Cascade {__version__} in ./{current_dir}")
     meta_paths = glob.glob(os.path.join(current_dir_full, "meta.*"))
@@ -48,24 +49,26 @@ def cli(ctx):
     elif len(meta_paths) == 1:
         meta = MetaHandler.read(meta_paths[0])
         ctx.obj["meta"] = meta
+        ctx.obj["type"] = meta[0].get("type")
+        ctx.obj["len"] = meta[0].get("len")
     else:
         click.echo(f"There are {len(meta_paths)} meta objects here")
 
 
-@cli.command()
+@cli.command
 @click.pass_context
 def status(ctx):
     """
     Short description of what is present in the current folder
     """
     if ctx.obj:
-        output = f"This is {ctx.obj['meta'][0]['type']}"
-        if ctx.obj["meta"][0].get("len"):
-            output += f" of len {ctx.obj['meta'][0]['len']}"
+        output = f"This is {ctx.obj['type']}"
+        if ctx.obj["len"]:
+            output += f" of len {ctx.obj['len']}"
         click.echo(output)
 
 
-@cli.command()
+@cli.command
 @click.pass_context
 def cat(ctx):
     """
@@ -73,17 +76,73 @@ def cat(ctx):
     """
     from pprint import pformat
 
-    if ctx.obj:
+    if ctx.obj.get("meta"):
         click.echo(pformat(ctx.obj["meta"]))
 
 
-@cli.command()
+@cli.group
 @click.pass_context
 def view(ctx):
     """
     Different viewers
     """
     pass
+
+
+@view.command
+@click.pass_context
+@click.option("--host", type=str, default="localhost")
+@click.option("--port", type=int, default=8050)
+@click.option("-l", type=int, help="The number of last lines to show")
+@click.option("-m", type=int, help="The number of last models to show")
+def history(ctx, host, port, l, m):
+    if ctx.obj.get("meta"):
+        type = ctx.obj["type"]
+        if type == "workspace":
+            from .models import Workspace
+            container = Workspace(ctx.obj["cwd"])
+        elif type == "repo":
+            from .models import ModelRepo
+            container = ModelRepo(ctx.obj["cwd"])
+        elif type == "line":
+            from .models import ModelLine
+            container = ModelLine(ctx.obj["cwd"])
+        else:
+            click.echo(f"Cannot open History Viewer in object of type `{type}`")
+            return
+
+        from .meta import HistoryViewer
+        HistoryViewer(container, last_lines=l, last_models=m).serve(host=host, port=port)
+
+
+@view.command
+@click.pass_context
+@click.option("-p", type=int, default=50, help="Page size for table")
+@click.option('-i', type=str, multiple=True, help="Metrics or params to include")
+@click.option('-x', type=str, multiple=True, help="Metrics or params to exclude")
+def metric(ctx, p, i, x):
+    type = ctx.obj["type"]
+    if type == "repo":
+        from .models import ModelRepo
+        container = ModelRepo(ctx.obj["cwd"])
+    elif type == "line":
+        from .models import ModelLine
+        container = ModelLine(ctx.obj["cwd"])
+    else:
+        click.echo(f"Cannot open History Viewer in object of type `{type}`")
+        return
+
+    from .meta import MetricViewer
+    i = None if len(i) == 0 else list(i)
+    x = None if len(x) == 0 else list(x)
+    MetricViewer(container).serve(page_size=p, include=i, exclude=x)
+
+
+@view.command
+@click.pass_context
+def diff(ctx):
+    from .meta import DiffViewer
+    DiffViewer(ctx.obj["cwd"]).serve()
 
 
 if __name__ == "__main__":
