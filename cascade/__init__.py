@@ -28,6 +28,9 @@ from .base import MetaHandler, supported_meta_formats
 @click.group()
 @click.pass_context
 def cli(ctx):
+    """
+    Cascade CLI
+    """
     ctx.ensure_object(dict)
 
     current_dir_full = os.getcwd()
@@ -53,7 +56,7 @@ def cli(ctx):
 @click.pass_context
 def status(ctx):
     """
-    Prints short description of what is present in the current folder
+    Short description of what is present in the current folder
     """
     if ctx.obj:
         output = f"This is {ctx.obj['meta'][0]['type']}"
@@ -66,7 +69,7 @@ def status(ctx):
 @click.pass_context
 def cat(ctx):
     """
-    Prints full meta data of the current object
+    Full meta data of the current object
     """
     from pprint import pformat
 
@@ -77,6 +80,9 @@ def cat(ctx):
 @cli.command()
 @click.pass_context
 def view(ctx):
+    """
+    Different viewers
+    """
     pass
 
 
