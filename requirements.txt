@@ -9,3 +9,4 @@ plotly>=5.7.0
 dash
 dash-renderjson==0.0.1
 coolname>=2.0.0
+click>=8.0.0
