@@ -22,7 +22,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     entry_points={'console_scripts': ['cascade = cascade.__init__:cli']},
-    package_dir={"cascade": "./cascade", "cascade_utils": "./cascade/utils"},
+    package_dir={"cascade": "./cascade"},
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
     install_requires=[
@@ -33,5 +33,6 @@ setuptools.setup(
         "pendulum>=2.1.2",
         "flatten_json>=0.1.13",
         "pyyaml>=5.4.1",
+        "click>=8.0.0",
     ],
 )
