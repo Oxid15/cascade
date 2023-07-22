@@ -18,7 +18,7 @@ limitations under the License.
 import os
 import glob
 import warnings
-from typing import Dict, Union, Any, Literal
+from typing import Dict, Union, Any, Literal, Iterable
 import pendulum
 
 from . import PipeMeta, MetaFromFile, supported_meta_formats
@@ -35,6 +35,7 @@ class Traceable:
         *args: Any,
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
         description: Union[str, None] = None,
+        tags: Union[Iterable[str], None] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -46,6 +47,8 @@ class Traceable:
             If str - prefix assumed to be path and loaded using MetaHandler.
         description:
             String description of an object
+        tags: Iterable[str], optional
+            The list of tags to be added
         See also
         --------
         cascade.base.MetaHandler
@@ -56,6 +59,11 @@ class Traceable:
             meta_prefix = self._read_meta_from_file(meta_prefix)
         self._meta_prefix = meta_prefix
         self.describe(description)
+
+        if tags is not None:
+            self.tags = set(tags)
+        else:
+            self.tags = set()
 
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
@@ -79,6 +87,7 @@ class Traceable:
         meta = {
             "name": repr(self),
             "description": self.description,
+            "tags": list(self.tags)
         }
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
@@ -147,6 +156,52 @@ class Traceable:
         if not isinstance(desc, str) and desc is not None:
             raise TypeError(f"Description should be str, got {type(desc)}")
         self.description = desc
+
+    def add_tag(self, tag: str) -> None:
+        """
+        Adds a tag to existing set
+        Makes no duplicates since tags are set
+
+        Parameters
+        ----------
+        tag : str
+            A tag to add
+        """
+        self.tags.add(tag)
+
+    def add_tags(self, tags: Iterable[str]) -> None:
+        """
+        Adds a list of tags in one call
+        Makes no duplicates since tags are set
+
+        Parameters
+        ----------
+        tags : Iterable[str]
+            Tags to add
+        """
+        self.tags = self.tags.union(tags)
+
+    def remove_tag(self, tag: str) -> None:
+        """
+        Removes a tag from the existing set
+
+        Parameters
+        ----------
+        tag : str
+            A tag to remove
+        """
+        self.tags.remove(tag)
+
+    def remove_tags(self, tags: Iterable[str]) -> None:
+        """
+        Removes a list of tags in one call
+
+        Parameters
+        ----------
+        tags : Iterable[str]
+            Tags to remove
+        """
+        self.tags = self.tags.difference(tags)
 
 
 class TraceableOnDisk(Traceable):
