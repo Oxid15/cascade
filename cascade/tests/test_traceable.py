@@ -37,6 +37,7 @@ def test_meta():
     assert type(meta[0]) == dict
     assert meta[0]["time"] == now
     assert "name" in meta[0]
+    assert "description" in meta[0]
 
 
 def test_update_meta():

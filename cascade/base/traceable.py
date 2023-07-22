@@ -21,7 +21,6 @@ import warnings
 from typing import Dict, Union, Any, Literal
 import pendulum
 
-from cascade.base import PipeMeta
 from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 
@@ -77,7 +76,10 @@ class Traceable:
 
             Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
-        meta = {"name": repr(self)}
+        meta = {
+            "name": repr(self),
+            "description": self.description,
+        }
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
