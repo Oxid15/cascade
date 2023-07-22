@@ -21,7 +21,6 @@ import warnings
 from typing import Dict, Union, Any, Literal
 import pendulum
 
-from cascade.base import PipeMeta
 from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 
@@ -35,6 +34,7 @@ class Traceable:
         self,
         *args: Any,
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
+        description: Union[str, None] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -44,7 +44,8 @@ class Traceable:
             The dictionary that is used to update object's meta in `get_meta` call.
             Due to the call of update can overwrite default values.
             If str - prefix assumed to be path and loaded using MetaHandler.
-
+        description:
+            String description of an object
         See also
         --------
         cascade.base.MetaHandler
@@ -54,6 +55,7 @@ class Traceable:
         elif isinstance(meta_prefix, str):
             meta_prefix = self._read_meta_from_file(meta_prefix)
         self._meta_prefix = meta_prefix
+        self.describe(description)
 
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
@@ -74,7 +76,10 @@ class Traceable:
 
             Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
-        meta = {"name": repr(self)}
+        meta = {
+            "name": repr(self),
+            "description": self.description,
+        }
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
@@ -123,6 +128,25 @@ class Traceable:
         """
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
+
+    def describe(self, desc: Union[str, None]):
+        """
+        Add description to an object
+
+        Parameters
+        ----------
+        desc : Union[str, None]
+            String description of an object.
+            May be None to use the method in default initializer
+
+        Raises
+        ------
+        TypeError
+            If the input is not None and not a string either
+        """
+        if not isinstance(desc, str) and desc is not None:
+            raise TypeError(f"Description should be str, got {type(desc)}")
+        self.description = desc
 
 
 class TraceableOnDisk(Traceable):
