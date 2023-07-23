@@ -69,6 +69,24 @@ class ModelLine(TraceableOnDisk):
 
         self._create_meta()
 
+    def _load(self) -> None:
+        if not os.path.isdir(self._root):
+            raise ValueError(f"folder should be directory, got `{self._root}`")
+
+        self.model_names = sorted(
+            [
+                model_folder
+                for model_folder in os.listdir(self._root)
+                if os.path.isdir(os.path.join(self._root, model_folder))
+            ]
+        )
+
+        if len(self.model_names) == 0:
+            warnings.warn(f"Model folders were not found by the line in {self._root}")
+
+    def reload(self) -> None:
+        self._load()
+
     def __getitem__(self, num: int) -> Model:
         """
         Loads the model using `load` method of a given class
@@ -175,21 +193,3 @@ class ModelLine(TraceableOnDisk):
             }
         )
         return meta
-
-    def _load(self):
-        if not os.path.isdir(self._root):
-            raise ValueError(f"folder should be directory, got `{self._root}`")
-
-        self.model_names = sorted(
-            [
-                model_folder
-                for model_folder in os.listdir(self._root)
-                if os.path.isdir(os.path.join(self._root, model_folder))
-            ]
-        )
-
-        if len(self.model_names) == 0:
-            warnings.warn(f"Model folders were not found by the line in {self._root}")
-
-    def reload(self) -> None:
-        self._load()
