@@ -74,7 +74,7 @@ def test_same_index_check(model_line, dummy_model):
 
     assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
 
-
+#TODO: write tests for exceptions
 @pytest.mark.parametrize("arg", ["num", "slug"])
 def test_load_model_meta(model_line, dummy_model, arg):
     slug = dummy_model.slug
@@ -91,3 +91,4 @@ def test_load_model_meta(model_line, dummy_model, arg):
     assert len(meta) == 1
     assert "metrics" in meta[0]
     assert "acc" in meta[0]["metrics"]
+    assert slug == meta[0]["slug"]

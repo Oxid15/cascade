@@ -81,6 +81,15 @@ class Repo(Traceable):
         """
         return list(self._lines.keys())
 
+    def load_model_meta(self, model):
+        for line in self._lines.values():
+            try:
+                meta = line.load_model_meta(model)
+            except FileNotFoundError:
+                continue
+            else:
+                return meta
+
 
 class SingleLineRepo(Repo):
     def __init__(
