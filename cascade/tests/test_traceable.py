@@ -38,6 +38,7 @@ def test_meta():
     assert meta[0]["time"] == now
     assert "name" in meta[0]
     assert "description" in meta[0]
+    assert "tags" in meta[0]
 
 
 def test_update_meta():
@@ -100,3 +101,23 @@ def test_on_disk_recreate(tmp_path, ext):
     assert list(meta[0].keys()) == list(new_meta[0].keys())
     assert meta[0]["created_at"] == new_meta[0]["created_at"]
     assert meta[0]["updated_at"] != new_meta[0]["updated_at"]
+
+
+def test_descriptions():
+    tr = Traceable(description="test")
+    assert tr.description == "test"
+
+
+def test_tags():
+    tr = Traceable(tags=["a", "b"])
+    tr.add_tag("c")
+    assert tr.tags == {"a", "b", "c"}
+
+    tr.add_tags(["c", "d"])
+    assert tr.tags == {"a", "b", "c", "d"}
+
+    tr.remove_tag("d")
+    assert tr.tags == {"a", "b", "c"}
+
+    tr.remove_tags(["a", "b", "c"])
+    assert tr.tags == set()
