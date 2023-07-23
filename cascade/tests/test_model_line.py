@@ -24,6 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.models import BasicModel
 from cascade.tests.conftest import DummyModel, ModelLine
 
 
@@ -92,3 +93,11 @@ def test_load_model_meta(model_line, dummy_model, arg):
     assert "metrics" in meta[0]
     assert "acc" in meta[0]["metrics"]
     assert slug == meta[0]["slug"]
+
+
+def test_cant_save_same_model_twice(model_line):
+    model = BasicModel()
+
+    model_line.save(model)
+    with pytest.raises(FileExistsError):
+        model_line.save(model)

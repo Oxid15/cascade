@@ -123,12 +123,13 @@ class ModelLine(TraceableOnDisk):
 
         return model
 
-    def _find_path_by_name(self, name: str) -> str:
+    def _find_meta_by_name(self, name: str):
         paths = glob.glob(os.path.join(self._root, name, "meta.*"))
         if len(paths) == 1:
-            return paths[0]
+            return MetaHandler.read(paths[0])
         else:
-            raise FileNotFoundError()
+            raise RuntimeError(
+                f"{len(paths)} meta files in {os.path.join(self._root, name)}")
 
     def _find_meta_by_slug(self, slug: str):
         for name in self.model_names:
@@ -137,13 +138,15 @@ class ModelLine(TraceableOnDisk):
                 meta = MetaHandler.read(paths[0])
                 if meta[0]["slug"] == slug:
                     return meta
-        raise FileNotFoundError()
+            else:
+                raise RuntimeError(
+                    f"{len(paths)} meta files in {os.path.join(self._root, name)}")
 
     def load_model_meta(self, model):
         if isinstance(model, int):
             name = f"{model:0>5d}"
-            path = self._find_path_by_name(name)
-            return MetaHandler.read(path)
+            meta = self._find_meta_by_name(name)
+            return meta
         else:
             meta = self._find_meta_by_slug(model)
             return meta
@@ -167,6 +170,11 @@ class ModelLine(TraceableOnDisk):
         only_meta: bool, optional
             Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
         """
+        meta = self._find_meta_by_slug(model.slug)
+        if meta:
+            raise FileExistsError(
+                f"The {model.slug} already exists in {meta[0]['path']}")
+
         if len(self.model_names) == 0:
             idx = 0
         else:
