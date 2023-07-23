@@ -133,10 +133,10 @@ class ModelLine(TraceableOnDisk):
     def _find_meta_by_slug(self, slug: str):
         for name in self.model_names:
             paths = glob.glob(os.path.join(self._root, name, "meta.*"))
-        if len(paths) == 1:
-            meta = MetaHandler.read(paths[0])
-            if meta[0]["slug"] == slug:
-                return meta
+            if len(paths) == 1:
+                meta = MetaHandler.read(paths[0])
+                if meta[0]["slug"] == slug:
+                    return meta
         raise FileNotFoundError()
 
     def load_model_meta(self, model):

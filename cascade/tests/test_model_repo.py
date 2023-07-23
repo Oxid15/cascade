@@ -359,9 +359,9 @@ def test_load_model_meta(tmp_path, dummy_model, arg, ext):
     line.save(dummy_model)
 
     if arg == "num":
-        meta = line.load_model_meta(0)
+        meta = repo.load_model_meta(0)
     elif arg == "slug":
-        meta = line.load_model_meta(slug)
+        meta = repo.load_model_meta(slug)
     else:
         raise RuntimeError(arg)
 
