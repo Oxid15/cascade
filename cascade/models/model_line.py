@@ -62,14 +62,14 @@ class ModelLine(TraceableOnDisk):
         self._root = folder
         self.model_names = []
         if os.path.exists(self._root):
-            self._load()
+            self._load_model_names()
         else:
             # No folder -> create
             os.mkdir(self._root)
 
         self._create_meta()
 
-    def _load(self) -> None:
+    def _load_model_names(self) -> None:
         if not os.path.isdir(self._root):
             raise ValueError(f"folder should be directory, got `{self._root}`")
 
@@ -82,7 +82,7 @@ class ModelLine(TraceableOnDisk):
         )
 
     def reload(self) -> None:
-        self._load()
+        self._load_model_names()
 
     def __getitem__(self, num: int) -> Model:
         """
