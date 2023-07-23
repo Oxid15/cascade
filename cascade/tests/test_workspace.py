@@ -54,15 +54,15 @@ def test_meta(tmp_path):
 def test_load_model_meta(tmp_path, dummy_model, arg, ext):
     tmp_path = str(tmp_path)
 
-    for i in range(10):
+    for i in range(2):
         ModelRepo(os.path.join(tmp_path, f"repo-{i}"))
 
-    wp = Workspace(tmp_path)
-
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+    repo = ModelRepo(os.path.join(tmp_path, "repo"), meta_fmt=ext)
     repo.add_line()
     repo.add_line()
     line = repo.add_line()
+
+    wp = Workspace(tmp_path)
 
     slug = dummy_model.slug
     dummy_model.evaluate()
