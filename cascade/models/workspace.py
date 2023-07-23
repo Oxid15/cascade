@@ -102,3 +102,4 @@ class Workspace(TraceableOnDisk):
                 continue
             else:
                 return meta
+        raise FileNotFoundError()

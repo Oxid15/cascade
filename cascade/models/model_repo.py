@@ -89,6 +89,7 @@ class Repo(Traceable):
                 continue
             else:
                 return meta
+        raise FileNotFoundError()
 
 
 class SingleLineRepo(Repo):
