@@ -81,9 +81,6 @@ class ModelLine(TraceableOnDisk):
             ]
         )
 
-        if len(self.model_names) == 0:
-            warnings.warn(f"Model folders were not found by the line in {self._root}")
-
     def reload(self) -> None:
         self._load()
 
