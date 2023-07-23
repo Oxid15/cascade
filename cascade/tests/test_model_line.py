@@ -73,3 +73,21 @@ def test_same_index_check(model_line, dummy_model):
     model_line.save(dummy_model)
 
     assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
+
+
+@pytest.mark.parametrize("arg", ["num", "slug"])
+def test_load_model_meta(model_line, dummy_model, arg):
+    slug = dummy_model.slug
+    dummy_model.evaluate()
+    model_line.save(dummy_model)
+
+    if arg == "num":
+        meta = model_line.load_model_meta(0)
+    elif arg == "slug":
+        meta = model_line.load_model_meta(slug)
+    else:
+        raise RuntimeError(arg)
+
+    assert len(meta) == 1
+    assert "metrics" in meta[0]
+    assert "acc" in meta[0]["metrics"]

@@ -123,6 +123,31 @@ class ModelLine(TraceableOnDisk):
 
         return model
 
+    def _find_path_by_name(self, name: str) -> str:
+        paths = glob.glob(os.path.join(self._root, name, "meta.*"))
+        if len(paths) == 1:
+            return paths[0]
+        else:
+            raise FileNotFoundError()
+
+    def _find_meta_by_slug(self, slug: str):
+        for name in self.model_names:
+            paths = glob.glob(os.path.join(self._root, name, "meta.*"))
+        if len(paths) == 1:
+            meta = MetaHandler.read(paths[0])
+            if meta[0]["slug"] == slug:
+                return meta
+        raise FileNotFoundError()
+
+    def load_model_meta(self, model):
+        if isinstance(model, int):
+            name = f"{model:0>5d}"
+            path = self._find_path_by_name(name)
+            return MetaHandler.read(path)
+        else:
+            meta = self._find_meta_by_slug(model)
+            return meta
+
     def save(self, model: Model, only_meta: bool = False) -> None:
         """
         Saves a model and its metadata to a line's folder.
