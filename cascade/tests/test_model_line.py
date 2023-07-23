@@ -62,18 +62,18 @@ def test_change_of_format(tmp_path, ext):
     assert len(glob.glob(os.path.join(tmp_path, "meta.*"))) == 1
 
 
-def test_same_index_check(model_line, dummy_model):
+def test_same_index_check(model_line):
     for _ in range(5):
-        dummy_model.evaluate()
-        model_line.save(dummy_model)
+        model_line.save(BasicModel())
 
     shutil.rmtree(os.path.join(model_line.get_root(), "00001"))
     shutil.rmtree(os.path.join(model_line.get_root(), "00002"))
     shutil.rmtree(os.path.join(model_line.get_root(), "00003"))
 
-    model_line.save(dummy_model)
+    model_line.save(BasicModel())
 
     assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
+
 
 #TODO: write tests for exceptions
 @pytest.mark.parametrize("arg", ["num", "slug"])

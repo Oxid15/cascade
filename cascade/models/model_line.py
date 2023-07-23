@@ -123,7 +123,7 @@ class ModelLine(TraceableOnDisk):
 
         return model
 
-    def _find_meta_by_name(self, name: str):
+    def _read_meta_by_name(self, name: str):
         paths = glob.glob(os.path.join(self._root, name, "meta.*"))
         if len(paths) == 1:
             return MetaHandler.read(paths[0])
@@ -131,25 +131,26 @@ class ModelLine(TraceableOnDisk):
             raise RuntimeError(
                 f"{len(paths)} meta files in {os.path.join(self._root, name)}")
 
-    def _find_meta_by_slug(self, slug: str):
+    def _find_name_by_slug(self, slug: str):
         for name in self.model_names:
-            paths = glob.glob(os.path.join(self._root, name, "meta.*"))
-            if len(paths) == 1:
-                meta = MetaHandler.read(paths[0])
-                if meta[0]["slug"] == slug:
-                    return meta
-            else:
-                raise RuntimeError(
-                    f"{len(paths)} meta files in {os.path.join(self._root, name)}")
+            filepath = os.path.join(self._root, name, "SLUG")
+            if not os.path.exists(filepath):
+                continue
+            with open(filepath, "r") as f:
+                if slug == f.read():
+                    return name
 
     def load_model_meta(self, model):
         if isinstance(model, int):
             name = f"{model:0>5d}"
-            meta = self._find_meta_by_name(name)
+        else:
+            name = self._find_name_by_slug(model)
+
+        if name:
+            meta = self._read_meta_by_name(name)
             return meta
         else:
-            meta = self._find_meta_by_slug(model)
-            return meta
+            raise FileNotFoundError()
 
     def save(self, model: Model, only_meta: bool = False) -> None:
         """
@@ -170,10 +171,10 @@ class ModelLine(TraceableOnDisk):
         only_meta: bool, optional
             Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
         """
-        meta = self._find_meta_by_slug(model.slug)
-        if meta:
+        name = self._find_name_by_slug(model.slug)
+        if name:
             raise FileExistsError(
-                f"The {model.slug} already exists in {meta[0]['path']}")
+                f"The {model.slug} already exists in {name}")
 
         if len(self.model_names) == 0:
             idx = 0
@@ -194,11 +195,13 @@ class ModelLine(TraceableOnDisk):
         meta = model.get_meta()
         meta[0]["path"] = os.path.join(self._root, folder_name)
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
-        self.model_names.append(folder_name)
 
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
+
+        with open(os.path.join(self._root, folder_name, "SLUG"), "w") as f:
+            f.write(model.slug)
 
         model.save(os.path.join(self._root, folder_name))
 
@@ -207,6 +210,7 @@ class ModelLine(TraceableOnDisk):
             os.makedirs(artifacts_folder)
             model.save_artifact(artifacts_folder)
 
+        self.model_names.append(folder_name)
         self._update_meta()
 
     def __repr__(self) -> str:
