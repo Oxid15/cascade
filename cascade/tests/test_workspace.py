@@ -14,6 +14,8 @@ limitations under the License.
 import os
 import sys
 
+import pytest
+
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.models import ModelRepo, Workspace
@@ -45,3 +47,35 @@ def test_meta(tmp_path):
     assert meta[0]["root"] == tmp_path
     assert meta[0]["len"] == 10
     assert meta[0]["type"] == "workspace"
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+@pytest.mark.parametrize("arg", ["num", "slug"])
+def test_load_model_meta(tmp_path, dummy_model, arg, ext):
+    tmp_path = str(tmp_path)
+
+    for i in range(10):
+        ModelRepo(os.path.join(tmp_path, f"repo-{i}"))
+
+    wp = Workspace(tmp_path)
+
+    repo = ModelRepo(tmp_path, meta_fmt=ext)
+    repo.add_line()
+    repo.add_line()
+    line = repo.add_line()
+
+    slug = dummy_model.slug
+    dummy_model.evaluate()
+    line.save(dummy_model)
+
+    if arg == "num":
+        meta = wp.load_model_meta(0)
+    elif arg == "slug":
+        meta = wp.load_model_meta(slug)
+    else:
+        raise RuntimeError(arg)
+
+    assert len(meta) == 1
+    assert "metrics" in meta[0]
+    assert "acc" in meta[0]["metrics"]
+    assert slug == meta[0]["slug"]

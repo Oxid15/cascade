@@ -92,3 +92,13 @@ class Workspace(TraceableOnDisk):
 
     def reload(self) -> None:
         pass
+
+    def load_model_meta(self, model):
+        for key in self._repo_names:
+            try:
+                repo = ModelRepo(os.path.join(self._root, key))
+                meta = repo.load_model_meta(model)
+            except FileNotFoundError:
+                continue
+            else:
+                return meta
