@@ -16,7 +16,6 @@ limitations under the License.
 
 import glob
 import os
-import warnings
 from hashlib import md5
 from typing import Any, Literal, Type
 
@@ -61,6 +60,7 @@ class ModelLine(TraceableOnDisk):
         self._model_cls = model_cls
         self._root = folder
         self.model_names = []
+        self._slug2name_cache = dict()
         if os.path.exists(self._root):
             self._load_model_names()
         else:
@@ -82,6 +82,7 @@ class ModelLine(TraceableOnDisk):
         )
 
     def reload(self) -> None:
+        # Here update slugs
         self._load_model_names()
 
     def __getitem__(self, num: int) -> Model:
@@ -132,12 +133,17 @@ class ModelLine(TraceableOnDisk):
                 f"{len(paths)} meta files in {os.path.join(self._root, name)}")
 
     def _find_name_by_slug(self, slug: str):
+        if slug in self._slug2name_cache:
+            return self._slug2name_cache[slug]
+
         for name in self.model_names:
             filepath = os.path.join(self._root, name, "SLUG")
             if not os.path.exists(filepath):
                 continue
             with open(filepath, "r") as f:
-                if slug == f.read():
+                slug_from_file = f.read()
+                self._slug2name_cache[slug_from_file] = name
+                if slug == slug_from_file:
                     return name
 
     def load_model_meta(self, model):
