@@ -16,12 +16,12 @@ limitations under the License.
 
 import glob
 import os
-from hashlib import md5
 from typing import Any, Literal, Type, Union
 
 import pendulum
 
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
+from ..base.utils import generate_slug
 from .model import Model
 
 
@@ -195,10 +195,6 @@ class ModelLine(TraceableOnDisk):
         only_meta: bool, optional
             Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
         """
-        name = self._find_name_by_slug(model.slug)
-        if name:
-            raise FileExistsError(
-                f"The {model.slug} already exists in {name}")
 
         if len(self.model_names) == 0:
             idx = 0
@@ -216,16 +212,19 @@ class ModelLine(TraceableOnDisk):
             os.makedirs(model_folder)
             break
 
+        slug = generate_slug()
+        with open(os.path.join(self._root, folder_name, "SLUG"), "w") as f:
+            f.write(slug)
+        self._slug2name_cache[slug] = folder_name
+
         meta = model.get_meta()
         meta[0]["path"] = os.path.join(self._root, folder_name)
+        meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
 
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
-
-        with open(os.path.join(self._root, folder_name, "SLUG"), "w") as f:
-            f.write(model.slug)
 
         model.save(os.path.join(self._root, folder_name))
 

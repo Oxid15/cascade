@@ -41,7 +41,6 @@ class Model(Traceable):
         log them in meta. Everything that is worth to document about model and data
         it was trained on can be put either in params or meta_prefix.
         """
-        self.slug = generate_slug()
         self.metrics = {}
         self.params = kwargs
         self.created_at = pendulum.now(tz="UTC")
@@ -148,7 +147,7 @@ class Model(Traceable):
         meta[0]["type"] = "model"
 
         all_default_exist = True
-        for attr in ("slug", "created_at", "metrics", "params"):
+        for attr in ("created_at", "metrics", "params"):
             if hasattr(self, attr):
                 meta[0][attr] = self.__getattribute__(attr)
             else:
