@@ -16,13 +16,12 @@ limitations under the License.
 
 import glob
 import os
-import warnings
 from hashlib import md5
-from typing import Any, Literal, Type
+from typing import Any, Literal, Type, Union
 
 import pendulum
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk
+from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
 from .model import Model
 
 
@@ -61,13 +60,30 @@ class ModelLine(TraceableOnDisk):
         self._model_cls = model_cls
         self._root = folder
         self.model_names = []
+        self._slug2name_cache = dict()
         if os.path.exists(self._root):
-            self._load()
+            self._load_model_names()
         else:
             # No folder -> create
             os.mkdir(self._root)
 
         self._create_meta()
+
+    def _load_model_names(self) -> None:
+        if not os.path.isdir(self._root):
+            raise ValueError(f"folder should be directory, got `{self._root}`")
+
+        self.model_names = sorted(
+            [
+                model_folder
+                for model_folder in os.listdir(self._root)
+                if os.path.isdir(os.path.join(self._root, model_folder))
+            ]
+        )
+
+    def reload(self) -> None:
+        # Here update slugs
+        self._load_model_names()
 
     def __getitem__(self, num: int) -> Model:
         """
@@ -108,6 +124,58 @@ class ModelLine(TraceableOnDisk):
 
         return model
 
+    def _read_meta_by_name(self, name: str) -> MetaFromFile:
+        paths = glob.glob(os.path.join(self._root, name, "meta.*"))
+        if len(paths) == 1:
+            return MetaHandler.read(paths[0])
+        else:
+            raise RuntimeError(
+                f"{len(paths)} meta files in {os.path.join(self._root, name)}")
+
+    def _find_name_by_slug(self, slug: str) -> Union[str, None]:
+        if slug in self._slug2name_cache:
+            return self._slug2name_cache[slug]
+
+        for name in self.model_names:
+            filepath = os.path.join(self._root, name, "SLUG")
+            if not os.path.exists(filepath):
+                continue
+            with open(filepath, "r") as f:
+                slug_from_file = f.read()
+                self._slug2name_cache[slug_from_file] = name
+                if slug == slug_from_file:
+                    return name
+
+    def load_model_meta(self, model: str) -> MetaFromFile:
+        """
+        Loads metadata of a model from disk
+
+        Parameters
+        ----------
+        model : str
+            model slug e.g. `fair_squid_of_bliss`
+
+        Returns
+        -------
+        MetaFromFile
+            Model metadata
+
+        Raises
+        ------
+        FileNotFoundError
+            Raises if failed to find the model with slug specified
+        RuntimeError
+            If found more than one metadata files in the specified
+            model folder
+        """
+        name = self._find_name_by_slug(model)
+        if name:
+            return self._read_meta_by_name(name)
+        else:
+            raise FileNotFoundError(
+                f"Failed to find the model {model} in the line at {self._root}"
+            )
+
     def save(self, model: Model, only_meta: bool = False) -> None:
         """
         Saves a model and its metadata to a line's folder.
@@ -127,6 +195,11 @@ class ModelLine(TraceableOnDisk):
         only_meta: bool, optional
             Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
         """
+        name = self._find_name_by_slug(model.slug)
+        if name:
+            raise FileExistsError(
+                f"The {model.slug} already exists in {name}")
+
         if len(self.model_names) == 0:
             idx = 0
         else:
@@ -146,11 +219,13 @@ class ModelLine(TraceableOnDisk):
         meta = model.get_meta()
         meta[0]["path"] = os.path.join(self._root, folder_name)
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
-        self.model_names.append(folder_name)
 
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
+
+        with open(os.path.join(self._root, folder_name, "SLUG"), "w") as f:
+            f.write(model.slug)
 
         model.save(os.path.join(self._root, folder_name))
 
@@ -159,6 +234,7 @@ class ModelLine(TraceableOnDisk):
             os.makedirs(artifacts_folder)
             model.save_artifact(artifacts_folder)
 
+        self.model_names.append(folder_name)
         self._update_meta()
 
     def __repr__(self) -> str:
@@ -175,21 +251,3 @@ class ModelLine(TraceableOnDisk):
             }
         )
         return meta
-
-    def _load(self):
-        if not os.path.isdir(self._root):
-            raise ValueError(f"folder should be directory, got `{self._root}`")
-
-        self.model_names = sorted(
-            [
-                model_folder
-                for model_folder in os.listdir(self._root)
-                if os.path.isdir(os.path.join(self._root, model_folder))
-            ]
-        )
-
-        if len(self.model_names) == 0:
-            warnings.warn(f"Model folders were not found by the line in {self._root}")
-
-    def reload(self) -> None:
-        self._load()

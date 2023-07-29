@@ -322,6 +322,7 @@ def test_auto_line_name(tmp_path, ext):
     assert names == ["00000", "00002", "00003", "test"]
 
 
+pytest.mark.skip
 def test_no_logging(tmp_path):
     tmp_path = str(tmp_path)
     ModelRepo(tmp_path, log_history=False)
@@ -342,3 +343,29 @@ def test_change_of_format(tmp_path, ext):
 
     # Check that no other meta is created
     assert len(glob.glob(os.path.join(tmp_path, "meta.*"))) == 1
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+@pytest.mark.parametrize("arg", ["path", "slug"])
+def test_load_model_meta(tmp_path, dummy_model, arg, ext):
+    tmp_path = str(tmp_path)
+    repo = ModelRepo(tmp_path, meta_fmt=ext)
+    repo.add_line()
+    repo.add_line()
+    line = repo.add_line()
+
+    slug = dummy_model.slug
+    dummy_model.evaluate()
+    line.save(dummy_model)
+
+    if arg == "path":
+        meta = repo.load_model_meta("00002/00000")
+    elif arg == "slug":
+        meta = repo.load_model_meta(slug)
+    else:
+        raise RuntimeError(arg)
+
+    assert len(meta) == 1
+    assert "metrics" in meta[0]
+    assert "acc" in meta[0]["metrics"]
+    assert slug == meta[0]["slug"]

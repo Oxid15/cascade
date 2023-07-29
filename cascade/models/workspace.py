@@ -19,7 +19,7 @@ import os
 import warnings
 from typing import Any, List, Literal, Union
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk
+from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
 from ..models import ModelRepo
 
 
@@ -58,6 +58,7 @@ class Workspace(TraceableOnDisk):
 
     def __getitem__(self, key: str) -> ModelRepo:
         if key in self._repo_names:
+            # TODO: remove log_history
             return ModelRepo(os.path.join(self._root, key), log_history=False)
         else:
             raise KeyError(f"{key} repo does not exist in workspace {self._root}")
@@ -92,3 +93,35 @@ class Workspace(TraceableOnDisk):
 
     def reload(self) -> None:
         pass
+
+    def load_model_meta(self, model: str) -> MetaFromFile:
+        """
+        Loads metadata of a model from disk
+
+        Parameters
+        ----------
+        model : str
+            model slug e.g. `fair_squid_of_bliss`
+
+        Returns
+        -------
+        MetaFromFile
+            Model metadata
+
+        Raises
+        ------
+        FileNotFoundError
+            Raises if failed to find the model with slug specified
+        """
+
+        for repo_name in self._repo_names:
+            try:
+                repo = ModelRepo(os.path.join(self._root, repo_name))
+                meta = repo.load_model_meta(model)
+            except FileNotFoundError:
+                continue
+            else:
+                return meta
+        raise FileNotFoundError(
+            f"Failed to find the model {model} in the workspace at {self._root}"
+        )

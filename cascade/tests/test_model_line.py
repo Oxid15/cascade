@@ -24,6 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.models import BasicModel
 from cascade.tests.conftest import DummyModel, ModelLine
 
 
@@ -61,15 +62,42 @@ def test_change_of_format(tmp_path, ext):
     assert len(glob.glob(os.path.join(tmp_path, "meta.*"))) == 1
 
 
-def test_same_index_check(model_line, dummy_model):
+def test_same_index_check(model_line):
     for _ in range(5):
-        dummy_model.evaluate()
-        model_line.save(dummy_model)
+        model_line.save(BasicModel())
 
     shutil.rmtree(os.path.join(model_line.get_root(), "00001"))
     shutil.rmtree(os.path.join(model_line.get_root(), "00002"))
     shutil.rmtree(os.path.join(model_line.get_root(), "00003"))
 
-    model_line.save(dummy_model)
+    model_line.save(BasicModel())
 
     assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
+
+
+#TODO: write tests for exceptions
+@pytest.mark.parametrize("arg", ["num", "slug"])
+def test_load_model_meta(model_line, dummy_model, arg):
+    slug = dummy_model.slug
+    dummy_model.evaluate()
+    model_line.save(dummy_model)
+
+    if arg == "num":
+        meta = model_line.load_model_meta(0)
+    elif arg == "slug":
+        meta = model_line.load_model_meta(slug)
+    else:
+        raise RuntimeError(arg)
+
+    assert len(meta) == 1
+    assert "metrics" in meta[0]
+    assert "acc" in meta[0]["metrics"]
+    assert slug == meta[0]["slug"]
+
+
+def test_cant_save_same_model_twice(model_line):
+    model = BasicModel()
+
+    model_line.save(model)
+    with pytest.raises(FileExistsError):
+        model_line.save(model)

@@ -11,22 +11,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import itertools
 import os
 import shutil
 from typing import Any, Dict, Generator, Iterable, List, Literal, Type, Union
 
-from deepdiff.diff import DeepDiff
-
 from ..base import (
-    HistoryLogger,
-    JSONEncoder,
-    MetaHandler,
     PipeMeta,
+    MetaFromFile,
     Traceable,
     TraceableOnDisk,
 )
+from ..base.utils import is_path
 from .model import Model
 from .model_line import ModelLine
 
@@ -90,18 +86,18 @@ class SingleLineRepo(Repo):
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
-        self._line_root = line.get_root()
+        self._root = line.get_root()
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(self._line_root)[-1]: line}
+        self._lines = {os.path.split(self._root)[-1]: line}
 
     def __getitem__(self, key: str) -> ModelLine:
         return self._lines[key]
 
     def __repr__(self) -> str:
-        return f"SingleLine in {self._line_root}"
+        return f"SingleLine in {self._root}"
 
     def get_root(self):
-        return self._line_root
+        return self._root
 
 
 class ModelRepo(Repo, TraceableOnDisk):
@@ -261,6 +257,37 @@ class ModelRepo(Repo, TraceableOnDisk):
 
     def __add__(self, repo) -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
+
+    def load_model_meta(self, model: str) -> MetaFromFile:
+        """
+        Loads metadata of a model from disk
+
+        Parameters
+        ----------
+        model : str
+            model slug e.g. `fair_squid_of_bliss`
+
+        Returns
+        -------
+        MetaFromFile
+            Model metadata
+
+        Raises
+        ------
+        FileNotFoundError
+            Raises if failed to find the model with slug specified
+        """
+
+        for line in self._lines.values():
+            try:
+                meta = line.load_model_meta(model)
+            except FileNotFoundError:
+                continue
+            else:
+                return meta
+        raise FileNotFoundError(
+            f"Failed to find the model {model} in the repo at {self._root}"
+        )
 
 
 class ModelRepoConcatenator(Repo):
