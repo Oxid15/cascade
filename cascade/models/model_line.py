@@ -17,11 +17,11 @@ limitations under the License.
 import glob
 import os
 from hashlib import md5
-from typing import Any, Literal, Type
+from typing import Any, Literal, Type, Union
 
 import pendulum
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk
+from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
 from .model import Model
 
 
@@ -124,7 +124,7 @@ class ModelLine(TraceableOnDisk):
 
         return model
 
-    def _read_meta_by_name(self, name: str):
+    def _read_meta_by_name(self, name: str) -> MetaFromFile:
         paths = glob.glob(os.path.join(self._root, name, "meta.*"))
         if len(paths) == 1:
             return MetaHandler.read(paths[0])
@@ -132,7 +132,7 @@ class ModelLine(TraceableOnDisk):
             raise RuntimeError(
                 f"{len(paths)} meta files in {os.path.join(self._root, name)}")
 
-    def _find_name_by_slug(self, slug: str):
+    def _find_name_by_slug(self, slug: str) -> Union[str, None]:
         if slug in self._slug2name_cache:
             return self._slug2name_cache[slug]
 
@@ -146,17 +146,43 @@ class ModelLine(TraceableOnDisk):
                 if slug == slug_from_file:
                     return name
 
-    def load_model_meta(self, model):
-        if isinstance(model, int):
-            name = f"{model:0>5d}"
-        else:
-            name = self._find_name_by_slug(model)
+    def load_model_meta(self, model: str) -> MetaFromFile:
+        """
+        Loads metadata of a model from disk
 
+        Parameters
+        ----------
+        model : str
+            Can be either num of the model e.g
+            `00000` or the model slug e.g. 
+            `fair_squid_of_bliss`
+
+        Returns
+        -------
+        MetaFromFile
+            Model metadata
+
+        Raises
+        ------
+        FileNotFoundError
+            If the num passed raises the error when the path does not
+            exists
+            If the slug passed raises if failed to find the model with
+            slug specified
+        RuntimeError
+            If found more than one metadata files in the specified
+            model folder
+        """
+        if model.isnumeric():
+            return self._read_meta_by_name(model)
+
+        name = self._find_name_by_slug(model)
         if name:
-            meta = self._read_meta_by_name(name)
-            return meta
+            return self._read_meta_by_name(name)
         else:
-            raise FileNotFoundError()
+            raise FileNotFoundError(
+                f"Failed to find the model {model} in the line at {self._root}"
+            )
 
     def save(self, model: Model, only_meta: bool = False) -> None:
         """

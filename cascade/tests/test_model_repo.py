@@ -346,7 +346,7 @@ def test_change_of_format(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-@pytest.mark.parametrize("arg", ["num", "slug"])
+@pytest.mark.parametrize("arg", ["path", "slug"])
 def test_load_model_meta(tmp_path, dummy_model, arg, ext):
     tmp_path = str(tmp_path)
     repo = ModelRepo(tmp_path, meta_fmt=ext)
@@ -358,8 +358,8 @@ def test_load_model_meta(tmp_path, dummy_model, arg, ext):
     dummy_model.evaluate()
     line.save(dummy_model)
 
-    if arg == "num":
-        meta = repo.load_model_meta(0)
+    if arg == "path":
+        meta = repo.load_model_meta("00002/00000")
     elif arg == "slug":
         meta = repo.load_model_meta(slug)
     else:

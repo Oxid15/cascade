@@ -50,7 +50,7 @@ def test_meta(tmp_path):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-@pytest.mark.parametrize("arg", ["num", "slug"])
+@pytest.mark.parametrize("arg", ["path", "slug"])
 def test_load_model_meta(tmp_path, dummy_model, arg, ext):
     tmp_path = str(tmp_path)
 
@@ -68,8 +68,8 @@ def test_load_model_meta(tmp_path, dummy_model, arg, ext):
     dummy_model.evaluate()
     line.save(dummy_model)
 
-    if arg == "num":
-        meta = wp.load_model_meta(0)
+    if arg == "path":
+        meta = wp.load_model_meta("repo/00002/00000")
     elif arg == "slug":
         meta = wp.load_model_meta(slug)
     else:
