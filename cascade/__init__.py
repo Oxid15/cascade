@@ -70,14 +70,37 @@ def status(ctx):
 
 @cli.command
 @click.pass_context
-def cat(ctx):
+@click.option('-p', default=None)
+def cat(ctx, p):
     """
-    Full meta data of the current object
+    Full meta data of the object
     """
     from pprint import pformat
 
-    if ctx.obj.get("meta"):
-        click.echo(pformat(ctx.obj["meta"]))
+    if not p:
+        if ctx.obj.get("meta"):
+            click.echo(pformat(ctx.obj["meta"]))
+    else:
+        if ctx.obj.get("meta"):
+            if ctx.obj["type"] == "line":
+                from cascade.models import ModelLine
+                container = ModelLine(ctx.obj["cwd"])
+            elif ctx.obj["type"] == "repo":
+                from cascade.models import ModelRepo
+                container = ModelRepo(ctx.obj["cwd"])
+            elif ctx.obj["type"] == "workspace":
+                from cascade.models import Workspace
+                container = Workspace(ctx.obj["cwd"])
+            else:
+                return
+
+            try:
+                p = int(p)
+            except ValueError:
+                pass
+
+            meta = container.load_model_meta(p)
+            click.echo(pformat(meta))
 
 
 @cli.group
