@@ -61,12 +61,12 @@ def status(ctx):
     """
     Short description of what is present in the current folder
     """
-    if ctx.obj:
+    if ctx.obj.get("type"):
         output = f"This is {ctx.obj['type']}"
-        if ctx.obj["len"]:
+        if ctx.obj.get("len"):
             output += f" of len {ctx.obj['len']}"
         click.echo(output)
-
+    
 
 @cli.command
 @click.pass_context
