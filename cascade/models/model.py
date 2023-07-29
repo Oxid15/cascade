@@ -118,7 +118,7 @@ class Model(Traceable):
                 if but_its_ok:
                     continue
                 raise FileNotFoundError(
-                    f"File {filepath} not found when trying to copy an artifact of model {self.slug}"
+                    f"File {filepath} not found when trying to copy an artifact of model at {path}"
                 )
             filename = os.path.split(filepath)[-1]
 
