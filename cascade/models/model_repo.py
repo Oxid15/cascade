@@ -265,9 +265,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         Parameters
         ----------
         model : str
-            Can be either path to the model in the form
-            `line/model` or the model slug e.g. 
-            `fair_squid_of_bliss`
+            model slug e.g. `fair_squid_of_bliss`
 
         Returns
         -------
@@ -277,32 +275,19 @@ class ModelRepo(Repo, TraceableOnDisk):
         Raises
         ------
         FileNotFoundError
-            If the path passed raises the error when the path does not
-            exists
-            If the slug passed raises if failed to find the model with
-            slug specified
+            Raises if failed to find the model with slug specified
         """
 
-        if is_path(model):
-            line_name, model_name = os.path.split(model)
-            if line_name in self._lines:
-                line = self._lines[line_name]
-                return line.load_model_meta(model_name)
+        for line in self._lines.values():
+            try:
+                meta = line.load_model_meta(model)
+            except FileNotFoundError:
+                continue
             else:
-                raise FileNotFoundError(
-                    f"Line {line_name} does not exist in the repo at {self._root}"
-                )
-        else:  # assume that it is a slug
-            for line in self._lines.values():
-                try:
-                    meta = line.load_model_meta(model)
-                except FileNotFoundError:
-                    continue
-                else:
-                    return meta
-            raise FileNotFoundError(
-                f"Failed to find the model {model} in the repo at {self._root}"
-            )
+                return meta
+        raise FileNotFoundError(
+            f"Failed to find the model {model} in the repo at {self._root}"
+        )
 
 
 class ModelRepoConcatenator(Repo):

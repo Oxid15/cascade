@@ -153,9 +153,7 @@ class ModelLine(TraceableOnDisk):
         Parameters
         ----------
         model : str
-            Can be either num of the model e.g
-            `00000` or the model slug e.g. 
-            `fair_squid_of_bliss`
+            model slug e.g. `fair_squid_of_bliss`
 
         Returns
         -------
@@ -165,17 +163,11 @@ class ModelLine(TraceableOnDisk):
         Raises
         ------
         FileNotFoundError
-            If the num passed raises the error when the path does not
-            exists
-            If the slug passed raises if failed to find the model with
-            slug specified
+            Raises if failed to find the model with slug specified
         RuntimeError
             If found more than one metadata files in the specified
             model folder
         """
-        if model.isnumeric():
-            return self._read_meta_by_name(model)
-
         name = self._find_name_by_slug(model)
         if name:
             return self._read_meta_by_name(name)
