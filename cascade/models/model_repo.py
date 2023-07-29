@@ -22,7 +22,6 @@ from ..base import (
     Traceable,
     TraceableOnDisk,
 )
-from ..base.utils import is_path
 from .model import Model
 from .model_line import ModelLine
 
