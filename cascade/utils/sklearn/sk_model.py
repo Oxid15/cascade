@@ -92,10 +92,11 @@ class SkModel(BasicModel):
             pickle.dump(self, f)
         self._pipeline = pipeline
 
-    # TODO: pass args to pickle
     def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Saves sklearn pipeline
+
+        Args and kwargs are passed into pickle.dump
 
         Parameters
         ----------
@@ -107,11 +108,13 @@ class SkModel(BasicModel):
 
         pipeline_path = os.path.join(path, "pipeline.pkl")
         with open(pipeline_path, "wb") as f:
-            pickle.dump(self._pipeline, f)
+            pickle.dump(self._pipeline, f, *args, **kwargs)
 
     def load_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Loads sklearn pipeline
+
+        Args and kwargs are passed into pickle.load
 
         Parameters
         ----------
@@ -128,7 +131,7 @@ class SkModel(BasicModel):
 
         pipeline_path = os.path.join(path, "pipeline.pkl")
         with open(pipeline_path, "rb") as f:
-            self._pipeline = pickle.load(f)
+            self._pipeline = pickle.load(f, *args, **kwargs)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

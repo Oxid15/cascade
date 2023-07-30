@@ -19,7 +19,9 @@ from typing import Any, Dict, Iterable, List, Union, Tuple
 
 import pendulum
 
-from ..base import Traceable, raise_not_implemented
+from cascade.models import ModelRepo
+
+from ..base import Traceable, raise_not_implemented, PipeMeta
 from ..models import Model, ModelLine, ModelRepo
 
 logger = logging.getLogger(__name__)
@@ -65,6 +67,10 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
+    def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
+        self.train_start_at = None
+        self.train_end_at = None
+        super().__init__(repo, *args, **kwargs)
 
     @staticmethod
     def _load_last_model(line: ModelLine) -> Tuple[Model, int]:
@@ -153,7 +159,7 @@ class BasicTrainer(Trainer):
         model.add_log_callback(line._save_only_meta)
 
         start_time = pendulum.now()
-        self._meta_prefix["train_start_at"] = start_time
+        self.train_start_at = start_time
         logger.info(f"Training started with parameters:\n{train_kwargs}")
         logger.info(f"repo is {self._repo}")
         logger.info(f"line is {line_name}")
@@ -187,8 +193,13 @@ class BasicTrainer(Trainer):
             logger.info(f"Epoch {epoch}: {model.metrics}")
 
         end_time = pendulum.now()
-        # TODO: meta prefix can be str
-        self._meta_prefix["train_end_at"] = end_time
+        self.train_end_at = end_time
         logger.info(
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"
         )
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]["train_start_at"] = self.train_start_at
+        meta[0]["train_end_at"] = self.train_end_at
+        return meta

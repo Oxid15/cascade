@@ -58,8 +58,7 @@ class Workspace(TraceableOnDisk):
 
     def __getitem__(self, key: str) -> ModelRepo:
         if key in self._repo_names:
-            # TODO: remove log_history
-            return ModelRepo(os.path.join(self._root, key), log_history=False)
+            return ModelRepo(os.path.join(self._root, key))
         else:
             raise KeyError(f"{key} repo does not exist in workspace {self._root}")
 
