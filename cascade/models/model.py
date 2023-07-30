@@ -178,10 +178,33 @@ class Model(Traceable):
         self._file_artifacts_paths.append(path)
         self._file_artifact_missing_oks.append(missing_ok)
 
-    def add_log_callback(self, callback: Callable[["Model"], None]):
+    def add_log_callback(self, callback: Callable[["Model"], None]) -> None:
+        """
+        Registers a callback to be executed
+        while logging metrics. Usually is used internally
+        and is not initially intended as a public method
+
+        Parameters
+        ----------
+        callback : Callable[[Model], None]
+            A function that accepts a model
+
+        See also
+        --------
+        cascade.models.Model.log_metrics
+        """
         self._log_callbacks.append(callback)
 
     def log_metrics(self, metrics: Dict[str, Any]) -> None:
+        """
+        Updates metrics dict and sequentially
+        calls every log callback
+
+        Parameters
+        ----------
+        metrics : Dict[str, Any]
+            dictionary with metrics
+        """
         self.metrics.update(metrics)
 
         for callback in self._log_callbacks:

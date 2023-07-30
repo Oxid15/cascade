@@ -256,6 +256,16 @@ class ModelLine(TraceableOnDisk):
         self.save(model, only_meta=True)
 
     def add_model(self, *args: Any, **kwargs: Any) -> Any:
+        """
+        Creates a model using the class given on
+        creation, registers log callbacks for it
+        and returns
+
+        Returns
+        -------
+        Any
+            Created and prepared model
+        """
         model = self._model_cls(*args, **kwargs)
         model.add_log_callback(self._save_only_meta)
         self.save(model, only_meta=True)
