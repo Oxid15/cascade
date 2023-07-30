@@ -183,6 +183,7 @@ class BasicTrainer(Trainer):
             logger.info(f"Epoch {epoch}: {model.metrics}")
 
         end_time = pendulum.now()
+        # TODO: meta prefix can be str
         self._meta_prefix["train_end_at"] = end_time
         logger.info(
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"

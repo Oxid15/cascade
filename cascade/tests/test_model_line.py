@@ -88,3 +88,15 @@ def test_load_model_meta(model_line, dummy_model):
     assert "metrics" in meta[0]
     assert "acc" in meta[0]["metrics"]
     assert slug == meta[0]["slug"]
+
+
+def test_add_model(tmp_path):
+    tmp_path = str(tmp_path)
+
+    line = ModelLine(tmp_path, model_cls=BasicModel)
+    model = line.add_model(a=0)
+    model.log_metrics({"b": 1})
+
+    assert model.params["a"] == 0
+    assert model.metrics["b"] == 1
+    assert len(line) == 2
