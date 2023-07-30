@@ -148,6 +148,10 @@ class BasicTrainer(Trainer):
                 raise RuntimeError(f"Cannot start from line {line_name} as it is empty")
             model, model_num = self._load_last_model(line)
 
+        # Since the model is created externally, we
+        # need to register a callback manually
+        model.add_log_callback(line._save_only_meta)
+
         start_time = pendulum.now()
         self._meta_prefix["train_start_at"] = start_time
         logger.info(f"Training started with parameters:\n{train_kwargs}")
