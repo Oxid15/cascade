@@ -17,12 +17,11 @@ limitations under the License.
 import os
 from shutil import copyfile
 import warnings
-from typing import Any, Union
+from typing import Any, Dict, Union, Callable, Tuple
 
 import pendulum
 
 from ..base import PipeMeta, Traceable, raise_not_implemented
-from ..base.utils import generate_slug
 
 
 class Model(Traceable):
@@ -46,6 +45,7 @@ class Model(Traceable):
         self.created_at = pendulum.now(tz="UTC")
         self._file_artifacts_paths = []
         self._file_artifact_missing_oks = []
+        self._log_callbacks = []
         # Model accepts meta_prefix explicitly to not to record it in 'params'
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
 
@@ -177,6 +177,15 @@ class Model(Traceable):
         """
         self._file_artifacts_paths.append(path)
         self._file_artifact_missing_oks.append(missing_ok)
+
+    def add_log_callback(self, callback: Callable[["Model"], None]):
+        self._log_callbacks.append(callback)
+
+    def log_metrics(self, metrics: Dict[str, Any]) -> None:
+        self.metrics.update(metrics)
+
+        for callback in self._log_callbacks:
+            callback(self)
 
 
 class ModelModifier(Model):

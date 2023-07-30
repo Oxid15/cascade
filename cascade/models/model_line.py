@@ -184,7 +184,7 @@ class ModelLine(TraceableOnDisk):
         using Model's method `save` in its own folder.
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
 
-        It is Model's responsibility to correctly  assign extension and save its own state.
+        It is Model's responsibility to correctly assign extension and save its own state.
 
         Additionally, saves ModelLine's meta to the Line's root.
 
@@ -250,3 +250,12 @@ class ModelLine(TraceableOnDisk):
             }
         )
         return meta
+
+    def _save_only_meta(self, model: Model) -> None:
+        self.save(model, only_meta=True)
+
+    def add_model(self, *args: Any, **kwargs: Any) -> Any:
+        model = self._model_cls(*args, **kwargs)
+        model.add_log_callback(self._save_only_meta)
+        self.save(model, only_meta=True)
+        return model
