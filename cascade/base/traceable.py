@@ -84,11 +84,14 @@ class Traceable:
 
             Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
-        meta = {
-            "name": repr(self),
-            "description": self.description,
-            "tags": list(self.tags)
-        }
+        meta = {"name": repr(self)}
+
+        if hasattr(self, "description"):
+            meta["description"] = self.description
+
+        if hasattr(self, "description"):
+            meta["tags"] = list(self.tags)
+
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:

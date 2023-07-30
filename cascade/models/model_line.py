@@ -16,12 +16,12 @@ limitations under the License.
 
 import glob
 import os
-from hashlib import md5
 from typing import Any, Literal, Type, Union
 
 import pendulum
 
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
+from ..base.utils import generate_slug
 from .model import Model
 
 
@@ -184,7 +184,7 @@ class ModelLine(TraceableOnDisk):
         using Model's method `save` in its own folder.
         Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
 
-        It is Model's responsibility to correctly  assign extension and save its own state.
+        It is Model's responsibility to correctly assign extension and save its own state.
 
         Additionally, saves ModelLine's meta to the Line's root.
 
@@ -193,12 +193,9 @@ class ModelLine(TraceableOnDisk):
         model: Model
             Model to be saved
         only_meta: bool, optional
-            Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
+            Flag, that indicates whether to save model's artifacts.
+            If True saves only metadata and wrapper.
         """
-        name = self._find_name_by_slug(model.slug)
-        if name:
-            raise FileExistsError(
-                f"The {model.slug} already exists in {name}")
 
         if len(self.model_names) == 0:
             idx = 0
@@ -216,16 +213,19 @@ class ModelLine(TraceableOnDisk):
             os.makedirs(model_folder)
             break
 
+        slug = generate_slug()
+        with open(os.path.join(self._root, folder_name, "SLUG"), "w") as f:
+            f.write(slug)
+        self._slug2name_cache[slug] = folder_name
+
         meta = model.get_meta()
         meta[0]["path"] = os.path.join(self._root, folder_name)
+        meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
 
         MetaHandler.write(
             os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
         )
-
-        with open(os.path.join(self._root, folder_name, "SLUG"), "w") as f:
-            f.write(model.slug)
 
         model.save(os.path.join(self._root, folder_name))
 
@@ -251,3 +251,12 @@ class ModelLine(TraceableOnDisk):
             }
         )
         return meta
+
+    def _save_only_meta(self, model: Model) -> None:
+        self.save(model, only_meta=True)
+
+    def add_model(self, *args: Any, **kwargs: Any) -> Any:
+        model = self._model_cls(*args, **kwargs)
+        model.add_log_callback(self._save_only_meta)
+        self.save(model, only_meta=True)
+        return model

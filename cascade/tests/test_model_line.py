@@ -76,18 +76,13 @@ def test_same_index_check(model_line):
 
 
 #TODO: write tests for exceptions
-@pytest.mark.parametrize("arg", ["num", "slug"])
-def test_load_model_meta(model_line, dummy_model, arg):
-    slug = dummy_model.slug
+def test_load_model_meta(model_line, dummy_model):
     dummy_model.evaluate()
     model_line.save(dummy_model)
 
-    if arg == "num":
-        meta = model_line.load_model_meta(0)
-    elif arg == "slug":
-        meta = model_line.load_model_meta(slug)
-    else:
-        raise RuntimeError(arg)
+    with open(os.path.join(model_line.get_root(), "00000", "SLUG"), "r") as f:
+        slug = f.read()
+    meta = model_line.load_model_meta(slug)
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
@@ -95,9 +90,13 @@ def test_load_model_meta(model_line, dummy_model, arg):
     assert slug == meta[0]["slug"]
 
 
-def test_cant_save_same_model_twice(model_line):
-    model = BasicModel()
+def test_add_model(tmp_path):
+    tmp_path = str(tmp_path)
 
-    model_line.save(model)
-    with pytest.raises(FileExistsError):
-        model_line.save(model)
+    line = ModelLine(tmp_path, model_cls=BasicModel)
+    model = line.add_model(a=0)
+    model.log_metrics({"b": 1})
+
+    assert model.params["a"] == 0
+    assert model.metrics["b"] == 1
+    assert len(line) == 2

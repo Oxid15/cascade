@@ -55,3 +55,15 @@ def test_add_missing_file(tmp_path):
     model = Model()
     model.add_file("iammissingtoobutitsok.jpg", missing_ok=True)
     model.save(os.path.join(tmp_path, "model"))
+
+
+def test_add_callback():
+    def set_a_to_1(model):
+        model.a = 1
+
+    model = Model(a=0)
+    model.add_log_callback(set_a_to_1)
+    model.log_metrics({"acc": 0.0})
+
+    assert model.metrics["acc"] == 0.0
+    assert model.a == 1

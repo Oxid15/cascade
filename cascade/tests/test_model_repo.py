@@ -346,24 +346,20 @@ def test_change_of_format(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-@pytest.mark.parametrize("arg", ["path", "slug"])
-def test_load_model_meta(tmp_path, dummy_model, arg, ext):
+def test_load_model_meta(tmp_path, dummy_model, ext):
     tmp_path = str(tmp_path)
     repo = ModelRepo(tmp_path, meta_fmt=ext)
     repo.add_line()
     repo.add_line()
     line = repo.add_line()
 
-    slug = dummy_model.slug
     dummy_model.evaluate()
     line.save(dummy_model)
 
-    if arg == "path":
-        meta = repo.load_model_meta("00002/00000")
-    elif arg == "slug":
-        meta = repo.load_model_meta(slug)
-    else:
-        raise RuntimeError(arg)
+    with open(os.path.join(line.get_root(), "00000", "SLUG"), "r") as f:
+        slug = f.read()
+
+    meta = repo.load_model_meta(slug)
 
     assert len(meta) == 1
     assert "metrics" in meta[0]

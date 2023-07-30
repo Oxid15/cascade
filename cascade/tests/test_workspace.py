@@ -50,8 +50,7 @@ def test_meta(tmp_path):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-@pytest.mark.parametrize("arg", ["path", "slug"])
-def test_load_model_meta(tmp_path, dummy_model, arg, ext):
+def test_load_model_meta(tmp_path, dummy_model, ext):
     tmp_path = str(tmp_path)
 
     for i in range(2):
@@ -64,16 +63,13 @@ def test_load_model_meta(tmp_path, dummy_model, arg, ext):
 
     wp = Workspace(tmp_path)
 
-    slug = dummy_model.slug
     dummy_model.evaluate()
     line.save(dummy_model)
 
-    if arg == "path":
-        meta = wp.load_model_meta("repo/00002/00000")
-    elif arg == "slug":
-        meta = wp.load_model_meta(slug)
-    else:
-        raise RuntimeError(arg)
+    with open(os.path.join(line.get_root(), "00000", "SLUG"), "r") as f:
+        slug = f.read()
+
+    meta = wp.load_model_meta(slug)
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
