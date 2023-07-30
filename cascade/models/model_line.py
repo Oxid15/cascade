@@ -193,7 +193,8 @@ class ModelLine(TraceableOnDisk):
         model: Model
             Model to be saved
         only_meta: bool, optional
-            Flag, that indicates whether to save model's artifacts. If True saves only metadata and wrapper.
+            Flag, that indicates whether to save model's artifacts.
+            If True saves only metadata and wrapper.
         """
 
         if len(self.model_names) == 0:
