@@ -1,12 +1,16 @@
+import os
+import sys
 import setuptools
 
+sys.path.append(os.path.dirname(__file__))
+from cascade.version import __version__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="cascade-ml",
-    version="0.13.0-alpha",
+    version=__version__,
     author="Ilia Moiseev",
     author_email="ilia.moiseev.5@yandex.ru",
     license="Apache License 2.0",
