@@ -15,13 +15,24 @@ limitations under the License.
 """
 
 
+from dataclasses import dataclass
 import os
 import glob
+import socket
 import warnings
 from typing import Dict, Union, Any, Literal, Iterable
 import pendulum
+from datetime import datetime
 
 from . import PipeMeta, MetaFromFile, supported_meta_formats
+
+
+@dataclass
+class Comment:
+    username: str
+    host: str
+    timestamp: datetime
+    message: str
 
 
 class Traceable:
@@ -64,6 +75,8 @@ class Traceable:
             self.tags = set(tags)
         else:
             self.tags = set()
+
+        self.comments = list()
 
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
@@ -205,6 +218,16 @@ class Traceable:
             Tags to remove
         """
         self.tags = self.tags.difference(tags)
+
+    def comment(self, message: str) -> None:
+        comment = Comment(
+            os.getlogin(),
+            socket.gethostname(),
+            pendulum.now(),
+            message
+        )
+
+        self.comments.append(comment)
 
 
 class TraceableOnDisk(Traceable):
