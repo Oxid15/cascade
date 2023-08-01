@@ -25,7 +25,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    entry_points={'console_scripts': ['cascade = cascade.__init__:cli']},
+    entry_points={'console_scripts': ['cascade = cascade.cli.cli:cli']},
     package_dir={"cascade": "./cascade"},
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
