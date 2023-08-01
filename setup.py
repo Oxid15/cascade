@@ -3,7 +3,7 @@ import sys
 import setuptools
 
 sys.path.append(os.path.dirname(__file__))
-from cascade.version import __version__
+from cascade.version import __version__, __author__, __author_email__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -11,8 +11,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setuptools.setup(
     name="cascade-ml",
     version=__version__,
-    author="Ilia Moiseev",
-    author_email="ilia.moiseev.5@yandex.ru",
+    author=__author__,
+    author_email=__author_email__,
     license="Apache License 2.0",
     description="ML-Engineering library",
     long_description=long_description,
