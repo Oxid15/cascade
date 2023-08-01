@@ -1,14 +1,18 @@
+import os
+import sys
 import setuptools
 
+sys.path.append(os.path.dirname(__file__))
+from cascade.version import __version__, __author__, __author_email__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="cascade-ml",
-    version="0.13.0-alpha",
-    author="Ilia Moiseev",
-    author_email="ilia.moiseev.5@yandex.ru",
+    version=__version__,
+    author=__author__,
+    author_email=__author_email__,
     license="Apache License 2.0",
     description="ML-Engineering library",
     long_description=long_description,
@@ -21,7 +25,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    entry_points={'console_scripts': ['cascade = cascade.__init__:cli']},
+    entry_points={'console_scripts': ['cascade = cascade.cli.cli:cli']},
     package_dir={"cascade": "./cascade"},
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
