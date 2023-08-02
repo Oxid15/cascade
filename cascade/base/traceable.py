@@ -107,19 +107,11 @@ class Traceable:
             meta["description"] = self.description
 
         if hasattr(self, "tags"):
-            tags = meta.get("tags")
-            if tags:
-                tags = set(tags).union(self.tags)
-            else:
-                tags = self.tags
-            meta["tags"] = list(tags)
+            meta["tags"] = list(self.tags)
 
         if hasattr(self, "comments"):
             comments = [asdict(comment) for comment in self.comments]
-            if meta.get("comments"):
-                meta["comments"].extend(comments)
-            else:
-                meta["comments"] = comments
+            meta["comments"] = comments
 
         return [meta]
 
@@ -151,6 +143,24 @@ class Traceable:
             "This may mean super().__init__() wasn't"
             "called somewhere"
         )
+
+    def from_meta(self, meta: Dict[str, Any]) -> None:
+        """
+        Updates special fields from the given metadata
+
+        Parameters
+        ----------
+        meta : Dict[str, Any]
+        """
+        if "description" in meta:
+            self.describe(meta["description"])
+        if "comments" in meta:
+            for comment in meta["comments"]:
+                self.comments.append(
+                    Comment(*comment)
+                )
+        if "tags" in meta:
+            self.add_tags(meta["tags"])
 
     def __repr__(self) -> str:
         """

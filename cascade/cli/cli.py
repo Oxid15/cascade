@@ -185,7 +185,7 @@ def comment_add(ctx, c):
     from cascade.base import Traceable
 
     tr = Traceable()
-    tr.update_meta(ctx.obj["meta"][0])
+    tr.from_meta(ctx.obj["meta"][0])
     tr.comment(c)
     MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
 
