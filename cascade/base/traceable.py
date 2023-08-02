@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 import os
 import glob
 import socket
@@ -98,17 +98,29 @@ class Traceable:
             Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
         meta = {"name": repr(self)}
-
-        if hasattr(self, "description"):
-            meta["description"] = self.description
-
-        if hasattr(self, "description"):
-            meta["tags"] = list(self.tags)
-
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
             self._warn_no_prefix()
+
+        if hasattr(self, "description"):
+            meta["description"] = self.description
+
+        if hasattr(self, "tags"):
+            tags = meta.get("tags")
+            if tags:
+                tags = set(tags).union(self.tags)
+            else:
+                tags = self.tags
+            meta["tags"] = list(tags)
+
+        if hasattr(self, "comments"):
+            comments = [asdict(comment) for comment in self.comments]
+            if meta.get("comments"):
+                meta["comments"].extend(comments)
+            else:
+                meta["comments"] = comments
+
         return [meta]
 
     def update_meta(self, obj: Union[Dict[Any, Any], str]) -> None:
@@ -116,6 +128,7 @@ class Traceable:
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called
         """
+        # TODO: fix this docstring
         if isinstance(obj, str):
             obj = self._read_meta_from_file(obj)
 

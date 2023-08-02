@@ -23,6 +23,9 @@ from ..version import __version__
 from ..base import MetaHandler, supported_meta_formats
 
 
+
+
+
 @click.group
 @click.pass_context
 def cli(ctx):
@@ -47,6 +50,7 @@ def cli(ctx):
     elif len(meta_paths) == 1:
         meta = MetaHandler.read(meta_paths[0])
         ctx.obj["meta"] = meta
+        ctx.obj["meta_path"] = meta_paths[0]
         ctx.obj["type"] = meta[0].get("type")
         ctx.obj["len"] = meta[0].get("len")
     else:
@@ -64,7 +68,7 @@ def status(ctx):
         if ctx.obj.get("len"):
             output += f" of len {ctx.obj['len']}"
         click.echo(output)
-    
+
 
 @cli.command
 @click.pass_context
@@ -164,6 +168,35 @@ def metric(ctx, p, i, x):
 def diff(ctx):
     from .meta import DiffViewer
     DiffViewer(ctx.obj["cwd"]).serve()
+
+
+@cli.group
+def comment():
+    pass
+
+
+@comment.command('add')
+@click.pass_context
+@click.option('-c', prompt="Comment: ")
+def comment_add(ctx, c):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import Traceable
+
+    tr = Traceable()
+    tr.update_meta(ctx.obj["meta"][0])
+    tr.comment(c)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+
+@comment.command('ls')
+@click.pass_context
+@click.option('-p')
+def comment_ls(ctx, p):
+    if not ctx.obj.get("meta"):
+        return
+    click.echo(ctx.obj["meta"][0].get("comments"))
 
 
 if __name__ == "__main__":
