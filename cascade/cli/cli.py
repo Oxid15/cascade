@@ -194,9 +194,16 @@ def comment_add(ctx, c):
 @click.pass_context
 @click.option('-p')
 def comment_ls(ctx, p):
+    import pendulum
+
     if not ctx.obj.get("meta"):
         return
-    click.echo(ctx.obj["meta"][0].get("comments"))
+
+    comments = ctx.obj["meta"][0].get("comments")
+    if comments:
+        for comment in comments:
+            date = pendulum.parse(comment['timestamp']).diff_for_humans(pendulum.now())
+            click.echo(f"{comment['username']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
 
 
 if __name__ == "__main__":
