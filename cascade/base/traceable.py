@@ -157,7 +157,7 @@ class Traceable:
         if "comments" in meta:
             for comment in meta["comments"]:
                 self.comments.append(
-                    Comment(*comment)
+                    Comment(**comment)
                 )
         if "tags" in meta:
             self.add_tags(meta["tags"])
