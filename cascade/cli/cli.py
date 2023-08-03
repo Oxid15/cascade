@@ -23,9 +23,6 @@ from ..version import __version__
 from ..base import MetaHandler, supported_meta_formats
 
 
-
-
-
 @click.group
 @click.pass_context
 def cli(ctx):
@@ -68,7 +65,7 @@ def status(ctx):
         if ctx.obj.get("len"):
             output += f" of len {ctx.obj['len']}"
         click.echo(output)
-
+    
 
 @cli.command
 @click.pass_context
@@ -124,19 +121,19 @@ def history(ctx, host, port, l, m):
     if ctx.obj.get("meta"):
         type = ctx.obj["type"]
         if type == "workspace":
-            from .models import Workspace
+            from ..models import Workspace
             container = Workspace(ctx.obj["cwd"])
         elif type == "repo":
-            from .models import ModelRepo
+            from ..models import ModelRepo
             container = ModelRepo(ctx.obj["cwd"])
         elif type == "line":
-            from .models import ModelLine
+            from ..models import ModelLine
             container = ModelLine(ctx.obj["cwd"])
         else:
             click.echo(f"Cannot open History Viewer in object of type `{type}`")
             return
 
-        from .meta import HistoryViewer
+        from ..meta import HistoryViewer
         HistoryViewer(container, last_lines=l, last_models=m).serve(host=host, port=port)
 
 
@@ -148,16 +145,16 @@ def history(ctx, host, port, l, m):
 def metric(ctx, p, i, x):
     type = ctx.obj["type"]
     if type == "repo":
-        from .models import ModelRepo
+        from ..models import ModelRepo
         container = ModelRepo(ctx.obj["cwd"])
     elif type == "line":
-        from .models import ModelLine
+        from ..models import ModelLine
         container = ModelLine(ctx.obj["cwd"])
     else:
         click.echo(f"Cannot open History Viewer in object of type `{type}`")
         return
 
-    from .meta import MetricViewer
+    from ..meta import MetricViewer
     i = None if len(i) == 0 else list(i)
     x = None if len(x) == 0 else list(x)
     MetricViewer(container).serve(page_size=p, include=i, exclude=x)
@@ -166,7 +163,7 @@ def metric(ctx, p, i, x):
 @view.command
 @click.pass_context
 def diff(ctx):
-    from .meta import DiffViewer
+    from ..meta import DiffViewer
     DiffViewer(ctx.obj["cwd"]).serve()
 
 
