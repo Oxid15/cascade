@@ -121,3 +121,33 @@ def test_tags():
 
     tr.remove_tags(["a", "b", "c"])
     assert tr.tags == set()
+
+
+def test_comments():
+    tr = Traceable()
+
+    tr.comment("hello")
+
+    assert len(tr.comments) == 1
+    assert tr.comments[0].id == "1"
+    assert tr.comments[0].message == "hello"
+    assert hasattr(tr.comments[0], "user")
+    assert hasattr(tr.comments[0], "host")
+    assert hasattr(tr.comments[0], "timestamp")
+
+
+def test_from_meta():
+    tr = Traceable()
+    tr.add_tag("tag")
+    tr.describe("description")
+    tr.comment("lol")
+    tr.comment("kek")
+
+    meta = tr.get_meta()
+
+    tr = Traceable()
+    tr.from_meta(meta[0])
+
+    assert tr.tags == set(["tag"])
+    assert tr.description == "description"
+    assert [c.message for c in tr.comments] == ["lol", "kek"]
