@@ -189,8 +189,7 @@ def comment_add(ctx, c):
 
 @comment.command('ls')
 @click.pass_context
-@click.option('-p')
-def comment_ls(ctx, p):
+def comment_ls(ctx):
     import pendulum
 
     if not ctx.obj.get("meta"):
@@ -200,7 +199,24 @@ def comment_ls(ctx, p):
     if comments:
         for comment in comments:
             date = pendulum.parse(comment['timestamp']).diff_for_humans(pendulum.now())
-            click.echo(f"{comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
+            click.echo(f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
+
+
+@comment.command('del')
+@click.pass_context
+@click.argument('id')
+def comment_del(ctx, id):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import Traceable
+
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.remove_comment(id)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+    click.echo(f"Removed comment {id}")
 
 
 if __name__ == "__main__":
