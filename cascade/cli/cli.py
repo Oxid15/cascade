@@ -200,7 +200,7 @@ def comment_ls(ctx, p):
     if comments:
         for comment in comments:
             date = pendulum.parse(comment['timestamp']).diff_for_humans(pendulum.now())
-            click.echo(f"{comment['username']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
+            click.echo(f"{comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
 
 
 if __name__ == "__main__":

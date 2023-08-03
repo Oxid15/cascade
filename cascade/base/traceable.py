@@ -29,7 +29,8 @@ from . import PipeMeta, MetaFromFile, supported_meta_formats
 
 @dataclass
 class Comment:
-    username: str
+    id: str
+    user: str
     host: str
     timestamp: datetime
     message: str
@@ -242,8 +243,15 @@ class Traceable:
         """
         self.tags = self.tags.difference(tags)
 
+    def _find_latest_comment_id(self) -> str:
+        if len(self.comments) == 0:
+            return "0"
+        return self.comments[-1].id
+
     def comment(self, message: str) -> None:
+        comment_id = str(int(self._find_latest_comment_id()) + 1)
         comment = Comment(
+            comment_id,
             os.getlogin(),
             socket.gethostname(),
             pendulum.now(),
@@ -251,6 +259,13 @@ class Traceable:
         )
 
         self.comments.append(comment)
+
+    def remove_comment(self, id: int) -> None:
+        for i, comment in enumerate(self.comments):
+            if comment.id == id:
+                self.comments.pop(i)
+                return
+        raise ValueError(f"Comment with {id} was not found")
 
 
 class TraceableOnDisk(Traceable):
