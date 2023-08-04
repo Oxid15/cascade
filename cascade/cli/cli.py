@@ -232,19 +232,19 @@ def tag(ctx):
 
 @tag.command('add')
 @click.pass_context
-@click.argument('t')
-def tag_add(ctx, arg):
+@click.argument('t', nargs=-1)
+def tag_add(ctx, t):
     if not ctx.obj.get("meta"):
         return
 
-    click.echo(arg)
+    from cascade.base import Traceable
 
-    # from cascade.base import Traceable
-
-    # tr = Traceable()
-    # tr.from_meta(ctx.obj["meta"][0])
-    # tr.tag(c)
-    # MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.tag(t)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    
+    click.echo(f"Added {t}")
 
 
 @tag.command('ls')
@@ -259,19 +259,19 @@ def tag_ls(ctx):
 
 @tag.command('del')
 @click.pass_context
-@click.argument('id')
-def tag_del(ctx, id):
+@click.argument('t', nargs=-1)
+def tag_del(ctx, t):
     if not ctx.obj.get("meta"):
         return
 
-    # from cascade.base import Traceable
+    from cascade.base import Traceable
 
-    # tr = Traceable()
-    # tr.from_meta(ctx.obj["meta"][0])
-    # tr.remove_tag(id)
-    # MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.remove_tag(t)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
 
-    click.echo(f"Removed tag {id}")
+    click.echo(f"Removed {t}")
 
 
 @cli.command('desc')
