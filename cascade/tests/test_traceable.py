@@ -106,20 +106,22 @@ def test_on_disk_recreate(tmp_path, ext):
 def test_descriptions():
     tr = Traceable(description="test")
     assert tr.description == "test"
+    tr.describe("test2")
+    assert tr.description == "test2"
 
 
 def test_tags():
     tr = Traceable(tags=["a", "b"])
-    tr.add_tag("c")
+    tr.tag("c")
     assert tr.tags == {"a", "b", "c"}
 
-    tr.add_tags(["c", "d"])
+    tr.tag(["c", "d"])
     assert tr.tags == {"a", "b", "c", "d"}
 
     tr.remove_tag("d")
     assert tr.tags == {"a", "b", "c"}
 
-    tr.remove_tags(["a", "b", "c"])
+    tr.remove_tag(["a", "b", "c"])
     assert tr.tags == set()
 
 
