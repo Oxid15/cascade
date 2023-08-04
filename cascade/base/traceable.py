@@ -153,6 +153,8 @@ class Traceable:
         ----------
         meta : Dict[str, Any]
         """
+        self._meta_prefix.update(meta)
+
         if "description" in meta:
             self.describe(meta["description"])
         if "comments" in meta:
@@ -161,7 +163,7 @@ class Traceable:
                     Comment(**comment)
                 )
         if "tags" in meta:
-            self.add_tags(meta["tags"])
+            self.tag(meta["tags"])
 
     def __repr__(self) -> str:
         """
