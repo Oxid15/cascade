@@ -15,12 +15,27 @@ limitations under the License.
 """
 
 
-import os
 import glob
+import os
+
 import click
 
 from ..version import __version__
 from ..base import MetaHandler, supported_meta_formats
+
+
+def infer_container(type: str, cwd: str):
+    if type == "line":
+        from cascade.models import ModelLine
+        return ModelLine(cwd)
+    elif type == "repo":
+        from cascade.models import ModelRepo
+        return ModelRepo(cwd)
+    elif type == "workspace":
+        from cascade.models import Workspace
+        return Workspace(cwd)
+    else:
+        return
 
 
 @click.group
@@ -34,7 +49,7 @@ def cli(ctx):
     current_dir_full = os.getcwd()
     ctx.obj["cwd"] = current_dir_full
     current_dir = os.path.split(current_dir_full)[-1]
-    click.echo(f"Cascade {__version__} in ./{current_dir}")
+    # click.echo(f"Cascade {__version__} in ./{current_dir}")
     meta_paths = glob.glob(os.path.join(current_dir_full, "meta.*"))
     meta_paths = [
         path
@@ -81,16 +96,8 @@ def cat(ctx, p):
             click.echo(pformat(ctx.obj["meta"]))
     else:
         if ctx.obj.get("meta"):
-            if ctx.obj["type"] == "line":
-                from cascade.models import ModelLine
-                container = ModelLine(ctx.obj["cwd"])
-            elif ctx.obj["type"] == "repo":
-                from cascade.models import ModelRepo
-                container = ModelRepo(ctx.obj["cwd"])
-            elif ctx.obj["type"] == "workspace":
-                from cascade.models import Workspace
-                container = Workspace(ctx.obj["cwd"])
-            else:
+            container = infer_container(ctx.obj["type"])
+            if not container:
                 return
 
             try:
@@ -119,18 +126,9 @@ def view(ctx):
 @click.option("-m", type=int, help="The number of last models to show")
 def view_history(ctx, host, port, l, m):
     if ctx.obj.get("meta"):
-        type = ctx.obj["type"]
-        if type == "workspace":
-            from ..models import Workspace
-            container = Workspace(ctx.obj["cwd"])
-        elif type == "repo":
-            from ..models import ModelRepo
-            container = ModelRepo(ctx.obj["cwd"])
-        elif type == "line":
-            from ..models import ModelLine
-            container = ModelLine(ctx.obj["cwd"])
-        else:
-            click.echo(f"Cannot open History Viewer in object of type `{type}`")
+        container = infer_container(ctx.obj["type"])
+        if not container:
+            click.echo(f"Cannot open History Viewer in object of type `{ctx.obj['type']}`")
             return
 
         from ..meta import HistoryViewer
@@ -151,7 +149,7 @@ def view_metric(ctx, p, i, x):
         from ..models import ModelLine
         container = ModelLine(ctx.obj["cwd"])
     else:
-        click.echo(f"Cannot open History Viewer in object of type `{type}`")
+        click.echo(f"Cannot open Metric Viewer in object of type `{type}`")
         return
 
     from ..meta import MetricViewer
@@ -289,6 +287,33 @@ def desc_add(ctx, d):
     tr.from_meta(ctx.obj["meta"][0])
     tr.describe(d)
     MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+
+@cli.command("diff")
+@click.pass_context
+@click.argument("left")
+@click.argument("right")
+def diff(ctx, left, right):
+    """
+    Provide diff programs with exact paths
+    to metadata
+    """
+    container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
+    if not container:
+        return
+
+    left_name = container._find_name_by_slug(left)
+    right_name = container._find_name_by_slug(right)
+    
+    if left_name and right_name:
+        left_name = os.path.join(container.get_root(), left_name)
+        right_name = os.path.join(container.get_root(), right_name)
+        
+        left_meta_name = glob.glob(os.path.join(left_name, "meta.*"))
+        right_meta_name = glob.glob(os.path.join(right_name, "meta.*"))
+        
+        if len(left_meta_name) == 1 and len(right_meta_name) == 1:
+            click.echo(left_meta_name[0] + ' ' + right_meta_name[0])
 
 
 if __name__ == "__main__":
