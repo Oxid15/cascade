@@ -47,6 +47,7 @@ def cli(ctx):
     elif len(meta_paths) == 1:
         meta = MetaHandler.read(meta_paths[0])
         ctx.obj["meta"] = meta
+        ctx.obj["meta_path"] = meta_paths[0]
         ctx.obj["type"] = meta[0].get("type")
         ctx.obj["len"] = meta[0].get("len")
     else:
@@ -120,19 +121,19 @@ def history(ctx, host, port, l, m):
     if ctx.obj.get("meta"):
         type = ctx.obj["type"]
         if type == "workspace":
-            from .models import Workspace
+            from ..models import Workspace
             container = Workspace(ctx.obj["cwd"])
         elif type == "repo":
-            from .models import ModelRepo
+            from ..models import ModelRepo
             container = ModelRepo(ctx.obj["cwd"])
         elif type == "line":
-            from .models import ModelLine
+            from ..models import ModelLine
             container = ModelLine(ctx.obj["cwd"])
         else:
             click.echo(f"Cannot open History Viewer in object of type `{type}`")
             return
 
-        from .meta import HistoryViewer
+        from ..meta import HistoryViewer
         HistoryViewer(container, last_lines=l, last_models=m).serve(host=host, port=port)
 
 
@@ -144,16 +145,16 @@ def history(ctx, host, port, l, m):
 def metric(ctx, p, i, x):
     type = ctx.obj["type"]
     if type == "repo":
-        from .models import ModelRepo
+        from ..models import ModelRepo
         container = ModelRepo(ctx.obj["cwd"])
     elif type == "line":
-        from .models import ModelLine
+        from ..models import ModelLine
         container = ModelLine(ctx.obj["cwd"])
     else:
         click.echo(f"Cannot open History Viewer in object of type `{type}`")
         return
 
-    from .meta import MetricViewer
+    from ..meta import MetricViewer
     i = None if len(i) == 0 else list(i)
     x = None if len(x) == 0 else list(x)
     MetricViewer(container).serve(page_size=p, include=i, exclude=x)
@@ -162,8 +163,60 @@ def metric(ctx, p, i, x):
 @view.command
 @click.pass_context
 def diff(ctx):
-    from .meta import DiffViewer
+    from ..meta import DiffViewer
     DiffViewer(ctx.obj["cwd"]).serve()
+
+
+@cli.group
+def comment():
+    pass
+
+
+@comment.command('add')
+@click.pass_context
+@click.option('-c', prompt="Comment: ")
+def comment_add(ctx, c):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import Traceable
+
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.comment(c)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+
+@comment.command('ls')
+@click.pass_context
+def comment_ls(ctx):
+    import pendulum
+
+    if not ctx.obj.get("meta"):
+        return
+
+    comments = ctx.obj["meta"][0].get("comments")
+    if comments:
+        for comment in comments:
+            date = pendulum.parse(comment['timestamp']).diff_for_humans(pendulum.now())
+            click.echo(f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
+
+
+@comment.command('del')
+@click.pass_context
+@click.argument('id')
+def comment_del(ctx, id):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import Traceable
+
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.remove_comment(id)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+    click.echo(f"Removed comment {id}")
 
 
 if __name__ == "__main__":

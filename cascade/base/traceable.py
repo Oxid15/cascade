@@ -15,13 +15,25 @@ limitations under the License.
 """
 
 
+from dataclasses import dataclass, asdict
 import os
 import glob
+import socket
 import warnings
 from typing import Dict, Union, Any, Literal, Iterable
 import pendulum
+from datetime import datetime
 
 from . import PipeMeta, MetaFromFile, supported_meta_formats
+
+
+@dataclass
+class Comment:
+    id: str
+    user: str
+    host: str
+    timestamp: datetime
+    message: str
 
 
 class Traceable:
@@ -65,6 +77,8 @@ class Traceable:
         else:
             self.tags = set()
 
+        self.comments = list()
+
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
         from . import MetaHandler
@@ -85,17 +99,21 @@ class Traceable:
             Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
         """
         meta = {"name": repr(self)}
-
-        if hasattr(self, "description"):
-            meta["description"] = self.description
-
-        if hasattr(self, "description"):
-            meta["tags"] = list(self.tags)
-
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
             self._warn_no_prefix()
+
+        if hasattr(self, "description"):
+            meta["description"] = self.description
+
+        if hasattr(self, "tags"):
+            meta["tags"] = list(self.tags)
+
+        if hasattr(self, "comments"):
+            comments = [asdict(comment) for comment in self.comments]
+            meta["comments"] = comments
+
         return [meta]
 
     def update_meta(self, obj: Union[Dict[Any, Any], str]) -> None:
@@ -103,6 +121,7 @@ class Traceable:
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called
         """
+        # TODO: fix this docstring
         if isinstance(obj, str):
             obj = self._read_meta_from_file(obj)
 
@@ -125,6 +144,24 @@ class Traceable:
             "This may mean super().__init__() wasn't"
             "called somewhere"
         )
+
+    def from_meta(self, meta: Dict[str, Any]) -> None:
+        """
+        Updates special fields from the given metadata
+
+        Parameters
+        ----------
+        meta : Dict[str, Any]
+        """
+        if "description" in meta:
+            self.describe(meta["description"])
+        if "comments" in meta:
+            for comment in meta["comments"]:
+                self.comments.append(
+                    Comment(**comment)
+                )
+        if "tags" in meta:
+            self.add_tags(meta["tags"])
 
     def __repr__(self) -> str:
         """
@@ -205,6 +242,30 @@ class Traceable:
             Tags to remove
         """
         self.tags = self.tags.difference(tags)
+
+    def _find_latest_comment_id(self) -> str:
+        if len(self.comments) == 0:
+            return "0"
+        return self.comments[-1].id
+
+    def comment(self, message: str) -> None:
+        comment_id = str(int(self._find_latest_comment_id()) + 1)
+        comment = Comment(
+            comment_id,
+            os.getlogin(),
+            socket.gethostname(),
+            pendulum.now(),
+            message
+        )
+
+        self.comments.append(comment)
+
+    def remove_comment(self, id: int) -> None:
+        for i, comment in enumerate(self.comments):
+            if comment.id == id:
+                self.comments.pop(i)
+                return
+        raise ValueError(f"Comment with {id} was not found")
 
 
 class TraceableOnDisk(Traceable):
