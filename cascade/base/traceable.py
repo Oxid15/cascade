@@ -197,9 +197,13 @@ class Traceable:
             raise TypeError(f"Description should be str, got {type(desc)}")
         self.description = desc
 
-    def add_tag(self, tag: str) -> None:
+    def tag(self, tag: Union[str, Iterable[str]]) -> None:
         """
+        If tag is a string:
         Adds a tag to existing set
+        Makes no duplicates since tags are set
+        If tag is an iterable of strings:
+        Adds a list of tags in one call
         Makes no duplicates since tags are set
 
         Parameters
@@ -207,41 +211,26 @@ class Traceable:
         tag : str
             A tag to add
         """
-        self.tags.add(tag)
+        if isinstance(tag, str):
+            self.tags.add(tag)
+        else:
+            self.tags = self.tags.union(tag)
 
-    def add_tags(self, tags: Iterable[str]) -> None:
-        """
-        Adds a list of tags in one call
-        Makes no duplicates since tags are set
-
-        Parameters
-        ----------
-        tags : Iterable[str]
-            Tags to add
-        """
-        self.tags = self.tags.union(tags)
-
-    def remove_tag(self, tag: str) -> None:
+    def remove_tag(self, tag: Union[str, Iterable[str]]) -> None:
         """
         Removes a tag from the existing set
+        if tag is a string, else
+        removes a list of tags in one call
 
         Parameters
         ----------
         tag : str
             A tag to remove
         """
-        self.tags.remove(tag)
-
-    def remove_tags(self, tags: Iterable[str]) -> None:
-        """
-        Removes a list of tags in one call
-
-        Parameters
-        ----------
-        tags : Iterable[str]
-            Tags to remove
-        """
-        self.tags = self.tags.difference(tags)
+        if isinstance(tag, str):
+            self.tags.remove(tag)
+        else:
+            self.tags = self.tags.difference(tag)
 
     def _find_latest_comment_id(self) -> str:
         if len(self.comments) == 0:
