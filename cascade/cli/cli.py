@@ -117,7 +117,7 @@ def view(ctx):
 @click.option("--port", type=int, default=8050)
 @click.option("-l", type=int, help="The number of last lines to show")
 @click.option("-m", type=int, help="The number of last models to show")
-def history(ctx, host, port, l, m):
+def view_history(ctx, host, port, l, m):
     if ctx.obj.get("meta"):
         type = ctx.obj["type"]
         if type == "workspace":
@@ -142,7 +142,7 @@ def history(ctx, host, port, l, m):
 @click.option("-p", type=int, default=50, help="Page size for table")
 @click.option('-i', type=str, multiple=True, help="Metrics or params to include")
 @click.option('-x', type=str, multiple=True, help="Metrics or params to exclude")
-def metric(ctx, p, i, x):
+def view_metric(ctx, p, i, x):
     type = ctx.obj["type"]
     if type == "repo":
         from ..models import ModelRepo
@@ -162,14 +162,16 @@ def metric(ctx, p, i, x):
 
 @view.command
 @click.pass_context
-def diff(ctx):
+def view_diff(ctx):
     from ..meta import DiffViewer
     DiffViewer(ctx.obj["cwd"]).serve()
 
 
 @cli.group
 def comment():
-    pass
+    """
+    Manage comments
+    """
 
 
 @comment.command('add')
@@ -219,9 +221,12 @@ def comment_del(ctx, id):
     click.echo(f"Removed comment {id}")
 
 
-@view.group
+@cli.group
 @click.pass_context
 def tag(ctx):
+    """
+    Manage tags
+    """
     pass
 
 
@@ -271,8 +276,11 @@ def tag_del(ctx, id):
 
 @cli.command('desc')
 @click.pass_context
-@click.option('-d', promt="Description: ")
+@click.option('-d', prompt="Description: ")
 def describe(ctx, d):
+    """
+    Describe objects
+    """
     if not ctx.obj.get("meta"):
         return
 
