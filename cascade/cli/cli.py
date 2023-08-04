@@ -69,7 +69,7 @@ def status(ctx):
 
 @cli.command
 @click.pass_context
-@click.option('-p', default=None)
+@click.option("-p", default=None)
 def cat(ctx, p):
     """
     Full meta data of the object
@@ -140,8 +140,8 @@ def view_history(ctx, host, port, l, m):
 @view.command
 @click.pass_context
 @click.option("-p", type=int, default=50, help="Page size for table")
-@click.option('-i', type=str, multiple=True, help="Metrics or params to include")
-@click.option('-x', type=str, multiple=True, help="Metrics or params to exclude")
+@click.option("-i", type=str, multiple=True, help="Metrics or params to include")
+@click.option("-x", type=str, multiple=True, help="Metrics or params to exclude")
 def view_metric(ctx, p, i, x):
     type = ctx.obj["type"]
     if type == "repo":
@@ -174,9 +174,9 @@ def comment():
     """
 
 
-@comment.command('add')
+@comment.command("add")
 @click.pass_context
-@click.option('-c', prompt="Comment: ")
+@click.option("-c", prompt="Comment: ")
 def comment_add(ctx, c):
     if not ctx.obj.get("meta"):
         return
@@ -189,7 +189,7 @@ def comment_add(ctx, c):
     MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
 
 
-@comment.command('ls')
+@comment.command("ls")
 @click.pass_context
 def comment_ls(ctx):
     import pendulum
@@ -200,13 +200,13 @@ def comment_ls(ctx):
     comments = ctx.obj["meta"][0].get("comments")
     if comments:
         for comment in comments:
-            date = pendulum.parse(comment['timestamp']).diff_for_humans(pendulum.now())
+            date = pendulum.parse(comment["timestamp"]).diff_for_humans(pendulum.now())
             click.echo(f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
 
 
-@comment.command('del')
+@comment.command("del")
 @click.pass_context
-@click.argument('id')
+@click.argument("id")
 def comment_del(ctx, id):
     if not ctx.obj.get("meta"):
         return
@@ -218,8 +218,6 @@ def comment_del(ctx, id):
     tr.remove_comment(id)
     MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
 
-    click.echo(f"Removed comment {id}")
-
 
 @cli.group
 @click.pass_context
@@ -230,9 +228,9 @@ def tag(ctx):
     pass
 
 
-@tag.command('add')
+@tag.command("add")
 @click.pass_context
-@click.argument('t', nargs=-1)
+@click.argument("t", nargs=-1)
 def tag_add(ctx, t):
     if not ctx.obj.get("meta"):
         return
@@ -243,11 +241,9 @@ def tag_add(ctx, t):
     tr.from_meta(ctx.obj["meta"][0])
     tr.tag(t)
     MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
-    
-    click.echo(f"Added {t}")
 
 
-@tag.command('ls')
+@tag.command("ls")
 @click.pass_context
 def tag_ls(ctx):
     if not ctx.obj.get("meta"):
@@ -257,9 +253,9 @@ def tag_ls(ctx):
     click.echo(tags)
 
 
-@tag.command('del')
+@tag.command("del")
 @click.pass_context
-@click.argument('t', nargs=-1)
+@click.argument("t", nargs=-1)
 def tag_del(ctx, t):
     if not ctx.obj.get("meta"):
         return
@@ -271,16 +267,19 @@ def tag_del(ctx, t):
     tr.remove_tag(t)
     MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
 
-    click.echo(f"Removed {t}")
 
-
-@cli.command('desc')
+@cli.group("desc")
 @click.pass_context
-@click.option('-d', prompt="Description: ")
-def describe(ctx, d):
+def desc(ctx):
     """
-    Describe objects
+    Manage descriptions
     """
+
+
+@desc.command("add")
+@click.pass_context
+@click.option("-d", prompt="Description: ")
+def desc_add(ctx, d):
     if not ctx.obj.get("meta"):
         return
 
@@ -290,8 +289,6 @@ def describe(ctx, d):
     tr.from_meta(ctx.obj["meta"][0])
     tr.describe(d)
     MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
-
-    click.echo("Added description")
 
 
 if __name__ == "__main__":
