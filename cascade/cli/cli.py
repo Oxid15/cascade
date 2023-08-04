@@ -64,7 +64,7 @@ def status(ctx):
         if ctx.obj.get("len"):
             output += f" of len {ctx.obj['len']}"
         click.echo(output)
-    
+
 
 @cli.command
 @click.pass_context
@@ -164,6 +164,73 @@ def metric(ctx, p, i, x):
 def diff(ctx):
     from .meta import DiffViewer
     DiffViewer(ctx.obj["cwd"]).serve()
+
+
+@view.group
+@click.pass_context
+def tag(ctx):
+    pass
+
+
+@tag.command('add')
+@click.pass_context
+@click.argument('t')
+def tag_add(ctx, arg):
+    if not ctx.obj.get("meta"):
+        return
+
+    click.echo(arg)
+
+    # from cascade.base import Traceable
+
+    # tr = Traceable()
+    # tr.from_meta(ctx.obj["meta"][0])
+    # tr.tag(c)
+    # MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+
+@tag.command('ls')
+@click.pass_context
+def tag_ls(ctx):
+    if not ctx.obj.get("meta"):
+        return
+
+    tags = ctx.obj["meta"][0].get("tags")
+    click.echo(tags)
+
+
+@tag.command('del')
+@click.pass_context
+@click.argument('id')
+def tag_del(ctx, id):
+    if not ctx.obj.get("meta"):
+        return
+
+    # from cascade.base import Traceable
+
+    # tr = Traceable()
+    # tr.from_meta(ctx.obj["meta"][0])
+    # tr.remove_tag(id)
+    # MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+    click.echo(f"Removed tag {id}")
+
+
+@cli.command('desc')
+@click.pass_context
+@click.option('-d', promt="Description: ")
+def describe(ctx, d):
+    if not ctx.obj.get("meta"):
+        return
+
+    # from cascade.base import Traceable
+
+    # tr = Traceable()
+    # tr.from_meta(ctx.obj["meta"][0])
+    # tr.describe(d)
+    # MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+    # click.echo("Description saved")
 
 
 if __name__ == "__main__":
