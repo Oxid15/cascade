@@ -284,14 +284,14 @@ def describe(ctx, d):
     if not ctx.obj.get("meta"):
         return
 
-    # from cascade.base import Traceable
+    from cascade.base import Traceable
 
-    # tr = Traceable()
-    # tr.from_meta(ctx.obj["meta"][0])
-    # tr.describe(d)
-    # MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.describe(d)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
 
-    # click.echo("Description saved")
+    click.echo("Added description")
 
 
 if __name__ == "__main__":
