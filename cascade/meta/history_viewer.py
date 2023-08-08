@@ -55,10 +55,6 @@ class HistoryViewer(Server):
         self._last_lines = last_lines
         self._last_models = last_models
 
-        self._reload()
-        self._make_table()
-
-    def _reload(self) -> None:
         repo = self._container
         if isinstance(self._container, ModelLine):
             repo = SingleLineRepo(self._container)
@@ -75,6 +71,11 @@ class HistoryViewer(Server):
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
+        self._make_table()
+
+    def _update(self) -> None:
+        self._repo.reload()
+        self._make_table()
     def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
         valid_lines = []
         updated_at = []
@@ -114,12 +115,7 @@ class HistoryViewer(Server):
             last_models = self._last_models if self._last_models is not None else 0
             for i in range(len(line))[-last_models:]:
                 new_meta = {"line": line_root, "model": i}
-                try:
-                    # TODO: to take only first is not good...
-                    meta = view[i][0]
-                except IndexError:
-                    meta = {}
-
+                meta = view[i][0]
                 new_meta.update(flatten(meta))
                 metas.append(new_meta)
 
@@ -371,9 +367,7 @@ class HistoryViewer(Server):
             prevent_initial_call=True,
         )
         def update_history(n_intervals, metric):
-            self._reload()
-
-            self._make_table()
+            self._update()
             return self.plot(metric) if metric is not None else go.Figure()
 
         @app.callback(
