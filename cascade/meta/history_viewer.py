@@ -76,6 +76,7 @@ class HistoryViewer(Server):
     def _update(self) -> None:
         self._repo.reload()
         self._make_table()
+
     def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
         valid_lines = []
         updated_at = []
