@@ -127,8 +127,11 @@ class HistoryViewer(Server):
             last_models = self._last_models if self._last_models is not None else 0
             for i in range(len(line))[-last_models:]:
                 new_meta = {"line": line_root, "model": i}
-                meta = view[i][0]
-                new_meta.update(flatten(meta))
+                try:
+                    meta = view[i][0]
+                    new_meta.update(flatten(meta))
+                except IndexError:
+                    pass
                 metas.append(new_meta)
 
                 p = {
@@ -195,17 +198,18 @@ class HistoryViewer(Server):
         return metric
 
     def _connect_points(self, lines: List[str], metric: str, fig: Any):
+        self.edges = []
         for line in lines:
-            edges = [0]
+            self.edges.append([0])
             params = [p for p in self._params if p["line"] == line]
             for i in range(1, len(params)):
                 diff = self._diff(params[i], params[:i])
-                edges.append(self._specific_argmin(diff, i))
+                self.edges[-1].append(self._specific_argmin(diff, i))
 
             xs = []
             ys = []
             t = self._table.loc[self._table["line"] == line]
-            for i, e in enumerate(edges):
+            for i, e in enumerate(self.edges[-1]):
                 xs += [t["time"].iloc[i], t["time"].iloc[e], None]
                 ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
@@ -246,7 +250,6 @@ class HistoryViewer(Server):
         # determine connections between models
         # plot each one with respected color
         lines = self._table["line"].unique()
-        self._edges = []
         fig = self._connect_points(lines, metric, fig)
 
         # Create human-readable ticks
@@ -269,7 +272,7 @@ class HistoryViewer(Server):
         return fig
 
     def _update_plot(self, metric: str) -> Any:
-        pass
+        return self.plot(metric)
 
     def _layout(self, metric):
         try:
