@@ -79,6 +79,7 @@ class HistoryViewer(Server):
             for repo in repos:
                 repo.reload()
 
+        self._edges = []
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
@@ -197,33 +198,21 @@ class HistoryViewer(Server):
 
         return metric
 
-    def _connect_points(self, lines: List[str], metric: str, fig: Any):
-        self.edges = []
-        for line in lines:
-            self.edges.append([0])
-            params = [p for p in self._params if p["line"] == line]
-            for i in range(1, len(params)):
-                diff = self._diff(params[i], params[:i])
-                self.edges[-1].append(self._specific_argmin(diff, i))
+    def _connect_points(self, line: str, metric: str, fig: Any):
+        edges = [0]
+        params = [p for p in self._params if p["line"] == line]
+        for i in range(1, len(params)):
+            diff = self._diff(params[i], params[:i])
+            edges.append(self._specific_argmin(diff, i))
 
-            xs = []
-            ys = []
-            t = self._table.loc[self._table["line"] == line]
-            for i, e in enumerate(self.edges[-1]):
-                xs += [t["time"].iloc[i], t["time"].iloc[e], None]
-                ys += [t[metric].iloc[i], t[metric].iloc[e], None]
+        xs = []
+        ys = []
+        t = self._table.loc[self._table["line"] == line]
+        for i, e in enumerate(edges):
+            xs += [t["time"].iloc[i], t["time"].iloc[e], None]
+            ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
-            fig.add_trace(
-                self._go.Scatter(
-                    x=xs,
-                    y=ys,
-                    mode="lines",
-                    marker={"color": t["color"].iloc[0]},
-                    name=line,
-                    hoverinfo="none",
-                )
-            )
-        return fig
+        return xs, ys
 
     def plot(self, metric: str, show: bool = False) -> Any:
         """
@@ -246,26 +235,20 @@ class HistoryViewer(Server):
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
         fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
-
-        # determine connections between models
-        # plot each one with respected color
         lines = self._table["line"].unique()
-        fig = self._connect_points(lines, metric, fig)
 
-        # Create human-readable ticks
-        # now = pendulum.now(tz="UTC")
-        # time_text = self._table["saved_at"].apply(
-        #     lambda t: t if t == "" else pendulum.parse(t).diff_for_humans(now)
-        # )
+        for line in lines:
+            xs, ys = self._connect_points(line, metric, fig)
+            fig.add_trace(
+                self._go.Scatter(
+                    x=xs,
+                    y=ys,
+                    mode="lines",
+                    name=line,
+                    hoverinfo="none",
+                )
+            )
 
-        # fig.update_layout(
-        #     hovermode="x",
-        #     xaxis=dict(
-        #         tickmode="array",
-        #         tickvals=[i for i in range(len(self._table))],
-        #         # ticktext=time_text,
-        #     ),
-        # )
         if show:
             fig.show()
 
@@ -274,7 +257,7 @@ class HistoryViewer(Server):
     def _update_plot(self, metric: str) -> Any:
         return self.plot(metric)
 
-    def _layout(self, metric):
+    def _layout(self, metric: Union[str, None]):
         try:
             import dash
         except ModuleNotFoundError:
@@ -338,7 +321,7 @@ class HistoryViewer(Server):
             from dash import Input, Output
 
         app = dash.Dash()
-        app.layout = self._layout(metric)
+        app.layout = lambda: self._layout(metric)
 
         @app.callback(
             Output("viewer-title", "children"), Input("history-interval", "n_intervals")
