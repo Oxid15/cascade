@@ -265,6 +265,34 @@ class ModelRepo(Repo, TraceableOnDisk):
     def load_model_meta(self, model: str) -> MetaFromFile:
         """
         Loads metadata of a model from disk
+
+        Parameters
+        ----------
+        model : str
+            model slug e.g. `fair_squid_of_bliss`
+
+        Returns
+        -------
+        MetaFromFile
+            Model metadata
+
+        Raises
+        ------
+        FileNotFoundError
+            Raises if failed to find the model with slug specified
+        """
+
+        for line in self._lines.values():
+            try:
+                meta = line.load_model_meta(model)
+            except FileNotFoundError:
+                continue
+            else:
+                return meta
+        raise FileNotFoundError(
+            f"Failed to find the model {model} in the repo at {self._root}"
+        )
+
     def _update_lines(self) -> None:
         for name in sorted(os.listdir(self._root)):
             if (
