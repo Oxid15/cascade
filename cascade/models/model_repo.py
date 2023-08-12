@@ -260,19 +260,6 @@ class ModelRepo(Repo, TraceableOnDisk):
     def load_model_meta(self, model: str) -> MetaFromFile:
         """
         Loads metadata of a model from disk
-    def _update_lines(self) -> None:
-        for name in sorted(os.listdir(self._root)):
-            if (
-                os.path.isdir(os.path.join(self._root, name))
-                and name not in self._lines
-            ):
-                self._lines[name] = ModelLine(
-                    os.path.join(self._root, name),
-                    model_cls=self._model_cls
-                    if isinstance(self._model_cls, type)
-                    else self._model_cls[name],
-                    meta_fmt=self._meta_fmt,
-                )
 
         Parameters
         ----------
@@ -300,6 +287,20 @@ class ModelRepo(Repo, TraceableOnDisk):
         raise FileNotFoundError(
             f"Failed to find the model {model} in the repo at {self._root}"
         )
+
+    def _update_lines(self) -> None:
+        for name in sorted(os.listdir(self._root)):
+            if (
+                os.path.isdir(os.path.join(self._root, name))
+                and name not in self._lines
+            ):
+                self._lines[name] = ModelLine(
+                    os.path.join(self._root, name),
+                    model_cls=self._model_cls
+                    if isinstance(self._model_cls, type)
+                    else self._model_cls[name],
+                    meta_fmt=self._meta_fmt,
+                )
 
 
 class ModelRepoConcatenator(Repo):
