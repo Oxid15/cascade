@@ -79,7 +79,7 @@ class HistoryViewer(Server):
             for repo in repos:
                 repo.reload()
 
-        self._edges = []
+        self._edges = dict()
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
@@ -212,6 +212,7 @@ class HistoryViewer(Server):
             xs += [t["time"].iloc[i], t["time"].iloc[e], None]
             ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
+        self._edges[line] = {"edges": (xs, ys), "len": len(t)}
         return xs, ys
 
     def plot(self, metric: str, show: bool = False) -> Any:
@@ -238,7 +239,10 @@ class HistoryViewer(Server):
         lines = self._table["line"].unique()
 
         for line in lines:
-            xs, ys = self._connect_points(line, metric, fig)
+            t = self._table.loc[self._table.line == line]
+            self._connect_points(line, metric, fig)
+
+            xs, ys = self._edges[line]["edges"]
             fig.add_trace(
                 self._go.Scatter(
                     x=xs,
@@ -246,6 +250,7 @@ class HistoryViewer(Server):
                     mode="lines",
                     name=line,
                     hoverinfo="none",
+                    marker_color=t["color"].iloc[0]
                 )
             )
 
@@ -255,7 +260,32 @@ class HistoryViewer(Server):
         return fig
 
     def _update_plot(self, metric: str) -> Any:
-        return self.plot(metric)
+        metric = self._preprocess_metric(metric)
+
+        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        if "saved_at" in self._table.columns:
+            hover_cols = ["saved_at"] + hover_cols
+        hover_cols = ["model"] + hover_cols
+        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+
+        for line in sorted(self._table.line.unique()):
+            t = self._table.loc[self._table.line == line]
+            if line in self._edges and len(t) == self._edges[line]["len"]:
+                xs, ys = self._edges[line]["edges"]
+            else:
+                xs, ys = self._connect_points(line, metric, fig)
+            fig.add_trace(
+                self._go.Scatter(
+                    x=xs,
+                    y=ys,
+                    mode="lines",
+                    name=line,
+                    hoverinfo="none",
+                    marker_color=t["color"].iloc[0]
+                )
+            )
+
+        return fig
 
     def _layout(self, metric: Union[str, None]):
         try:
@@ -348,7 +378,8 @@ class HistoryViewer(Server):
         )
         def update_history(n_intervals, metric):
             self._update()
-            return self._update_plot(metric) if metric is not None else self._go.Figure()
+            return (self._update_plot(metric)
+                    if metric is not None else self._go.Figure())
 
         @app.callback(
             Output("metric-dropwdown", "value"),
