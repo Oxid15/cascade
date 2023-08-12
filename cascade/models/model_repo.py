@@ -45,7 +45,6 @@ class Repo(Traceable):
         self._lines = dict()
 
     def reload(self) -> None:
-        # TODO: implement full reload
         for line in self._lines:
             self._lines[line].reload()
 
@@ -249,17 +248,31 @@ class ModelRepo(Repo, TraceableOnDisk):
 
     def reload(self) -> None:
         """
-        Updates internal state.
+        Updates internal state
         """
         super().reload()
+        self._update_lines()
         self._update_meta()
 
-    def __add__(self, repo) -> "ModelRepoConcatenator":
+    def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
     def load_model_meta(self, model: str) -> MetaFromFile:
         """
         Loads metadata of a model from disk
+    def _update_lines(self) -> None:
+        for name in sorted(os.listdir(self._root)):
+            if (
+                os.path.isdir(os.path.join(self._root, name))
+                and name not in self._lines
+            ):
+                self._lines[name] = ModelLine(
+                    os.path.join(self._root, name),
+                    model_cls=self._model_cls
+                    if isinstance(self._model_cls, type)
+                    else self._model_cls[name],
+                    meta_fmt=self._meta_fmt,
+                )
 
         Parameters
         ----------

@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+from typing import NoReturn
 
 from cascade.models.trainer import BasicTrainer
 
@@ -25,6 +26,14 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import Wrapper
 from cascade.models import ModelRepo, Trainer
 from cascade.tests.conftest import DummyModel
+
+
+class AlwaysFailingModel(DummyModel):
+    def fit(self, *args, **kwargs) -> NoReturn:
+        raise RuntimeError()
+
+    def evaluate(self, *args, **kwargs) -> NoReturn:
+        raise RuntimeError()
 
 
 def test_base(tmp_path, model_repo):
@@ -54,3 +63,16 @@ def test_basic_trainer(tmp_path):
     assert len(repo) == 1
     assert len(repo["00000"]) == 5
     assert len(t.metrics) == 5
+
+
+def test_error_handling(tmp_path):
+    repo = ModelRepo(str(tmp_path))
+    t = BasicTrainer(repo)
+
+    model = AlwaysFailingModel()
+
+    t.train(model, Wrapper([0, 1, 2, 3, 4]), Wrapper([0, 1, 2, 3, 4]), epochs=5)
+
+    assert len(repo) == 1
+    assert len(repo["00000"]) == 1
+    assert len(t.metrics) == 0
