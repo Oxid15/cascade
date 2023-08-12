@@ -262,6 +262,9 @@ class ModelRepo(Repo, TraceableOnDisk):
     def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
+    def load_model_meta(self, model: str) -> MetaFromFile:
+        """
+        Loads metadata of a model from disk
     def _update_lines(self) -> None:
         for name in sorted(os.listdir(self._root)):
             if (
