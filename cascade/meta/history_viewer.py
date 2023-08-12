@@ -127,7 +127,8 @@ class HistoryViewer(Server):
 
             last_models = self._last_models if self._last_models is not None else 0
             for i in range(len(line))[-last_models:]:
-                new_meta = {"line": line_root, "model": i}
+                line_name = os.path.split(line_root)[-1]
+                new_meta = {"line": line_name, "model": i}
                 try:
                     meta = view[i][0]
                     new_meta.update(flatten(meta))
@@ -136,7 +137,7 @@ class HistoryViewer(Server):
                 metas.append(new_meta)
 
                 p = {
-                    "line": line_root,
+                    "line": line_name,
                 }
                 if "params" in meta:
                     if len(meta["params"]) > 0:
