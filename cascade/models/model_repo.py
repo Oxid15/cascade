@@ -42,11 +42,7 @@ class Repo(Traceable):
         **kwargs: Any,
     ) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = dict()
-
-    def reload(self) -> None:
-        for line in self._lines:
-            self._lines[line].reload()
+        self._lines = list()
 
     def __getitem__(self, key: str) -> ModelLine:
         raise NotImplementedError()
@@ -73,7 +69,10 @@ class Repo(Traceable):
         """
         Returns list of line names.
         """
-        return list(self._lines.keys())
+        return self._lines
+
+    def reload(self) -> None:
+        pass
 
 
 class SingleLineRepo(Repo):
@@ -171,17 +170,10 @@ class ModelRepo(Repo, TraceableOnDisk):
         self._create_meta()
 
     def _load_lines(self) -> None:
-        self._lines = {
-            name: ModelLine(
-                os.path.join(self._root, name),
-                model_cls=self._model_cls
-                if isinstance(self._model_cls, type)
-                else self._model_cls[name],
-                meta_fmt=self._meta_fmt,
-            )
-            for name in sorted(os.listdir(self._root))
+        self._lines = [
+            name for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))
-        }
+        ]
 
     def add_line(
         self,
@@ -224,7 +216,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
         line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
-        self._lines[name] = line
+        self._lines.append(name)
 
         self._update_meta()
         return line
@@ -236,12 +228,20 @@ class ModelRepo(Repo, TraceableOnDisk):
         line: ModelLine
            existing line of the name passed in `key`
         """
-        if isinstance(key, str):
-            return self._lines[key]
-        elif isinstance(key, int):
-            return self._lines[list(self._lines.keys())[key]]
-        else:
+        if isinstance(key, int):
+            key = self._lines[key]
+        elif not isinstance(key, str):
             raise TypeError(f"{type(key)} is not supported as key")
+
+        if key in self._lines:
+            return ModelLine(
+                os.path.join(self._root, key),
+                model_cls=self._model_cls
+                if isinstance(self._model_cls, type)
+                else self._model_cls[key],
+            )
+        else:
+            raise KeyError(f"Line {key} does not exist in {self._root}")
 
     def __repr__(self) -> str:
         return f"ModelRepo in {self._root} of {len(self)} lines"
@@ -251,7 +251,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         Updates internal state
         """
         super().reload()
-        self._update_lines()
+        self._load_lines()
         self._update_meta()
 
     def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
@@ -277,8 +277,9 @@ class ModelRepo(Repo, TraceableOnDisk):
             Raises if failed to find the model with slug specified
         """
 
-        for line in self._lines.values():
+        for name in self._lines:
             try:
+                line = ModelLine(os.path.join(self._root, name))
                 meta = line.load_model_meta(model)
             except FileNotFoundError:
                 continue
@@ -287,20 +288,6 @@ class ModelRepo(Repo, TraceableOnDisk):
         raise FileNotFoundError(
             f"Failed to find the model {model} in the repo at {self._root}"
         )
-
-    def _update_lines(self) -> None:
-        for name in sorted(os.listdir(self._root)):
-            if (
-                os.path.isdir(os.path.join(self._root, name))
-                and name not in self._lines
-            ):
-                self._lines[name] = ModelLine(
-                    os.path.join(self._root, name),
-                    model_cls=self._model_cls
-                    if isinstance(self._model_cls, type)
-                    else self._model_cls[name],
-                    meta_fmt=self._meta_fmt,
-                )
 
 
 class ModelRepoConcatenator(Repo):
