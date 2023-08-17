@@ -241,7 +241,7 @@ class ModelRepo(Repo, TraceableOnDisk):
                 else self._model_cls[key],
             )
         else:
-            raise KeyError(f"Line {key} does not exist in {self._root}")
+            raise KeyError(f"Line {key} does not exist in {self}")
 
     def __repr__(self) -> str:
         return f"ModelRepo in {self._root} of {len(self)} lines"
