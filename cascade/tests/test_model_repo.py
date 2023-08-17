@@ -254,7 +254,7 @@ def test_failed_line_meta(tmp_path, ext):
         f.write("\t{{{: 'sorry, i am broken'")
 
     repo = ModelRepo(
-        repo_path, lines=[dict(name="0", model_cls=DummyModel, meta_fmt=ext)]
+        repo_path, lines=[dict(name="0", model_cls=DummyModel)], meta_fmt=ext
     )
     model = repo["0"][0]
 
