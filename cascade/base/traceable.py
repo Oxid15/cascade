@@ -276,7 +276,7 @@ class TraceableOnDisk(Traceable):
         ext = self._determine_meta_fmt()
 
         if ext is None and meta_fmt is None:
-            meta_fmt = default_meta_format
+            self._meta_fmt = default_meta_format
         elif not ext:
             # Here we write meta first time and
             # don't know the real ext from file
