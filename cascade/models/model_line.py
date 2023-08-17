@@ -36,7 +36,7 @@ class ModelLine(TraceableOnDisk):
         self,
         folder: str,
         model_cls: Type = Model,
-        meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
+        meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -49,7 +49,7 @@ class ModelLine(TraceableOnDisk):
             If folder does not exist, creates it
         model_cls: type, optional
             A class of models in line. ModelLine uses this class to reconstruct a model
-        meta_fmt: Literal[".json", ".yml", ".yaml"], optional
+        meta_fmt: Literal[".json", ".yml", ".yaml", None], optional
             Format in which to store meta data.
         See also
         --------

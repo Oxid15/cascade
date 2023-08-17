@@ -24,7 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler, Traceable, TraceableOnDisk
+from cascade.base import MetaHandler, Traceable, TraceableOnDisk, default_meta_format
 
 
 def test_meta():
@@ -101,6 +101,36 @@ def test_on_disk_recreate(tmp_path, ext):
     assert list(meta[0].keys()) == list(new_meta[0].keys())
     assert meta[0]["created_at"] == new_meta[0]["created_at"]
     assert meta[0]["updated_at"] != new_meta[0]["updated_at"]
+
+
+def test_default_meta_fmt(tmp_path):
+    tmp_path = str(tmp_path)
+    trd = TraceableOnDisk(tmp_path, meta_fmt=None)
+    trd._create_meta()
+
+    assert os.path.join(tmp_path, "meta" + default_meta_format)
+
+
+def test_infer_meta_fmt(tmp_path):
+    tmp_path = str(tmp_path)
+    trd = TraceableOnDisk(tmp_path, meta_fmt=".yml")
+    trd._create_meta()
+
+    trd = TraceableOnDisk(tmp_path, None)
+
+    assert os.path.join(tmp_path, "meta.yml")
+
+
+def test_infer_meta_fmt_conflict(tmp_path):
+    tmp_path = str(tmp_path)
+    trd = TraceableOnDisk(tmp_path, meta_fmt=".yml")
+    trd._create_meta()
+
+    with pytest.warns(UserWarning):
+        trd = TraceableOnDisk(tmp_path, meta_fmt=".json")
+
+    trd._update_meta()
+    assert os.path.join(tmp_path, "meta.yml")
 
 
 def test_descriptions():

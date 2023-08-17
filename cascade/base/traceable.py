@@ -24,7 +24,7 @@ from typing import Dict, Union, Any, Literal, Iterable
 import pendulum
 from datetime import datetime
 
-from . import PipeMeta, MetaFromFile, supported_meta_formats
+from . import PipeMeta, MetaFromFile, default_meta_format, supported_meta_formats
 
 
 @dataclass
@@ -265,16 +265,42 @@ class TraceableOnDisk(Traceable):
     def __init__(
         self,
         root: str,
-        meta_fmt: Literal[".json", ".yml", ".yaml"],
+        meta_fmt: Literal[".json", ".yml", ".yaml", None],
         *args: Any,
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._root = root
-        if meta_fmt not in supported_meta_formats:
-            raise ValueError(f"Only {supported_meta_formats} are supported formats")
-        self._meta_fmt = meta_fmt
+        
+        ext = self._determine_meta_fmt()
+
+        if ext is None and meta_fmt is None:
+            self._meta_fmt = default_meta_format
+        elif not ext:
+            # Here we write meta first time and
+            # don't know the real ext from file
+            if meta_fmt not in supported_meta_formats:
+                raise ValueError(f"Only {supported_meta_formats} are supported formats")
+            self._meta_fmt = meta_fmt
+        else:
+            # Here we know the real extension and will
+            # strictly use it regardless of what was passed
+            self._meta_fmt = ext
+            if meta_fmt != ext:
+                warnings.warn(
+                    f"Trying to set {meta_fmt} to the object that already has {ext} on path {self._root}"
+                )
+
+    def _determine_meta_fmt(self) -> Union[str, None]:
+        meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
+        if len(meta_paths) == 1:
+            _, ext = os.path.splitext(meta_paths[0])
+            return ext
+        else:
+            warnings.warn(
+                f"Multiple meta files found in {self._root}"
+            )
 
     def _create_meta(self) -> None:
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
