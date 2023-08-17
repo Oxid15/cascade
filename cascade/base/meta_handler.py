@@ -26,6 +26,7 @@ import numpy as np
 
 from . import MetaFromFile
 
+default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
 
 
