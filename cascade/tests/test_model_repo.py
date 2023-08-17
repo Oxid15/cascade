@@ -299,8 +299,8 @@ def test_integer_indices(tmp_path, ext):
     first_line = repo.add_line("a")
     last_line = repo.add_line("b")
 
-    assert first_line == repo[0]
-    assert last_line == repo[-1]
+    assert first_line.get_root() == repo[0].get_root()
+    assert last_line.get_root() == repo[-1].get_root()
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
