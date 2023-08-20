@@ -161,7 +161,7 @@ class Traceable:
                     Comment(**comment)
                 )
         if "tags" in meta:
-            self.add_tags(meta["tags"])
+            self.tag(meta["tags"])
 
     def __repr__(self) -> str:
         """
