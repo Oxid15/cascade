@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import glob
+import traceback
 import os
 from typing import Any, Literal, Type, Union
 
@@ -225,13 +226,16 @@ class ModelLine(TraceableOnDisk):
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
 
         model_exception = None
+        model_tb = None
         try:
             model.save(full_path)
         except Exception as e:
             model_exception = str(e)
-            print(f"Failed to save model {full_path} {model_exception}")
+            model_tb = traceback.format_exc()
+            print(f"Failed to save model {full_path}\n{model_exception}\n{model_tb}")
 
         artifact_exception = None
+        artifact_tb = None
         if not only_meta:
             artifacts_folder = os.path.join(full_path, "artifacts")
             os.makedirs(artifacts_folder)
@@ -239,12 +243,15 @@ class ModelLine(TraceableOnDisk):
                 model.save_artifact(artifacts_folder)
             except Exception as e:
                 artifact_exception = str(e)
-                print(f"Failed to save artifact {full_path} {artifact_exception}")
+                artifact_tb = traceback.format_exc()
+                print(f"Failed to save artifact {full_path}\n{artifact_exception}\n{artifact_tb}")
 
         if model_exception:
             meta[0]["save_error"] = model_exception
+            meta[0]["save_traceback"] = model_tb
         if artifact_exception:
             meta[0]["save_artifact_error"] = artifact_exception
+            meta[0]["save_artifact_traceback"] = artifact_tb
 
         MetaHandler.write(
             os.path.join(full_path, "meta" + self._meta_fmt), meta
