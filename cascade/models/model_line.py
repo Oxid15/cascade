@@ -225,7 +225,6 @@ class ModelLine(TraceableOnDisk):
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
 
-        model_exception = None
         model_tb = None
         try:
             model.save(full_path)
@@ -234,7 +233,6 @@ class ModelLine(TraceableOnDisk):
             model_tb = traceback.format_exc()
             print(f"Failed to save model {full_path}\n{model_exception}\n{model_tb}")
 
-        artifact_exception = None
         artifact_tb = None
         if not only_meta:
             artifacts_folder = os.path.join(full_path, "artifacts")
@@ -246,12 +244,12 @@ class ModelLine(TraceableOnDisk):
                 artifact_tb = traceback.format_exc()
                 print(f"Failed to save artifact {full_path}\n{artifact_exception}\n{artifact_tb}")
 
-        if model_exception:
-            meta[0]["save_error"] = model_exception
-            meta[0]["save_traceback"] = model_tb
-        if artifact_exception:
-            meta[0]["save_artifact_error"] = artifact_exception
-            meta[0]["save_artifact_traceback"] = artifact_tb
+        if model_tb is not None or artifact_tb is not None:
+            meta[0]["errors"] = {}
+            if model_tb is not None:
+                meta[0]["errors"]["save"] = model_tb
+            if artifact_tb is not None:
+                meta[0]["errors"]["save_artifact"] = artifact_tb
 
         MetaHandler.write(
             os.path.join(full_path, "meta" + self._meta_fmt), meta
@@ -290,5 +288,5 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls(*args, **kwargs)
         model.add_log_callback(self._save_only_meta)
-        self.save(model, only_meta=True)
+        self.save(model, only_meta=True) # TODO: why?
         return model
