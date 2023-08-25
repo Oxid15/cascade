@@ -101,6 +101,9 @@ class SingleLineRepo(Repo):
     def get_root(self):
         return self._root
 
+    def reload(self) -> None:
+        self._line.reload()
+
 
 class ModelRepo(Repo, TraceableOnDisk):
     """
