@@ -272,7 +272,7 @@ class TraceableOnDisk(Traceable):
     ) -> None:
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._root = root
-        
+
         ext = self._determine_meta_fmt()
 
         if ext is None and meta_fmt is None:
@@ -287,9 +287,10 @@ class TraceableOnDisk(Traceable):
             # Here we know the real extension and will
             # strictly use it regardless of what was passed
             self._meta_fmt = ext
-            if meta_fmt != ext:
+            if meta_fmt != ext and meta_fmt is not None:
                 warnings.warn(
-                    f"Trying to set {meta_fmt} to the object that already has {ext} on path {self._root}"
+                    f"Trying to set {meta_fmt} to the object that already has {ext} "
+                    "on path {self._root}"
                 )
 
     def _determine_meta_fmt(self) -> Union[str, None]:
