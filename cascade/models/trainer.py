@@ -86,6 +86,10 @@ class BasicTrainer(Trainer):
                 if model_num == -1:
                     raise FileNotFoundError(f"No model files were found in line {line}")
 
+    def _handle(self, error: Exception, model: Model, line: ModelLine):
+        line.save(model, only_meta=True)
+        logger.exception(error)
+
     def train(
         self,
         model: Model,
@@ -173,11 +177,19 @@ class BasicTrainer(Trainer):
             model.metrics = {}
 
             # Train model
-            model.fit(train_data, **train_kwargs)
+            try:
+                model.fit(train_data, **train_kwargs)
+            except Exception as e:
+                self._handle(e, model, line)
+                return
 
             if eval_strategy is not None:
                 if epoch % eval_strategy == 0:
-                    model.evaluate(test_data, **test_kwargs)
+                    try:
+                        model.evaluate(test_data, **test_kwargs)
+                    except Exception as e:
+                        self._handle(e, model, line)
+                        return
 
             if save_strategy is not None:
                 if epoch % save_strategy == 0:

@@ -26,6 +26,7 @@ import numpy as np
 
 from . import MetaFromFile
 
+default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
 
 
@@ -151,7 +152,7 @@ class YAMLHandler(BaseHandler):
 
 
 class TextHandler(BaseHandler):
-    def read(self, path: str) -> Dict:
+    def read(self, path: str) -> Dict[str, str]:
         """
         Reads text file from path and returns dict
         in the form {path: 'text from file'}

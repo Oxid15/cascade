@@ -24,6 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.base import MetaHandler, default_meta_format
 from cascade.models import BasicModel
 from cascade.tests.conftest import DummyModel, ModelLine
 
@@ -100,3 +101,40 @@ def test_add_model(tmp_path):
     assert model.params["a"] == 0
     assert model.metrics["b"] == 1
     assert len(line) == 2
+
+
+def test_handle_save_error(tmp_path):
+    tmp_path = str(tmp_path)
+    
+    class Fail2SaveModel(BasicModel):
+        def save(self, path: str) -> None:
+            raise RuntimeError()
+    
+    line = ModelLine(tmp_path, Fail2SaveModel)
+    
+    model = Fail2SaveModel()
+    line.save(model)
+    
+    meta = MetaHandler.read(os.path.join(tmp_path, "00000", "meta" + default_meta_format))
+    assert "errors" in meta[0]
+    assert "save" in meta[0]["errors"]
+
+
+def test_handle_save_artifact_error(tmp_path):
+    tmp_path = str(tmp_path)
+    
+    class Fail2SaveArtModel(BasicModel):
+        def save_artifact(self, path: str) -> None:
+            raise RuntimeError()
+        
+        def save(self, path: str) -> None:
+            pass
+    
+    line = ModelLine(tmp_path, Fail2SaveArtModel)
+    
+    model = Fail2SaveArtModel()
+    line.save(model)
+
+    meta = MetaHandler.read(os.path.join(tmp_path, "00000", "meta" + default_meta_format))
+    assert "errors" in meta[0]
+    assert "save_artifact" in meta[0]["errors"]

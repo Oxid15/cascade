@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import glob
+import traceback
 import os
 from typing import Any, Literal, Type, Union
 
@@ -36,7 +37,7 @@ class ModelLine(TraceableOnDisk):
         self,
         folder: str,
         model_cls: Type = Model,
-        meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
+        meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -49,7 +50,7 @@ class ModelLine(TraceableOnDisk):
             If folder does not exist, creates it
         model_cls: type, optional
             A class of models in line. ModelLine uses this class to reconstruct a model
-        meta_fmt: Literal[".json", ".yml", ".yaml"], optional
+        meta_fmt: Literal[".json", ".yml", ".yaml", None], optional
             Format in which to store meta data.
         See also
         --------
@@ -213,27 +214,46 @@ class ModelLine(TraceableOnDisk):
             os.makedirs(model_folder)
             break
 
+        full_path = os.path.join(self._root, folder_name)
         slug = generate_slug()
         with open(os.path.join(self._root, folder_name, "SLUG"), "w") as f:
             f.write(slug)
         self._slug2name_cache[slug] = folder_name
 
         meta = model.get_meta()
-        meta[0]["path"] = os.path.join(self._root, folder_name)
+        meta[0]["path"] = full_path
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
 
-        MetaHandler.write(
-            os.path.join(self._root, folder_name, "meta" + self._meta_fmt), meta
-        )
+        model_tb = None
+        try:
+            model.save(full_path)
+        except Exception as e:
+            model_exception = str(e)
+            model_tb = traceback.format_exc()
+            print(f"Failed to save model {full_path}\n{model_exception}\n{model_tb}")
 
-        model.save(os.path.join(self._root, folder_name))
-
+        artifact_tb = None
         if not only_meta:
-            artifacts_folder = os.path.join(self._root, folder_name, "artifacts")
+            artifacts_folder = os.path.join(full_path, "artifacts")
             os.makedirs(artifacts_folder)
-            model.save_artifact(artifacts_folder)
+            try:
+                model.save_artifact(artifacts_folder)
+            except Exception as e:
+                artifact_exception = str(e)
+                artifact_tb = traceback.format_exc()
+                print(f"Failed to save artifact {full_path}\n{artifact_exception}\n{artifact_tb}")
 
+        if model_tb is not None or artifact_tb is not None:
+            meta[0]["errors"] = {}
+            if model_tb is not None:
+                meta[0]["errors"]["save"] = model_tb
+            if artifact_tb is not None:
+                meta[0]["errors"]["save_artifact"] = artifact_tb
+
+        MetaHandler.write(
+            os.path.join(full_path, "meta" + self._meta_fmt), meta
+        )
         self.model_names.append(folder_name)
         self._update_meta()
 
@@ -268,5 +288,5 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls(*args, **kwargs)
         model.add_log_callback(self._save_only_meta)
-        self.save(model, only_meta=True)
+        self.save(model, only_meta=True) # TODO: why?
         return model

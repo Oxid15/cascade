@@ -44,11 +44,6 @@ class Repo(Traceable):
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._lines = dict()
 
-    def reload(self) -> None:
-        # TODO: implement full reload
-        for line in self._lines:
-            self._lines[line].reload()
-
     def __getitem__(self, key: str) -> ModelLine:
         raise NotImplementedError()
 
@@ -76,6 +71,9 @@ class Repo(Traceable):
         """
         return list(self._lines.keys())
 
+    def reload(self) -> None:
+        pass
+
 
 class SingleLineRepo(Repo):
     def __init__(
@@ -87,16 +85,24 @@ class SingleLineRepo(Repo):
     ) -> None:
         self._root = line.get_root()
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(self._root)[-1]: line}
+        self._lines = {os.path.split(self._root)[-1]: {"args": [], "kwargs": dict()}}
+        self._line = line
 
     def __getitem__(self, key: str) -> ModelLine:
-        return self._lines[key]
+        if key in self._lines:
+            return self._line
+        else:
+            raise KeyError(
+                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist")
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._root}"
 
     def get_root(self):
         return self._root
+
+    def reload(self) -> None:
+        self._line.reload()
 
 
 class ModelRepo(Repo, TraceableOnDisk):
@@ -163,26 +169,23 @@ class ModelRepo(Repo, TraceableOnDisk):
             shutil.rmtree(self._root)
 
         os.makedirs(self._root, exist_ok=True)
-        self._load_lines()
-
-        if lines is not None:
-            for line in lines:
-                self.add_line(**line)
-
-        self._create_meta()
-
-    def _load_lines(self) -> None:
         self._lines = {
-            name: ModelLine(
-                os.path.join(self._root, name),
-                model_cls=self._model_cls
-                if isinstance(self._model_cls, type)
-                else self._model_cls[name],
-                meta_fmt=self._meta_fmt,
-            )
+            name: {"args": [], "kwargs": dict()}
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))
         }
+
+        if lines is not None:
+            for line in lines:
+                name = line["name"]
+                del line["name"]
+
+                self._lines[name] = {
+                    "args": [],
+                    "kwargs": line
+                }
+
+        self._create_meta()
 
     def add_line(
         self,
@@ -224,10 +227,17 @@ class ModelRepo(Repo, TraceableOnDisk):
         folder = os.path.join(self._root, name)
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
-        line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
-        self._lines[name] = line
 
+        self._lines[name] = {
+            "args": args,
+            "kwargs": {
+                "meta_fmt": meta_fmt,
+                **kwargs
+            }
+        }
         self._update_meta()
+
+        line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
         return line
 
     def __getitem__(self, key: Union[str, int]) -> ModelLine:
@@ -237,24 +247,32 @@ class ModelRepo(Repo, TraceableOnDisk):
         line: ModelLine
            existing line of the name passed in `key`
         """
-        if isinstance(key, str):
-            return self._lines[key]
-        elif isinstance(key, int):
-            return self._lines[list(self._lines.keys())[key]]
-        else:
+        if isinstance(key, int):
+            key = list(self._lines.keys())[key]
+        elif not isinstance(key, str):
             raise TypeError(f"{type(key)} is not supported as key")
+
+        if key in self._lines:
+            return ModelLine(
+                os.path.join(self._root, key),
+                *self._lines[key]["args"],
+                **self._lines[key]["kwargs"],
+            )
+        else:
+            raise KeyError(f"Line {key} does not exist in {self}")
 
     def __repr__(self) -> str:
         return f"ModelRepo in {self._root} of {len(self)} lines"
 
     def reload(self) -> None:
         """
-        Updates internal state.
+        Updates internal state
         """
         super().reload()
+        self._update_lines()
         self._update_meta()
 
-    def __add__(self, repo) -> "ModelRepoConcatenator":
+    def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
     def load_model_meta(self, model: str) -> MetaFromFile:
@@ -277,8 +295,9 @@ class ModelRepo(Repo, TraceableOnDisk):
             Raises if failed to find the model with slug specified
         """
 
-        for line in self._lines.values():
+        for name in self._lines:
             try:
+                line = ModelLine(os.path.join(self._root, name), *self._lines[name]["args"], **self._lines[name]["kwargs"])
                 meta = line.load_model_meta(model)
             except FileNotFoundError:
                 continue
@@ -287,6 +306,17 @@ class ModelRepo(Repo, TraceableOnDisk):
         raise FileNotFoundError(
             f"Failed to find the model {model} in the repo at {self._root}"
         )
+
+    def _update_lines(self) -> None:
+        for name in sorted(os.listdir(self._root)):
+            if (
+                os.path.isdir(os.path.join(self._root, name))
+                and name not in self._lines
+            ):
+                self._lines[name] = {
+                    "args": [],
+                    "kwargs": dict()
+                }
 
 
 class ModelRepoConcatenator(Repo):

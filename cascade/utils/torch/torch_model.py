@@ -53,7 +53,7 @@ class TorchModel(BasicModel):
 
         super().__init__(**kwargs)
 
-    def predict(self, *args, **kwargs) -> Any:
+    def predict(self, *args: Any, **kwargs: Any) -> Any:
         """
         Calls internal module with arguments provided.
         """
