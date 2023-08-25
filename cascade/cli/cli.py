@@ -48,7 +48,7 @@ def cli(ctx):
 
     current_dir_full = os.getcwd()
     ctx.obj["cwd"] = current_dir_full
-    current_dir = os.path.split(current_dir_full)[-1]
+    # current_dir = os.path.split(current_dir_full)[-1]
     # click.echo(f"Cascade {__version__} in ./{current_dir}")
     meta_paths = glob.glob(os.path.join(current_dir_full, "meta.*"))
     meta_paths = [
@@ -96,7 +96,7 @@ def cat(ctx, p):
             click.echo(pformat(ctx.obj["meta"]))
     else:
         if ctx.obj.get("meta"):
-            container = infer_container(ctx.obj["type"])
+            container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
             if not container:
                 return
 
@@ -126,7 +126,7 @@ def view(ctx):
 @click.option("-m", type=int, help="The number of last models to show")
 def view_history(ctx, host, port, l, m):
     if ctx.obj.get("meta"):
-        container = infer_container(ctx.obj["type"])
+        container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
         if not container:
             click.echo(f"Cannot open History Viewer in object of type `{ctx.obj['type']}`")
             return
