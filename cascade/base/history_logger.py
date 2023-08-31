@@ -16,7 +16,11 @@ limitations under the License.
 
 import os
 from typing import Any
+
 from .meta_handler import MetaHandler
+from ..version import __version__
+
+from deepdiff import DeepDiff
 
 
 class HistoryLogger:
@@ -59,7 +63,16 @@ class HistoryLogger:
             except IOError as e:
                 raise IOError(f"Failed to read log file: {self._log_file }") from e
         else:
-            self._log = {"history": [], "type": "history"}
+            self._log = {"history": [], "cascade_version": __version__, "type": "history"}
+
+    def _reconstruct_state(self, n: int):
+        state = self._log["history"][0]
+        if n == 0:
+            return state
+        else:
+            for i in range(0, n):
+                state = 
+                
 
     def log(self, obj: Any) -> None:
         """
@@ -70,9 +83,17 @@ class HistoryLogger:
         obj: Any
             Meta data of the object
         """
-        self._log["history"].append(obj)
+        if len(self._log["history"]) == 0:
+            self._log["history"].append(obj)
+        else:
+
+            diff = DeepDiff()
+            self._log["history"].append(obj)
 
         try:
             MetaHandler.write(self._log_file, self._log)
         except IOError as e:
             raise IOError(f"Failed to write log file: {self._log_file}") from e
+
+    def __getitem__(self, key: int):
+        pass
