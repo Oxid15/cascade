@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
-import json
 import datetime
-from typing import NoReturn, Union, Dict, Any
-from json import JSONEncoder
 import deepdiff
+import glob
+import json
+from json import JSONEncoder
+import os
+from typing import NoReturn, Union, Dict, Any
 
 import yaml
 import numpy as np
@@ -241,3 +242,37 @@ class MetaHandler:
             return YAMLHandler()
         else:
             return TextHandler()
+
+    @classmethod
+    def read_dir(
+        cls,
+        path: str,
+        meta_template: str = "meta.*"
+    ) -> MetaFromFile:
+        """
+        Reads a single meta file from a given directory
+
+        Parameters
+        ----------
+        path : str
+            Path to a directory
+        meta_template : str, optional
+            The template to identify meta file, by default "meta.*"
+
+        Returns
+        -------
+        MetaFromFile
+            Meta
+
+        Raises
+        ------
+        IOError
+            If the number of files filtered by the template are not equal to 1
+        """
+        meta_paths = glob.glob(os.path.join(path, meta_template))
+        if len(meta_paths) == 0:
+            raise IOError(f"There is no {meta_template} file in {path}")
+        elif len(meta_paths) > 1:
+            raise IOError(f"There are {len(meta_paths)} in {path}")
+        else:
+            return cls.read(os.path.join(path, meta_paths[0]))
