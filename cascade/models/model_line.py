@@ -156,8 +156,8 @@ class ModelLine(TraceableOnDisk):
 
         Parameters
         ----------
-        model : str
-            model slug e.g. `fair_squid_of_bliss`
+        model : Union[str, int]
+            model slug e.g. `fair_squid_of_bliss` or number
 
         Returns
         -------
