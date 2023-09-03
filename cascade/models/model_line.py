@@ -190,6 +190,19 @@ class ModelLine(TraceableOnDisk):
         return self._read_meta_by_name(name)
 
     def load_artifact_paths(self, model: Union[int, str]) -> Dict[str, List[str]]:
+        """
+        Returns full paths to the files and artifacts of the model
+
+        Parameters
+        ----------
+        model : Union[int, str]
+            Model slug or number
+
+        Returns
+        -------
+        Dict[str, List[str]]
+            Lists of files under the keys "artifacts" and "files"
+        """
         name = self._parse_model_name(model)
         model_folder = os.path.join(self._root, name)
 
@@ -199,10 +212,10 @@ class ModelLine(TraceableOnDisk):
         }
         artifact_path = os.path.join(model_folder, "artifacts")
         if os.path.exists(artifact_path):
-            result["artifacts"] = os.listdir(artifact_path)
+            result["artifacts"] = [os.path.join(self._root, "artifacts", name) for name in os.listdir(artifact_path)]
         file_path = os.path.join(model_folder, "files")
         if os.path.exists(file_path):
-            result["files"] = os.listdir(file_path)
+            result["files"] = [os.path.join(self._root, "files", name) for name in os.listdir(file_path)]
         return result
 
     def save(self, model: Model, only_meta: bool = False) -> None:

@@ -114,12 +114,14 @@ def test_load_artifact_paths(tmp_path, model_line, dummy_model):
 
     model_line.save(dummy_model)
 
-    res = model_line.load_artifact_paths()
+    res = model_line.load_artifact_paths(0)
 
     assert "artifacts" in res
     assert "files" in res
-
-    # TODO: more can be checked
+    assert len(res["artifacts"]) == 1
+    assert len(res["files"]) == 1
+    assert res["artifacts"][0] == os.path.join(model_line.get_root(), "artifacts", "model")
+    assert res["files"][0] == os.path.join(model_line.get_root(), "files", "file.txt")
 
 
 def test_add_model(tmp_path):
