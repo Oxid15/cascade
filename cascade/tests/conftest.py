@@ -17,6 +17,7 @@ limitations under the License.
 import datetime
 import os
 import sys
+from typing import Any
 
 import numpy as np
 import pendulum
@@ -45,7 +46,7 @@ from cascade.models import BasicModel, Model, ModelLine, ModelRepo
 class DummyModel(BasicModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.model = b"model"
+        self.model = "model"
 
     def fit(self, *args, **kwargs):
         pass
@@ -55,6 +56,10 @@ class DummyModel(BasicModel):
 
     def evaluate(self, *args, **kwargs):
         self.metrics.update({"acc": np.random.random()})
+
+    def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        with open(os.path.join(path, "model"), "w") as f:
+            f.write(self.model)
 
 
 class EmptyModel(DummyModel):
