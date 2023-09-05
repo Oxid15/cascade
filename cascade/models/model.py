@@ -66,7 +66,7 @@ class Model(Traceable):
 
     def evaluate(self, *args: Any, **kwargs: Any) -> None:
         """
-        Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.
+        Evaluates model against any metrics. Should not return any value, just populate self.metrics
         """
         raise_not_implemented("cascade.models.Model", "evaluate")
 
@@ -227,7 +227,7 @@ class Model(Traceable):
                 raise ValueError("metric.value cannot be None when adding")
         else:
             raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
-        
+
         # Overwrites metric if it is the same, but
         # value is different
         for i, base_metric in enumerate(self.metrics):
