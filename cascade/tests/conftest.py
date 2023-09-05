@@ -54,7 +54,7 @@ class DummyModel(BasicModel):
         pass
 
     def evaluate(self, *args, **kwargs):
-        self.metrics.update({"acc": np.random.random()})
+        self.add_metric("acc", np.random.random())
 
 
 class EmptyModel(DummyModel):

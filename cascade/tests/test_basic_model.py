@@ -50,8 +50,10 @@ def test_basic_model_with_concrete_case(ones_model):
         metrics_dict={"precision": precision, "recall": recall},
     )
 
-    assert model.metrics["precision"] == 2 / 3
-    assert model.metrics["recall"] == 1
+    assert model.metrics[0].name == "precision"
+    assert model.metrics[0].value == 2 / 3
+    assert model.metrics[0].name == "recall"
+    assert model.metrics[0].value == 1
 
 
 def test_modifier(ones_model):

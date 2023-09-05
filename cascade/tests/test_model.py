@@ -65,5 +65,6 @@ def test_add_callback():
     model.add_log_callback(set_a_to_1)
     model.log_metrics({"acc": 0.0})
 
-    assert model.metrics["acc"] == 0.0
+    assert model.metrics[0].name == "acc"
+    assert model.metrics[0].value == 0.0
     assert model.a == 1

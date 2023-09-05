@@ -99,7 +99,7 @@ def test_add_model(tmp_path):
     model.log_metrics({"b": 1})
 
     assert model.params["a"] == 0
-    assert model.metrics["b"] == 1
+    assert model.add_metric("b", 1)
     assert len(line) == 2
 
 
