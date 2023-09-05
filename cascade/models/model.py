@@ -220,8 +220,8 @@ class Model(Traceable):
         if isinstance(metric, str):
             if value is None:
                 raise ValueError("value cannot be None if metric is str")
-                metric = Metric(name=metric,
-                       value=value, **kwargs)
+            metric = Metric(name=metric,
+                    value=value, **kwargs)
         elif isinstance(metric, Metric):
             if metric.value is None:
                 raise ValueError("metric.value cannot be None when adding")
