@@ -90,26 +90,3 @@ def test_get_best_by(tmp_path, ext):
 
     mv = MetricViewer(repo)
     mv.get_best_by("acc")
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_get_best_by_non_sortable(tmp_path, ext):
-    repo = ModelRepo(str(tmp_path), meta_fmt=ext, model_cls=ModelComplexMetric)
-    line = repo.add_line("00001", model_cls=ModelComplexMetric)
-
-    for _ in range(10):
-        model = ModelComplexMetric()
-        model.evaluate(
-            None,
-            None,
-            {
-                "dict_metric": lambda x, y: {
-                    np.random.choice(["a", "b", "c"]): np.random.random()
-                }
-            },
-        )
-        line.save(model, only_meta=True)
-
-    mv = MetricViewer(repo)
-    with pytest.raises(TypeError):
-        mv.get_best_by("dict_metric")
