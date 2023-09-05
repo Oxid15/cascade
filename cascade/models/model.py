@@ -199,7 +199,7 @@ class Model(Traceable):
     def add_metric(self, metric: Union[str, Metric],
                    value: Union[MetricType, None] = None, **kwargs: Any) -> None:
         """
-        Adds metric value to the model
+        Adds metric value to the model. If metric already exists in the list, updates its value.
 
         Parameters
         ----------
@@ -207,6 +207,8 @@ class Model(Traceable):
             Either metric name or metric object. If object, then second argument is ignored
         value : Union[MetricType, None], optional
             Metric value when metric is str, by default None
+
+        Any additional args will go to the Metric constructor for flexibility if metric is str
 
         Raises
         ------
@@ -218,16 +220,21 @@ class Model(Traceable):
         if isinstance(metric, str):
             if value is None:
                 raise ValueError("value cannot be None if metric is str")
-            self.metrics.append(
-                Metric(name=metric,
+                metric = Metric(name=metric,
                        value=value, **kwargs)
-            )
         elif isinstance(metric, Metric):
             if metric.value is None:
                 raise ValueError("metric.value cannot be None when adding")
-            self.metrics.append(metric)
         else:
             raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
+        
+        # Overwrites metric if it is the same, but
+        # value is different
+        for i, base_metric in enumerate(self.metrics):
+            if metric == base_metric:
+                self.metrics[i] = metric
+        self.metrics.append(metric)
+
 
     def log(self) -> None:
         """

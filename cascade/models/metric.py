@@ -31,3 +31,15 @@ class Metric:
         Should always populate the internal `self.value` field and return it.
         """
         raise NotImplementedError()
+
+    def __eq__(self, __value: object) -> bool:
+        if isinstance(__value, Metric):
+            if (__value.name == self.name and
+                # Compare all fields without `value``
+                __value.dataset == self.dataset and
+                __value.split == self.split and
+                __value.direction == self.direction and
+                __value.interval == self.interval):
+                return True
+            return False
+        return NotImplemented
