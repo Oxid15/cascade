@@ -288,5 +288,5 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls(*args, **kwargs)
         model.add_log_callback(self._save_only_meta)
-        self.save(model, only_meta=True) # TODO: why?
+        # self.save(model, only_meta=True)
         return model
