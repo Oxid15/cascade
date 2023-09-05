@@ -77,7 +77,7 @@ def test_same_index_check(model_line):
 
 
 #TODO: write tests for exceptions
-def test_load_model_meta(model_line, dummy_model):
+def test_load_model_meta_slug(model_line, dummy_model):
     dummy_model.evaluate()
     model_line.save(dummy_model)
 
@@ -89,6 +89,18 @@ def test_load_model_meta(model_line, dummy_model):
     assert "metrics" in meta[0]
     assert meta[0]["metrics"][0]["name"] == "acc"
     assert slug == meta[0]["slug"]
+
+
+def test_load_model_meta_num(model_line, dummy_model):
+    dummy_model.evaluate()
+    model_line.save(dummy_model)
+
+    meta = model_line.load_model_meta(0)
+
+    assert len(meta) == 1
+    assert "metrics" in meta[0]
+    assert "acc" in meta[0]["metrics"]
+    assert meta[0]["metrics"]["acc"] == dummy_model.metrics["acc"]
 
 
 def test_add_model(tmp_path):
