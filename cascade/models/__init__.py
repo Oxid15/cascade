@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from .basic_model import BasicModel, BasicModelModifier
-from .metric import FnMetric, Metric
+from .metric import Metric
 from .model import Model, ModelModifier
 from .model_line import ModelLine
 from .model_repo import ModelRepo, Repo, SingleLineRepo

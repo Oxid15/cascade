@@ -21,7 +21,7 @@ from typing import Any, Dict, Union, Callable, Tuple
 
 import pendulum
 
-from .metric import FnMetric, MetricType, Metric
+from .metric import MetricType, Metric
 from ..base import PipeMeta, Traceable, raise_not_implemented
 
 
@@ -196,33 +196,52 @@ class Model(Traceable):
         """
         self._log_callbacks.append(callback)
 
-    def add_metric(self, metric: Union[str, Callable[[Any], MetricType], Metric],
-                   value: Union[MetricType, None] = None, **kwargs: Any):
+    def add_metric(self, metric: Union[str, Metric],
+                   value: Union[MetricType, None] = None, **kwargs: Any) -> None:
         """
-        Adds
+        Adds metric value to the model
 
         Parameters
         ----------
-        metric : Union[str, Callable[[Any], MetricType], Metric]
-            _description_
+        metric : Union[str, Metric]
+            Either metric name or metric object. If object, then second argument is ignored
         value : Union[MetricType, None], optional
-            _description_, by default None
+            Metric value when metric is str, by default None
+
+        Raises
+        ------
+        ValueError
+            If in either value or metric.value is None
+        TypeError
+            If metric is of inappropriate type
         """
         if isinstance(metric, str):
+            if value is None:
+                raise ValueError("value cannot be None if metric is str")
             self.metrics.append(
                 Metric(name=metric,
                        value=value, **kwargs)
             )
-        elif isinstance(metric, Callable):
-            self.metrics.append(FnMetric(
-                metric
-            ))
         elif isinstance(metric, Metric):
+            if metric.value is None:
+                raise ValueError("metric.value cannot be None when adding")
             self.metrics.append(metric)
+        else:
+            raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
 
     def log(self) -> None:
         """
-        Sequentially calls every log callback
+        Sequentially calls every log callback.
+        Use this if you want to make a checkpoint of a model
+        from inside the model. Callback should be a function that
+        given the model saves it. For example ModelLine.save method.
+        ModelLine.add_model registers callback with only_meta=True automatically
+        when creating a new model.
+
+        See also
+        --------
+        cascade.models.ModelLine.add_model
+        cascade.models.Model.add_log_callback
         """
         for callback in self._log_callbacks:
             callback(self)

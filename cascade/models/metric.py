@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Union, Any, Literal, SupportsFloat, Tuple, Callable
+from typing import Union, Any, Literal, SupportsFloat, Tuple
 
 
 MetricType = SupportsFloat
@@ -31,12 +31,3 @@ class Metric:
         Should always populate the internal `self.value` field and return it.
         """
         raise NotImplementedError()
-
-
-class FnMetric(Metric):
-    def __init__(self, fn: Callable[[Any], MetricType], *args: Any, **kwargs: Any) -> None:
-        """
-        See cascade.models.Metric
-        """
-        super().__init__(*args, name=fn.__name__, **kwargs)
-        self.compute = fn
