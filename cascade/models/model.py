@@ -21,6 +21,7 @@ from typing import Any, Dict, Union, Callable, Tuple
 
 import pendulum
 
+from .metric import FnMetric, MetricType, Metric
 from ..base import PipeMeta, Traceable, raise_not_implemented
 
 
@@ -37,10 +38,10 @@ class Model(Traceable):
         Should be called in any successor - initializes default meta needed.
 
         Successors may pass all of their parameters to superclass for it to be able to
-        log them in meta. Everything that is worth to document about model and data
-        it was trained on can be put either in params or meta_prefix.
+        log them in meta. Everything that is worth to document about the model
+        can be put either in params or meta_prefix
         """
-        self.metrics = {}
+        self.metrics = []
         self.params = kwargs
         self.created_at = pendulum.now(tz="UTC")
         self._file_artifacts_paths = []
@@ -195,18 +196,34 @@ class Model(Traceable):
         """
         self._log_callbacks.append(callback)
 
-    def log_metrics(self, metrics: Dict[str, Any]) -> None:
+    def add_metric(self, metric: Union[str, Callable[[Any], MetricType], Metric],
+                   value: Union[MetricType, None] = None, **kwargs: Any):
         """
-        Updates metrics dict and sequentially
-        calls every log callback
+        Adds
 
         Parameters
         ----------
-        metrics : Dict[str, Any]
-            dictionary with metrics
+        metric : Union[str, Callable[[Any], MetricType], Metric]
+            _description_
+        value : Union[MetricType, None], optional
+            _description_, by default None
         """
-        self.metrics.update(metrics)
+        if isinstance(metric, str):
+            self.metrics.append(
+                Metric(name=metric,
+                       value=value, **kwargs)
+            )
+        elif isinstance(metric, Callable):
+            self.metrics.append(FnMetric(
+                metric
+            ))
+        elif isinstance(metric, Metric):
+            self.metrics.append(metric)
 
+    def log(self) -> None:
+        """
+        Sequentially calls every log callback
+        """
         for callback in self._log_callbacks:
             callback(self)
 
