@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import json
+from dataclasses import asdict, is_dataclass
 import datetime
 from typing import NoReturn, Union, Dict, Any
 from json import JSONEncoder
@@ -76,6 +77,9 @@ class CustomEncoder(JSONEncoder):
 
         elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
             return list(obj)
+
+        elif is_dataclass(obj):
+            return asdict(obj)
 
         return super(CustomEncoder, self).default(obj)
 

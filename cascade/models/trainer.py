@@ -174,7 +174,7 @@ class BasicTrainer(Trainer):
         for epoch in range(epochs):
             # Empty model's metrics to not to repeat them
             # in epochs where no evaluation
-            model.metrics = {}
+            model.metrics = []
 
             # Train model
             try:
@@ -202,7 +202,9 @@ class BasicTrainer(Trainer):
             # Record metrics:
             # no need to copy since don't reuse model's metrics dict
             self.metrics.append(model.metrics)
-            logger.info(f"Epoch {epoch}: {model.metrics}")
+            logger.info(f"Epoch: {epoch}")
+            for metric in model.metrics:
+                logger.info(metric)
 
         end_time = pendulum.now()
         self.train_end_at = end_time
