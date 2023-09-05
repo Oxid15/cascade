@@ -233,6 +233,8 @@ class Model(Traceable):
         for i, base_metric in enumerate(self.metrics):
             if metric == base_metric:
                 self.metrics[i] = metric
+                return
+
         self.metrics.append(metric)
 
 
