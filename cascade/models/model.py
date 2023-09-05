@@ -228,6 +228,10 @@ class Model(Traceable):
         else:
             raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
 
+        # Model be initialized not properly
+        if not hasattr(self, "metrics"):
+            self.metrics = []
+
         # Overwrites metric if it is the same, but
         # value is different
         for i, base_metric in enumerate(self.metrics):
