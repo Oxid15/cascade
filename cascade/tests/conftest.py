@@ -54,7 +54,7 @@ class DummyModel(BasicModel):
         pass
 
     def evaluate(self, *args, **kwargs):
-        self.metrics.update({"acc": np.random.random()})
+        self.add_metric("acc", np.random.random())
 
 
 class EmptyModel(DummyModel):
@@ -68,11 +68,6 @@ class OnesModel(BasicModel):
 
     def fit(self, x, y, *args, **kwargs) -> None:
         pass
-
-
-class ModelComplexMetric(BasicModel):
-    def predict(self, *args, **kwargs):
-        return None
 
 
 def f(x: int) -> int:

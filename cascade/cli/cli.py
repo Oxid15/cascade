@@ -65,7 +65,7 @@ def status(ctx):
         if ctx.obj.get("len"):
             output += f" of len {ctx.obj['len']}"
         click.echo(output)
-    
+
 
 @cli.command
 @click.pass_context
@@ -151,7 +151,7 @@ def metric(ctx, p, i, x):
         from ..models import ModelLine
         container = ModelLine(ctx.obj["cwd"])
     else:
-        click.echo(f"Cannot open History Viewer in object of type `{type}`")
+        click.echo(f"Cannot open Metric Viewer in object of type `{type}`")
         return
 
     from ..meta import MetricViewer

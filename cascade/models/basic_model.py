@@ -19,10 +19,11 @@ import glob
 from hashlib import md5
 import pickle
 import os
+import warnings
 
-from typing import Dict, Callable, Any
+from typing import Union, Callable, Any, List
 from ..base import raise_not_implemented, MetaHandler
-from .model import Model, ModelModifier
+from .model import Metric, MetricType, Model, ModelModifier
 
 
 class BasicModel(Model):
@@ -46,30 +47,39 @@ class BasicModel(Model):
         self,
         x: Any,
         y: Any,
-        metrics_dict: Dict[str, Callable],
+        metrics: List[Union[Metric, Callable[[Any, Any], MetricType]]],
         *args: Any,
         **kwargs: Any,
     ) -> None:
         """
         Receives x and y validation sequences. Passes x to the model's predict
         method along with any args or kwargs needed.
-        Then updates self.metrics with what functions in `metrics_dict` return.
-        `metrics_dict` should contain names of the metrics and the functions with the interface:
-        f(true, predicted) -> metric_value, where metric_value is not always scalar, can be
-        array or dict. For example confusion matrix.
+        Then updates self.metrics with what objects in `metrics` return.
+        `metrics` should contain Metric with compute() method or callables with the interface:
+        f(true, predicted) -> metric_value, where metric_value is a scalar
 
         Parameters
         ----------
-            x:
+            x: Any
                 Input of the model.
-            y:
+            y: Any
                 Desired output to compare with the values predicted.
-            metrics_dict: Dict[str, Callable]
-                Dictionary with functions that given ground-truth and
-                predicted values return metrics.
+            metrics: List[Union[Metric, Callable[[Any, Any], MetricType]]]
+                List of metrics or callables to compute metric values
         """
         preds = self.predict(x, *args, **kwargs)
-        self.metrics.update({key: metrics_dict[key](y, preds) for key in metrics_dict})
+        for metric in metrics:
+            if isinstance(metric, Metric):
+                metric.compute(y, preds)
+                self.add_metric(metric)
+            elif isinstance(metric, Callable):
+                value = metric(y, preds)
+                self.add_metric(metric.__name__, value)
+            else:
+                # Will not raise to not to interrupt evaluation
+                warnings.warn(
+                    f"Cannot compute metric of type {type(metric)}"
+                )
 
     @classmethod
     def _check_model_hash(cls, path: str) -> None:

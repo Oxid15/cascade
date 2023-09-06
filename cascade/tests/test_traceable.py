@@ -170,7 +170,7 @@ def test_comments():
 
 def test_from_meta():
     tr = Traceable()
-    tr.add_tag("tag")
+    tr.tag("tag")
     tr.describe("description")
     tr.comment("lol")
     tr.comment("kek")
