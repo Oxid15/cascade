@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 import os
 import glob
 import socket
@@ -34,6 +34,14 @@ class Comment:
     host: str
     timestamp: datetime
     message: str
+
+
+@dataclass
+class Link:
+    name: Union[str, None]
+    uri: Union[str, None]
+    meta: Union[PipeMeta, None]
+    created_at: datetime
 
 
 class Traceable:
@@ -78,6 +86,7 @@ class Traceable:
             self.tags = set()
 
         self.comments = list()
+        self.links = list()
 
     @staticmethod
     def _read_meta_from_file(path: str) -> MetaFromFile:
@@ -113,6 +122,10 @@ class Traceable:
         if hasattr(self, "comments"):
             comments = [asdict(comment) for comment in self.comments]
             meta["comments"] = comments
+
+        if hasattr(self, "links"):
+            links = [asdict(link) for link in self.links]
+            meta["links"] = links
 
         return [meta]
 
@@ -162,6 +175,12 @@ class Traceable:
                 )
         if "tags" in meta:
             self.tag(meta["tags"])
+
+        if "links" in meta:
+            for link in meta["links"]:
+                self.links.append(
+                    Link(**link)
+                )
 
     def __repr__(self) -> str:
         """
@@ -255,6 +274,52 @@ class Traceable:
                 self.comments.pop(i)
                 return
         raise ValueError(f"Comment with {id} was not found")
+
+    def link(self,
+             obj: Union["Traceable", None] = None,
+             name: Union[str, None] = None,
+             uri: Union[str, None] = None,
+             meta: Union[PipeMeta, None] = None,
+             include: bool = True) -> None:
+        """
+        Links another object to this object. Links can contain
+        name, URI and meta of the object.
+
+        To create the link the Traceable can be passed - if include
+        is True (by default) object's meta and string representation will be taken and saved with
+        the link.
+
+        Link can be initialized without meta for example with only name
+        or only URI.
+
+        If name or meta passed with the object at the same time
+        they will override values from the object.
+
+        The get_meta() of an object is resolved in the link method to
+        prevent circular calls and other problems.
+
+        Parameters
+        ----------
+        obj : Union[Traceable, None]
+            The object to link
+        name : Union[str, None], optional
+            Name of the object, overrides obj name if passed, by default None
+        uri : Union[str, None], optional
+            URI of the object, by default None
+        meta : Union[PipeMeta, None], optional
+            Meta of the object, overrides obj meta if passed, by default None
+        include : bool, optional
+            Whether to include full meta of the object, by default True
+        """
+        if isinstance(obj, Traceable):
+            if name is None:
+                name = str(obj)
+            if meta is None and include:
+                meta = obj.get_meta()
+
+        self.links.append(
+            Link(name, uri, meta, pendulum.now(tz="UTC"))
+        )
 
 
 class TraceableOnDisk(Traceable):
