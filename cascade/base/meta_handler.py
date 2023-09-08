@@ -272,8 +272,10 @@ class MetaHandler:
 
         Raises
         ------
-        MetaIOError
-            If the number of files filtered by the template are not equal to 1
+        ZeroMetaError
+            If there is no files satisfying the template in the directory provided
+        MultipleMetaError
+            If the number of files filtered by the template are more than 1
         """
         meta_paths = glob.glob(os.path.join(path, meta_template))
         if len(meta_paths) == 0:
@@ -282,7 +284,3 @@ class MetaHandler:
             raise MultipleMetaError(f"There are {len(meta_paths)} in {path}")
         else:
             return cls.read(os.path.join(path, meta_paths[0]))
-
-    # @classmethod
-    # def write_dir(cls, path: str, meta_template: str = "meta.*") -> None:
-    #     meta_paths = glob.glob(os.path.join(path, meta_template))
