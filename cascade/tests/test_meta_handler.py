@@ -24,7 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler
+from cascade.base import MetaHandler, MetaIOError
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -74,8 +74,7 @@ def test_text(tmp_path, ext):
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml", ".txt", ".md"])
 def test_not_exist(ext):
-    # The case of non-existing file
-    with pytest.raises(MetaIOError) as e:
+    with pytest.raises(FileNotFoundError) as e:
         MetaHandler.read("this_file_does_not_exist" + ext)
     assert e.typename == "FileNotFoundError"
 
