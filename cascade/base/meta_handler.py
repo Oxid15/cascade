@@ -20,6 +20,9 @@ import glob
 import json
 from json import JSONEncoder
 import os
+import json
+from dataclasses import asdict, is_dataclass
+import datetime
 from typing import NoReturn, Union, Dict, Any
 
 import yaml
@@ -77,6 +80,9 @@ class CustomEncoder(JSONEncoder):
 
         elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
             return list(obj)
+
+        elif is_dataclass(obj):
+            return asdict(obj)
 
         return super(CustomEncoder, self).default(obj)
 

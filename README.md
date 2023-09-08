@@ -100,9 +100,7 @@ from cascade import models as cdm
 from cascade import data as cdd
 
 model = cdm.Model()
-model.metrics.update({
-    'acc': random.random()
-})
+model.add_metric('acc': random.random())
 
 # Repo is the collection of model lines
 repo = cdm.ModelRepo('repos/use_case_repo')

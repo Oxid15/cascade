@@ -21,6 +21,7 @@ from typing import Any, Dict, Union, Callable, Tuple
 
 import pendulum
 
+from .metric import MetricType, Metric
 from ..base import PipeMeta, Traceable, raise_not_implemented
 
 
@@ -37,10 +38,10 @@ class Model(Traceable):
         Should be called in any successor - initializes default meta needed.
 
         Successors may pass all of their parameters to superclass for it to be able to
-        log them in meta. Everything that is worth to document about model and data
-        it was trained on can be put either in params or meta_prefix.
+        log them in meta. Everything that is worth to document about the model
+        can be put either in params or meta_prefix
         """
-        self.metrics = {}
+        self.metrics = []
         self.params = kwargs
         self.created_at = pendulum.now(tz="UTC")
         self._file_artifacts_paths = []
@@ -65,7 +66,7 @@ class Model(Traceable):
 
     def evaluate(self, *args: Any, **kwargs: Any) -> None:
         """
-        Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.
+        Evaluates model against any metrics. Should not return any value, just populate self.metrics
         """
         raise_not_implemented("cascade.models.Model", "evaluate")
 
@@ -195,18 +196,66 @@ class Model(Traceable):
         """
         self._log_callbacks.append(callback)
 
-    def log_metrics(self, metrics: Dict[str, Any]) -> None:
+    def add_metric(self, metric: Union[str, Metric],
+                   value: Union[MetricType, None] = None, **kwargs: Any) -> None:
         """
-        Updates metrics dict and sequentially
-        calls every log callback
+        Adds metric value to the model. If metric already exists in the list, updates its value.
 
         Parameters
         ----------
-        metrics : Dict[str, Any]
-            dictionary with metrics
-        """
-        self.metrics.update(metrics)
+        metric : Union[str, Metric]
+            Either metric name or metric object. If object, then second argument is ignored
+        value : Union[MetricType, None], optional
+            Metric value when metric is str, by default None
 
+        Any additional args will go to the Metric constructor for flexibility if metric is str
+
+        Raises
+        ------
+        ValueError
+            If in either value or metric.value is None
+        TypeError
+            If metric is of inappropriate type
+        """
+        if isinstance(metric, str):
+            if value is None:
+                raise ValueError("value cannot be None if metric is str")
+            metric = Metric(name=metric,
+                    value=value, **kwargs)
+        elif isinstance(metric, Metric):
+            if metric.value is None:
+                raise ValueError("metric.value cannot be None when adding")
+        else:
+            raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
+
+        # Model be initialized not properly
+        if not hasattr(self, "metrics"):
+            self.metrics = []
+
+        # Overwrites metric if it is the same, but
+        # value is different
+        for i, base_metric in enumerate(self.metrics):
+            if metric == base_metric:
+                self.metrics[i] = metric
+                return
+
+        self.metrics.append(metric)
+
+
+    def log(self) -> None:
+        """
+        Sequentially calls every log callback.
+        Use this if you want to make a checkpoint of a model
+        from inside the model. Callback should be a function that
+        given the model saves it. For example ModelLine.save method.
+        ModelLine.add_model registers callback with only_meta=True automatically
+        when creating a new model.
+
+        See also
+        --------
+        cascade.models.ModelLine.add_model
+        cascade.models.Model.add_log_callback
+        """
         for callback in self._log_callbacks:
             callback(self)
 
