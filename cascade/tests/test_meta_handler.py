@@ -24,7 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler, MetaIOError
+from cascade.base import MetaHandler, MetaIOError, ZeroMetaError, MultipleMetaError
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -117,3 +117,38 @@ def test_random_pipeline_meta(tmp_path, dataset, ext):
 
     meta = dataset.get_meta()
     MetaHandler.write(filename, meta)
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_directory_reading(tmp_path, ext):
+    tmp_path = str(tmp_path)
+
+    meta = [{
+        "type": "model"
+    }]
+
+    MetaHandler.write(os.path.join(tmp_path, "meta" + ext), meta)
+
+    meta_from_dir = MetaHandler.read_dir(tmp_path)
+    assert meta_from_dir == meta
+
+
+def test_zero_meta(tmp_path):
+    tmp_path = str(tmp_path)
+
+    with pytest.raises(ZeroMetaError):
+        MetaHandler.read_dir(tmp_path)
+
+
+def test_multiple_meta(tmp_path):
+    tmp_path = str(tmp_path)
+
+    meta = [{
+        "type": "model"
+    }]
+
+    MetaHandler.write(os.path.join(tmp_path, "meta.json"), meta)
+    MetaHandler.write(os.path.join(tmp_path, "meta.yaml"), meta)
+
+    with pytest.raises(MultipleMetaError):
+        MetaHandler.read_dir(tmp_path)
