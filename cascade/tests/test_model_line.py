@@ -99,8 +99,8 @@ def test_load_model_meta_num(model_line, dummy_model):
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
-    assert "acc" in meta[0]["metrics"]
-    assert meta[0]["metrics"]["acc"] == dummy_model.metrics["acc"]
+    assert meta[0]["metrics"][0]["name"] == "acc"
+    assert meta[0]["metrics"][0]["value"] == dummy_model.metrics[0].value
 
 
 def test_add_model(tmp_path):
