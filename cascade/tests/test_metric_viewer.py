@@ -17,15 +17,14 @@ limitations under the License.
 import os
 import sys
 
-import numpy as np
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.meta import MetricViewer
-from cascade.models import BasicModel, ModelRepo
-from cascade.tests.conftest import DummyModel, ModelComplexMetric
+from cascade.models import ModelRepo
+from cascade.tests.conftest import DummyModel
 
 
 def test(repo_or_line, dummy_model):
