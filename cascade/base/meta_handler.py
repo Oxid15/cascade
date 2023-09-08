@@ -28,8 +28,7 @@ from typing import NoReturn, Union, Dict, Any
 import yaml
 import numpy as np
 
-from . import MetaFromFile
-from . import MetaIOError
+from . import MetaFromFile, MetaIOError, ZeroMetaError, MultipleMetaError
 
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
@@ -278,9 +277,9 @@ class MetaHandler:
         """
         meta_paths = glob.glob(os.path.join(path, meta_template))
         if len(meta_paths) == 0:
-            raise MetaIOError(f"There is no {meta_template} file in {path}")
+            raise ZeroMetaError(f"There is no {meta_template} file in {path}")
         elif len(meta_paths) > 1:
-            raise MetaIOError(f"There are {len(meta_paths)} in {path}")
+            raise MultipleMetaError(f"There are {len(meta_paths)} in {path}")
         else:
             return cls.read(os.path.join(path, meta_paths[0]))
 
