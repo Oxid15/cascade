@@ -29,21 +29,10 @@ import yaml
 import numpy as np
 
 from . import MetaFromFile
+from . import MetaIOError
 
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
-
-
-class MetaIOError(IOError):
-    pass
-
-
-class ZeroMetaError(MetaIOError):
-    pass
-
-
-class MultipleMetaError(MetaIOError):
-    pass
 
 
 class CustomEncoder(JSONEncoder):

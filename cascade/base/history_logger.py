@@ -16,8 +16,8 @@ limitations under the License.
 
 import os
 from typing import Any
-from .meta_handler import MetaHandler
 from . import MetaIOError
+from .meta_handler import MetaHandler
 
 
 class HistoryLogger:

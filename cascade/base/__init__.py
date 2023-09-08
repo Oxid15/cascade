@@ -37,6 +37,18 @@ This type described what we can get when reading previously written to meta obje
 MetaFromFile = Union[List[Any], Dict[Any, Any]]
 
 
+class MetaIOError(IOError):
+    pass
+
+
+class ZeroMetaError(MetaIOError):
+    pass
+
+
+class MultipleMetaError(MetaIOError):
+    pass
+
+
 def raise_not_implemented(class_name: str, name: str) -> NoReturn:
     raise NotImplementedError(
         f"Default {class_name} class '{name}()' "
@@ -46,6 +58,6 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
 
 
 from .history_logger import HistoryLogger
-from .meta_handler import CustomEncoder as JSONEncoder, MetaIOError, ZeroMetaError, MultipleMetaError
+from .meta_handler import CustomEncoder as JSONEncoder
 from .meta_handler import MetaHandler, default_meta_format, supported_meta_formats
 from .traceable import Traceable, TraceableOnDisk
