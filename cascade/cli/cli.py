@@ -35,21 +35,21 @@ def cli(ctx):
     ctx.obj["cwd"] = current_dir_full
     current_dir = os.path.split(current_dir_full)[-1]
     click.echo(f"Cascade {__version__} in ./{current_dir}")
-    meta_paths = glob.glob(os.path.join(current_dir_full, "meta.*"))
-    meta_paths = [
-        path
-        for path in meta_paths
-        if os.path.splitext(path)[-1] in supported_meta_formats
-    ]
+
+    try:
+        meta = MetaHandler.read_dir(current_dir_full)
+        ctx.obj["meta"] = meta
+        ctx.obj["meta_path"] = meta_paths[0]
+        ctx.obj["type"] = meta[0].get("type")
+        ctx.obj["len"] = meta[0].get("len")
+    except MetaIOError as e:
+        click.echo(e)
 
     if len(meta_paths) == 0:
         click.echo("It seems that there is no cascade objects here")
     elif len(meta_paths) == 1:
         meta = MetaHandler.read(meta_paths[0])
-        ctx.obj["meta"] = meta
-        ctx.obj["meta_path"] = meta_paths[0]
-        ctx.obj["type"] = meta[0].get("type")
-        ctx.obj["len"] = meta[0].get("len")
+
     else:
         click.echo(f"There are {len(meta_paths)} meta objects here")
 

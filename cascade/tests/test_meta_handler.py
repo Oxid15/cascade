@@ -75,7 +75,7 @@ def test_text(tmp_path, ext):
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml", ".txt", ".md"])
 def test_not_exist(ext):
     # The case of non-existing file
-    with pytest.raises(IOError) as e:
+    with pytest.raises(MetaIOError) as e:
         MetaHandler.read("this_file_does_not_exist" + ext)
     assert e.typename == "FileNotFoundError"
 
@@ -90,7 +90,7 @@ def test_read_fail(tmp_path, ext):
         f.write("\t{\t :this file is broken")
 
     # Test that file path is in error message
-    with pytest.raises(IOError) as e:
+    with pytest.raises(MetaIOError) as e:
         MetaHandler.read(filename)
     assert filename in e.value.args[0]
 
@@ -105,7 +105,7 @@ def test_empty_file(tmp_path, ext):
         f.write("")
 
     # Test that file path is in error message
-    with pytest.raises(IOError) as e:
+    with pytest.raises(MetaIOError) as e:
         MetaHandler.read(filename)
     assert filename in e.value.args[0]
 

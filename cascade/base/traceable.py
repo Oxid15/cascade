@@ -24,7 +24,7 @@ from typing import Dict, Union, Any, Literal, Iterable
 import pendulum
 from datetime import datetime
 
-from . import PipeMeta, MetaFromFile, default_meta_format, supported_meta_formats
+from . import PipeMeta, MetaFromFile, default_meta_format, supported_meta_formats, MetaIOError
 
 
 @dataclass
@@ -294,6 +294,7 @@ class TraceableOnDisk(Traceable):
                 )
 
     def _determine_meta_fmt(self) -> Union[str, None]:
+        # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
         if len(meta_paths) == 1:
             _, ext = os.path.splitext(meta_paths[0])
@@ -318,7 +319,7 @@ class TraceableOnDisk(Traceable):
 
         try:
             MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
-        except IOError as e:
+        except MetaIOError as e:
             warnings.warn(f"File writing error ignored: {e}")
 
     def _update_meta(self) -> None:
@@ -347,13 +348,13 @@ class TraceableOnDisk(Traceable):
         meta_path = meta_path[0]
         try:
             meta = MetaHandler.read(meta_path)[0]
-        except IOError as e:
+        except MetaIOError as e:
             warnings.warn(f"File reading error ignored: {e}")
 
         meta.update(self.get_meta()[0])
         try:
             MetaHandler.write(meta_path, [meta])
-        except IOError as e:
+        except MetaIOError as e:
             warnings.warn(f"File writing error ignored: {e}")
 
     def get_root(self) -> str:

@@ -34,6 +34,18 @@ default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
 
 
+class MetaIOError(IOError):
+    pass
+
+
+class ZeroMetaError(MetaIOError):
+    pass
+
+
+class MultipleMetaError(MetaIOError):
+    pass
+
+
 class CustomEncoder(JSONEncoder):
     def default(self, obj: Any) -> Any:
         if isinstance(obj, type):
@@ -104,9 +116,9 @@ class BaseHandler:
         # prepended with filepath for user
         # to be able to identify broken file
         if exc is not None:
-            raise IOError(f"Error while reading file `{path}`") from exc
+            raise MetaIOError(f"Error while reading file `{path}`") from exc
         else:
-            raise IOError(f"Error while reading file `{path}`")
+            raise MetaIOError(f"Error while reading file `{path}`")
 
 
 class JSONHandler(BaseHandler):
@@ -210,7 +222,7 @@ class MetaHandler:
 
         Raises
         ------
-        IOError
+        MetaIOError
             when decoding errors occur
         """
         handler = cls._get_handler(path)
@@ -233,7 +245,7 @@ class MetaHandler:
 
         Raises
         ------
-        IOError
+        MetaIOError
             when encoding errors occur
         """
         handler = cls._get_handler(path)
@@ -272,13 +284,17 @@ class MetaHandler:
 
         Raises
         ------
-        IOError
+        MetaIOError
             If the number of files filtered by the template are not equal to 1
         """
         meta_paths = glob.glob(os.path.join(path, meta_template))
         if len(meta_paths) == 0:
-            raise IOError(f"There is no {meta_template} file in {path}")
+            raise MetaIOError(f"There is no {meta_template} file in {path}")
         elif len(meta_paths) > 1:
-            raise IOError(f"There are {len(meta_paths)} in {path}")
+            raise MetaIOError(f"There are {len(meta_paths)} in {path}")
         else:
             return cls.read(os.path.join(path, meta_paths[0]))
+
+    # @classmethod
+    # def write_dir(cls, path: str, meta_template: str = "meta.*") -> None:
+    #     meta_paths = glob.glob(os.path.join(path, meta_template))
