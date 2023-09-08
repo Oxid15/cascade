@@ -38,6 +38,7 @@ class Comment:
 
 @dataclass
 class Link:
+    id: str
     name: Union[str, None]
     uri: Union[str, None]
     meta: Union[PipeMeta, None]
@@ -275,6 +276,11 @@ class Traceable:
                 return
         raise ValueError(f"Comment with {id} was not found")
 
+    def _find_latest_link_id(self) -> str:
+        if len(self.links) == 0:
+            return "0"
+        return self.links[-1].id
+
     def link(self,
              obj: Union["Traceable", None] = None,
              name: Union[str, None] = None,
@@ -288,6 +294,9 @@ class Traceable:
         To create the link the Traceable can be passed - if include
         is True (by default) object's meta and string representation will be taken and saved with
         the link.
+
+        If include is False get_meta will still be called, but only small set of
+        specific fields will be taken.
 
         Link can be initialized without meta for example with only name
         or only URI.
@@ -314,12 +323,37 @@ class Traceable:
         if isinstance(obj, Traceable):
             if name is None:
                 name = str(obj)
-            if meta is None and include:
-                meta = obj.get_meta()
+            if meta is None:
+                if include:
+                    meta = obj.get_meta()
+                else:
+                    obj_meta = obj.get_meta()
+                    meta = [{
+                        "type": obj_meta[0].get("type"),
+                        "description": obj_meta[0].get("description"),
+                        "tags": obj_meta[0].get("tags"),
+                        "comments": obj_meta[0].get("comments"),
+                    }]
 
+        link_id = str(int(self._find_latest_link_id()) + 1)
         self.links.append(
-            Link(name, uri, meta, pendulum.now(tz="UTC"))
+            Link(link_id, name, uri, meta, pendulum.now(tz="UTC"))
         )
+
+    def remove_link(self, id: str) -> None:
+        """
+        Removes a link given an index
+
+        Parameters
+        ----------
+        idx : int
+            Link's index
+        """
+        for i, link in enumerate(self.links):
+            if link.id == id:
+                self.links.pop(i)
+                return
+        raise ValueError(f"Link with {id} was not found")
 
 
 class TraceableOnDisk(Traceable):
