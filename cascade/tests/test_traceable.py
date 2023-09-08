@@ -168,6 +168,27 @@ def test_comments():
     assert hasattr(tr.comments[0], "timestamp")
 
 
+def test_links():
+    tr = Traceable()
+    tr2 = Traceable(lol=2)
+
+    tr.link(tr2)
+
+    assert len(tr.links) == 1
+    assert tr.links[0].meta == tr2.get_meta()
+    assert tr.links[0].uri is None
+
+    tr.link(name="link2")
+
+    assert len(tr.links) == 2
+    assert tr.links[1].name == "link2"
+    assert tr.links[1].uri is None
+
+    tr.link(tr2, include=False)
+
+    assert tr.links[2].meta is not None
+
+
 def test_from_meta():
     tr = Traceable()
     tr.tag("tag")
