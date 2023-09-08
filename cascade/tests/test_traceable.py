@@ -175,6 +175,7 @@ def test_links():
     tr.link(tr2)
 
     assert len(tr.links) == 1
+    assert tr.links[0].id == "1"
     assert tr.links[0].meta == tr2.get_meta()
     assert tr.links[0].uri is None
 
@@ -187,6 +188,12 @@ def test_links():
     tr.link(tr2, include=False)
 
     assert tr.links[2].meta is not None
+
+    tr.remove_link("0")
+    assert len(tr.links) == 2
+
+    with pytest.raises(ValueError):
+        tr.remove_link("0")
 
 
 def test_from_meta():
