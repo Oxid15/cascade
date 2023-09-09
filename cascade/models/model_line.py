@@ -129,12 +129,8 @@ class ModelLine(TraceableOnDisk):
         return f"{num:0>5d}"
 
     def _read_meta_by_name(self, name: str) -> MetaFromFile:
-        paths = glob.glob(os.path.join(self._root, name, "meta.*"))
-        if len(paths) == 1:
-            return MetaHandler.read(paths[0])
-        else:
-            raise RuntimeError(
-                f"{len(paths)} meta files in {os.path.join(self._root, name)}")
+        meta = MetaHandler.read_dir(os.path.join(self._root, name))
+        return meta
 
     def _find_name_by_slug(self, slug: str) -> Union[str, None]:
         if slug in self._slug2name_cache:
@@ -297,5 +293,5 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls(*args, **kwargs)
         model.add_log_callback(self._save_only_meta)
-        self.save(model, only_meta=True) # TODO: why?
+        # self.save(model, only_meta=True)
         return model

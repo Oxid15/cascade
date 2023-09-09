@@ -87,8 +87,7 @@ def test_load_model_meta_slug(model_line, dummy_model):
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
-    assert "acc" in meta[0]["metrics"]
-    assert meta[0]["metrics"]["acc"] == dummy_model.metrics["acc"]
+    assert meta[0]["metrics"][0]["name"] == "acc"
     assert slug == meta[0]["slug"]
 
 
@@ -100,8 +99,8 @@ def test_load_model_meta_num(model_line, dummy_model):
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
-    assert "acc" in meta[0]["metrics"]
-    assert meta[0]["metrics"]["acc"] == dummy_model.metrics["acc"]
+    assert meta[0]["metrics"][0]["name"] == "acc"
+    assert meta[0]["metrics"][0]["value"] == dummy_model.metrics[0].value
 
 
 def test_add_model(tmp_path):
@@ -109,11 +108,13 @@ def test_add_model(tmp_path):
 
     line = ModelLine(tmp_path, model_cls=BasicModel)
     model = line.add_model(a=0)
-    model.log_metrics({"b": 1})
+    model.add_metric("b", 1)
+    model.log()
 
     assert model.params["a"] == 0
-    assert model.metrics["b"] == 1
-    assert len(line) == 2
+    assert model.metrics[0].name == "b"
+    assert model.metrics[0].value == 1
+    assert len(line) == 1 # Model is saved only on log()
 
 
 def test_handle_save_error(tmp_path):

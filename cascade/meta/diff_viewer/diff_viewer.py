@@ -17,7 +17,7 @@ limitations under the License.
 import glob
 import os
 
-from ...base import MetaHandler, supported_meta_formats
+from ...base import MetaHandler, supported_meta_formats, MetaIOError, ZeroMetaError
 from ...meta import Server
 from .dataset_version_diff_viewer import DatasetVersionDiffViewer
 from .history_diff_viewer import HistoryDiffViewer
@@ -45,12 +45,9 @@ class DiffViewer(Server):
         Determines the type of DiffReader and returns it
         """
         if os.path.isdir(path):
-            meta_path = sorted(glob.glob(os.path.join(path, "meta.*")))
-            if len(meta_path) > 1:
-                raise RuntimeError(f"Found {len(meta_path)} meta files in {path}")
 
-            if len(meta_path) == 1:
-                meta = MetaHandler().read(meta_path[0])
+            try:
+                meta = MetaHandler.read_dir(path)
 
                 if meta[0]["type"] == "repo":
                     return RepoDiffViewer(path)
@@ -60,7 +57,7 @@ class DiffViewer(Server):
                     raise ValueError(
                         f"No viewer found for meta with type {meta[0]['type']}"
                     )
-            else:
+            except ZeroMetaError:
                 # In this case should check internal folder
                 # I suppose that this could be folder
                 # that can be Workspace but doesn't have meta
@@ -73,20 +70,20 @@ class DiffViewer(Server):
                     ]
                 )
                 for folder in folders:
-                    folder_meta = sorted(
-                        glob.glob(os.path.join(path, folder, "meta.*"))
-                    )
-                    if len(folder_meta) == 1:
-                        meta = MetaHandler.read(folder_meta[0])
-                        if meta[0]["type"] == "repo":
-                            return WorkspaceDiffViewer(path)
-                        elif meta[0]["type"] == "line":
-                            return RepoDiffViewer(path)
-                        else:
-                            raise ValueError(
-                                f"No viewer found for folder with objects of type {meta[0]['type']}"
-                            )
-        else:
+                    try:
+                        meta = MetaHandler.read_dir(os.path.join(path, folder))
+                    except MetaIOError:
+                        continue
+
+                    if meta[0]["type"] == "repo":
+                        return WorkspaceDiffViewer(path)
+                    elif meta[0]["type"] == "line":
+                        return RepoDiffViewer(path)
+                    else:
+                        raise ValueError(
+                            f"No viewer found for folder with objects of type {meta[0]['type']}"
+                        )
+        else:  # The given meta is a file
             _, ext = os.path.splitext(path)
             if ext not in supported_meta_formats:
                 raise ValueError(
@@ -94,7 +91,7 @@ class DiffViewer(Server):
                     f" meta formats: {supported_meta_formats}"
                 )
 
-            meta = MetaHandler().read(path)
+            meta = MetaHandler.read(path)
             if "type" not in meta:
                 raise ValueError(
                     f"Meta in file {path} has no `type` in its keys!"
