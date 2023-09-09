@@ -16,7 +16,6 @@ limitations under the License.
 
 
 import os
-import glob
 import click
 
 from ..version import __version__
