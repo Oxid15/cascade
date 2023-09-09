@@ -84,24 +84,20 @@ class BasicModel(Model):
     @classmethod
     def _check_model_hash(cls, path: str) -> None:
         root = os.path.dirname(path)
-        names = glob.glob(os.path.join(f"{root}", "meta.*"))
-        if len(names) == 1:
-            meta = MetaHandler.read(names[0])
-            # Uses first meta in list
-            # Usually the list is of unit length
-            meta = meta[0]
-            if "md5sum" in meta:
-                with open(path, "rb") as f:
-                    file_hash = md5(f.read()).hexdigest()
-                if file_hash != meta["md5sum"]:
-                    raise RuntimeError(
-                        f".pkl model hash check failed "
-                        f"it may be that model's .pkl file was corrupted\n"
-                        f'hash from {names[0]}: {meta["md5sum"]}\n'
-                        f"hash of {path}: {file_hash}"
-                    )
-        elif len(names) > 1:
-            raise RuntimeError(f"Multiple possible meta-files found: {names}")
+        meta = MetaHandler.read_dir(root)
+        # Uses first meta in list
+        # Usually the list is of unit length
+        meta = meta[0]
+        if "md5sum" in meta:
+            with open(path, "rb") as f:
+                file_hash = md5(f.read()).hexdigest()
+            if file_hash != meta["md5sum"]:
+                raise RuntimeError(
+                    f".pkl model hash check failed "
+                    f"it may be that model's .pkl file was corrupted\n"
+                    f'hash from {names[0]}: {meta["md5sum"]}\n'
+                    f"hash of {path}: {file_hash}"
+                )
 
     @classmethod
     def load(cls, path: str, check_hash: bool = True) -> "BasicModel":
