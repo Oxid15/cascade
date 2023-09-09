@@ -103,11 +103,11 @@ def test_load_model_meta_num(model_line, dummy_model):
     assert meta[0]["metrics"][0]["value"] == dummy_model.metrics[0].value
 
 
-def test_add_model(tmp_path):
+def test_create_model(tmp_path):
     tmp_path = str(tmp_path)
 
     line = ModelLine(tmp_path, model_cls=BasicModel)
-    model = line.add_model(a=0)
+    model = line.create_model(a=0)
     model.add_metric("b", 1)
     model.log()
 

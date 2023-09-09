@@ -73,7 +73,7 @@ class MetricViewer:
 
             view = MetaViewer(viewer_root, filt={"type": "model"})
 
-            for i in range(len(line.model_names)):
+            for i in range(len(line)):
                 try:
                     meta = view[i][-1]  # Takes last model from meta
                 except IndexError:
