@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 import os
 from coolname import generate
 
@@ -29,13 +29,14 @@ def migrate_repo_v0_13(path: str) -> None:
     if "cascade_version" in meta:
         major, minor, _ = parse_version(meta)
         if int(major) >= 0 and int(minor) >= 13:
+            print(f"Version is {major}.{minor}.{_} in {path}, no need to migrate")
             return
 
     # Import everythin AFTER migration is needed
     from cascade.models import ModelRepo, ModelLine, Metric, MetricType, SingleLineRepo
     from cascade.version import __version__
 
-    def process_metrics(metrics):
+    def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):
             return [], metrics
 
@@ -54,13 +55,13 @@ def migrate_repo_v0_13(path: str) -> None:
                 incompatible[name] = value
         return new_style, incompatible
 
-
     if meta["type"] == "repo":
         repo = ModelRepo(path)
     elif meta["type"] == "line":
         line = ModelLine(path)
         repo = SingleLineRepo(line)
     else:
+        print(f"Type {meta['type']} is not supported")
         return
 
     for line in repo.get_line_names():
@@ -77,3 +78,4 @@ def migrate_repo_v0_13(path: str) -> None:
             meta[0]["cascade_version"] = __version__
 
             MetaHandler.write_dir(os.path.join(path, line, model), meta)
+    print("Done")
