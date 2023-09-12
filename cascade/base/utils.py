@@ -1,3 +1,4 @@
+from typing import Any, Dict, List
 import os
 from coolname import generate
 
@@ -6,6 +7,18 @@ def generate_slug() -> str:
     words = generate(3)
     slug = "_".join(words)
     return slug
+
+
+def parse_version(meta: List[Dict[Any, Any]]):
+    import re
+
+    ver = meta[0]["cascade_version"]
+    numbers = re.findall("[0-9]+.[0-9]+.[0-9]+", ver)
+    if len(numbers) == 1:
+        major, minor, debug = numbers[0].split(".")
+        return int(major), int(minor), int(debug)
+    else:
+        raise RuntimeError(f"Got unexpected version string {ver}")
 
 
 def migrate_repo_v0_13(path: str) -> None:
@@ -36,9 +49,7 @@ def migrate_repo_v0_13(path: str) -> None:
     meta = MetaHandler.read_dir(path)[0]
 
     if "cascade_version" in meta:
-        ver = meta["cascade_version"]
-
-        major, minor, _ = ver.split('.')
+        major, minor, _ = parse_version(meta)
         if int(major) >= 0 and int(minor) >= 13:
             return
 
