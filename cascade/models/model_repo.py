@@ -24,6 +24,7 @@ from ..base import (
 )
 from .model import Model
 from .model_line import ModelLine
+from ..version import __version__
 
 
 class Repo(Traceable):
@@ -62,7 +63,14 @@ class Repo(Traceable):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({"root": self._root, "len": len(self), "type": "repo"})
+        meta[0].update(
+            {
+                "root": self._root,
+                "len": len(self),
+                "type": "repo",
+                "cascade_version": __version__,
+            }
+        )
         return meta
 
     def get_line_names(self) -> List[str]:

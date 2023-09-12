@@ -24,6 +24,7 @@ import pendulum
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
 from ..base.utils import generate_slug
 from .model import Model
+from ..version import __version__
 
 
 class ModelLine(TraceableOnDisk):
@@ -273,6 +274,7 @@ class ModelLine(TraceableOnDisk):
                 "model_cls": repr(self._model_cls),
                 "len": len(self),
                 "type": "line",
+                "cascade_version": __version__
             }
         )
         return meta
