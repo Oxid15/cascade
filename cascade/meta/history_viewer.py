@@ -83,6 +83,13 @@ class HistoryViewer(Server):
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
+        meta = MetaHandler.read_dir(repo.get_root())
+        if "cascade_version" not in meta[0]:
+            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
+                               f" metric format. Please, migrate the repo in {repo.get_root()}"
+                               " to be able to use the viewer."
+                               "Use cascade.base.utils.migrate_repo_v0_13")
+
         self._make_table()
 
     def _update(self) -> None:
