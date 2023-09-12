@@ -24,7 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler, MetaIOError, ZeroMetaError, MultipleMetaError
+from cascade.base import MetaHandler, MetaIOError, ZeroMetaError, MultipleMetaError, default_meta_format
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -152,3 +152,22 @@ def test_multiple_meta(tmp_path):
 
     with pytest.raises(MultipleMetaError):
         MetaHandler.read_dir(tmp_path)
+
+
+def test_directory_writing(tmp_path):
+    tmp_path = str(tmp_path)
+
+    meta = [{
+        "type": "model"
+    }]
+
+    MetaHandler.write_dir(tmp_path, meta)
+
+    assert os.path.exists(os.path.join(tmp_path, "meta" + default_meta_format))
+
+    meta[0]["data"] = "abc"
+
+    MetaHandler.write_dir(tmp_path, meta)
+
+    from_file = MetaHandler.read(os.path.join(tmp_path, "meta" + default_meta_format))
+    assert from_file == meta
