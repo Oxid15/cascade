@@ -93,7 +93,8 @@ class SingleLineRepo(Repo):
             return self._line
         else:
             raise KeyError(
-                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist")
+                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist"
+            )
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._root}"
@@ -170,7 +171,7 @@ class ModelRepo(Repo, TraceableOnDisk):
 
         os.makedirs(self._root, exist_ok=True)
         self._lines = {
-            name: {"args": [], "kwargs": dict()}
+            os.path.join(self._root, name): {"args": [], "kwargs": dict()}
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))
         }
@@ -180,10 +181,7 @@ class ModelRepo(Repo, TraceableOnDisk):
                 name = line["name"]
                 del line["name"]
 
-                self._lines[name] = {
-                    "args": [],
-                    "kwargs": line
-                }
+                self._lines[name] = {"args": [], "kwargs": line}
 
         self._create_meta()
 
@@ -228,13 +226,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
 
-        self._lines[name] = {
-            "args": args,
-            "kwargs": {
-                "meta_fmt": meta_fmt,
-                **kwargs
-            }
-        }
+        self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
         self._update_meta()
 
         line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
@@ -297,7 +289,11 @@ class ModelRepo(Repo, TraceableOnDisk):
 
         for name in self._lines:
             try:
-                line = ModelLine(os.path.join(self._root, name), *self._lines[name]["args"], **self._lines[name]["kwargs"])
+                line = ModelLine(
+                    os.path.join(self._root, name),
+                    *self._lines[name]["args"],
+                    **self._lines[name]["kwargs"],
+                )
                 meta = line.load_model_meta(model)
             except FileNotFoundError:
                 continue
@@ -313,10 +309,7 @@ class ModelRepo(Repo, TraceableOnDisk):
                 os.path.isdir(os.path.join(self._root, name))
                 and name not in self._lines
             ):
-                self._lines[name] = {
-                    "args": [],
-                    "kwargs": dict()
-                }
+                self._lines[name] = {"args": [], "kwargs": dict()}
 
 
 class ModelRepoConcatenator(Repo):

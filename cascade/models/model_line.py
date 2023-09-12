@@ -59,7 +59,7 @@ class ModelLine(TraceableOnDisk):
 
         super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
-        self._root = folder
+        self._root = os.path.abspath(folder)
         self.model_names = []
         self._slug2name_cache = dict()
         if os.path.exists(self._root):
