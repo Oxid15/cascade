@@ -22,8 +22,17 @@ def parse_version(meta: List[Dict[Any, Any]]):
 
 
 def migrate_repo_v0_13(path: str) -> None:
-    from cascade.models import ModelRepo, ModelLine, Metric, MetricType
     from cascade.base import MetaHandler
+    # Repo's meta file
+    meta = MetaHandler.read_dir(path)[0]
+
+    if "cascade_version" in meta:
+        major, minor, _ = parse_version(meta)
+        if int(major) >= 0 and int(minor) >= 13:
+            return
+
+    # Import everythin AFTER migration is needed
+    from cascade.models import ModelRepo, ModelLine, Metric, MetricType, SingleLineRepo
     from cascade.version import __version__
 
     def process_metrics(metrics):
@@ -45,15 +54,14 @@ def migrate_repo_v0_13(path: str) -> None:
                 incompatible[name] = value
         return new_style, incompatible
 
-    # Repo's meta file
-    meta = MetaHandler.read_dir(path)[0]
 
-    if "cascade_version" in meta:
-        major, minor, _ = parse_version(meta)
-        if int(major) >= 0 and int(minor) >= 13:
-            return
-
-    repo = ModelRepo(path)
+    if meta["type"] == "repo":
+        repo = ModelRepo(path)
+    elif meta["type"] == "line":
+        line = ModelLine(path)
+        repo = SingleLineRepo(line)
+    else:
+        return
 
     for line in repo.get_line_names():
         line_obj = ModelLine(line)
