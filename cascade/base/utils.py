@@ -12,7 +12,7 @@ def generate_slug() -> str:
 def parse_version(meta: List[Dict[Any, Any]]):
     import re
 
-    ver = meta[0]["cascade_version"]
+    ver = meta["cascade_version"]
     numbers = re.findall("[0-9]+.[0-9]+.[0-9]+", ver)
     if len(numbers) == 1:
         major, minor, debug = numbers[0].split(".")
@@ -22,12 +22,13 @@ def parse_version(meta: List[Dict[Any, Any]]):
 
 
 def migrate_repo_v0_13(path: str) -> None:
+    from tqdm import tqdm
     from cascade.base import MetaHandler
     # Repo's meta file
-    meta = MetaHandler.read_dir(path)[0]
+    meta = MetaHandler.read_dir(path)
 
-    if "cascade_version" in meta:
-        major, minor, _ = parse_version(meta)
+    if "cascade_version" in meta[0]:
+        major, minor, _ = parse_version(meta[0])
         if int(major) >= 0 and int(minor) >= 13:
             print(f"Version is {major}.{minor}.{_} in {path}, no need to migrate")
             return
@@ -55,16 +56,16 @@ def migrate_repo_v0_13(path: str) -> None:
                 incompatible[name] = value
         return new_style, incompatible
 
-    if meta["type"] == "repo":
+    if meta[0]["type"] == "repo":
         repo = ModelRepo(path)
-    elif meta["type"] == "line":
+    elif meta[0]["type"] == "line":
         line = ModelLine(path)
         repo = SingleLineRepo(line)
     else:
-        print(f"Type {meta['type']} is not supported")
+        print(f"Type {meta[0]['type']} is not supported")
         return
 
-    for line in repo.get_line_names():
+    for line in tqdm(repo.get_line_names(), desc=f"Migrating to {__version__}"):
         line_obj = ModelLine(line)
         for model in line_obj.model_names:
             meta = MetaHandler.read_dir(os.path.join(path, line, model))
@@ -78,4 +79,3 @@ def migrate_repo_v0_13(path: str) -> None:
             meta[0]["cascade_version"] = __version__
 
             MetaHandler.write_dir(os.path.join(path, line, model), meta)
-    print("Done")
