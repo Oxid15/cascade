@@ -91,9 +91,9 @@ class SingleLineRepo(Repo):
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
-        self._root = line.get_root()
+        self._root = os.path.dirname(line.get_root())
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(self._root)[-1]: {"args": [], "kwargs": dict()}}
+        self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
         self._line = line
 
     def __getitem__(self, key: str) -> ModelLine:
@@ -179,7 +179,7 @@ class ModelRepo(Repo, TraceableOnDisk):
 
         os.makedirs(self._root, exist_ok=True)
         self._lines = {
-            os.path.join(self._root, name): {"args": [], "kwargs": dict()}
+            name: {"args": [], "kwargs": dict()}
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))
         }
