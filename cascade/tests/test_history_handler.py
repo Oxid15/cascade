@@ -66,3 +66,4 @@ def test_get_state(tmp_path):
 
     assert hl.get(0) == meta1
     assert hl.get(1) == meta2
+    assert len(hl) == 2
