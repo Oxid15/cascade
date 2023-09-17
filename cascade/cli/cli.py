@@ -192,10 +192,10 @@ def comment_ls(ctx):
             click.echo(f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
 
 
-@comment.command("del")
+@comment.command("rm")
 @click.pass_context
 @click.argument("id")
-def comment_del(ctx, id):
+def comment_rm(ctx, id):
     if not ctx.obj.get("meta"):
         return
 
@@ -204,7 +204,7 @@ def comment_del(ctx, id):
     tr = Traceable()
     tr.from_meta(ctx.obj["meta"][0])
     tr.remove_comment(id)
-    MetaHandler.write(ctx.obj["cwd"], tr.get_meta())
+    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @cli.group
@@ -214,6 +214,7 @@ def tag(ctx):
     Manage tags
     """
     pass
+
 
 @cli.command('migrate')
 @click.pass_context
@@ -229,6 +230,22 @@ def migrate(ctx):
     from cascade.base.utils import migrate_repo_v0_13
 
     migrate_repo_v0_13(ctx.obj.get("cwd"))
+
+
+
+@cli.group("artifact")
+@click.pass_context
+def artifact(ctx):
+    """
+    Manage artifacts
+    """
+
+
+@artifact.command("rm")
+@click.pass_context
+def artifact_rm(ctx):
+    if ctx.obj["type"] != "model":
+        click.echo(f"Cannot remove an artifact from {ctx.obj['type']}")
 
 
 
