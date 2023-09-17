@@ -166,4 +166,7 @@ def test_model_names(tmp_path):
 
     assert line.get_model_names() == ["00000", "00001", "00002"]
 
+    line = ModelLine(tmp_path)
+    assert line.get_model_names() == ["00000", "00001", "00002"]
+
 # TODO: write test for restoring line from repo

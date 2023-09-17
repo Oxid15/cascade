@@ -87,3 +87,6 @@ def test_repo_names(tmp_path):
     wp.add_repo("2")
 
     assert wp.get_repo_names() == ["0", "1", "2"]
+
+    wp = Workspace(tmp_path)
+    assert wp.get_repo_names() == ["0", "1", "2"]
