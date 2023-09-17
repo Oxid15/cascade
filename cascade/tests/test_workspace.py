@@ -73,5 +73,20 @@ def test_load_model_meta(tmp_path, dummy_model, ext):
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
-    assert "acc" in meta[0]["metrics"]
+    assert meta[0]["metrics"][0]["name"] == "acc"
     assert slug == meta[0]["slug"]
+
+
+def test_repo_names(tmp_path):
+    tmp_path = str(tmp_path)
+
+    wp = Workspace(tmp_path)
+
+    wp.add_repo("0")
+    wp.add_repo("1")
+    wp.add_repo("2")
+
+    assert wp.get_repo_names() == ["0", "1", "2"]
+
+    wp = Workspace(tmp_path)
+    assert wp.get_repo_names() == ["0", "1", "2"]

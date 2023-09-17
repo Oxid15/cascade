@@ -55,7 +55,7 @@ class DummyModel(BasicModel):
         pass
 
     def evaluate(self, *args, **kwargs):
-        self.metrics.update({"acc": np.random.random()})
+        self.add_metric("acc", np.random.random())
 
     def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
         with open(os.path.join(path, "model"), "w") as f:
@@ -73,11 +73,6 @@ class OnesModel(BasicModel):
 
     def fit(self, x, y, *args, **kwargs) -> None:
         pass
-
-
-class ModelComplexMetric(BasicModel):
-    def predict(self, *args, **kwargs):
-        return None
 
 
 def f(x: int) -> int:

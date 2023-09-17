@@ -51,7 +51,7 @@ def test_no_metric(repo_or_line, dummy_model):
 
 def test_empty_model(model_repo, empty_model):
     model_repo.add_line("test", EmptyModel)
-    empty_model.metrics = {"acc": 0.9}
+    empty_model.add_metric("acc", 0.9)
     model_repo["test"].save(empty_model)
 
     hv = HistoryViewer(model_repo)

@@ -22,7 +22,7 @@ import pandas as pd
 from deepdiff import DeepDiff
 from flatten_json import flatten
 
-from ..base import MetaHandler
+from ..base import MetaHandler, ZeroMetaError, MetaIOError
 from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
 from . import MetaViewer, Server
 
@@ -83,6 +83,13 @@ class HistoryViewer(Server):
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
+        meta = MetaHandler.read_dir(repo.get_root())
+        if "cascade_version" not in meta[0]:
+            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
+                               f" metric format. Please, migrate the repo in {repo.get_root()}"
+                               " to be able to use the viewer."
+                               "Use cascade.base.utils.migrate_repo_v0_13")
+
         self._make_table()
 
     def _update(self) -> None:
@@ -93,16 +100,11 @@ class HistoryViewer(Server):
         valid_lines = []
         updated_at = []
         for line in line_names:
-            meta_paths = glob.glob(os.path.join(self._repo.get_root(), line, "meta.*"))
-            if len(meta_paths) > 1:
-                raise RuntimeError(
-                    f"{len(meta_paths)} line meta files was found in "
-                    f"{os.path.join(self._repo.get_root(), line)}. Should be exactly one"
-                )
-            elif len(meta_paths) == 0:
+            try:
+                meta = MetaHandler.read_dir(os.path.join(self._repo.get_root(), line))
+            except ZeroMetaError:
                 continue
 
-            meta = MetaHandler.read(meta_paths[0])
             updated_at.append(meta[0]["updated_at"])
             valid_lines.append(line)
 
@@ -131,6 +133,7 @@ class HistoryViewer(Server):
                 new_meta = {"line": line_name, "model": i}
                 try:
                     meta = view[i][0]
+                    meta["metrics"] = {m["name"]: m["value"] for m in meta["metrics"]}
                     new_meta.update(flatten(meta))
                 except IndexError:
                     pass

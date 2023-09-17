@@ -50,7 +50,7 @@ along with all meta data.
 
     # Your existing experiment here
 
-    model.metrics.update({'f1': random.random()})
+    model.add_metric('f1', random.random())
 
     repo = ModelRepo('classification')
     line = repo.add_line('resnet')

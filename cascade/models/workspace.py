@@ -14,12 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import os
 import warnings
 from typing import Any, List, Literal, Union
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
+from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
 from ..models import ModelRepo
 
 
@@ -46,13 +45,12 @@ class Workspace(TraceableOnDisk):
         )
         self._repo_names = []
         for d in dirs:
-            meta_path = sorted(glob.glob(os.path.join(abs_root, d, "meta.*")))
-            if len(meta_path) == 1:
-                meta = MetaHandler.read(meta_path[0])
+            try:
+                meta = MetaHandler.read_dir(os.path.join(abs_root, d))
                 if meta[0].get("type") == "repo":
                     self._repo_names.append(d)
-            else:
-                warnings.warn(f"Found {len(meta_path)} meta files in {d}")
+            except MetaIOError as e:
+                warnings.warn(str(e))
 
         self._create_meta()
 
@@ -124,3 +122,29 @@ class Workspace(TraceableOnDisk):
         raise FileNotFoundError(
             f"Failed to find the model {model} in the workspace at {self._root}"
         )
+
+    def add_repo(self, name: str, *args: Any, **kwargs: Any) -> ModelRepo:
+        """
+        Creates and adds repo to the Workspace
+
+        Parameters
+        ----------
+        name : str
+            Name of the repo
+
+        Returns
+        -------
+        ModelRepo
+            Created repo
+
+        Raises
+        ------
+        ValueError
+            If the repo already exists
+        """
+        if name in self._repo_names:
+            raise ValueError(f"Repo {name} already exists")
+
+        repo = ModelRepo(os.path.join(self._root, name), *args, **kwargs)
+        self._repo_names.append(name)
+        return repo

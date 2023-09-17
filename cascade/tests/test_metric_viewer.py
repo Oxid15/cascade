@@ -17,15 +17,14 @@ limitations under the License.
 import os
 import sys
 
-import numpy as np
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.meta import MetricViewer
-from cascade.models import BasicModel, ModelRepo
-from cascade.tests.conftest import DummyModel, ModelComplexMetric
+from cascade.models import ModelRepo
+from cascade.tests.conftest import DummyModel
 
 
 def test(repo_or_line, dummy_model):
@@ -90,26 +89,3 @@ def test_get_best_by(tmp_path, ext):
 
     mv = MetricViewer(repo)
     mv.get_best_by("acc")
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_get_best_by_non_sortable(tmp_path, ext):
-    repo = ModelRepo(str(tmp_path), meta_fmt=ext, model_cls=ModelComplexMetric)
-    line = repo.add_line("00001", model_cls=ModelComplexMetric)
-
-    for _ in range(10):
-        model = ModelComplexMetric()
-        model.evaluate(
-            None,
-            None,
-            {
-                "dict_metric": lambda x, y: {
-                    np.random.choice(["a", "b", "c"]): np.random.random()
-                }
-            },
-        )
-        line.save(model, only_meta=True)
-
-    mv = MetricViewer(repo)
-    with pytest.raises(TypeError):
-        mv.get_best_by("dict_metric")

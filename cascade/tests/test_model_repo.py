@@ -363,5 +363,5 @@ def test_load_model_meta(tmp_path, dummy_model, ext):
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
-    assert "acc" in meta[0]["metrics"]
+    assert meta[0]["metrics"][0]["name"] == "acc"
     assert slug == meta[0]["slug"]
