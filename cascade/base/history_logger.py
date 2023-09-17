@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import json
 import os
 from typing import Any
+import pendulum
 from . import MetaIOError
-from .meta_handler import MetaHandler
+from .meta_handler import MetaHandler, CustomEncoder
 from ..version import __version__
 
-from deepdiff import DeepDiff
+from deepdiff import DeepDiff, Delta
 
 
 class HistoryLogger:
@@ -63,37 +65,56 @@ class HistoryLogger:
             except MetaIOError as e:
                 raise MetaIOError(f"Failed to read log file: {self._log_file }") from e
         else:
-            self._log = {"history": [], "cascade_version": __version__, "type": "history"}
-
-    def _reconstruct_state(self, n: int):
-        state = self._log["history"][0]
-        if n == 0:
-            return state
-        else:
-            for i in range(0, n):
-                state = 
-                
+            self._log = {
+                "history": [],
+                "cascade_version": __version__,
+                "type": "history",
+            }
 
     def log(self, obj: Any) -> None:
         """
         Logs the state of the object
+        only if there is the change compared
+        to the latest object state
 
         Parameters
         ----------
         obj: Any
             Meta data of the object
         """
-        if len(self._log["history"]) == 0:
-            self._log["history"].append(obj)
+        if not self._log.get("latest"):
+            self._log["latest"] = obj
         else:
+            diff = DeepDiff(obj, self._log["latest"])
+            delta = Delta(
+                diff, serializer=lambda x: json.dumps(x, cls=CustomEncoder)
+            ).dumps()
+            delta = json.loads(delta)
 
-            diff = DeepDiff()
-            self._log["history"].append(obj)
+            # Log only if any change occured
+            if delta:
+                self._log["history"].append(
+                    {"id": len(self._log["history"]), "time": pendulum.now(tz="UTC"), "delta": delta}
+                )
+                self._log["latest"] = obj
 
         try:
             MetaHandler.write(self._log_file, self._log)
         except MetaIOError as e:
             raise MetaIOError(f"Failed to write log file: {self._log_file}") from e
 
-    def __getitem__(self, key: int):
-        pass
+    def get(self, key: int):
+        """
+        Restore and return object's state by the index
+        """
+        length = len(self._log["history"])
+
+        # Number of states = number of deltas + 1 latest state
+        if key == length:
+            return self._log["latest"]
+        else:
+            state = self._log["latest"]
+            for i in range(length - 1, -1, -1):
+                delta = self._log["history"][i]["delta"]
+                state = state + Delta(delta)
+            return state
