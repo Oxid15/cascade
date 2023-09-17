@@ -119,6 +119,14 @@ def migrate_repo_v0_13(path: str) -> None:
                 print(f"Failed to write meta: {e}")
                 continue
 
-        update_version(os.path.join(path, line), new_version)
-    update_version(path, new_version)
+        try:
+            update_version(os.path.join(path, line), new_version)
+        except MetaIOError as e:
+            print(f"Failed to update line version: {e}")
+
+    try:
+        update_version(path, new_version)
+    except MetaIOError as e:
+        print(f"Faile to update repo version: {e}")
+
     print("Done")
