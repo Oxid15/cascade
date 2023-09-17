@@ -103,11 +103,31 @@ def test_load_model_meta_num(model_line, dummy_model):
     assert meta[0]["metrics"][0]["value"] == dummy_model.metrics[0].value
 
 
-def test_add_model(tmp_path):
+def test_load_artifact_paths(tmp_path, model_line, dummy_model):
+    tmp_path = str(tmp_path)
+    filename = os.path.join(tmp_path, "file.txt")
+    with open(filename, "w") as f:
+        f.write("hello")
+
+    dummy_model.add_file(filename)
+
+    model_line.save(dummy_model)
+
+    res = model_line.load_artifact_paths(0)
+
+    assert "artifacts" in res
+    assert "files" in res
+    assert len(res["artifacts"]) == 1
+    assert len(res["files"]) == 1
+    assert res["artifacts"][0] == os.path.join(model_line.get_root(), "artifacts", "model")
+    assert res["files"][0] == os.path.join(model_line.get_root(), "files", "file.txt")
+
+
+def test_create_model(tmp_path):
     tmp_path = str(tmp_path)
 
     line = ModelLine(tmp_path, model_cls=BasicModel)
-    model = line.add_model(a=0)
+    model = line.create_model(a=0)
     model.add_metric("b", 1)
     model.log()
 
@@ -152,5 +172,21 @@ def test_handle_save_artifact_error(tmp_path):
     meta = MetaHandler.read(os.path.join(tmp_path, "00000", "meta" + default_meta_format))
     assert "errors" in meta[0]
     assert "save_artifact" in meta[0]["errors"]
+
+
+def test_model_names(tmp_path):
+    tmp_path = str(tmp_path)
+
+    line = ModelLine(tmp_path)
+    model = line.create_model()
+
+    line.save(model)
+    line.save(model)
+    line.save(model)
+
+    assert line.get_model_names() == ["00000", "00001", "00002"]
+
+    line = ModelLine(tmp_path)
+    assert line.get_model_names() == ["00000", "00001", "00002"]
 
 # TODO: write test for restoring line from repo

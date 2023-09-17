@@ -122,3 +122,29 @@ class Workspace(TraceableOnDisk):
         raise FileNotFoundError(
             f"Failed to find the model {model} in the workspace at {self._root}"
         )
+
+    def add_repo(self, name: str, *args: Any, **kwargs: Any) -> ModelRepo:
+        """
+        Creates and adds repo to the Workspace
+
+        Parameters
+        ----------
+        name : str
+            Name of the repo
+
+        Returns
+        -------
+        ModelRepo
+            Created repo
+
+        Raises
+        ------
+        ValueError
+            If the repo already exists
+        """
+        if name in self._repo_names:
+            raise ValueError(f"Repo {name} already exists")
+
+        repo = ModelRepo(os.path.join(self._root, name), *args, **kwargs)
+        self._repo_names.append(name)
+        return repo
