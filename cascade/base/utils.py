@@ -94,7 +94,7 @@ def migrate_repo_v0_13(path: str) -> None:
 
     for line in tqdm(repo.get_line_names(), desc=f"Migrating to {new_version}"):
         line_obj = ModelLine(os.path.join(repo.get_root(), line))
-        for model in line_obj.model_names:
+        for model in line_obj.get_model_names():
             try:
                 meta = MetaHandler.read_dir(os.path.join(path, line, model))
             except MetaIOError as e:
