@@ -71,6 +71,9 @@ class HistoryHandler:
                 "type": "history",
             }
 
+    def __len__(self) -> int:
+        return len(self._log["history"]) + 1
+
     def log(self, obj: Any) -> None:
         """
         Logs the state of the object
