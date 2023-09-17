@@ -16,7 +16,7 @@ limitations under the License.
 
 import traceback
 import os
-from typing import Any, Literal, Type, Union, List
+from typing import Any, Literal, Type, Union, List, Dict
 
 import pendulum
 
@@ -146,6 +146,20 @@ class ModelLine(TraceableOnDisk):
                 if slug == slug_from_file:
                     return name
 
+    def _parse_model_name(self, model: Union[str, int]) -> str:
+        if isinstance(model, int):
+            name = self._model_name_by_num(model)
+        elif isinstance(model, str):
+            name = self._find_name_by_slug(model)
+        else:
+            raise TypeError(f"The argument of type {type(model)} is not supported")
+
+        if not name:
+            raise FileNotFoundError(
+                f"Failed to find the model {model} in the line at {self._root}"
+            )
+        return name
+
     def load_model_meta(self, model: Union[str, int]) -> MetaFromFile:
         """
         Loads metadata of a model from disk
@@ -168,19 +182,37 @@ class ModelLine(TraceableOnDisk):
             If found more than one metadata files in the specified
             model folder
         """
-        if isinstance(model, int):
-            name = self._model_name_by_num(model)
-        elif isinstance(model, str):
-            name = self._find_name_by_slug(model)
-        else:
-            raise TypeError(f"The argument of type {type(model)} is not supported")
+        name = self._parse_model_name(model)
+        return self._read_meta_by_name(name)
 
-        if name:
-            return self._read_meta_by_name(name)
-        else:
-            raise FileNotFoundError(
-                f"Failed to find the model {model} in the line at {self._root}"
-            )
+    def load_artifact_paths(self, model: Union[int, str]) -> Dict[str, List[str]]:
+        """
+        Returns full paths to the files and artifacts of the model
+
+        Parameters
+        ----------
+        model : Union[int, str]
+            Model slug or number
+
+        Returns
+        -------
+        Dict[str, List[str]]
+            Lists of files under the keys "artifacts" and "files"
+        """
+        name = self._parse_model_name(model)
+        model_folder = os.path.join(self._root, name)
+
+        result = {
+            "artifacts": [],
+            "files": []
+        }
+        artifact_path = os.path.join(model_folder, "artifacts")
+        if os.path.exists(artifact_path):
+            result["artifacts"] = [os.path.join(self._root, "artifacts", name) for name in os.listdir(artifact_path)]
+        file_path = os.path.join(model_folder, "files")
+        if os.path.exists(file_path):
+            result["files"] = [os.path.join(self._root, "files", name) for name in os.listdir(file_path)]
+        return result
 
     def save(self, model: Model, only_meta: bool = False) -> None:
         """

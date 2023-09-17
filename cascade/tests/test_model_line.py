@@ -103,6 +103,26 @@ def test_load_model_meta_num(model_line, dummy_model):
     assert meta[0]["metrics"][0]["value"] == dummy_model.metrics[0].value
 
 
+def test_load_artifact_paths(tmp_path, model_line, dummy_model):
+    tmp_path = str(tmp_path)
+    filename = os.path.join(tmp_path, "file.txt")
+    with open(filename, "w") as f:
+        f.write("hello")
+
+    dummy_model.add_file(filename)
+
+    model_line.save(dummy_model)
+
+    res = model_line.load_artifact_paths(0)
+
+    assert "artifacts" in res
+    assert "files" in res
+    assert len(res["artifacts"]) == 1
+    assert len(res["files"]) == 1
+    assert res["artifacts"][0] == os.path.join(model_line.get_root(), "artifacts", "model")
+    assert res["files"][0] == os.path.join(model_line.get_root(), "files", "file.txt")
+
+
 def test_create_model(tmp_path):
     tmp_path = str(tmp_path)
 
