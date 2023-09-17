@@ -35,16 +35,34 @@ def test_repo(tmp_path, ext):
 
     assert "history" in obj_from_file
     assert "type" in obj_from_file
-    assert len(obj_from_file["history"]) == 1
+    assert len(obj_from_file["history"]) == 0
     assert obj_from_file["type"] == "history"
-    assert obj_from_file["history"][0]["a"] == 0
 
-    obj["a"] = 1
+    obj = {"a": 1, "b": datetime.datetime.now()}
 
     hl.log(obj)
     obj_from_file = MetaHandler.read(tmp_path)
 
     assert "history" in obj_from_file
     assert "type" in obj_from_file
-    assert len(obj_from_file["history"]) == 2
-    assert obj_from_file["history"][1]["a"] == 1
+    assert len(obj_from_file["history"]) == 1
+    assert obj_from_file["history"][0]["id"] == 0
+
+
+def test_get_state(tmp_path):
+    tmp_path = str(tmp_path)
+    from cascade.base import HistoryLogger
+    from cascade.data import Wrapper, Modifier
+
+    hl = HistoryLogger(os.path.join(tmp_path, "diff_history.yml"))
+
+    ds = Wrapper([1, 2])
+    meta1 = ds.get_meta()
+    hl.log(meta1)
+
+    ds = Modifier(ds)
+    meta2 = ds.get_meta()
+    hl.log(meta2)
+
+    assert hl.get(0) == meta1
+    assert hl.get(1) == meta2
