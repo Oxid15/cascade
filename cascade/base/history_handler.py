@@ -25,15 +25,15 @@ from ..version import __version__
 from deepdiff import DeepDiff, Delta
 
 
-class HistoryLogger:
+class HistoryHandler:
     """
     An interface to log meta into history files
 
     Example
     -------
-    from cascade.base import HistoryLogger
+    from cascade.base import HistoryHandler
     from cascade.data import Wrapper
-    hl = HistoryLogger("wrapper_history_log.yml")
+    hl = HistoryHandler("wrapper_history_log.yml")
     ds = Wrapper([0, 1, 2])
     hl.log(ds.get_meta())
     """

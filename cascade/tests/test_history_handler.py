@@ -19,14 +19,14 @@ import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
-from cascade.base import HistoryLogger, MetaHandler
+from cascade.base import HistoryHandler, MetaHandler
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_repo(tmp_path, ext):
     tmp_path = str(tmp_path)
     tmp_path = os.path.join(tmp_path, "history" + ext)
-    hl = HistoryLogger(tmp_path)
+    hl = HistoryHandler(tmp_path)
 
     obj = {"a": 0, "b": datetime.datetime.now()}
 
@@ -51,10 +51,10 @@ def test_repo(tmp_path, ext):
 
 def test_get_state(tmp_path):
     tmp_path = str(tmp_path)
-    from cascade.base import HistoryLogger
+    from cascade.base import HistoryHandler
     from cascade.data import Wrapper, Modifier
 
-    hl = HistoryLogger(os.path.join(tmp_path, "diff_history.yml"))
+    hl = HistoryHandler(os.path.join(tmp_path, "diff_history.yml"))
 
     ds = Wrapper([1, 2])
     meta1 = ds.get_meta()
