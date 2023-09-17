@@ -81,6 +81,9 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
             return list(obj)
 
+        elif isinstance(obj, deepdiff.DeepDiff):
+            return obj.to_dict()
+
         elif is_dataclass(obj):
             return asdict(obj)
 

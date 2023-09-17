@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Tuple, Union
 
 import pendulum
 
-from ..base import HistoryLogger
+from ..base import HistoryHandler
 
 
 @dataclass
@@ -147,7 +147,7 @@ class DataRegistrator:
     """
 
     def __init__(self, filepath: str) -> None:
-        self._logger = HistoryLogger(filepath)
+        self._logger = HistoryHandler(filepath)
 
     def register(self, card: DataCard) -> None:
         """

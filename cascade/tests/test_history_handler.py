@@ -19,14 +19,14 @@ import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
-from cascade.base import HistoryLogger, MetaHandler
+from cascade.base import HistoryHandler, MetaHandler
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_repo(tmp_path, ext):
     tmp_path = str(tmp_path)
     tmp_path = os.path.join(tmp_path, "history" + ext)
-    hl = HistoryLogger(tmp_path)
+    hl = HistoryHandler(tmp_path)
 
     obj = {"a": 0, "b": datetime.datetime.now()}
 
@@ -35,16 +35,35 @@ def test_repo(tmp_path, ext):
 
     assert "history" in obj_from_file
     assert "type" in obj_from_file
-    assert len(obj_from_file["history"]) == 1
+    assert len(obj_from_file["history"]) == 0
     assert obj_from_file["type"] == "history"
-    assert obj_from_file["history"][0]["a"] == 0
 
-    obj["a"] = 1
+    obj = {"a": 1, "b": datetime.datetime.now()}
 
     hl.log(obj)
     obj_from_file = MetaHandler.read(tmp_path)
 
     assert "history" in obj_from_file
     assert "type" in obj_from_file
-    assert len(obj_from_file["history"]) == 2
-    assert obj_from_file["history"][1]["a"] == 1
+    assert len(obj_from_file["history"]) == 1
+    assert obj_from_file["history"][0]["id"] == 0
+
+
+def test_get_state(tmp_path):
+    tmp_path = str(tmp_path)
+    from cascade.base import HistoryHandler
+    from cascade.data import Wrapper, Modifier
+
+    hl = HistoryHandler(os.path.join(tmp_path, "diff_history.yml"))
+
+    ds = Wrapper([1, 2])
+    meta1 = ds.get_meta()
+    hl.log(meta1)
+
+    ds = Modifier(ds)
+    meta2 = ds.get_meta()
+    hl.log(meta2)
+
+    assert hl.get(0) == meta1
+    assert hl.get(1) == meta2
+    assert len(hl) == 2
