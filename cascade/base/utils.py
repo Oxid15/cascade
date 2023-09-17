@@ -60,7 +60,6 @@ def migrate_repo_v0_13(path: str) -> None:
     from tqdm import tqdm
     from cascade.base import MetaHandler, MetaIOError
     from cascade.models import ModelRepo, ModelLine, Metric, MetricType, SingleLineRepo
-    from cascade.version import __version__
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):
@@ -81,6 +80,8 @@ def migrate_repo_v0_13(path: str) -> None:
                 incompatible[name] = value
         return new_style, incompatible
 
+    new_version = "0.13.0"
+
     root_meta = MetaHandler.read_dir(path)
     if root_meta[0]["type"] == "repo":
         repo = ModelRepo(path)
@@ -91,7 +92,7 @@ def migrate_repo_v0_13(path: str) -> None:
         print(f"Type {root_meta[0]['type']} is not supported")
         return
 
-    for line in tqdm(repo.get_line_names(), desc=f"Migrating to {__version__}"):
+    for line in tqdm(repo.get_line_names(), desc=f"Migrating to {new_version}"):
         line_obj = ModelLine(os.path.join(repo.get_root(), line))
         for model in line_obj.model_names:
             try:
@@ -110,7 +111,7 @@ def migrate_repo_v0_13(path: str) -> None:
                 if incompatible:
                     meta[0]["old_metrics"] = incompatible
 
-            meta[0]["cascade_version"] = __version__
+            meta[0]["cascade_version"] = new_version
 
             try:
                 MetaHandler.write_dir(os.path.join(path, line, model), meta)
@@ -118,6 +119,6 @@ def migrate_repo_v0_13(path: str) -> None:
                 print(f"Failed to write meta: {e}")
                 continue
 
-        update_version(os.path.join(path, line), __version__)
-    update_version(path, __version__)
+        update_version(os.path.join(path, line), new_version)
+    update_version(path, new_version)
     print("Done")
