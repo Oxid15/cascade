@@ -50,6 +50,10 @@ class HistoryHandler:
         if os.path.exists(self._log_file):
             try:
                 self._log = MetaHandler.read(self._log_file)
+                if not self._is_log_compatible(self._log):
+                    raise RuntimeError(f"Log {filepath} is incompatible with history handler"
+                                       f" in cascade {__version__}")
+
                 if isinstance(self._log, list):
                     raise RuntimeError(
                         f"Failed to initialize history logger due to unexpected object"
@@ -70,6 +74,11 @@ class HistoryHandler:
                 "cascade_version": __version__,
                 "type": "history",
             }
+
+    def _is_log_compatible(self, log: Any) -> bool:
+        if log.get("cascade_version"):
+            return True
+        return False
 
     def __len__(self) -> int:
         return len(self._log["history"]) + 1
