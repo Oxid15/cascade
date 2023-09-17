@@ -249,6 +249,7 @@ class MetaHandler:
         else:
             return TextHandler()
 
+    # TODO: template should cover only supported fmts
     @classmethod
     def read_dir(
         cls,
@@ -283,4 +284,36 @@ class MetaHandler:
         elif len(meta_paths) > 1:
             raise MultipleMetaError(f"There are {len(meta_paths)} in {path}")
         else:
-            return cls.read(os.path.join(path, meta_paths[0]))
+            return cls.read(os.path.join(meta_paths[0]))
+
+    @classmethod
+    def _determine_meta_fmt(cls, path: str, template: str) -> Union[str, None]:
+        meta_paths = glob.glob(os.path.join(path, template))
+        if len(meta_paths) == 1:
+            _, ext = os.path.splitext(meta_paths[0])
+            return ext
+
+    @classmethod
+    def write_dir(cls, path: str, obj: Any, overwrite: bool = True, meta_template: str = "meta.*") -> None:
+        """
+        Writes meta to directory without specifying file name
+        
+        Automatically determines extension and overwrites of file exists
+
+        Parameters
+        ----------
+        path : str
+            Directory to write meta
+        obj : Any
+            Meta object
+        overwrite : bool, optional
+            See MetaHandler.write, by default True
+        meta_template : str, optional
+            The template for meta files, by default "meta.*"
+        """
+        ext = cls._determine_meta_fmt(path, meta_template)
+        
+        if not ext:
+            ext = default_meta_format
+            
+        cls.write(os.path.join(path, "meta" + ext), obj, overwrite=overwrite)

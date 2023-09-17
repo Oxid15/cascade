@@ -23,6 +23,7 @@ import pendulum
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
 from ..base.utils import generate_slug
 from .model import Model
+from ..version import __version__
 
 
 class ModelLine(TraceableOnDisk):
@@ -58,8 +59,8 @@ class ModelLine(TraceableOnDisk):
 
         super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
-        self._root = folder
-        self._model_names = []
+        self._root = os.path.abspath(folder)
+        self.model_names = []
         self._slug2name_cache = dict()
         if os.path.exists(self._root):
             self._load_model_names()
@@ -272,6 +273,7 @@ class ModelLine(TraceableOnDisk):
                 "model_cls": repr(self._model_cls),
                 "len": len(self),
                 "type": "line",
+                "cascade_version": __version__
             }
         )
         return meta

@@ -21,7 +21,8 @@ import pandas as pd
 import pendulum
 from flatten_json import flatten
 
-from ..models import Model, ModelLine, ModelRepo, Repo, SingleLineRepo
+from ..base import MetaHandler
+from ..models import Model, ModelLine, Repo, SingleLineRepo
 from . import MetaViewer, Server
 
 
@@ -46,6 +47,14 @@ class MetricViewer:
         """
         if isinstance(repo, ModelLine):
             repo = SingleLineRepo(repo)
+
+        meta = MetaHandler.read_dir(repo.get_root())
+        if "cascade_version" not in meta[0]:
+            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
+                               f" metric format. Please, migrate the repo in {repo.get_root()}"
+                               " to be able to use the viewer."
+                               "Use cascade.base.utils.migrate_repo_v0_13")
+
         self._repo = repo
         self._scope = scope
         self._metrics = []

@@ -24,6 +24,7 @@ from ..base import (
 )
 from .model import Model
 from .model_line import ModelLine
+from ..version import __version__
 
 
 class Repo(Traceable):
@@ -62,7 +63,14 @@ class Repo(Traceable):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0].update({"root": self._root, "len": len(self), "type": "repo"})
+        meta[0].update(
+            {
+                "root": self._root,
+                "len": len(self),
+                "type": "repo",
+                "cascade_version": __version__,
+            }
+        )
         return meta
 
     def get_line_names(self) -> List[str]:
@@ -83,9 +91,9 @@ class SingleLineRepo(Repo):
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
-        self._root = line.get_root()
+        self._root = os.path.dirname(line.get_root())
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(self._root)[-1]: {"args": [], "kwargs": dict()}}
+        self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
         self._line = line
 
     def __getitem__(self, key: str) -> ModelLine:
@@ -93,7 +101,8 @@ class SingleLineRepo(Repo):
             return self._line
         else:
             raise KeyError(
-                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist")
+                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist"
+            )
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._root}"
@@ -180,10 +189,7 @@ class ModelRepo(Repo, TraceableOnDisk):
                 name = line["name"]
                 del line["name"]
 
-                self._lines[name] = {
-                    "args": [],
-                    "kwargs": line
-                }
+                self._lines[name] = {"args": [], "kwargs": line}
 
         self._create_meta()
 
@@ -228,13 +234,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
 
-        self._lines[name] = {
-            "args": args,
-            "kwargs": {
-                "meta_fmt": meta_fmt,
-                **kwargs
-            }
-        }
+        self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
         self._update_meta()
 
         line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
@@ -297,7 +297,11 @@ class ModelRepo(Repo, TraceableOnDisk):
 
         for name in self._lines:
             try:
-                line = ModelLine(os.path.join(self._root, name), *self._lines[name]["args"], **self._lines[name]["kwargs"])
+                line = ModelLine(
+                    os.path.join(self._root, name),
+                    *self._lines[name]["args"],
+                    **self._lines[name]["kwargs"],
+                )
                 meta = line.load_model_meta(model)
             except FileNotFoundError:
                 continue
@@ -313,10 +317,7 @@ class ModelRepo(Repo, TraceableOnDisk):
                 os.path.isdir(os.path.join(self._root, name))
                 and name not in self._lines
             ):
-                self._lines[name] = {
-                    "args": [],
-                    "kwargs": dict()
-                }
+                self._lines[name] = {"args": [], "kwargs": dict()}
 
 
 class ModelRepoConcatenator(Repo):
