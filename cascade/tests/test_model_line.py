@@ -76,7 +76,7 @@ def test_same_index_check(model_line):
     assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
 
 
-#TODO: write tests for exceptions
+# TODO: write tests for exceptions
 def test_load_model_meta_slug(model_line, dummy_model):
     dummy_model.evaluate()
     model_line.save(dummy_model)
@@ -119,16 +119,16 @@ def test_add_model(tmp_path):
 
 def test_handle_save_error(tmp_path):
     tmp_path = str(tmp_path)
-    
+
     class Fail2SaveModel(BasicModel):
         def save(self, path: str) -> None:
             raise RuntimeError()
-    
+
     line = ModelLine(tmp_path, Fail2SaveModel)
-    
+
     model = Fail2SaveModel()
     line.save(model)
-    
+
     meta = MetaHandler.read(os.path.join(tmp_path, "00000", "meta" + default_meta_format))
     assert "errors" in meta[0]
     assert "save" in meta[0]["errors"]
@@ -136,19 +136,21 @@ def test_handle_save_error(tmp_path):
 
 def test_handle_save_artifact_error(tmp_path):
     tmp_path = str(tmp_path)
-    
+
     class Fail2SaveArtModel(BasicModel):
         def save_artifact(self, path: str) -> None:
             raise RuntimeError()
-        
+
         def save(self, path: str) -> None:
             pass
-    
+
     line = ModelLine(tmp_path, Fail2SaveArtModel)
-    
+
     model = Fail2SaveArtModel()
     line.save(model)
 
     meta = MetaHandler.read(os.path.join(tmp_path, "00000", "meta" + default_meta_format))
     assert "errors" in meta[0]
     assert "save_artifact" in meta[0]["errors"]
+
+# TODO: write test for restoring line from repo

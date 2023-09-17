@@ -284,7 +284,7 @@ class MetaHandler:
         elif len(meta_paths) > 1:
             raise MultipleMetaError(f"There are {len(meta_paths)} in {path}")
         else:
-            return cls.read(os.path.join(path, meta_paths[0]))
+            return cls.read(os.path.join(meta_paths[0]))
 
     @classmethod
     def _determine_meta_fmt(cls, path: str, template: str) -> Union[str, None]:

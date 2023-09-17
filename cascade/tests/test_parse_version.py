@@ -14,10 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .basic_model import BasicModel, BasicModelModifier
-from .metric import Metric, MetricType
-from .model import Model, ModelModifier
-from .model_line import ModelLine
-from .model_repo import ModelRepo, Repo, SingleLineRepo
-from .trainer import BasicTrainer, Trainer
-from .workspace import Workspace
+
+import os
+import sys
+
+import pytest
+
+MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(MODULE_PATH))
+
+from cascade.base.utils import parse_version
+
+
+@pytest.mark.parametrize(
+    "ver,result", [
+        ("0.13.0", (0, 13, 0)),
+        ("0.13.0-alpha", (0, 13, 0)),
+        ("0.0.0", (0, 0, 0)),
+        ("0.0.100", (0, 0, 100)),
+        ("100.99990.100", (100, 99990, 100)),
+        ("v100.99990.100", (100, 99990, 100)),
+    ]
+)
+def test(ver, result):
+    assert parse_version(ver) == result
