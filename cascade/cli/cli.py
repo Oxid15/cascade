@@ -17,11 +17,10 @@ limitations under the License.
 
 import glob
 import os
-
 import click
 
 from ..version import __version__
-from ..base import MetaHandler, supported_meta_formats
+from ..base import MetaHandler, MetaIOError
 
 
 def infer_container(type: str, cwd: str):
@@ -48,25 +47,16 @@ def cli(ctx):
 
     current_dir_full = os.getcwd()
     ctx.obj["cwd"] = current_dir_full
-    # current_dir = os.path.split(current_dir_full)[-1]
-    # click.echo(f"Cascade {__version__} in ./{current_dir}")
-    meta_paths = glob.glob(os.path.join(current_dir_full, "meta.*"))
-    meta_paths = [
-        path
-        for path in meta_paths
-        if os.path.splitext(path)[-1] in supported_meta_formats
-    ]
+    current_dir = os.path.split(current_dir_full)[-1]
+    click.echo(f"Cascade {__version__} in ./{current_dir}")
 
-    if len(meta_paths) == 0:
-        click.echo("It seems that there is no cascade objects here")
-    elif len(meta_paths) == 1:
-        meta = MetaHandler.read(meta_paths[0])
+    try:
+        meta = MetaHandler.read_dir(current_dir_full)
         ctx.obj["meta"] = meta
-        ctx.obj["meta_path"] = meta_paths[0]
         ctx.obj["type"] = meta[0].get("type")
         ctx.obj["len"] = meta[0].get("len")
-    else:
-        click.echo(f"There are {len(meta_paths)} meta objects here")
+    except MetaIOError as e:
+        click.echo(e)
 
 
 @cli.command
@@ -184,7 +174,7 @@ def comment_add(ctx, c):
     tr = Traceable()
     tr.from_meta(ctx.obj["meta"][0])
     tr.comment(c)
-    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @comment.command("ls")
@@ -214,7 +204,7 @@ def comment_del(ctx, id):
     tr = Traceable()
     tr.from_meta(ctx.obj["meta"][0])
     tr.remove_comment(id)
-    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    MetaHandler.write(ctx.obj["cwd"], tr.get_meta())
 
 
 @cli.group
@@ -224,6 +214,22 @@ def tag(ctx):
     Manage tags
     """
     pass
+
+@cli.command('migrate')
+@click.pass_context
+def migrate(ctx):
+    """
+    Automatic migration of objects to newer cascade versions
+    """
+    supported_types = ["repo", "line"]
+    if not ctx.obj.get("type") in supported_types:
+        click.echo(f"Cannot migrate {ctx.obj['type']}, only {supported_types} are supported")
+        return
+
+    from cascade.base.utils import migrate_repo_v0_13
+
+    migrate_repo_v0_13(ctx.obj.get("cwd"))
+
 
 
 @tag.command("add")

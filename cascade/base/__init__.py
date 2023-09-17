@@ -37,6 +37,18 @@ This type described what we can get when reading previously written to meta obje
 MetaFromFile = Union[List[Any], Dict[Any, Any]]
 
 
+class MetaIOError(IOError):
+    pass
+
+
+class ZeroMetaError(MetaIOError):
+    pass
+
+
+class MultipleMetaError(MetaIOError):
+    pass
+
+
 def raise_not_implemented(class_name: str, name: str) -> NoReturn:
     raise NotImplementedError(
         f"Default {class_name} class '{name}()' "

@@ -24,6 +24,7 @@ import pendulum
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
 from ..base.utils import generate_slug
 from .model import Model
+from ..version import __version__
 
 
 class ModelLine(TraceableOnDisk):
@@ -59,7 +60,7 @@ class ModelLine(TraceableOnDisk):
 
         super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
-        self._root = folder
+        self._root = os.path.abspath(folder)
         self.model_names = []
         self._slug2name_cache = dict()
         if os.path.exists(self._root):
@@ -125,13 +126,12 @@ class ModelLine(TraceableOnDisk):
 
         return model
 
+    def _model_name_by_num(self, num: int):
+        return f"{num:0>5d}"
+
     def _read_meta_by_name(self, name: str) -> MetaFromFile:
-        paths = glob.glob(os.path.join(self._root, name, "meta.*"))
-        if len(paths) == 1:
-            return MetaHandler.read(paths[0])
-        else:
-            raise RuntimeError(
-                f"{len(paths)} meta files in {os.path.join(self._root, name)}")
+        meta = MetaHandler.read_dir(os.path.join(self._root, name))
+        return meta
 
     def _find_name_by_slug(self, slug: str) -> Union[str, None]:
         if slug in self._slug2name_cache:
@@ -147,14 +147,14 @@ class ModelLine(TraceableOnDisk):
                 if slug == slug_from_file:
                     return name
 
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_model_meta(self, model: Union[str, int]) -> MetaFromFile:
         """
         Loads metadata of a model from disk
 
         Parameters
         ----------
-        model : str
-            model slug e.g. `fair_squid_of_bliss`
+        model : Union[str, int]
+            model slug e.g. `fair_squid_of_bliss` or number
 
         Returns
         -------
@@ -169,7 +169,13 @@ class ModelLine(TraceableOnDisk):
             If found more than one metadata files in the specified
             model folder
         """
-        name = self._find_name_by_slug(model)
+        if isinstance(model, int):
+            name = self._model_name_by_num(model)
+        elif isinstance(model, str):
+            name = self._find_name_by_slug(model)
+        else:
+            raise TypeError(f"The argument of type {type(model)} is not supported")
+
         if name:
             return self._read_meta_by_name(name)
         else:
@@ -205,7 +211,7 @@ class ModelLine(TraceableOnDisk):
 
         # Should check just in case
         while True:
-            folder_name = f"{idx:0>5d}"
+            folder_name = self._model_name_by_num(idx)
             model_folder = os.path.join(self._root, folder_name)
             if os.path.exists(model_folder):
                 idx += 1
@@ -268,6 +274,7 @@ class ModelLine(TraceableOnDisk):
                 "model_cls": repr(self._model_cls),
                 "len": len(self),
                 "type": "line",
+                "cascade_version": __version__
             }
         )
         return meta
@@ -288,5 +295,5 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls(*args, **kwargs)
         model.add_log_callback(self._save_only_meta)
-        self.save(model, only_meta=True) # TODO: why?
+        # self.save(model, only_meta=True)
         return model
