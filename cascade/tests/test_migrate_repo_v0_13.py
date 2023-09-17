@@ -52,6 +52,13 @@ def test_scalars_only(tmp_path):
     assert meta[0]["metrics"][0]["name"] == "acc"
     assert meta[0]["metrics"][0]["value"] == 0.55
     assert "old_metrics" not in meta[0]
+    assert "cascade_version" in meta[0]
+
+    meta_line = MetaHandler.read_dir(os.path.join(tmp_path, "00000"))
+    assert "cascade_version" in meta_line[0]
+
+    meta_repo = MetaHandler.read_dir(tmp_path)
+    assert "cascade_version" in meta_repo[0]
 
 
 def test_complex_metrics(tmp_path):
@@ -84,3 +91,9 @@ def test_complex_metrics(tmp_path):
     assert meta[0]["metrics"][0]["value"] == 0.55
     assert "old_metrics" in meta[0]
     assert meta[0]["old_metrics"] == {"complex": model.metrics["complex"]}
+
+    meta_line = MetaHandler.read_dir(os.path.join(tmp_path, "00000"))
+    assert "cascade_version" in meta_line[0]
+
+    meta_repo = MetaHandler.read_dir(tmp_path)
+    assert "cascade_version" in meta_repo[0]
