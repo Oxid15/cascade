@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 from typing import Any
-
+from . import MetaIOError
 from .meta_handler import MetaHandler
 from ..version import __version__
 
@@ -60,8 +60,8 @@ class HistoryLogger:
                         f' format - "history" key is missing.'
                         f" Check your {self._log_file} file"
                     )
-            except IOError as e:
-                raise IOError(f"Failed to read log file: {self._log_file }") from e
+            except MetaIOError as e:
+                raise MetaIOError(f"Failed to read log file: {self._log_file }") from e
         else:
             self._log = {"history": [], "cascade_version": __version__, "type": "history"}
 
@@ -92,8 +92,8 @@ class HistoryLogger:
 
         try:
             MetaHandler.write(self._log_file, self._log)
-        except IOError as e:
-            raise IOError(f"Failed to write log file: {self._log_file}") from e
+        except MetaIOError as e:
+            raise MetaIOError(f"Failed to write log file: {self._log_file}") from e
 
     def __getitem__(self, key: int):
         pass
