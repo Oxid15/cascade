@@ -215,9 +215,9 @@ def migrate(ctx):
     """
     Automatic migration of objects to newer cascade versions
     """
-
-    if not ctx.obj.get("type") in ["repo", "line"]:
-        click.echo(f"Can migrate only on the repo scale, got {ctx.obj['type']}")
+    supported_types = ["repo", "line"]
+    if not ctx.obj.get("type") in supported_types:
+        click.echo(f"Cannot migrate {ctx.obj['type']}, only {supported_types} are supported")
         return
 
     from cascade.base.utils import migrate_repo_v0_13

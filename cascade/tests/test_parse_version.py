@@ -37,7 +37,4 @@ from cascade.base.utils import parse_version
     ]
 )
 def test(ver, result):
-    assert parse_version([{"cascade_version": ver}]) == result
-
-    # When no version_key
-    assert parse_version([{}]) is None
+    assert parse_version(ver) == result
