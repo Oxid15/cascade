@@ -153,4 +153,17 @@ def test_handle_save_artifact_error(tmp_path):
     assert "errors" in meta[0]
     assert "save_artifact" in meta[0]["errors"]
 
+
+def test_model_names(tmp_path):
+    tmp_path = str(tmp_path)
+
+    line = ModelLine(tmp_path)
+    model = line.create_model()
+
+    line.save(model)
+    line.save(model)
+    line.save(model)
+
+    assert line.get_model_names() == ["00000", "00001", "00002"]
+
 # TODO: write test for restoring line from repo
