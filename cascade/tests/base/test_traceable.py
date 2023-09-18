@@ -189,11 +189,11 @@ def test_links():
 
     assert tr.links[2].meta is not None
 
-    tr.remove_link("0")
+    tr.remove_link("1")
     assert len(tr.links) == 2
 
     with pytest.raises(ValueError):
-        tr.remove_link("0")
+        tr.remove_link("1")
 
 
 def test_from_meta():
