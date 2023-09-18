@@ -1,28 +1,24 @@
 Welcome to Cascade!
 ###################
 
-ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development more fast.
-  
-This project is an attempt to build a bundle of tools for ML-Engineer, certain standards and guides for 
-workflow, a set of templates for typical tasks.
+Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
 
 Who could find it useful
 ************************
-Small and fast-prototyping ML-teams and especially single ML developers
-could use it as a tradeoff between total absence of any MLOps 
-framework and demanding enterprise solutions.
+The slope of adopting MLOps platforms can sometimes be too steep for small teams.
+However, they can still benefit from MLOps practices integrated into the workflow.
+Cascade offers the solution that enables those features for small projects while demanding little.
 
 Key Principles
 **************
-* Elegancy - ML-pipelines code should be about ML with minimum meta-code
-* Agility - it should be easy to build new prototypes and integrate existing project with Cascade
-* Reusability - code should have an ability to be reused in similar projects with little or no effort
+* Elegancy - ML code should be about ML with minimum meta-code
+* Agility - it should be easy to build prototypes and integrate existing project with Cascade
+* Reusability - code should have an ability to be reused in similar projects
 * Traceability - everything should have meta data
 
 Introduction
 ************
-Cascade is built for small teams and individuals and does not require any
-complex setups. To start use it you just need to install the python package.
+Cascade does not require any complex setups. To start use it you just need to install the python package.
 
 Installation
 ------------
@@ -35,7 +31,9 @@ More info on installation can be found in :ref:`/quickstart.rst` page.
 
 Track your first experiment
 ---------------------------
-Integration of Cascade in your existing workflow can be at different levels.
+Cascade is built to be modular and flexible so that integration of Cascade
+in your existing workflow could become gradual.
+
 The simplest case is the experiment tracking - store your models structured
 along with all meta data.
 
@@ -77,16 +75,24 @@ What is saved as default meta data in ``classification/resnet/00000/meta.json``
 
     [
         {
+            "comments": [],
+            "created_at": "2023-09-18T19:43:48.146504+00:00",
+            "description": null,
+            "links": [],
+            "metrics": [{"created_at": "2023-09-18T19:44:39.853785+00:00",
+                        "dataset": null,
+                        "direction": null,
+                        "interval": null,
+                        "name": "f1",
+                        "split": null,
+                        "value": 0.45756550190760725}],
             "name": "cascade.models.model.Model",
-            "created_at": "2023-06-12T09:49:56.741950+00:00",
-            "metrics": {
-                "f1": 0.4956132247067879
-            },
-            "params": {
-                "learning_rate": 1e-10
-            },
-            "type": "model",
-            "saved_at": "2023-06-12T09:55:15.865675+00:00"
+            "params": {"learning_rate": 1e-10},
+            "path": "/home/ilia/classification/resnet/00000",
+            "saved_at": "2023-09-18T19:46:00.099433+00:00",
+            "slug": "perky_awesome_coua",
+            "tags": [],
+            "type": "model"
         }
     ]
 
@@ -103,7 +109,10 @@ proportional to the role clean and well prepared data plays in the final
 performance of ML solution.
 
 This is where Datasets come in. Consider this toy-example where the data would be
-a sequence of digits
+a sequence of digits.
+
+Cascade offers a library of useful default datasets and modifiers along with
+a modular paradigm of independent pipeline steps as modifiers.
 
 .. code-block:: python
 
@@ -111,17 +120,13 @@ a sequence of digits
 
 
     ds = cdd.Wrapper([0, 1, 2, 3, 4])
-
     ds = cdd.ApplyModifier(ds, lambda x: x**2)
-    ds = cdd.RandomSampler(ds)
-    train_ds, test_ds = cdd.split(ds, 0.8)
 
-In this example our data goes through three stages that are defined
-(and will not be computed until accessed) above.
+In this example our data goes through three stages that are defined above.
+The pipeline is defined in a declarative way and each step will be executed as the
+particular item requested.
 
-Data is squared, randomly resampled and then divided into train and test sets.
-
-
+Though the main feature of datasets is their metadata.
 To get metadata of an object you do just:
 
 .. code-block:: python
@@ -132,25 +137,23 @@ To get metadata of an object you do just:
     
     [
         {
-            "len": 4,
-            "name": "cascade.data.range_sampler.RangeSampler",
-            "type": "dataset"
+            'comments': [],
+            'description': None,
+            'len': 5,
+            'links': [],
+            'name': 'cascade.data.apply_modifier.ApplyModifier',
+            'tags': [],
+            'type': 'dataset'
         },
         {
-            "len": 5,
-            "name": "cascade.data.random_sampler.RandomSampler",
-            "type": "dataset"
-        },
-        {
-            "len": 5,
-            "name": "cascade.data.apply_modifier.ApplyModifier",
-            "type": "dataset"
-        },
-        {
-            "len": 5,
-            "name": "cascade.data.dataset.Wrapper",
-            "obj_type": "<class 'list'>",
-            "type": "dataset"
+            'comments': [],
+            'description': None,
+            'len': 5,
+            'links': [],
+            'name': 'cascade.data.dataset.Wrapper',
+            'obj_type': "<class 'list'>",
+            'tags': [],
+            'type': 'dataset'
         }
     ]
 
