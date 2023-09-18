@@ -133,7 +133,16 @@ class HistoryViewer(Server):
                 new_meta = {"line": line_name, "model": i}
                 try:
                     meta = view[i][0]
-                    meta["metrics"] = {m["name"]: m["value"] for m in meta["metrics"]}
+
+                    metrics = dict()
+                    for metric in meta["metrics"]:
+                        name = metric["name"]
+                        for key in ["dataset", "split"]:
+                            part = metric.get(key)
+                            name += "_" + part if part else ""
+                        metrics[name] = metric["value"]
+                    meta["metrics"] = metrics
+
                     new_meta.update(flatten(meta))
                 except IndexError:
                     pass
