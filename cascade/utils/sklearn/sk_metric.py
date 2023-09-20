@@ -36,7 +36,10 @@ METRIC_ALIASES = {
 class SkMetric(Metric):
     def compute(self, *args: Any, **kwargs: Any) -> MetricType:
         try:
-            metric = getattr(metrics, self.name)
+            name = self.name
+            if self.name in METRIC_ALIASES:
+                name = METRIC_ALIASES[self.name]
+            metric = getattr(metrics, name)
         except AttributeError as e:
             raise AttributeError(
                 f"SkMetric accepts only names defined in module sklearn.metrics "
