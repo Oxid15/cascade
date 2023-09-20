@@ -46,4 +46,6 @@ class SkMetric(Metric):
                 f"as the list of aliases: {METRIC_ALIASES}"
             ) from e
 
-        return metric(*args, **kwargs)
+        value = metric(*args, **kwargs)
+        self.value = value
+        return value
