@@ -15,3 +15,4 @@ limitations under the License.
 """
 
 from .sk_model import SkModel
+from .sk_metric import SkMetric
