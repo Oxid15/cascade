@@ -12,6 +12,10 @@ class Metric:
     """
     Base class for every metric, defines the way of computation
     and serves as the value and metadata storage
+
+    Metrics should always be scalar. If your metric returns some
+    complex types like dicts or lists consider using multiple
+    Metric objects.
     """
 
     name: str
