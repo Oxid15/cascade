@@ -28,12 +28,12 @@ def pipeline_run(ds, root):
     MetaValidator(ds, root=root)
 
 
-def test_true(number_dataset, tmp_path):
-    pipeline_run(number_dataset, str(tmp_path))
-    pipeline_run(number_dataset, str(tmp_path))
+def test_true(number_dataset, tmp_path_str):
+    pipeline_run(number_dataset, tmp_path_str)
+    pipeline_run(number_dataset, tmp_path_str)
 
 
-def test_raise(tmp_path):
-    pipeline_run(Wrapper([1, 2, 3, 4, 5]), str(tmp_path))
+def test_raise(tmp_path_str):
+    pipeline_run(Wrapper([1, 2, 3, 4, 5]), tmp_path_str)
     with pytest.raises(DataValidationException):
-        pipeline_run(Wrapper([1, 2, 3, 4, 5, 6]), str(tmp_path))
+        pipeline_run(Wrapper([1, 2, 3, 4, 5, 6]), tmp_path_str)

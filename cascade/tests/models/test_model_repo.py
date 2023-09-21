@@ -23,36 +23,33 @@ from cascade.models import ModelRepo
 from cascade.tests.conftest import DummyModel
 
 
-def test_repo(tmp_path):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path)
+def test_repo(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
     repo.add_line("dummy_1", DummyModel)
     repo.add_line("00001", DummyModel)
 
-    assert os.path.exists(os.path.join(tmp_path, "dummy_1"))
-    assert os.path.exists(os.path.join(tmp_path, "00001"))
+    assert os.path.exists(os.path.join(tmp_path_str, "dummy_1"))
+    assert os.path.exists(os.path.join(tmp_path_str, "00001"))
     assert 2 == len(repo)
 
 
-def test_save_load(tmp_path, dummy_model):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path)
+def test_save_load(tmp_path_str, dummy_model):
+    repo = ModelRepo(tmp_path_str)
     repo.add_line("0", DummyModel)
     repo["0"].save(dummy_model)
 
-    repo = ModelRepo(tmp_path, lines=[dict(name="0", model_cls=DummyModel)])
+    repo = ModelRepo(tmp_path_str, lines=[dict(name="0", model_cls=DummyModel)])
     model = repo["0"][0]
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_overwrite(tmp_path, ext):
-    tmp_path = str(tmp_path)
+def test_overwrite(tmp_path_str, ext):
     # If no overwrite repo will have 4 models
-    repo = ModelRepo(tmp_path, overwrite=True, meta_fmt=ext)
+    repo = ModelRepo(tmp_path_str, overwrite=True, meta_fmt=ext)
     repo.add_line("vgg16", DummyModel)
     repo.add_line("resnet", DummyModel)
 
-    repo = ModelRepo(tmp_path, overwrite=True)
+    repo = ModelRepo(tmp_path_str, overwrite=True)
     repo.add_line("densenet", DummyModel)
     repo.add_line("efficientnet", DummyModel)
     assert 2 == len(repo)
@@ -63,17 +60,15 @@ def test_overwrite(tmp_path, ext):
 # class was the first argument
 # this is not supported and not common for a long time now
 @pytest.mark.skip
-def test_add_line(tmp_path):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path)
+def test_add_line(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
     with pytest.raises(AssertionError):
         repo.add_line(DummyModel, "vgg16")  # wrong argument order
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_reusage(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+def test_reusage(tmp_path_str, ext):
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
     repo.add_line("vgg16", DummyModel)
 
     model = DummyModel()
@@ -81,15 +76,14 @@ def test_reusage(tmp_path, ext):
 
     # some time...
 
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
     repo.add_line("vgg16", DummyModel)
     assert len(repo["vgg16"]) == 1
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_reusage_init_alias(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+def test_reusage_init_alias(tmp_path_str, ext):
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
 
     repo.add_line("vgg16", DummyModel)
 
@@ -99,36 +93,34 @@ def test_reusage_init_alias(tmp_path, ext):
     # some time...
 
     repo = ModelRepo(
-        tmp_path, lines=[dict(name="vgg16", model_cls=DummyModel)], meta_fmt=ext
+        tmp_path_str, lines=[dict(name="vgg16", model_cls=DummyModel)], meta_fmt=ext
     )
     assert len(repo["vgg16"]) == 1
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_meta(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+def test_meta(tmp_path_str, ext):
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
     repo.add_line("00000", DummyModel)
     repo.add_line("00001", DummyModel)
 
     meta = repo.get_meta()
     assert meta[0]["len"] == 2
 
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
     repo.add_line("00002", DummyModel)
 
     meta = repo.get_meta()
     assert meta[0]["len"] == 3
 
 
-def test_add(tmp_path):
-    tmp_path = str(tmp_path)
+def test_add(tmp_path_str):
 
-    repo_1 = ModelRepo(os.path.join(tmp_path, "repo_1"))
+    repo_1 = ModelRepo(os.path.join(tmp_path_str, "repo_1"))
     repo_1.add_line("line_1", DummyModel)
     repo_1["line_1"].save(DummyModel())
 
-    repo_2 = ModelRepo(os.path.join(tmp_path, "repo_2"))
+    repo_2 = ModelRepo(os.path.join(tmp_path_str, "repo_2"))
     repo_2.add_line("line_1", DummyModel)
     repo_2.add_line("line_2", DummyModel)
     # repo_2['line_2'].save(DummyModel())
@@ -151,9 +143,8 @@ def test_add(tmp_path):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_missing_repo_meta(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo_path = os.path.join(tmp_path, "repo")
+def test_missing_repo_meta(tmp_path_str, ext):
+    repo_path = os.path.join(tmp_path_str, "repo")
     repo = ModelRepo(repo_path, meta_fmt=ext)
     repo.add_line("0", DummyModel)
 
@@ -172,9 +163,8 @@ def test_missing_repo_meta(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_missing_line_meta(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo_path = os.path.join(tmp_path, "repo")
+def test_missing_line_meta(tmp_path_str, ext):
+    repo_path = os.path.join(tmp_path_str, "repo")
     repo = ModelRepo(repo_path, meta_fmt=ext)
     repo.add_line("0", DummyModel)
 
@@ -193,9 +183,8 @@ def test_missing_line_meta(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_missing_model_meta(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo_path = os.path.join(tmp_path, "repo")
+def test_missing_model_meta(tmp_path_str, ext):
+    repo_path = os.path.join(tmp_path_str, "repo")
     repo = ModelRepo(repo_path, meta_fmt=ext)
     repo.add_line("0", DummyModel)
 
@@ -214,9 +203,8 @@ def test_missing_model_meta(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_failed_repo_meta(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo_path = os.path.join(tmp_path, "repo")
+def test_failed_repo_meta(tmp_path_str, ext):
+    repo_path = os.path.join(tmp_path_str, "repo")
     repo = ModelRepo(repo_path, meta_fmt=ext)
     repo.add_line("0", DummyModel)
 
@@ -237,9 +225,8 @@ def test_failed_repo_meta(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_failed_line_meta(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo_path = os.path.join(tmp_path, "repo")
+def test_failed_line_meta(tmp_path_str, ext):
+    repo_path = os.path.join(tmp_path_str, "repo")
     repo = ModelRepo(repo_path, meta_fmt=ext)
     repo.add_line("0", DummyModel)
 
@@ -260,9 +247,8 @@ def test_failed_line_meta(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_failed_model_meta(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo_path = os.path.join(tmp_path, "repo")
+def test_failed_model_meta(tmp_path_str, ext):
+    repo_path = os.path.join(tmp_path_str, "repo")
     repo = ModelRepo(repo_path, meta_fmt=ext)
     repo.add_line("0", DummyModel)
 
@@ -283,9 +269,8 @@ def test_failed_model_meta(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_get_line_names(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+def test_get_line_names(tmp_path_str, ext):
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
     repo.add_line("a")
     repo.add_line("b")
 
@@ -293,9 +278,8 @@ def test_get_line_names(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_integer_indices(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+def test_integer_indices(tmp_path_str, ext):
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
     first_line = repo.add_line("a")
     last_line = repo.add_line("b")
 
@@ -304,8 +288,8 @@ def test_integer_indices(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_auto_line_name(tmp_path, ext):
-    repo = ModelRepo(str(tmp_path), meta_fmt=ext)
+def test_auto_line_name(tmp_path_str, ext):
+    repo = ModelRepo(str(tmp_path_str), meta_fmt=ext)
     repo.add_line()
     repo.add_line("test")
     repo.add_line()
@@ -315,7 +299,7 @@ def test_auto_line_name(tmp_path, ext):
 
     assert names == ["00000", "test", "00002", "00003"]
 
-    repo = ModelRepo(str(tmp_path), meta_fmt=ext)
+    repo = ModelRepo(str(tmp_path_str), meta_fmt=ext)
 
     names = repo.get_line_names()
 
@@ -323,32 +307,29 @@ def test_auto_line_name(tmp_path, ext):
 
 
 pytest.mark.skip
-def test_no_logging(tmp_path):
-    tmp_path = str(tmp_path)
-    ModelRepo(tmp_path, log_history=False)
+def test_no_logging(tmp_path_str):
+    ModelRepo(tmp_path_str, log_history=False)
 
-    metas = glob.glob(os.path.join(tmp_path, "history.*"))
+    metas = glob.glob(os.path.join(tmp_path_str, "history.*"))
 
     assert len(metas) == 0
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_change_of_format(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    ModelRepo(tmp_path, meta_fmt=ext)
+def test_change_of_format(tmp_path_str, ext):
+    ModelRepo(tmp_path_str, meta_fmt=ext)
 
-    assert os.path.exists(os.path.join(tmp_path, "meta" + ext))
+    assert os.path.exists(os.path.join(tmp_path_str, "meta" + ext))
 
-    ModelRepo(tmp_path)
+    ModelRepo(tmp_path_str)
 
     # Check that no other meta is created
-    assert len(glob.glob(os.path.join(tmp_path, "meta.*"))) == 1
+    assert len(glob.glob(os.path.join(tmp_path_str, "meta.*"))) == 1
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_load_model_meta(tmp_path, dummy_model, ext):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path, meta_fmt=ext)
+def test_load_model_meta(tmp_path_str, dummy_model, ext):
+    repo = ModelRepo(tmp_path_str, meta_fmt=ext)
     repo.add_line()
     repo.add_line()
     line = repo.add_line()

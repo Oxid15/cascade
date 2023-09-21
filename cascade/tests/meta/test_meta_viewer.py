@@ -27,17 +27,16 @@ from cascade.models import ModelRepo
 from cascade.tests import DummyModel
 
 
-def test(tmp_path):
-    tmp_path = str(tmp_path)
-    os.mkdir(os.path.join(tmp_path, "model"))
+def test(tmp_path_str):
+    os.mkdir(os.path.join(tmp_path_str, "model"))
 
     # Write the file with pure json
-    with open(os.path.join(tmp_path, "test0.json"), "w") as f:
+    with open(os.path.join(tmp_path_str, "test0.json"), "w") as f:
         json.dump({"name": "test0"}, f)
 
-    MetaHandler.write(os.path.join(tmp_path, "model", "test1.json"), {"name": "test1"})
+    MetaHandler.write(os.path.join(tmp_path_str, "model", "test1.json"), {"name": "test1"})
 
-    mev = MetaViewer(tmp_path)
+    mev = MetaViewer(tmp_path_str)
 
     assert len(mev) == 2
     assert "name" in mev[0]
@@ -49,16 +48,15 @@ def test(tmp_path):
     assert mev[1]["name"] == "test0"
 
 
-def test_order(tmp_path):
-    tmp_path = str(tmp_path)
-    repo = ModelRepo(tmp_path)
+def test_order(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
     repo.add_line("line1", DummyModel)
 
     for i in range(3):
         model = DummyModel(real_num=i)
         repo["line1"].save(model)
 
-    mev = MetaViewer(tmp_path)
+    mev = MetaViewer(tmp_path_str)
     k = 0
 
     # This checks that models were read in exactly same order as they were saved
