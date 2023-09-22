@@ -41,5 +41,5 @@ def test_create(tmp_path):
     ds = TextClassificationFolder(tmp_path)
     meta = ds.get_meta()[0]
 
-    assert meta["size"] == 6
+    assert meta["len"] == 6
     assert len(meta["labels"]) == 3
