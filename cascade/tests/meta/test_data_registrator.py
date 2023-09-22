@@ -37,6 +37,6 @@ def test(tmp_path_str):
     meta = MetaHandler.read(tmp_path)
 
     assert "history" in meta
-    assert len(meta["history"]) == 1
-    assert "name" in meta["history"][0]
-    assert meta["history"][0]["name"] == "name"
+    assert len(meta["history"]) == 0
+    assert "name" in meta["latest"]
+    assert meta["latest"]["name"] == "name"
