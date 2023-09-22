@@ -30,9 +30,7 @@ from cascade.models import BasicModel
 from cascade.utils.sklearn import SkMetric
 
 
-def test(tmp_path):
-    tmp_path = str(tmp_path)
-
+def test():
     model = BasicModel()
     model.predict = lambda x: [0 for _ in range(len(x))]
 

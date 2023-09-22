@@ -73,14 +73,14 @@ def test_many_lines(model_repo, dummy_model):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_missing_model_meta(tmp_path, dummy_model, ext):
-    model_repo = ModelRepo(str(tmp_path))
+def test_missing_model_meta(tmp_path_str, dummy_model, ext):
+    model_repo = ModelRepo(tmp_path_str)
     model_repo.add_line("test", model_cls=DummyModel, meta_fmt=ext)
     dummy_model.evaluate()
     model_repo["test"].save(dummy_model)
     model_repo["test"].save(dummy_model)
 
-    os.remove(os.path.join(tmp_path, "test", "00000", "meta" + ext))
+    os.remove(os.path.join(tmp_path_str, "test", "00000", "meta" + ext))
 
     hv = HistoryViewer(model_repo)
     hv.plot("acc")

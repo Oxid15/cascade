@@ -36,8 +36,8 @@ class AlwaysFailingModel(DummyModel):
         raise RuntimeError()
 
 
-def test_base(tmp_path, model_repo):
-    t = Trainer(str(tmp_path))
+def test_base(tmp_path_str, model_repo):
+    t = Trainer(tmp_path_str)
     meta = t.get_meta()
 
     assert len(meta) == 1
@@ -52,8 +52,8 @@ def test_base(tmp_path, model_repo):
     assert "metrics" in meta[0]
 
 
-def test_basic_trainer(tmp_path):
-    repo = ModelRepo(str(tmp_path))
+def test_basic_trainer(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
     t = BasicTrainer(repo)
 
     model = DummyModel()
@@ -65,8 +65,8 @@ def test_basic_trainer(tmp_path):
     assert len(t.metrics) == 5
 
 
-def test_error_handling(tmp_path):
-    repo = ModelRepo(str(tmp_path))
+def test_error_handling(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
     t = BasicTrainer(repo)
 
     model = AlwaysFailingModel()

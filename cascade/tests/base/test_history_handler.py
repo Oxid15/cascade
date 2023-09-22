@@ -23,9 +23,8 @@ from cascade.base import HistoryHandler, MetaHandler
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_repo(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    tmp_path = os.path.join(tmp_path, "history" + ext)
+def test_repo(tmp_path_str, ext):
+    tmp_path = os.path.join(tmp_path_str, "history" + ext)
     hl = HistoryHandler(tmp_path)
 
     obj = {"a": 0, "b": datetime.datetime.now()}
@@ -49,12 +48,11 @@ def test_repo(tmp_path, ext):
     assert obj_from_file["history"][0]["id"] == 0
 
 
-def test_get_state(tmp_path):
-    tmp_path = str(tmp_path)
+def test_get_state(tmp_path_str):
     from cascade.base import HistoryHandler
     from cascade.data import Wrapper, Modifier
 
-    hl = HistoryHandler(os.path.join(tmp_path, "diff_history.yml"))
+    hl = HistoryHandler(os.path.join(tmp_path_str, "diff_history.yml"))
 
     ds = Wrapper([1, 2])
     meta1 = ds.get_meta()

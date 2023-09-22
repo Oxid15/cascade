@@ -51,16 +51,15 @@ def test_meta(model_line, dummy_model):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_change_of_format(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    ModelLine(tmp_path, meta_fmt=ext)
+def test_change_of_format(tmp_path_str, ext):
+    ModelLine(tmp_path_str, meta_fmt=ext)
 
-    assert os.path.exists(os.path.join(tmp_path, "meta" + ext))
+    assert os.path.exists(os.path.join(tmp_path_str, "meta" + ext))
 
-    ModelLine(tmp_path)
+    ModelLine(tmp_path_str)
 
     # Check that no other meta is created
-    assert len(glob.glob(os.path.join(tmp_path, "meta.*"))) == 1
+    assert len(glob.glob(os.path.join(tmp_path_str, "meta.*"))) == 1
 
 
 def test_same_index_check(model_line):
@@ -103,9 +102,8 @@ def test_load_model_meta_num(model_line, dummy_model):
     assert meta[0]["metrics"][0]["value"] == dummy_model.metrics[0].value
 
 
-def test_load_artifact_paths(tmp_path, model_line, dummy_model):
-    tmp_path = str(tmp_path)
-    filename = os.path.join(tmp_path, "file.txt")
+def test_load_artifact_paths(tmp_path_str, model_line, dummy_model):
+    filename = os.path.join(tmp_path_str, "file.txt")
     with open(filename, "w") as f:
         f.write("hello")
 
@@ -123,10 +121,9 @@ def test_load_artifact_paths(tmp_path, model_line, dummy_model):
     assert res["files"][0] == os.path.join(model_line.get_root(), "files", "file.txt")
 
 
-def test_create_model(tmp_path):
-    tmp_path = str(tmp_path)
+def test_create_model(tmp_path_str):
 
-    line = ModelLine(tmp_path, model_cls=BasicModel)
+    line = ModelLine(tmp_path_str, model_cls=BasicModel)
     model = line.create_model(a=0)
     model.add_metric("b", 1)
     model.log()
@@ -137,25 +134,23 @@ def test_create_model(tmp_path):
     assert len(line) == 1 # Model is saved only on log()
 
 
-def test_handle_save_error(tmp_path):
-    tmp_path = str(tmp_path)
+def test_handle_save_error(tmp_path_str):
 
     class Fail2SaveModel(BasicModel):
         def save(self, path: str) -> None:
             raise RuntimeError()
 
-    line = ModelLine(tmp_path, Fail2SaveModel)
+    line = ModelLine(tmp_path_str, Fail2SaveModel)
 
     model = Fail2SaveModel()
     line.save(model)
 
-    meta = MetaHandler.read(os.path.join(tmp_path, "00000", "meta" + default_meta_format))
+    meta = MetaHandler.read(os.path.join(tmp_path_str, "00000", "meta" + default_meta_format))
     assert "errors" in meta[0]
     assert "save" in meta[0]["errors"]
 
 
-def test_handle_save_artifact_error(tmp_path):
-    tmp_path = str(tmp_path)
+def test_handle_save_artifact_error(tmp_path_str):
 
     class Fail2SaveArtModel(BasicModel):
         def save_artifact(self, path: str) -> None:
@@ -164,20 +159,19 @@ def test_handle_save_artifact_error(tmp_path):
         def save(self, path: str) -> None:
             pass
 
-    line = ModelLine(tmp_path, Fail2SaveArtModel)
+    line = ModelLine(tmp_path_str, Fail2SaveArtModel)
 
     model = Fail2SaveArtModel()
     line.save(model)
 
-    meta = MetaHandler.read(os.path.join(tmp_path, "00000", "meta" + default_meta_format))
+    meta = MetaHandler.read(os.path.join(tmp_path_str, "00000", "meta" + default_meta_format))
     assert "errors" in meta[0]
     assert "save_artifact" in meta[0]["errors"]
 
 
-def test_model_names(tmp_path):
-    tmp_path = str(tmp_path)
+def test_model_names(tmp_path_str):
 
-    line = ModelLine(tmp_path)
+    line = ModelLine(tmp_path_str)
     model = line.create_model()
 
     line.save(model)
@@ -186,7 +180,7 @@ def test_model_names(tmp_path):
 
     assert line.get_model_names() == ["00000", "00001", "00002"]
 
-    line = ModelLine(tmp_path)
+    line = ModelLine(tmp_path_str)
     assert line.get_model_names() == ["00000", "00001", "00002"]
 
 # TODO: write test for restoring line from repo
