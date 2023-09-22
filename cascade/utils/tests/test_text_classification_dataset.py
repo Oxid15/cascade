@@ -25,12 +25,11 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.utils.nlp import TextClassificationFolder
 
 
-def test_create(tmp_path):
-    tmp_path = str(tmp_path)
+def test_create(tmp_path_str):
     paths = [f"class_{i}" for i in range(3)]
 
     for path in paths:
-        path = os.path.join(tmp_path, path)
+        path = os.path.join(tmp_path_str, path)
         os.mkdir(path)
 
         with open(os.path.join(path, "text_1.txt"), "w") as f:
@@ -38,7 +37,7 @@ def test_create(tmp_path):
         with open(os.path.join(path, "text_2.txt"), "w") as f:
             f.write("hello")
 
-    ds = TextClassificationFolder(tmp_path)
+    ds = TextClassificationFolder(tmp_path_str)
     meta = ds.get_meta()[0]
 
     assert meta["size"] == 6

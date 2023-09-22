@@ -80,20 +80,16 @@ def test_modifier(ones_model):
     assert len(meta) == 2
 
 
-def test_save_load(tmp_path):
-    tmp_path = str(tmp_path)
-
+def test_save_load(tmp_path_str):
     model = BasicModel(a=10)
-    model.save(tmp_path)
-    model = BasicModel.load(tmp_path)
+    model.save(tmp_path_str)
+    model = BasicModel.load(tmp_path_str)
     assert model.params.get("a") == 10
 
 
-def test_model_artifacts(tmp_path):
-    tmp_path = str(tmp_path)
-
+def test_model_artifacts(tmp_path_str):
     model = BasicModel(a=10)
 
     # Those should work, but do nothing
-    model.save_artifact(tmp_path)
-    model.load_artifact(tmp_path)
+    model.save_artifact(tmp_path_str)
+    model.load_artifact(tmp_path_str)

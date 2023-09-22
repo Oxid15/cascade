@@ -26,9 +26,8 @@ from cascade.base import MetaHandler
 from cascade.meta import DataCard, DataRegistrator
 
 
-def test(tmp_path):
-    tmp_path = str(tmp_path)
-    tmp_path = tmp_path + ".yml"
+def test(tmp_path_str):
+    tmp_path = tmp_path_str + ".yml"
 
     card = DataCard(name="name")
 

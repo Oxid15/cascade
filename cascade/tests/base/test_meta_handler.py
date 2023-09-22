@@ -28,10 +28,9 @@ from cascade.base import MetaHandler, MetaIOError, ZeroMetaError, MultipleMetaEr
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test(tmp_path, ext):
-    tmp_path = str(tmp_path)
+def test(tmp_path_str, ext):
     MetaHandler.write(
-        os.path.join(tmp_path, "meta" + ext),
+        os.path.join(tmp_path_str, "meta" + ext),
         {
             "name": "test_mh",
             "array": np.zeros(4),
@@ -40,7 +39,7 @@ def test(tmp_path, ext):
         },
     )
 
-    obj = MetaHandler.read(os.path.join(tmp_path, "meta" + ext))
+    obj = MetaHandler.read(os.path.join(tmp_path_str, "meta" + ext))
 
     assert obj["name"] == "test_mh"
     assert obj["array"] == [0, 0, 0, 0]
@@ -48,8 +47,8 @@ def test(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_overwrite(tmp_path, ext):
-    tmp_path = os.path.join(str(tmp_path), "test_mh_ow" + ext)
+def test_overwrite(tmp_path_str, ext):
+    tmp_path = os.path.join(tmp_path_str, "test_mh_ow" + ext)
 
     MetaHandler.write(tmp_path, {"name": "first"}, overwrite=False)
 
@@ -60,8 +59,8 @@ def test_overwrite(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".txt", ".md"])
-def test_text(tmp_path, ext):
-    tmp_path = str(os.path.join(tmp_path, "meta" + ext))
+def test_text(tmp_path_str, ext):
+    tmp_path = os.path.join(tmp_path_str, "meta" + ext)
 
     info = "#Meta\n\n\n this is object for testing text files"
     with open(tmp_path, "w") as f:
@@ -80,11 +79,9 @@ def test_not_exist(ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_read_fail(tmp_path, ext):
-    tmp_path = str(tmp_path)
-
+def test_read_fail(tmp_path_str, ext):
     # Simulate broken syntax in file
-    filename = os.path.join(tmp_path, "meta" + ext)
+    filename = os.path.join(tmp_path_str, "meta" + ext)
     with open(filename, "w") as f:
         f.write("\t{\t :this file is broken")
 
@@ -95,11 +92,9 @@ def test_read_fail(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_empty_file(tmp_path, ext):
-    tmp_path = str(tmp_path)
-
+def test_empty_file(tmp_path_str, ext):
     # Simulate empty file
-    filename = os.path.join(tmp_path, "meta" + ext)
+    filename = os.path.join(tmp_path_str, "meta" + ext)
     with open(filename, "w") as f:
         f.write("")
 
@@ -110,64 +105,54 @@ def test_empty_file(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_random_pipeline_meta(tmp_path, dataset, ext):
-    tmp_path = str(tmp_path)
-
-    filename = os.path.join(tmp_path, "meta" + ext)
+def test_random_pipeline_meta(tmp_path_str, dataset, ext):
+    filename = os.path.join(tmp_path_str, "meta" + ext)
 
     meta = dataset.get_meta()
     MetaHandler.write(filename, meta)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_directory_reading(tmp_path, ext):
-    tmp_path = str(tmp_path)
-
+def test_directory_reading(tmp_path_str, ext):
     meta = [{
         "type": "model"
     }]
 
-    MetaHandler.write(os.path.join(tmp_path, "meta" + ext), meta)
+    MetaHandler.write(os.path.join(tmp_path_str, "meta" + ext), meta)
 
-    meta_from_dir = MetaHandler.read_dir(tmp_path)
+    meta_from_dir = MetaHandler.read_dir(tmp_path_str)
     assert meta_from_dir == meta
 
 
-def test_zero_meta(tmp_path):
-    tmp_path = str(tmp_path)
-
+def test_zero_meta(tmp_path_str):
     with pytest.raises(ZeroMetaError):
-        MetaHandler.read_dir(tmp_path)
+        MetaHandler.read_dir(tmp_path_str)
 
 
-def test_multiple_meta(tmp_path):
-    tmp_path = str(tmp_path)
-
+def test_multiple_meta(tmp_path_str):
     meta = [{
         "type": "model"
     }]
 
-    MetaHandler.write(os.path.join(tmp_path, "meta.json"), meta)
-    MetaHandler.write(os.path.join(tmp_path, "meta.yaml"), meta)
+    MetaHandler.write(os.path.join(tmp_path_str, "meta.json"), meta)
+    MetaHandler.write(os.path.join(tmp_path_str, "meta.yaml"), meta)
 
     with pytest.raises(MultipleMetaError):
-        MetaHandler.read_dir(tmp_path)
+        MetaHandler.read_dir(tmp_path_str)
 
 
-def test_directory_writing(tmp_path):
-    tmp_path = str(tmp_path)
-
+def test_directory_writing(tmp_path_str):
     meta = [{
         "type": "model"
     }]
 
-    MetaHandler.write_dir(tmp_path, meta)
+    MetaHandler.write_dir(tmp_path_str, meta)
 
-    assert os.path.exists(os.path.join(tmp_path, "meta" + default_meta_format))
+    assert os.path.exists(os.path.join(tmp_path_str, "meta" + default_meta_format))
 
     meta[0]["data"] = "abc"
 
-    MetaHandler.write_dir(tmp_path, meta)
+    MetaHandler.write_dir(tmp_path_str, meta)
 
-    from_file = MetaHandler.read(os.path.join(tmp_path, "meta" + default_meta_format))
+    from_file = MetaHandler.read(os.path.join(tmp_path_str, "meta" + default_meta_format))
     assert from_file == meta
