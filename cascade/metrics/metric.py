@@ -14,25 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Union, Any, Literal, SupportsFloat, Tuple
-
-from .base import Traceable
+from typing import Union, Any, Literal, SupportsFloat, Tuple, Dict
 
 import pendulum
 
 MetricType = SupportsFloat
 
 
-class Metric(Traceable):
+class Metric:
     """
     Base class for every metric, defines the way of computation
     and serves as the value and metadata storage
 
     Metrics should always be scalar. If your metric returns some
     complex types like dicts or lists consider using multiple
-    Metric objects.
+    Metric objects. Or if values are connected, use extra keyword.
     """
 
     def __init__(
@@ -44,6 +40,7 @@ class Metric(Traceable):
         split: Union[str, None] = None,
         direction: Literal["up", "down", None] = None,
         interval: Union[Tuple[MetricType, MetricType], None] = None,
+        extra: Union[Dict[str, MetricType], None] = None,
         **kwargs: Any
     ) -> None:
         self.name = name
@@ -53,6 +50,7 @@ class Metric(Traceable):
         self.direction = direction
         self.interval = interval
         self.created_at = pendulum.now(tz="UTC")
+        self.extra = extra
 
         super().__init__(*args, **kwargs)
 
@@ -83,3 +81,15 @@ class Metric(Traceable):
                 return True
             return False
         return NotImplemented
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "value": self.value,
+            "dataset": self.dataset,
+            "split": self.split,
+            "direction": self.direction,
+            "interval": self.interval,
+            "created_at": self.created_at,
+            "extra": self.extra,
+        }

@@ -29,6 +29,7 @@ import yaml
 import numpy as np
 
 from . import MetaFromFile, MetaIOError, ZeroMetaError, MultipleMetaError
+from ..metrics import Metric
 
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
@@ -86,6 +87,9 @@ class CustomEncoder(JSONEncoder):
 
         elif is_dataclass(obj):
             return asdict(obj)
+
+        elif isinstance(obj, Metric):
+            return obj.to_dict()
 
         return super(CustomEncoder, self).default(obj)
 
