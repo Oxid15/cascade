@@ -1,14 +1,31 @@
+"""
+Copyright 2022-2023 Ilia Moiseev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Union, Any, Literal, SupportsFloat, Tuple
+
+from .base import Traceable
 
 import pendulum
 
 MetricType = SupportsFloat
 
 
-@dataclass
-class Metric:
+class Metric(Traceable):
     """
     Base class for every metric, defines the way of computation
     and serves as the value and metadata storage
@@ -18,16 +35,26 @@ class Metric:
     Metric objects.
     """
 
-    name: str
-    value: Union[MetricType, None] = None
-    dataset: Union[str, None] = None
-    split: Union[str, None] = None
-    direction: Literal["up", "down", None] = None
-    interval: Union[Tuple[MetricType, MetricType], None] = None
-    created_at: datetime = field(init=False)
-
-    def __post_init__(self):
+    def __init__(
+        self,
+        name: str,
+        *args: None,
+        value: Union[MetricType, None] = None,
+        dataset: Union[str, None] = None,
+        split: Union[str, None] = None,
+        direction: Literal["up", "down", None] = None,
+        interval: Union[Tuple[MetricType, MetricType], None] = None,
+        **kwargs: Any
+    ) -> None:
+        self.name = name
+        self.value = value
+        self.dataset = dataset
+        self.split = split
+        self.direction = direction
+        self.interval = interval
         self.created_at = pendulum.now(tz="UTC")
+
+        super().__init__(*args, **kwargs)
 
     def compute(self, *args: Any, **kwargs: Any) -> MetricType:
         """

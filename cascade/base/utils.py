@@ -59,7 +59,8 @@ def migrate_repo_v0_13(path: str) -> None:
     """
     from tqdm import tqdm
     from cascade.base import MetaHandler, MetaIOError
-    from cascade.models import ModelRepo, ModelLine, Metric, MetricType, SingleLineRepo
+    from cascade.models import ModelRepo, ModelLine, SingleLineRepo
+    from cascade.metrics import Metric, MetricType
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):

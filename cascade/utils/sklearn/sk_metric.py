@@ -17,9 +17,7 @@ limitations under the License.
 from typing import Any
 from sklearn import metrics
 
-from cascade.models.metric import MetricType
-
-from ...models import Metric
+from ...metrics import MetricType, Metric
 
 
 METRIC_ALIASES = {
