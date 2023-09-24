@@ -21,7 +21,7 @@ from typing import Any, Dict, Union, Callable, Tuple
 
 import pendulum
 
-from .metric import MetricType, Metric
+from ..metrics import MetricType, Metric
 from ..base import PipeMeta, Traceable, raise_not_implemented
 
 
