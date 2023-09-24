@@ -21,47 +21,44 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.models import ModelRepo, Workspace
 
 
-def test(tmp_path):
-    tmp_path = str(tmp_path)
+def test(tmp_path_str):
     for i in range(10):
-        ModelRepo(os.path.join(tmp_path, f"repo-{i}"))
+        ModelRepo(os.path.join(tmp_path_str, f"repo-{i}"))
 
-    wp = Workspace(tmp_path, default_repo="repo-1")
+    wp = Workspace(tmp_path_str, default_repo="repo-1")
 
     assert len(wp) == 10
     assert wp.get_repo_names() == [f"repo-{i}" for i in range(10)]
-    assert wp.get_default().get_root() == os.path.join(tmp_path, "repo-1")
+    assert wp.get_default().get_root() == os.path.join(tmp_path_str, "repo-1")
     wp.set_default("repo-2")
-    assert wp.get_default().get_root() == os.path.join(tmp_path, "repo-2")
+    assert wp.get_default().get_root() == os.path.join(tmp_path_str, "repo-2")
 
 
-def test_meta(tmp_path):
-    tmp_path = str(tmp_path)
+def test_meta(tmp_path_str):
 
     for i in range(10):
-        ModelRepo(os.path.join(tmp_path, f"repo-{i}"))
+        ModelRepo(os.path.join(tmp_path_str, f"repo-{i}"))
 
-    wp = Workspace(tmp_path)
+    wp = Workspace(tmp_path_str)
 
     meta = wp.get_meta()
-    assert meta[0]["root"] == tmp_path
+    assert meta[0]["root"] == tmp_path_str
     assert meta[0]["len"] == 10
     assert meta[0]["type"] == "workspace"
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_load_model_meta(tmp_path, dummy_model, ext):
-    tmp_path = str(tmp_path)
+def test_load_model_meta(tmp_path_str, dummy_model, ext):
 
     for i in range(2):
-        ModelRepo(os.path.join(tmp_path, f"repo-{i}"))
+        ModelRepo(os.path.join(tmp_path_str, f"repo-{i}"))
 
-    repo = ModelRepo(os.path.join(tmp_path, "repo"), meta_fmt=ext)
+    repo = ModelRepo(os.path.join(tmp_path_str, "repo"), meta_fmt=ext)
     repo.add_line()
     repo.add_line()
     line = repo.add_line()
 
-    wp = Workspace(tmp_path)
+    wp = Workspace(tmp_path_str)
 
     dummy_model.evaluate()
     line.save(dummy_model)
@@ -77,10 +74,9 @@ def test_load_model_meta(tmp_path, dummy_model, ext):
     assert slug == meta[0]["slug"]
 
 
-def test_repo_names(tmp_path):
-    tmp_path = str(tmp_path)
+def test_repo_names(tmp_path_str):
 
-    wp = Workspace(tmp_path)
+    wp = Workspace(tmp_path_str)
 
     wp.add_repo("0")
     wp.add_repo("1")
@@ -88,5 +84,5 @@ def test_repo_names(tmp_path):
 
     assert wp.get_repo_names() == ["0", "1", "2"]
 
-    wp = Workspace(tmp_path)
+    wp = Workspace(tmp_path_str)
     assert wp.get_repo_names() == ["0", "1", "2"]

@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
-from dataclasses import dataclass, asdict, field
+from dataclasses import dataclass, asdict
+from getpass import getuser
 import os
 import glob
 import socket
@@ -263,7 +263,7 @@ class Traceable:
         comment_id = str(int(self._find_latest_comment_id()) + 1)
         comment = Comment(
             comment_id,
-            os.getlogin(),
+            getuser(),
             socket.gethostname(),
             pendulum.now(),
             message

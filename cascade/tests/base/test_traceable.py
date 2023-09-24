@@ -74,24 +74,22 @@ def test_update_meta_from_file(tmp_path):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_create(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    trd = TraceableOnDisk(tmp_path, ext)
+def test_on_disk_create(tmp_path_str, ext):
+    trd = TraceableOnDisk(tmp_path_str, ext)
     trd._create_meta()
 
-    meta_path = os.path.join(tmp_path, "meta" + ext)
+    meta_path = os.path.join(tmp_path_str, "meta" + ext)
 
     assert os.path.exists(meta_path)
     assert trd.get_root() == os.path.dirname(meta_path)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_recreate(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    trd = TraceableOnDisk(tmp_path, ext)
+def test_on_disk_recreate(tmp_path_str, ext):
+    trd = TraceableOnDisk(tmp_path_str, ext)
     trd._create_meta()
 
-    meta_path = os.path.join(tmp_path, "meta" + ext)
+    meta_path = os.path.join(tmp_path_str, "meta" + ext)
     meta = MetaHandler.read(meta_path)
 
     trd._create_meta()
@@ -103,34 +101,31 @@ def test_on_disk_recreate(tmp_path, ext):
     assert meta[0]["updated_at"] != new_meta[0]["updated_at"]
 
 
-def test_default_meta_fmt(tmp_path):
-    tmp_path = str(tmp_path)
-    trd = TraceableOnDisk(tmp_path, meta_fmt=None)
+def test_default_meta_fmt(tmp_path_str):
+    trd = TraceableOnDisk(tmp_path_str, meta_fmt=None)
     trd._create_meta()
 
-    assert os.path.join(tmp_path, "meta" + default_meta_format)
+    assert os.path.join(tmp_path_str, "meta" + default_meta_format)
 
 
-def test_infer_meta_fmt(tmp_path):
-    tmp_path = str(tmp_path)
-    trd = TraceableOnDisk(tmp_path, meta_fmt=".yml")
+def test_infer_meta_fmt(tmp_path_str):
+    trd = TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
     trd._create_meta()
 
-    trd = TraceableOnDisk(tmp_path, None)
+    trd = TraceableOnDisk(tmp_path_str, None)
 
-    assert os.path.join(tmp_path, "meta.yml")
+    assert os.path.join(tmp_path_str, "meta.yml")
 
 
-def test_infer_meta_fmt_conflict(tmp_path):
-    tmp_path = str(tmp_path)
-    trd = TraceableOnDisk(tmp_path, meta_fmt=".yml")
+def test_infer_meta_fmt_conflict(tmp_path_str):
+    trd = TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
     trd._create_meta()
 
     with pytest.warns(UserWarning):
-        trd = TraceableOnDisk(tmp_path, meta_fmt=".json")
+        trd = TraceableOnDisk(tmp_path_str, meta_fmt=".json")
 
     trd._update_meta()
-    assert os.path.join(tmp_path, "meta.yml")
+    assert os.path.join(tmp_path_str, "meta.yml")
 
 
 def test_descriptions():
@@ -189,11 +184,11 @@ def test_links():
 
     assert tr.links[2].meta is not None
 
-    tr.remove_link("0")
+    tr.remove_link("1")
     assert len(tr.links) == 2
 
     with pytest.raises(ValueError):
-        tr.remove_link("0")
+        tr.remove_link("1")
 
 
 def test_from_meta():

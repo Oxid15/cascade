@@ -79,6 +79,11 @@ def f(x: int) -> int:
     return 2 * x
 
 
+@pytest.fixture
+def tmp_path_str(tmp_path) -> str:
+    return str(tmp_path)
+
+
 @pytest.fixture(
     params=[
         Iterator([0]),
