@@ -23,15 +23,14 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import FolderDataset
 
 
-def test(tmp_path):
-    tmp_path = str(tmp_path)
-    with open(os.path.join(tmp_path, "a.txt"), "w") as w:
+def test(tmp_path_str):
+    with open(os.path.join(tmp_path_str, "a.txt"), "w") as w:
         w.write("hello")
 
-    with open(os.path.join(tmp_path, "b.txt"), "w") as w:
+    with open(os.path.join(tmp_path_str, "b.txt"), "w") as w:
         w.write("hello")
 
-    ds = FolderDataset(tmp_path)
+    ds = FolderDataset(tmp_path_str)
     meta = ds.get_meta()[0]
 
     assert len(ds) == 2
@@ -39,15 +38,14 @@ def test(tmp_path):
     assert "len" in meta
 
 
-def test_names(tmp_path):
-    tmp_path = str(tmp_path)
-    with open(os.path.join(tmp_path, "a.txt"), "w") as w:
+def test_names(tmp_path_str):
+    with open(os.path.join(tmp_path_str, "a.txt"), "w") as w:
         w.write("hello")
 
-    with open(os.path.join(tmp_path, "b.txt"), "w") as w:
+    with open(os.path.join(tmp_path_str, "b.txt"), "w") as w:
         w.write("hello")
 
-    ds = FolderDataset(tmp_path)
+    ds = FolderDataset(tmp_path_str)
     names = ds.get_names()
     assert os.path.split(names[0])[-1] == "a.txt"
     assert os.path.split(names[1])[-1] == "b.txt"

@@ -25,36 +25,34 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.models import Model
 
 
-def test_add_file(tmp_path):
-    tmp_path = str(tmp_path)
+def test_add_file(tmp_path_str):
 
     message = "Hello I am artifact"
-    filepath = os.path.join(tmp_path, "file.txt")
+    filepath = os.path.join(tmp_path_str, "file.txt")
     with open(filepath, "w") as f:
         f.write(message)
 
     model = Model()
     model.add_file(filepath)
-    model.save(os.path.join(tmp_path, "model"))
+    model.save(os.path.join(tmp_path_str, "model"))
 
-    with open(os.path.join(tmp_path, "model", "files", "file.txt"), "r") as f:
+    with open(os.path.join(tmp_path_str, "model", "files", "file.txt"), "r") as f:
         read_message = f.read()
 
     assert read_message == message
 
 
-def test_add_missing_file(tmp_path):
-    tmp_path = str(tmp_path)
+def test_add_missing_file(tmp_path_str):
 
     model = Model()
     model.add_file("iammissing.jpg")
 
     with pytest.raises(FileNotFoundError):
-        model.save(os.path.join(tmp_path, "model"))
+        model.save(os.path.join(tmp_path_str, "model"))
 
     model = Model()
     model.add_file("iammissingtoobutitsok.jpg", missing_ok=True)
-    model.save(os.path.join(tmp_path, "model"))
+    model.save(os.path.join(tmp_path_str, "model"))
 
 
 def test_add_callback():

@@ -15,39 +15,34 @@ limitations under the License.
 """
 
 import os
+import shutil
 import sys
 
 import pytest
-import torch
+from sklearn import metrics
 
 MODULE_PATH = os.path.dirname(
     os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 )
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-
-from cascade.utils.torch import TorchModel
-
-
-def test_save_load(tmp_path_str):
-    model = TorchModel(torch.nn.Linear, in_features=10, out_features=2)
-
-    model.save(tmp_path_str)
-
-    assert model._model
-
-    model = TorchModel.load(tmp_path_str)
-
-    assert model.params.get("in_features") == 10
-    assert model.params.get("out_features") == 2
+from cascade.models import BasicModel
+from cascade.utils.sklearn import SkMetric
 
 
-def test_model_artifacts(tmp_path_str):
-    model = TorchModel(torch.nn.Linear, in_features=10, out_features=2)
+def test():
+    model = BasicModel()
+    model.predict = lambda x: [0 for _ in range(len(x))]
 
-    model.save_artifact(tmp_path_str)
+    x = [None for _ in range(5)]
+    gt = [0, 0, 0, 1, 1]
+    model.evaluate(x, gt, metrics=[
+        SkMetric("acc"),
+        SkMetric("accuracy_score")
+    ])
 
-    model = TorchModel()
-    model.load_artifact(tmp_path_str)
+    assert model.metrics[0].value == 3 / 5
+    assert model.metrics[1].value == 3 / 5
 
-    assert str(model._model) == str(torch.nn.Linear(10, 2))
+    pred = model.predict(x)
+    assert metrics.accuracy_score(gt, pred) == 3 / 5

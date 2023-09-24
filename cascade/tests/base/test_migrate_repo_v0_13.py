@@ -28,10 +28,8 @@ from cascade.base import MetaHandler
 from cascade.models import ModelRepo, Model
 
 
-def test_scalars_only(tmp_path):
-    tmp_path = str(tmp_path)
-
-    repo = ModelRepo(tmp_path)
+def test_scalars_only(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
     line = repo.add_line()
 
     model = Model()
@@ -42,9 +40,9 @@ def test_scalars_only(tmp_path):
 
     line.save(model, only_meta=True)
 
-    migrate_repo_v0_13(tmp_path)
+    migrate_repo_v0_13(tmp_path_str)
 
-    model_path = os.path.join(tmp_path, "00000", "00000")
+    model_path = os.path.join(tmp_path_str, "00000", "00000")
     meta = MetaHandler.read_dir(model_path)
     assert "metrics" in meta[0]
     assert isinstance(meta[0]["metrics"], list)
@@ -54,17 +52,15 @@ def test_scalars_only(tmp_path):
     assert "old_metrics" not in meta[0]
     assert "cascade_version" in meta[0]
 
-    meta_line = MetaHandler.read_dir(os.path.join(tmp_path, "00000"))
+    meta_line = MetaHandler.read_dir(os.path.join(tmp_path_str, "00000"))
     assert "cascade_version" in meta_line[0]
 
-    meta_repo = MetaHandler.read_dir(tmp_path)
+    meta_repo = MetaHandler.read_dir(tmp_path_str)
     assert "cascade_version" in meta_repo[0]
 
 
-def test_complex_metrics(tmp_path):
-    tmp_path = str(tmp_path)
-
-    repo = ModelRepo(tmp_path)
+def test_complex_metrics(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
     line = repo.add_line()
 
     model = Model()
@@ -80,9 +76,9 @@ def test_complex_metrics(tmp_path):
 
     line.save(model, only_meta=True)
 
-    migrate_repo_v0_13(tmp_path)
+    migrate_repo_v0_13(tmp_path_str)
 
-    model_path = os.path.join(tmp_path, "00000", "00000")
+    model_path = os.path.join(tmp_path_str, "00000", "00000")
     meta = MetaHandler.read_dir(model_path)
     assert "metrics" in meta[0]
     assert isinstance(meta[0]["metrics"], list)
@@ -92,8 +88,8 @@ def test_complex_metrics(tmp_path):
     assert "old_metrics" in meta[0]
     assert meta[0]["old_metrics"] == {"complex": model.metrics["complex"]}
 
-    meta_line = MetaHandler.read_dir(os.path.join(tmp_path, "00000"))
+    meta_line = MetaHandler.read_dir(os.path.join(tmp_path_str, "00000"))
     assert "cascade_version" in meta_line[0]
 
-    meta_repo = MetaHandler.read_dir(tmp_path)
+    meta_repo = MetaHandler.read_dir(tmp_path_str)
     assert "cascade_version" in meta_repo[0]
