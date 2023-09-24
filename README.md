@@ -5,9 +5,9 @@
 [![Downloads](https://pepy.tech/badge/cascade-ml)](https://pepy.tech/project/cascade-ml)
 [![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
 
-Flexible ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development faster.  
+Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
 
-Cascade built for individuals or small teams that are in need of ML Engineering solution, but don't have time or resources to use large enterprise-level systems.  
+Cascade was built especially for individuals or small teams that are in need of MLOps, but don't have time or resources to integrate with platforms.
 
 **Included in [Model Lifecycle](https://github.com/kelvins/awesome-mlops#model-lifecycle) section of Awesome MLOps list**
 

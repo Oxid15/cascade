@@ -39,35 +39,37 @@ along with all meta data.
 
 .. code-block:: python
 
-    from cascade.models import Model, ModelRepo
+    from cascade.models import BasicModel, ModelRepo
     import random
 
 
-    model = Model()
-    model.params.update({'learning_rate': 1e-10})
+    model = BasicModel()
+    model.params.update({"learning_rate": 1e-10})
 
-    # Your existing experiment here
+    # Your existing experiment goes here
 
-    model.add_metric('f1', random.random())
+    model.link(name="dataset", uri="../data/dataset")
+    model.add_metric("f1", random.random())
+    model.add_file("example_plot.png")
 
-    repo = ModelRepo('classification')
-    line = repo.add_line('resnet')
-    line.save(model, only_meta=True)
+    repo = ModelRepo("classification")
+    line = repo.add_line("resnet")
+    line.save(model)
 
 This brief example shows that you can easily start experiment tracking
 from your current setup.
-Cascade allows you to abstract from structuring your model storage. Note
-that in this example ``only_meta`` is stored. We haven't define ``save()``
-method of our model and cannot save it. Let's see what is saved.
+
+Cascade allows you to abstract from structuring your model storage.
+It creates and manages repositories of models from which they can be extracted easily
+for evaluation or deployment.
 
 .. code-block:: 
 
-    |- classification         # Repo folder
-    |  |- resnet              # Line folder
-    |  |  |- 00000            # Model folder
-    |  |  |  |- meta.json
-    |  |  |- meta.json
-    |  |- meta.json
+    |- classification
+    |  |- resnet
+    |  |  |- 00000
+    |  |  |  |- artifacts
+    |  |  |  |- files
 
 What is saved as default meta data in ``classification/resnet/00000/meta.json``
 
@@ -78,7 +80,7 @@ What is saved as default meta data in ``classification/resnet/00000/meta.json``
             "comments": [],
             "created_at": "2023-09-18T19:43:48.146504+00:00",
             "description": null,
-            "links": [],
+            "links": ["name": "dataset", "uri": "../data/dataset", "meta": null],
             "metrics": [{"created_at": "2023-09-18T19:44:39.853785+00:00",
                         "dataset": null,
                         "direction": null,
@@ -134,31 +136,31 @@ To get metadata of an object you do just:
     train_ds.get_meta()
 
 .. code-block:: json
-    
+
     [
         {
-            'comments': [],
-            'description': None,
-            'len': 5,
-            'links': [],
-            'name': 'cascade.data.apply_modifier.ApplyModifier',
-            'tags': [],
-            'type': 'dataset'
+            "comments": [],
+            "description": None,
+            "len": 5,
+            "links": [],
+            "name": "cascade.data.apply_modifier.ApplyModifier",
+            "tags": [],
+            "type": "dataset"
         },
         {
-            'comments': [],
-            'description': None,
-            'len': 5,
-            'links': [],
-            'name': 'cascade.data.dataset.Wrapper',
-            'obj_type': "<class 'list'>",
-            'tags': [],
-            'type': 'dataset'
+            "comments": [],
+            "description": None,
+            "len": 5,
+            "links": [],
+            "name": "cascade.data.dataset.Wrapper",
+            "obj_type": "<class 'list'>",
+            "tags": [],
+            "type": "dataset"
         }
     ]
 
 By default all `sized` objects will have length in their meta data.
-The more specific the transformation the richer meta will be.
+The more specific the transformation about the dataset the richer meta will be.
 
 All datasets with examples can be found in :ref:`/examples/dataset_zoo.ipynb`
 
