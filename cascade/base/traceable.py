@@ -395,7 +395,9 @@ class TraceableOnDisk(Traceable):
     def _determine_meta_fmt(self) -> Union[str, None]:
         # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
-        if len(meta_paths) == 1:
+        if len(meta_paths) == 0:
+            return
+        elif len(meta_paths) == 1:
             _, ext = os.path.splitext(meta_paths[0])
             return ext
         else:
