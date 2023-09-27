@@ -132,3 +132,32 @@ class Metric:
         s += ", ".join(formatted)
         s += ")"
         return s
+
+
+class Loss(Metric):
+    """
+    Loss is the convenience metric
+    which by default has name "loss"
+    and is always directed down
+    """
+    def __init__(
+        self,
+        value: Union[MetricType, None] = None,
+        name: str = "loss",
+        dataset: Union[str, None] = None,
+        split: Union[str, None] = None,
+        **kwargs: Any
+    ) -> None:
+        """
+        See also
+        --------
+        cascade.metric.Metric
+        """
+        super().__init__(
+            name=name,
+            direction="down",
+            value=value,
+            dataset=dataset,
+            split=split,
+            **kwargs
+        )
