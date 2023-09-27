@@ -43,6 +43,26 @@ class Metric:
         extra: Union[Dict[str, MetricType], None] = None,
         **kwargs: Any
     ) -> None:
+        """
+        Creates Metric
+
+        Parameters
+        ----------
+        name : str
+            Name of the metric
+        value : Union[MetricType, None], optional
+            Scalar value of the metric, by default None
+        dataset : Union[str, None], optional
+            Dataset on which metric was computed, by default None
+        split : Union[str, None], optional
+            The split of the dataset for example train or test, by default None
+        direction : Literal["up", "down", None], optional
+            Is metric better when it is greater or less, by default None
+        interval : Union[Tuple[MetricType, MetricType], None], optional
+            Upper and lower boundaries of value, by default None
+        extra : Union[Dict[str, MetricType], None], optional
+            Extra values that needs to be stored with metric, by default None
+        """
         self.name = name
         self.value = value
         self.dataset = dataset
@@ -83,6 +103,13 @@ class Metric:
         return NotImplemented
 
     def to_dict(self) -> Dict[str, Any]:
+        """
+        Converts metric object into dict
+
+        Returns
+        -------
+        Dict[str, Any]
+        """
         return {
             "name": self.name,
             "value": self.value,
@@ -93,3 +120,15 @@ class Metric:
             "created_at": self.created_at,
             "extra": self.extra,
         }
+
+    def __repr__(self) -> str:
+        s = f"{type(self).__name__}("
+        info = self.to_dict()
+
+        formatted = []
+        for field in info:
+            if info[field] is not None:
+                formatted.append(f"{field}={info[field]}")
+        s += ", ".join(formatted)
+        s += ")"
+        return s
