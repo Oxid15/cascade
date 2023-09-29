@@ -14,14 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import builtins
+import io
 import pickle
 from typing import Any
+
+safe_builtins = {
+    'range',
+    'complex',
+    'set',
+    'frozenset',
+    'slice',
+}
+
+
+class RestrictedUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        # Only allow safe classes from builtins.
+        if module == "builtins" and name in safe_builtins:
+            return getattr(builtins, name)
+        # Forbid everything else.
+        raise pickle.UnpicklingError("global '%s.%s' is forbidden" %
+                                     (module, name))
 
 
 class Serializer:
     @staticmethod
     def deserialize(obj: str):
-        return pickle.loads(bytes.fromhex(obj))
+        RestrictedUnpickler(io.BytesIO(bytes.fromhex(obj))).load()
 
     @staticmethod
     def serialize(obj: Any) -> str:
