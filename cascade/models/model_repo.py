@@ -23,6 +23,7 @@ from ..base import (
     HistoryLogger,
     JSONEncoder,
     MetaHandler,
+    MetaFromFile,
     PipeMeta,
     Traceable,
     TraceableOnDisk,
