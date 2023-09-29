@@ -397,7 +397,9 @@ class TraceableOnDisk(Traceable):
     def _determine_meta_fmt(self) -> Union[str, None]:
         # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
-        if len(meta_paths) == 1:
+        if len(meta_paths) == 0:
+            return
+        elif len(meta_paths) == 1:
             _, ext = os.path.splitext(meta_paths[0])
             return ext
         else:
@@ -432,29 +434,18 @@ class TraceableOnDisk(Traceable):
         and writes back in the same format
         """
 
-        meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
-
-        if len(meta_path) == 0:
-            return
-
-        if len(meta_path) > 1:
-            warnings.warn(
-                f"There are {len(meta_path)} meta files in {self._root}, failed to update meta"
-            )
-            return
-
         meta = {}
         from . import MetaHandler
 
-        meta_path = meta_path[0]
         try:
-            meta = MetaHandler.read(meta_path)[0]
+            meta = MetaHandler.read_dir(self._root)[0]
         except MetaIOError as e:
             warnings.warn(f"File reading error ignored: {e}")
 
         meta.update(self.get_meta()[0])
+
         try:
-            MetaHandler.write(meta_path, [meta])
+            MetaHandler.write_dir(self._root, [meta])
         except MetaIOError as e:
             warnings.warn(f"File writing error ignored: {e}")
 
