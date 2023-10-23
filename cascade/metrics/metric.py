@@ -151,7 +151,7 @@ class Loss(Metric):
         """
         See also
         --------
-        cascade.metric.Metric
+        cascade.metrics.Metric
         """
         super().__init__(
             name=name,
