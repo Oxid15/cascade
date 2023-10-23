@@ -98,7 +98,7 @@ class MetricViewer:
                         ).diff_for_humans(metric["created_at"])
 
                 if "metrics" in meta:
-                    metric.update({m["name"]: m["value"] for m in meta["metrics"]})
+                    metric.update({m["name"]: m.get("value") for m in meta["metrics"]})
                 if "params" in meta:
                     metric.update(meta["params"])
 

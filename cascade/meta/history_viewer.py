@@ -140,7 +140,7 @@ class HistoryViewer(Server):
                         for key in ["dataset", "split"]:
                             part = metric.get(key)
                             name += "_" + part if part else ""
-                        metrics[name] = metric["value"]
+                        metrics[name] = metric.get("value")
                     meta["metrics"] = metrics
 
                     new_meta.update(flatten(meta))
