@@ -110,16 +110,18 @@ class Metric:
         -------
         Dict[str, Any]
         """
-        return {
-            "name": self.name,
-            "value": self.value,
-            "dataset": self.dataset,
-            "split": self.split,
-            "direction": self.direction,
-            "interval": self.interval,
-            "created_at": self.created_at,
-            "extra": self.extra,
-        }
+        keys = [
+            "name",
+            "value",
+            "dataset",
+            "split",
+            "direction",
+            "interval",
+            "created_at",
+            "extra",
+        ]
+        d = {key: getattr(self, key) for key in keys if getattr(self, key) is not None}
+        return d
 
     def __repr__(self) -> str:
         s = f"{type(self).__name__}("
