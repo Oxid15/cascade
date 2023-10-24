@@ -104,7 +104,7 @@ class Metric:
 
     def to_dict(self) -> Dict[str, Any]:
         """
-        Converts metric object into dict
+        Converts metric object into dict, omits fields that are None
 
         Returns
         -------
