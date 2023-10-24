@@ -15,3 +15,4 @@ limitations under the License.
 """
 
 from .metric import Loss, Metric, MetricType
+from .classification import Accuracy
