@@ -17,7 +17,7 @@ limitations under the License.
 import os
 from shutil import copyfile
 import warnings
-from typing import Any, Dict, Union, Callable, Tuple
+from typing import Any, Union, Callable
 
 import pendulum
 
@@ -218,13 +218,7 @@ class Model(Traceable):
             If metric is of inappropriate type
         """
         if isinstance(metric, str):
-            if value is None:
-                raise ValueError("value cannot be None if metric is str")
-            metric = Metric(name=metric,
-                    value=value, **kwargs)
-        elif isinstance(metric, Metric):
-            if metric.value is None:
-                raise ValueError("metric.value cannot be None when adding")
+            metric = Metric(name=metric, value=value, **kwargs)
         else:
             raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
 
@@ -240,7 +234,6 @@ class Model(Traceable):
                 return
 
         self.metrics.append(metric)
-
 
     def log(self) -> None:
         """

@@ -26,7 +26,7 @@ from ...models import BasicModel
 
 class TorchModel(BasicModel):
     """
-    The wrapper around `nn.Module`s.
+    The wrapper around `nn.Module`s
     """
 
     def __init__(
