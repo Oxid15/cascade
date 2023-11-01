@@ -21,15 +21,17 @@ from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from cascade.cli.cli import status
+from cascade.cli.cli import cli
 from cascade.models import ModelRepo
 
 
 def test(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        repo = ModelRepo(tmp_path_str)
+        repo = ModelRepo(td)
         line = repo.add_line("line")
-        model = line.create_model()
 
-        result = runner.invoke(status)
+        result = runner.invoke(cli, args=["status"])
+
+        assert result.exit_code == 0
+        assert "repo of len 1" in result.output
