@@ -310,7 +310,7 @@ def desc_add(ctx, d):
     tr = Traceable()
     tr.from_meta(ctx.obj["meta"][0])
     tr.describe(d)
-    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @cli.command("diff")
