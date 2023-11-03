@@ -313,32 +313,5 @@ def desc_add(ctx, d):
     MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
-@cli.command("diff")
-@click.pass_context
-@click.argument("left")
-@click.argument("right")
-def diff(ctx, left, right):
-    """
-    Provide diff programs with exact paths
-    to metadata
-    """
-    container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
-    if not container:
-        return
-
-    left_name = container._find_name_by_slug(left)
-    right_name = container._find_name_by_slug(right)
-
-    if left_name and right_name:
-        left_name = os.path.join(container.get_root(), left_name)
-        right_name = os.path.join(container.get_root(), right_name)
-
-        left_meta_name = glob.glob(os.path.join(left_name, "meta.*"))
-        right_meta_name = glob.glob(os.path.join(right_name, "meta.*"))
-
-        if len(left_meta_name) == 1 and len(right_meta_name) == 1:
-            click.echo(left_meta_name[0] + ' ' + right_meta_name[0])
-
-
 if __name__ == "__main__":
     cli(obj={})
