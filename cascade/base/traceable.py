@@ -167,6 +167,8 @@ class Traceable:
         ----------
         meta : Dict[str, Any]
         """
+        self._meta_prefix.update(meta)
+
         if "description" in meta:
             self.describe(meta["description"])
         if "comments" in meta:
