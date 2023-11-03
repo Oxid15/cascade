@@ -228,7 +228,7 @@ def tag_add(ctx, t):
     tr = Traceable()
     tr.from_meta(ctx.obj["meta"][0])
     tr.tag(t)
-    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @tag.command("ls")
@@ -253,7 +253,7 @@ def tag_rm(ctx, t):
     tr = Traceable()
     tr.from_meta(ctx.obj["meta"][0])
     tr.remove_tag(t)
-    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @cli.command('migrate')
