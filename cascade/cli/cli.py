@@ -286,6 +286,8 @@ def artifact(ctx):
 def artifact_rm(ctx):
     if ctx.obj["type"] != "model":
         click.echo(f"Cannot remove an artifact from {ctx.obj['type']}")
+    
+    raise NotImplementedError()
 
 
 @cli.group("desc")
