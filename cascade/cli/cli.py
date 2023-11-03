@@ -216,6 +216,46 @@ def tag(ctx):
     pass
 
 
+@tag.command("add")
+@click.pass_context
+@click.argument("t", nargs=-1)
+def tag_add(ctx, t):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import Traceable
+
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.tag(t)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+
+@tag.command("ls")
+@click.pass_context
+def tag_ls(ctx):
+    if not ctx.obj.get("meta"):
+        return
+
+    tags = ctx.obj["meta"][0].get("tags")
+    click.echo(tags)
+
+
+@tag.command("rm")
+@click.pass_context
+@click.argument("t", nargs=-1)
+def tag_rm(ctx, t):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import Traceable
+
+    tr = Traceable()
+    tr.from_meta(ctx.obj["meta"][0])
+    tr.remove_tag(t)
+    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
+
+
 @cli.command('migrate')
 @click.pass_context
 def migrate(ctx):
@@ -246,47 +286,6 @@ def artifact(ctx):
 def artifact_rm(ctx):
     if ctx.obj["type"] != "model":
         click.echo(f"Cannot remove an artifact from {ctx.obj['type']}")
-
-
-
-@tag.command("add")
-@click.pass_context
-@click.argument("t", nargs=-1)
-def tag_add(ctx, t):
-    if not ctx.obj.get("meta"):
-        return
-
-    from cascade.base import Traceable
-
-    tr = Traceable()
-    tr.from_meta(ctx.obj["meta"][0])
-    tr.tag(t)
-    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
-
-
-@tag.command("ls")
-@click.pass_context
-def tag_ls(ctx):
-    if not ctx.obj.get("meta"):
-        return
-
-    tags = ctx.obj["meta"][0].get("tags")
-    click.echo(tags)
-
-
-@tag.command("del")
-@click.pass_context
-@click.argument("t", nargs=-1)
-def tag_del(ctx, t):
-    if not ctx.obj.get("meta"):
-        return
-
-    from cascade.base import Traceable
-
-    tr = Traceable()
-    tr.from_meta(ctx.obj["meta"][0])
-    tr.remove_tag(t)
-    MetaHandler.write(ctx.obj["meta_path"], tr.get_meta())
 
 
 @cli.group("desc")
@@ -327,14 +326,14 @@ def diff(ctx, left, right):
 
     left_name = container._find_name_by_slug(left)
     right_name = container._find_name_by_slug(right)
-    
+
     if left_name and right_name:
         left_name = os.path.join(container.get_root(), left_name)
         right_name = os.path.join(container.get_root(), right_name)
-        
+
         left_meta_name = glob.glob(os.path.join(left_name, "meta.*"))
         right_meta_name = glob.glob(os.path.join(right_name, "meta.*"))
-        
+
         if len(left_meta_name) == 1 and len(right_meta_name) == 1:
             click.echo(left_meta_name[0] + ' ' + right_meta_name[0])
 
