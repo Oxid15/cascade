@@ -63,3 +63,28 @@ def test_ls(tmp_path_str):
         assert result.exit_code == 0
 
         assert "Hello" in result.output
+
+
+def test_rm(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        mh = MetaHandler()
+        repo = ModelRepo(td)
+
+        init_meta = mh.read_dir(td)
+
+        result = runner.invoke(cli, args=["comment", "add"], input="Hello")
+        assert result.exit_code == 0
+
+        result = runner.invoke(cli, args=["comment", "rm", "1"])
+        assert result.exit_code == 0
+
+        meta = mh.read_dir(td)
+
+        assert "comments" in meta[0]
+        assert len(meta[0]["comments"]) == 0
+        assert meta == init_meta
+
+        # Test of removing nonexisting comment
+        result = runner.invoke(cli, args=["comment", "rm", "1"])
+        assert result.exit_code == 1
