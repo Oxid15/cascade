@@ -94,6 +94,11 @@ class HistoryHandler:
         obj: Any
             Meta data of the object
         """
+
+        # Use serialize nac back to prevent false diffs due to
+        # comparisons with meta from disk
+        obj = CustomEncoder().obj_to_dict(obj)
+
         if not self._log.get("latest"):
             self._log["latest"] = obj
         else:
