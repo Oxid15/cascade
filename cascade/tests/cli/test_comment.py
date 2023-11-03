@@ -26,7 +26,7 @@ from cascade.base import MetaHandler
 from cascade.models import ModelRepo
 
 
-def test(tmp_path_str):
+def test_add(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
@@ -46,3 +46,20 @@ def test(tmp_path_str):
 
         meta[0]["comments"] = []
         assert meta == init_meta
+
+
+def test_ls(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        mh = MetaHandler()
+        repo = ModelRepo(td)
+
+        init_meta = mh.read_dir(td)
+
+        result = runner.invoke(cli, args=["comment", "add"], input="Hello")
+        assert result.exit_code == 0
+    
+        result = runner.invoke(cli, args=["comment", "ls"])
+        assert result.exit_code == 0
+
+        assert "Hello" in result.output
