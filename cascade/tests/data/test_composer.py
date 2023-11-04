@@ -29,8 +29,7 @@ def test_meta():
     n1 = Wrapper([0, 1, 2, 3])
     n2 = Wrapper([2, 3, 4, 5])
 
-    c = Composer([n1, n2], meta_prefix={"num": 1})
-    assert c.get_meta()[0]["num"] == 1
+    c = Composer([n1, n2])
     assert len(c.get_meta()[0]["data"]) == 2
 
 

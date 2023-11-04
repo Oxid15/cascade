@@ -35,7 +35,8 @@ def test_getitem():
 
 def test_meta():
     now = datetime.datetime.now()
-    ds = Dataset(meta_prefix={"time": now})
+    ds = Dataset()
+    ds.update_meta({"time": now})
     meta = ds.get_meta()
 
     assert type(meta) == list
@@ -46,7 +47,8 @@ def test_meta():
 
 
 def test_update_meta():
-    ds = Dataset(meta_prefix={"a": 1, "b": 2})
+    ds = Dataset()
+    ds.update_meta({"a": 1, "b": 2})
     ds.update_meta({"b": 3})
     meta = ds.get_meta()
 
@@ -54,6 +56,8 @@ def test_update_meta():
     assert meta[0]["b"] == 3
 
 
+# This is deprecated since 0.13.0
+@pytest.mark.skip
 def test_meta_from_file(tmp_path):
     with open(os.path.join(tmp_path, "test_meta_from_file.json"), "w") as f:
         json.dump({"a": 1}, f)
