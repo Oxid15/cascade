@@ -163,6 +163,9 @@ class Traceable:
         meta : Union[PipeMeta, Meta]
         """
         self.update_meta(meta)
+        
+        if not isinstance(meta, list):
+            meta = [meta]
 
         if "description" in meta[0]:
             self.describe(meta[0]["description"])
