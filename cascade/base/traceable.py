@@ -24,7 +24,7 @@ from typing import Dict, Union, Any, Literal, Iterable
 import pendulum
 from datetime import datetime
 
-from . import PipeMeta, MetaFromFile, default_meta_format, supported_meta_formats, MetaIOError
+from . import PipeMeta, Meta, MetaFromFile, default_meta_format, supported_meta_formats, MetaIOError
 
 
 @dataclass
@@ -54,7 +54,6 @@ class Traceable:
     def __init__(
         self,
         *args: Any,
-        meta_prefix: Union[Dict[Any, Any], str, None] = None,
         description: Union[str, None] = None,
         tags: Union[Iterable[str], None] = None,
         **kwargs: Any,
@@ -62,10 +61,6 @@ class Traceable:
         """
         Parameters
         ----------
-        meta_prefix: Union[Dict[Any, Any], str], optional
-            The dictionary that is used to update object's meta in `get_meta` call.
-            Due to the call of update can overwrite default values.
-            If str - prefix assumed to be path and loaded using MetaHandler.
         description:
             String description of an object
         tags: Iterable[str], optional
@@ -74,11 +69,7 @@ class Traceable:
         --------
         cascade.base.MetaHandler
         """
-        if meta_prefix is None:
-            meta_prefix = {}
-        elif isinstance(meta_prefix, str):
-            meta_prefix = self._read_meta_from_file(meta_prefix)
-        self._meta_prefix = meta_prefix
+        self._meta_prefix = {}
         self.describe(description)
 
         if tags is not None:
@@ -88,12 +79,6 @@ class Traceable:
 
         self.comments = list()
         self.links = list()
-
-    @staticmethod
-    def _read_meta_from_file(path: str) -> MetaFromFile:
-        from . import MetaHandler
-
-        return MetaHandler.read(path)
 
     def get_meta(self) -> PipeMeta:
         """
@@ -130,26 +115,36 @@ class Traceable:
 
         return [meta]
 
-    def update_meta(self, obj: Union[Dict[Any, Any], str]) -> None:
+    def update_meta(self, meta: Union[PipeMeta, Meta]) -> None:
         """
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called
+
+        Parameters
+        ----------
+        meta : Union[PipeMeta, Meta]
+            The object to update with
+
+        Raises
+        ------
+        ValueError
+            If the list passed and it is not of the unit length
         """
-        # TODO: fix this docstring
-        if isinstance(obj, str):
-            obj = self._read_meta_from_file(obj)
-
-        if isinstance(obj, list):
-            raise RuntimeError(
-                "Object that was passed or read from path is a list."
-                "There is no clear way how to update this object's meta"
-                "using list"
-            )
-
-        if hasattr(self, "_meta_prefix"):
-            self._meta_prefix.update(obj)
-        else:
+        if not hasattr(self, "_meta_prefix"):
             self._warn_no_prefix()
+            self._meta_prefix = {}
+
+        if isinstance(meta, list):
+            if len(meta) != 1:
+                raise ValueError(
+                    f"Object that was passed or read from path is a list of length {len(meta)}"
+                    f"There is no clear way to update this object's meta"
+                    f"using this kind of list"
+                )
+            self._meta_prefix.update(meta[0])
+        else:
+            self._meta_prefix.update(meta)
+
 
     @staticmethod
     def _warn_no_prefix() -> None:
@@ -159,28 +154,28 @@ class Traceable:
             "called somewhere"
         )
 
-    def from_meta(self, meta: Dict[str, Any]) -> None:
+    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
         """
         Updates special fields from the given metadata
 
         Parameters
         ----------
-        meta : Dict[str, Any]
+        meta : Union[PipeMeta, Meta]
         """
-        self._meta_prefix.update(meta)
+        self.update_meta(meta)
 
-        if "description" in meta:
-            self.describe(meta["description"])
-        if "comments" in meta:
-            for comment in meta["comments"]:
+        if "description" in meta[0]:
+            self.describe(meta[0]["description"])
+        if "comments" in meta[0]:
+            for comment in meta[0]["comments"]:
                 self.comments.append(
                     Comment(**comment)
                 )
-        if "tags" in meta:
-            self.tag(meta["tags"])
+        if "tags" in meta[0]:
+            self.tag(meta[0]["tags"])
 
-        if "links" in meta:
-            for link in meta["links"]:
+        if "links" in meta[0]:
+            for link in meta[0]["links"]:
                 self.links.append(
                     Link(**link)
                 )
