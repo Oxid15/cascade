@@ -109,6 +109,34 @@ def test_modifier_meta():
     assert len(meta) == 2
 
 
+def test_modifier_update_meta():
+    ds = Wrapper([1 ,2 ,3])
+    ds = Modifier(ds)
+    ds.update_meta([
+        {"a": 1}, {"b": 0}
+    ])
+
+    meta = ds.get_meta()
+    assert meta[0]["a"] == 1
+    assert meta[1]["b"] == 0
+
+
+def test_modifier_from_meta():
+    ds = Wrapper([1 ,2 ,3])
+    ds = Modifier(ds)
+    ds.update_meta([
+        {"a": 1}, {"b": 0}
+    ])
+    meta = ds.get_meta()
+
+    ds = Wrapper([1 ,2 ,3])
+    ds = Modifier(ds)
+    ds.from_meta(meta)
+
+    assert meta[0]["a"] == 1
+    assert meta[1]["b"] == 0
+
+
 def test_sampler():
     ds = Wrapper([1, 2, 3, 4])
     ds = Sampler(ds, 10)
