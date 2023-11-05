@@ -11,9 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Generic, Iterable, Sequence, Sized, TypeVar
+from typing import Any, Generic, Iterable, Sequence, Sized, TypeVar, Union
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import Meta, PipeMeta, Traceable, raise_not_implemented
 
 T = TypeVar("T")
 
@@ -101,7 +101,49 @@ class Iterator(Dataset):
         return meta
 
 
-class ItModifier(Dataset):
+class BaseModifier(Dataset):
+    def __init__(self, dataset: SizedDataset[T], *args: Any, **kwargs: Any) -> None:
+        """
+        Constructs a Modifier. Makes no transformations in initialization.
+
+        Parameters
+        ----------
+        dataset: Dataset
+            A dataset to modify
+        """
+        self._dataset = dataset
+        super().__init__(*args, **kwargs)
+
+    def get_meta(self) -> PipeMeta:
+        """
+        Overrides base method enabling cascade-like calls to previous datasets.
+        The metadata of a pipeline that consist of several modifiers can be easily
+        obtained with `get_meta` of the last block.
+        """
+        self_meta = super().get_meta()
+        self_meta += self._dataset.get_meta()
+        return self_meta
+
+    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+        """
+        Calls the same method as base class but does
+        it cascade-like which allows to
+        roll list of meta on a pipeline
+
+        Parameters
+        ----------
+        meta : Union[PipeMeta, Meta]
+            Meta of a single object or a pipeline
+        """
+        if isinstance(meta, list):
+            super().from_meta(meta[0])
+            if len(meta) > 1:
+                self._dataset.from_meta(meta[1:])
+        else:
+            super().from_meta(meta)
+
+
+class ItModifier(BaseModifier):
     """
     The Modifier for Iterator datasets
 
@@ -109,9 +151,6 @@ class ItModifier(Dataset):
     --------
     cascade.data.Modifier
     """
-    def __init__(self, dataset: Iterator, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self._dataset = dataset
 
     def __iter__(self) -> Iterable[T]:
         for item in self._dataset:
@@ -149,7 +188,7 @@ class Wrapper(SizedDataset):
         return meta
 
 
-class Modifier(SizedDataset):
+class Modifier(BaseModifier):
     """
     Basic pipeline building block in Cascade. Every block which is not a data source should be
     a successor of Sampler or Modifier.
@@ -161,18 +200,6 @@ class Modifier(SizedDataset):
     Applies no transformation if `__getitem__` is not overridden.
     """
 
-    def __init__(self, dataset: SizedDataset[T], *args: Any, **kwargs: Any) -> None:
-        """
-        Constructs a Modifier. Makes no transformations in initialization.
-
-        Parameters
-        ----------
-        dataset: Dataset
-            A dataset to modify
-        """
-        self._dataset = dataset
-        super().__init__(*args, **kwargs)
-
     def __getitem__(self, index: Any) -> T:
         return self._dataset[index]
 
@@ -182,16 +209,11 @@ class Modifier(SizedDataset):
 
     def __len__(self) -> int:
         return len(self._dataset)
-
+    
     def get_meta(self) -> PipeMeta:
-        """
-        Overrides base method enabling cascade-like calls to previous datasets.
-        The metadata of a pipeline that consist of several modifiers can be easily
-        obtained with `get_meta` of the last block.
-        """
-        self_meta = super().get_meta()
-        self_meta += self._dataset.get_meta()
-        return self_meta
+        meta = super().get_meta()
+        meta[0]["len"] = len(self)
+        return meta
 
 
 class Sampler(Modifier):

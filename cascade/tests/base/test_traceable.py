@@ -50,6 +50,8 @@ def test_update_meta():
     assert meta[0]["b"] == 3
 
 
+# This is deprecated since 0.13.0
+@pytest.mark.skip
 def test_meta_from_file(tmp_path):
     with open(os.path.join(tmp_path, "test_meta_from_file.json"), "w") as f:
         json.dump({"a": 1}, f)
@@ -61,6 +63,8 @@ def test_meta_from_file(tmp_path):
     assert meta[0]["a"] == 1
 
 
+# This is deprecated since 0.13.0
+@pytest.mark.skip
 def test_update_meta_from_file(tmp_path):
     with open(os.path.join(tmp_path, "test_meta_from_file.json"), "w") as f:
         json.dump({"a": 1}, f)
@@ -193,6 +197,7 @@ def test_links():
 
 def test_from_meta():
     tr = Traceable()
+    tr.update_meta({"a": 1})
     tr.tag("tag")
     tr.describe("description")
     tr.comment("lol")
@@ -201,8 +206,9 @@ def test_from_meta():
     meta = tr.get_meta()
 
     tr = Traceable()
-    tr.from_meta(meta[0])
+    tr.from_meta(meta)
 
+    assert tr.get_meta()[0]["a"] == 1
     assert tr.tags == set(["tag"])
     assert tr.description == "description"
     assert [c.message for c in tr.comments] == ["lol", "kek"]

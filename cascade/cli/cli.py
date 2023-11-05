@@ -172,7 +172,7 @@ def comment_add(ctx, c):
     from cascade.base import Traceable
 
     tr = Traceable()
-    tr.from_meta(ctx.obj["meta"][0])
+    tr.from_meta(ctx.obj["meta"])
     tr.comment(c)
     MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
@@ -202,7 +202,7 @@ def comment_rm(ctx, id):
     from cascade.base import Traceable
 
     tr = Traceable()
-    tr.from_meta(ctx.obj["meta"][0])
+    tr.from_meta(ctx.obj["meta"])
     tr.remove_comment(id)
     MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
@@ -226,7 +226,7 @@ def tag_add(ctx, t):
     from cascade.base import Traceable
 
     tr = Traceable()
-    tr.from_meta(ctx.obj["meta"][0])
+    tr.from_meta(ctx.obj["meta"])
     tr.tag(t)
     MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
@@ -251,7 +251,7 @@ def tag_rm(ctx, t):
     from cascade.base import Traceable
 
     tr = Traceable()
-    tr.from_meta(ctx.obj["meta"][0])
+    tr.from_meta(ctx.obj["meta"])
     tr.remove_tag(t)
     MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
@@ -308,7 +308,7 @@ def desc_add(ctx, d):
     from cascade.base import Traceable
 
     tr = Traceable()
-    tr.from_meta(ctx.obj["meta"][0])
+    tr.from_meta(ctx.obj["meta"])
     tr.describe(d)
     MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
