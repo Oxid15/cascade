@@ -113,7 +113,8 @@ def view(ctx):
 @click.option("--port", type=int, default=8050)
 @click.option("-l", type=int, help="The number of last lines to show")
 @click.option("-m", type=int, help="The number of last models to show")
-def view_history(ctx, host, port, l, m):
+@click.option("-p", type=int, help="Update period in seconds")
+def view_history(ctx, host, port, l, m, p):
     if ctx.obj.get("meta"):
         container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
         if not container:
@@ -121,7 +122,7 @@ def view_history(ctx, host, port, l, m):
             return
 
         from ..meta import HistoryViewer
-        HistoryViewer(container, last_lines=l, last_models=m).serve(host=host, port=port)
+        HistoryViewer(container, last_lines=l, last_models=m, update_period_sec=p).serve(host=host, port=port)
 
 
 @view.command("metric")
