@@ -219,7 +219,7 @@ class Model(Traceable):
         """
         if isinstance(metric, str):
             metric = Metric(name=metric, value=value, **kwargs)
-        else:
+        elif not isinstance(metric, Metric):
             raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
 
         # Model be initialized not properly
