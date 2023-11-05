@@ -49,6 +49,18 @@ def test(tmp_path, ext):
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_idempotency(tmp_path, ext):
+    filepath = os.path.join(tmp_path, "ds" + ext)
+
+    ds = Wrapper([0, 1, 2, 3, 4])
+    va = VersionAssigner(ds, filepath)
+    assert va.version == "0.0"
+
+    va = VersionAssigner(ds, filepath)
+    assert va.version == "0.0"
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_deep_changes(tmp_path, ext):
     filepath = os.path.join(tmp_path, "ds" + ext)
 
