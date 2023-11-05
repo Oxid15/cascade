@@ -15,7 +15,6 @@ limitations under the License.
 """
 
 
-import glob
 import os
 import click
 
@@ -108,7 +107,7 @@ def view(ctx):
     pass
 
 
-@view.command
+@view.command("history")
 @click.pass_context
 @click.option("--host", type=str, default="localhost")
 @click.option("--port", type=int, default=8050)
@@ -125,7 +124,7 @@ def view_history(ctx, host, port, l, m):
         HistoryViewer(container, last_lines=l, last_models=m).serve(host=host, port=port)
 
 
-@view.command
+@view.command("metric")
 @click.pass_context
 @click.option("-p", type=int, default=50, help="Page size for table")
 @click.option("-i", type=str, multiple=True, help="Metrics or params to include")
@@ -148,7 +147,7 @@ def view_metric(ctx, p, i, x):
     MetricViewer(container).serve(page_size=p, include=i, exclude=x)
 
 
-@view.command
+@view.command("diff")
 @click.pass_context
 def view_diff(ctx):
     from ..meta import DiffViewer
