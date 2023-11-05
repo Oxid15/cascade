@@ -28,4 +28,4 @@ from .range_sampler import RangeSampler
 from .sequential_cacher import SequentialCacher
 from .simple_dataloader import SimpleDataloader
 from .utils import split
-from .version_assigner import VersionAssigner
+from .version_assigner import VersionAssigner, version
