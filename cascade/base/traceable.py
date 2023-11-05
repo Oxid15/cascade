@@ -44,6 +44,10 @@ class Link:
     meta: Union[PipeMeta, None]
     created_at: datetime
 
+    def __post_init__(self) -> None:
+        if self.uri is not None and os.path.exists(self.uri):
+            self.uri = os.path.abspath(self.uri)
+
 
 class Traceable:
     """
