@@ -149,7 +149,7 @@ class HistoryViewer(Server):
 
                     new_meta.update(flatten(meta))
                 except IndexError:
-                    pass
+                    meta = {}
                 metas.append(new_meta)
 
                 p = {
