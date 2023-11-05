@@ -39,6 +39,7 @@ class HistoryViewer(Server):
         container: Union[Workspace, ModelRepo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
+        update_period_sec: int = 3
     ) -> None:
         """
         Parameters
@@ -49,6 +50,8 @@ class HistoryViewer(Server):
             Constraints the number of lines back from the last one to view
         last_models: int, optional
             For each line constraints the number of models back from the last one to view
+        update_period_sec: int, default is 3
+            Update period in seconds
         """
 
         try:
@@ -65,6 +68,7 @@ class HistoryViewer(Server):
         self._container = container
         self._last_lines = last_lines
         self._last_models = last_models
+        self._update_period_sec = update_period_sec
 
         repo = self._container
         if isinstance(self._container, ModelLine):
@@ -336,7 +340,7 @@ class HistoryViewer(Server):
                     value=metric,
                 ),
                 dcc.Graph(id="history-figure", figure=fig),
-                dcc.Interval(id="history-interval", interval=1000 * 3),
+                dcc.Interval(id="history-interval", interval=1000 * self._update_period_sec),
             ]
         )
 
