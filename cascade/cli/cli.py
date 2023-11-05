@@ -47,8 +47,6 @@ def cli(ctx):
 
     current_dir_full = os.getcwd()
     ctx.obj["cwd"] = current_dir_full
-    current_dir = os.path.split(current_dir_full)[-1]
-    click.echo(f"Cascade {__version__} in ./{current_dir}")
 
     try:
         meta = MetaHandler.read_dir(current_dir_full)
@@ -57,6 +55,7 @@ def cli(ctx):
         ctx.obj["len"] = meta[0].get("len")
     except MetaIOError as e:
         click.echo(e)
+        raise e
 
 
 @cli.command
