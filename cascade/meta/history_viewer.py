@@ -229,7 +229,7 @@ class HistoryViewer(Server):
             xs += [t["time"].iloc[i], t["time"].iloc[e], None]
             ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
-        self._edges[line] = {"edges": (xs, ys), "len": len(t)}
+        self._edges[line] = {metric: {"edges": (xs, ys), "len": len(t)}}
         return xs, ys
 
     def plot(self, metric: str, show: bool = False) -> Any:
@@ -259,7 +259,7 @@ class HistoryViewer(Server):
             t = self._table.loc[self._table.line == line]
             self._connect_points(line, metric, fig)
 
-            xs, ys = self._edges[line]["edges"]
+            xs, ys = self._edges[line][metric]["edges"]
             fig.add_trace(
                 self._go.Scatter(
                     x=xs,
@@ -287,8 +287,11 @@ class HistoryViewer(Server):
 
         for line in sorted(self._table.line.unique()):
             t = self._table.loc[self._table.line == line]
-            if line in self._edges and len(t) == self._edges[line]["len"]:
-                xs, ys = self._edges[line]["edges"]
+            if (line in self._edges
+                and metric in self._edges
+                and len(t) == self._edges[line][metric]["len"]
+            ):
+                xs, ys = self._edges[line][metric]["edges"]
             else:
                 xs, ys = self._connect_points(line, metric, fig)
             fig.add_trace(
