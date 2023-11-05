@@ -15,9 +15,9 @@ limitations under the License.
 """
 
 
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Union
 
-from ..base import PipeMeta
+from ..base import PipeMeta, Meta
 from . import SizedDataset
 
 
@@ -72,3 +72,20 @@ class Composer(SizedDataset):
         meta = super().get_meta()
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
         return meta
+
+    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+        """
+        Updates its own fields as usual and
+        if meta has `data` key then sequentially updates
+        data of all its datasets
+
+        Parameters
+        ----------
+        meta : Union[PipeMeta, Meta]
+            Meta of a single object or a pipeline
+        """
+
+        super().from_meta(meta)
+        if "data" in meta[0]:
+            for ds, meta in zip(self._datasets, meta[0]["data"]):
+                ds.from_meta(meta)

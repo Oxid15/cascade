@@ -124,24 +124,6 @@ class BaseModifier(Dataset):
         self_meta += self._dataset.get_meta()
         return self_meta
 
-    def update_meta(self, meta: Union[PipeMeta, Meta]) -> None:
-        """
-        Overrides base method enabling cascade-like calls to previous datasets.
-        Updates its owm meta with the first entry and passes the rest to the
-        next dataset.
-
-        Parameters
-        ----------
-        meta : Union[PipeMeta, Meta]
-            Meta of a single object or a pipeline
-        """
-        if isinstance(meta, list):
-            super().update_meta(meta[0])
-            if len(meta) > 1:
-                self._dataset.update_meta(meta[1:])
-        else:
-            super().update_meta(meta)
-
     def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
         """
         Calls the same method as base class but does

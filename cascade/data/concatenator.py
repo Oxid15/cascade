@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, List
+from typing import Any, List, Union
 
 import numpy as np
 
-from ..base import PipeMeta
+from ..base import Meta, PipeMeta
 from .dataset import SizedDataset, T
 
 
@@ -82,3 +82,20 @@ class Concatenator(SizedDataset):
         meta = super().get_meta()
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
         return meta
+
+    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+        """
+        Updates its own fields as usual and
+        if meta has `data` key then sequentially updates
+        data of all its datasets
+
+        Parameters
+        ----------
+        meta : Union[PipeMeta, Meta]
+            Meta of a single object or a pipeline
+        """
+
+        super().from_meta(meta)
+        if "data" in meta[0]:
+            for ds, meta in zip(self._datasets, meta[0]["data"]):
+                ds.from_meta(meta)

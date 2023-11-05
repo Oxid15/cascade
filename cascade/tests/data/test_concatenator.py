@@ -33,6 +33,28 @@ def test_meta():
     assert len(c.get_meta()[0]["data"]) == 2
 
 
+def test_from_meta():
+    n1 = Wrapper([0, 1, 2, 3])
+    n2 = Wrapper([0, 1, 2, 3])
+
+    n1.update_meta({"a": 1})
+    n2.update_meta({"b": 0})
+
+    c = Concatenator([n1, n2])
+    meta = c.get_meta()
+
+    n1 = Wrapper([0, 1, 2, 3])
+    n2 = Wrapper([0, 1, 2, 3])
+
+    c = Concatenator([n1, n2])
+    c.from_meta(meta)
+
+    meta = c.get_meta()
+
+    assert meta[0]["data"][0][0]["a"] == 1
+    assert meta[0]["data"][1][0]["b"] == 0
+
+
 @pytest.mark.parametrize(
     "arrs",
     [
