@@ -28,11 +28,19 @@ from cascade.base import MetaHandler
 from cascade.models import ModelRepo, Model
 
 
+class OldStyleModel(Model):
+    def get_meta(self):
+        meta = super().get_meta()
+        if "cascade_version" in meta[0]:
+            del meta[0]["cascade_version"]
+        return meta
+
+
 def test_scalars_only(tmp_path_str):
     repo = ModelRepo(tmp_path_str)
     line = repo.add_line()
 
-    model = Model()
+    model = OldStyleModel()
     # Make old-style metrics by overwriting with dict
     model.metrics = {
         "acc": 0.55
@@ -63,7 +71,7 @@ def test_complex_metrics(tmp_path_str):
     repo = ModelRepo(tmp_path_str)
     line = repo.add_line()
 
-    model = Model()
+    model = OldStyleModel()
     # Make old-style metrics by overwriting with dict
     model.metrics = {
         "acc": 0.55,
@@ -93,3 +101,30 @@ def test_complex_metrics(tmp_path_str):
 
     meta_repo = MetaHandler.read_dir(tmp_path_str)
     assert "cascade_version" in meta_repo[0]
+
+
+def test_idempotency(tmp_path_str):
+    repo = ModelRepo(tmp_path_str)
+    line = repo.add_line()
+
+    model = OldStyleModel()
+    # Make old-style metrics by overwriting with dict
+    model.metrics = {
+        "acc": 0.55,
+        "complex": {
+            "metric_1": 1,
+            "metric_2": 2,
+            "metric_arr": [0, 1, 2]
+        }
+    }
+
+    line.save(model, only_meta=True)
+
+    # Do the migration twice
+    migrate_repo_v0_13(tmp_path_str)
+    migrate_repo_v0_13(tmp_path_str)
+
+    model_path = os.path.join(tmp_path_str, "00000", "00000")
+    meta = MetaHandler.read_dir(model_path)
+
+    assert meta[0]["metrics"][0]["name"] == "acc"
