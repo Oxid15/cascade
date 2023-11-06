@@ -44,6 +44,10 @@ class Link:
     meta: Union[PipeMeta, None]
     created_at: datetime
 
+    def __post_init__(self) -> None:
+        if self.uri is not None and os.path.exists(self.uri):
+            self.uri = os.path.abspath(self.uri)
+
 
 class Traceable:
     """
@@ -299,7 +303,8 @@ class Traceable:
         specific fields will be taken.
 
         Link can be initialized without meta for example with only name
-        or only URI.
+        or only URI. If path exists locally then it is automatically will
+        be made absolute.
 
         If name or meta passed with the object at the same time
         they will override values from the object.
