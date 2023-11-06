@@ -1,6 +1,9 @@
 Examples
 ========
 
+Examples by task
+----------------
+
 .. grid:: 2
 
     .. grid-item::
@@ -38,6 +41,19 @@ Examples
 
             See how you can ensure data quality with data validation tools
 
+Examples by entity
+------------------
+
+.. grid:: 2
+
+    .. grid-item::
+        .. card:: Dataset
+            :link: /examples/dataset.rst
+            :link-type: ref
+
+            Learn about datasets, modifiers and how to use them
+
+
 Contents
 --------
 
@@ -49,3 +65,4 @@ Contents
     examples/model_training_trainers.ipynb
     examples/dataset_zoo.ipynb
     examples/data_validation.ipynb
+    examples/dataset.rst
