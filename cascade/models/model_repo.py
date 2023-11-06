@@ -17,6 +17,7 @@ import shutil
 from typing import Any, Dict, Generator, Iterable, List, Literal, Type, Union
 
 from ..base import (
+    MetaFromFile,
     PipeMeta,
     MetaFromFile,
     Traceable,
