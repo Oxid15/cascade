@@ -72,8 +72,6 @@ class Metric:
         self.created_at = pendulum.now(tz="UTC")
         self.extra = extra
 
-        super().__init__(*args, **kwargs)
-
     def compute(self, *args: Any, **kwargs: Any) -> MetricType:
         """
         The method to compute metric's value. Should always populate
