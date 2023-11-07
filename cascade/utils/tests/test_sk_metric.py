@@ -38,11 +38,13 @@ def test():
     gt = [0, 0, 0, 1, 1]
     model.evaluate(x, gt, metrics=[
         SkMetric("acc"),
-        SkMetric("accuracy_score")
+        SkMetric("accuracy_score"),
+        SkMetric("f1", average="micro"),
     ])
 
     assert model.metrics[0].value == 3 / 5
     assert model.metrics[1].value == 3 / 5
+    assert model.metrics[2].value == 3 / 5
 
     pred = model.predict(x)
     assert metrics.accuracy_score(gt, pred) == 3 / 5
