@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any
+from typing import Any, Dict, Literal, Tuple, Union
 from sklearn import metrics
 
 from ...metrics import MetricType, Metric
@@ -32,6 +32,30 @@ METRIC_ALIASES = {
 
 
 class SkMetric(Metric):
+    def __init__(
+        self,
+        name: str,
+        *args: None,
+        value: Union[MetricType, None] = None,
+        dataset: Union[str, None] = None,
+        split: Union[str, None] = None,
+        direction: Union[Literal["up", "down"], None] = None,
+        interval: Union[Tuple[MetricType, MetricType], None] = None,
+        extra: Union[Dict[str, MetricType], None] = None,
+        **kwargs: Any,
+    ) -> None:
+        self._args = args
+        self._kwargs = kwargs
+        super().__init__(
+            name,
+            value=value,
+            dataset=dataset,
+            split=split,
+            direction=direction,
+            interval=interval,
+            extra=extra,
+        )
+
     def compute(self, *args: Any, **kwargs: Any) -> MetricType:
         try:
             name = self.name
@@ -44,6 +68,6 @@ class SkMetric(Metric):
                 f"as the list of aliases: {METRIC_ALIASES}"
             ) from e
 
-        value = metric(*args, **kwargs)
+        value = metric(*self._args, *args, **self._kwargs, **kwargs)
         self.value = value
         return value
