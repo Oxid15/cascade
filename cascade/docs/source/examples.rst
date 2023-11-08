@@ -53,6 +53,34 @@ Examples by entity
 
             Learn about datasets, modifiers and how to use them
 
+    .. grid-item::
+        .. card:: Traceable
+            :link: /examples/traceable.rst
+            :link-type: ref
+
+            The basis of Cascade's objects
+
+    .. grid-item::
+        .. card:: Comments
+            :link: /examples/comments.rst
+            :link-type: ref
+
+            Sometimes you really need to express your thought at the moment
+
+    .. grid-item::
+        .. card:: Tags
+            :link: /examples/tags.rst
+            :link-type: ref
+
+            It's about building your own system
+
+    .. grid-item::
+        .. card:: Links
+            :link: /examples/links.rst
+            :link-type: ref
+
+            To always know what data relates to an artifact at hand
+
 
 Contents
 --------
