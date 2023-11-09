@@ -61,7 +61,6 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = "pydata_sphinx_theme"
-html_logo = "../imgs/logo.svg"
 html_favicon = "../imgs/logo_sq.svg"
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -84,4 +83,8 @@ html_theme_options = {
         "version_match": "latest",
     },
     "navbar_start": ["navbar-logo", "version-switcher"],
+    "logo": {
+        "image_light": "imgs/logo_light.svg",
+        "image_dark": "imgs/logo_dark.svg",
+   }
 }
