@@ -170,5 +170,4 @@ All datasets with examples can be found in :ref:`/examples/dataset_zoo.ipynb`
 
     quickstart
     examples
-    concepts
     modules
