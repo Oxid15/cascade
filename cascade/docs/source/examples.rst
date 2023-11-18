@@ -81,6 +81,13 @@ Examples by entity
 
             To always know what data relates to an artifact at hand
 
+    .. grid-item::
+        .. card:: Artifacts
+            :link: /examples/artifact.rst
+            :link-type: ref
+
+            The final result of most ML workflows
+
 
 Contents
 --------
@@ -94,3 +101,8 @@ Contents
     examples/dataset_zoo.ipynb
     examples/data_validation.ipynb
     examples/dataset.rst
+    examples/traceable.rst
+    examples/comments.rst
+    examples/tags.rst
+    examples/links.rst
+    examples/artifacts.rst
