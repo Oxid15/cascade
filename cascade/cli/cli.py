@@ -112,7 +112,7 @@ def view(ctx):
 @click.option("--port", type=int, default=8050)
 @click.option("-l", type=int, help="The number of last lines to show")
 @click.option("-m", type=int, help="The number of last models to show")
-@click.option("-p", type=int, help="Update period in seconds")
+@click.option("-p", type=int, default=3, help="Update period in seconds")
 def view_history(ctx, host, port, l, m, p):
     if ctx.obj.get("meta"):
         container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
