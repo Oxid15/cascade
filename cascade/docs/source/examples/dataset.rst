@@ -21,10 +21,6 @@ can be done and should be enforced.
 Cascade has default builtin ways to write dataset doc. It is called
 Data Card and it can be used with DataRegistrator
 
-See also
---------
-:py:class:`cascade.meta.DataCard`
-:py:class:`cascade.meta.DataRegistrator`
 
 Modifier
 --------
@@ -34,3 +30,9 @@ Modifier - is a dataset that performs transformations on the dataset it accepts.
 It stores a reference to the previous dataset and is responsible for handling not only its own
 meta data, but previous dataset's also. This mechanism allows to form
 and trace a pipeline as a whole starting at its last block.
+
+
+See also
+--------
+:py:class:`cascade.meta.DataCard`
+:py:class:`cascade.meta.DataRegistrator`

@@ -32,7 +32,7 @@ file artifacts easily using model's API.
 This will copy `file.txt` into `files` folder within model's directory.
 
 Model's work with artifacts
-===========================
+---------------------------
 
 .. note::
 
@@ -45,6 +45,6 @@ To save up space when saving model is decoupled from wrapper, since two methods 
 called at the same time.
 
 See also
-========
+--------
 :py:class:`cascade.utils.torch.TorchModel`
 :py:class:`cascade.utils.sklearn.SkModel`

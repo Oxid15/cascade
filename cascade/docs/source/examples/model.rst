@@ -16,9 +16,6 @@ perform evaluation and fill up its metrics.
 All this responsibilities form self-sufficient and independent model, which can be managed in more
 abstract way.
 
-See also
---------
-:py:class:`cascade.models.BasicModel`
 
 ModelLine
 ---------
@@ -44,3 +41,7 @@ ModelRepo constitutes a collection of lines.
 Its meta can contain the information about the experiments in general and about things that are
 applicable to all of the models. For example feature set, information about dataset (can be its meta)
 or validation procedure.
+
+See also
+--------
+:py:class:`cascade.models.BasicModel`
