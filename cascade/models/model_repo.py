@@ -92,7 +92,7 @@ class SingleLineRepo(Repo):
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
-        self._root = os.path.dirname(line.get_root())
+        self._root = line.get_root()
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
         self._line = line
