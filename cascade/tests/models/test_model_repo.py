@@ -306,7 +306,7 @@ def test_auto_line_name(tmp_path_str, ext):
     assert names == ["00000", "00002", "00003", "test"]
 
 
-pytest.mark.skip
+@pytest.mark.skip
 def test_no_logging(tmp_path_str):
     ModelRepo(tmp_path_str, log_history=False)
 

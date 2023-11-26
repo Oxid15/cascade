@@ -15,13 +15,11 @@ limitations under the License.
 """
 
 import logging
-from typing import Any, Dict, Iterable, List, Union, Tuple
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
 import pendulum
 
-from cascade.models import ModelRepo
-
-from ..base import Traceable, raise_not_implemented, PipeMeta
+from ..base import PipeMeta, Traceable, raise_not_implemented
 from ..models import Model, ModelLine, ModelRepo
 
 logger = logging.getLogger(__name__)

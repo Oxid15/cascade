@@ -50,7 +50,7 @@ class PaSchemaValidator(AggregateValidator):
     @staticmethod
     def _validate(ds: TableDataset, schema) -> bool:
         try:
-            if type(schema) == str:
+            if type(schema) is str:
                 schema = paio.from_yaml(schema)
             schema.validate(ds._table)
         except SchemaError as e:

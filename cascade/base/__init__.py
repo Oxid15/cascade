@@ -16,6 +16,12 @@ limitations under the License.
 
 from typing import Any, Dict, List, NoReturn, Union
 
+from .history_handler import HistoryHandler
+from .meta_handler import CustomEncoder as JSONEncoder
+from .meta_handler import MetaHandler, default_meta_format, supported_meta_formats
+from .traceable import Traceable, TraceableOnDisk
+
+
 """
 Single Meta of basic object is just a dict, however Cascade supports
 pipelines with lists of meta.
@@ -55,9 +61,3 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
         f"method called. May be you haven't "
         f"implemented it in the successor class"
     )
-
-
-from .history_handler import HistoryHandler
-from .meta_handler import CustomEncoder as JSONEncoder
-from .meta_handler import MetaHandler, default_meta_format, supported_meta_formats
-from .traceable import Traceable, TraceableOnDisk

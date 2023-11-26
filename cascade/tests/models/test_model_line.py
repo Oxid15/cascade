@@ -131,7 +131,7 @@ def test_create_model(tmp_path_str):
     assert model.params["a"] == 0
     assert model.metrics[0].name == "b"
     assert model.metrics[0].value == 1
-    assert len(line) == 1 # Model is saved only on log()
+    assert len(line) == 1  # Model is saved only on log()
 
 
 def test_handle_save_error(tmp_path_str):

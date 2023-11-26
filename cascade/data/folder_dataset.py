@@ -15,7 +15,6 @@ limitations under the License.
 """
 
 import os
-from hashlib import md5
 from typing import Any, List
 
 from ..base import PipeMeta, raise_not_implemented

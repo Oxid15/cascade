@@ -14,4 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .tables import TableDataset, TableFilter, TableIterator, PartedTableLoader, LargeCSVDataset, FeatureTable
+from .tables import (CSVDataset, FeatureTable, LargeCSVDataset,
+                     PartedTableLoader, TableDataset, TableFilter,
+                     TableIterator)

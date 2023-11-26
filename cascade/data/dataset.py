@@ -209,7 +209,7 @@ class Modifier(BaseModifier):
 
     def __len__(self) -> int:
         return len(self._dataset)
-    
+
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]["len"] = len(self)

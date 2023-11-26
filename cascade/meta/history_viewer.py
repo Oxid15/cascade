@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import os
 from typing import Any, Dict, List, Union
 
@@ -22,7 +21,7 @@ import pandas as pd
 from deepdiff import DeepDiff
 from flatten_json import flatten
 
-from ..base import MetaHandler, ZeroMetaError, MetaIOError
+from ..base import MetaHandler, ZeroMetaError
 from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
 from . import MetaViewer, Server
 
@@ -55,7 +54,7 @@ class HistoryViewer(Server):
         """
 
         try:
-            import plotly
+            import plotly  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_plotly()
         else:
@@ -116,7 +115,7 @@ class HistoryViewer(Server):
             line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
         ]
 
-        return valid_lines[-self._last_lines :]
+        return valid_lines[-self._last_lines:]
 
     def _make_table(self) -> None:
         metas = []
@@ -287,7 +286,8 @@ class HistoryViewer(Server):
 
         for line in sorted(self._table.line.unique()):
             t = self._table.loc[self._table.line == line]
-            if (line in self._edges
+            if (
+                line in self._edges
                 and metric in self._edges
                 and len(t) == self._edges[line][metric]["len"]
             ):
@@ -309,11 +309,11 @@ class HistoryViewer(Server):
 
     def _layout(self, metric: Union[str, None]):
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
-            from dash import Input, Output, dcc, html
+            from dash import dcc, html  # noqa: F401
 
         fig = self.plot(metric) if metric is not None else self._go.Figure()
 

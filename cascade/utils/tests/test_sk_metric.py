@@ -15,10 +15,8 @@ limitations under the License.
 """
 
 import os
-import shutil
 import sys
 
-import pytest
 from sklearn import metrics
 
 MODULE_PATH = os.path.dirname(

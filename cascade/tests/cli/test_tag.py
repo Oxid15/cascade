@@ -58,7 +58,7 @@ def test_ls(tmp_path_str):
 
         result = runner.invoke(cli, args=["tag", "add", "hello"])
         assert result.exit_code == 0
-    
+
         result = runner.invoke(cli, args=["tag", "ls"])
         assert result.exit_code == 0
 

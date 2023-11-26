@@ -21,8 +21,8 @@ from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from cascade.cli.cli import cli
 from cascade.base import MetaHandler
+from cascade.cli.cli import cli
 from cascade.models import ModelRepo
 
 
@@ -58,7 +58,7 @@ def test_ls(tmp_path_str):
 
         result = runner.invoke(cli, args=["comment", "add"], input="Hello")
         assert result.exit_code == 0
-    
+
         result = runner.invoke(cli, args=["comment", "ls"])
         assert result.exit_code == 0
 

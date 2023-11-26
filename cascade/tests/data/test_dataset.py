@@ -39,9 +39,9 @@ def test_meta():
     ds.update_meta({"time": now})
     meta = ds.get_meta()
 
-    assert type(meta) == list
+    assert type(meta) is list
     assert len(meta) == 1
-    assert type(meta[0]) == dict
+    assert type(meta[0]) is dict
     assert meta[0]["time"] == now
     assert "name" in meta[0]
 
@@ -105,18 +105,18 @@ def test_modifier_meta():
     ds = Modifier(ds)
 
     meta = ds.get_meta()
-    assert type(meta) == list
+    assert type(meta) is list
     assert len(meta) == 2
 
 
 def test_modifier_from_meta():
-    ds = Wrapper([1 ,2 ,3])
+    ds = Wrapper([1, 2, 3])
     ds.update_meta({"a": 1})
     ds = Modifier(ds)
     ds.update_meta({"b": 0})
     meta = ds.get_meta()
 
-    ds = Wrapper([1 ,2 ,3])
+    ds = Wrapper([1, 2, 3])
     ds = Modifier(ds)
     ds.from_meta(meta)
 

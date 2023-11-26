@@ -24,7 +24,7 @@ from typing import Dict, Union, Any, Literal, Iterable
 import pendulum
 from datetime import datetime
 
-from . import PipeMeta, Meta, MetaFromFile, default_meta_format, supported_meta_formats, MetaIOError
+from . import PipeMeta, Meta, default_meta_format, supported_meta_formats, MetaIOError
 
 
 @dataclass
@@ -149,7 +149,6 @@ class Traceable:
         else:
             self._meta_prefix.update(meta)
 
-
     @staticmethod
     def _warn_no_prefix() -> None:
         warnings.warn(
@@ -167,7 +166,7 @@ class Traceable:
         meta : Union[PipeMeta, Meta]
         """
         self.update_meta(meta)
-        
+
         if not isinstance(meta, list):
             meta = [meta]
 

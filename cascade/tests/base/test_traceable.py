@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import datetime
 import json
 import os
 import sys
@@ -24,16 +23,17 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler, Traceable, TraceableOnDisk, default_meta_format
+from cascade.base import (MetaHandler, Traceable, TraceableOnDisk,
+                          default_meta_format)
 
 
 def test_meta():
     tr = Traceable()
     meta = tr.get_meta()
 
-    assert type(meta) == list
+    assert type(meta) is list
     assert len(meta) == 1
-    assert type(meta[0]) == dict
+    assert type(meta[0]) is dict
     assert "name" in meta[0]
     assert "description" in meta[0]
     assert "tags" in meta[0]

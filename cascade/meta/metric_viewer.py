@@ -114,7 +114,7 @@ class MetricViewer:
         """
 
         try:
-            import plotly
+            import plotly  # noqa: F401
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 """

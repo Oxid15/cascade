@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import os
 from typing import Dict, Tuple
 
@@ -130,14 +129,14 @@ class RepoDiffViewer(BaseDiffViewer):
             )
 
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
             from dash import dcc, html
 
         try:
-            import dash_renderjson
+            import dash_renderjson  # noqa: F401
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"

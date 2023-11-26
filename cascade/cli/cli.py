@@ -16,9 +16,9 @@ limitations under the License.
 
 
 import os
+
 import click
 
-from ..version import __version__
 from ..base import MetaHandler, MetaIOError
 
 
@@ -113,7 +113,7 @@ def view(ctx):
 @click.option("-l", type=int, help="The number of last lines to show")
 @click.option("-m", type=int, help="The number of last models to show")
 @click.option("-p", type=int, default=3, help="Update period in seconds")
-def view_history(ctx, host, port, l, m, p):
+def view_history(ctx, host, port, l, m, p):  # noqa: E741
     if ctx.obj.get("meta"):
         container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
         if not container:
@@ -188,7 +188,9 @@ def comment_ls(ctx):
     if comments:
         for comment in comments:
             date = pendulum.parse(comment["timestamp"]).diff_for_humans(pendulum.now())
-            click.echo(f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}")
+            click.echo(
+                f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}"
+            )
 
 
 @comment.command("rm")
@@ -271,7 +273,6 @@ def migrate(ctx):
     migrate_repo_v0_13(ctx.obj.get("cwd"))
 
 
-
 @cli.group("artifact")
 @click.pass_context
 def artifact(ctx):
@@ -285,7 +286,7 @@ def artifact(ctx):
 def artifact_rm(ctx):
     if ctx.obj["type"] != "model":
         click.echo(f"Cannot remove an artifact from {ctx.obj['type']}")
-    
+
     raise NotImplementedError()
 
 

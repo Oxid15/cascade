@@ -16,16 +16,10 @@ import os
 import shutil
 from typing import Any, Dict, Generator, Iterable, List, Literal, Type, Union
 
-from ..base import (
-    MetaFromFile,
-    PipeMeta,
-    MetaFromFile,
-    Traceable,
-    TraceableOnDisk,
-)
+from ..base import MetaFromFile, PipeMeta, Traceable, TraceableOnDisk
+from ..version import __version__
 from .model import Model
 from .model_line import ModelLine
-from ..version import __version__
 
 
 class Repo(Traceable):

@@ -321,10 +321,10 @@ class FeatureTable(TableDataset):
 
 
 class PartedTableLoader(TableDataset):
-    def __init__(self, *args: Any, t = None, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, t=None, **kwargs: Any) -> None:
         raise ImportError("PartedTableLoader was removed since 0.12.0, consider using older version")
 
 
 class LargeCSVDataset(TableDataset):
-    def __init__(self, *args: Any, t = None, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, t=None, **kwargs: Any) -> None:
         raise ImportError("LargeCSVDataset was removed since 0.12.0, consider using older version")

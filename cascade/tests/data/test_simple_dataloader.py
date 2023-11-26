@@ -19,7 +19,6 @@ import sys
 
 import pytest
 
-from cascade.data import ApplyModifier
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))

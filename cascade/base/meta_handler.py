@@ -15,21 +15,19 @@ limitations under the License.
 """
 
 import datetime
-import deepdiff
 import glob
 import json
-from json import JSONEncoder
 import os
-import json
 from dataclasses import asdict, is_dataclass
-import datetime
-from typing import NoReturn, Union, Dict, Any
+from json import JSONEncoder
+from typing import Any, Dict, NoReturn, Union
 
-import yaml
+import deepdiff
 import numpy as np
+import yaml
 
-from . import MetaFromFile, MetaIOError, ZeroMetaError, MultipleMetaError
 from ..metrics import Metric
+from . import MetaFromFile, MetaIOError, MultipleMetaError, ZeroMetaError
 
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
@@ -304,7 +302,7 @@ class MetaHandler:
     def write_dir(cls, path: str, obj: Any, overwrite: bool = True, meta_template: str = "meta.*") -> None:
         """
         Writes meta to directory without specifying file name
-        
+
         Automatically determines extension and overwrites of file exists
 
         Parameters
@@ -319,8 +317,8 @@ class MetaHandler:
             The template for meta files, by default "meta.*"
         """
         ext = cls._determine_meta_fmt(path, meta_template)
-        
+
         if not ext:
             ext = default_meta_format
-            
+
         cls.write(os.path.join(path, "meta" + ext), obj, overwrite=overwrite)
