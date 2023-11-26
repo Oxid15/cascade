@@ -28,25 +28,22 @@ from cascade.base import MetaHandler, Traceable, TraceableOnDisk, default_meta_f
 
 
 def test_meta():
-    now = datetime.datetime.now()
-    tr = Traceable(meta_prefix={"time": now})
+    tr = Traceable()
     meta = tr.get_meta()
 
     assert type(meta) == list
     assert len(meta) == 1
     assert type(meta[0]) == dict
-    assert meta[0]["time"] == now
     assert "name" in meta[0]
     assert "description" in meta[0]
     assert "tags" in meta[0]
 
 
 def test_update_meta():
-    tr = Traceable(meta_prefix={"a": 1, "b": 2})
+    tr = Traceable()
     tr.update_meta({"b": 3})
     meta = tr.get_meta()
 
-    assert meta[0]["a"] == 1
     assert meta[0]["b"] == 3
 
 
