@@ -94,7 +94,7 @@ class BasicModel(Model):
                 raise RuntimeError(
                     f".pkl model hash check failed "
                     f"it may be that model's .pkl file was corrupted\n"
-                    f'hash from {names[0]}: {meta["md5sum"]}\n'
+                    f'hash from meta: {meta["md5sum"]}\n'
                     f"hash of {path}: {file_hash}"
                 )
 
