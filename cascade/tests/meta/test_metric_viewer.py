@@ -69,7 +69,7 @@ def test_missing_model_meta(tmp_path_str, dummy_model, ext):
     model_repo["test"].save(dummy_model)
     model_repo["test"].save(dummy_model)
 
-    os.remove(os.path.join(tmp_path, "test", "00000", "meta" + ext))
+    os.remove(os.path.join(tmp_path_str, "test", "00000", "meta" + ext))
 
     mv = MetricViewer(model_repo)
     mv.plot_table()
