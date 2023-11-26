@@ -175,7 +175,7 @@ class HistoryViewer(Server):
 
         self._table["time"] = time
         self._table["color"] = [line_cols[line] for line in self._table["line"]]
-        self._table = self._table.fillna("")
+        # self._table = self._table.fillna("")
 
         columns2fill = [
             col for col in self._table.columns if not col.startswith("metrics_")
