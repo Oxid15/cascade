@@ -83,28 +83,28 @@ Examples by entity
 
     .. grid-item::
         .. card:: Artifacts
-            :link: /examples/artifact.rst
+            :link: /examples/artifacts.rst
             :link-type: ref
 
             The final result of most ML workflows
 
     .. grid-item::
         .. card:: Model
-            :link: /examples/artifact.rst
+            :link: /examples/model.rst
             :link-type: ref
 
             Wrappers for artifacts
 
     .. grid-item::
         .. card:: Validator
-            :link: /examples/artifact.rst
+            :link: /examples/validator.rst
             :link-type: ref
 
             Thorough validation is a key to data quality
 
     .. grid-item::
         .. card:: Viewer
-            :link: /examples/artifact.rst
+            :link: /examples/viewer.rst
             :link-type: ref
 
             Built in viewers for meta data
