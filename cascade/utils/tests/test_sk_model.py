@@ -35,9 +35,8 @@ from cascade.utils.sklearn import SkModel
 # Skipped until hash check can be returned
 @pytest.mark.skip
 @pytest.mark.parametrize("ext", [".json", ".yml"])
-def test_hash_check(tmp_path, ext):
-    tmp_path = str(tmp_path)
-    repo = csd.models.ModelRepo(tmp_path, overwrite=True, meta_fmt=ext)
+def test_hash_check(tmp_path_str, ext):
+    repo = csd.models.ModelRepo(tmp_path_str, overwrite=True, meta_fmt=ext)
 
     tree = SkModel(blocks=[DecisionTreeClassifier()])
 
@@ -48,30 +47,38 @@ def test_hash_check(tmp_path, ext):
     line.save(forest)
 
     # This should pass
-    tree.load(os.path.join(tmp_path, "tree", "00000", "model"))
+    tree.load(os.path.join(tmp_path_str, "tree", "00000", "model"))
 
     # This should fail
     shutil.move(
-        os.path.join(tmp_path, "tree", "00001", "model.pkl"),
-        os.path.join(tmp_path, "tree", "00000", "model.pkl"),
+        os.path.join(tmp_path_str, "tree", "00001", "model.pkl"),
+        os.path.join(tmp_path_str, "tree", "00000", "model.pkl"),
     )
 
     with pytest.raises(RuntimeError):
-        tree.load(os.path.join(tmp_path, "tree", "00000", "model"))
+        tree.load(os.path.join(tmp_path_str, "tree", "00000", "model"))
 
 
-@pytest.mark.parametrize("postfix", ["", "model", "model.pkl"])
-def test_save_load(tmp_path, postfix):
-    tmp_path = str(tmp_path)
-    if postfix:
-        tmp_path = os.path.join(tmp_path, postfix)
+def test_save_load(tmp_path_str):
 
     model = SkModel(blocks=[RandomForestClassifier(n_estimators=2)], custom_param=42)
-    model.save(tmp_path)
+    model.save(tmp_path_str)
 
     assert model._pipeline
 
-    model = SkModel.load(tmp_path)
+    model = SkModel.load(tmp_path_str)
 
     assert model.params.get("custom_param") == 42
+
+
+def test_model_artifacts(tmp_path_str):
+
+    model = SkModel(blocks=[RandomForestClassifier(n_estimators=2)], custom_param=42)
+    model.save_artifact(tmp_path_str)
+
+    assert os.path.exists(os.path.join(tmp_path_str, "pipeline.pkl"))
+    assert not os.path.exists(os.path.join(tmp_path_str, "model.pkl"))
+
+    model = SkModel()
+    model.load_artifact(tmp_path_str)
     assert model._pipeline[0].n_estimators == 2

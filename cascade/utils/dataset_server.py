@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any
 
-from flask import Flask, Response, request
+from flask import Flask, request
 
 from ..data import Dataset, Modifier, T
 from .serializer import Serializer

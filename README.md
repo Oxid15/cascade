@@ -5,9 +5,9 @@
 [![Downloads](https://pepy.tech/badge/cascade-ml)](https://pepy.tech/project/cascade-ml)
 [![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
 
-Flexible ML Engineering library with the aim to standardize the work with data and models, make experiments more reproducible, ML development faster.  
+Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
 
-Cascade built for individuals or small teams that are in need of ML Engineering solution, but don't have time or resources to use large enterprise-level systems.  
+Cascade was built especially for individuals or small teams that are in need of MLOps, but don't have time or resources to integrate with platforms.
 
 **Included in [Model Lifecycle](https://github.com/kelvins/awesome-mlops#model-lifecycle) section of Awesome MLOps list**
 
@@ -19,7 +19,7 @@ pip install cascade-ml
 
 More info on installation can be found in [documentation](https://oxid15.github.io/cascade/en/latest/quickstart.html#installation)
 
-## Documentation
+## Docs
 
 [Go to Cascade documentation](https://oxid15.github.io/cascade/en/latest)
 
@@ -31,8 +31,8 @@ of what the library is capable of. See more in documentation.
 ### ETL pipeline tracking
 
 Data processing pipelines need to be versioned and tracked as a part of model experiments.  
-To track changes and version everything about data Cascade has Datasets - special wrappers
-that encapsulate changes that are done during preprocessing.
+To track changes and version everything about data Cascade has `Datasets` - special wrappers
+that encapsulate operations on data.
 
 ```python
 from pprint import pprint
@@ -44,11 +44,9 @@ import numpy as np
 X, y = load_digits(return_X_y=True)
 pairs = [(x, y) for (x, y) in zip(X, y)]
 
-# To track all preparation stages we wrap cdd.Dataset
 ds = cdd.Wrapper(pairs)
-
-# This creates pipeline
 ds = cdd.RandomSampler(ds)
+
 train_ds, test_ds = cdd.split(ds)
 train_ds = cdd.ApplyModifier(
     train_ds,
@@ -60,35 +58,62 @@ pprint(train_ds.get_meta())
 
 We see all the stages that we did in meta.
 
+<details>
+<summary>Click to see full pipeline metadata</summary>
+
 ```json
-[{"len": 898,
+[{"comments": [],
+  "description": null,
+  "len": 898,
+  "links": [],
   "name": "cascade.data.apply_modifier.ApplyModifier",
+  "tags": [],
   "type": "dataset"},
- {"len": 898,
+ {"comments": [],
+  "description": null,
+  "len": 898,
+  "links": [],
   "name": "cascade.data.range_sampler.RangeSampler",
+  "tags": [],
   "type": "dataset"},
- {"len": 1797,
+ {"comments": [],
+  "description": null,
+  "len": 1797,
+  "links": [],
   "name": "cascade.data.random_sampler.RandomSampler",
+  "tags": [],
   "type": "dataset"},
- {"len": 1797,
+ {"comments": [],
+  "len": 1797,
+  "links": [],
   "name": "cascade.data.dataset.Wrapper",
   "obj_type": "<class 'list'>",
+  "tags": [],
   "type": "dataset"}]
 ```
 
-However, the pipelines are changing frequently and these changes during experiments are rarely got version-tracked.
-Cascade has a solution for this.
-
-```python
-# We save the dataset's meta into the version log
-# if something will change in the pipeline
-# the version will be updated
-
-cdd.VersionAssigner(train_ds, 'version_log.yml')
-```
+</details>
 
 See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/examples/dataset_zoo.html)  
 See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
+
+
+### Pipeline versioning
+
+Cascade offers automatic pipeline versioning
+utilities
+
+```python
+from cascade.data import Wrapper, Modifier, version
+
+ds = Wrapper([0, 1, 2])
+ds = Modifier(ds)
+
+ver = version(ds, "version_log.yml")
+```
+
+Will output `0.1` and for any change in the steps or any meta of the pipeline it will
+bump the version. If you return to the previous version, then will return to previous one as well.
 
 ### Experiment tracking
 
@@ -100,41 +125,46 @@ from cascade import models as cdm
 from cascade import data as cdd
 
 model = cdm.Model()
-model.metrics.update({
-    'acc': random.random()
-})
+model.add_metric('acc', random.random())
 
-# Repo is the collection of model lines
 repo = cdm.ModelRepo('repos/use_case_repo')
 
-# Line can be a bunch of experiments on one model type
 line = repo.add_line('baseline')
 line.save(model, only_meta=True)
 ```
 
-Let's see what is saved as meta data of this experiment.
+`Repo` is the collection of model lines and `Line` can be a bunch of experiments on one model type.
+
+
+<details>
+<summary>Click to see full model metadata</summary>
 
 ```json
-[
-    {
-        "name": "cascade.models.model.Model",
-        "created_at": "2023-05-29T21:06:23.341752+00:00",
-        "metrics": {
-            "acc": 0.6745652975946803
-        },
-        "params": {},
-        "type": "model",
-        "saved_at": "2023-05-29T21:06:25.977728+00:00"
-    }
-]
+[{"comments": [],
+  "created_at": "2023-11-06T07:42:42.737248+00:00",
+  "description": null,
+  "links": [],
+  "metrics": [{"created_at": "2023-11-06T07:42:43.004261+00:00",
+               "name": "acc",
+               "value": 0.3730907820891789}],
+  "name": "cascade.models.model.Model",
+  "params": {},
+  "path": "/home/user/repos/use_case_repo/baseline/00001",
+  "saved_at": "2023-11-06T07:43:17.325593+00:00",
+  "slug": "cerulean_jaguarundi_of_trust",
+  "tags": [],
+  "type": "model"}]
 ```
+
+</details>
+
 
 See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Data validation
 
 Validation is an important part of pipelines. Simple asserts can do the thing, but
-there is more useful validation tools.  
+there are more useful validation tools.  
 Validators provide meaningful error messages and a way to perform many checks in one run over the dataset.
 
 ```python
@@ -203,7 +233,7 @@ See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/
 
 ## Who could find Cascade useful
 
-Small and fast-prototyping AI-teams could use it as a tradeoff between total missingness of any ML-Engineering framework and demanding enterprise solutions.
+Small and fast-prototyping AI-teams could use it as a tradeoff between total missingness of any MLOps practices and demanding enterprise solutions.
 
 ## Principles
 

@@ -14,11 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
+from shutil import copyfile
 import warnings
-from typing import Any, Union
+from typing import Any, Union, Callable
 
 import pendulum
 
+from ..metrics import MetricType, Metric
 from ..base import PipeMeta, Traceable, raise_not_implemented
 
 
@@ -35,13 +38,16 @@ class Model(Traceable):
         Should be called in any successor - initializes default meta needed.
 
         Successors may pass all of their parameters to superclass for it to be able to
-        log them in meta. Everything that is worth to document about model and data
-        it was trained on can be put either in params or meta_prefix.
+        log them in meta. Everything that is worth to document about the model
+        can be put either in params or meta_prefix
         """
-        # Model accepts meta_prefix explicitly to not to record it in 'params'
-        self.metrics = {}
+        self.metrics = []
         self.params = kwargs
         self.created_at = pendulum.now(tz="UTC")
+        self._file_artifacts_paths = []
+        self._file_artifact_missing_oks = []
+        self._log_callbacks = []
+        # Model accepts meta_prefix explicitly to not to record it in 'params'
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
 
     def fit(self, *args: Any, **kwargs: Any) -> None:
@@ -60,7 +66,7 @@ class Model(Traceable):
 
     def evaluate(self, *args: Any, **kwargs: Any) -> None:
         """
-        Evaluates model against any metrics. Should not return any value, just populate self.metrics dict.
+        Evaluates model against any metrics. Should not return any value, just populate self.metrics
         """
         raise_not_implemented("cascade.models.Model", "evaluate")
 
@@ -73,32 +79,80 @@ class Model(Traceable):
 
     def save(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Saves model's state using provided filepath.
+        Does additional saving routines. Call this if you call
+        save() in any subclass.
+
+        Creates the folder,
+        copies file artifacts added by add_file
+        automatically
+
+        Parameters
+        ----------
+        path : str
+            Path to the model folder
+
+        Raises
+        ------
+        ValueError
+            If the path is not a folder
+        FileNotFoundError
+            If the file that should be copied does not exists and
+            it is not ok. See `add_file` for more info.
+
+        See also
+        --------
+        cascade.models.Model.add_file
         """
-        raise_not_implemented("cascade.models.Model", "save")
+        os.makedirs(path, exist_ok=True)
+
+        if not hasattr(self, "_file_artifacts_paths"):
+            warnings.warn(
+                "Failed to perform basic Model.save since some attributes are missing"
+                "maybe you haven't call super().__init__ in Model's subclass?"
+            )
+            return
+
+        for filepath, but_its_ok in zip(
+            self._file_artifacts_paths, self._file_artifact_missing_oks
+        ):
+            if not os.path.exists(filepath):
+                if but_its_ok:
+                    continue
+                raise FileNotFoundError(
+                    f"File {filepath} not found when trying to copy an artifact of model at {path}"
+                )
+            filename = os.path.split(filepath)[-1]
+
+            files_folder = os.path.join(path, "files")
+            os.makedirs(files_folder, exist_ok=True)
+
+            copyfile(filepath, os.path.join(files_folder, filename))
+
+    def load_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Loads standalone model's artifact using provided filepath and sets it inside the model
+        """
+        raise_not_implemented("cascade.models.Model", "load_artifact")
+
+    def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Saves standalone model's artifact using provided filepath
+        """
+        raise_not_implemented("cascade.models.Model", "save_artifact")
 
     def get_meta(self) -> PipeMeta:
         # Successors may not call super().__init__
         # they may not have these default fields
 
         meta = super().get_meta()
+        meta[0]["type"] = "model"
 
-        # TODO: can refactor this
         all_default_exist = True
-        if hasattr(self, "created_at"):
-            meta[0]["created_at"] = self.created_at
-        else:
-            all_default_exist = False
-
-        if hasattr(self, "metrics"):
-            meta[0]["metrics"] = self.metrics
-        else:
-            all_default_exist = False
-
-        if hasattr(self, "params"):
-            meta[0]["params"] = self.params
-        else:
-            all_default_exist = False
+        for attr in ("created_at", "metrics", "params"):
+            if hasattr(self, attr):
+                meta[0][attr] = self.__getattribute__(attr)
+            else:
+                all_default_exist = False
 
         if not all_default_exist:
             warnings.warn(
@@ -106,8 +160,97 @@ class Model(Traceable):
                 "maybe you haven't call super().__init__ in subclass?"
             )
 
-        meta[0]["type"] = "model"
         return meta
+
+    def add_file(self, path: str, missing_ok: bool = False) -> None:
+        """
+        Add additional file artifact to the model
+        Copy the file to the model folder when saving model.
+
+        Parameters
+        ----------
+        path : str
+            Path to the file to be copied. Can be
+            missing at the time of the call, but should be
+            present when calling save()
+        missing_ok : bool, optional
+            If it is okay when the file does not exist. Raises an error if False, by default False
+        """
+        self._file_artifacts_paths.append(path)
+        self._file_artifact_missing_oks.append(missing_ok)
+
+    def add_log_callback(self, callback: Callable[["Model"], None]) -> None:
+        """
+        Registers a callback to be executed
+        while logging metrics. Usually is used internally
+        and is not initially intended as a public method
+
+        Parameters
+        ----------
+        callback : Callable[[Model], None]
+            A function that accepts a model
+
+        See also
+        --------
+        cascade.models.Model.log_metrics
+        """
+        self._log_callbacks.append(callback)
+
+    def add_metric(self, metric: Union[str, Metric],
+                   value: Union[MetricType, None] = None, **kwargs: Any) -> None:
+        """
+        Adds metric value to the model. If metric already exists in the list, updates its value.
+
+        Parameters
+        ----------
+        metric : Union[str, Metric]
+            Either metric name or metric object. If object, then second argument is ignored
+        value : Union[MetricType, None], optional
+            Metric value when metric is str, by default None
+
+        Any additional args will go to the Metric constructor for flexibility if metric is str
+
+        Raises
+        ------
+        ValueError
+            If in either value or metric.value is None
+        TypeError
+            If metric is of inappropriate type
+        """
+        if isinstance(metric, str):
+            metric = Metric(name=metric, value=value, **kwargs)
+        elif not isinstance(metric, Metric):
+            raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
+
+        # Model be initialized not properly
+        if not hasattr(self, "metrics"):
+            self.metrics = []
+
+        # Overwrites metric if it is the same, but
+        # value is different
+        for i, base_metric in enumerate(self.metrics):
+            if metric == base_metric:
+                self.metrics[i] = metric
+                return
+
+        self.metrics.append(metric)
+
+    def log(self) -> None:
+        """
+        Sequentially calls every log callback.
+        Use this if you want to make a checkpoint of a model
+        from inside the model. Callback should be a function that
+        given the model saves it. For example ModelLine.save method.
+        ModelLine.add_model registers callback with only_meta=True automatically
+        when creating a new model.
+
+        See also
+        --------
+        cascade.models.ModelLine.add_model
+        cascade.models.Model.add_log_callback
+        """
+        for callback in self._log_callbacks:
+            callback(self)
 
 
 class ModelModifier(Model):

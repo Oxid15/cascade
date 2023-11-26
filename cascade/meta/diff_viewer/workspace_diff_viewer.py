@@ -34,14 +34,14 @@ class WorkspaceDiffViewer(RepoDiffViewer):
 
     def _line_table(self):
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
             from dash import html
 
         try:
-            import dash_renderjson
+            import dash_renderjson  # noqa: F401
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
@@ -122,14 +122,14 @@ class WorkspaceDiffViewer(RepoDiffViewer):
 
     def _layout(self):
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
             from dash import dcc, html
 
         try:
-            import dash_renderjson
+            import dash_renderjson  # noqa: F401
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"

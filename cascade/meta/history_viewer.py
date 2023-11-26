@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import os
 from typing import Any, Dict, List, Union
 
@@ -22,7 +21,7 @@ import pandas as pd
 from deepdiff import DeepDiff
 from flatten_json import flatten
 
-from ..base import MetaHandler
+from ..base import MetaHandler, ZeroMetaError
 from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
 from . import MetaViewer, Server
 
@@ -39,6 +38,7 @@ class HistoryViewer(Server):
         container: Union[Workspace, ModelRepo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
+        update_period_sec: int = 3
     ) -> None:
         """
         Parameters
@@ -49,10 +49,12 @@ class HistoryViewer(Server):
             Constraints the number of lines back from the last one to view
         last_models: int, optional
             For each line constraints the number of models back from the last one to view
+        update_period_sec: int, default is 3
+            Update period in seconds
         """
 
         try:
-            import plotly
+            import plotly  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_plotly()
         else:
@@ -65,6 +67,7 @@ class HistoryViewer(Server):
         self._container = container
         self._last_lines = last_lines
         self._last_models = last_models
+        self._update_period_sec = update_period_sec
 
         repo = self._container
         if isinstance(self._container, ModelLine):
@@ -83,6 +86,13 @@ class HistoryViewer(Server):
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
+        meta = MetaHandler.read_dir(repo.get_root())
+        if "cascade_version" not in meta[0]:
+            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
+                               f" metric format. Please, migrate the repo in {repo.get_root()}"
+                               " to be able to use the viewer."
+                               "Use cascade.base.utils.migrate_repo_v0_13")
+
         self._make_table()
 
     def _update(self) -> None:
@@ -93,16 +103,11 @@ class HistoryViewer(Server):
         valid_lines = []
         updated_at = []
         for line in line_names:
-            meta_paths = glob.glob(os.path.join(self._repo.get_root(), line, "meta.*"))
-            if len(meta_paths) > 1:
-                raise RuntimeError(
-                    f"{len(meta_paths)} line meta files was found in "
-                    f"{os.path.join(self._repo.get_root(), line)}. Should be exactly one"
-                )
-            elif len(meta_paths) == 0:
+            try:
+                meta = MetaHandler.read_dir(os.path.join(self._repo.get_root(), line))
+            except ZeroMetaError:
                 continue
 
-            meta = MetaHandler.read(meta_paths[0])
             updated_at.append(meta[0]["updated_at"])
             valid_lines.append(line)
 
@@ -110,7 +115,7 @@ class HistoryViewer(Server):
             line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
         ]
 
-        return valid_lines[-self._last_lines :]
+        return valid_lines[-self._last_lines:]
 
     def _make_table(self) -> None:
         metas = []
@@ -131,9 +136,19 @@ class HistoryViewer(Server):
                 new_meta = {"line": line_name, "model": i}
                 try:
                     meta = view[i][0]
+
+                    metrics = dict()
+                    for metric in meta["metrics"]:
+                        name = metric["name"]
+                        for key in ["dataset", "split"]:
+                            part = metric.get(key)
+                            name += "_" + part if part else ""
+                        metrics[name] = metric.get("value")
+                    meta["metrics"] = metrics
+
                     new_meta.update(flatten(meta))
                 except IndexError:
-                    pass
+                    meta = {}
                 metas.append(new_meta)
 
                 p = {
@@ -159,7 +174,7 @@ class HistoryViewer(Server):
 
         self._table["time"] = time
         self._table["color"] = [line_cols[line] for line in self._table["line"]]
-        self._table = self._table.fillna("")
+        # self._table = self._table.fillna("")
 
         columns2fill = [
             col for col in self._table.columns if not col.startswith("metrics_")
@@ -213,7 +228,7 @@ class HistoryViewer(Server):
             xs += [t["time"].iloc[i], t["time"].iloc[e], None]
             ys += [t[metric].iloc[i], t[metric].iloc[e], None]
 
-        self._edges[line] = {"edges": (xs, ys), "len": len(t)}
+        self._edges[line] = {metric: {"edges": (xs, ys), "len": len(t)}}
         return xs, ys
 
     def plot(self, metric: str, show: bool = False) -> Any:
@@ -243,7 +258,7 @@ class HistoryViewer(Server):
             t = self._table.loc[self._table.line == line]
             self._connect_points(line, metric, fig)
 
-            xs, ys = self._edges[line]["edges"]
+            xs, ys = self._edges[line][metric]["edges"]
             fig.add_trace(
                 self._go.Scatter(
                     x=xs,
@@ -271,8 +286,12 @@ class HistoryViewer(Server):
 
         for line in sorted(self._table.line.unique()):
             t = self._table.loc[self._table.line == line]
-            if line in self._edges and len(t) == self._edges[line]["len"]:
-                xs, ys = self._edges[line]["edges"]
+            if (
+                line in self._edges
+                and metric in self._edges
+                and len(t) == self._edges[line][metric]["len"]
+            ):
+                xs, ys = self._edges[line][metric]["edges"]
             else:
                 xs, ys = self._connect_points(line, metric, fig)
             fig.add_trace(
@@ -290,11 +309,11 @@ class HistoryViewer(Server):
 
     def _layout(self, metric: Union[str, None]):
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
-            from dash import Input, Output, dcc, html
+            from dash import dcc, html  # noqa: F401
 
         fig = self.plot(metric) if metric is not None else self._go.Figure()
 
@@ -324,7 +343,7 @@ class HistoryViewer(Server):
                     value=metric,
                 ),
                 dcc.Graph(id="history-figure", figure=fig),
-                dcc.Interval(id="history-interval", interval=1000 * 3),
+                dcc.Interval(id="history-interval", interval=1000 * self._update_period_sec),
             ]
         )
 

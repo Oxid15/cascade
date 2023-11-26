@@ -20,10 +20,10 @@ from typing import Any, Tuple
 import numpy as np
 
 from ...base import PipeMeta
-from ...data import Dataset
+from ...data import SizedDataset
 
 
-class TextClassificationFolder(Dataset):
+class TextClassificationFolder(SizedDataset):
     """
     Dataset to simplify loading of data for text classification.
     Texts of different classes should be placed in different folders.
@@ -75,8 +75,6 @@ class TextClassificationFolder(Dataset):
         meta = super().get_meta()
         meta[0].update(
             {
-                "name": repr(self),
-                "size": len(self),
                 "root": self._root,
                 "labels": np.unique(self._labels).tolist(),
             }

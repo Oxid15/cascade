@@ -5,8 +5,13 @@
         "url": "https://oxid15.github.io/cascade/en/latest/"
     },
     {
-        "name": "v0.12.0 (stable)",
+        "name": "v0.13.0 (stable)",
         "version": "stable",
+        "url": "https://oxid15.github.io/cascade/en/v0.13.0/"
+    },
+    {
+        "name": "v0.12.0",
+        "version": "0.12.0",
         "url": "https://oxid15.github.io/cascade/en/v0.12.0/"
     },
     {

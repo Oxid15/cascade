@@ -15,12 +15,11 @@ limitations under the License.
 """
 
 import logging
-import os
-from typing import Any, Dict, Iterable, List, Union
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
 import pendulum
 
-from ..base import Traceable, raise_not_implemented
+from ..base import PipeMeta, Traceable, raise_not_implemented
 from ..models import Model, ModelLine, ModelRepo
 
 logger = logging.getLogger(__name__)
@@ -66,17 +65,20 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
+    def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
+        self.train_start_at = None
+        self.train_end_at = None
+        super().__init__(repo, *args, **kwargs)
 
     @staticmethod
-    def _find_last_model(model: Model, line: ModelLine) -> None:
+    def _load_last_model(line: ModelLine) -> Tuple[Model, int]:
         model_num = len(line) - 1
         while True:
-            path = os.path.join(line.get_root(), line.model_names[model_num])
             try:
-                model.load(path)
-                break
-            except FileNotFoundError as e:
-                logger.warning(f"Model {path} files were not found\n{e}")
+                model = line.load(model_num, only_meta=False)
+                return model, model_num
+            except Exception as e:
+                logger.warning(f"Model {model_num} files were not found\n{e}")
                 model_num -= 1
 
                 if model_num == -1:
@@ -152,10 +154,14 @@ class BasicTrainer(Trainer):
         if start_from is not None:
             if len(line) == 0:
                 raise RuntimeError(f"Cannot start from line {line_name} as it is empty")
-            model_num = self._find_last_model(model, line)
+            model, model_num = self._load_last_model(line)
+
+        # Since the model is created externally, we
+        # need to register a callback manually
+        model.add_log_callback(line._save_only_meta)
 
         start_time = pendulum.now()
-        self._meta_prefix["train_start_at"] = start_time
+        self.train_start_at = start_time
         logger.info(f"Training started with parameters:\n{train_kwargs}")
         logger.info(f"repo is {self._repo}")
         logger.info(f"line is {line_name}")
@@ -166,7 +172,7 @@ class BasicTrainer(Trainer):
         for epoch in range(epochs):
             # Empty model's metrics to not to repeat them
             # in epochs where no evaluation
-            model.metrics = {}
+            model.metrics = []
 
             # Train model
             try:
@@ -194,10 +200,18 @@ class BasicTrainer(Trainer):
             # Record metrics:
             # no need to copy since don't reuse model's metrics dict
             self.metrics.append(model.metrics)
-            logger.info(f"Epoch {epoch}: {model.metrics}")
+            logger.info(f"Epoch: {epoch}")
+            for metric in model.metrics:
+                logger.info(metric)
 
         end_time = pendulum.now()
-        self._meta_prefix["train_end_at"] = end_time
+        self.train_end_at = end_time
         logger.info(
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"
         )
+
+    def get_meta(self) -> PipeMeta:
+        meta = super().get_meta()
+        meta[0]["train_start_at"] = self.train_start_at
+        meta[0]["train_end_at"] = self.train_end_at
+        return meta

@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import os
 from typing import Dict, Tuple
 
@@ -46,31 +45,23 @@ class RepoDiffViewer(BaseDiffViewer):
         # Check that meta of repo or line exists
         # do not restrict extensions because meta handler would fail with
         # informative message anyway
-        metas = glob.glob(os.path.join(path, "meta.*"))
-        if len(metas) == 0:
-            raise ValueError(f"There is no meta file in the directory provided: {path}")
 
-        # No idea how to handle multiple metas
-        # and what it means
-        if len(metas) > 1:
-            raise ValueError(f"Multiple meta files in the directory provided: {path}")
-
-        meta = MetaHandler.read(metas[0])
+        meta = MetaHandler.read_dir(path)
         if "type" not in meta[0]:
             raise ValueError(
-                f"Meta in file {metas[0]} has no `type` in its keys! "
+                f"Meta in {path} has no `type` in its keys! "
                 "It may be that you are using DiffViewer on old "
                 "type of history logs before 0.10.0."
             )
 
         if not isinstance(meta, list):
             raise ValueError(
-                f"Something is wrong with meta in {metas[0]} - it is not a list"
+                f"Something is wrong with meta in {path} - it is not a list"
             )
 
         if "type" not in meta[0]:
             raise ValueError(
-                f"Something is wrong with meta in {metas[0]} - no type key in it"
+                f"Something is wrong with meta in {path} - no type key in it"
             )
 
         if meta[0]["type"] not in meta_type:
@@ -81,7 +72,7 @@ class RepoDiffViewer(BaseDiffViewer):
 
         mev = MetaViewer(path, filt={"type": "model"})
         objs = [meta for meta in mev]
-        objs = {meta[0]["name"]: meta for meta in objs}
+        objs = {meta[0]["path"]: meta for meta in objs}
         return objs
 
     def _layout(self):
@@ -138,14 +129,14 @@ class RepoDiffViewer(BaseDiffViewer):
             )
 
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
             from dash import dcc, html
 
         try:
-            import dash_renderjson
+            import dash_renderjson  # noqa: F401
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"

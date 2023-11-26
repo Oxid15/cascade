@@ -16,9 +16,6 @@ limitations under the License.
 
 from typing import Any
 
-import numpy as np
-
-from ..base import PipeMeta
 from ..data import Wrapper
 
 
