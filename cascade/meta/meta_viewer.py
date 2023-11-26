@@ -18,7 +18,7 @@ import os
 import warnings
 from typing import Any, Dict, Union
 
-from ..base import MetaFromFile, MetaHandler, supported_meta_formats
+from ..base import MetaFromFile, MetaIOError, MetaHandler, supported_meta_formats
 
 
 class MetaViewer:
@@ -91,7 +91,12 @@ class MetaViewer:
         return MetaHandler.read(path)
 
     def _filter(self, name: str) -> bool:
-        meta = MetaHandler.read(name)
+        try:
+            meta = MetaHandler.read(name)
+        except MetaIOError as e:
+            warnings.warn(str(e))
+            return False
+
         if isinstance(meta, list):
             meta = meta[0]
 

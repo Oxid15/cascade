@@ -19,11 +19,10 @@ import os
 from typing import Any, Dict, List, Union
 
 import pandas as pd
-import pendulum
 from deepdiff import DeepDiff
 from flatten_json import flatten
 
-from ..base import MetaHandler
+from ..base import MetaHandler, ZeroMetaError, MetaIOError
 from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
 from . import MetaViewer, Server
 
@@ -40,6 +39,7 @@ class HistoryViewer(Server):
         container: Union[Workspace, ModelRepo, ModelLine],
         last_lines: Union[int, None] = None,
         last_models: Union[int, None] = None,
+        update_period_sec: int = 3
     ) -> None:
         """
         Parameters
@@ -50,15 +50,26 @@ class HistoryViewer(Server):
             Constraints the number of lines back from the last one to view
         last_models: int, optional
             For each line constraints the number of models back from the last one to view
+        update_period_sec: int, default is 3
+            Update period in seconds
         """
+
+        try:
+            import plotly
+        except ModuleNotFoundError:
+            self._raise_cannot_import_plotly()
+        else:
+            from plotly import express as px
+            from plotly import graph_objects as go
+
+            self._px = px
+            self._go = go
+
         self._container = container
         self._last_lines = last_lines
         self._last_models = last_models
+        self._update_period_sec = update_period_sec
 
-        self._reload()
-        self._make_table()
-
-    def _reload(self) -> None:
         repo = self._container
         if isinstance(self._container, ModelLine):
             repo = SingleLineRepo(self._container)
@@ -72,23 +83,32 @@ class HistoryViewer(Server):
             for repo in repos:
                 repo.reload()
 
+        self._edges = dict()
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
+
+        meta = MetaHandler.read_dir(repo.get_root())
+        if "cascade_version" not in meta[0]:
+            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
+                               f" metric format. Please, migrate the repo in {repo.get_root()}"
+                               " to be able to use the viewer."
+                               "Use cascade.base.utils.migrate_repo_v0_13")
+
+        self._make_table()
+
+    def _update(self) -> None:
+        self._repo.reload()
+        self._make_table()
 
     def _get_last_updated_lines(self, line_names: List[str]) -> List[str]:
         valid_lines = []
         updated_at = []
         for line in line_names:
-            meta_paths = glob.glob(os.path.join(self._repo.get_root(), line, "meta.*"))
-            if len(meta_paths) > 1:
-                raise RuntimeError(
-                    f"{len(meta_paths)} line meta files was found in "
-                    f"{os.path.join(self._repo.get_root(), line)}. Should be exactly one"
-                )
-            elif len(meta_paths) == 0:
+            try:
+                meta = MetaHandler.read_dir(os.path.join(self._repo.get_root(), line))
+            except ZeroMetaError:
                 continue
 
-            meta = MetaHandler.read(meta_paths[0])
             updated_at.append(meta[0]["updated_at"])
             valid_lines.append(line)
 
@@ -113,18 +133,27 @@ class HistoryViewer(Server):
 
             last_models = self._last_models if self._last_models is not None else 0
             for i in range(len(line))[-last_models:]:
-                new_meta = {"line": line_root, "model": i}
+                line_name = os.path.split(line_root)[-1]
+                new_meta = {"line": line_name, "model": i}
                 try:
-                    # TODO: to take only first is not good...
                     meta = view[i][0]
+
+                    metrics = dict()
+                    for metric in meta["metrics"]:
+                        name = metric["name"]
+                        for key in ["dataset", "split"]:
+                            part = metric.get(key)
+                            name += "_" + part if part else ""
+                        metrics[name] = metric.get("value")
+                    meta["metrics"] = metrics
+
+                    new_meta.update(flatten(meta))
                 except IndexError:
                     meta = {}
-
-                new_meta.update(flatten(meta))
                 metas.append(new_meta)
 
                 p = {
-                    "line": line_root,
+                    "line": line_name,
                 }
                 if "params" in meta:
                     if len(meta["params"]) > 0:
@@ -135,6 +164,23 @@ class HistoryViewer(Server):
         self._params = params
         if "saved_at" in self._table:
             self._table = self._table.sort_values("saved_at")
+
+        # turn time into evenly spaced intervals
+        time = [i for i in range(len(self._table))]
+        lines = self._table["line"].unique()
+
+        cmap = self._px.colors.qualitative.Plotly
+        cmap_len = len(self._px.colors.qualitative.Plotly)
+        line_cols = {line: cmap[i % cmap_len] for i, line in enumerate(lines)}
+
+        self._table["time"] = time
+        self._table["color"] = [line_cols[line] for line in self._table["line"]]
+        self._table = self._table.fillna("")
+
+        columns2fill = [
+            col for col in self._table.columns if not col.startswith("metrics_")
+        ]
+        self._table = self._table.fillna({name: "" for name in columns2fill})
 
     @staticmethod
     def _diff(p1: Dict[Any, Any], params: Dict[Any, Any]) -> List:
@@ -169,6 +215,23 @@ class HistoryViewer(Server):
 
         return metric
 
+    def _connect_points(self, line: str, metric: str, fig: Any):
+        edges = [0]
+        params = [p for p in self._params if p["line"] == line]
+        for i in range(1, len(params)):
+            diff = self._diff(params[i], params[:i])
+            edges.append(self._specific_argmin(diff, i))
+
+        xs = []
+        ys = []
+        t = self._table.loc[self._table["line"] == line]
+        for i, e in enumerate(edges):
+            xs += [t["time"].iloc[i], t["time"].iloc[e], None]
+            ys += [t[metric].iloc[i], t[metric].iloc[e], None]
+
+        self._edges[line] = {metric: {"edges": (xs, ys), "len": len(t)}}
+        return xs, ys
+
     def plot(self, metric: str, show: bool = False) -> Any:
         """
         Plots training history of model versions using plotly.
@@ -180,94 +243,71 @@ class HistoryViewer(Server):
         show: bool, optional
             Whether to return and show or just return figure
         """
-        try:
-            import plotly
-        except ModuleNotFoundError:
-            self._raise_cannot_import_plotly()
-        else:
-            from plotly import express as px
-            from plotly import graph_objects as go
-
-        metric = self._preprocess_metric(metric)
-
-        # turn time into evenly spaced intervals
-        time = [i for i in range(len(self._table))]
-        lines = self._table["line"].unique()
-
-        cmap = px.colors.qualitative.Plotly
-        cmap_len = len(px.colors.qualitative.Plotly)
-        line_cols = {line: cmap[i % cmap_len] for i, line in enumerate(lines)}
-
-        self._table["time"] = time
-        self._table["color"] = [line_cols[line] for line in self._table["line"]]
-        table = self._table.fillna("")
-
-        columns2fill = [
-            col for col in self._table.columns if not col.startswith("metrics_")
-        ]
-        table = self._table.fillna({name: "" for name in columns2fill})
 
         # plot each model against metric
         # with all metadata on hover
+        metric = self._preprocess_metric(metric)
 
         hover_cols = [name for name in pd.DataFrame(self._params).columns]
-        if "saved_at" in table.columns:
+        if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
-        fig = px.scatter(table, x="time", y=metric, hover_data=hover_cols, color="line")
-
-        # determine connections between models
-        # plot each one with respected color
+        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+        lines = self._table["line"].unique()
 
         for line in lines:
-            params = [p for p in self._params if p["line"] == line]
-            edges = []
-            for i in range(len(params)):
-                if i == 0:
-                    edges.append(0)
-                    continue
-                else:
-                    diff = self._diff(params[i], params[:i])
-                    edges.append(self._specific_argmin(diff, i))
+            t = self._table.loc[self._table.line == line]
+            self._connect_points(line, metric, fig)
 
-            xs = []
-            ys = []
-            t = table.loc[table["line"] == line]
-            for i, e in enumerate(edges):
-                xs += [t["time"].iloc[i], t["time"].iloc[e], None]
-                ys += [t[metric].iloc[i], t[metric].iloc[e], None]
-
+            xs, ys = self._edges[line][metric]["edges"]
             fig.add_trace(
-                go.Scatter(
+                self._go.Scatter(
                     x=xs,
                     y=ys,
                     mode="lines",
-                    marker={"color": t["color"].iloc[0]},
                     name=line,
                     hoverinfo="none",
+                    marker_color=t["color"].iloc[0]
                 )
             )
 
-        # Create human-readable ticks
-        now = pendulum.now(tz="UTC")
-        time_text = table["saved_at"].apply(
-            lambda t: t if t == "" else pendulum.parse(t).diff_for_humans(now)
-        )
-
-        fig.update_layout(
-            hovermode="x",
-            xaxis=dict(
-                tickmode="array",
-                tickvals=[i for i in range(len(time))],
-                ticktext=time_text,
-            ),
-        )
         if show:
             fig.show()
 
         return fig
 
-    def _layout(self, metric):
+    def _update_plot(self, metric: str) -> Any:
+        metric = self._preprocess_metric(metric)
+
+        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        if "saved_at" in self._table.columns:
+            hover_cols = ["saved_at"] + hover_cols
+        hover_cols = ["model"] + hover_cols
+        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+
+        for line in sorted(self._table.line.unique()):
+            t = self._table.loc[self._table.line == line]
+            if (line in self._edges
+                and metric in self._edges
+                and len(t) == self._edges[line][metric]["len"]
+            ):
+                xs, ys = self._edges[line][metric]["edges"]
+            else:
+                xs, ys = self._connect_points(line, metric, fig)
+            fig.add_trace(
+                self._go.Scatter(
+                    x=xs,
+                    y=ys,
+                    mode="lines",
+                    name=line,
+                    hoverinfo="none",
+                    marker_color=t["color"].iloc[0]
+                )
+            )
+
+        return fig
+
+    def _layout(self, metric: Union[str, None]):
         try:
             import dash
         except ModuleNotFoundError:
@@ -275,14 +315,7 @@ class HistoryViewer(Server):
         else:
             from dash import Input, Output, dcc, html
 
-        try:
-            import plotly
-        except ModuleNotFoundError:
-            self._raise_cannot_import_plotly()
-        else:
-            from plotly import graph_objects as go
-
-        fig = self.plot(metric) if metric is not None else go.Figure()
+        fig = self.plot(metric) if metric is not None else self._go.Figure()
 
         return html.Div(
             [
@@ -310,7 +343,7 @@ class HistoryViewer(Server):
                     value=metric,
                 ),
                 dcc.Graph(id="history-figure", figure=fig),
-                dcc.Interval(id="history-interval", interval=1000 * 3),
+                dcc.Interval(id="history-interval", interval=1000 * self._update_period_sec),
             ]
         )
 
@@ -337,15 +370,8 @@ class HistoryViewer(Server):
         else:
             from dash import Input, Output
 
-        try:
-            import plotly
-        except ModuleNotFoundError:
-            self._raise_cannot_import_plotly()
-        else:
-            from plotly import graph_objects as go
-
         app = dash.Dash()
-        app.layout = self._layout(metric)
+        app.layout = lambda: self._layout(metric)
 
         @app.callback(
             Output("viewer-title", "children"), Input("history-interval", "n_intervals")
@@ -371,10 +397,9 @@ class HistoryViewer(Server):
             prevent_initial_call=True,
         )
         def update_history(n_intervals, metric):
-            self._reload()
-
-            self._make_table()
-            return self.plot(metric) if metric is not None else go.Figure()
+            self._update()
+            return (self._update_plot(metric)
+                    if metric is not None else self._go.Figure())
 
         @app.callback(
             Output("metric-dropwdown", "value"),
@@ -384,7 +409,5 @@ class HistoryViewer(Server):
         def update_repos(name):
             if isinstance(self._container, Workspace):
                 self._container.set_default(os.path.split(name)[-1])
-
-            return None
 
         app.run_server(use_reloader=False, **kwargs)

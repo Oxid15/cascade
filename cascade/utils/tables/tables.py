@@ -20,11 +20,11 @@ import pandas as pd
 from tqdm import tqdm
 
 from ...base import PipeMeta
-from ...data import Dataset, Iterator, Modifier
+from ...data import SizedDataset, Iterator, Modifier
 from ...meta import AggregateValidator, DataValidationException
 
 
-class TableDataset(Dataset):
+class TableDataset(SizedDataset):
     """
     Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
     validation.
@@ -71,9 +71,7 @@ class TableDataset(Dataset):
         meta = super().get_meta()
         meta[0].update(
             {
-                "name": repr(self),
                 "columns": list(self._table.columns),
-                "len": len(self),
                 "info": self._table.describe().to_dict(),
             }
         )

@@ -14,14 +14,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
-__version__ = "0.12.0"
-__author__ = "Ilia Moiseev"
-__author_email__ = "ilia.moiseev.5@yandex.ru"
-
-from . import data, meta, models
-
-# cascade does not have
-# from . import utils
-# because it will bring additional dependencies
-# that may not be needed by the user
+from .version import __version__, __author__, __author_email__

@@ -43,3 +43,8 @@ from cascade.utils.time_series import TimeSeriesDataset
 )
 def utils_dataset(request) -> Dataset:
     return request.param
+
+
+@pytest.fixture
+def tmp_path_str(tmp_path):
+    return str(tmp_path)
