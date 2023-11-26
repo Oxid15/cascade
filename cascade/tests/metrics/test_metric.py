@@ -22,7 +22,7 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler
+from cascade.base import MetaHandler, JSONEncoder
 from cascade.metrics import Metric
 
 
@@ -40,4 +40,4 @@ def test_save_load(tmp_path_str):
     MetaHandler.write(os.path.join(tmp_path_str, "metric.json"), metric)
 
     from_file = MetaHandler.read(os.path.join(tmp_path_str, "metric.json"))
-    assert metric.to_dict() == from_file
+    assert JSONEncoder().obj_to_dict(metric.to_dict()) == from_file
