@@ -14,15 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import os
 import pickle
-from hashlib import md5
 from typing import Any, List, Union
 
 from sklearn.pipeline import Pipeline
 
-from ...base import MetaHandler, PipeMeta
+from ...base import PipeMeta
 from ...models import BasicModel
 
 
@@ -71,74 +69,69 @@ class SkModel(BasicModel):
         """
         return self._pipeline.predict_proba(x, *args, **kwargs)
 
-    @classmethod
-    def load(cls, path: str, check_hash: bool = True) -> "SkModel":
-        """
-        Loads the model from path provided. Path may be a folder,
-        if so, model.pkl is assumed.
-
-        If path is the file with no extension, .pkl is added.
-        """
-        if os.path.isdir(path):
-            os.makedirs(path, exist_ok=True)
-            model_path = os.path.join(path, "model.pkl")
-            pipeline_path = os.path.join(path, "pipeline.pkl")
-        else:
-            model_path = path
-            pipeline_path = os.path.join(*os.path.split(path)[:-1], "pipeline.pkl")
-
-        model_path, ext = os.path.splitext(model_path)
-        if ext == "":
-            ext += ".pkl"
-        model_path = model_path + ext
-
-        # TODO: enable check again later
-        # if check_hash:
-        #     cls._check_model_hash(model_path)
-
-        with open(model_path, "rb") as f:
-            model = pickle.load(f)
-
-        with open(pipeline_path, "rb") as f:
-            model._pipeline = pickle.load(f)
-        return model
-
     def save(self, path: str) -> None:
         """
         Saves model to the path provided.
-        If path is a folder, then creates
+        Path should be a folder. Creates
         it if not exists and saves there as
         model.pkl
-        If path is a file, then saves it accordingly.
-        If no extension of file provided, then .pkl is added.
 
-        The model is saved in two parts - the wrapper without pipeline
-        and the actual sklearn model as pipeline separately.
-        This is done for artifact portability - you can use pipeline in
-        deployments directly without the need to bring additional dependency
-        with the wrapper. At the same time additional params can still be loaded
-        using wrapper that is saved nearby.
+        When saving using this method only wrapper is saved
+        if you want to save sklearn model use save_artifact
+
+        See also
+        --------
+        cascade.utils.sklearn.SkModel.save_artifact
         """
-        if os.path.isdir(path):
-            os.makedirs(path, exist_ok=True)
-            model_path = os.path.join(path, "model.pkl")
-            pipeline_path = os.path.join(path, "pipeline.pkl")
-        else:
-            model_path = path
-            pipeline_path = os.path.join(*os.path.split(path)[:-1], "pipeline.pkl")
+        super().save(path)
+        model_path = os.path.join(path, "model.pkl")
 
-        model_path, ext = os.path.splitext(model_path)
-        if ext == "":
-            ext += ".pkl"
-        model_path = model_path + ext
-
-        with open(pipeline_path, "wb") as f:
-            pickle.dump(self._pipeline, f)
         pipeline = self._pipeline
         del self._pipeline
         with open(model_path, "wb") as f:
             pickle.dump(self, f)
         self._pipeline = pipeline
+
+    def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Saves sklearn pipeline
+
+        Args and kwargs are passed into pickle.dump
+
+        Parameters
+        ----------
+        path : str
+            the folder in which to save pipeline.pkl
+        """
+        if not os.path.isdir(path):
+            raise ValueError(f"Error when saving an artifact - {path} is not a folder")
+
+        pipeline_path = os.path.join(path, "pipeline.pkl")
+        with open(pipeline_path, "wb") as f:
+            pickle.dump(self._pipeline, f, *args, **kwargs)
+
+    def load_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        """
+        Loads sklearn pipeline
+
+        Args and kwargs are passed into pickle.load
+
+        Parameters
+        ----------
+        path : str
+            the folder from which to load pipeline.pkl
+
+        Raises
+        ------
+        ValueError
+            if the path is not a valid directory
+        """
+        if not os.path.isdir(path):
+            raise ValueError(f"Error when loading an artifact - {path} is not a folder")
+
+        pipeline_path = os.path.join(path, "pipeline.pkl")
+        with open(pipeline_path, "rb") as f:
+            self._pipeline = pickle.load(f, *args, **kwargs)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

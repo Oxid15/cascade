@@ -14,18 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import datetime
+import deepdiff
+import glob
+import json
+from json import JSONEncoder
 import os
 import json
+from dataclasses import asdict, is_dataclass
 import datetime
 from typing import NoReturn, Union, Dict, Any
-from json import JSONEncoder
-import deepdiff
 
 import yaml
 import numpy as np
 
-from . import MetaFromFile
+from . import MetaFromFile, MetaIOError, ZeroMetaError, MultipleMetaError
+from ..metrics import Metric
 
+default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
 
 
@@ -76,6 +82,15 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
             return list(obj)
 
+        elif isinstance(obj, deepdiff.DeepDiff):
+            return obj.to_dict()
+
+        elif is_dataclass(obj):
+            return asdict(obj)
+
+        elif isinstance(obj, Metric):
+            return obj.to_dict()
+
         return super(CustomEncoder, self).default(obj)
 
     def obj_to_dict(self, obj: Any) -> Any:
@@ -96,9 +111,9 @@ class BaseHandler:
         # prepended with filepath for user
         # to be able to identify broken file
         if exc is not None:
-            raise IOError(f"Error while reading file `{path}`") from exc
+            raise MetaIOError(f"Error while reading file `{path}`") from exc
         else:
-            raise IOError(f"Error while reading file `{path}`")
+            raise MetaIOError(f"Error while reading file `{path}`")
 
 
 class JSONHandler(BaseHandler):
@@ -151,7 +166,7 @@ class YAMLHandler(BaseHandler):
 
 
 class TextHandler(BaseHandler):
-    def read(self, path: str) -> Dict:
+    def read(self, path: str) -> Dict[str, str]:
         """
         Reads text file from path and returns dict
         in the form {path: 'text from file'}
@@ -202,7 +217,7 @@ class MetaHandler:
 
         Raises
         ------
-        IOError
+        MetaIOError
             when decoding errors occur
         """
         handler = cls._get_handler(path)
@@ -225,7 +240,7 @@ class MetaHandler:
 
         Raises
         ------
-        IOError
+        MetaIOError
             when encoding errors occur
         """
         handler = cls._get_handler(path)
@@ -240,3 +255,72 @@ class MetaHandler:
             return YAMLHandler()
         else:
             return TextHandler()
+
+    # TODO: template should cover only supported fmts
+    @classmethod
+    def read_dir(
+        cls,
+        path: str,
+        meta_template: str = "meta.*"
+    ) -> MetaFromFile:
+        """
+        Reads a single meta file from a given directory
+
+        Parameters
+        ----------
+        path : str
+            Path to a directory
+        meta_template : str, optional
+            The template to identify meta file, by default "meta.*"
+
+        Returns
+        -------
+        MetaFromFile
+            Meta
+
+        Raises
+        ------
+        ZeroMetaError
+            If there is no files satisfying the template in the directory provided
+        MultipleMetaError
+            If the number of files filtered by the template are more than 1
+        """
+        meta_paths = glob.glob(os.path.join(path, meta_template))
+        if len(meta_paths) == 0:
+            raise ZeroMetaError(f"There is no {meta_template} file in {path}")
+        elif len(meta_paths) > 1:
+            raise MultipleMetaError(f"There are {len(meta_paths)} in {path}")
+        else:
+            return cls.read(os.path.join(meta_paths[0]))
+
+    @classmethod
+    def _determine_meta_fmt(cls, path: str, template: str) -> Union[str, None]:
+        meta_paths = glob.glob(os.path.join(path, template))
+        if len(meta_paths) == 1:
+            _, ext = os.path.splitext(meta_paths[0])
+            return ext
+
+    @classmethod
+    def write_dir(cls, path: str, obj: Any, overwrite: bool = True, meta_template: str = "meta.*") -> None:
+        """
+        Writes meta to directory without specifying file name
+        
+        Automatically determines extension and overwrites of file exists
+
+        Parameters
+        ----------
+        path : str
+            Directory to write meta
+        obj : Any
+            Meta object
+        overwrite : bool, optional
+            See MetaHandler.write, by default True
+        meta_template : str, optional
+            The template for meta files, by default "meta.*"
+        """
+        ext = cls._determine_meta_fmt(path, meta_template)
+        
+        if not ext:
+            ext = default_meta_format
+            
+        cls.write(os.path.join(path, "meta" + ext), obj, overwrite=overwrite)

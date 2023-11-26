@@ -17,6 +17,7 @@ limitations under the License.
 import datetime
 import os
 import sys
+from typing import Any
 
 import numpy as np
 import pendulum
@@ -42,10 +43,10 @@ from cascade.data import (
 from cascade.models import BasicModel, Model, ModelLine, ModelRepo
 
 
-class DummyModel(Model):
+class DummyModel(BasicModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.model = b"model"
+        self.model = "model"
 
     def fit(self, *args, **kwargs):
         pass
@@ -54,18 +55,11 @@ class DummyModel(Model):
         pass
 
     def evaluate(self, *args, **kwargs):
-        self.metrics.update({"acc": np.random.random()})
+        self.add_metric("acc", np.random.random())
 
-    @classmethod
-    def load(cls, path):
-        with open(path, "rb") as f:
-            model = DummyModel()
-            model.model = str(f.read())
-            return model
-
-    def save(self, path):
-        with open(path, "wb") as f:
-            f.write(b"model")
+    def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
+        with open(os.path.join(path, "model"), "w") as f:
+            f.write(self.model)
 
 
 class EmptyModel(DummyModel):
@@ -77,19 +71,17 @@ class OnesModel(BasicModel):
     def predict(self, x, *args, **kwargs):
         return np.array([1 for _ in range(len(x))])
 
-    @classmethod
-    def load(cls, filepath) -> "OnesModel":
-        return OnesModel()
-
-    def save(self, filepath) -> None:
-        pass
-
     def fit(self, x, y, *args, **kwargs) -> None:
         pass
 
 
 def f(x: int) -> int:
     return 2 * x
+
+
+@pytest.fixture
+def tmp_path_str(tmp_path) -> str:
+    return str(tmp_path)
 
 
 @pytest.fixture(

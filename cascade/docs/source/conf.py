@@ -61,20 +61,22 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = "pydata_sphinx_theme"
-html_logo = "../imgs/logo.svg"
-html_favicon = "../imgs/logo_sq.svg"
+html_favicon = "_static/logo_sq.svg"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+html_css_files = [
+    'css/custom.css',
+]
 
 html_theme_options = {
     "header_links_before_dropdown": 4,
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/oxid15/cascade",  # required
+            "url": "https://github.com/oxid15/cascade",
             "icon": "fa-brands fa-github",
             "type": "fontawesome",
         }
@@ -84,4 +86,8 @@ html_theme_options = {
         "version_match": "latest",
     },
     "navbar_start": ["navbar-logo", "version-switcher"],
+    "logo": {
+        "image_light": "_static/logo_light.svg",
+        "image_dark": "_static/logo_dark.svg",
+   }
 }

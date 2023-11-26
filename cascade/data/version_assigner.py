@@ -189,3 +189,28 @@ class VersionAssigner(Modifier):
         meta = super().get_meta()
         meta[0]["version"] = self.version
         return meta
+
+
+def version(ds: Dataset[T], path: str) -> str:
+    """
+    Returns version of a dataset using VersionAssigner
+
+    Parameters
+    ----------
+    ds : Dataset[T]
+        Dataset to track and version
+    path : str
+        Path to the version log of a dataset, will be created if does
+        not exists
+
+    Returns
+    -------
+    str
+        Version in two parts like 2.1 or 0.1
+
+    See also
+    --------
+    cascade.data.VersionAssigner
+    """
+    ds = VersionAssigner(ds, path)
+    return ds.version

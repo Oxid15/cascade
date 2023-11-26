@@ -17,6 +17,7 @@ limitations under the License.
 from typing import Any
 
 import pandera.io as paio
+from pandera import DataFrameSchema
 from pandera.errors import SchemaError
 
 from ...meta import AggregateValidator, DataValidationException
@@ -29,7 +30,7 @@ class PaSchemaValidator(AggregateValidator):
     It accepts TableDataset and schema.
     For more details on schemas see pandera's documentation.
     """
-    def __init__(self, dataset: TableDataset, schema, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, dataset: TableDataset, schema: DataFrameSchema, *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------

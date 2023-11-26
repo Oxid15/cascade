@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any, Dict
 
-from ...base import MetaHandler
+from ...base import HistoryHandler
 from .base_diff_viewer import BaseDiffViewer
 
 
@@ -29,6 +29,7 @@ class HistoryDiffViewer(BaseDiffViewer):
     def _read_objects(self, path: str) -> Dict[str, Any]:
         self._check_path(path, ("history",))
 
-        history = MetaHandler.read(path)["history"]
+        hl = HistoryHandler(path)
 
-        return {item["updated_at"]: item for item in history}
+        states = {str(i): hl.get(i) for i in range(len(hl))}
+        return states
