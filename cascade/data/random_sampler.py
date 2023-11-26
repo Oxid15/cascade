@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any, Union
 
-from numpy.random import random_integers, shuffle
+from numpy.random import randint, shuffle
 
 from . import Sampler, SizedDataset, T
 
@@ -50,7 +50,7 @@ class RandomSampler(Sampler):
             shuffle(self._indices)
             self._indices = self._indices[:num_samples]
         else:
-            self._indices = random_integers(0, len(dataset) - 1, num_samples)
+            self._indices = randint(0, len(dataset), num_samples)
         super().__init__(dataset, num_samples, **kwargs)
 
     def __getitem__(self, index: int) -> T:
