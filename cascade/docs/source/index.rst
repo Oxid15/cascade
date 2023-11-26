@@ -140,7 +140,7 @@ To get metadata of an object you do just:
     [
         {
             "comments": [],
-            "description": None,
+            "description": null,
             "len": 5,
             "links": [],
             "name": "cascade.data.apply_modifier.ApplyModifier",
@@ -149,7 +149,7 @@ To get metadata of an object you do just:
         },
         {
             "comments": [],
-            "description": None,
+            "description": null,
             "len": 5,
             "links": [],
             "name": "cascade.data.dataset.Wrapper",
