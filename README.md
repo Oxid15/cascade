@@ -87,7 +87,7 @@ We see all the stages that we did in meta.
   "len": 1797,
   "links": [],
   "name": "cascade.data.dataset.Wrapper",
-  "obj_type": "<class "list">",
+  "obj_type": "<class 'list'>",
   "tags": [],
   "type": "dataset"}]
 ```
