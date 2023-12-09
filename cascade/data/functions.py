@@ -55,12 +55,46 @@ class FModifier(FDataset):
 
 
 def dataset(f: Callable[..., Any]) -> Callable[..., FDataset]:
+    """
+    Thin wrapper to turn any function into a Cascade's Dataset.
+    Use this if the function is the data source
+
+    Will return FDataset object. To get results of the execution
+    use `dataset.result` field
+
+    Parameters
+    ----------
+    f : Callable[..., Any]
+        Function that produces data
+
+    Returns
+    -------
+    Callable[..., FDataset]
+        Call this to get a dataset
+    """
     def wrapper(*args: Any, **kwargs: Any) -> FDataset:
         return FDataset(*args, **kwargs, f=f)
     return wrapper
 
 
 def modifier(f: Callable[..., Any]) -> Callable[..., FModifier]:
+    """
+    Thin wrapper to turn any function into Cascade's Modifier
+    Pass the returning value of a function
+    that was previosly wrapped dataset or modifier. Will replace any
+    dataset with `dataset.result` automatically if the function
+    argument is `FDataset`.
+
+    Parameters
+    ----------
+    f : Callable[..., Any]
+        Function that modifies data
+
+    Returns
+    -------
+    Callable[..., FModifier]
+        Call this to get a modifier
+    """
     def wrapper(*args: Any, **kwargs: Any) -> FModifier:
         return FModifier(*args, **kwargs, f=f)
     return wrapper
