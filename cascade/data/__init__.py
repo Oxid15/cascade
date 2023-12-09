@@ -22,6 +22,7 @@ from .composer import Composer
 from .concatenator import Concatenator
 from .cyclic_sampler import CyclicSampler
 from .folder_dataset import FolderDataset
+from .functions import dataset, modifier
 from .pickler import Pickler
 from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
