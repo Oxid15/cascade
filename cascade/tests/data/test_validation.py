@@ -16,7 +16,9 @@ limitations under the License.
 
 import os
 import sys
+from typing import List, Dict
 
+import pydantic
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -50,3 +52,72 @@ def test_default_types():
 
     with pytest.raises(ValidationError):
         validate(add_int)(1.2, 3.4)
+
+
+def test_lists():
+    def sum_list(a: List[float]):
+        return sum(a)
+    
+    validate(sum_list)([1.2, 3.4, 5.])
+
+    with pytest.raises(ValidationError):
+        validate(sum_list)(None)
+
+    with pytest.raises(ValidationError):
+        validate(sum_list)(["a", "b"])
+
+
+def test_dicts():
+    def sum_dict(a: Dict[str, int]):
+        return sum(a.values())
+    
+    sum_dict({"a": 2, "b": 1})
+
+    with pytest.raises(ValidationError):
+        validate(sum_dict)([1, 2, 3])
+
+    with pytest.raises(ValidationError):
+        validate(sum_dict)(3)
+
+    with pytest.raises(ValidationError):
+        validate(sum_dict)({1: 2, 3: 4})
+
+    with pytest.raises(ValidationError):
+        validate(sum_dict)({"a": "b", "c": "d"})
+
+
+def test_pydantic_model():
+    class LargeModel(pydantic.BaseModel):
+        int_: int
+        float_: float
+        str_: str
+        dict_: dict
+        list_: list
+        li: List[int]
+        ds: Dict[str, float]
+
+    def identity(a: LargeModel):
+        return a
+
+    validate(
+        identity)(dict(
+            int_=0, float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
+        )
+    )
+
+    with pytest.raises(ValidationError):
+        validate(identity)(
+            dict(
+                int_="err", float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
+            )
+        )
+
+
+def test_pydantic_field():
+    def identity(a: int = pydantic.Field(le=0)):
+        return a
+
+    validate(identity)(0)
+
+    with pytest.raises(ValidationError):
+        validate(identity)(10000)
