@@ -83,7 +83,7 @@ def validate(f: Callable[..., Any]) -> Callable[..., Any]:
     sig = inspect.signature(f)
     args = {
         key: (sig.parameters[key].annotation if sig.parameters[key].annotation is not sig.empty else Any,
-              sig.parameters[key].default if not sig.empty else ...) 
+              sig.parameters[key].default if sig.parameters[key].annotation is not sig.empty else ...) 
         for key in sig.parameters
     }
     v = Validator(args)
