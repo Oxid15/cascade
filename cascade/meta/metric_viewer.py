@@ -88,7 +88,8 @@ class MetricViewer:
                 except IndexError:
                     meta = {}
 
-                metric = {"line": viewer_root, "num": i}
+                _, line = os.path.split(viewer_root)
+                metric = {"line": line, "num": i}
 
                 if "created_at" in meta:
                     metric["created_at"] = pendulum.parse(meta["created_at"])
@@ -101,6 +102,12 @@ class MetricViewer:
                     metric.update({m["name"]: m.get("value") for m in meta["metrics"]})
                 if "params" in meta:
                     metric.update(meta["params"])
+                if "tags" in meta:
+                    metric["tags"] = meta["tags"]
+                if "comments" in meta:
+                    metric["comment_count"] = len(meta["comments"])
+                if "links" in meta:
+                    metric["link_count"] = len(meta["links"])
 
                 self._metrics.append(metric)
         self.table = pd.DataFrame(self._metrics)
