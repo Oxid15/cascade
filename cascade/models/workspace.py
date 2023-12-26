@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, List, Literal, Union
+from typing import Any, Generator, List, Literal, Union
 
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
 from ..models import ModelRepo
@@ -62,6 +62,10 @@ class Workspace(TraceableOnDisk):
 
     def __len__(self) -> int:
         return len(self._repo_names)
+
+    def __iter__(self) -> Generator[ModelRepo, None, None]:
+        for repo in self._repo_names:
+            yield self.__getitem__(repo)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

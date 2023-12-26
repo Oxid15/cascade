@@ -458,3 +458,8 @@ class TraceableOnDisk(Traceable):
         meta = super().get_meta()
         meta[0]["updated_at"] = pendulum.now(tz="UTC")
         return meta
+
+    def load_meta(self):
+        from . import MetaHandler
+        meta = MetaHandler.read_dir(self._root)
+        return meta

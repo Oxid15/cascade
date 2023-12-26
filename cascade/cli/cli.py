@@ -22,7 +22,7 @@ import click
 from ..base import MetaHandler, MetaIOError
 
 
-def infer_container(type: str, cwd: str):
+def create_container(type: str, cwd: str):
     if type == "line":
         from cascade.models import ModelLine
         return ModelLine(cwd)
@@ -84,7 +84,7 @@ def cat(ctx, p):
             click.echo(pformat(ctx.obj["meta"]))
     else:
         if ctx.obj.get("meta"):
-            container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
+            container = create_container(ctx.obj["type"], ctx.obj["cwd"])
             if not container:
                 return
 
@@ -115,7 +115,7 @@ def view(ctx):
 @click.option("-p", type=int, default=3, help="Update period in seconds")
 def view_history(ctx, host, port, l, m, p):  # noqa: E741
     if ctx.obj.get("meta"):
-        container = infer_container(ctx.obj["type"], ctx.obj["cwd"])
+        container = create_container(ctx.obj["type"], ctx.obj["cwd"])
         if not container:
             click.echo(f"Cannot open History Viewer in object of type `{ctx.obj['type']}`")
             return
@@ -181,9 +181,6 @@ def comment_add(ctx, c):
 def comment_ls(ctx):
     import pendulum
 
-    if not ctx.obj.get("meta"):
-        return
-
     comments = ctx.obj["meta"][0].get("comments")
     if comments:
         for comment in comments:
@@ -191,6 +188,26 @@ def comment_ls(ctx):
             click.echo(
                 f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}"
             )
+    else:
+        click.echo("No comments here")
+
+    container = create_container(ctx.obj.get("type"), ctx.obj.get("cwd"))
+    if container:
+        from cascade.models import ModelLine
+
+        comment_counter = 0
+        if isinstance(container, ModelLine):
+            for i in range(len(container)):
+                meta = container.load_model_meta(i)
+                if "comments" in meta[0]:
+                    comment_counter += len(meta[0]["comments"])
+        else:
+            for item in container:
+                meta = item.load_meta()
+                if "comments" in meta[0]:
+                    comment_counter += len(meta[0]["comments"])
+
+        click.echo(f"{comment_counter} comments inside total")
 
 
 @comment.command("rm")
