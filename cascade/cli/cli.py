@@ -16,6 +16,8 @@ limitations under the License.
 
 
 import os
+from math import ceil
+from typing import Dict, List
 
 import click
 
@@ -34,6 +36,36 @@ def create_container(type: str, cwd: str):
         return Workspace(cwd)
     else:
         return
+
+
+def comments_table(comments: List[Dict[str, str]]) -> str:
+    import pendulum
+
+    between_cols = 3
+    w, _ = os.get_terminal_size()
+
+    first_rows = [", ".join((c["id"], c["user"], c["host"])) for c in comments]
+    second_rows = [pendulum.parse(c["timestamp"]).diff_for_humans(pendulum.now()) for c in comments]
+
+    w_first_col = max(max([len(r1) for r1 in first_rows]), max([len(r2) for r2 in second_rows]))
+    w_second_col = w - (w_first_col + between_cols)
+
+    table = ""
+    for i, c in enumerate(comments):
+        # Minimum two rows for comments meta data
+        n_rows = max(2, ceil(len(c["message"]) / w_second_col))
+        for row in range(n_rows):
+            if row == 0:
+                table += first_rows[i] + " " * (w_first_col - len(first_rows[i]) + between_cols)
+            elif row == 1:
+                table += second_rows[i] + " " * (w_first_col - len(second_rows[i]) + between_cols)
+            else:
+                table += " " * (w_first_col + between_cols)
+
+            # Output comment's text by batches
+            table += c["message"][row * w_second_col: min((row + 1) * w_second_col, len(c["message"]))]
+            table += "\n"
+    return table
 
 
 @click.group
@@ -179,15 +211,10 @@ def comment_add(ctx, c):
 @comment.command("ls")
 @click.pass_context
 def comment_ls(ctx):
-    import pendulum
-
     comments = ctx.obj["meta"][0].get("comments")
     if comments:
-        for comment in comments:
-            date = pendulum.parse(comment["timestamp"]).diff_for_humans(pendulum.now())
-            click.echo(
-                f"{comment['id']:<s} | {comment['user']:<s} | {comment['host']:<s} | {date:<s} | {comment['message']:<s}"
-            )
+        t = comments_table(comments)
+        click.echo(t)
     else:
         click.echo("No comments here")
 
