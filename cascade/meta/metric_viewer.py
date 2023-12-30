@@ -275,7 +275,8 @@ class MetricServer(Server):
         self._df_flatten = pd.DataFrame(
             map(lambda x: flatten(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
         )
-        self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
+        if any(df["tags"].apply(lambda x: x != [])):
+            self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
         dep_fig = go.Figure()
 
         return html.Div(
