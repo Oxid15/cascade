@@ -41,29 +41,37 @@ def create_container(type: str, cwd: str):
 def comments_table(comments: List[Dict[str, str]]) -> str:
     import pendulum
 
+    left_limit = 50
     between_cols = 3
     w, _ = os.get_terminal_size()
 
-    first_rows = [", ".join((c["id"], c["user"], c["host"])) for c in comments]
-    second_rows = [pendulum.parse(c["timestamp"]).diff_for_humans(pendulum.now()) for c in comments]
+    comm_meta = []
+    comm_date = []
+    for c in comments:
+        comm_meta.append(", ".join((c["id"], c["user"], c["host"])))
+        date = pendulum.parse(c["timestamp"]).diff_for_humans(pendulum.now())
+        comm_date.append(date)
 
-    w_first_col = max(max([len(r1) for r1 in first_rows]), max([len(r2) for r2 in second_rows]))
-    w_second_col = w - (w_first_col + between_cols)
+    w_left = max(max([len(r1) for r1 in comm_meta]), max([len(r2) for r2 in comm_date]))
+    w_left = min(w_left, left_limit)
+    w_right = w - (w_left + between_cols)
 
     table = ""
     for i, c in enumerate(comments):
         # Minimum two rows for comments meta data
-        n_rows = max(2, ceil(len(c["message"]) / w_second_col))
+        n_rows = max(2, ceil(len(c["message"]) / w_right))
         for row in range(n_rows):
             if row == 0:
-                table += first_rows[i] + " " * (w_first_col - len(first_rows[i]) + between_cols)
+                table += comm_meta[i] if len(comm_meta[i]) <= left_limit else comm_meta[i][:left_limit - 3] + "..."
+                table += " " * (w_left - min(len(comm_meta[i]), left_limit) + between_cols)
             elif row == 1:
-                table += second_rows[i] + " " * (w_first_col - len(second_rows[i]) + between_cols)
+                table += comm_date[i]
+                table += " " * (w_left - len(comm_date[i]) + between_cols)
             else:
-                table += " " * (w_first_col + between_cols)
+                table += " " * (w_left + between_cols)
 
             # Output comment's text by batches
-            table += c["message"][row * w_second_col: min((row + 1) * w_second_col, len(c["message"]))]
+            table += c["message"][row * w_right: min((row + 1) * w_right, len(c["message"]))]
             table += "\n"
     return table
 
