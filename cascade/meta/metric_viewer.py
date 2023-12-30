@@ -98,8 +98,6 @@ class MetricViewer:
                             meta["saved_at"]
                         ).diff_for_humans(metric["created_at"])
 
-                if "metrics" in meta:
-                    metric.update({m["name"]: m.get("value") for m in meta["metrics"]})
                 if "params" in meta:
                     metric.update(meta["params"])
                 if "tags" in meta:
@@ -108,8 +106,17 @@ class MetricViewer:
                     metric["comment_count"] = len(meta["comments"])
                 if "links" in meta:
                     metric["link_count"] = len(meta["links"])
+                if "metrics" in meta:
+                    for m in meta["metrics"]:
+                        metric[m["name"]] = m.get("value")
+                        for key in m.keys():
+                            if key not in ("name", "value", "created_at"):
+                                if m[key] is not None:
+                                    metric[key] = m[key]
 
-                self._metrics.append(metric)
+                        self._metrics.append(metric)
+                else:
+                    self._metrics.append(metric)
         self.table = pd.DataFrame(self._metrics)
 
     def __repr__(self) -> str:
