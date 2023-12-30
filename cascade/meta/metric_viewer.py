@@ -265,7 +265,10 @@ class MetricServer(Server):
         if self._include is not None:
             df = df[["line", "num"] + self._include]
 
-        self._df_flatten = pd.DataFrame(map(flatten, df.to_dict("records")))
+        self._df_flatten = pd.DataFrame(
+            map(lambda x: flatten(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
+        )
+        self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
         dep_fig = go.Figure()
 
         return html.Div(
