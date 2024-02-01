@@ -256,7 +256,7 @@ class MetricServer(Server):
             if x is not None and y is not None:
                 fig.add_trace(
                     go.Scatter(
-                        x=self._df_flatten[x], y=self._df_flatten[y], mode="markers"
+                        x=self._for_plots[x], y=self._for_plots[y], mode="markers"
                     )
                 )
                 fig.update_layout(title=f"{x} to {y} relation")
@@ -283,6 +283,14 @@ class MetricServer(Server):
         self._df_flatten = pd.DataFrame(
             map(lambda x: flatten(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
         )
+        self._for_plots = self._df_flatten
+        for name in self._df_flatten.name.unique():
+            self._for_plots[name] = None
+            self._for_plots.loc[self._for_plots["name"] == name, name] = (
+                self._for_plots.loc[self._for_plots["name"] == name, "value"]
+            )
+        self._for_plots = self._for_plots.drop(["name", "value"], axis=1)
+
         if any(df["tags"].apply(lambda x: x != [])):
             self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
         dep_fig = go.Figure()
@@ -298,10 +306,10 @@ class MetricServer(Server):
                     },
                 ),
                 dcc.Dropdown(
-                    list(self._df_flatten.columns), id="dropdown-x", multi=False
+                    list(self._for_plots.columns), id="dropdown-x", multi=False
                 ),
                 dcc.Dropdown(
-                    list(self._df_flatten.columns), id="dropdown-y", multi=False
+                    list(self._for_plots.columns), id="dropdown-y", multi=False
                 ),
                 dcc.Graph(id="dependence-figure", figure=dep_fig),
                 dash_table.DataTable(
