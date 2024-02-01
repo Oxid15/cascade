@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Any, List, Union
+from typing import Any, Dict, List, Union
 
 import pandas as pd
 import pendulum
@@ -68,6 +68,26 @@ class MetricViewer:
         return MetricViewer(self._repo, scope=key)
 
     def reload_table(self) -> None:
+        def create_metric(meta: Dict[str, Any]) -> Dict[str, Any]:
+            metric = {"line": line, "num": i}
+            if "created_at" in meta:
+                metric["created_at"] = pendulum.parse(meta["created_at"])
+                if "saved_at" in meta:
+                    metric["saved"] = pendulum.parse(
+                        meta["saved_at"]
+                    ).diff_for_humans(metric["created_at"])
+
+            if "params" in meta:
+                metric.update(meta["params"])
+            if "tags" in meta:
+                metric["tags"] = meta["tags"]
+            if "comments" in meta:
+                metric["comment_count"] = len(meta["comments"])
+            if "links" in meta:
+                metric["link_count"] = len(meta["links"])
+            
+            return metric
+
         self._metrics = []
         selected_names = self._repo.get_line_names()
 
@@ -92,23 +112,7 @@ class MetricViewer:
                 if "metrics" in meta:
                     # Need to generate new metric each time
                     for m in meta["metrics"]:
-                        metric = {"line": line, "num": i}
-
-                        if "created_at" in meta:
-                            metric["created_at"] = pendulum.parse(meta["created_at"])
-                            if "saved_at" in meta:
-                                metric["saved"] = pendulum.parse(
-                                    meta["saved_at"]
-                                ).diff_for_humans(metric["created_at"])
-
-                        if "params" in meta:
-                            metric.update(meta["params"])
-                        if "tags" in meta:
-                            metric["tags"] = meta["tags"]
-                        if "comments" in meta:
-                            metric["comment_count"] = len(meta["comments"])
-                        if "links" in meta:
-                            metric["link_count"] = len(meta["links"])
+                        metric = create_metric(meta)
 
                         metric["name"] = m.get("name")
                         metric["value"] =  m.get("value")
@@ -120,7 +124,7 @@ class MetricViewer:
 
                         self._metrics.append(metric)
                 else:
-                    self._metrics.append({"line": line, "num": i})
+                    self._metrics.append(create_metric(meta))
         self.table = pd.DataFrame(self._metrics)
 
     def __repr__(self) -> str:
