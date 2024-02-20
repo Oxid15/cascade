@@ -90,16 +90,48 @@ def test_on_disk_recreate(tmp_path_str, ext):
     trd = TraceableOnDisk(tmp_path_str, ext)
     trd._create_meta()
 
-    meta_path = os.path.join(tmp_path_str, "meta" + ext)
-    meta = MetaHandler.read(meta_path)
+    meta = MetaHandler.read_dir(tmp_path_str)
 
+    trd = TraceableOnDisk(tmp_path_str, ext)
     trd._create_meta()
 
-    new_meta = MetaHandler.read(meta_path)
+    new_meta = MetaHandler.read_dir(tmp_path_str)
 
     assert list(meta[0].keys()) == list(new_meta[0].keys())
     assert meta[0]["created_at"] == new_meta[0]["created_at"]
     assert meta[0]["updated_at"] != new_meta[0]["updated_at"]
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_on_disk_recreate_comment(tmp_path_str, ext):
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.comment("Hello")
+    trd._create_meta()
+
+    meta = MetaHandler.read_dir(tmp_path_str)
+
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd._create_meta()
+
+    new_meta = MetaHandler.read_dir(tmp_path_str)
+
+    assert len(meta[0]["comments"]) == len(new_meta[0]["comments"])
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_on_disk_update_comment(tmp_path_str, ext):
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.comment("Hello")
+    trd._create_meta()
+
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd._create_meta()
+    trd.comment("World")
+    trd._create_meta()
+
+    new_meta = MetaHandler.read_dir(tmp_path_str)
+
+    assert len(new_meta[0]["comments"]) == 2
 
 
 def test_default_meta_fmt(tmp_path_str):
