@@ -72,7 +72,7 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
 
             # Output comment's text by batches
             table += c["message"][row * w_right: min((row + 1) * w_right, len(c["message"]))]
-            table += "\n"
+        table += "\n\n"
     return table
 
 
@@ -203,7 +203,7 @@ def comment():
 
 @comment.command("add")
 @click.pass_context
-@click.option("-c", prompt="Comment: ")
+@click.option("-c", prompt="Comment")
 def comment_add(ctx, c):
     if not ctx.obj.get("meta"):
         return
@@ -242,7 +242,9 @@ def comment_ls(ctx):
                 if "comments" in meta[0]:
                     comment_counter += len(meta[0]["comments"])
 
-        click.echo(f"{comment_counter} comments inside total")
+        click.echo(
+            f"{comment_counter} comment{'s' if comment_counter != 1 else ''} inside total"
+        )
 
 
 @comment.command("rm")
