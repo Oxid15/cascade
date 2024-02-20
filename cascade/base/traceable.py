@@ -26,6 +26,8 @@ from datetime import datetime
 
 from . import PipeMeta, Meta, default_meta_format, supported_meta_formats, MetaIOError
 
+DO_NOT_UPDATE = ["created_at"]
+
 
 @dataclass
 class Comment:
@@ -266,7 +268,7 @@ class Traceable:
             comment_id,
             getuser(),
             socket.gethostname(),
-            pendulum.now(),
+            pendulum.now(tz="UTC"),
             message
         )
 
@@ -444,12 +446,19 @@ class TraceableOnDisk(Traceable):
         except MetaIOError as e:
             warnings.warn(f"File reading error ignored: {e}")
 
-        meta.update(self.get_meta()[0])
+        self_meta = self.get_meta()[0]  # TODO: Use all blocks in meta?
+        for key in self_meta:
+            if key not in DO_NOT_UPDATE and self_meta[key]:
+                meta[key] = self_meta[key]
 
         try:
             MetaHandler.write_dir(self._root, [meta])
         except MetaIOError as e:
             warnings.warn(f"File writing error ignored: {e}")
+
+        # Update internal fields from updated meta
+        # syncronizing its state with disk
+        self.from_meta(meta)
 
     def get_root(self) -> str:
         return self._root
