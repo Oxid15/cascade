@@ -134,6 +134,38 @@ def test_on_disk_update_comment(tmp_path_str, ext):
     assert len(new_meta[0]["comments"]) == 2
 
 
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_on_disk_recreate_description(tmp_path_str, ext):
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.describe("Hello")
+    trd.sync_meta()
+
+    meta = MetaHandler.read_dir(tmp_path_str)
+
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.sync_meta()
+
+    new_meta = MetaHandler.read_dir(tmp_path_str)
+
+    assert meta[0]["description"] == new_meta[0]["description"]
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_on_disk_recreate_tags(tmp_path_str, ext):
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.tag(["hello", "world"])
+    trd.sync_meta()
+
+    meta = MetaHandler.read_dir(tmp_path_str)
+
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.sync_meta()
+
+    new_meta = MetaHandler.read_dir(tmp_path_str)
+
+    assert meta[0]["tags"] == new_meta[0]["tags"]
+
+
 def test_default_meta_fmt(tmp_path_str):
     trd = TraceableOnDisk(tmp_path_str, meta_fmt=None)
     trd.sync_meta()
