@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 from deepdiff import DeepDiff
@@ -36,8 +36,8 @@ class HistoryViewer(Server):
     def __init__(
         self,
         container: Union[Workspace, ModelRepo, ModelLine],
-        last_lines: Union[int, None] = None,
-        last_models: Union[int, None] = None,
+        last_lines: Optional[int] = None,
+        last_models: Optional[int] = None,
         update_period_sec: int = 3
     ) -> None:
         """
@@ -307,7 +307,7 @@ class HistoryViewer(Server):
 
         return fig
 
-    def _layout(self, metric: Union[str, None]):
+    def _layout(self, metric: Optional[str]):
         try:
             import dash  # noqa: F401
         except ModuleNotFoundError:
@@ -347,7 +347,7 @@ class HistoryViewer(Server):
             ]
         )
 
-    def serve(self, metric: Union[str, None] = None, **kwargs: Any) -> None:
+    def serve(self, metric: Optional[str] = None, **kwargs: Any) -> None:
         """
         Runs dash-based server with HistoryViewer, updating plots in real-time.
 

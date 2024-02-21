@@ -20,7 +20,7 @@ import os
 import glob
 import socket
 import warnings
-from typing import Dict, Union, Any, Literal, Iterable
+from typing import Dict, Union, Any, Literal, Iterable, Optional
 import pendulum
 from datetime import datetime
 
@@ -41,9 +41,9 @@ class Comment:
 @dataclass
 class Link:
     id: str
-    name: Union[str, None]
-    uri: Union[str, None]
-    meta: Union[PipeMeta, None]
+    name: Optional[str]
+    uri: Optional[str]
+    meta: Optional[PipeMeta]
     created_at: datetime
 
     def __post_init__(self) -> None:
@@ -60,8 +60,8 @@ class Traceable:
     def __init__(
         self,
         *args: Any,
-        description: Union[str, None] = None,
-        tags: Union[Iterable[str], None] = None,
+        description: Optional[str] = None,
+        tags: Optional[Iterable[str]] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -203,13 +203,13 @@ class Traceable:
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
 
-    def describe(self, desc: Union[str, None]):
+    def describe(self, desc: Optional[str]):
         """
         Add description to an object
 
         Parameters
         ----------
-        desc : Union[str, None]
+        desc : Optional[str]
             String description of an object.
             May be None to use the method in default initializer
 
@@ -287,10 +287,10 @@ class Traceable:
         return self.links[-1].id
 
     def link(self,
-             obj: Union["Traceable", None] = None,
-             name: Union[str, None] = None,
-             uri: Union[str, None] = None,
-             meta: Union[PipeMeta, None] = None,
+             obj: Optional["Traceable"] = None,
+             name: Optional[str] = None,
+             uri: Optional[str] = None,
+             meta: Optional[PipeMeta] = None,
              include: bool = True) -> None:
         """
         Links another object to this object. Links can contain
@@ -315,15 +315,15 @@ class Traceable:
 
         Parameters
         ----------
-        obj : Union[Traceable, None]
+        obj : Optional[Traceable]
             The object to link
-        name : Union[str, None], optional
+        name : Optional[str]
             Name of the object, overrides obj name if passed, by default None
-        uri : Union[str, None], optional
+        uri : Optional[str]
             URI of the object, by default None
-        meta : Union[PipeMeta, None], optional
+        meta : Optional[PipeMeta]
             Meta of the object, overrides obj meta if passed, by default None
-        include : bool, optional
+        include : bool, default is True
             Whether to include full meta of the object, by default True
         """
         if isinstance(obj, Traceable):
@@ -398,7 +398,7 @@ class TraceableOnDisk(Traceable):
                     "on path {self._root}"
                 )
 
-    def _determine_meta_fmt(self) -> Union[str, None]:
+    def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
         if len(meta_paths) == 0:

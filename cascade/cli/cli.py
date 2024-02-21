@@ -17,14 +17,14 @@ limitations under the License.
 
 import os
 from math import ceil
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import click
 
 from ..base import MetaHandler, MetaIOError
 
 
-def create_container(type: str, cwd: str):
+def create_container(type: str, cwd: str) -> Any:
     if type == "line":
         from cascade.models import ModelLine
         return ModelLine(cwd)

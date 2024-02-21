@@ -27,7 +27,7 @@ class ConstantBaseline(BasicModel):
     (for example it can be majority class)
     """
 
-    def __init__(self, constant: Any = None, **kwargs: Any) -> None:
+    def __init__(self, constant: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._constant = constant
 

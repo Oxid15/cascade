@@ -14,12 +14,12 @@ class Accuracy(Metric):
     """
     def __init__(
             self,
-            value: Union[MetricType, None] = None,
+            value: Optional[MetricType] = None,
             name: str = "accuracy",
-            dataset: Union[str, None] = None,
-            split: Union[str, None] = None,
-            interval: Union[Tuple[MetricType, MetricType], None] = None,
-            extra: Union[Dict[str, MetricType], None] = None,
+            dataset: Optional[str] = None,
+            split: Optional[str] = None,
+            interval: Optional[Tuple[MetricType, MetricType]] = None,
+            extra: Union[Dict[str, MetricType]] = None,
             **kwargs: Any
     ) -> None:
         super().__init__(name, value=value, dataset=dataset, split=split,

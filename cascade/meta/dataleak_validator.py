@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable, Union
+from typing import Any, Callable, Optional
 
 from tqdm import tqdm
 
@@ -28,7 +28,7 @@ class DataleakValidator(Validator):
         self,
         train_ds: Dataset[T],
         test_ds: Dataset[T],
-        hash_fn: Union[Callable[[Any], str], None] = None,
+        hash_fn: Optional[Callable[[Any], str]] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -43,7 +43,7 @@ class DataleakValidator(Validator):
             Train dataset
         test_ds : Dataset[T]
             Test or evaluation dataset
-        hash_fn : Union[Callable[[Any], str], None], optional
+        hash_fn : Optional[Callable[[Any], str]]
             Hash function, by default None
 
         Raises

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, Literal, Tuple, Union
+from typing import Any, Dict, Literal, Tuple, Optional
 from sklearn import metrics
 
 from ...metrics import MetricType, Metric
@@ -35,13 +35,13 @@ class SkMetric(Metric):
     def __init__(
         self,
         name: str,
-        *args: None,
-        value: Union[MetricType, None] = None,
-        dataset: Union[str, None] = None,
-        split: Union[str, None] = None,
-        direction: Union[Literal["up", "down"], None] = None,
-        interval: Union[Tuple[MetricType, MetricType], None] = None,
-        extra: Union[Dict[str, MetricType], None] = None,
+        *args: Any,
+        value: Optional[MetricType] = None,
+        dataset: Optional[str] = None,
+        split: Optional[str] = None,
+        direction: Optional[Literal["up", "down"]] = None,
+        interval: Optional[Tuple[MetricType, MetricType]] = None,
+        extra: Optional[Dict[str, MetricType]] = None,
         **kwargs: Any,
     ) -> None:
         self._args = args

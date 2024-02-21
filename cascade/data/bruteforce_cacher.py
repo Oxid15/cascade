@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any
 from tqdm import tqdm, trange
-from . import Dataset, Modifier, T
+from . import SizedDataset, Modifier, T
 
 
 class BruteforceCacher(Modifier):
@@ -52,7 +52,7 @@ class BruteforceCacher(Modifier):
     cascade.data.SequentialCacher
     cascade.data.Pickler
     """
-    def __init__(self, dataset: Dataset[T],
+    def __init__(self, dataset: SizedDataset[T],
                  *args: Any, **kwargs: Any) -> None:
         """
         Loads every item in dataset in internal list.

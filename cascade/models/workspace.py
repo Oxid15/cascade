@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, Generator, List, Literal, Union
+from typing import Any, Generator, List, Literal, Optional
 
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
 from ..models import ModelRepo
@@ -27,7 +27,7 @@ class Workspace(TraceableOnDisk):
         self,
         path: str,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
-        default_repo: Union[str, None] = None,
+        default_repo: Optional[str] = None,
         *args: Any,
         **kwargs: Any,
     ) -> None:

@@ -16,7 +16,7 @@ limitations under the License.
 
 import traceback
 import os
-from typing import Any, Literal, Type, Union, List, Dict
+from typing import Any, Literal, Type, Union, List, Dict, Optional
 
 import pendulum
 
@@ -132,7 +132,7 @@ class ModelLine(TraceableOnDisk):
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
-    def _find_name_by_slug(self, slug: str) -> Union[str, None]:
+    def _find_name_by_slug(self, slug: str) -> Optional[str]:
         if slug in self._slug2name_cache:
             return self._slug2name_cache[slug]
 

@@ -146,7 +146,7 @@ class WeighedSampler(Sampler):
     def __init__(
         self,
         dataset: SizedDataset[Tuple[Any, Any]],
-        partitioning: Union[Dict[Any, int], None] = None,
+        partitioning: Optional[Dict[Any, int]] = None,
     ) -> None:
         """
         Parameters

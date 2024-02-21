@@ -16,7 +16,7 @@ limitations under the License.
 
 import pickle
 import os
-from typing import Any, Type, Union
+from typing import Any, Type, Optional
 
 import torch
 
@@ -31,8 +31,8 @@ class TorchModel(BasicModel):
 
     def __init__(
         self,
-        model_class: Union[Type, None] = None,
-        model: Union[torch.nn.Module, None] = None,
+        model_class: Optional[Type] = None,
+        model: Optional[torch.nn.Module] = None,
         **kwargs: Any,
     ) -> None:
         """

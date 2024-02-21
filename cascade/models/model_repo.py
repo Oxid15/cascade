@@ -14,7 +14,7 @@ limitations under the License.
 import itertools
 import os
 import shutil
-from typing import Any, Dict, Generator, Iterable, List, Literal, Type, Union
+from typing import Any, Dict, Generator, Iterable, List, Literal, Optional, Type, Union
 
 from ..base import MetaFromFile, PipeMeta, Traceable, TraceableOnDisk
 from ..version import __version__
@@ -83,7 +83,7 @@ class SingleLineRepo(Repo):
         self,
         line: ModelLine,
         *args: Any,
-        meta_prefix: Union[Dict[Any, Any], str, None] = None,
+        meta_prefix: Optional[Dict[Any, Any]] = None,
         **kwargs: Any,
     ) -> None:
         self._root = line.get_root()
@@ -190,9 +190,9 @@ class ModelRepo(Repo, TraceableOnDisk):
 
     def add_line(
         self,
-        name: Union[str, None] = None,
+        name: Optional[str] = None,
         *args: Any,
-        meta_fmt: Union[str, None] = None,
+        meta_fmt: Optional[str] = None,
         **kwargs: Any,
     ) -> ModelLine:
         """
