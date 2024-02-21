@@ -68,7 +68,7 @@ class ModelLine(TraceableOnDisk):
             # No folder -> create
             os.mkdir(self._root)
 
-        self._create_meta()
+        self.sync_meta()
 
     def _load_model_names(self) -> None:
         if not os.path.isdir(self._root):
@@ -292,7 +292,7 @@ class ModelLine(TraceableOnDisk):
             os.path.join(full_path, "meta" + self._meta_fmt), meta
         )
         self._model_names.append(folder_name)
-        self._update_meta()
+        self.sync_meta()
 
     def __repr__(self) -> str:
         return f"ModelLine of {len(self)} models of {self._model_cls}"

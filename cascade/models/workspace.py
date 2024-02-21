@@ -52,7 +52,7 @@ class Workspace(TraceableOnDisk):
             except MetaIOError as e:
                 warnings.warn(str(e))
 
-        self._create_meta()
+        self.sync_meta()
 
     def __getitem__(self, key: str) -> ModelRepo:
         if key in self._repo_names:

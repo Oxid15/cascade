@@ -411,54 +411,43 @@ class TraceableOnDisk(Traceable):
                 f"Multiple meta files found in {self._root}"
             )
 
-    def _create_meta(self) -> None:
+    def sync_meta(self) -> None:
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
         # Object was created before -> update
         if len(meta_path) > 0:
-            self._update_meta()
+            meta = {}
+            from . import MetaHandler
+
+            try:
+                meta = MetaHandler.read_dir(self._root)[0]
+            except MetaIOError as e:
+                warnings.warn(f"File reading error ignored: {e}")
+
+            self_meta = self.get_meta()[0]  # TODO: Use all blocks in meta?
+            for key in self_meta:
+                if key not in DO_NOT_UPDATE and self_meta[key]:
+                    meta[key] = self_meta[key]
+
+            try:
+                MetaHandler.write_dir(self._root, [meta])
+            except MetaIOError as e:
+                warnings.warn(f"File writing error ignored: {e}")
+
+            # Update internal fields from updated meta
+            # syncronizing its state with disk
+            self.from_meta(meta)
             return
+        else:
+            created = str(pendulum.now(tz="UTC"))
+            meta = self.get_meta()
+            meta[0].update({"created_at": created})
 
-        created = str(pendulum.now(tz="UTC"))
-        meta = self.get_meta()
-        meta[0].update({"created_at": created})
+            from . import MetaHandler
 
-        from . import MetaHandler
-
-        try:
-            MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
-        except MetaIOError as e:
-            warnings.warn(f"File writing error ignored: {e}")
-
-    def _update_meta(self) -> None:
-        """
-        Reads meta if exists and updates it with new values
-        writes back to disk
-
-        If meta file exists and is only one, then reads it
-        and writes back in the same format
-        """
-
-        meta = {}
-        from . import MetaHandler
-
-        try:
-            meta = MetaHandler.read_dir(self._root)[0]
-        except MetaIOError as e:
-            warnings.warn(f"File reading error ignored: {e}")
-
-        self_meta = self.get_meta()[0]  # TODO: Use all blocks in meta?
-        for key in self_meta:
-            if key not in DO_NOT_UPDATE and self_meta[key]:
-                meta[key] = self_meta[key]
-
-        try:
-            MetaHandler.write_dir(self._root, [meta])
-        except MetaIOError as e:
-            warnings.warn(f"File writing error ignored: {e}")
-
-        # Update internal fields from updated meta
-        # syncronizing its state with disk
-        self.from_meta(meta)
+            try:
+                MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
+            except MetaIOError as e:
+                warnings.warn(f"File writing error ignored: {e}")
 
     def get_root(self) -> str:
         return self._root

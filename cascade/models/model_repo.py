@@ -186,7 +186,7 @@ class ModelRepo(Repo, TraceableOnDisk):
 
                 self._lines[name] = {"args": [], "kwargs": line}
 
-        self._create_meta()
+        self.sync_meta()
 
     def add_line(
         self,
@@ -230,7 +230,7 @@ class ModelRepo(Repo, TraceableOnDisk):
             meta_fmt = self._meta_fmt
 
         self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
-        self._update_meta()
+        self.sync_meta()
 
         line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
         return line
@@ -265,7 +265,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         """
         super().reload()
         self._update_lines()
-        self._update_meta()
+        self.sync_meta()
 
     def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
