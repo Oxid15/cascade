@@ -17,7 +17,7 @@ limitations under the License.
 import os
 from shutil import copyfile
 import warnings
-from typing import Any, Union, Callable
+from typing import Any, Callable, Optional, Union
 
 import pendulum
 

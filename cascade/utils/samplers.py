@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from itertools import cycle
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Tuple, Optional
 
 import numpy as np
 from tqdm import trange

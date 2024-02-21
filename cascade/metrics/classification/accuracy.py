@@ -1,4 +1,4 @@
-from typing import Any, Dict, Sequence, Tuple, Union
+from typing import Any, Dict, Sequence, Tuple, Optional
 from ..metric import Metric, MetricType
 
 
@@ -19,7 +19,7 @@ class Accuracy(Metric):
             dataset: Optional[str] = None,
             split: Optional[str] = None,
             interval: Optional[Tuple[MetricType, MetricType]] = None,
-            extra: Union[Dict[str, MetricType]] = None,
+            extra: Optional[Dict[str, MetricType]] = None,
             **kwargs: Any
     ) -> None:
         super().__init__(name, value=value, dataset=dataset, split=split,
