@@ -454,7 +454,7 @@ class TraceableOnDisk(Traceable):
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]["updated_at"] = pendulum.now(tz="UTC")
+        meta[0]["updated_at"] = str(pendulum.now(tz="UTC"))
         return meta
 
     def load_meta(self):
