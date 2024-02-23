@@ -17,7 +17,7 @@ limitations under the License.
 import os
 from shutil import copyfile
 import warnings
-from typing import Any, Union, Callable
+from typing import Any, Callable, Optional, Union
 
 import pendulum
 
@@ -197,7 +197,7 @@ class Model(Traceable):
         self._log_callbacks.append(callback)
 
     def add_metric(self, metric: Union[str, Metric],
-                   value: Union[MetricType, None] = None, **kwargs: Any) -> None:
+                   value: Optional[MetricType] = None, **kwargs: Any) -> None:
         """
         Adds metric value to the model. If metric already exists in the list, updates its value.
 
@@ -205,7 +205,7 @@ class Model(Traceable):
         ----------
         metric : Union[str, Metric]
             Either metric name or metric object. If object, then second argument is ignored
-        value : Union[MetricType, None], optional
+        value : Optional[MetricType]
             Metric value when metric is str, by default None
 
         Any additional args will go to the Metric constructor for flexibility if metric is str

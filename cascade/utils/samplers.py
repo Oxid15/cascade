@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from itertools import cycle
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Tuple, Optional
 
 import numpy as np
 from tqdm import trange
@@ -146,7 +146,7 @@ class WeighedSampler(Sampler):
     def __init__(
         self,
         dataset: SizedDataset[Tuple[Any, Any]],
-        partitioning: Union[Dict[Any, int], None] = None,
+        partitioning: Optional[Dict[Any, int]] = None,
     ) -> None:
         """
         Parameters

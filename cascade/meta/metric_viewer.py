@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 
 import pandas as pd
 import pendulum
@@ -207,8 +207,8 @@ class MetricServer(Server):
         self,
         mv: MetricViewer,
         page_size: int,
-        include: Union[List[str], None],
-        exclude: Union[List[str], None],
+        include: Optional[List[str]],
+        exclude: Optional[List[str]],
         **kwargs: Any,
     ) -> None:
         self._mv = mv

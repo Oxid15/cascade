@@ -16,9 +16,9 @@ limitations under the License.
 
 import os
 import pickle
-from typing import Any, Union
+from typing import Any, Optional
 
-from . import Dataset, Modifier, T
+from . import SizedDataset, Modifier, T
 
 
 class Pickler(Modifier):
@@ -29,7 +29,7 @@ class Pickler(Modifier):
     def __init__(
         self,
         path: str,
-        dataset: Union[Dataset[T], None] = None,
+        dataset: Optional[SizedDataset[T]] = None,
         *args: Any,
         **kwargs: Any
     ) -> None:
@@ -69,7 +69,7 @@ class Pickler(Modifier):
         with open(self._path, "rb") as f:
             self._dataset = pickle.load(f)
 
-    def ds(self) -> Dataset[T]:
+    def ds(self) -> SizedDataset[T]:
         """
         Returns pickled dataset
         """

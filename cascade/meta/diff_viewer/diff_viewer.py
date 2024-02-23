@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+from typing import Any
 
 from ...base import MetaHandler, supported_meta_formats, MetaIOError, ZeroMetaError
 from ...meta import Server
@@ -109,5 +110,5 @@ class DiffViewer(Server):
                 "Available types are: for Repo or Line, for DatasetVersion logs or for History log."
             )
 
-    def serve(self, *args, **kwargs):
+    def serve(self, *args: Any, **kwargs: Any):
         return self._diff_viewer.serve(*args, **kwargs)

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Union
+from typing import Any, Optional
 
 from numpy.random import randint, shuffle
 
@@ -29,7 +29,7 @@ class RandomSampler(Sampler):
     def __init__(
         self,
         dataset: SizedDataset[T],
-        num_samples: Union[int, None] = None,
+        num_samples: Optional[int] = None,
         *args: Any,
         **kwargs: Any
     ) -> None:
@@ -51,7 +51,7 @@ class RandomSampler(Sampler):
             self._indices = self._indices[:num_samples]
         else:
             self._indices = randint(0, len(dataset), num_samples)
-        super().__init__(dataset, num_samples, **kwargs)
+        super().__init__(dataset, num_samples, *args, **kwargs)
 
     def __getitem__(self, index: int) -> T:
         return super().__getitem__(self._indices[index])

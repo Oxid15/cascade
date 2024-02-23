@@ -26,7 +26,7 @@ from .base_diff_viewer import BaseDiffViewer
 
 
 class RepoDiffViewer(BaseDiffViewer):
-    def __init__(self, path) -> None:
+    def __init__(self, path: str) -> None:
         """
         Parameters
         ----------

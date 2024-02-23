@@ -16,7 +16,7 @@ limitations under the License.
 
 import json
 import os
-from typing import Any
+from typing import Any, Dict
 import pendulum
 from . import MetaIOError
 from .meta_handler import MetaHandler, CustomEncoder
@@ -75,7 +75,7 @@ class HistoryHandler:
                 "type": "history",
             }
 
-    def _is_log_compatible(self, log: Any) -> bool:
+    def _is_log_compatible(self, log: Dict[str, Any]) -> bool:
         if log.get("cascade_version"):
             return True
         return False

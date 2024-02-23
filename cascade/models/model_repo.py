@@ -14,7 +14,7 @@ limitations under the License.
 import itertools
 import os
 import shutil
-from typing import Any, Dict, Generator, Iterable, List, Literal, Type, Union
+from typing import Any, Dict, Generator, Iterable, List, Literal, Optional, Type, Union
 
 from ..base import MetaFromFile, PipeMeta, Traceable, TraceableOnDisk
 from ..version import __version__
@@ -83,7 +83,7 @@ class SingleLineRepo(Repo):
         self,
         line: ModelLine,
         *args: Any,
-        meta_prefix: Union[Dict[Any, Any], str, None] = None,
+        meta_prefix: Optional[Dict[Any, Any]] = None,
         **kwargs: Any,
     ) -> None:
         self._root = line.get_root()
@@ -186,13 +186,13 @@ class ModelRepo(Repo, TraceableOnDisk):
 
                 self._lines[name] = {"args": [], "kwargs": line}
 
-        self._create_meta()
+        self.sync_meta()
 
     def add_line(
         self,
-        name: Union[str, None] = None,
+        name: Optional[str] = None,
         *args: Any,
-        meta_fmt: Union[str, None] = None,
+        meta_fmt: Optional[str] = None,
         **kwargs: Any,
     ) -> ModelLine:
         """
@@ -230,7 +230,7 @@ class ModelRepo(Repo, TraceableOnDisk):
             meta_fmt = self._meta_fmt
 
         self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
-        self._update_meta()
+        self.sync_meta()
 
         line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
         return line
@@ -265,7 +265,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         """
         super().reload()
         self._update_lines()
-        self._update_meta()
+        self.sync_meta()
 
     def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])

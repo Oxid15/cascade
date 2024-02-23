@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional
 
 from ..base import MetaFromFile, MetaIOError, MetaHandler, supported_meta_formats
 
@@ -26,7 +26,7 @@ class MetaViewer:
     The class to view all metadata in folders and subfolders.
     """
 
-    def __init__(self, root: str, filt: Union[Dict[Any, Any], None] = None) -> None:
+    def __init__(self, root: str, filt: Optional[Dict[Any, Any]] = None) -> None:
         """
         Parameters
         ----------

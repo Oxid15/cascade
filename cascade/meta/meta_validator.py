@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 from hashlib import md5
-from typing import Literal, Union
+from typing import Literal, Optional
 
 from deepdiff import DeepDiff
 
@@ -72,7 +72,7 @@ class MetaValidator(Validator):
     def __init__(
         self,
         dataset: SizedDataset[T],
-        root: Union[str, None] = None,
+        root: Optional[str] = None,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
     ) -> None:
         """
