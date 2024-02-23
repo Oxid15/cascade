@@ -93,6 +93,10 @@ class HistoryHandler:
         ----------
         obj: Any
             Meta data of the object
+        
+        Raises
+        ------
+        MetaIOError - if log writing fails
         """
 
         # Use serialize nac back to prevent false diffs due to

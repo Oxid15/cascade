@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Tuple, Union, Optional
 
 import pendulum
 
-from ..base import HistoryHandler
+from ..base import HistoryHandler, MetaIOError
 
 
 @dataclass
@@ -146,8 +146,24 @@ class DataRegistrator:
     has some properties changed during the time.
     """
 
-    def __init__(self, filepath: str) -> None:
-        self._logger = HistoryHandler(filepath)
+    def __init__(self, filepath: str, raise_on_fail: bool = False) -> None:
+        """
+        Parameters
+        ----------
+        filepath : str
+            Path to the log file for HistoryLogger
+        raise_on_fail : bool, optional
+            Whether to raise a warning or an exception in case when
+            logger failed to read a file for some reason, by default False
+        """
+        self._raise_on_fail = raise_on_fail
+        try:
+            self._logger = HistoryHandler(filepath)
+        except MetaIOError as e:
+            if self._raise_on_fail:
+                raise e
+            else:
+                warnings.warn(str(e))
 
     def register(self, card: DataCard) -> None:
         """
@@ -170,4 +186,10 @@ class DataRegistrator:
         now = str(pendulum.now(tz="UTC"))
         card.data["updated_at"] = now
 
-        self._logger.log(card.data)
+        try:
+            self._logger.log(card.data)
+        except MetaIOError as e:
+            if self._raise_on_fail:
+                raise e
+            else:
+                warnings.warn(str(e))
