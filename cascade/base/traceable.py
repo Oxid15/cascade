@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from dataclasses import dataclass, asdict
-from getpass import getuser
-import os
 import glob
+import os
 import socket
 import warnings
-from typing import Dict, Union, Any, Literal, Iterable, Optional
-import pendulum
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from getpass import getuser
+from typing import Any, Dict, Iterable, Literal, Optional, Union
 
-from . import PipeMeta, Meta, default_meta_format, supported_meta_formats, MetaIOError
+import pendulum
+
+from . import Meta, MetaIOError, PipeMeta, default_meta_format, supported_meta_formats
 
 DO_NOT_UPDATE = ["created_at"]
 
@@ -59,7 +60,7 @@ class Traceable:
 
     def __init__(
         self,
-        *args: Any,
+        *args: Any,  # TODO: why?
         description: Optional[str] = None,
         tags: Optional[Iterable[str]] = None,
         **kwargs: Any,

@@ -11,77 +11,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import itertools
 import os
 import shutil
-from typing import Any, Dict, Generator, Iterable, List, Literal, Optional, Type, Union
+import warnings
+from typing import Any, Dict, Iterable, List, Literal, Optional, Type, Union
 
-from ..base import MetaFromFile, PipeMeta, Traceable, TraceableOnDisk
-from ..version import __version__
-from .model import Model
-from .model_line import ModelLine
+from ..base import MetaFromFile, TraceableOnDisk, ZeroMetaError
+from .base_repo import BaseRepo
+from .line import Line
+from .line_factory import LineFactory
 
 
-class Repo(Traceable):
-    """
-    Base interface for repos of models. Repo is the collection of Lines.
-
-    See also
-    --------
-    cascade.models.ModelRepo
-    """
-
+class SingleLineRepo(BaseRepo):
     def __init__(
         self,
-        *args: Any,
-        meta_prefix: Union[Dict[Any, Any], str, None] = None,
-        **kwargs: Any,
-    ) -> None:
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = dict()
-
-    def __getitem__(self, key: str) -> ModelLine:
-        raise NotImplementedError()
-
-    def __len__(self) -> int:
-        """
-        Returns
-        -------
-        num: int
-            a number of lines
-        """
-        return len(self._lines)
-
-    def __iter__(self) -> Generator[ModelLine, None, None]:
-        for line in self._lines:
-            yield self.__getitem__(line)
-
-    def get_meta(self) -> PipeMeta:
-        meta = super().get_meta()
-        meta[0].update(
-            {
-                "root": self._root,
-                "len": len(self),
-                "type": "repo",
-                "cascade_version": __version__,
-            }
-        )
-        return meta
-
-    def get_line_names(self) -> List[str]:
-        """
-        Returns list of line names.
-        """
-        return list(self._lines.keys())
-
-    def reload(self) -> None:
-        pass
-
-
-class SingleLineRepo(Repo):
-    def __init__(
-        self,
-        line: ModelLine,
+        line: Line,
         *args: Any,
         meta_prefix: Optional[Dict[Any, Any]] = None,
         **kwargs: Any,
@@ -91,7 +35,7 @@ class SingleLineRepo(Repo):
         self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
         self._line = line
 
-    def __getitem__(self, key: str) -> ModelLine:
+    def __getitem__(self, key: str) -> Line:
         if key in self._lines:
             return self._line
         else:
@@ -108,66 +52,64 @@ class SingleLineRepo(Repo):
     def reload(self) -> None:
         self._line.reload()
 
+    def __len__(self) -> Literal[1]:
+        return 1
 
-class ModelRepo(Repo, TraceableOnDisk):
+    def get_line_names(self) -> List[str]:
+        return [self._line.get_root()]
+
+
+class Repo(BaseRepo, TraceableOnDisk):
     """
-    An interface to manage experiments with several lines of models.
-    When created, initializes an empty folder constituting a repository of model lines.
-
-    Stores its metadata in its root folder. With every run if the repo was already
-    created earlier, updates its meta and logs changes in human-readable format in history file
+    An interface to manage series of experiments called lines.
+    When created, initializes an empty folder constituting a repository of lines.
 
     Example
     -------
-    >>> from cascade.models import ModelRepo
+    >>> from cascade.base import Repo
     >>> from cascade.utils.baselines import ConstantBaseline
-    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one line for the example.'})
-    >>> line = repo.add_line('model', ConstantBaseline)
-    >>> model = ConstantBaseline(1)
+    >>> repo = Repo("repo")
+    >>> repo.describe("This is a repo with one line for the example.")
+    >>> line = repo.add_line("const", model_cls=ConstantBaseline)
+    >>> model = line.add_model()
     >>> model.fit()
     >>> line.save(model)
-
-
-    >>> from cascade.models import ModelRepo
-    >>> from cascade.utils.baselines import ConstantBaseline
-    >>> repo = ModelRepo('repo', lines=[dict(name='constant', model_cls=ConstantBaseline)])
-    >>> model = ConstantBaseline()
-    >>> model.fit()
-    >>> repo['constant'].save(model)
     """
 
     def __init__(
         self,
         folder: str,
         *args: Any,
-        lines: Union[Iterable[ModelLine], None] = None,
+        lines: Optional[Iterable[Dict[str, Any]]] = None,
         overwrite: bool = False,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
-        model_cls: Union[Type, Dict[str, Type]] = Model,
         **kwargs: Any,
     ) -> None:
         """
         Parameters
         ----------
         folder:
-            Path to a folder where ModelRepo needs to be created or already was created
+            Path to a folder where Repo needs to be created or already was created
             if folder does not exist, creates it
-        lines: List[Dict]
-            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
+        lines: Optional[Iterable[Dict[str, Any]]], by default is None
+            Deprecated, use add_model instead
+
+            A list with parameters of lines to add at creation
+            or to initialize (alias for `add_line`)
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
         meta_fmt: Literal['.json', '.yml', '.yaml']
             extension of repo's metadata files and that will be assigned to the lines by default
             `.json` and `.yml` or `.yaml` are supported
-        model_cls:
-            Default class for any ModelLine in repo
+
         See also
         --------
+        cascade.base.Line
+        cascade.data.DataLine
         cascade.models.ModelLine
         """
-        super().__init__(folder, meta_fmt, *args, **kwargs)
-        self._model_cls = model_cls
+        super().__init__(path=folder, root=folder, meta_fmt=meta_fmt, *args, **kwargs)
 
         if overwrite and os.path.exists(self._root):
             shutil.rmtree(self._root)
@@ -180,6 +122,10 @@ class ModelRepo(Repo, TraceableOnDisk):
         }
 
         if lines is not None:
+            warnings.warn(
+                "`lines` keyword is deprecated and will be removed in 0.15.0, "
+                "consider migrating to `add_line`"
+            )
             for line in lines:
                 name = line["name"]
                 del line["name"]
@@ -191,15 +137,16 @@ class ModelRepo(Repo, TraceableOnDisk):
     def add_line(
         self,
         name: Optional[str] = None,
+        line_cls: Optional[Type[Any]] = None,
         *args: Any,
         meta_fmt: Optional[str] = None,
         **kwargs: Any,
-    ) -> ModelLine:
+    ) -> Line:
         """
         Adds new line to repo if it doesn't exist and returns it.
         If line exists, defines it in repo with parameters provided.
 
-        Supports all the parameters of ModelLine using args and kwargs.
+        Supports all the parameters of Line using args and kwargs.
 
         Parameters:
             name: str, optional
@@ -212,7 +159,7 @@ class ModelRepo(Repo, TraceableOnDisk):
                 If omitted, inherits format from repo.
         See also
         --------
-            cascade.models.ModelLine
+            cascade.base.Line
         """
         if name is None:
             name = f"{len(self):0>5d}"
@@ -231,14 +178,28 @@ class ModelRepo(Repo, TraceableOnDisk):
         self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
         self.sync_meta()
 
-        line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
+        if line_cls is None:
+            try:
+                line = LineFactory.read(folder)
+            except TypeError as e:
+                raise TypeError(
+                    f"line_cls was {line_cls}, which is incompatible with line {name}"
+                ) from e
+            except ZeroMetaError as e:
+                raise IOError(
+                    f"Did not found meta in {folder}, pass `line_cls` if you want to create a line"
+                ) from e
+        else:
+            line = LineFactory.create(
+                folder, line_cls, *args, meta_fmt=meta_fmt, **kwargs
+            )
         return line
 
-    def __getitem__(self, key: Union[str, int]) -> ModelLine:
+    def __getitem__(self, key: Union[str, int]) -> Line:
         """
         Returns
         -------
-        line: ModelLine
+        line: Line
            existing line of the name passed in `key`
         """
         if isinstance(key, int):
@@ -247,7 +208,7 @@ class ModelRepo(Repo, TraceableOnDisk):
             raise TypeError(f"{type(key)} is not supported as key")
 
         if key in self._lines:
-            return ModelLine(
+            return LineFactory.read(
                 os.path.join(self._root, key),
                 *self._lines[key]["args"],
                 **self._lines[key]["kwargs"],
@@ -256,53 +217,49 @@ class ModelRepo(Repo, TraceableOnDisk):
             raise KeyError(f"Line {key} does not exist in {self}")
 
     def __repr__(self) -> str:
-        return f"ModelRepo in {self._root} of {len(self)} lines"
+        return f"Repo in {self._root} of {len(self)} lines"
 
     def reload(self) -> None:
         """
         Updates internal state
         """
-        super().reload()
         self._update_lines()
         self.sync_meta()
 
-    def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
-        return ModelRepoConcatenator([self, repo])
-
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_obj_meta(self, obj: str) -> MetaFromFile:
         """
-        Loads metadata of a model from disk
+        Loads metadata of an object inside repo from disk
 
         Parameters
         ----------
-        model : str
-            model slug e.g. `fair_squid_of_bliss`
+        obj : str
+            obj slug e.g. `fair_squid_of_bliss`
 
         Returns
         -------
         MetaFromFile
-            Model metadata
+            Obj metadata
 
         Raises
         ------
         FileNotFoundError
-            Raises if failed to find the model with slug specified
+            Raises if failed to find the obj with slug specified
         """
 
         for name in self._lines:
             try:
-                line = ModelLine(
+                line = LineFactory.create(
                     os.path.join(self._root, name),
                     *self._lines[name]["args"],
                     **self._lines[name]["kwargs"],
                 )
-                meta = line.load_model_meta(model)
+                meta = line.load_obj_meta(obj)
             except FileNotFoundError:
                 continue
             else:
                 return meta
         raise FileNotFoundError(
-            f"Failed to find the model {model} in the repo at {self._root}"
+            f"Failed to find the object {obj} in the repo at {self._root}"
         )
 
     def _update_lines(self) -> None:
@@ -313,45 +270,17 @@ class ModelRepo(Repo, TraceableOnDisk):
             ):
                 self._lines[name] = {"args": [], "kwargs": dict()}
 
-
-class ModelRepoConcatenator(Repo):
-    """
-    The class to concatenate different Repos.
-    For the ease of use please, don't use it directly.
-    Just do `repo = repo_1 + repo_2` to unify two or more repos.
-    """
-
-    def __init__(self, repos: Iterable[Repo], *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self._repos = repos
-
-    def __getitem__(self, key) -> ModelLine:
-        pair = key.split("_")
-        if len(pair) <= 2:
-            raise KeyError(
-                f"Key {key} is not in required format \
-            `<repo_idx>_..._<line_name>`. \
-            Please, use the key in this format. For example `0_line_1`"
-            )
-        idx, line_name = pair[0], "_".join(pair[1:])
-        idx = int(idx)
-
-        return self._repos[idx][line_name]
-
     def __len__(self) -> int:
-        return sum([len(repo) for repo in self._repos])
+        """
+        Returns
+        -------
+        num: int
+            a number of lines
+        """
+        return len(self._lines)
 
-    def __iter__(self) -> Generator[ModelLine, None, None]:
-        # this flattens the list of lines
-        for line in itertools.chain(*[[line for line in repo] for repo in self._repos]):
-            yield line
-
-    def __add__(self, repo: ModelRepo):
-        return ModelRepoConcatenator([self, repo])
-
-    def __repr__(self) -> str:
-        return f"ModelRepoConcatenator of {len(self._repos)} repos, {len(self)} lines total"
-
-    def reload(self) -> None:
-        for repo in self._repos:
-            repo.reload()
+    def get_line_names(self) -> List[str]:
+        """
+        Returns list of line names.
+        """
+        return list(self._lines.keys())
