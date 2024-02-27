@@ -20,7 +20,9 @@ from typing import Any, Dict, Iterable, Optional, Tuple, Union
 import pendulum
 
 from ..base import PipeMeta, Traceable, raise_not_implemented
-from ..models import Model, ModelLine, ModelRepo
+from ..lines import ModelLine
+from ..models import Model
+from ..repos import Repo
 
 logger = logging.getLogger(__name__)
 
@@ -30,21 +32,19 @@ class Trainer(Traceable):
     A class that encapsulates training, evaluation and saving of models.
     """
 
-    def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
+    def __init__(self, repo: Union[Repo, str], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
-        repo: Union[ModelRepo, str]
+        repo: Union[Repo, str]
             Either repo or path to it
         """
         if isinstance(repo, str):
-            self._repo = ModelRepo(repo)
-        elif isinstance(repo, ModelRepo):
+            self._repo = Repo(repo)
+        elif isinstance(repo, Repo):
             self._repo = repo
         else:
-            raise TypeError(
-                f"Repo should be either ModelRepo or path, got {type(repo)}"
-            )
+            raise TypeError(f"Repo should be either Repo or path, got {type(repo)}")
 
         self.metrics = []
         super().__init__(*args, **kwargs)
@@ -65,7 +65,8 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
-    def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
+
+    def __init__(self, repo: Union[Repo, str], *args: Any, **kwargs: Any) -> None:
         self.train_start_at = None
         self.train_end_at = None
         super().__init__(repo, *args, **kwargs)

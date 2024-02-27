@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from . import Sampler, T
+from .dataset import Sampler, T
 
 
 class CyclicSampler(Sampler):

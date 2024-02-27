@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Generator, List, Union
+from typing import Any, List
 
 from ..base import PipeMeta
 from ..base.traceable import Traceable
+from ..lines import Line
 from ..version import __version__
-from .line import Line
 
 
 class BaseRepo(Traceable, ABC):

@@ -15,12 +15,11 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from ..base import MetaFromFile
-from . import Model
 
 
 class Line(ABC):
     @abstractmethod
-    def __getitem__(self, num: int) -> Model: ...
+    def __getitem__(self, num: int) -> Any: ...
 
     @abstractmethod
     def reload(self): ...

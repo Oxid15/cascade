@@ -18,7 +18,7 @@ from typing import Any
 
 from numpy import ceil
 
-from . import Modifier, SizedDataset, T
+from .dataset import Modifier, SizedDataset, T
 
 
 class SequentialCacher(Modifier):

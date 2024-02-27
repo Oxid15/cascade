@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any, Optional
 
-from . import Sampler, SizedDataset, T
+from .dataset import Sampler, SizedDataset, T
 
 
 class RangeSampler(Sampler):

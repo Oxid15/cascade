@@ -26,13 +26,13 @@ from ..base import MetaHandler, MetaIOError
 
 def create_container(type: str, cwd: str) -> Any:
     if type == "line":
-        from cascade.models import ModelLine
+        from ..lines import ModelLine
         return ModelLine(cwd)
     elif type == "repo":
-        from cascade.models import ModelRepo
-        return ModelRepo(cwd)
+        from ..repos import Repo
+        return Repo(cwd)
     elif type == "workspace":
-        from cascade.models import Workspace
+        from ..models import Workspace
         return Workspace(cwd)
     else:
         return
@@ -172,10 +172,10 @@ def view_history(ctx, host, port, l, m, p):  # noqa: E741
 def view_metric(ctx, p, i, x):
     type = ctx.obj["type"]
     if type == "repo":
-        from ..models import ModelRepo
-        container = ModelRepo(ctx.obj["cwd"])
+        from ..repos import Repo
+        container = Repo(ctx.obj["cwd"])
     elif type == "line":
-        from ..models import ModelLine
+        from ..lines import ModelLine
         container = ModelLine(ctx.obj["cwd"])
     else:
         click.echo(f"Cannot open Metric Viewer in object of type `{type}`")
@@ -228,7 +228,7 @@ def comment_ls(ctx):
 
     container = create_container(ctx.obj.get("type"), ctx.obj.get("cwd"))
     if container:
-        from cascade.models import ModelLine
+        from cascade.lines import ModelLine
 
         comment_counter = 0
         if isinstance(container, ModelLine):

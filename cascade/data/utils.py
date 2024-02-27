@@ -15,9 +15,10 @@ limitations under the License.
 """
 
 from math import floor
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
-from . import RangeSampler, SizedDataset, T
+from .dataset import SizedDataset, T
+from .range_sampler import RangeSampler
 
 
 def split(

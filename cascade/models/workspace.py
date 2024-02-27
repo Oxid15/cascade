@@ -18,8 +18,8 @@ import os
 import warnings
 from typing import Any, Generator, List, Literal, Optional
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
-from ..models import ModelRepo
+from ..base import MetaFromFile, MetaHandler, MetaIOError, PipeMeta, TraceableOnDisk
+from ..repos import Repo
 
 
 class Workspace(TraceableOnDisk):
@@ -54,16 +54,16 @@ class Workspace(TraceableOnDisk):
 
         self.sync_meta()
 
-    def __getitem__(self, key: str) -> ModelRepo:
+    def __getitem__(self, key: str) -> Repo:
         if key in self._repo_names:
-            return ModelRepo(os.path.join(self._root, key))
+            return Repo(os.path.join(self._root, key))
         else:
             raise KeyError(f"{key} repo does not exist in workspace {self._root}")
 
     def __len__(self) -> int:
         return len(self._repo_names)
 
-    def __iter__(self) -> Generator[ModelRepo, None, None]:
+    def __iter__(self) -> Generator[Repo, None, None]:
         for repo in self._repo_names:
             yield self.__getitem__(repo)
 
@@ -77,14 +77,16 @@ class Workspace(TraceableOnDisk):
     def get_repo_names(self) -> List[str]:
         return self._repo_names
 
-    def get_default(self) -> ModelRepo:
+    def get_default(self) -> Repo:
         if self._default is not None:
             return self[self._default]
         else:
             if len(self._repo_names) > 0:
                 return self[self._repo_names[0]]
             else:
-                raise RuntimeError("Tried to get the default repo when the workspace is empty")
+                raise RuntimeError(
+                    "Tried to get the default repo when the workspace is empty"
+                )
 
     def set_default(self, repo: str) -> None:
         if repo in self._repo_names:
@@ -117,7 +119,7 @@ class Workspace(TraceableOnDisk):
 
         for repo_name in self._repo_names:
             try:
-                repo = ModelRepo(os.path.join(self._root, repo_name))
+                repo = Repo(os.path.join(self._root, repo_name))
                 meta = repo.load_model_meta(model)
             except FileNotFoundError:
                 continue
@@ -127,7 +129,7 @@ class Workspace(TraceableOnDisk):
             f"Failed to find the model {model} in the workspace at {self._root}"
         )
 
-    def add_repo(self, name: str, *args: Any, **kwargs: Any) -> ModelRepo:
+    def add_repo(self, name: str, *args: Any, **kwargs: Any) -> Repo:
         """
         Creates and adds repo to the Workspace
 
@@ -138,7 +140,7 @@ class Workspace(TraceableOnDisk):
 
         Returns
         -------
-        ModelRepo
+        Repo
             Created repo
 
         Raises
@@ -149,6 +151,6 @@ class Workspace(TraceableOnDisk):
         if name in self._repo_names:
             raise ValueError(f"Repo {name} already exists")
 
-        repo = ModelRepo(os.path.join(self._root, name), *args, **kwargs)
+        repo = Repo(os.path.join(self._root, name), *args, **kwargs)
         self._repo_names.append(name)
         return repo

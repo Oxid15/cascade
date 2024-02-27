@@ -1,6 +1,7 @@
-from typing import Any, Dict, List, Tuple
 import os
 import re
+from typing import Any, Dict, List, Tuple
+
 from coolname import generate
 
 
@@ -25,6 +26,7 @@ def update_version(path: str, version: str) -> None:
         MetaHandler.write_dir(path, meta)
 
     from cascade.base import MetaHandler
+
     meta = MetaHandler.read_dir(path)
 
     ver = meta[0].get("cascade_version")
@@ -58,9 +60,11 @@ def migrate_repo_v0_13(path: str) -> None:
         Path to the container to migrate
     """
     from tqdm import tqdm
+
     from cascade.base import MetaHandler, MetaIOError
-    from cascade.models import ModelRepo, ModelLine, SingleLineRepo
+    from cascade.lines import ModelLine
     from cascade.metrics import Metric, MetricType
+    from cascade.repos import Repo, SingleLineRepo
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):
@@ -72,10 +76,7 @@ def migrate_repo_v0_13(path: str) -> None:
             value = metrics[name]
 
             if isinstance(value, MetricType):
-                metric = Metric(
-                    name=name,
-                    value=value
-                )
+                metric = Metric(name=name, value=value)
                 new_style.append(metric)
             else:
                 incompatible[name] = value
@@ -85,7 +86,7 @@ def migrate_repo_v0_13(path: str) -> None:
 
     root_meta = MetaHandler.read_dir(path)
     if root_meta[0]["type"] == "repo":
-        repo = ModelRepo(path)
+        repo = Repo(path)
     elif root_meta[0]["type"] == "line":
         line = ModelLine(path)
         repo = SingleLineRepo(line)

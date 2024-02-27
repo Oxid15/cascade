@@ -17,8 +17,8 @@ limitations under the License.
 
 from typing import Any, List, Tuple, Union
 
-from ..base import PipeMeta, Meta
-from . import SizedDataset
+from ..base import Meta, PipeMeta
+from .dataset import SizedDataset
 
 
 class Composer(SizedDataset):

@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, List, Sequence, Generator
+from typing import Any, Generator, List, Sequence
 
 import numpy as np
 
-from ..data import T
+from .dataset import T
 
 
 class SimpleDataloader:
@@ -32,12 +32,14 @@ class SimpleDataloader:
     [[0, 1], [2]]
 
     """
+
     def __init__(self, data: Sequence[T], batch_size: int = 1) -> None:
         if batch_size == 0:
             raise ValueError("Batch size cannot be 0")
         if batch_size > len(data):
             raise ValueError(
-                f"Batch size ({batch_size}) is larger than sequence length ({len(data)})")
+                f"Batch size ({batch_size}) is larger than sequence length ({len(data)})"
+            )
 
         self._data = data
         self._bs = batch_size

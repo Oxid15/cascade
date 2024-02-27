@@ -18,7 +18,7 @@ import os
 import pickle
 from typing import Any, Optional
 
-from . import SizedDataset, Modifier, T
+from .dataset import Modifier, SizedDataset, T
 
 
 class Pickler(Modifier):

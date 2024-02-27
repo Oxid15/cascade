@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any, Callable
 
-from . import SizedDataset, Modifier, T
+from .dataset import Modifier, SizedDataset, T
 
 
 class ApplyModifier(Modifier):
@@ -25,7 +25,11 @@ class ApplyModifier(Modifier):
     """
 
     def __init__(
-        self, dataset: SizedDataset[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
+        self,
+        dataset: SizedDataset[T],
+        func: Callable[[T], Any],
+        *args: Any,
+        **kwargs: Any
     ) -> None:
         """
         Parameters

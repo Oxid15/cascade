@@ -18,45 +18,7 @@ from typing import Any, Dict, Iterable, List, Literal, Optional, Type, Union
 
 from ..base import MetaFromFile, TraceableOnDisk, ZeroMetaError
 from .base_repo import BaseRepo
-from .line import Line
 from .line_factory import LineFactory
-
-
-class SingleLineRepo(BaseRepo):
-    def __init__(
-        self,
-        line: Line,
-        *args: Any,
-        meta_prefix: Optional[Dict[Any, Any]] = None,
-        **kwargs: Any,
-    ) -> None:
-        self._root = line.get_root()
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
-        self._line = line
-
-    def __getitem__(self, key: str) -> Line:
-        if key in self._lines:
-            return self._line
-        else:
-            raise KeyError(
-                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist"
-            )
-
-    def __repr__(self) -> str:
-        return f"SingleLine in {self._root}"
-
-    def get_root(self):
-        return self._root
-
-    def reload(self) -> None:
-        self._line.reload()
-
-    def __len__(self) -> Literal[1]:
-        return 1
-
-    def get_line_names(self) -> List[str]:
-        return [self._line.get_root()]
 
 
 class Repo(BaseRepo, TraceableOnDisk):
@@ -141,7 +103,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         *args: Any,
         meta_fmt: Optional[str] = None,
         **kwargs: Any,
-    ) -> Line:
+    ):  # -> Line:
         """
         Adds new line to repo if it doesn't exist and returns it.
         If line exists, defines it in repo with parameters provided.
@@ -195,7 +157,7 @@ class Repo(BaseRepo, TraceableOnDisk):
             )
         return line
 
-    def __getitem__(self, key: Union[str, int]) -> Line:
+    def __getitem__(self, key: Union[str, int]):  # -> "Line":
         """
         Returns
         -------

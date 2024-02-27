@@ -24,12 +24,11 @@ from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
 from ..base.utils import generate_slug
 from ..version import __version__
 from .line import Line
-from .model import Model
 
 
 class ModelLine(TraceableOnDisk, Line):
     """
-    A manager for a line of models. Used by ModelRepo to access models on disk.
+    A manager for a line of models. Used by Repo to access models on disk.
     A line of models is typically models with the same hyperparameters and architecture,
     but different epochs or trained using different data.
     """
@@ -37,7 +36,7 @@ class ModelLine(TraceableOnDisk, Line):
     def __init__(
         self,
         folder: str,
-        model_cls: Type[Any] = Model,
+        model_cls: Type[Any] = Any,
         meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
         **kwargs: Any,
     ) -> None:
@@ -55,7 +54,7 @@ class ModelLine(TraceableOnDisk, Line):
             Format in which to store meta data.
         See also
         --------
-        cascade.models.ModelRepo
+        cascade.repos.Repo
         """
 
         super().__init__(folder, meta_fmt, **kwargs)
@@ -87,7 +86,7 @@ class ModelLine(TraceableOnDisk, Line):
         # Here update slugs
         self._load_model_names()
 
-    def __getitem__(self, num: int) -> Model:
+    def __getitem__(self, num: int) -> Any:
         """
         Loads the model using `load` method of a given class
 
@@ -107,7 +106,7 @@ class ModelLine(TraceableOnDisk, Line):
         """
         return len(self._model_names)
 
-    def load(self, num: int, only_meta: bool = False) -> Model:
+    def load(self, num: int, only_meta: bool = False) -> Any:
         """
         Loads a model
 
@@ -218,7 +217,7 @@ class ModelLine(TraceableOnDisk, Line):
             ]
         return result
 
-    def save(self, model: Model, only_meta: bool = False) -> None:
+    def save(self, model: Any, only_meta: bool = False) -> None:
         """
         Saves a model and its metadata to a line's folder.
 
@@ -314,7 +313,7 @@ class ModelLine(TraceableOnDisk, Line):
         )
         return meta
 
-    def _save_only_meta(self, model: Model) -> None:
+    def _save_only_meta(self, model: Any) -> None:
         self.save(model, only_meta=True)
 
     def create_model(self, *args: Any, **kwargs: Any) -> Any:

@@ -19,8 +19,7 @@ from typing import Any, Callable, Optional
 from tqdm import tqdm
 
 from ..data import Dataset, T
-from . import DataValidationException, Validator
-from .validator import prettify_items
+from .validator import DataValidationException, Validator, prettify_items
 
 
 class DataleakValidator(Validator):

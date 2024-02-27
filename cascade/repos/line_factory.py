@@ -14,9 +14,7 @@ limitations under the License.
 from typing import Any, Type
 
 from ..base import MetaHandler
-from .data_line import DataLine
-from .line import Line
-from .model_line import ModelLine
+from ..lines import DataLine, Line, ModelLine
 
 
 class LineFactory:
