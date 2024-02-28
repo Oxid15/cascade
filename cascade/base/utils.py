@@ -64,7 +64,7 @@ def migrate_repo_v0_13(path: str) -> None:
     from cascade.base import MetaHandler, MetaIOError
     from cascade.lines import ModelLine
     from cascade.metrics import Metric, MetricType
-    from cascade.repos import Repo, SingleLineRepo
+    from cascade.models import ModelRepo, SingleLineRepo
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):
@@ -86,7 +86,7 @@ def migrate_repo_v0_13(path: str) -> None:
 
     root_meta = MetaHandler.read_dir(path)
     if root_meta[0]["type"] == "repo":
-        repo = Repo(path)
+        repo = ModelRepo(path)
     elif root_meta[0]["type"] == "line":
         line = ModelLine(path)
         repo = SingleLineRepo(line)

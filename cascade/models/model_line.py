@@ -23,6 +23,7 @@ import pendulum
 from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
 from ..base.utils import generate_slug
 from ..version import __version__
+from .model import Model
 
 
 class ModelLine(TraceableOnDisk):
@@ -35,7 +36,7 @@ class ModelLine(TraceableOnDisk):
     def __init__(
         self,
         folder: str,
-        model_cls: Type[Any] = Any,
+        model_cls: Type[Any] = Model,
         meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
         **kwargs: Any,
     ) -> None:
@@ -85,7 +86,7 @@ class ModelLine(TraceableOnDisk):
         # Here update slugs
         self._load_model_names()
 
-    def __getitem__(self, num: int) -> Any:
+    def __getitem__(self, num: int) -> Model:
         """
         Loads the model using `load` method of a given class
 
@@ -105,7 +106,7 @@ class ModelLine(TraceableOnDisk):
         """
         return len(self._model_names)
 
-    def load(self, num: int, only_meta: bool = False) -> Any:
+    def load(self, num: int, only_meta: bool = False) -> Model:
         """
         Loads a model
 
@@ -216,7 +217,7 @@ class ModelLine(TraceableOnDisk):
             ]
         return result
 
-    def save(self, model: Any, only_meta: bool = False) -> None:
+    def save(self, model: Model, only_meta: bool = False) -> None:
         """
         Saves a model and its metadata to a line's folder.
 
@@ -312,7 +313,7 @@ class ModelLine(TraceableOnDisk):
         )
         return meta
 
-    def _save_only_meta(self, model: Any) -> None:
+    def _save_only_meta(self, model: Model) -> None:
         self.save(model, only_meta=True)
 
     def create_model(self, *args: Any, **kwargs: Any) -> Any:
