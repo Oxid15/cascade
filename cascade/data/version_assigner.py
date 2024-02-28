@@ -21,8 +21,8 @@ from typing import Any, Tuple
 import pendulum
 
 from ..base import MetaHandler, PipeMeta, supported_meta_formats
-from ..data import Dataset, Modifier, T
-from .utils import skeleton
+from ..meta.utils import skeleton
+from . import Dataset, Modifier, T
 
 
 class VersionAssigner(Modifier):

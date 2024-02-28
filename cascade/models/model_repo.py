@@ -12,19 +12,18 @@ limitations under the License.
 """
 
 # import itertools
-# from typing import Any, Dict, Generator, Iterable, Optional
+from typing import Any, Dict, Generator, Iterable, Optional
 
-# from ..base import TraceableOnDisk
-# from ..lines import ModelLine
-# from ..repos import Repo
+from ..base import TraceableOnDisk
+from ..repos import Repo
 
 
-# class ModelRepo(Repo, TraceableOnDisk):
-#     def __init__(
-#         self,
-#         *args: Any,
-#         **kwargs: Any,
-#     ) -> None: ...
+class ModelRepo(Repo, TraceableOnDisk):
+    def __init__(
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None: ...
 
 
 # class ModelRepoConcatenator(Repo):

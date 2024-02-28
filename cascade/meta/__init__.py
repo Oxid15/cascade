@@ -30,4 +30,3 @@ from .validator import (
     PredicateValidator,
     Validator,
 )
-from .version_assigner import VersionAssigner, version
