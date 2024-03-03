@@ -23,11 +23,10 @@ import pendulum
 from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
 from ..base.utils import generate_slug
 from ..models.model import Model
-from ..version import __version__
-from .line import Line
+from .disk_line import DiskLine
 
 
-class ModelLine(TraceableOnDisk, Line):
+class ModelLine(DiskLine):
     """
     A manager for a line of models. Used by Repo to access models on disk.
     A line of models is typically models with the same hyperparameters and architecture,
@@ -36,76 +35,16 @@ class ModelLine(TraceableOnDisk, Line):
 
     def __init__(
         self,
-        folder: str,
-        model_cls: Type[Any] = Model,
-        meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
+        root: str,
+        *args: Any,
         **kwargs: Any,
     ) -> None:
         """
         All models in line should be instances of the same class.
-
-        Parameters
-        ----------
-        folder: str
-            Path to a folder where ModelLine will be created or already was created.
-            If folder does not exist, creates it
-        model_cls: type, optional
-            A class of models in line. ModelLine uses this class to reconstruct a model
-        meta_fmt: Literal[".json", ".yml", ".yaml", None], optional
-            Format in which to store meta data.
-        See also
-        --------
-        cascade.repos.Repo
         """
 
-        super().__init__(folder, meta_fmt, **kwargs)
-        self._model_cls = model_cls
-        self._root = os.path.abspath(folder)
-        self._model_names = []
         self._slug2name_cache = dict()
-        if os.path.exists(self._root):
-            self._load_model_names()
-        else:
-            # No folder -> create
-            os.mkdir(self._root)
-
-        self.sync_meta()
-
-    def _load_model_names(self) -> None:
-        if not os.path.isdir(self._root):
-            raise ValueError(f"folder should be directory, got `{self._root}`")
-
-        self._model_names = sorted(
-            [
-                model_folder
-                for model_folder in os.listdir(self._root)
-                if os.path.isdir(os.path.join(self._root, model_folder))
-            ]
-        )
-
-    def reload(self) -> None:
-        # Here update slugs
-        self._load_model_names()
-
-    def __getitem__(self, num: int) -> Model:
-        """
-        Loads the model using `load` method of a given class
-
-        Returns
-        -------
-            model: Model
-                a loaded model
-        """
-        model = self.load(num, only_meta=True)
-        return model
-
-    def __len__(self) -> int:
-        """
-        Returns
-        -------
-        A number of models in line
-        """
-        return len(self._model_names)
+        super().__init__(root, *args, **kwargs)
 
     def load(self, num: int, only_meta: bool = False) -> Model:
         """
@@ -118,73 +57,13 @@ class ModelLine(TraceableOnDisk, Line):
         only_meta : bool, optional
             If True doesn't load model's artifacts, by default False
         """
-        model = self._model_cls.load(os.path.join(self._root, self._model_names[num]))
+        model = super().load(num)
         if not only_meta:
             model.load_artifact(
-                os.path.join(self._root, self._model_names[num], "artifacts")
+                os.path.join(self._root, self._item_names[num], "artifacts")
             )
 
         return model
-
-    def _model_name_by_num(self, num: int) -> str:
-        return f"{num:0>5d}"
-
-    def _read_meta_by_name(self, name: str) -> MetaFromFile:
-        meta = MetaHandler.read_dir(os.path.join(self._root, name))
-        return meta
-
-    def _find_name_by_slug(self, slug: str) -> Optional[str]:
-        if slug in self._slug2name_cache:
-            return self._slug2name_cache[slug]
-
-        for name in self._model_names:
-            filepath = os.path.join(self._root, name, "SLUG")
-            if not os.path.exists(filepath):
-                continue
-            with open(filepath, "r") as f:
-                slug_from_file = f.read()
-                self._slug2name_cache[slug_from_file] = name
-                if slug == slug_from_file:
-                    return name
-
-    def _parse_model_name(self, model: Union[str, int]) -> str:
-        if isinstance(model, int):
-            name = self._model_name_by_num(model)
-        elif isinstance(model, str):
-            name = self._find_name_by_slug(model)
-        else:
-            raise TypeError(f"The argument of type {type(model)} is not supported")
-
-        if not name:
-            raise FileNotFoundError(
-                f"Failed to find the model {model} in the line at {self._root}"
-            )
-        return name
-
-    def load_obj_meta(self, model: Union[str, int]) -> MetaFromFile:
-        """
-        Loads metadata of a model from disk
-
-        Parameters
-        ----------
-        model : Union[str, int]
-            model slug e.g. `fair_squid_of_bliss` or number
-
-        Returns
-        -------
-        MetaFromFile
-            Model metadata
-
-        Raises
-        ------
-        FileNotFoundError
-            Raises if failed to find the model with slug specified
-        RuntimeError
-            If found more than one metadata files in the specified
-            model folder
-        """
-        name = self._parse_model_name(model)
-        return self._read_meta_by_name(name)
 
     def load_artifact_paths(self, model: Union[int, str]) -> Dict[str, List[str]]:
         """
@@ -200,7 +79,7 @@ class ModelLine(TraceableOnDisk, Line):
         Dict[str, List[str]]
             Lists of files under the keys "artifacts" and "files"
         """
-        name = self._parse_model_name(model)
+        name = self._parse_item_name(model)
         model_folder = os.path.join(self._root, name)
 
         result = {"artifacts": [], "files": []}
@@ -239,10 +118,10 @@ class ModelLine(TraceableOnDisk, Line):
             If True saves only metadata and wrapper.
         """
 
-        if len(self._model_names) == 0:
+        if len(self._item_names) == 0:
             idx = 0
         else:
-            idx = int(max(self._model_names)) + 1
+            idx = int(max(self._item_names)) + 1
 
         # Should check just in case
         while True:
@@ -295,31 +174,21 @@ class ModelLine(TraceableOnDisk, Line):
                 meta[0]["errors"]["save_artifact"] = artifact_tb
 
         MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
-        self._model_names.append(folder_name)
+        self._item_names.append(folder_name)
         self.sync_meta()
-
-    def __repr__(self) -> str:
-        return f"ModelLine of {len(self)} models of {self._model_cls}"
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update(
             {
-                "root": self._root,
-                "model_cls": repr(self._model_cls),
-                "len": len(self),
                 "type": "model_line",
-                "cascade_version": __version__,
             }
         )
         return meta
 
-    def _save_only_meta(self, model: Model) -> None:
-        self.save(model, only_meta=True)
-
-    def create_model(self, *args: Any, **kwargs: Any) -> Any:
+    def create_model(self, *args: Any, **kwargs: Any) -> Model:
         """
-        Creates a model using the class given on
+        Creates a model using the class given on line's
         creation, registers log callbacks for it
         and returns
 
@@ -328,17 +197,10 @@ class ModelLine(TraceableOnDisk, Line):
         Any
             Created and prepared model
         """
-        model = self._model_cls(*args, **kwargs)
-        model.add_log_callback(self._save_only_meta)
-        return model
+        return super().create_item(*args, **kwargs)
+
+    def load_model_meta(self, path_spec: Union[str, int]) -> MetaFromFile:
+        return super().load_obj_meta(path_spec)
 
     def get_model_names(self) -> List[str]:
-        """
-        Returns names of folders models live in
-
-        Returns
-        -------
-        List[str]
-            Only names of folders without whole path
-        """
-        return self._model_names
+        return super().get_item_names()

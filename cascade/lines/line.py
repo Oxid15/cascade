@@ -11,13 +11,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, List, Literal, Type, Union
 
-from ..base import MetaFromFile
+from ..base import MetaFromFile, MetaHandler, TraceableOnDisk
 
 
 class Line(ABC):
+    @abstractmethod
+    def __len__(self) -> int: ...
+
     @abstractmethod
     def __getitem__(self, num: int) -> Any: ...
 
@@ -25,7 +29,7 @@ class Line(ABC):
     def reload(self): ...
 
     @abstractmethod
-    def load(self, num: int, only_meta: bool = False) -> None: ...
+    def load(self, num: int) -> None: ...
 
     @abstractmethod
     def save(self, obj: Any, only_meta: bool = False) -> None: ...
