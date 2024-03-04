@@ -16,11 +16,11 @@ limitations under the License.
 
 import os
 import traceback
-from typing import Any, Dict, List, Literal, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pendulum
 
-from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
+from ..base import MetaFromFile, MetaHandler, PipeMeta
 from ..base.utils import generate_slug
 from ..models.model import Model
 from .disk_line import DiskLine
@@ -45,6 +45,34 @@ class ModelLine(DiskLine):
 
         self._slug2name_cache = dict()
         super().__init__(root, *args, **kwargs)
+
+    def _find_name_by_slug(self, slug: str) -> Optional[str]:
+        if slug in self._slug2name_cache:
+            return self._slug2name_cache[slug]
+
+        for name in self._item_names:
+            filepath = os.path.join(self._root, name, "SLUG")
+            if not os.path.exists(filepath):
+                continue
+            with open(filepath, "r") as f:
+                slug_from_file = f.read()
+                self._slug2name_cache[slug_from_file] = name
+                if slug == slug_from_file:
+                    return name
+
+    def _parse_item_name(self, item: Union[int, str]) -> str:
+        if isinstance(item, int):
+            name = self._item_name_by_num(item)
+        elif isinstance(item, str):
+            name = self._find_name_by_slug(item)
+        else:
+            raise TypeError(f"The argument of type {type(item)} is not supported")
+
+        if not name:
+            raise FileNotFoundError(
+                f"Failed to find the item {item} in the line at {self._root}"
+            )
+        return name
 
     def load(self, num: int, only_meta: bool = False) -> Model:
         """
@@ -125,7 +153,7 @@ class ModelLine(DiskLine):
 
         # Should check just in case
         while True:
-            folder_name = self._model_name_by_num(idx)
+            folder_name = self._item_name_by_num(idx)
             model_folder = os.path.join(self._root, folder_name)
             if os.path.exists(model_folder):
                 idx += 1
@@ -200,7 +228,8 @@ class ModelLine(DiskLine):
         return super().create_item(*args, **kwargs)
 
     def load_model_meta(self, path_spec: Union[str, int]) -> MetaFromFile:
-        return super().load_obj_meta(path_spec)
+        name = self._parse_item_name(path_spec)
+        return self._read_meta_by_name(name)
 
     def get_model_names(self) -> List[str]:
         return super().get_item_names()

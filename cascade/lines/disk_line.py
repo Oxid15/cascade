@@ -66,28 +66,12 @@ class DiskLine(TraceableOnDisk, Line):
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
-    def _model_name_by_num(self, num: int) -> str:
+    def _item_name_by_num(self, num: int) -> str:
         return f"{num:0>5d}"
 
-    def _find_name_by_slug(self, slug: str) -> Optional[str]:
-        if slug in self._slug2name_cache:
-            return self._slug2name_cache[slug]
-
-        for name in self._model_names:
-            filepath = os.path.join(self._root, name, "SLUG")
-            if not os.path.exists(filepath):
-                continue
-            with open(filepath, "r") as f:
-                slug_from_file = f.read()
-                self._slug2name_cache[slug_from_file] = name
-                if slug == slug_from_file:
-                    return name
-
-    def _parse_item_name(self, item: Union[str, int]) -> str:
+    def _parse_item_name(self, item: int) -> str:
         if isinstance(item, int):
             name = self._item_name_by_num(item)
-        elif isinstance(item, str):
-            name = self._find_name_by_slug(item)
         else:
             raise TypeError(f"The argument of type {type(item)} is not supported")
 
@@ -100,14 +84,14 @@ class DiskLine(TraceableOnDisk, Line):
     def __repr__(self) -> str:
         return f"{self.__class__}({len(self)}) items of {self._item_cls}"
 
-    def load_obj_meta(self, path_spec: Union[str, int]) -> MetaFromFile:
+    def load_obj_meta(self, path_spec: int) -> MetaFromFile:
         """
         Loads metadata of a item from disk
 
         Parameters
         ----------
-        path_spec : Union[str, int]
-            can be a slug e.g. `fair_squid_of_bliss` or a number
+        path_spec : int
+            item number
 
         Returns
         -------
@@ -122,7 +106,7 @@ class DiskLine(TraceableOnDisk, Line):
             If found more than one metadata files in the specified
             item folder
         """
-        name = self._parse_item_name(item)
+        name = self._parse_item_name(path_spec)
         return self._read_meta_by_name(name)
 
     def get_item_names(self) -> List[str]:

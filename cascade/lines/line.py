@@ -11,11 +11,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 from abc import ABC, abstractmethod
-from typing import Any, List, Literal, Type, Union
+from typing import Any
 
-from ..base import MetaFromFile, MetaHandler, TraceableOnDisk
+from ..base import MetaFromFile
 
 
 class Line(ABC):
