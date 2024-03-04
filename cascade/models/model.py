@@ -15,14 +15,14 @@ limitations under the License.
 """
 
 import os
-from shutil import copyfile
 import warnings
+from shutil import copyfile
 from typing import Any, Callable, Optional, Union
 
 import pendulum
 
-from ..metrics import MetricType, Metric
 from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..metrics import Metric, MetricType
 
 
 class Model(Traceable):
@@ -196,8 +196,12 @@ class Model(Traceable):
         """
         self._log_callbacks.append(callback)
 
-    def add_metric(self, metric: Union[str, Metric],
-                   value: Optional[MetricType] = None, **kwargs: Any) -> None:
+    def add_metric(
+        self,
+        metric: Union[str, Metric],
+        value: Optional[MetricType] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Adds metric value to the model. If metric already exists in the list, updates its value.
 
@@ -220,7 +224,9 @@ class Model(Traceable):
         if isinstance(metric, str):
             metric = Metric(name=metric, value=value, **kwargs)
         elif not isinstance(metric, Metric):
-            raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
+            raise TypeError(
+                f"Metric can be either str or Metric type, not {type(metric)}"
+            )
 
         # Model be initialized not properly
         if not hasattr(self, "metrics"):
@@ -242,7 +248,7 @@ class Model(Traceable):
         from inside the model. Callback should be a function that
         given the model saves it. For example ModelLine.save method.
         ModelLine.add_model registers callback with only_meta=True automatically
-        when creating a new model.
+        when creating a new model using `create_model`.
 
         See also
         --------

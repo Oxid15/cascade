@@ -76,7 +76,7 @@ class BasicTrainer(Trainer):
         model_num = len(line) - 1
         while True:
             try:
-                model = line.load(model_num, only_meta=False)
+                model = line.load(model_num)
                 return model, model_num
             except Exception as e:
                 logger.warning(f"Model {model_num} files were not found\n{e}")
@@ -86,6 +86,7 @@ class BasicTrainer(Trainer):
                     raise FileNotFoundError(f"No model files were found in line {line}")
 
     def _handle(self, error: Exception, model: Model, line: ModelLine):
+        # TODO: write exception into meta?
         line.save(model, only_meta=True)
         logger.exception(error)
 

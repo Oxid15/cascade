@@ -1,4 +1,4 @@
-from typing import Any, Dict, Literal, Type
+from typing import Any, Dict, Type
 
 from ..base import PipeMeta
 from ..data.dataset import Dataset
@@ -11,17 +11,14 @@ class DataLine(DiskLine):
         root: str,
         ds_cls: Type[Any] = Dataset,
         *args: Any,
-        meta_prefix: Dict[Any, Any] | str | None = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(
-            root, item_cls=ds_cls, *args, meta_prefix=meta_prefix, **kwargs
-        )
+        super().__init__(root, item_cls=ds_cls, *args, **kwargs)
 
     def reload(self) -> None:
         pass
 
-    def load(self, num: int, only_meta: bool = False) -> None:
+    def load(self, num: int) -> None:
         pass
 
     def save(self, obj: Any, only_meta: bool = False) -> None:

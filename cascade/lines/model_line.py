@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import traceback
+import warnings
 from typing import Any, Dict, List, Optional, Union
 
 import pendulum
@@ -74,7 +75,7 @@ class ModelLine(DiskLine):
             )
         return name
 
-    def load(self, num: int, only_meta: bool = False) -> Model:
+    def load(self, num: int, only_meta: Optional[bool] = None) -> Model:
         """
         Loads a model
 
@@ -82,15 +83,18 @@ class ModelLine(DiskLine):
         ----------
         num : int
             Model number in line
-        only_meta : bool, optional
-            If True doesn't load model's artifacts, by default False
         """
-        model = super().load(num)
-        if not only_meta:
-            model.load_artifact(
-                os.path.join(self._root, self._item_names[num], "artifacts")
+        if only_meta is not None:
+            warnings.warn(
+                "`only_meta` is deprecated since 0.14.0,"
+                " if you need to load model's meta, then"
+                " use `line.load_model_meta()` instead"
             )
 
+        model = super().load(num)
+        model.load_artifact(
+            os.path.join(self._root, self._item_names[num], "artifacts")
+        )
         return model
 
     def load_artifact_paths(self, model: Union[int, str]) -> Dict[str, List[str]]:
@@ -127,15 +131,16 @@ class ModelLine(DiskLine):
 
     def save(self, model: Model, only_meta: bool = False) -> None:
         """
-        Saves a model and its metadata to a line's folder.
+        Saves a model and its metadata into a model's folder
 
-        Model is automatically assigned a number and a model is saved
-        using Model's method `save` in its own folder.
-        Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
+        Model is automatically assigned a number and a slug
+        then it is saved using its own method `save`.
 
-        It is Model's responsibility to correctly assign extension and save its own state.
+        Folder names are assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
 
-        Additionally, saves ModelLine's meta to the Line's root.
+        It is Model's responsibility to save its own state given a folder.
+
+        Also saves ModelLine's meta to the Line's root.
 
         Parameters
         ----------
@@ -143,7 +148,7 @@ class ModelLine(DiskLine):
             Model to be saved
         only_meta: bool, optional
             Flag, that indicates whether to save model's artifacts.
-            If True saves only metadata and wrapper.
+            If True saves only metadata
         """
 
         if len(self._item_names) == 0:
@@ -174,15 +179,17 @@ class ModelLine(DiskLine):
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
 
         model_tb = None
-        try:
-            model.save(full_path)
-        except Exception as e:
-            model_exception = str(e)
-            model_tb = traceback.format_exc()
-            print(f"Failed to save model {full_path}\n{model_exception}\n{model_tb}")
-
         artifact_tb = None
         if not only_meta:
+            try:
+                model.save(full_path)
+            except Exception as e:
+                model_exception = str(e)
+                model_tb = traceback.format_exc()
+                print(
+                    f"Failed to save model {full_path}\n{model_exception}\n{model_tb}"
+                )
+
             artifacts_folder = os.path.join(full_path, "artifacts")
             os.makedirs(artifacts_folder)
             try:
@@ -228,8 +235,35 @@ class ModelLine(DiskLine):
         return super().create_item(*args, **kwargs)
 
     def load_model_meta(self, path_spec: Union[str, int]) -> MetaFromFile:
+        """
+        Given a model num or a slug, loads its metadata from disk
+
+        Parameters
+        ----------
+        path_spec : Union[str, int]
+            Can be an int number or a str slug
+
+        Returns
+        -------
+        MetaFromFile
+            Model's meta
+
+        Raises
+        ------
+        FileNotFoundError
+            When the num or the slug was not found in the line
+        """
         name = self._parse_item_name(path_spec)
         return self._read_meta_by_name(name)
 
     def get_model_names(self) -> List[str]:
+        """
+        Get the list of model names, which are
+        folder names relative to line's root
+
+        Returns
+        -------
+        List[str]
+            The list of names
+        """
         return super().get_item_names()
