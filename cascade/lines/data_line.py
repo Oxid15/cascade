@@ -1,6 +1,9 @@
-from typing import Any, Dict, Type
+import os
+from typing import Any, Type
 
-from ..base import PipeMeta
+import pendulum
+
+from ..base import MetaHandler, PipeMeta
 from ..data.dataset import Dataset
 from .disk_line import DiskLine
 
@@ -15,19 +18,38 @@ class DataLine(DiskLine):
     ) -> None:
         super().__init__(root, item_cls=ds_cls, *args, **kwargs)
 
-    def reload(self) -> None:
-        pass
-
     def load(self, num: int) -> None:
-        pass
+        raise NotImplementedError()
 
-    def save(self, obj: Any, only_meta: bool = False) -> None:
-        pass
+    def save(self, ds: Dataset) -> None:
+        if len(self._item_names) == 0:
+            idx = 0
+        else:
+            idx = int(max(self._item_names)) + 1
 
-    def load_obj_meta(self, pathspec: str) -> PipeMeta: ...
+        # Should check just in case
+        while True:
+            folder_name = self._item_name_by_num(idx)
+            model_folder = os.path.join(self._root, folder_name)
+            if os.path.exists(model_folder):
+                idx += 1
+                continue
+
+            os.makedirs(model_folder)
+            break
+
+        full_path = os.path.join(self._root, folder_name)
+
+        meta = ds.get_meta()
+        meta[0]["path"] = full_path
+        meta[0]["saved_at"] = pendulum.now(tz="UTC")
+
+        MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
+        self._item_names.append(folder_name)
+        self.sync_meta()
 
     def __getitem__(self, num: int) -> Any:
-        pass
+        raise NotImplementedError()
 
     def __repr__(self) -> str:
         return f"DataLine of {len(self)} versions of {self._item_cls}"
