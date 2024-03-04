@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import logging
+import warnings
 from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 import pendulum
@@ -67,6 +68,12 @@ class BasicTrainer(Trainer):
     """
 
     def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
+        warnings.warn(
+            "cascade.models.BasicTrainer is deprecated since 0.14.0"
+            " please, consider migrating to cascade.trainers.Trainer"
+            " See documentation and release notes on what's changed"
+        )
+
         self.train_start_at = None
         self.train_end_at = None
         super().__init__(repo, *args, **kwargs)

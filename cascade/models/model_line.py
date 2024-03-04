@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import traceback
+import warnings
 from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
@@ -56,6 +57,11 @@ class ModelLine(TraceableOnDisk):
         --------
         cascade.repos.Repo
         """
+        warnings.warn(
+            "cascade.models.ModelLine is deprecated since 0.14.0"
+            " please, consider migrating to cascade.lines.ModelLine"
+            " See documentation and release notes on what's changed"
+        )
 
         super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
