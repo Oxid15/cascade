@@ -11,11 +11,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Generic, Iterable, Sequence, Sized, TypeVar, Union
+from typing import (
+    Any,
+    Generator,
+    Generic,
+    Iterable,
+    Sequence,
+    Sized,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from ..base import Meta, PipeMeta, Traceable, raise_not_implemented
 
-T = TypeVar("T")
+T = TypeVar("T", covariant=True)
 
 
 class Dataset(Generic[T], Traceable):
@@ -91,7 +101,7 @@ class Iterator(Dataset):
             "Please, consider the use of Wrapper instead."
         )
 
-    def __iter__(self) -> Iterable[T]:
+    def __iter__(self) -> Generator[Type[T], Any, None]:
         for item in self._data:
             yield item
 
@@ -152,7 +162,7 @@ class ItModifier(BaseModifier):
     cascade.data.Modifier
     """
 
-    def __iter__(self) -> Iterable[T]:
+    def __iter__(self) -> Generator:
         for item in self._dataset:
             yield item
 
