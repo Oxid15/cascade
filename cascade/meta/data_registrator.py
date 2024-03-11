@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@ limitations under the License.
 """
 
 from dataclasses import asdict, dataclass
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, Optional
 
 import pendulum
 
-from ..base import HistoryHandler
+from ..base import HistoryHandler, MetaIOError
 
 
 @dataclass
@@ -36,8 +36,8 @@ class Assessor:
     a new class instead.
     """
 
-    id: Union[str, None] = None
-    position: Union[str, None] = None
+    id: Optional[str] = None
+    position: Optional[str] = None
 
 
 @dataclass
@@ -53,9 +53,9 @@ class LabelingInfo:
     a new class instead.
     """
 
-    who: Union[List[Assessor], None] = None
-    process_desc: Union[str, None] = None
-    docs: Union[str, None] = None
+    who: Optional[List[Assessor]] = None
+    process_desc: Optional[str] = None
+    docs: Optional[str] = None
 
 
 class DataCard:
@@ -86,39 +86,39 @@ class DataCard:
 
     def __init__(
         self,
-        name: Union[str, None] = None,
-        desc: Union[str, None] = None,
-        source: Union[str, None] = None,
-        goal: Union[str, None] = None,
-        labeling_info: Union[LabelingInfo, None] = None,
+        name: Optional[str] = None,
+        desc: Optional[str] = None,
+        source: Optional[str] = None,
+        goal: Optional[str] = None,
+        labeling_info: Optional[LabelingInfo] = None,
         size: Union[int, Tuple[int], None] = None,
-        metrics: Union[Dict[str, Any], None] = None,
-        schema: Union[Dict[Any, Any], None] = None,
+        metrics: Optional[Dict[str, Any]] = None,
+        schema: Optional[Dict[Any, Any]] = None,
         **kwargs: Any
     ) -> None:
         """
         Parameters
         ----------
-        name: Union[str, None], optional
+        name: Optional[str]
             The name of dataset
-        desc: Union[str, None], optional
+        desc: Optional[str]
             Short description
-        source: Union[str, None], optional
+        source: Optional[str]
             The source of data. Can be URL or textual
             description of source
-        goal: Union[str, None], optional
+        goal: Optional[str]
             The datasets have a goal - what should be achieved
             using this data?
-        labeling_info: Union[LabelingInfo, None], optional
+        labeling_info: Optional[LabelingInfo]
             The instance of dataclass describing labeling process
             placed here
-        size: Union[int, Tuple[int], None], optional
+        size: Union[int, Tuple[int], None]
             This can usually be done automatically - number of items
             or shape of the table.
-        metrics: Union[Dict[str, Any], None], optional
+        metrics: Optional[Dict[str, Any]]
             Dictionary with names and values of metrics. Any quality metrics
             can be included
-        schema: Union[Dict[Any, Any], None], optional
+        schema: Optional[Dict[Any, Any]]
             Schema dictionary describing table datasets,
             their columns, data types, possible values, etc.
             Panderas schema objects can be used when converted into
@@ -146,8 +146,24 @@ class DataRegistrator:
     has some properties changed during the time.
     """
 
-    def __init__(self, filepath: str) -> None:
-        self._logger = HistoryHandler(filepath)
+    def __init__(self, filepath: str, raise_on_fail: bool = False) -> None:
+        """
+        Parameters
+        ----------
+        filepath : str
+            Path to the log file for HistoryLogger
+        raise_on_fail : bool, optional
+            Whether to raise a warning or an exception in case when
+            logger failed to read a file for some reason, by default False
+        """
+        self._raise_on_fail = raise_on_fail
+        try:
+            self._logger = HistoryHandler(filepath)
+        except MetaIOError as e:
+            if self._raise_on_fail:
+                raise e
+            else:
+                warnings.warn(str(e))
 
     def register(self, card: DataCard) -> None:
         """
@@ -170,4 +186,10 @@ class DataRegistrator:
         now = str(pendulum.now(tz="UTC"))
         card.data["updated_at"] = now
 
-        self._logger.log(card.data)
+        try:
+            self._logger.log(card.data)
+        except MetaIOError as e:
+            if self._raise_on_fail:
+                raise e
+            else:
+                warnings.warn(str(e))

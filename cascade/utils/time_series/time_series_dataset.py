@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from datetime import datetime
-from typing import Any, Iterable, Tuple, Union
+from typing import Any, Iterable, Tuple, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -35,8 +35,8 @@ class TimeSeriesDataset(Dataset):
     def __init__(
         self,
         *args: Any,
-        time: Union[Iterable[datetime], None] = None,
-        data: Union[Iterable[Any], None] = None,
+        time: Optional[Iterable[datetime]] = None,
+        data: Optional[Iterable[Any]] = None,
         **kwargs: Any,
     ) -> None:
         """

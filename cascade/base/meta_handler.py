@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import json
 import os
 from dataclasses import asdict, is_dataclass
 from json import JSONEncoder
-from typing import Any, Dict, NoReturn, Union
+from typing import Any, Dict, NoReturn, Optional, Optional
 
 import deepdiff
 import numpy as np
@@ -58,14 +58,18 @@ class CustomEncoder(JSONEncoder):
                 np.uint16,
                 np.uint32,
                 np.uint64,
-            ),
+            ),  # type: ignore
         ):
             return int(obj)
 
-        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
+        elif isinstance(
+            obj, (np.float_, np.float16, np.float32, np.float64)  # type: ignore
+        ):
             return float(obj)
 
-        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):
+        elif isinstance(
+            obj, (np.complex_, np.complex64, np.complex128)  # type: ignore
+        ):
             return {"real": obj.real, "imag": obj.imag}
 
         elif isinstance(obj, (np.ndarray,)):
@@ -77,7 +81,7 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
-        elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
+        elif isinstance(obj, deepdiff.diff.PrettyOrderedSet):
             return list(obj)
 
         elif isinstance(obj, deepdiff.DeepDiff):
@@ -103,7 +107,7 @@ class BaseHandler:
         raise NotImplementedError()
 
     def _raise_io_error(
-        self, path: str, exc: Union[Exception, None] = None
+        self, path: str, exc: Optional[Exception] = None
     ) -> NoReturn:
         # Any file decoding errors will be
         # prepended with filepath for user
@@ -292,7 +296,7 @@ class MetaHandler:
             return cls.read(os.path.join(meta_paths[0]))
 
     @classmethod
-    def _determine_meta_fmt(cls, path: str, template: str) -> Union[str, None]:
+    def _determine_meta_fmt(cls, path: str, template: str) -> Optional[str]:
         meta_paths = glob.glob(os.path.join(path, template))
         if len(meta_paths) == 1:
             _, ext = os.path.splitext(meta_paths[0])
