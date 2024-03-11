@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
 import os
 import sys
 
@@ -22,16 +21,17 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import dataset, modifier
-from cascade.data.functions import FDataset, FModifier
+from cascade.data.functions import FunctionDataset, FunctionModifier
+
 
 def test_dataset():
     @dataset
     def read_data():
         return [0, 1, 2]
-    
+
     x = read_data()
 
-    assert isinstance(x, FDataset)
+    assert isinstance(x, FunctionDataset)
     assert x.result == [0, 1, 2]
 
 
@@ -39,15 +39,15 @@ def test_modifier():
     @dataset
     def read_data():
         return [0, 1, 2]
-    
+
     @modifier
     def square(x):
         return [i**2 for i in x]
-    
+
     x = read_data()
     x = square(x)
 
-    assert isinstance(x, FModifier)
+    assert isinstance(x, FunctionModifier)
     assert x.result == [0, 1, 4]
     meta = x.get_meta()
     assert len(meta) == 2
@@ -65,8 +65,8 @@ def test_multiple_inputs():
     x = read_data()
     x = sum_two(x, x)
 
-    assert isinstance(x, FModifier)
+    assert isinstance(x, FunctionModifier)
     assert x.result == [0, 2, 4]
     meta = x.get_meta()
     assert len(meta) == 2
-    assert len(meta[1]) == 2 # This means two inputs at the first stage
+    assert len(meta[1]) == 2  # This means two inputs at the first stage

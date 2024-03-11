@@ -20,7 +20,7 @@ from ..base import PipeMeta
 from .dataset import Dataset
 
 
-class FDataset(Dataset):
+class FunctionDataset(Dataset):
     def __init__(self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any) -> None:
         self.result = f(*args, **kwargs)
         self._f_name = f.__name__
@@ -32,12 +32,12 @@ class FDataset(Dataset):
         return meta
 
 
-class FModifier(FDataset):
+class FunctionModifier(FunctionDataset):
     def __init__(self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any) -> None:
-        datasets: List[FDataset] = []
+        datasets: List[FunctionDataset] = []
         converted_args = []
         for i in range(len(args)):
-            if isinstance(args[i], FDataset):
+            if isinstance(args[i], FunctionDataset):
                 datasets.append(args[i])
                 converted_args.append(args[i].result)
             else:
@@ -54,12 +54,12 @@ class FModifier(FDataset):
         return meta
 
 
-def dataset(f: Callable[..., Any]) -> Callable[..., FDataset]:
+def dataset(f: Callable[..., Any]) -> Callable[..., FunctionDataset]:
     """
     Thin wrapper to turn any function into a Cascade's Dataset.
     Use this if the function is the data source
 
-    Will return FDataset object. To get results of the execution
+    Will return FunctionDataset object. To get results of the execution
     use `dataset.result` field
 
     Parameters
@@ -69,21 +69,21 @@ def dataset(f: Callable[..., Any]) -> Callable[..., FDataset]:
 
     Returns
     -------
-    Callable[..., FDataset]
+    Callable[..., FunctionDataset]
         Call this to get a dataset
     """
-    def wrapper(*args: Any, **kwargs: Any) -> FDataset:
-        return FDataset(*args, **kwargs, f=f)
+    def wrapper(*args: Any, **kwargs: Any) -> FunctionDataset:
+        return FunctionDataset(*args, **kwargs, f=f)
     return wrapper
 
 
-def modifier(f: Callable[..., Any]) -> Callable[..., FModifier]:
+def modifier(f: Callable[..., Any]) -> Callable[..., FunctionModifier]:
     """
     Thin wrapper to turn any function into Cascade's Modifier
     Pass the returning value of a function
     that was previosly wrapped dataset or modifier. Will replace any
     dataset with `dataset.result` automatically if the function
-    argument is `FDataset`.
+    argument is `FunctionDataset`.
 
     Parameters
     ----------
@@ -92,9 +92,9 @@ def modifier(f: Callable[..., Any]) -> Callable[..., FModifier]:
 
     Returns
     -------
-    Callable[..., FModifier]
+    Callable[..., FunctionModifier]
         Call this to get a modifier
     """
-    def wrapper(*args: Any, **kwargs: Any) -> FModifier:
-        return FModifier(*args, **kwargs, f=f)
+    def wrapper(*args: Any, **kwargs: Any) -> FunctionModifier:
+        return FunctionModifier(*args, **kwargs, f=f)
     return wrapper
