@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 import json
 import os
-from typing import Any
+from typing import Any, Dict
 import pendulum
 from . import MetaIOError
 from .meta_handler import MetaHandler, CustomEncoder
@@ -75,7 +75,7 @@ class HistoryHandler:
                 "type": "history",
             }
 
-    def _is_log_compatible(self, log: Any) -> bool:
+    def _is_log_compatible(self, log: Dict[str, Any]) -> bool:
         if log.get("cascade_version"):
             return True
         return False
@@ -93,6 +93,10 @@ class HistoryHandler:
         ----------
         obj: Any
             Meta data of the object
+        
+        Raises
+        ------
+        MetaIOError - if log writing fails
         """
 
         # Use serialize nac back to prevent false diffs due to
