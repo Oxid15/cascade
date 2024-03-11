@@ -74,7 +74,7 @@ class IteratorModifier(BaseModifier[T], IteratorDataset[T]):
         return self_meta
 
 
-class Modifier(BaseModifier):
+class Modifier(BaseModifier[T]):
     """
     Basic pipeline building block in Cascade. Every block which is not a data source should be
     a successor of Sampler or Modifier.
@@ -102,7 +102,7 @@ class Modifier(BaseModifier):
         return meta
 
 
-class Sampler(BaseModifier):
+class Sampler(Modifier[T]):
     """
     Defines certain sampling over a Dataset.
 
