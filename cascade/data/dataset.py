@@ -18,22 +18,17 @@ from typing import (
     Iterable,
     Sequence,
     Sized,
-    Type,
     TypeVar,
-    Union,
 )
 
-from ..base import Meta, PipeMeta, Traceable, raise_not_implemented
+from ..base import PipeMeta, Traceable, raise_not_implemented
 
 T = TypeVar("T", covariant=True)
 
 
-class Dataset(Generic[T], Traceable):
+class BaseDataset(Generic[T], Traceable):
     """
-    Base class of any module that constitutes a data-pipeline.
-    In its basic idea is similar to torch.utils.data.Dataset.
-    It does not define `__len__` for similar reasons.
-    See `pytorch/torch/utils/data/sampler.py` note on this topic.
+    Base class of any object that constitutes a step in a data-pipeline
 
     See also
     --------
@@ -41,7 +36,7 @@ class Dataset(Generic[T], Traceable):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
     def __getitem__(self, index: Any) -> T:
         """
@@ -63,18 +58,25 @@ class Dataset(Generic[T], Traceable):
         return meta
 
 
-class SizedDataset(Dataset[T], Sized):
+class IteratorDataset(BaseDataset[T], Iterable[T]):
+    """
+    An abstract class to represent a dataset as
+    an iterable object
+    """
+
+
+class Dataset(BaseDataset[T], Sized):
     """
     An abstract class to represent a dataset
     with __len__ method present. Inheritance of
     this class should mean the presence of length.
 
-    If your dataset does not have length defined, please
-    use Dataset.
+    If your dataset does not have length defined
+    you can use Iterator
 
     See also
     --------
-    cascade.data.Dataset
+    cascade.data.Iterator
     """
 
     def __len__(self) -> int:
@@ -86,22 +88,16 @@ class SizedDataset(Dataset[T], Sized):
         return meta
 
 
-class Iterator(Dataset):
+class IteratorWrapper(BaseDataset[T]):
     """
-    Wraps Dataset around any Iterable. Does not have map-like interface.
+    Wraps BaseDataset around any Iterable. Does not have map-like interface.
     """
 
     def __init__(self, data: Iterable[T], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._data = data
 
-    def __getitem__(self, item: Any) -> T:
-        raise NotImplementedError(
-            "Iterator explicitly forbids __getitem__ method."
-            "Please, consider the use of Wrapper instead."
-        )
-
-    def __iter__(self) -> Generator[Type[T], Any, None]:
+    def __iter__(self) -> Generator[T, Any, None]:
         for item in self._data:
             yield item
 
@@ -111,73 +107,7 @@ class Iterator(Dataset):
         return meta
 
 
-class BaseModifier(Dataset):
-    def __init__(self, dataset: SizedDataset[T], *args: Any, **kwargs: Any) -> None:
-        """
-        Constructs a Modifier. Makes no transformations in initialization.
-
-        Parameters
-        ----------
-        dataset: Dataset
-            A dataset to modify
-        """
-        self._dataset = dataset
-        super().__init__(*args, **kwargs)
-
-    def get_meta(self) -> PipeMeta:
-        """
-        Overrides base method enabling cascade-like calls to previous datasets.
-        The metadata of a pipeline that consist of several modifiers can be easily
-        obtained with `get_meta` of the last block.
-        """
-        self_meta = super().get_meta()
-        self_meta += self._dataset.get_meta()
-        return self_meta
-
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
-        """
-        Calls the same method as base class but does
-        it cascade-like which allows to
-        roll list of meta on a pipeline
-
-        Parameters
-        ----------
-        meta : Union[PipeMeta, Meta]
-            Meta of a single object or a pipeline
-        """
-        if isinstance(meta, list):
-            super().from_meta(meta[0])
-            if len(meta) > 1:
-                self._dataset.from_meta(meta[1:])
-        else:
-            super().from_meta(meta)
-
-
-class ItModifier(BaseModifier):
-    """
-    The Modifier for Iterator datasets
-
-    See also
-    --------
-    cascade.data.Modifier
-    """
-
-    def __iter__(self) -> Generator:
-        for item in self._dataset:
-            yield item
-
-    def get_meta(self) -> PipeMeta:
-        """
-        Overrides base method enabling cascade-like calls to previous datasets.
-        The metadata of a pipeline that consist of several modifiers can be easily
-        obtained with `get_meta` of the last block.
-        """
-        self_meta = super().get_meta()
-        self_meta += self._dataset.get_meta()
-        return self_meta
-
-
-class Wrapper(SizedDataset):
+class Wrapper(Dataset):
     """
     Wraps Dataset around any list-like object.
     """
@@ -196,64 +126,3 @@ class Wrapper(SizedDataset):
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))
         return meta
-
-
-class Modifier(BaseModifier):
-    """
-    Basic pipeline building block in Cascade. Every block which is not a data source should be
-    a successor of Sampler or Modifier.
-    This structure enables a workflow, when we have a data pipeline which consists of uniform blocks
-    each of them has a reference to the previous one in its `_dataset` field. See get_meta method
-    for example.
-    Basically Modifier defines an arbitrary transformation on every dataset's item that is applied
-    in a lazy manner on each `__getitem__` call.
-    Applies no transformation if `__getitem__` is not overridden.
-    """
-
-    def __getitem__(self, index: Any) -> T:
-        return self._dataset[index]
-
-    def __iter__(self) -> Iterable[T]:
-        for i in range(len(self)):
-            yield self.__getitem__(i)
-
-    def __len__(self) -> int:
-        return len(self._dataset)
-
-    def get_meta(self) -> PipeMeta:
-        meta = super().get_meta()
-        meta[0]["len"] = len(self)
-        return meta
-
-
-class Sampler(Modifier):
-    """
-    Defines certain sampling over a Dataset. Its distinctive feature is that it changes the number
-    of items in dataset. It can be used to build a batch sampler, random sampler, etc.
-
-    See also
-    --------
-    cascade.data.CyclicSampler
-    cascade.data.RandomSampler
-    cascade.data.RangeSampler
-    """
-
-    def __init__(
-        self, dataset: SizedDataset[T], num_samples: int, *args: Any, **kwargs: Any
-    ) -> None:
-        """
-        Constructs a Sampler.
-
-        Parameters
-        ----------
-            dataset: Dataset
-                A dataset to sample from
-            num_samples: int
-                The number of samples
-        """
-        assert num_samples > 0, "The number of samples should be positive"
-        super().__init__(dataset, *args, **kwargs)
-        self._num_samples = num_samples
-
-    def __len__(self) -> int:
-        return self._num_samples

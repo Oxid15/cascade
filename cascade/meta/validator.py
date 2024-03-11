@@ -15,7 +15,8 @@ from typing import Any, Callable, Dict, List, NoReturn, Union
 
 from tqdm import tqdm
 
-from ..data import Dataset, Modifier, T
+from ..data.dataset import BaseDataset, T
+from ..data.modifier import Modifier
 
 
 class DataValidationException(Exception):
@@ -31,14 +32,14 @@ def prettify_items(items: List[int]) -> str:
         return f'{", ".join(map(str, items[:5]))} ... {", ".join(map(str, items[-5:]))}'
 
 
-class Validator(Modifier):
+class Validator(Modifier[T]):
     """
     Base class for validators. Defines basic `__init__` structure
     """
 
     def __init__(
         self,
-        dataset: Dataset[T],
+        dataset: BaseDataset[T],
         func: Union[Callable[[T], bool], List[Callable[[T], bool]]],
         **kwargs: Any,
     ) -> None:
@@ -49,7 +50,7 @@ class Validator(Modifier):
             self._func = func
 
 
-class AggregateValidator(Validator):
+class AggregateValidator(Validator[T]):
     """
     This validator accepts an aggregate function
     that accepts a `Dataset` and returns `True` or `False`
@@ -62,7 +63,7 @@ class AggregateValidator(Validator):
     """
 
     def __init__(
-        self, dataset: Dataset[T], func: Callable[[Dataset[T]], bool], **kwargs
+        self, dataset: BaseDataset[T], func: Callable[[BaseDataset[T]], bool], **kwargs
     ) -> None:
         super().__init__(dataset, func, **kwargs)
 
@@ -77,7 +78,7 @@ class AggregateValidator(Validator):
             print("OK!")
 
 
-class PredicateValidator(Validator):
+class PredicateValidator(Validator[T]):
     """
     This validator accepts function that is applied to each item in a dataset
     and returns `True` or `False`. Calls `__getitem__`s of all previous datasets in `__init__`.
@@ -91,7 +92,7 @@ class PredicateValidator(Validator):
 
     def __init__(
         self,
-        dataset: Dataset,
+        dataset: BaseDataset[T],
         func: Union[Callable[[T], bool], List[Callable[[T], bool]]],
         **kwargs: Any,
     ) -> None:

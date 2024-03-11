@@ -18,11 +18,11 @@ from typing import Any
 
 import requests
 
-from ..data import Dataset
+from ..data.dataset import BaseDataset
 from .serializer import Serializer
 
 
-class DatasetClient(Dataset):
+class DatasetClient(BaseDataset):
     """
     Client for DatasetServer.
 

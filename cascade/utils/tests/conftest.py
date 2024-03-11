@@ -23,7 +23,7 @@ MODULE_PATH = os.path.dirname(
 )
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, Wrapper
+from cascade.data import BaseDataset, Wrapper
 from cascade.utils.samplers import OverSampler, UnderSampler, WeighedSampler
 from cascade.utils.tables import TableDataset, TableFilter
 from cascade.utils.time_series import TimeSeriesDataset
@@ -41,7 +41,7 @@ from cascade.utils.time_series import TimeSeriesDataset
         WeighedSampler(Wrapper([(0, 0), (0, 0), (0, 1), (0, 0)])),
     ]
 )
-def utils_dataset(request) -> Dataset:
+def utils_dataset(request) -> BaseDataset:
     return request.param
 
 

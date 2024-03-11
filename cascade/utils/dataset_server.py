@@ -18,7 +18,8 @@ from typing import Any
 
 from flask import Flask, request
 
-from ..data import Dataset, Modifier, T
+from ..data.dataset import BaseDataset, T
+from ..data.modifier import Modifier
 from .serializer import Serializer
 
 
@@ -44,7 +45,7 @@ class DatasetServer(Modifier):
     cascade.utils.dataset_client.DatasetClient
     """
 
-    def __init__(self, dataset: Dataset[T], **kwargs: Any) -> None:
+    def __init__(self, dataset: BaseDataset[T], **kwargs: Any) -> None:
         super().__init__(dataset, **kwargs)
         self.app = Flask(__name__)
 
