@@ -133,5 +133,5 @@ class SizedDataset(Dataset):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         warnings.warn("SizedDataset is deprecated since 0.14.0."
                       " Consider using older version or migrate to"
-                      " Dataset")
+                      " Dataset, which is sized by default now")
         super().__init__(*args, **kwargs)
