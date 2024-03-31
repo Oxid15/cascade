@@ -166,10 +166,12 @@ def view_history(ctx, host, port, l, m, p):  # noqa: E741
 
 @view.command("metric")
 @click.pass_context
+@click.option("--host", type=str, default="localhost")
+@click.option("--port", type=int, default=8050)
 @click.option("-p", type=int, default=50, help="Page size for table")
 @click.option("-i", type=str, multiple=True, help="Metrics or params to include")
 @click.option("-x", type=str, multiple=True, help="Metrics or params to exclude")
-def view_metric(ctx, p, i, x):
+def view_metric(ctx, host, port, p, i, x):
     type = ctx.obj["type"]
     if type == "repo":
         from ..models import ModelRepo
@@ -184,14 +186,16 @@ def view_metric(ctx, p, i, x):
     from ..meta import MetricViewer
     i = None if len(i) == 0 else list(i)
     x = None if len(x) == 0 else list(x)
-    MetricViewer(container).serve(page_size=p, include=i, exclude=x)
+    MetricViewer(container).serve(page_size=p, include=i, exclude=x, host=host, port=port)
 
 
 @view.command("diff")
 @click.pass_context
-def view_diff(ctx):
+@click.option("--host", type=str, default="localhost")
+@click.option("--port", type=int, default=8050)
+def view_diff(ctx, host, port):
     from ..meta import DiffViewer
-    DiffViewer(ctx.obj["cwd"]).serve()
+    DiffViewer(ctx.obj["cwd"]).serve(host=host, port=port)
 
 
 @cli.group

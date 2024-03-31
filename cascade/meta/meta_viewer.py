@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import warnings
 from typing import Any, Dict, Optional
+from typing_extensions import deprecated
 
 from ..base import MetaFromFile, MetaIOError, MetaHandler, supported_meta_formats
 
@@ -70,25 +71,25 @@ class MetaViewer:
     def __len__(self) -> int:
         return len(self.names)
 
+    @deprecated("This method was removed in 0.14.0. Use MetaHandler.write instead")
     def write(self, path: str, obj: Any) -> None:
         """
         Dumps obj to path
         """
-        warnings.warn(
-            "This method will be deprecated in future versions. \
-            Consider using MetaHandler instead."
+        raise ValueError(
+            "This method was removed in 0.14.0. "
+            "Consider using MetaHandler.write or switching to previous versions."
         )
-        MetaHandler.write(path, obj)
 
+    @deprecated("This method was removed in 0.14.0. Use MetaHandler.read instead")
     def read(self, path: str) -> MetaFromFile:
         """
         Loads object from path
         """
-        warnings.warn(
-            "This method will be deprecated in future versions. \
-            Consider using MetaHandler instead."
+        raise ValueError(
+            "This method was removed in 0.14.0. "
+            "Consider using MetaHandler.read or switching to previous versions."
         )
-        return MetaHandler.read(path)
 
     def _filter(self, name: str) -> bool:
         try:

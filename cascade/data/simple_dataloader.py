@@ -36,8 +36,7 @@ class SimpleDataloader:
         if batch_size == 0:
             raise ValueError("Batch size cannot be 0")
         if batch_size > len(data):
-            raise ValueError(
-                f"Batch size ({batch_size}) is larger than sequence length ({len(data)})")
+            batch_size = len(data)
 
         self.data = data
         self._bs = batch_size
