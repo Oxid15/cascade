@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import sys
-from typing import List, Dict
+from typing import Dict, List
 
 import pydantic
 import pytest
@@ -24,47 +24,47 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import validate, ValidationError
+from cascade.data import ValidationError, validate_in
 
 
 def test_no_annot():
     def add(a, b):
         return a + b
 
-    validate(add)(1, 2)
-    validate(add)("a", "b")
+    validate_in(add)(1, 2)
+    validate_in(add)("a", "b")
 
 
 def test_default_types():
     def add_int(a: int, b: int):
         return a + b
 
-    validate(add_int)(1, 2)
+    validate_in(add_int)(1, 2)
 
     with pytest.raises(ValidationError):
-        validate(add_int)("a", 2)
+        validate_in(add_int)("a", 2)
 
     with pytest.raises(ValidationError):
-        validate(add_int)(1, "b")
+        validate_in(add_int)(1, "b")
 
     with pytest.raises(ValidationError):
-        validate(add_int)("a", "b")
+        validate_in(add_int)("a", "b")
 
     with pytest.raises(ValidationError):
-        validate(add_int)(1.2, 3.4)
+        validate_in(add_int)(1.2, 3.4)
 
 
 def test_lists():
     def sum_list(a: List[float]):
         return sum(a)
     
-    validate(sum_list)([1.2, 3.4, 5.])
+    validate_in(sum_list)([1.2, 3.4, 5.])
 
     with pytest.raises(ValidationError):
-        validate(sum_list)(None)
+        validate_in(sum_list)(None)
 
     with pytest.raises(ValidationError):
-        validate(sum_list)(["a", "b"])
+        validate_in(sum_list)(["a", "b"])
 
 
 def test_dicts():
@@ -74,16 +74,16 @@ def test_dicts():
     sum_dict({"a": 2, "b": 1})
 
     with pytest.raises(ValidationError):
-        validate(sum_dict)([1, 2, 3])
+        validate_in(sum_dict)([1, 2, 3])
 
     with pytest.raises(ValidationError):
-        validate(sum_dict)(3)
+        validate_in(sum_dict)(3)
 
     with pytest.raises(ValidationError):
-        validate(sum_dict)({1: 2, 3: 4})
+        validate_in(sum_dict)({1: 2, 3: 4})
 
     with pytest.raises(ValidationError):
-        validate(sum_dict)({"a": "b", "c": "d"})
+        validate_in(sum_dict)({"a": "b", "c": "d"})
 
 
 def test_pydantic_model():
@@ -99,14 +99,14 @@ def test_pydantic_model():
     def identity(a: LargeModel):
         return a
 
-    validate(
+    validate_in(
         identity)(dict(
             int_=0, float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
         )
     )
 
     with pytest.raises(ValidationError):
-        validate(identity)(
+        validate_in(identity)(
             dict(
                 int_="err", float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
             )
@@ -117,7 +117,7 @@ def test_pydantic_field():
     def identity(a: int = pydantic.Field(le=0)):
         return a
 
-    validate(identity)(0)
+    validate_in(identity)(0)
 
     with pytest.raises(ValidationError):
-        validate(identity)(10000)
+        validate_in(identity)(10000)

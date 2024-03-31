@@ -64,9 +64,11 @@ class Validator:
             validator(*args, **kwargs)
 
 
-def validate(f: Callable[..., Any]) -> Callable[..., Any]:
+def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
     """
-    Data validation decorator for callables
+    Data validation decorator for callables. In each call
+    validates only the input schema using type annotations
+    if present. Does not check return value.
 
     Parameters
     ----------
