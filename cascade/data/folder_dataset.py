@@ -18,10 +18,10 @@ import os
 from typing import Any, List
 
 from ..base import PipeMeta, raise_not_implemented
-from .dataset import SizedDataset, T
+from .dataset import Dataset, T
 
 
-class FolderDataset(SizedDataset):
+class FolderDataset(Dataset[T]):
     """
     Basic "folder of files" dataset. Accepts root folder in which considers all files.
     Is abstract - getitem is not defined, since it is specific for each file type.
@@ -51,7 +51,7 @@ class FolderDataset(SizedDataset):
             ]
         )
 
-    def __getitem__(self, item: Any) -> T:
+    def __getitem__(self, index: Any) -> T:
         raise_not_implemented("cascade.data.FolderDataset", "__getitem__")
 
     def get_names(self) -> List[str]:
@@ -62,7 +62,7 @@ class FolderDataset(SizedDataset):
 
     def get_meta(self) -> PipeMeta:
         """
-        Returns meta containing
+        Returns meta containing root folder
         """
         meta = super().get_meta()
         meta[0].update(

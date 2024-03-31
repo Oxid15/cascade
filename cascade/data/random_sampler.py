@@ -18,17 +18,18 @@ from typing import Any, Optional
 
 from numpy.random import randint, shuffle
 
-from . import Sampler, SizedDataset, T
+from .dataset import Dataset, T
+from .modifier import Sampler
 
 
-class RandomSampler(Sampler):
+class RandomSampler(Sampler[T]):
     """
     Shuffles a dataset
     """
 
     def __init__(
         self,
-        dataset: SizedDataset[T],
+        dataset: Dataset[T],
         num_samples: Optional[int] = None,
         *args: Any,
         **kwargs: Any
@@ -36,7 +37,7 @@ class RandomSampler(Sampler):
         """
         Parameters
         ----------
-        dataset: Dataset
+        dataset: Dataset[T]
             Input dataset to sample from
         num_samples: int, optional
             If less or equal than len(dataset) samples without repetitions (shuffles indices)

@@ -19,10 +19,10 @@ from typing import Any, List, Union
 import numpy as np
 
 from ..base import Meta, PipeMeta
-from .dataset import SizedDataset, T
+from .dataset import Dataset, T
 
 
-class Concatenator(SizedDataset):
+class Concatenator(Dataset[T]):
     """
     Unifies several Datasets under one, calling them sequentially in the provided order.
 
@@ -36,7 +36,7 @@ class Concatenator(SizedDataset):
     """
 
     def __init__(
-        self, datasets: List[SizedDataset[T]], *args: Any, **kwargs: Any
+        self, datasets: List[Dataset[T]], *args: Any, **kwargs: Any
     ) -> None:
         """
         Creates concatenated dataset from the list of datasets provided

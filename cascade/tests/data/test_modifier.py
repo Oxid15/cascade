@@ -20,7 +20,7 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Modifier, Wrapper, Iterator, ItModifier
+from cascade.data import Modifier, Wrapper, IteratorWrapper, ItModifier
 
 
 def test_iter_of_modifier():
@@ -40,7 +40,7 @@ def test_iter_of_modifier():
 
 
 def test_iter_of_itmodifier():
-    d = Iterator([1, 2, 3, 4, 5])
+    d = IteratorWrapper([1, 2, 3, 4, 5])
     m = ItModifier(d)
 
     result1 = []

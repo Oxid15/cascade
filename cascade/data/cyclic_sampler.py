@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from . import Sampler, T
+from .dataset import T
+from .modifier import Sampler
 
 
-class CyclicSampler(Sampler):
+class CyclicSampler(Sampler[T]):
     """
     A Sampler that iterates `num_samples` times through an input Dataset in cyclic manner
 
