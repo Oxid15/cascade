@@ -21,7 +21,7 @@ from typing import Literal, Optional
 from deepdiff import DeepDiff
 
 from ..base import MetaFromFile, MetaHandler, PipeMeta, supported_meta_formats
-from ..data import SizedDataset, T
+from ..data.dataset import BaseDataset, T
 from . import DataValidationException, Validator
 
 
@@ -71,14 +71,14 @@ class MetaValidator(Validator):
 
     def __init__(
         self,
-        dataset: SizedDataset[T],
+        dataset: BaseDataset[T],
         root: Optional[str] = None,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
     ) -> None:
         """
         Parameters
         ----------
-        dataset: Dataset
+        dataset: BaseDataset[T]
             Dataset to validate
         root: str, optional
             Path to the folder in which to store meta

@@ -18,10 +18,11 @@ import os
 import pickle
 from typing import Any, Optional
 
-from . import SizedDataset, Modifier, T
+from .dataset import BaseDataset, T
+from .modifier import BaseModifier
 
 
-class Pickler(Modifier):
+class Pickler(BaseModifier[T]):
     """
     Pickles input dataset or unpickles one
     """
@@ -29,7 +30,7 @@ class Pickler(Modifier):
     def __init__(
         self,
         path: str,
-        dataset: Optional[SizedDataset[T]] = None,
+        dataset: Optional[BaseDataset[T]] = None,
         *args: Any,
         **kwargs: Any
     ) -> None:
@@ -43,7 +44,7 @@ class Pickler(Modifier):
         ----------
         path: str
             Path to the pickled dataset
-        dataset: Dataset, optional
+        dataset: BaseDataset, optional
             A dataset to be pickled
 
         Raises
@@ -69,7 +70,21 @@ class Pickler(Modifier):
         with open(self._path, "rb") as f:
             self._dataset = pickle.load(f)
 
-    def ds(self) -> SizedDataset[T]:
+    def __getitem__(self, index: int) -> T:
+        """
+        Forwards the call to the wrapped dataset regardless
+        of presence of this method in it
+        """
+        return self._dataset.__getitem__(index)
+
+    def __len__(self) -> int:
+        """
+        Forwards the call to the wrapped dataset regardless
+        of presence of this method in it
+        """
+        return self._dataset.__len__()
+
+    def ds(self) -> BaseDataset[T]:
         """
         Returns pickled dataset
         """

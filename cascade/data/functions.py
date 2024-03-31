@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@ limitations under the License.
 from typing import Any, Callable, List, Union
 
 from ..base import PipeMeta
-from .dataset import Dataset
+from .dataset import BaseDataset
 
 
-class FunctionDataset(Dataset):
+class FunctionDataset(BaseDataset):
     def __init__(self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any) -> None:
         self.result = f(*args, **kwargs)
         self._f_name = f.__name__
