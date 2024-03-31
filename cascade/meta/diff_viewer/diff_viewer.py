@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+from typing import Any
 
 from ...base import MetaHandler, supported_meta_formats, MetaIOError, ZeroMetaError
 from ...meta import Server
@@ -109,5 +110,5 @@ class DiffViewer(Server):
                 "Available types are: for Repo or Line, for DatasetVersion logs or for History log."
             )
 
-    def serve(self, *args, **kwargs):
+    def serve(self, *args: Any, **kwargs: Any):
         return self._diff_viewer.serve(*args, **kwargs)

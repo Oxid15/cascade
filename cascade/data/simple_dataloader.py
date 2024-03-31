@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,8 +36,7 @@ class SimpleDataloader:
         if batch_size == 0:
             raise ValueError("Batch size cannot be 0")
         if batch_size > len(data):
-            raise ValueError(
-                f"Batch size ({batch_size}) is larger than sequence length ({len(data)})")
+            batch_size = len(data)
 
         self._data = data
         self._bs = batch_size

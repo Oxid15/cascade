@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ class ConstantBaseline(BasicModel):
     (for example it can be majority class)
     """
 
-    def __init__(self, constant: Any = None, **kwargs: Any) -> None:
+    def __init__(self, constant: Any, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self._constant = constant
 

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any
 from tqdm import tqdm, trange
-from . import Dataset, Modifier, T
+from . import SizedDataset, Modifier, T
 
 
 class BruteforceCacher(Modifier):
@@ -52,7 +52,7 @@ class BruteforceCacher(Modifier):
     cascade.data.SequentialCacher
     cascade.data.Pickler
     """
-    def __init__(self, dataset: Dataset[T],
+    def __init__(self, dataset: SizedDataset[T],
                  *args: Any, **kwargs: Any) -> None:
         """
         Loads every item in dataset in internal list.

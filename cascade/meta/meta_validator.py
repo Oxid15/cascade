@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 from hashlib import md5
-from typing import Literal, Union
+from typing import Literal, Optional
 
 from deepdiff import DeepDiff
 
@@ -72,7 +72,7 @@ class MetaValidator(Validator):
     def __init__(
         self,
         dataset: SizedDataset[T],
-        root: Union[str, None] = None,
+        root: Optional[str] = None,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
     ) -> None:
         """

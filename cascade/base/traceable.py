@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,11 +20,13 @@ import os
 import glob
 import socket
 import warnings
-from typing import Dict, Union, Any, Literal, Iterable
+from typing import Dict, Union, Any, Literal, Iterable, Optional
 import pendulum
 from datetime import datetime
 
 from . import PipeMeta, Meta, default_meta_format, supported_meta_formats, MetaIOError
+
+DO_NOT_UPDATE = ["created_at"]
 
 
 @dataclass
@@ -39,9 +41,9 @@ class Comment:
 @dataclass
 class Link:
     id: str
-    name: Union[str, None]
-    uri: Union[str, None]
-    meta: Union[PipeMeta, None]
+    name: Optional[str]
+    uri: Optional[str]
+    meta: Optional[PipeMeta]
     created_at: datetime
 
     def __post_init__(self) -> None:
@@ -58,8 +60,8 @@ class Traceable:
     def __init__(
         self,
         *args: Any,
-        description: Union[str, None] = None,
-        tags: Union[Iterable[str], None] = None,
+        description: Optional[str] = None,
+        tags: Optional[Iterable[str]] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -201,13 +203,13 @@ class Traceable:
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
 
-    def describe(self, desc: Union[str, None]):
+    def describe(self, desc: Optional[str]):
         """
         Add description to an object
 
         Parameters
         ----------
-        desc : Union[str, None]
+        desc : Optional[str]
             String description of an object.
             May be None to use the method in default initializer
 
@@ -266,7 +268,7 @@ class Traceable:
             comment_id,
             getuser(),
             socket.gethostname(),
-            pendulum.now(),
+            pendulum.now(tz="UTC"),
             message
         )
 
@@ -285,10 +287,10 @@ class Traceable:
         return self.links[-1].id
 
     def link(self,
-             obj: Union["Traceable", None] = None,
-             name: Union[str, None] = None,
-             uri: Union[str, None] = None,
-             meta: Union[PipeMeta, None] = None,
+             obj: Optional["Traceable"] = None,
+             name: Optional[str] = None,
+             uri: Optional[str] = None,
+             meta: Optional[PipeMeta] = None,
              include: bool = True) -> None:
         """
         Links another object to this object. Links can contain
@@ -313,15 +315,15 @@ class Traceable:
 
         Parameters
         ----------
-        obj : Union[Traceable, None]
+        obj : Optional[Traceable]
             The object to link
-        name : Union[str, None], optional
+        name : Optional[str]
             Name of the object, overrides obj name if passed, by default None
-        uri : Union[str, None], optional
+        uri : Optional[str]
             URI of the object, by default None
-        meta : Union[PipeMeta, None], optional
+        meta : Optional[PipeMeta]
             Meta of the object, overrides obj meta if passed, by default None
-        include : bool, optional
+        include : bool, default is True
             Whether to include full meta of the object, by default True
         """
         if isinstance(obj, Traceable):
@@ -396,7 +398,7 @@ class TraceableOnDisk(Traceable):
                     "on path {self._root}"
                 )
 
-    def _determine_meta_fmt(self) -> Union[str, None]:
+    def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
         if len(meta_paths) == 0:
@@ -409,52 +411,53 @@ class TraceableOnDisk(Traceable):
                 f"Multiple meta files found in {self._root}"
             )
 
-    def _create_meta(self) -> None:
+    def sync_meta(self) -> None:
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
         # Object was created before -> update
         if len(meta_path) > 0:
-            self._update_meta()
+            meta = {}
+            from . import MetaHandler
+
+            try:
+                meta = MetaHandler.read_dir(self._root)[0]
+            except MetaIOError as e:
+                warnings.warn(f"File reading error ignored: {e}")
+
+            self_meta = self.get_meta()[0]  # TODO: Use all blocks in meta?
+            for key in self_meta:
+                if key not in DO_NOT_UPDATE and self_meta[key]:
+                    meta[key] = self_meta[key]
+
+            try:
+                MetaHandler.write_dir(self._root, [meta])
+            except MetaIOError as e:
+                warnings.warn(f"File writing error ignored: {e}")
+
+            # Update internal fields from updated meta
+            # syncronizing its state with disk
+            self.from_meta(meta)
             return
+        else:
+            created = str(pendulum.now(tz="UTC"))
+            meta = self.get_meta()
+            meta[0].update({"created_at": created})
 
-        created = str(pendulum.now(tz="UTC"))
-        meta = self.get_meta()
-        meta[0].update({"created_at": created})
+            from . import MetaHandler
 
-        from . import MetaHandler
-
-        try:
-            MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
-        except MetaIOError as e:
-            warnings.warn(f"File writing error ignored: {e}")
-
-    def _update_meta(self) -> None:
-        """
-        Reads meta if exists and updates it with new values
-        writes back to disk
-
-        If meta file exists and is only one, then reads it
-        and writes back in the same format
-        """
-
-        meta = {}
-        from . import MetaHandler
-
-        try:
-            meta = MetaHandler.read_dir(self._root)[0]
-        except MetaIOError as e:
-            warnings.warn(f"File reading error ignored: {e}")
-
-        meta.update(self.get_meta()[0])
-
-        try:
-            MetaHandler.write_dir(self._root, [meta])
-        except MetaIOError as e:
-            warnings.warn(f"File writing error ignored: {e}")
+            try:
+                MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
+            except MetaIOError as e:
+                warnings.warn(f"File writing error ignored: {e}")
 
     def get_root(self) -> str:
         return self._root
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]["updated_at"] = pendulum.now(tz="UTC")
+        meta[0]["updated_at"] = str(pendulum.now(tz="UTC"))
+        return meta
+
+    def load_meta(self):
+        from . import MetaHandler
+        meta = MetaHandler.read_dir(self._root)
         return meta
