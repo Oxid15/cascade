@@ -17,11 +17,14 @@ limitations under the License.
 from typing import Any, Callable, List, Union
 
 from ..base import PipeMeta
-from .dataset import BaseDataset
+from .dataset import Dataset
+from .validation import validate_in
 
 
-class FunctionDataset(BaseDataset):
-    def __init__(self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any) -> None:
+class FunctionDataset(Dataset):
+    def __init__(
+        self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any
+    ) -> None:
         self.result = f(*args, **kwargs)
         self._f_name = f.__name__
         super().__init__(*args, **kwargs)
@@ -33,7 +36,9 @@ class FunctionDataset(BaseDataset):
 
 
 class FunctionModifier(FunctionDataset):
-    def __init__(self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any) -> None:
+    def __init__(
+        self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any
+    ) -> None:
         datasets: List[FunctionDataset] = []
         converted_args = []
         for i in range(len(args)):
@@ -54,7 +59,7 @@ class FunctionModifier(FunctionDataset):
         return meta
 
 
-def dataset(f: Callable[..., Any]) -> Callable[..., FunctionDataset]:
+def dataset(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[..., FunctionDataset]:
     """
     Thin wrapper to turn any function into a Cascade's Dataset.
     Use this if the function is the data source
@@ -72,8 +77,12 @@ def dataset(f: Callable[..., Any]) -> Callable[..., FunctionDataset]:
     Callable[..., FunctionDataset]
         Call this to get a dataset
     """
+    if do_validate_in:
+        f = validate_in(f)
+
     def wrapper(*args: Any, **kwargs: Any) -> FunctionDataset:
         return FunctionDataset(*args, **kwargs, f=f)
+
     return wrapper
 
 
@@ -95,6 +104,8 @@ def modifier(f: Callable[..., Any]) -> Callable[..., FunctionModifier]:
     Callable[..., FunctionModifier]
         Call this to get a modifier
     """
+
     def wrapper(*args: Any, **kwargs: Any) -> FunctionModifier:
         return FunctionModifier(*args, **kwargs, f=f)
+
     return wrapper
