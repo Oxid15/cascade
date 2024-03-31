@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 from ..base import Meta, PipeMeta
 
@@ -22,7 +22,7 @@ default_keys = ["data", "dataset"]
 
 
 def skeleton(
-    meta: Union[PipeMeta, Meta], keys: Union[List[Any], None] = None
+    meta: Union[PipeMeta, Meta], keys: Optional[List[Any]] = None
 ) -> List[List[Dict[Any, Any]]]:
     """
     Parameters

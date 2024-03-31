@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Any, Dict, List, Union
+from typing import Any, List, Optional, Union
 
 import pandas as pd
 import pendulum
@@ -229,8 +229,8 @@ class MetricServer(Server):
         self,
         mv: MetricViewer,
         page_size: int,
-        include: Union[List[str], None],
-        exclude: Union[List[str], None],
+        include: Optional[List[str]],
+        exclude: Optional[List[str]],
         **kwargs: Any,
     ) -> None:
         self._mv = mv

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 import pickle
 import os
-from typing import Any, Type, Union
+from typing import Any, Type, Optional
 
 import torch
 
@@ -31,8 +31,8 @@ class TorchModel(BasicModel):
 
     def __init__(
         self,
-        model_class: Union[Type, None] = None,
-        model: Union[torch.nn.Module, None] = None,
+        model_class: Optional[Type] = None,
+        model: Optional[torch.nn.Module] = None,
         **kwargs: Any,
     ) -> None:
         """

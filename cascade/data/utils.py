@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@ limitations under the License.
 """
 
 from math import floor
-from typing import Tuple, Union
+from typing import Tuple, Optional
 
 from . import RangeSampler, SizedDataset, T
 
 
 def split(
-    ds: SizedDataset[T], frac: Union[float, None] = 0.5, num: Union[int, None] = None
-) -> Tuple[SizedDataset, SizedDataset]:
+    ds: SizedDataset[T], frac: Optional[float] = 0.5, num: Optional[int] = None
+) -> Tuple[SizedDataset[T], SizedDataset[T]]:
     """
     Splits dataset into two cascade.data.RangeSampler`s
 

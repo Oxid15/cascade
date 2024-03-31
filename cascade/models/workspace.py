@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, List, Literal, Union
+from typing import Any, Generator, List, Literal, Optional
 
 from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
 from ..models import ModelRepo
@@ -27,7 +27,7 @@ class Workspace(TraceableOnDisk):
         self,
         path: str,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
-        default_repo: Union[str, None] = None,
+        default_repo: Optional[str] = None,
         *args: Any,
         **kwargs: Any,
     ) -> None:
@@ -52,7 +52,7 @@ class Workspace(TraceableOnDisk):
             except MetaIOError as e:
                 warnings.warn(str(e))
 
-        self._create_meta()
+        self.sync_meta()
 
     def __getitem__(self, key: str) -> ModelRepo:
         if key in self._repo_names:
@@ -62,6 +62,10 @@ class Workspace(TraceableOnDisk):
 
     def __len__(self) -> int:
         return len(self._repo_names)
+
+    def __iter__(self) -> Generator[ModelRepo, None, None]:
+        for repo in self._repo_names:
+            yield self.__getitem__(repo)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

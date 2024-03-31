@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any, Callable
 
-from . import Dataset, Modifier, T
+from . import SizedDataset, Modifier, T
 
 
 class ApplyModifier(Modifier):
@@ -25,7 +25,7 @@ class ApplyModifier(Modifier):
     """
 
     def __init__(
-        self, dataset: Dataset[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
+        self, dataset: SizedDataset[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
     ) -> None:
         """
         Parameters

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import logging
-from typing import Any, Dict, Iterable, List, Tuple, Union
+from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 import pendulum
 
@@ -52,7 +52,7 @@ class Trainer(Traceable):
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise_not_implemented("cascade.models.Trainer", "train")
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0]["metrics"] = self.metrics
         meta[0]["repo"] = self._repo.get_meta()
@@ -91,16 +91,14 @@ class BasicTrainer(Trainer):
     def train(
         self,
         model: Model,
-        *args: Any,
-        train_data: Union[Iterable[Any], None] = None,
-        test_data: Union[Iterable[Any], None] = None,
-        train_kwargs: Union[Dict[Any, Any], None] = None,
-        test_kwargs: Union[Dict[Any, Any], None] = None,
+        train_data: Optional[Iterable[Any]] = None,
+        test_data: Optional[Iterable[Any]] = None,
+        train_kwargs: Optional[Dict[Any, Any]] = None,
+        test_kwargs: Optional[Dict[Any, Any]] = None,
         epochs: int = 1,
-        start_from: Union[str, None] = None,
-        eval_strategy: Union[int, None] = None,
-        save_strategy: Union[int, None] = None,
-        **kwargs: Any,
+        start_from: Optional[str] = None,
+        eval_strategy: Optional[int] = None,
+        save_strategy: Optional[int] = None,
     ) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.

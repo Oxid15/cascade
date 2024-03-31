@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional
+from typing_extensions import deprecated
 
 from ..base import MetaFromFile, MetaIOError, MetaHandler, supported_meta_formats
 
@@ -26,7 +27,7 @@ class MetaViewer:
     The class to view all metadata in folders and subfolders.
     """
 
-    def __init__(self, root: str, filt: Union[Dict[Any, Any], None] = None) -> None:
+    def __init__(self, root: str, filt: Optional[Dict[Any, Any]] = None) -> None:
         """
         Parameters
         ----------
@@ -70,25 +71,25 @@ class MetaViewer:
     def __len__(self) -> int:
         return len(self.names)
 
+    @deprecated("This method was removed in 0.14.0. Use MetaHandler.write instead")
     def write(self, path: str, obj: Any) -> None:
         """
         Dumps obj to path
         """
-        warnings.warn(
-            "This method will be deprecated in future versions. \
-            Consider using MetaHandler instead."
+        raise ValueError(
+            "This method was removed in 0.14.0. "
+            "Consider using MetaHandler.write or switching to previous versions."
         )
-        MetaHandler.write(path, obj)
 
+    @deprecated("This method was removed in 0.14.0. Use MetaHandler.read instead")
     def read(self, path: str) -> MetaFromFile:
         """
         Loads object from path
         """
-        warnings.warn(
-            "This method will be deprecated in future versions. \
-            Consider using MetaHandler instead."
+        raise ValueError(
+            "This method was removed in 0.14.0. "
+            "Consider using MetaHandler.read or switching to previous versions."
         )
-        return MetaHandler.read(path)
 
     def _filter(self, name: str) -> bool:
         try:
