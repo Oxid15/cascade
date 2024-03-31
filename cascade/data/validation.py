@@ -1,10 +1,10 @@
+import inspect
 from collections import defaultdict
 from functools import wraps
-import inspect
-from typing import Any, Dict, Tuple, Callable, Literal
-
+from typing import Any, Callable, Dict, Literal, Tuple
 
 SupportedProviders = Literal["pydantic"]
+
 
 class ValidationError(Exception):
     pass
@@ -23,14 +23,14 @@ class PydanticValidator(ValidationProvider):
         super().__init__(types)
 
         try:
-            from pydantic import create_model, ValidationError
+            from pydantic import ValidationError, create_model
         except ImportError as e:
             raise ImportError(
                 "Cannot import `pydantic` - it is optional dependency for general type checking"
             ) from e
         else:
             self._exc_type = ValidationError
-            self._model = create_model("pydantic_validator", **types) # type: ignore
+            self._model = create_model("pydantic_validator", **types)  # type: ignore
 
     def __call__(self, *args: Any, **kwargs: Any) -> None:
         from_args = dict()
@@ -45,9 +45,7 @@ class PydanticValidator(ValidationProvider):
 
 class Validator:
     def __init__(self, types: Dict[str, Tuple[Any, Any]]) -> None:
-        providers = {
-            "pydantic": PydanticValidator
-        }
+        providers = {"pydantic": PydanticValidator}
         provider_to_args = defaultdict(dict)
         for name in types:
             provider = self._resolve_validator(types[name][0])
@@ -82,13 +80,21 @@ def validate(f: Callable[..., Any]) -> Callable[..., Any]:
     """
     sig = inspect.signature(f)
     args = {
-        key: (sig.parameters[key].annotation if sig.parameters[key].annotation is not sig.empty else Any,
-              sig.parameters[key].default if sig.parameters[key].annotation is not sig.empty else ...) 
+        key: (
+            (
+                sig.parameters[key].annotation
+                if sig.parameters[key].annotation is not sig.empty
+                else Any
+            ),
+            sig.parameters[key].default if sig.parameters[key].annotation is not sig.empty else ...,
+        )
         for key in sig.parameters
     }
     v = Validator(args)
+
     @wraps(f)
     def wrapper(*args: Any, **kwargs: Any):
         v(*args, **kwargs)
         return f(*args, **kwargs)
+
     return wrapper
