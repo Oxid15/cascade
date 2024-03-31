@@ -283,7 +283,7 @@ class MetricServer(Server):
         self._df_flatten = pd.DataFrame(
             map(lambda x: flatten(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
         )
-        self._for_plots = self._df_flatten
+        self._for_plots = self._df_flatten.copy()
         for name in self._df_flatten.name.unique():
             self._for_plots[name] = None
             self._for_plots.loc[self._for_plots["name"] == name, name] = (
