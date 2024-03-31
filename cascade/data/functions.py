@@ -17,11 +17,11 @@ limitations under the License.
 from typing import Any, Callable, List, Union
 
 from ..base import PipeMeta
-from .dataset import Dataset
+from .dataset import BaseDataset
 from .validation import validate_in
 
 
-class FunctionDataset(Dataset):
+class FunctionDataset(BaseDataset):
     def __init__(
         self, *args: Any, f: Union[Callable[[Any], Any], None] = None, **kwargs: Any
     ) -> None:
@@ -59,7 +59,7 @@ class FunctionModifier(FunctionDataset):
         return meta
 
 
-def dataset(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[..., FunctionDataset]:
+def dataset(do_validate_in: bool = True) -> Callable[..., FunctionDataset]:
     """
     Thin wrapper to turn any function into a Cascade's Dataset.
     Use this if the function is the data source
@@ -77,16 +77,18 @@ def dataset(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[...,
     Callable[..., FunctionDataset]
         Call this to get a dataset
     """
-    if do_validate_in:
-        f = validate_in(f)
+    def outer_wrapper(f: Callable[..., Any]):
+        if do_validate_in:
+            f = validate_in(f)
 
-    def wrapper(*args: Any, **kwargs: Any) -> FunctionDataset:
-        return FunctionDataset(*args, **kwargs, f=f)
+        def wrapper(*args: Any, **kwargs: Any) -> FunctionDataset:
+            return FunctionDataset(*args, **kwargs, f=f)
 
-    return wrapper
+        return wrapper
+    return outer_wrapper
 
 
-def modifier(f: Callable[..., Any]) -> Callable[..., FunctionModifier]:
+def modifier(do_validate_in: bool = True) -> Callable[..., FunctionModifier]:
     """
     Thin wrapper to turn any function into Cascade's Modifier
     Pass the returning value of a function
@@ -104,8 +106,12 @@ def modifier(f: Callable[..., Any]) -> Callable[..., FunctionModifier]:
     Callable[..., FunctionModifier]
         Call this to get a modifier
     """
+    def outer_wrapper(f: Callable[..., Any]):
+        if do_validate_in:
+            f = validate_in(f)
 
-    def wrapper(*args: Any, **kwargs: Any) -> FunctionModifier:
-        return FunctionModifier(*args, **kwargs, f=f)
+        def wrapper(*args: Any, **kwargs: Any) -> FunctionModifier:
+            return FunctionModifier(*args, **kwargs, f=f)
 
-    return wrapper
+        return wrapper
+    return outer_wrapper

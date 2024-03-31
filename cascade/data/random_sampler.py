@@ -18,7 +18,7 @@ from typing import Any, Optional
 
 from numpy.random import randint, shuffle
 
-from . import Dataset, T
+from .dataset import Dataset, T
 from .modifier import Sampler
 
 
