@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .dataset import BaseDataset, IteratorDataset, Dataset, IteratorWrapper, Wrapper, T
-from .modifier import BaseModifier, IteratorModifier, Modifier
-
 from .apply_modifier import ApplyModifier
 from .bruteforce_cacher import BruteforceCacher
 from .composer import Composer
@@ -30,4 +27,5 @@ from .range_sampler import RangeSampler
 from .sequential_cacher import SequentialCacher
 from .simple_dataloader import SimpleDataloader
 from .utils import split
+from .validation import ValidationError, validate_in
 from .version_assigner import VersionAssigner, version
