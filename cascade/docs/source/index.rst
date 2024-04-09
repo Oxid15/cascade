@@ -5,9 +5,12 @@ Lightweight and modular MLOps library with the aim to make ML development more e
 
 Who could find it useful
 ************************
-The slope of adopting MLOps platforms can sometimes be too steep for small teams.
-However, they can still benefit from MLOps practices integrated into the workflow.
+The slope of adopting MLOps platforms can sometimes be too steep for individuals.
+However, they can still benefit from some MLOps practices integrated into the workflow.
 Cascade offers the solution that enables those features for small projects while demanding little.
+In small-scale ML-projects there is usually no need for the whole MLOps setups (at least in early stages).
+Taking this in mind, Cascade is built modular to enable users to fit the solution to their specific needs
+by using different parts of the library without the need to bring everything at once.
 
 Key Principles
 **************
@@ -18,7 +21,7 @@ Key Principles
 
 Introduction
 ************
-Cascade does not require any complex setups. To start use it you just need to install the python package.
+Cascade does not require complex setups. To start use it you just need to install the python package.
 
 Installation
 ------------
@@ -27,10 +30,10 @@ Installation
 
     pip install cascade-ml
 
-More info on installation can be found in :ref:`/quickstart.rst` page.
+More info on installation and first steps can be found in :ref:`/quickstart.rst` page.
 
-Track your first experiment
----------------------------
+Experiment tracking
+-------------------
 Cascade is built to be modular and flexible so that integration of Cascade
 in your existing workflow could become gradual.
 
@@ -42,14 +45,13 @@ along with all meta data.
     from cascade.models import BasicModel, ModelRepo
     import random
 
+    # Your existing experiment can remain unchanged
 
     model = BasicModel()
     model.params.update({"learning_rate": 1e-10})
 
-    # Your existing experiment goes here
-
     model.link(name="dataset", uri="../data/dataset")
-    model.add_metric("f1", random.random())
+    model.add_metric("f1", random.random()) # Your metric value
     model.add_file("example_plot.png")
 
     repo = ModelRepo("classification")
@@ -59,7 +61,7 @@ along with all meta data.
 This brief example shows that you can easily start experiment tracking
 from your current setup.
 
-Cascade allows you to abstract from structuring your model storage.
+Cascade allows you to abstract from structuring your experiment results and model artifacts storage.
 It creates and manages repositories of models from which they can be extracted easily
 for evaluation or deployment.
 
@@ -106,7 +108,7 @@ For more advanced usage of ``Model`` see :ref:`/examples/model_training.ipynb` p
 Build pipelines
 ---------------
 
-The amount of work we put in the building data processing pipelines is
+The amount of work that is put in the building data processing pipelines is
 proportional to the role clean and well prepared data plays in the final
 performance of ML solution.
 
@@ -160,7 +162,6 @@ To get metadata of an object you do just:
     ]
 
 By default all `sized` objects will have length in their meta data.
-The more specific the transformation about the dataset the richer meta will be.
 
 All datasets with examples can be found in :ref:`/examples/dataset_zoo.ipynb`
 
