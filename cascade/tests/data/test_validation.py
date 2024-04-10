@@ -57,7 +57,7 @@ def test_default_types():
 def test_lists():
     def sum_list(a: List[float]):
         return sum(a)
-    
+
     validate_in(sum_list)([1.2, 3.4, 5.])
 
     with pytest.raises(ValidationError):
@@ -70,7 +70,7 @@ def test_lists():
 def test_dicts():
     def sum_dict(a: Dict[str, int]):
         return sum(a.values())
-    
+
     sum_dict({"a": 2, "b": 1})
 
     with pytest.raises(ValidationError):
