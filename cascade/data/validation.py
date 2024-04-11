@@ -25,23 +25,34 @@ class PydanticValidator(ValidationProvider):
         super().__init__(schema)
 
         try:
-            from pydantic import ValidationError
+            from pydantic import BaseModel, ValidationError
         except ImportError as e:
             raise ImportError(
                 "Cannot import `pydantic` - it is optional dependency for general type checking"
             ) from e
         else:
+            self._base_model_cls = BaseModel
             self._exc_type = ValidationError
 
     def __call__(self, *args: Any, **kwargs: Any) -> None:
-        from_args = dict()
-        for name, arg in zip(self._schema.model_fields, args):
-            from_args[name] = arg
+        if (
+            len(args) == 1
+            and len(kwargs) == 0
+            and (isinstance(args[0], dict) or isinstance(args[0], self._base_model_cls))
+        ):
+            try:
+                self._schema.model_validate(args[0])
+            except self._exc_type as e:
+                raise ValidationError() from e
+        else:
+            from_args = dict()
+            for name, arg in zip(self._schema.model_fields, args):
+                from_args[name] = arg
 
-        try:
-            self._schema(**from_args, **kwargs)
-        except self._exc_type as e:
-            raise ValidationError() from e
+            try:
+                self._schema(**from_args, **kwargs)
+            except self._exc_type as e:
+                raise ValidationError() from e
 
 
 class Validator:

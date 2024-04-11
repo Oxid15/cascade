@@ -25,6 +25,7 @@ from .dataset import (
     IteratorDataset,
     IteratorWrapper,
     SizedDataset,
+    Wrapper,
 )
 from .folder_dataset import FolderDataset
 from .functions import dataset, modifier
@@ -32,6 +33,7 @@ from .modifier import BaseModifier, IteratorModifier, Modifier
 from .pickler import Pickler
 from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
+from .schema_dataset import SchemaDataset, SchemaModifier
 from .sequential_cacher import SequentialCacher
 from .simple_dataloader import SimpleDataloader
 from .utils import split
