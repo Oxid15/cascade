@@ -18,10 +18,11 @@ from typing import Any
 
 from numpy import ceil
 
-from .dataset import Modifier, SizedDataset, T
+from .dataset import Dataset, T
+from .modifier import Modifier
 
 
-class SequentialCacher(Modifier):
+class SequentialCacher(Modifier[T]):
     """
     A batched version of BruteforceCacher class.
 
@@ -35,7 +36,7 @@ class SequentialCacher(Modifier):
     """
 
     def __init__(
-        self, dataset: SizedDataset[T], batch_size: int = 2, *args: Any, **kwargs: Any
+        self, dataset: Dataset[T], batch_size: int = 2, *args: Any, **kwargs: Any
     ) -> None:
         """
         Parameters

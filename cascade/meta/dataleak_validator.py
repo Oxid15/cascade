@@ -18,15 +18,16 @@ from typing import Any, Callable, Optional
 
 from tqdm import tqdm
 
-from ..data import Dataset, T
-from .validator import DataValidationException, Validator, prettify_items
+from ..data.dataset import BaseDataset, T
+from . import DataValidationException, Validator
+from .validator import prettify_items
 
 
 class DataleakValidator(Validator):
     def __init__(
         self,
-        train_ds: Dataset[T],
-        test_ds: Dataset[T],
+        train_ds: BaseDataset[T],
+        test_ds: BaseDataset[T],
         hash_fn: Optional[Callable[[Any], str]] = None,
         **kwargs: Any,
     ) -> None:

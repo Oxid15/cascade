@@ -16,10 +16,11 @@ limitations under the License.
 
 from typing import Any, Optional
 
-from .dataset import Sampler, SizedDataset, T
+from .dataset import Dataset, T
+from .modifier import Sampler
 
 
-class RangeSampler(Sampler):
+class RangeSampler(Sampler[T]):
     """
     Implements an interface of standard range in a dataset.
 
@@ -46,7 +47,7 @@ class RangeSampler(Sampler):
 
     def __init__(
         self,
-        dataset: SizedDataset[T],
+        dataset: Dataset[T],
         start: Optional[int] = None,
         stop: Optional[int] = None,
         step: int = 1,

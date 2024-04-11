@@ -1,5 +1,5 @@
 tqdm>=4.64.1
-numpy>=1.18.5
+numpy>=1.18.5,<2
 pandas>=1.4.0
 deepdiff>=5.8.0
 pendulum>=2.1.2
@@ -10,3 +10,4 @@ dash
 dash-renderjson==0.0.1
 coolname>=2.0.0
 click>=8.0.0
+typing-extensions>=4.11.0,<5

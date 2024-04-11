@@ -17,13 +17,14 @@ limitations under the License.
 from typing import Any
 
 from tqdm import tqdm, trange
+from .dataset import BaseDataset, T
+from .modifier import Modifier
 
 from .dataset import Modifier, SizedDataset, T
 
-
-class BruteforceCacher(Modifier):
+class BruteforceCacher(Modifier[T]):
     """
-    Identity modifier that calls all previous pipeline in __init__ loading everything
+    Special modifier that calls all previous pipeline in __init__ loading everything
     in memory. This is useful in combination with `Pickler` when pipeline
     has heavy operations upstream. You can load everything and pickle it to turn off
     heavy part of the pipeline.
@@ -55,12 +56,12 @@ class BruteforceCacher(Modifier):
     cascade.data.Pickler
     """
 
-    def __init__(self, dataset: SizedDataset[T], *args: Any, **kwargs: Any) -> None:
+    def __init__(self, dataset: BaseDataset[T], *args: Any, **kwargs: Any) -> None:
         """
         Loads every item in dataset in internal list.
         """
         super().__init__(dataset, *args, **kwargs)
-        # forcibly calling all previous datasets in the init
+        # force calling all previous datasets in the init
         if hasattr(self._dataset, "__len__") and hasattr(self._dataset, "__getitem__"):
             self._data = [self._dataset[i] for i in trange(len(self._dataset))]
         elif hasattr(self._dataset, "__iter__"):

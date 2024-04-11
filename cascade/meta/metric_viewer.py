@@ -73,6 +73,26 @@ class MetricViewer:
         return MetricViewer(self._repo, scope=key)
 
     def reload_table(self) -> None:
+        def create_metric(meta: Dict[str, Any]) -> Dict[str, Any]:
+            metric = {"line": line, "num": i}
+            if "created_at" in meta:
+                metric["created_at"] = pendulum.parse(meta["created_at"])
+                if "saved_at" in meta:
+                    metric["saved"] = pendulum.parse(
+                        meta["saved_at"]
+                    ).diff_for_humans(metric["created_at"])
+
+            if "params" in meta:
+                metric.update(meta["params"])
+            if "tags" in meta:
+                metric["tags"] = meta["tags"]
+            if "comments" in meta:
+                metric["comment_count"] = len(meta["comments"])
+            if "links" in meta:
+                metric["link_count"] = len(meta["links"])
+            
+            return metric
+
         self._metrics = []
         selected_names = self._repo.get_line_names()
 
@@ -93,21 +113,23 @@ class MetricViewer:
                 except IndexError:
                     meta = {}
 
-                metric = {"line": viewer_root, "num": i}
-
-                if "created_at" in meta:
-                    metric["created_at"] = pendulum.parse(meta["created_at"])
-                    if "saved_at" in meta:
-                        metric["saved"] = pendulum.parse(
-                            meta["saved_at"]
-                        ).diff_for_humans(metric["created_at"])
-
+                _, line = os.path.split(viewer_root)
                 if "metrics" in meta:
-                    metric.update({m["name"]: m.get("value") for m in meta["metrics"]})
-                if "params" in meta:
-                    metric.update(meta["params"])
+                    # Need to generate new metric each time
+                    for m in meta["metrics"]:
+                        metric = create_metric(meta)
 
-                self._metrics.append(metric)
+                        metric["name"] = m.get("name")
+                        metric["value"] =  m.get("value")
+
+                        for key in m.keys():
+                            if key not in ("name", "value", "created_at"):
+                                if m[key] is not None:
+                                    metric[key] = m[key]
+
+                        self._metrics.append(metric)
+                else:
+                    self._metrics.append(create_metric(meta))
         self.table = pd.DataFrame(self._metrics)
 
     def __repr__(self) -> str:
@@ -239,7 +261,7 @@ class MetricServer(Server):
             if x is not None and y is not None:
                 fig.add_trace(
                     go.Scatter(
-                        x=self._df_flatten[x], y=self._df_flatten[y], mode="markers"
+                        x=self._for_plots[x], y=self._for_plots[y], mode="markers"
                     )
                 )
                 fig.update_layout(title=f"{x} to {y} relation")
@@ -263,7 +285,19 @@ class MetricServer(Server):
         if self._include is not None:
             df = df[["line", "num"] + self._include]
 
-        self._df_flatten = pd.DataFrame(map(flatten, df.to_dict("records")))
+        self._df_flatten = pd.DataFrame(
+            map(lambda x: flatten(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
+        )
+        self._for_plots = self._df_flatten.copy()
+        for name in self._df_flatten.name.unique():
+            self._for_plots[name] = None
+            self._for_plots.loc[self._for_plots["name"] == name, name] = (
+                self._for_plots.loc[self._for_plots["name"] == name, "value"]
+            )
+        self._for_plots = self._for_plots.drop(["name", "value"], axis=1)
+
+        if any(df["tags"].apply(lambda x: x != [])):
+            self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
         dep_fig = go.Figure()
 
         return html.Div(
@@ -277,10 +311,10 @@ class MetricServer(Server):
                     },
                 ),
                 dcc.Dropdown(
-                    list(self._df_flatten.columns), id="dropdown-x", multi=False
+                    list(self._for_plots.columns), id="dropdown-x", multi=False
                 ),
                 dcc.Dropdown(
-                    list(self._df_flatten.columns), id="dropdown-y", multi=False
+                    list(self._for_plots.columns), id="dropdown-y", multi=False
                 ),
                 dcc.Graph(id="dependence-figure", figure=dep_fig),
                 dash_table.DataTable(

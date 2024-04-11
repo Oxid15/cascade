@@ -22,7 +22,8 @@ import pendulum
 
 from ..base import MetaHandler, PipeMeta, supported_meta_formats
 from ..meta.utils import skeleton
-from . import Dataset, Modifier, T
+from .dataset import BaseDataset, T
+from .modifier import Modifier
 
 
 class VersionAssigner(Modifier):
@@ -74,7 +75,7 @@ class VersionAssigner(Modifier):
 
     def __init__(
         self,
-        dataset: Dataset[T],
+        dataset: BaseDataset[T],
         path: str,
         verbose: bool = False,
         *args: Any,
@@ -191,7 +192,7 @@ class VersionAssigner(Modifier):
         return meta
 
 
-def version(ds: Dataset[T], path: str) -> str:
+def version(ds: BaseDataset[T], path: str) -> str:
     """
     Returns version of a dataset using VersionAssigner
 

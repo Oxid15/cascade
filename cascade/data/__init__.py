@@ -30,10 +30,12 @@ from .dataset import (
     Wrapper,
 )
 from .folder_dataset import FolderDataset
+from .functions import dataset, modifier
 from .pickler import Pickler
 from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
 from .sequential_cacher import SequentialCacher
 from .simple_dataloader import SimpleDataloader
 from .utils import split
+from .validation import ValidationError, validate_in
 from .version_assigner import VersionAssigner, version

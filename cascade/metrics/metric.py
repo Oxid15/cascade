@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, Literal, SupportsFloat, Tuple, Optional
+from typing import Any, Dict, Literal, Optional, SupportsFloat, Tuple
 
 import pendulum
 
@@ -39,7 +39,7 @@ class Metric:
         split: Optional[str] = None,
         direction: Optional[Literal["up", "down"]] = None,
         interval: Optional[Tuple[MetricType, MetricType]] = None,
-        extra: Optional[Dict[str, MetricType]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> None:
         """
         Creates Metric
@@ -58,7 +58,7 @@ class Metric:
             Is metric better when it is greater or less, by default None
         interval : Optional[Tuple[MetricType, MetricType]]
             Upper and lower boundaries of value, by default None
-        extra : Optional[Dict[str, MetricType]]
+        extra : Optional[Dict[str, Any]]
             Extra values that needs to be stored with metric, by default None
         """
         self.name = name

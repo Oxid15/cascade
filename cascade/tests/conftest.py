@@ -28,7 +28,7 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import (ApplyModifier, BruteforceCacher, Composer,
-                          Concatenator, CyclicSampler, Dataset, Iterator,
+                          Concatenator, CyclicSampler, BaseDataset, IteratorWrapper,
                           RandomSampler, RangeSampler, SequentialCacher,
                           Wrapper)
 from cascade.models import BasicModel, ModelLine, ModelRepo
@@ -77,7 +77,7 @@ def tmp_path_str(tmp_path) -> str:
 
 @pytest.fixture(
     params=[
-        Iterator([0]),
+        IteratorWrapper([0]),
         Wrapper([0]),
         ApplyModifier(Wrapper([0, 1, 2]), f),
         BruteforceCacher(Wrapper([0, 2])),
@@ -89,7 +89,7 @@ def tmp_path_str(tmp_path) -> str:
         SequentialCacher(Wrapper([0, 1, 2, 3])),
     ]
 )
-def dataset(request) -> Dataset:
+def dataset(request) -> BaseDataset:
     return request.param
 
 
@@ -104,7 +104,7 @@ def number_dataset(request):
     params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(100, 0)]]
 )
 def number_iterator(request):
-    return Iterator(request.param)
+    return IteratorWrapper(request.param)
 
 
 @pytest.fixture(

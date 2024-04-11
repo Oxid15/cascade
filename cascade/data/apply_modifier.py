@@ -16,20 +16,17 @@ limitations under the License.
 
 from typing import Any, Callable
 
-from .dataset import Modifier, SizedDataset, T
+from .dataset import Dataset, T
+from .modifier import Modifier
 
 
-class ApplyModifier(Modifier):
+class ApplyModifier(Modifier[T]):
     """
-    Modifier that maps a function to given dataset's items in a lazy way.
+    Modifier that applies a function to given dataset's items in each __getitem__ call
     """
 
     def __init__(
-        self,
-        dataset: SizedDataset[T],
-        func: Callable[[T], Any],
-        *args: Any,
-        **kwargs: Any
+        self, dataset: Dataset[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
     ) -> None:
         """
         Parameters
@@ -56,3 +53,7 @@ class ApplyModifier(Modifier):
     def __getitem__(self, index: int) -> Any:
         item = self._dataset[index]
         return self._func(item)
+
+    # def __iter__(self):
+    #     for item in self._dataset:
+    #         yield self._func(item)
