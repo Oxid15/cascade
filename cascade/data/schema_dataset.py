@@ -1,17 +1,17 @@
 from typing import Any, Optional
 
-from .dataset import BaseDataset
+from .dataset import Dataset
 from .modifier import Modifier
 from .validation import SchemaValidator
 
 
-class SchemaDataset(BaseDataset):
+class SchemaDataset(Dataset):
     in_schema: Optional[Any] = None
 
     def get_meta(self):
         meta = super().get_meta()
         if self.in_schema:
-            meta[0]["is_schema"] = self.in_schema.model_json_schema()
+            meta[0]["in_schema"] = self.in_schema.model_json_schema()
         return meta
 
 
@@ -24,7 +24,7 @@ class SchemaModifier(SchemaDataset, Modifier):
 
 class ValidationWrapper(Modifier):
     def __init__(
-        self, dataset: BaseDataset, schema: Any, *args: Any, **kwargs: Any
+        self, dataset: Dataset, schema: Any, *args: Any, **kwargs: Any
     ) -> None:
         self.validator = SchemaValidator(schema)
         super().__init__(dataset, *args, **kwargs)
