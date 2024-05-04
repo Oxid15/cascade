@@ -58,7 +58,7 @@ def test_lists():
     def sum_list(a: List[float]):
         return sum(a)
 
-    validate_in(sum_list)([1.2, 3.4, 5.])
+    validate_in(sum_list)([1.2, 3.4, 5.0])
 
     with pytest.raises(ValidationError):
         validate_in(sum_list)(None)
@@ -99,16 +99,20 @@ def test_pydantic_model():
     def identity(a: LargeModel):
         return a
 
-    validate_in(
-        identity)(dict(
-            int_=0, float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
-        )
+    validate_in(identity)(
+        dict(int_=0, float_=0.0, str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.0})
     )
 
     with pytest.raises(ValidationError):
         validate_in(identity)(
             dict(
-                int_="err", float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
+                int_="err",
+                float_=0.0,
+                str_="a",
+                dict_=dict(),
+                list_=list(),
+                li=[0, 1],
+                ds={"a": 1.0},
             )
         )
 
@@ -121,3 +125,22 @@ def test_pydantic_field():
 
     with pytest.raises(ValidationError):
         validate_in(identity)(10000)
+
+
+def test_custom_types():
+    class MyType:
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+
+    def identity(a: MyType):
+        return a
+
+    validate_in(identity)(MyType(a=0, b=1))
+
+    # This will pass since this is a custom type
+    validate_in(identity)(MyType(a=None, b="lol"))
+
+    # This will fail since type is checked
+    with pytest.raises(ValidationError):
+        validate_in(identity)(None)

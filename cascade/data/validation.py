@@ -84,7 +84,9 @@ class SchemaFactory:
                     "Cannot import `pydantic` - it is optional dependency for general type checking"
                 ) from e
             else:
-                return create_model("pydantic_validator", **types)  # type: ignore
+                return create_model(
+                    "pydantic_validator", __config__=dict(arbitrary_types_allowed=True), **types
+                )  # type: ignore
 
 
 class TypesValidator(Validator):
