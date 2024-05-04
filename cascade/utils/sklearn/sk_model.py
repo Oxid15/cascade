@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import pickle
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional
 
 from sklearn.pipeline import Pipeline
 
@@ -37,8 +37,6 @@ class SkModel(BasicModel):
         """
         Parameters
         ----------
-        name: str, optional
-            Name of the model
         blocks: list, optional
             List of sklearn transformers to make a pipeline from
         """
