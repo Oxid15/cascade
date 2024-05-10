@@ -14,6 +14,7 @@ limitations under the License.
 from typing import Any, Callable, Dict, List, NoReturn, Union
 
 from tqdm import tqdm
+from typing_extensions import deprecated
 
 from ..data.dataset import BaseDataset, T
 from ..data.modifier import Modifier
@@ -37,6 +38,8 @@ class Validator(Modifier[T]):
     Base class for validators. Defines basic `__init__` structure
     """
 
+    @deprecated("Whole cascade.meta.validation is deprecated since 0.14.0 and is planned to"
+                " be removed in 0.15.0. Use cascade.data.SchemaDataset instead")
     def __init__(
         self,
         dataset: BaseDataset[T],
