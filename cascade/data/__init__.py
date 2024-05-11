@@ -33,7 +33,7 @@ from .modifier import BaseModifier, IteratorModifier, Modifier
 from .pickler import Pickler
 from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
-from .schema_dataset import SchemaDataset, SchemaModifier
+from .schema import SchemaModifier
 from .sequential_cacher import SequentialCacher
 from .simple_dataloader import SimpleDataloader
 from .utils import split
