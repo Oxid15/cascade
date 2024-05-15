@@ -29,7 +29,7 @@ from .dataset import (
 )
 from .folder_dataset import FolderDataset
 from .functions import dataset, modifier
-from .modifier import BaseModifier, IteratorModifier, Modifier
+from .modifier import BaseModifier, IteratorModifier, Modifier, Sampler
 from .pickler import Pickler
 from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
