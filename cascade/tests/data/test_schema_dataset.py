@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +27,18 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import Dataset, SchemaModifier, ValidationError
 
 
+class FiveIdenticalImages(Dataset):
+    def __getitem__(self, idx):
+        return AnnotImage(
+            image=[[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
+            segments=[[0, 1, 2], [0, 1, 2]],
+            bboxes=[(0, 0, 1, 1)],
+        )
+
+    def __len__(self):
+        return 5
+
+
 class AnnotImage(pydantic.BaseModel):
     image: List[List[List[float]]]
     segments: List[List[int]]
@@ -37,23 +49,13 @@ class ImagesDataset(SchemaModifier):
     in_schema = AnnotImage
 
 
-def test():
-    class FiveIdenticalImages(Dataset):
-        def __getitem__(self, idx):
-            return AnnotImage(
-                image=[[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
-                segments=[[0, 1, 2], [0, 1, 2]],
-                bboxes=[(0, 0, 1, 1)],
-            )
+class IDoNothing(ImagesDataset):
+    def __getitem__(self, idx):
+        item = self._dataset[idx]
+        return item
 
-        def __len__(self):
-            return 5
 
-    class IDoNothing(ImagesDataset):
-        def __getitem__(self, idx):
-            item = self._dataset[idx]
-            return item
-
+def test_wrapper():
     ds = FiveIdenticalImages()
     ds = IDoNothing(ds)
 
@@ -63,3 +65,34 @@ def test():
     assert "in_schema" in meta[0]
     assert isinstance(meta[0]["in_schema"], dict)
     assert meta[1]["name"].split(".")[-1] == "ValidationWrapper"
+
+
+def test_correct_schema():
+    ds = FiveIdenticalImages()
+    ds = IDoNothing(ds)
+    
+    item = ds[0]
+    assert isinstance(item.image, list)
+    assert isinstance(item.segments, list)
+    assert isinstance(item.bboxes, list)
+
+
+class BrokenImage(pydantic.BaseModel):
+    image: List[List[float]]
+    segments: List[str]
+
+
+class FiveBrokenImageDataset(Dataset):
+    def __getitem__(self, index: int):
+        return BrokenImage(image=[[0.]], segments=["lol"])
+
+    def __len__(self) -> int:
+        return 5
+
+
+def test_wrong_schema():
+    ds = FiveBrokenImageDataset()
+    ds = IDoNothing(ds)
+
+    with pytest.raises(ValidationError):
+        item = ds[0]
