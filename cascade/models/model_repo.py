@@ -313,7 +313,8 @@ class ModelRepo(Repo, TraceableOnDisk):
 
 @deprecated(
     "Concatenating Repos is deprecated since"
-    " 0.14.0 and will be removed by 0.15.0",
+    " 0.14.0 and will be removed by 0.15.0"
+    " Use Workspaces instead",
     category=DeprecationWarning,
     stacklevel=1
 )
