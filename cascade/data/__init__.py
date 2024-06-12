@@ -27,6 +27,7 @@ from .dataset import (
     SizedDataset,
     Wrapper,
 )
+from .filter import Filter, IteratorFilter
 from .folder_dataset import FolderDataset
 from .functions import dataset, modifier
 from .modifier import BaseModifier, IteratorModifier, Modifier, Sampler
