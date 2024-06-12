@@ -13,7 +13,7 @@ limitations under the License.
 
 import warnings
 from abc import abstractmethod
-from typing import Any, Generator, Generic, Iterable, Sequence, Sized, TypeVar
+from typing import Any, Generator, Generic, Iterable, Iterator, Sequence, Sized, TypeVar
 
 from ..base import PipeMeta, Traceable
 
@@ -54,6 +54,8 @@ class IteratorDataset(BaseDataset[T], Iterable[T]):
     An abstract class to represent a dataset as
     an iterable object
     """
+    def __iter__(self) -> Iterator[T]:
+        return super().__iter__()
 
 
 class Dataset(BaseDataset[T], Sized):

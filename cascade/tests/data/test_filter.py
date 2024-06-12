@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import random
 import sys
 
 import pytest
@@ -22,7 +23,7 @@ import pytest
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from cascade.data import Filter, Wrapper
+from cascade.data import Filter, IteratorDataset, IteratorFilter, Wrapper
 
 
 @pytest.mark.parametrize(
@@ -55,3 +56,28 @@ def test_runtime_error():
 
     with pytest.raises(RuntimeError):
         ds = Filter(ds, two_is_bad)
+
+
+def test_iter():
+    class RandomDataStream(IteratorDataset):
+        def __next__(self):
+            if random.random() < 0.2:
+                raise StopIteration()
+            else:
+                return random.randint(0, 255)
+
+    ds = RandomDataStream()
+    ds = IteratorFilter(ds, lambda x: x < 127)
+
+    assert all([item < 127 for item in ds])
+
+
+def test_empty_iter():
+    class EmptyStream(IteratorDataset):
+        def __next__(self):
+            raise StopIteration()
+
+    ds = EmptyStream()
+    ds = IteratorFilter(ds, lambda x: True)
+
+    assert [] == [item for item in ds]
