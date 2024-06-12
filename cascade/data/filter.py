@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable
+from typing import Any, Callable, Iterator
 
-from .dataset import Dataset
-from .modifier import Sampler
+from .dataset import Dataset, IteratorDataset
+from .modifier import IteratorModifier, Sampler
 
 
 class Filter(Sampler):
@@ -25,6 +25,7 @@ class Filter(Sampler):
     Filter for Datasets with length. Uses a function
     to create a mask of items that will remain
     """
+
     def __init__(self, dataset: Dataset, filter_fn: Callable, *args: Any, **kwargs: Any) -> None:
         """
         Filter a dataset using a filter function.
@@ -55,3 +56,26 @@ class Filter(Sampler):
 
     def __getitem__(self, index: Any):
         return self._dataset[self._mask[index]]
+
+
+class IteratorFilter(IteratorModifier):
+    """
+    Filter for datasets without length
+
+    Does not filter on init, returns only items that pass the filter
+    """
+    def __init__(
+        self, dataset: IteratorDataset, filter_fn: Callable, *args: Any, **kwargs: Any
+    ) -> None:
+        self._filter_fn = filter_fn
+        super().__init__(dataset, *args, **kwargs)
+
+    def __next__(self):
+        while True:
+            item = next(self._dataset)
+            try:
+                result = self._filter_fn(item)
+                if result:
+                    return item
+            except Exception as e:
+                raise RuntimeError("Error when filtering iterator") from e
