@@ -207,9 +207,18 @@ class BasicTrainer(Trainer):
         logger.info(
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"
         )
+        logger.info(f"repo was {self._repo}")
+        logger.info(f"line was {line_name}")
+        if start_from is not None:
+            logger.info(f"started from model {model_num}")
+        logger.info(f"training ended on {epoch} epoch")
+        logger.info(f"Parameters:\n{train_kwargs}")
+        logger.info("Metrics:")
+        for metric in model.metrics:
+                logger.info(metric)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
-        meta[0]["train_start_at"] = self.train_start_at
-        meta[0]["train_end_at"] = self.train_end_at
+        meta[0]["training_started_at"] = self.train_start_at
+        meta[0]["training_ended_at"] = self.train_end_at
         return meta
