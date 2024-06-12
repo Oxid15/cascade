@@ -20,11 +20,12 @@ import pandas as pd
 from tqdm import tqdm
 
 from ...base import PipeMeta
-from ...data import SizedDataset, Iterator, Modifier
+from ...data.dataset import Dataset, IteratorWrapper, T
+from ...data.modifier import Modifier
 from ...meta import AggregateValidator, DataValidationException
 
 
-class TableDataset(SizedDataset):
+class TableDataset(Dataset[T]):
     """
     Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
     validation.
@@ -127,7 +128,7 @@ class CSVDataset(TableDataset):
         super().__init__(t=t, **kwargs)
 
 
-class TableIterator(Iterator):
+class TableIterator(IteratorWrapper):
     """
     Iterates over the table from path by the chunks.
     """

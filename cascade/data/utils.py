@@ -17,12 +17,13 @@ limitations under the License.
 from math import floor
 from typing import Tuple, Optional
 
-from . import RangeSampler, SizedDataset, T
+from .dataset import Dataset, T
+from .range_sampler import RangeSampler
 
 
 def split(
-    ds: SizedDataset[T], frac: Optional[float] = 0.5, num: Optional[int] = None
-) -> Tuple[SizedDataset[T], SizedDataset[T]]:
+    ds: Dataset[T], frac: Optional[float] = 0.5, num: Optional[int] = None
+) -> Tuple[RangeSampler[T], RangeSampler[T]]:
     """
     Splits dataset into two cascade.data.RangeSampler`s
 

@@ -18,10 +18,10 @@ limitations under the License.
 from typing import Any, List, Tuple, Union
 
 from ..base import PipeMeta, Meta
-from . import SizedDataset
+from .dataset import Dataset, T
 
 
-class Composer(SizedDataset):
+class Composer(Dataset[T]):
     """
     Unifies two or more datasets element-wise.
 
@@ -35,7 +35,7 @@ class Composer(SizedDataset):
     """
 
     def __init__(
-        self, datasets: List[SizedDataset[Any]], *args: Any, **kwargs: Any
+        self, datasets: List[Dataset[Any]], *args: Any, **kwargs: Any
     ) -> None:
         """
         Parameters
@@ -50,7 +50,7 @@ class Composer(SizedDataset):
         # set the length of any dataset as the length of Composer
         self._len = len(self._datasets[0])
 
-    def _validate_input(self, datasets: List[SizedDataset[Any]]) -> None:
+    def _validate_input(self, datasets: List[Dataset[T]]) -> None:
         lengths = [len(ds) for ds in datasets]
         first = lengths[0]
         if not all([ln == first for ln in lengths]):
@@ -59,7 +59,7 @@ class Composer(SizedDataset):
                 f"Actual lengths: {lengths}"
             )
 
-    def __getitem__(self, index: int) -> Tuple[Any]:
+    def __getitem__(self, index: int) -> Tuple[T]:
         return tuple(ds[index] for ds in self._datasets)
 
     def __len__(self) -> int:

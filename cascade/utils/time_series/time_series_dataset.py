@@ -21,10 +21,10 @@ import numpy as np
 import pandas as pd
 
 from ...base import PipeMeta
-from ...data import Dataset
+from ...data.dataset import Dataset, T
 
 
-class TimeSeriesDataset(Dataset):
+class TimeSeriesDataset(Dataset[T]):
     """
     Dataset to simplify the work with time series.
     Manages the time and data. Reflects the list API
