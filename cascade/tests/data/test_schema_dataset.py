@@ -70,7 +70,7 @@ def test_wrapper():
 def test_correct_schema():
     ds = FiveIdenticalImages()
     ds = IDoNothing(ds)
-    
+
     item = ds[0]
     assert isinstance(item.image, list)
     assert isinstance(item.segments, list)
@@ -94,5 +94,6 @@ def test_wrong_schema():
     ds = FiveBrokenImageDataset()
     ds = IDoNothing(ds)
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValidationError) as e:
         item = ds[0]
+    assert e.value.error_index == 0

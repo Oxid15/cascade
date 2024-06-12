@@ -17,7 +17,7 @@ limitations under the License.
 import inspect
 from collections import defaultdict
 from functools import wraps
-from typing import Any, Callable, Dict, Literal, Tuple, Union
+from typing import Any, Callable, Dict, Literal, Optional, Tuple
 
 SupportedProviders = Literal["pydantic"]
 
@@ -25,7 +25,18 @@ TypeDict = Dict[str, Tuple[Any, Any]]
 
 
 class ValidationError(Exception):
-    pass
+    """
+    Base class to raise if data
+    validation failed
+
+    Can provide additional information about the fail
+    """
+    def __init__(self, message: Optional[str] = None, error_index: Optional[int] = None) -> None:
+        self.error_index = error_index
+
+        if message is not None and self.error_index is not None:
+            message = f"Error on index {self.error_index}: " + message
+        super().__init__(message)
 
 
 class ValidationProvider:
@@ -59,7 +70,7 @@ class PydanticValidator(ValidationProvider):
             try:
                 self._schema.model_validate(args[0])
             except self._exc_type as e:
-                raise ValidationError() from e
+                raise ValidationError("Validation failed, see traceback above") from e
         else:
             from_args = dict()
             for name, arg in zip(self._schema.model_fields, args):
