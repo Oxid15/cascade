@@ -58,31 +58,31 @@ Examples by entity
             :link: /examples/traceable.rst
             :link-type: ref
 
-            The basis of Cascade's objects
+            The basis of Cascade objects
 
     .. grid-item::
-        .. card:: Comments
+        .. card:: Comment
             :link: /examples/comments.rst
             :link-type: ref
 
             Sometimes you really need to express your thought at the moment
 
     .. grid-item::
-        .. card:: Tags
+        .. card:: Tag
             :link: /examples/tags.rst
             :link-type: ref
 
             It's about building your own system
 
     .. grid-item::
-        .. card:: Links
+        .. card:: Link
             :link: /examples/links.rst
             :link-type: ref
 
             To always know what data relates to an artifact at hand
 
     .. grid-item::
-        .. card:: Artifacts
+        .. card:: Artifact
             :link: /examples/artifacts.rst
             :link-type: ref
 
@@ -93,7 +93,7 @@ Examples by entity
             :link: /examples/model.rst
             :link-type: ref
 
-            Wrappers for artifacts
+            Self-sufficient wrappers for training and inference
 
     .. grid-item::
         .. card:: Validator
@@ -107,7 +107,7 @@ Examples by entity
             :link: /examples/viewer.rst
             :link-type: ref
 
-            Built in viewers for meta data
+            Built-in viewers for meta data
 
 Contents
 --------
