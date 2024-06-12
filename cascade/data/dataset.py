@@ -12,17 +12,10 @@ limitations under the License.
 """
 
 import warnings
-from typing import (
-    Any,
-    Generator,
-    Generic,
-    Iterable,
-    Sequence,
-    Sized,
-    TypeVar,
-)
+from abc import abstractmethod
+from typing import Any, Generator, Generic, Iterable, Sequence, Sized, TypeVar
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import PipeMeta, Traceable
 
 T = TypeVar("T", covariant=True)
 
@@ -39,11 +32,8 @@ class BaseDataset(Generic[T], Traceable):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: Any) -> T:
-        """
-        Abstract method - should be defined in every successor
-        """
-        raise_not_implemented("cascade.data.Dataset", "__getitem__")
+    @abstractmethod
+    def __getitem__(self, index: Any) -> T:...
 
     def get_meta(self) -> PipeMeta:
         """
@@ -80,8 +70,8 @@ class Dataset(BaseDataset[T], Sized):
     cascade.data.Iterator
     """
 
-    def __len__(self) -> int:
-        raise_not_implemented("cascade.data.Dataset", "__len__")
+    @abstractmethod
+    def __len__(self) -> int: ...
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()

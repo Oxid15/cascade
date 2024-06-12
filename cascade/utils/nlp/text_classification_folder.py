@@ -20,7 +20,7 @@ from typing import Any, Tuple
 import numpy as np
 
 from ...base import PipeMeta
-from ...data.dataset import Dataset
+from ...data.dataset import Dataset, T
 
 
 class TextClassificationFolder(Dataset[T]):

@@ -1,9 +1,27 @@
+"""
+Copyright 2022-2024 Ilia Moiseev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
 import inspect
 from collections import defaultdict
 from functools import wraps
-from typing import Any, Callable, Dict, Literal, Tuple
+from typing import Any, Callable, Dict, Literal, Tuple, Union
 
 SupportedProviders = Literal["pydantic"]
+
+TypeDict = Dict[str, Tuple[Any, Any]]
 
 
 class ValidationError(Exception):
@@ -11,57 +29,99 @@ class ValidationError(Exception):
 
 
 class ValidationProvider:
-    def __init__(self, types: Dict[str, Tuple[Any, Any]]) -> None:
-        self._types = types
+    def __init__(self, schema: Any) -> None:
+        self._schema = schema
 
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
         raise NotImplementedError()
 
 
 class PydanticValidator(ValidationProvider):
-    def __init__(self, types: Dict[str, Tuple[Any, Any]]) -> None:
-        super().__init__(types)
+    def __init__(self, schema: Any) -> None:
+        super().__init__(schema)
 
         try:
-            from pydantic import ValidationError, create_model
+            from pydantic import BaseModel, ValidationError
         except ImportError as e:
             raise ImportError(
                 "Cannot import `pydantic` - it is optional dependency for general type checking"
             ) from e
         else:
+            self._base_model_cls = BaseModel
             self._exc_type = ValidationError
-            self._model = create_model("pydantic_validator", **types)  # type: ignore
 
     def __call__(self, *args: Any, **kwargs: Any) -> None:
-        from_args = dict()
-        for name, arg in zip(self._types, args):
-            from_args[name] = arg
+        if (
+            len(args) == 1
+            and len(kwargs) == 0
+            and (isinstance(args[0], dict) or isinstance(args[0], self._base_model_cls))
+        ):
+            try:
+                self._schema.model_validate(args[0])
+            except self._exc_type as e:
+                raise ValidationError() from e
+        else:
+            from_args = dict()
+            for name, arg in zip(self._schema.model_fields, args):
+                from_args[name] = arg
 
-        try:
-            self._model(**from_args, **kwargs)
-        except self._exc_type as e:
-            raise ValidationError() from e
+            try:
+                self._schema(**from_args, **kwargs)
+            except self._exc_type as e:
+                raise ValidationError() from e
 
 
 class Validator:
-    def __init__(self, types: Dict[str, Tuple[Any, Any]]) -> None:
-        providers = {"pydantic": PydanticValidator}
+    providers = {"pydantic": PydanticValidator}
+    _validators = []
+
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
+        for validator in self._validators:
+            validator(*args, **kwargs)
+
+
+class SchemaValidator(Validator):
+    def __init__(self, schema: Any) -> None:
+        name = self._resolve_validator(schema)
+        self._validators.append(self.providers[name](schema))
+
+    def _resolve_validator(self, *args: Any, **kwargs: Any) -> SupportedProviders:
+        return "pydantic"
+
+
+class SchemaFactory:
+    @classmethod
+    def build(cls, types: TypeDict, provider: SupportedProviders) -> Any:
+        if provider == "pydantic":
+            try:
+                from pydantic import create_model
+            except ImportError as e:
+                raise ImportError(
+                    "Cannot import `pydantic` - it is optional dependency"
+                    " for general type checking"
+                    "\nYou can install it with `pip install 'pydantic==2.6.4'`"
+                ) from e
+            else:
+                return create_model(
+                    "pydantic_validator", __config__=dict(arbitrary_types_allowed=True), **types
+                )  # type: ignore
+
+
+class TypesValidator(Validator):
+    def __init__(self, types: TypeDict) -> None:
+        super().__init__()
         provider_to_args = defaultdict(dict)
         for name in types:
             provider = self._resolve_validator(types[name][0])
             provider_to_args[provider][name] = types[name]
 
-        self._validators = []
-        for name in provider_to_args:
-            validator = providers[name](provider_to_args[name])
+        for provider in provider_to_args:
+            schema = SchemaFactory.build(provider_to_args[provider], provider)
+            validator = self.providers[provider](schema)
             self._validators.append(validator)
 
     def _resolve_validator(self, type: Any) -> SupportedProviders:
         return "pydantic"
-
-    def __call__(self, *args: Any, **kwargs: Any) -> Any:
-        for validator in self._validators:
-            validator(*args, **kwargs)
 
 
 def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
@@ -92,7 +152,7 @@ def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
         )
         for key in sig.parameters
     }
-    v = Validator(args)
+    v = TypesValidator(args)
 
     @wraps(f)
     def wrapper(*args: Any, **kwargs: Any):
