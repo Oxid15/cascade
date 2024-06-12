@@ -43,3 +43,15 @@ def test_empty_filter():
 
     with pytest.raises(AssertionError):
         ds = Filter(ds, lambda x: x > 4)
+
+
+def test_runtime_error():
+    def two_is_bad(i):
+        if i == 2:
+            raise ValueError("No, 2 is bad!!!")
+        return True
+
+    ds = Wrapper([0, 1, 2, 3])
+
+    with pytest.raises(RuntimeError):
+        ds = Filter(ds, two_is_bad)
