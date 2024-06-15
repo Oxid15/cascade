@@ -24,6 +24,9 @@ class DataLine(DiskLine):
 
     def save(self, ds: Dataset) -> None:
         meta = ds.get_meta()
+        obj_type = meta[0].get("type")
+        if obj_type != "dataset":
+            raise ValueError(f"Can only save meta of type dataset into DataLine, got {obj_type}")
 
         if len(self._item_names) == 0:
             idx = 0

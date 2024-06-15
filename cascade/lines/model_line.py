@@ -150,6 +150,10 @@ class ModelLine(DiskLine):
             Flag, that indicates whether to save model's artifacts.
             If True saves only metadata
         """
+        meta = model.get_meta()
+        obj_type = meta[0].get("type")
+        if obj_type != "model":
+            raise ValueError(f"Can only save meta of type model into ModelLine, got {obj_type}")
 
         if len(self._item_names) == 0:
             idx = 0
@@ -173,7 +177,6 @@ class ModelLine(DiskLine):
             f.write(slug)
         self._slug2name_cache[slug] = folder_name
 
-        meta = model.get_meta()
         meta[0]["path"] = full_path
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
