@@ -2,8 +2,9 @@ import os
 from typing import Any, Type
 
 import pendulum
+from deepdiff import DeepDiff
 
-from ..base import MetaHandler, PipeMeta
+from ..base import MetaHandler, MetaIOError, PipeMeta
 from ..data.dataset import Dataset
 from .disk_line import DiskLine
 
@@ -22,10 +23,24 @@ class DataLine(DiskLine):
         raise NotImplementedError()
 
     def save(self, ds: Dataset) -> None:
+        meta = ds.get_meta()
+
         if len(self._item_names) == 0:
             idx = 0
         else:
             idx = int(max(self._item_names)) + 1
+
+            prev_folder_name = self._item_name_by_num(idx - 1)
+            prev_path = os.path.join(self._root, prev_folder_name)
+            if os.path.exists(prev_path):
+                try:
+                    prev_meta = MetaHandler.read_dir(prev_path)
+                except MetaIOError:
+                    pass
+                else:
+                    diff = DeepDiff(meta, prev_meta)
+                    if not diff:
+                        return
 
         # Should check just in case
         while True:
@@ -40,7 +55,6 @@ class DataLine(DiskLine):
 
         full_path = os.path.join(self._root, folder_name)
 
-        meta = ds.get_meta()
         meta[0]["path"] = full_path
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
 
