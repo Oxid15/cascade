@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
 import os
 from math import ceil
 from typing import Any, Dict, List
@@ -62,7 +61,11 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
         n_rows = max(2, ceil(len(c["message"]) / w_right))
         for row in range(n_rows):
             if row == 0:
-                table += comm_meta[i] if len(comm_meta[i]) <= left_limit else comm_meta[i][:left_limit - 3] + "..."
+                table += (
+                    comm_meta[i]
+                    if len(comm_meta[i]) <= left_limit
+                    else comm_meta[i][: left_limit - 3] + "..."
+                )
                 table += " " * (w_left - min(len(comm_meta[i]), left_limit) + between_cols)
             elif row == 1:
                 table += comm_date[i]
@@ -71,7 +74,7 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
                 table += " " * (w_left + between_cols)
 
             # Output comment's text by batches
-            table += c["message"][row * w_right: min((row + 1) * w_right, len(c["message"]))]
+            table += c["message"][row * w_right : min((row + 1) * w_right, len(c["message"]))]
         table += "\n\n"
     return table
 
@@ -161,7 +164,10 @@ def view_history(ctx, host, port, l, m, p):  # noqa: E741
             return
 
         from ..meta import HistoryViewer
-        HistoryViewer(container, last_lines=l, last_models=m, update_period_sec=p).serve(host=host, port=port)
+
+        HistoryViewer(container, last_lines=l, last_models=m, update_period_sec=p).serve(
+            host=host, port=port
+        )
 
 
 @view.command("metric")
@@ -184,6 +190,7 @@ def view_metric(ctx, host, port, p, i, x):
         return
 
     from ..meta import MetricViewer
+
     i = None if len(i) == 0 else list(i)
     x = None if len(x) == 0 else list(x)
     MetricViewer(container).serve(page_size=p, include=i, exclude=x, host=host, port=port)
@@ -195,6 +202,7 @@ def view_metric(ctx, host, port, p, i, x):
 @click.option("--port", type=int, default=8050)
 def view_diff(ctx, host, port):
     from ..meta import DiffViewer
+
     DiffViewer(ctx.obj["cwd"]).serve(host=host, port=port)
 
 
@@ -246,9 +254,7 @@ def comment_ls(ctx):
                 if "comments" in meta[0]:
                     comment_counter += len(meta[0]["comments"])
 
-        click.echo(
-            f"{comment_counter} comment{'s' if comment_counter != 1 else ''} inside total"
-        )
+        click.echo(f"{comment_counter} comment{'s' if comment_counter != 1 else ''} inside total")
 
 
 @comment.command("rm")
@@ -315,7 +321,7 @@ def tag_rm(ctx, t):
     MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
-@cli.command('migrate')
+@cli.command("migrate")
 @click.pass_context
 def migrate(ctx):
     """

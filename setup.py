@@ -20,7 +20,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/oxid15/cascade",
     project_urls={
-        "Documentation": "https://oxid15.github.io/cascade",
+        "Documentation": "https://oxid15.github.io/cascade/en/latest/index.html",
     },
     classifiers=[
         "Programming Language :: Python :: 3",

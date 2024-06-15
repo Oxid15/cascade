@@ -25,8 +25,8 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler, default_meta_format
-from cascade.models import BasicModel
-from cascade.tests.conftest import DummyModel, ModelLine
+from cascade.models import BasicModel, ModelLine, ModelRepo
+from cascade.tests.conftest import DummyModel
 
 
 @pytest.mark.parametrize("only_meta", [True, False])
@@ -184,3 +184,22 @@ def test_model_names(tmp_path_str):
     assert line.get_model_names() == ["00000", "00001", "00002"]
 
 # TODO: write test for restoring line from repo
+
+
+def test_line_comment(tmp_path_str):
+    line_dir = os.path.join(tmp_path_str, "line")
+    os.makedirs(line_dir, exist_ok=True)
+
+    line = ModelLine(line_dir)
+    line.comment("This comment should stay")
+    line.sync_meta()
+
+    # Recreate
+    line = ModelLine(line_dir)
+    meta = MetaHandler.read_dir(line_dir)
+    assert len(meta[0]["comments"]) > 0
+
+    # Recreate alternative
+    line = ModelRepo(tmp_path_str).add_line("line")
+    meta = MetaHandler.read_dir(line_dir)
+    assert len(meta[0]["comments"]) > 0
