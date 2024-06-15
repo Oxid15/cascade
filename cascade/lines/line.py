@@ -38,3 +38,6 @@ class Line(ABC):
 
     @abstractmethod
     def get_root(self) -> str: ...
+
+    def __repr__(self) -> str:
+        return f"Line of {len(self)} of {self._item_cls}"

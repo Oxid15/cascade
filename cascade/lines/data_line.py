@@ -51,9 +51,6 @@ class DataLine(DiskLine):
     def __getitem__(self, num: int) -> Any:
         raise NotImplementedError()
 
-    def __repr__(self) -> str:
-        return f"DataLine of {len(self)} versions of {self._item_cls}"
-
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
         meta[0].update({"type": "data_line"})
