@@ -15,7 +15,9 @@ limitations under the License.
 """
 
 import os
+import socket
 import traceback
+from getpass import getuser
 from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
@@ -262,6 +264,8 @@ class ModelLine(TraceableOnDisk):
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
         meta[0]["python_version"] = get_python_version()
+        meta[0]["user"] = getuser()
+        meta[0]["host"] = socket.gethostname()
 
         git_commit = get_latest_commit_hash()
         if git_commit is not None:
