@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import traceback
 import os
-from typing import Any, Literal, Type, Union, List, Dict, Optional
+import traceback
+from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
-from ..base.utils import generate_slug
-from .model import Model
+from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
+from ..base.utils import generate_slug, get_latest_commit_hash
 from ..version import __version__
+from .model import Model
 
 
 class ModelLine(TraceableOnDisk):
@@ -261,6 +261,11 @@ class ModelLine(TraceableOnDisk):
         meta[0]["path"] = full_path
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
+
+        git_commit = get_latest_commit_hash()
+        if git_commit is not None:
+            meta[0]["cwd"] = os.getcwd()
+            meta[0]["git_commit"] = git_commit
 
         model_tb = None
         try:

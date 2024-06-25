@@ -1,6 +1,8 @@
-from typing import Any, Dict, List, Tuple
 import os
 import re
+import subprocess
+from typing import Any, Dict, List, Tuple
+
 from coolname import generate
 
 
@@ -8,6 +10,14 @@ def generate_slug() -> str:
     words = generate(3)
     slug = "_".join(words)
     return slug
+
+
+def get_latest_commit_hash():
+    try:
+        result = subprocess.run(['git', 'rev-parse', 'HEAD'], capture_output=True, text=True)
+        return result.stdout.strip()
+    except Exception:
+        return None
 
 
 def parse_version(ver: str) -> Tuple[int, int, int]:
@@ -57,10 +67,10 @@ def migrate_repo_v0_13(path: str) -> None:
     path : str
         Path to the container to migrate
     """
-    from tqdm import tqdm
     from cascade.base import MetaHandler, MetaIOError
-    from cascade.models import ModelRepo, ModelLine, SingleLineRepo
     from cascade.metrics import Metric, MetricType
+    from cascade.models import ModelLine, ModelRepo, SingleLineRepo
+    from tqdm import tqdm
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):
