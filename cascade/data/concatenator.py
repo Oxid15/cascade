@@ -64,23 +64,13 @@ class Concatenator(Dataset[T]):
         """
         return sum([len(ds) for ds in self._datasets])
 
-    def __repr__(self) -> str:
-        """
-        Mentions joined datasets in its repr in form:
-        Concatenator of
-        Dataset1
-        Dataset2
-        ...
-        """
-        rp = super().__repr__()
-        return f"{rp} of\n" + "\n".join(repr(ds) for ds in self._datasets)
-
     def get_meta(self) -> PipeMeta:
         """
         Concatenator calls `get_meta()` of all its datasets
         """
         meta = super().get_meta()
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
+        meta[0]["num_concatenated"] = len(self._datasets)
         return meta
 
     def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
