@@ -144,6 +144,6 @@ def migrate_repo_v0_13(path: str) -> None:
     try:
         update_version(path, new_version)
     except MetaIOError as e:
-        print(f"Faile to update repo version: {e}")
+        print(f"Failed to update repo version: {e}")
 
     print("Done")
