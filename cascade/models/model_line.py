@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Literal, Optional, Type, Union
 import pendulum
 
 from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
-from ..base.utils import generate_slug, get_latest_commit_hash
+from ..base.utils import generate_slug, get_latest_commit_hash, get_python_version
 from ..version import __version__
 from .model import Model
 
@@ -261,6 +261,7 @@ class ModelLine(TraceableOnDisk):
         meta[0]["path"] = full_path
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
+        meta[0]["python_version"] = get_python_version()
 
         git_commit = get_latest_commit_hash()
         if git_commit is not None:

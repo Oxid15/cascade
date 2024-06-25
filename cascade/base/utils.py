@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+import sys
 from typing import Any, Dict, List, Tuple
 
 from coolname import generate
@@ -12,12 +13,17 @@ def generate_slug() -> str:
     return slug
 
 
-def get_latest_commit_hash():
+def get_latest_commit_hash() -> str:
     try:
         result = subprocess.run(['git', 'rev-parse', 'HEAD'], capture_output=True, text=True)
         return result.stdout.strip()
     except Exception:
         return None
+
+
+def get_python_version() -> str:
+    info = sys.version
+    return info
 
 
 def parse_version(ver: str) -> Tuple[int, int, int]:
