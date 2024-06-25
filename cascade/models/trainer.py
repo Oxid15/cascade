@@ -99,6 +99,7 @@ class BasicTrainer(Trainer):
         start_from: Optional[str] = None,
         eval_strategy: Optional[int] = None,
         save_strategy: Optional[int] = None,
+        save_meta_callback: bool = True,
     ) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
@@ -124,6 +125,9 @@ class BasicTrainer(Trainer):
             save_strategy: int, optional
                 Saving will take place every `save_strategy` epochs. Meta will be saved anyway.
                 If None - the strategy is 'save only meta'.
+            save_meta_callback: bool, optional
+                By default True - adds line.save(model, only_meta=True) as a callback
+                when model.log() is called
         """
 
         if train_kwargs is None:
@@ -156,7 +160,8 @@ class BasicTrainer(Trainer):
 
         # Since the model is created externally, we
         # need to register a callback manually
-        model.add_log_callback(line._save_only_meta)
+        if save_meta_callback:
+            model.add_log_callback(line._save_only_meta)
 
         start_time = pendulum.now()
         self.train_start_at = start_time
@@ -215,7 +220,7 @@ class BasicTrainer(Trainer):
         logger.info(f"Parameters:\n{train_kwargs}")
         logger.info("Metrics:")
         for metric in model.metrics:
-                logger.info(metric)
+            logger.info(metric)
 
     def get_meta(self) -> PipeMeta:
         meta = super().get_meta()
