@@ -52,10 +52,9 @@ class Trainer(Traceable):
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise_not_implemented("cascade.models.Trainer", "train")
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Dict[Any, Any]:
         meta = super().get_meta()
-        meta[0]["metrics"] = self.metrics
-        meta[0]["repo"] = self._repo.get_meta()
+        meta[0]["type"] = "trainer"
         return meta
 
 
@@ -152,6 +151,19 @@ class BasicTrainer(Trainer):
 
         self._repo.add_line(line_name, type(model))
         line = self._repo[line_name]
+
+        self.update_meta({
+            "epochs": epochs,
+            "eval_strategy": eval_strategy,
+            "save_strategy": save_strategy,
+        })
+        line.link(self)
+
+        if isinstance(train_data, BaseDataset):
+            line.link(train_data)
+
+        if isinstance(test_data, BaseDataset):
+            line.link(test_data)
 
         if start_from is not None:
             if len(line) == 0:
