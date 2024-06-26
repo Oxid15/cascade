@@ -23,7 +23,12 @@ from typing import Any, Dict, List, Literal, Optional, Type, Union
 import pendulum
 
 from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
-from ..base.utils import generate_slug, get_latest_commit_hash, get_python_version
+from ..base.utils import (
+    generate_slug,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+)
 from ..version import __version__
 from .model import Model
 
@@ -271,6 +276,10 @@ class ModelLine(TraceableOnDisk):
         if git_commit is not None:
             meta[0]["cwd"] = os.getcwd()
             meta[0]["git_commit"] = git_commit
+
+        git_uncommitted = get_uncommitted_changes()
+        if git_uncommitted is not None:
+            meta[0]["git_uncommitted_changes"] = git_uncommitted
 
         model_tb = None
         try:

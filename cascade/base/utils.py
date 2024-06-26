@@ -2,7 +2,7 @@ import os
 import re
 import subprocess
 import sys
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from coolname import generate
 
@@ -13,10 +13,21 @@ def generate_slug() -> str:
     return slug
 
 
-def get_latest_commit_hash() -> str:
+def get_latest_commit_hash() -> Optional[str]:
     try:
-        result = subprocess.run(['git', 'rev-parse', 'HEAD'], capture_output=True, text=True)
+        result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
         return result.stdout.strip()
+    except Exception:
+        return None
+
+
+def get_uncommitted_changes() -> Optional[List[str]]:
+    try:
+        result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        result = result.stdout.strip()
+        if result != "":
+            return result.split("\n ")
+        return None
     except Exception:
         return None
 
