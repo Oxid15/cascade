@@ -18,13 +18,12 @@ import os
 import sys
 from typing import NoReturn
 
-from cascade.models.trainer import BasicTrainer
-
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.base import MetaHandler
 from cascade.data import Wrapper
-from cascade.models import ModelRepo, Trainer
+from cascade.models import BasicTrainer, ModelRepo, Trainer
 from cascade.tests.conftest import DummyModel
 
 
@@ -63,6 +62,22 @@ def test_basic_trainer(tmp_path_str):
     assert len(repo) == 1
     assert len(repo["00000"]) == 5
     assert len(t.metrics) == 5
+
+    trainer_meta = t.get_meta()
+
+    assert trainer_meta[0]["epochs"] == 5
+    assert trainer_meta[0]["eval_strategy"] is None
+    assert trainer_meta[0]["save_strategy"] is None
+
+    line_meta = MetaHandler.read_dir(repo["00000"].get_root())
+    assert len(line_meta[0]["links"]) == 3
+    for link in line_meta[0]["links"]:
+        if link["meta"][0].get("type") == "trainer":
+            assert "epochs" in link["meta"][0]
+            assert "eval_strategy" in link["meta"][0]
+            assert "save_strategy" in link["meta"][0]
+        elif link["meta"][0].get("type") == "dataset":
+            assert link["meta"][0]["len"] == 5
 
 
 def test_error_handling(tmp_path_str):
