@@ -421,6 +421,9 @@ class TraceableOnDisk(Traceable):
 
         Then writes new meta on disk and updates its own meta
         syncronizing both states.
+
+        If meta consists of several blocks, it zips two lists
+        and update accordingly
         """
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
         # Object was created before -> update meta on disk
@@ -429,17 +432,18 @@ class TraceableOnDisk(Traceable):
             from . import MetaHandler
 
             try:
-                meta = MetaHandler.read_dir(self._root)[0]
+                meta = MetaHandler.read_dir(self._root)
             except MetaIOError as e:
                 warnings.warn(f"File reading error ignored: {e}")
 
-            self_meta = self.get_meta()[0]  # TODO: Use all blocks in meta?
-            for key in self_meta:
-                if key not in DO_NOT_UPDATE and self_meta[key]:
-                    meta[key] = self_meta[key]
+            self_meta = self.get_meta()
+            for self_block, block in zip(self_meta, meta):
+                for key in self_block:
+                    if key not in DO_NOT_UPDATE and self_block[key]:
+                        block[key] = self_block[key]
 
             try:
-                MetaHandler.write_dir(self._root, [meta])
+                MetaHandler.write_dir(self._root, meta)
             except MetaIOError as e:
                 warnings.warn(f"File writing error ignored: {e}")
 
