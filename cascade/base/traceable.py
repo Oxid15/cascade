@@ -162,32 +162,36 @@ class Traceable:
 
     def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
         """
-        Updates special fields from the given metadata
+        Overwrites special fields like description,
+        comments, tags and links from the given metadata
+
+        Updates meta_prefix too
 
         Parameters
         ----------
         meta : Union[PipeMeta, Meta]
         """
-        self.update_meta(meta)
 
         if not isinstance(meta, list):
             meta = [meta]
 
         if "description" in meta[0]:
             self.describe(meta[0]["description"])
+            del meta[0]["description"]
+
         if "comments" in meta[0]:
-            for comment in meta[0]["comments"]:
-                self.comments.append(
-                    Comment(**comment)
-                )
+            self.comments = [Comment(**comment) for comment in meta[0]["comments"]]
+            del meta[0]["comments"]
+
         if "tags" in meta[0]:
-            self.tag(meta[0]["tags"])
+            self.tags = set(meta[0]["tags"])
+            del meta[0]["tags"]
 
         if "links" in meta[0]:
-            for link in meta[0]["links"]:
-                self.links.append(
-                    Link(**link)
-                )
+            self.links = [Link(**link) for link in meta[0]["links"]]
+            del meta[0]["links"]
+
+        self.update_meta(meta)
 
     def __repr__(self) -> str:
         """
@@ -266,11 +270,7 @@ class Traceable:
     def comment(self, message: str) -> None:
         comment_id = str(int(self._find_latest_comment_id()) + 1)
         comment = Comment(
-            comment_id,
-            getuser(),
-            socket.gethostname(),
-            pendulum.now(tz="UTC"),
-            message
+            comment_id, getuser(), socket.gethostname(), pendulum.now(tz="UTC"), message
         )
 
         self.comments.append(comment)
@@ -287,12 +287,14 @@ class Traceable:
             return "0"
         return self.links[-1].id
 
-    def link(self,
-             obj: Optional["Traceable"] = None,
-             name: Optional[str] = None,
-             uri: Optional[str] = None,
-             meta: Optional[PipeMeta] = None,
-             include: bool = True) -> None:
+    def link(
+        self,
+        obj: Optional["Traceable"] = None,
+        name: Optional[str] = None,
+        uri: Optional[str] = None,
+        meta: Optional[PipeMeta] = None,
+        include: bool = True,
+    ) -> None:
         """
         Links another object to this object. Links can contain
         name, URI and meta of the object.
@@ -335,18 +337,18 @@ class Traceable:
                     meta = obj.get_meta()
                 else:
                     obj_meta = obj.get_meta()
-                    meta = [{
-                        "name": name,
-                        "type": obj_meta[0].get("type"),
-                        "description": obj_meta[0].get("description"),
-                        "tags": obj_meta[0].get("tags"),
-                        "comments": obj_meta[0].get("comments"),
-                    }]
+                    meta = [
+                        {
+                            "name": name,
+                            "type": obj_meta[0].get("type"),
+                            "description": obj_meta[0].get("description"),
+                            "tags": obj_meta[0].get("tags"),
+                            "comments": obj_meta[0].get("comments"),
+                        }
+                    ]
 
         link_id = str(int(self._find_latest_link_id()) + 1)
-        self.links.append(
-            Link(link_id, name, uri, meta, pendulum.now(tz="UTC"))
-        )
+        self.links.append(Link(link_id, name, uri, meta, pendulum.now(tz="UTC")))
 
     def remove_link(self, id: str) -> None:
         """
@@ -369,6 +371,7 @@ class TraceableOnDisk(Traceable):
     Common interface for Traceables that have
     their meta-data written on disk
     """
+
     def __init__(
         self,
         root: str,
@@ -409,13 +412,18 @@ class TraceableOnDisk(Traceable):
             _, ext = os.path.splitext(meta_paths[0])
             return ext
         else:
-            warnings.warn(
-                f"Multiple meta files found in {self._root}"
-            )
+            warnings.warn(f"Multiple meta files found in {self._root}")
 
     def sync_meta(self) -> None:
+        """
+        If meta was already written, updates every field
+        if the field in not None or empty except for creation time.
+
+        Then writes new meta on disk and updates its own meta
+        syncronizing both states.
+        """
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
-        # Object was created before -> update
+        # Object was created before -> update meta on disk
         if len(meta_path) > 0:
             meta = {}
             from . import MetaHandler
@@ -461,5 +469,6 @@ class TraceableOnDisk(Traceable):
 
     def load_meta(self):
         from . import MetaHandler
+
         meta = MetaHandler.read_dir(self._root)
         return meta
