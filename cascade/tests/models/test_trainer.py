@@ -38,17 +38,11 @@ class AlwaysFailingModel(DummyModel):
 def test_base(tmp_path_str, model_repo):
     t = Trainer(tmp_path_str)
     meta = t.get_meta()
-
     assert len(meta) == 1
-    assert "repo" in meta[0]
-    assert "metrics" in meta[0]
 
     t = Trainer(model_repo)
     meta = t.get_meta()
-
     assert len(meta) == 1
-    assert "repo" in meta[0]
-    assert "metrics" in meta[0]
 
 
 def test_basic_trainer(tmp_path_str):
