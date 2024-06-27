@@ -20,7 +20,7 @@ from typing import Any, List, Optional, Union
 
 from sklearn.pipeline import Pipeline
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...models import BasicModel
 
 
@@ -133,7 +133,7 @@ class SkModel(BasicModel):
         with open(pipeline_path, "rb") as f:
             self._pipeline = pickle.load(f, *args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({"pipeline": repr(self._pipeline)})
         return meta

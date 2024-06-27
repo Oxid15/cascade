@@ -18,7 +18,7 @@ import os
 import warnings
 from typing import Any, Generator, List, Literal, Optional
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
+from ..base import Meta, MetaHandler, MetaIOError, TraceableOnDisk
 from ..models import ModelRepo
 
 
@@ -67,7 +67,7 @@ class Workspace(TraceableOnDisk):
         for repo in self._repo_names:
             yield self.__getitem__(repo)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["root"] = self._root
         meta[0]["len"] = len(self)
@@ -95,7 +95,7 @@ class Workspace(TraceableOnDisk):
     def reload(self) -> None:
         pass
 
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_model_meta(self, model: str) -> Meta:
         """
         Loads metadata of a model from disk
 
@@ -106,7 +106,7 @@ class Workspace(TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises

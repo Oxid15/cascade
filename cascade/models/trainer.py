@@ -19,7 +19,7 @@ from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 import pendulum
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import Meta, Traceable, raise_not_implemented
 from ..data import BaseDataset
 from ..models import Model, ModelLine, ModelRepo
 
@@ -235,7 +235,7 @@ class BasicTrainer(Trainer):
         for metric in model.metrics:
             logger.info(metric)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["training_started_at"] = self.train_start_at
         meta[0]["training_ended_at"] = self.train_end_at

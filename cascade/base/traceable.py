@@ -25,7 +25,7 @@ from typing import Any, Dict, Iterable, Literal, Optional, Union
 
 import pendulum
 
-from . import Meta, MetaIOError, PipeMeta, default_meta_format, supported_meta_formats
+from . import Meta, MetaIOError, default_meta_format, supported_meta_formats
 
 DO_NOT_UPDATE = ["created_at"]
 
@@ -44,7 +44,7 @@ class Link:
     id: str
     name: Optional[str]
     uri: Optional[str]
-    meta: Optional[PipeMeta]
+    meta: Optional[Meta]
     created_at: datetime
 
     def __post_init__(self) -> None:
@@ -87,18 +87,18 @@ class Traceable:
         self.comments = list()
         self.links = list()
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Returns
         -------
-        meta: PipeMeta
+        meta: Meta
             A list where first element is this object's metadata.
             All other elements represent the other stages of pipeline if present.
 
             Meta can be anything that is worth to document about
             the object and its properties.
 
-            Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
+            Meta is a list (see Meta type alias) to allow the formation of pipelines.
         """
         meta = {"name": repr(self)}
         if hasattr(self, "_meta_prefix"):
@@ -122,14 +122,14 @@ class Traceable:
 
         return [meta]
 
-    def update_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def update_meta(self, meta: Meta) -> None:
         """
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
             The object to update with
 
         Raises
@@ -160,7 +160,7 @@ class Traceable:
             "called somewhere"
         )
 
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def from_meta(self, meta: Meta) -> None:
         """
         Overwrites special fields like description,
         comments, tags and links from the given metadata
@@ -169,7 +169,7 @@ class Traceable:
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
         """
 
         if not isinstance(meta, list):
@@ -292,7 +292,7 @@ class Traceable:
         obj: Optional["Traceable"] = None,
         name: Optional[str] = None,
         uri: Optional[str] = None,
-        meta: Optional[PipeMeta] = None,
+        meta: Optional[Meta] = None,
         include: bool = True,
     ) -> None:
         """
@@ -324,7 +324,7 @@ class Traceable:
             Name of the object, overrides obj name if passed, by default None
         uri : Optional[str]
             URI of the object, by default None
-        meta : Optional[PipeMeta]
+        meta : Optional[Meta]
             Meta of the object, overrides obj meta if passed, by default None
         include : bool, default is True
             Whether to include full meta of the object, by default True
@@ -466,7 +466,7 @@ class TraceableOnDisk(Traceable):
     def get_root(self) -> str:
         return self._root
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["updated_at"] = str(pendulum.now(tz="UTC"))
         return meta

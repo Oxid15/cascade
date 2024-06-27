@@ -18,7 +18,7 @@ from typing import Any, List, Union
 
 import numpy as np
 
-from ..base import Meta, PipeMeta
+from ..base import Meta
 from .dataset import Dataset, T
 
 
@@ -75,7 +75,7 @@ class Concatenator(Dataset[T]):
         rp = super().__repr__()
         return f"{rp} of\n" + "\n".join(repr(ds) for ds in self._datasets)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Concatenator calls `get_meta()` of all its datasets
         """
@@ -83,7 +83,7 @@ class Concatenator(Dataset[T]):
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
         return meta
 
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def from_meta(self, meta: Meta) -> None:
         """
         Updates its own fields as usual and
         if meta has `data` key then sequentially updates
@@ -91,7 +91,7 @@ class Concatenator(Dataset[T]):
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
             Meta of a single object or a pipeline
         """
 

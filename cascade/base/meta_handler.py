@@ -20,14 +20,14 @@ import json
 import os
 from dataclasses import asdict, is_dataclass
 from json import JSONEncoder
-from typing import Any, Dict, NoReturn, Optional, Optional
+from typing import Any, Dict, NoReturn, Optional
 
 import deepdiff
 import numpy as np
 import yaml
 
 from ..metrics import Metric
-from . import MetaFromFile, MetaIOError, MultipleMetaError, ZeroMetaError
+from . import Meta, MetaIOError, MultipleMetaError, ZeroMetaError
 
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
@@ -100,7 +100,7 @@ class CustomEncoder(JSONEncoder):
 
 
 class BaseHandler:
-    def read(self, path: str) -> MetaFromFile:
+    def read(self, path: str) -> Meta:
         raise NotImplementedError()
 
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
@@ -119,7 +119,7 @@ class BaseHandler:
 
 
 class JSONHandler(BaseHandler):
-    def read(self, path: str) -> MetaFromFile:
+    def read(self, path: str) -> Meta:
         _, ext = os.path.splitext(path)
         if ext == "":
             path += ".json"
@@ -142,7 +142,7 @@ class JSONHandler(BaseHandler):
 
 
 class YAMLHandler(BaseHandler):
-    def read(self, path: str) -> MetaFromFile:
+    def read(self, path: str) -> Meta:
         _, ext = os.path.splitext(path)
         if ext == "":
             path += ".yml"
@@ -204,7 +204,7 @@ class MetaHandler:
     """
 
     @classmethod
-    def read(cls, path: str) -> MetaFromFile:
+    def read(cls, path: str) -> Meta:
         """
         Reads object from path.
 
@@ -215,7 +215,7 @@ class MetaHandler:
 
         Returns
         -------
-            obj: MetaFromFile
+            obj: Meta
 
         Raises
         ------
@@ -264,7 +264,7 @@ class MetaHandler:
         cls,
         path: str,
         meta_template: str = "meta.*"
-    ) -> MetaFromFile:
+    ) -> Meta:
         """
         Reads a single meta file from a given directory
 
@@ -277,7 +277,7 @@ class MetaHandler:
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Meta
 
         Raises

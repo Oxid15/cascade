@@ -16,7 +16,7 @@ import os
 import shutil
 from typing import Any, Dict, Generator, Iterable, List, Literal, Optional, Type, Union
 
-from ..base import MetaFromFile, PipeMeta, Traceable, TraceableOnDisk
+from ..base import Meta, Traceable, TraceableOnDisk
 from ..version import __version__
 from .model import Model
 from .model_line import ModelLine
@@ -56,7 +56,7 @@ class Repo(Traceable):
         for line in self._lines:
             yield self.__getitem__(line)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -270,7 +270,7 @@ class ModelRepo(Repo, TraceableOnDisk):
     def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_model_meta(self, model: str) -> Meta:
         """
         Loads metadata of a model from disk
 
@@ -281,7 +281,7 @@ class ModelRepo(Repo, TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises

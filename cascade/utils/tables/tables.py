@@ -19,7 +19,7 @@ from typing import Any, Callable, List, Literal, Tuple, Union
 import pandas as pd
 from tqdm import tqdm
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...data.dataset import Dataset, IteratorWrapper, T
 from ...data.modifier import Modifier
 from ...meta import AggregateValidator, DataValidationException
@@ -68,7 +68,7 @@ class TableDataset(Dataset[T]):
         """
         return len(self._table)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -304,7 +304,7 @@ class FeatureTable(TableDataset):
         self._computed_features_args[name] = args
         self._computed_features_kwargs[name] = kwargs
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["computed_columns"] = list(self._computed_features.keys())
         meta[0]["computed_functions"] = {

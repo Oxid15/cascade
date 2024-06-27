@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any, Callable, List, Union
 
-from ..base import PipeMeta
+from ..base import Meta
 from .dataset import BaseDataset
 from .validation import validate_in
 
@@ -29,7 +29,7 @@ class FunctionDataset(BaseDataset):
         self._f_name = f.__name__
         super().__init__(*args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["f"] = self._f_name
         return meta
@@ -50,7 +50,7 @@ class FunctionModifier(FunctionDataset):
         self._datasets = datasets
         super().__init__(*converted_args, f=f, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         if len(self._datasets) == 1:
             meta += self._datasets[0].get_meta()
