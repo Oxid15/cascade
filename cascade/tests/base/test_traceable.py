@@ -182,6 +182,29 @@ def test_on_disk_recreate_links(tmp_path_str):
     assert meta[0]["links"] == new_meta[0]["links"]
 
 
+def test_sync_idempotency(tmp_path_str):
+    trd = TraceableOnDisk(tmp_path_str, ".json")
+    tr = Traceable()
+
+    trd.update_meta({"hello": "everyone"})
+    trd.describe("description")
+    trd.tag(["tags", "are", "cool"])
+    trd.comment("Testing that nothing will duplicate after sync")
+    trd.link(tr)
+
+    # Sync two times
+    trd.sync_meta()
+    trd.sync_meta()
+
+    meta = trd.get_meta()
+
+    assert meta[0]["hello"] == "everyone"
+    assert meta[0]["description"] == "description"
+    assert set(meta[0]["tags"]) == {"tags", "are", "cool"}
+    assert len(meta[0]["comments"]) == 1
+    assert len(meta[0]["links"]) == 1
+
+
 def test_default_meta_fmt(tmp_path_str):
     trd = TraceableOnDisk(tmp_path_str, meta_fmt=None)
     trd.sync_meta()
