@@ -20,6 +20,7 @@ from typing import Any, Dict, Iterable, Optional, Tuple, Union
 import pendulum
 
 from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..data import BaseDataset
 from ..models import Model, ModelLine, ModelRepo
 
 logger = logging.getLogger(__name__)
