@@ -17,14 +17,17 @@ limitations under the License.
 import json
 import os
 from typing import Any, Dict
+
 import pendulum
-from . import MetaIOError
-from .meta_handler import MetaHandler, CustomEncoder
-from ..version import __version__
-
 from deepdiff import DeepDiff, Delta
+from typing_extensions import deprecated
+
+from ..version import __version__
+from . import MetaIOError
+from .meta_handler import CustomEncoder, MetaHandler
 
 
+@deprecated("This is deprecated and will be removed in 0.15.0")
 class HistoryHandler:
     """
     An interface to log meta into history files
