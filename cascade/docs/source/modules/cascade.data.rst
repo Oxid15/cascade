@@ -126,15 +126,6 @@ cascade.data
 
 | 
 
-.. autoclass:: cascade.data.SequentialCacher
-    :members:
-
-|
-
-|
-
-| 
-
 .. autofunction:: cascade.data.split
 
 
