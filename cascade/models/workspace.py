@@ -36,6 +36,7 @@ class Workspace(TraceableOnDisk):
         self._default = default_repo
 
         abs_root = os.path.abspath(self._root)
+        os.makedirs(abs_root, exist_ok=True)
         dirs = sorted(
             [
                 name
