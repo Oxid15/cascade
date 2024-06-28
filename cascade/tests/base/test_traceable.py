@@ -23,8 +23,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import (MetaHandler, Traceable, TraceableOnDisk,
-                          default_meta_format)
+from cascade.base import MetaHandler, Traceable, TraceableOnDisk, default_meta_format
 
 
 def test_meta():
@@ -166,6 +165,46 @@ def test_on_disk_recreate_tags(tmp_path_str, ext):
     assert meta[0]["tags"] == new_meta[0]["tags"]
 
 
+def test_on_disk_recreate_links(tmp_path_str):
+    trd = TraceableOnDisk(tmp_path_str, ".json")
+    tr = Traceable()
+    trd.link(tr)
+    trd.sync_meta()
+
+    meta = MetaHandler.read_dir(tmp_path_str)
+
+    # Recreate empty and sync again
+    trd = TraceableOnDisk(tmp_path_str, ".json")
+    trd.sync_meta()
+
+    new_meta = MetaHandler.read_dir(tmp_path_str)
+
+    assert meta[0]["links"] == new_meta[0]["links"]
+
+
+def test_sync_idempotency(tmp_path_str):
+    trd = TraceableOnDisk(tmp_path_str, ".json")
+    tr = Traceable()
+
+    trd.update_meta({"hello": "everyone"})
+    trd.describe("description")
+    trd.tag(["tags", "are", "cool"])
+    trd.comment("Testing that nothing will duplicate after sync")
+    trd.link(tr)
+
+    # Sync two times
+    trd.sync_meta()
+    trd.sync_meta()
+
+    meta = trd.get_meta()
+
+    assert meta[0]["hello"] == "everyone"
+    assert meta[0]["description"] == "description"
+    assert set(meta[0]["tags"]) == {"tags", "are", "cool"}
+    assert len(meta[0]["comments"]) == 1
+    assert len(meta[0]["links"]) == 1
+
+
 def test_default_meta_fmt(tmp_path_str):
     trd = TraceableOnDisk(tmp_path_str, meta_fmt=None)
     trd.sync_meta()
@@ -264,6 +303,9 @@ def test_from_meta():
     tr.comment("lol")
     tr.comment("kek")
 
+    another_tr = Traceable()
+    tr.link(another_tr)
+
     meta = tr.get_meta()
 
     tr = Traceable()
@@ -273,3 +315,5 @@ def test_from_meta():
     assert tr.tags == set(["tag"])
     assert tr.description == "description"
     assert [c.message for c in tr.comments] == ["lol", "kek"]
+    assert len(tr.links) == 1
+    assert tr.links[0].meta == another_tr.get_meta()

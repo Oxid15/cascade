@@ -15,12 +15,12 @@ limitations under the License.
 """
 
 from datetime import datetime
-from typing import Any, Iterable, Tuple, Optional, Union
+from typing import Any, Iterable, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...data.dataset import Dataset, T
 
 
@@ -168,7 +168,7 @@ class TimeSeriesDataset(Dataset[T]):
     def __len__(self) -> int:
         return len(self._num_idx)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {

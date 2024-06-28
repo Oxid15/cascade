@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import traceback
 import os
-from typing import Any, Literal, Type, Union, List, Dict, Optional
+import traceback
+from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
+from ..base import Meta, MetaHandler, TraceableOnDisk
 from ..base.utils import generate_slug
-from .model import Model
 from ..version import __version__
+from .model import Model
 
 
 class ModelLine(TraceableOnDisk):
@@ -128,7 +128,7 @@ class ModelLine(TraceableOnDisk):
     def _model_name_by_num(self, num: int):
         return f"{num:0>5d}"
 
-    def _read_meta_by_name(self, name: str) -> MetaFromFile:
+    def _read_meta_by_name(self, name: str) -> Meta:
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
@@ -160,7 +160,7 @@ class ModelLine(TraceableOnDisk):
             )
         return name
 
-    def load_model_meta(self, model: Union[str, int]) -> MetaFromFile:
+    def load_model_meta(self, model: Union[str, int]) -> Meta:
         """
         Loads metadata of a model from disk
 
@@ -171,7 +171,7 @@ class ModelLine(TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -297,7 +297,7 @@ class ModelLine(TraceableOnDisk):
     def __repr__(self) -> str:
         return f"ModelLine of {len(self)} models of {self._model_cls}"
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {

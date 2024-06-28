@@ -15,7 +15,7 @@ import warnings
 from abc import abstractmethod
 from typing import Any, Generator, Generic, Iterable, Iterator, Sequence, Sized, TypeVar
 
-from ..base import PipeMeta, Traceable
+from ..base import Meta, Traceable
 
 T = TypeVar("T", covariant=True)
 
@@ -35,11 +35,11 @@ class BaseDataset(Generic[T], Traceable):
     @abstractmethod
     def __getitem__(self, index: Any) -> T:...
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Returns
         -------
-        meta: PipeMeta
+        meta: Meta
             A list where last element is this dataset's metadata.
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
@@ -75,7 +75,7 @@ class Dataset(BaseDataset[T], Sized):
     @abstractmethod
     def __len__(self) -> int: ...
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["len"] = len(self)
         return meta
@@ -94,7 +94,7 @@ class IteratorWrapper(BaseDataset[T]):
         for item in self._data:
             yield item
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))
         return meta
@@ -115,7 +115,7 @@ class Wrapper(Dataset):
     def __len__(self) -> int:
         return len(self._data)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))
         return meta
