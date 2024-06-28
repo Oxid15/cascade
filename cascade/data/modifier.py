@@ -1,7 +1,7 @@
 from typing import Any, Iterator, Union
 
-from ..base import PipeMeta, Meta
-from .dataset import BaseDataset, T, Dataset, IteratorDataset
+from ..base import Meta
+from .dataset import BaseDataset, Dataset, IteratorDataset, T
 
 
 class BaseModifier(BaseDataset[T]):
@@ -18,7 +18,7 @@ class BaseModifier(BaseDataset[T]):
         self._dataset = dataset
         super().__init__(*args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Overrides base method enabling cascade-like calls to previous datasets.
         The metadata of a pipeline that consist of several modifiers can be easily
@@ -28,7 +28,7 @@ class BaseModifier(BaseDataset[T]):
         self_meta += self._dataset.get_meta()
         return self_meta
 
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def from_meta(self, meta: Meta) -> None:
         """
         Calls the same method as base class but does
         it cascade-like which allows to
@@ -36,7 +36,7 @@ class BaseModifier(BaseDataset[T]):
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
             Meta of a single object or a pipeline
         """
         if isinstance(meta, list):
@@ -63,7 +63,7 @@ class IteratorModifier(BaseModifier[T], IteratorDataset[T]):
     def __iter__(self) -> Iterator[T]:
         return self._dataset.__iter__()
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Overrides base method enabling cascade-like calls to previous datasets.
         The metadata of a pipeline that consist of several modifiers can be easily
@@ -96,7 +96,7 @@ class Modifier(BaseModifier[T]):
     def __len__(self) -> int:
         return len(self._dataset)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["len"] = len(self)
         return meta

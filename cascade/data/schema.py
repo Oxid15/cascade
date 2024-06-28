@@ -18,7 +18,7 @@ from typing import Any, Optional
 
 from .dataset import Dataset
 from .modifier import Modifier
-from .validation import SchemaValidator
+from .validation import SchemaValidator, ValidationError
 
 
 class SchemaModifier(Modifier):
@@ -74,12 +74,14 @@ class SchemaModifier(Modifier):
     will be raised.
 
     """
+
     in_schema: Optional[Any] = None
 
     def __getattribute__(self, __name: str) -> Any:
         if __name == "_dataset" and self.in_schema is not None:
             return ValidationWrapper(super().__getattribute__(__name), self.in_schema)
         if __name == "get_meta":
+
             def get_meta(self):
                 meta = super().get_meta()
                 if self.in_schema:
@@ -92,13 +94,17 @@ class SchemaModifier(Modifier):
 
 
 class ValidationWrapper(Modifier):
-    def __init__(
-        self, dataset: Dataset, schema: Any, *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, dataset: Dataset, schema: Any, *args: Any, **kwargs: Any) -> None:
         self.validator = SchemaValidator(schema)
         super().__init__(dataset, *args, **kwargs)
 
     def __getitem__(self, index: Any):
         item = super().__getitem__(index)
-        self.validator(item)
+        try:
+            self.validator(item)
+        except ValidationError as e:
+            raise ValidationError(
+                f"Got incorrect input data from {self._dataset}",
+                error_index=index
+            ) from e
         return item

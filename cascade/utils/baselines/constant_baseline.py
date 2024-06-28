@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any, List
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...models import BasicModel
 
 
@@ -41,7 +41,7 @@ class ConstantBaseline(BasicModel):
         """
         return [self._constant for _ in range(len(x))]
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["constant"] = self._constant
         return meta

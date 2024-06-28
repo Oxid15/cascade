@@ -17,7 +17,7 @@ limitations under the License.
 
 from typing import Any, List, Tuple, Union
 
-from ..base import PipeMeta, Meta
+from ..base import Meta
 from .dataset import Dataset, T
 
 
@@ -65,7 +65,7 @@ class Composer(Dataset[T]):
     def __len__(self) -> int:
         return self._len
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Composer calls `get_meta()` of all its datasets
         """
@@ -73,7 +73,7 @@ class Composer(Dataset[T]):
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
         return meta
 
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def from_meta(self, meta: Meta) -> None:
         """
         Updates its own fields as usual and
         if meta has `data` key then sequentially updates
@@ -81,7 +81,7 @@ class Composer(Dataset[T]):
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
             Meta of a single object or a pipeline
         """
 
