@@ -51,9 +51,16 @@ class Average(TimeSeriesDataset, Modifier):
             `unit='months'` and `amount=6`.
         """
         time, data = dataset.get_data()
-        reg_time = [
-            d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)
-        ]
+        try:
+            # This is pendulum 2.x
+            reg_time = [
+                d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)
+            ]
+        except AttributeError:
+            # If it doesn't work then try pendulum 3.x
+            reg_time = [
+                d for d in pendulum.interval(time[0], time[-1]).range(unit, amount=amount)
+            ]
 
         reg_data = self._avg(data, time, reg_time)
         assert len(reg_data) > 1, (
