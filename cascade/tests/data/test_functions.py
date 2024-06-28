@@ -25,27 +25,24 @@ from cascade.data.functions import FunctionDataset, FunctionModifier
 
 
 def test_dataset():
-    @dataset
     def read_data():
         return [0, 1, 2]
 
-    x = read_data()
+    x = dataset(read_data)()
 
     assert isinstance(x, FunctionDataset)
     assert x.result == [0, 1, 2]
 
 
 def test_modifier():
-    @dataset
     def read_data():
         return [0, 1, 2]
 
-    @modifier
     def square(x):
         return [i**2 for i in x]
 
-    x = read_data()
-    x = square(x)
+    x = dataset(read_data)()
+    x = modifier(square)(x)
 
     assert isinstance(x, FunctionModifier)
     assert x.result == [0, 1, 4]
@@ -54,16 +51,14 @@ def test_modifier():
 
 
 def test_multiple_inputs():
-    @dataset
     def read_data():
         return [0, 1, 2]
 
-    @modifier
     def sum_two(x, y):
         return [i + j for i, j in zip(x, y)]
 
-    x = read_data()
-    x = sum_two(x, x)
+    x = dataset(read_data)()
+    x = modifier(sum_two)(x, x)
 
     assert isinstance(x, FunctionModifier)
     assert x.result == [0, 2, 4]
