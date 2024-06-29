@@ -313,11 +313,17 @@ class ModelLine(TraceableOnDisk):
     def _save_only_meta(self, model: Model) -> None:
         self.save(model, only_meta=True)
 
-    def create_model(self, *args: Any, **kwargs: Any) -> Any:
+    def create_model(self, *args: Any, log_: bool = True, **kwargs: Any) -> Any:
         """
         Creates a model using the class given on
         creation, registers log callbacks for it
         and returns
+
+        Parameters
+        ----------
+        log_: bool, optional
+            Whether to register log callback at creation that
+            saves model with `only_meta`. By default True
 
         Returns
         -------
@@ -325,7 +331,8 @@ class ModelLine(TraceableOnDisk):
             Created and prepared model
         """
         model = self._model_cls(*args, **kwargs)
-        model.add_log_callback(self._save_only_meta)
+        if log_:
+            model.add_log_callback(self._save_only_meta)
         return model
 
     def get_model_names(self) -> List[str]:
