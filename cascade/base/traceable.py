@@ -402,7 +402,6 @@ class TraceableOnDisk(Traceable):
                     f"Trying to set {meta_fmt} to the object that already has {ext} "
                     "on path {self._root}"
                 )
-        self.sync_meta()
 
     def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
@@ -425,6 +424,8 @@ class TraceableOnDisk(Traceable):
 
         If meta consists of several blocks, it zips two lists
         and update accordingly
+
+        The object should already exist to be synced
         """
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
         # Object was created before -> update meta on disk

@@ -12,6 +12,7 @@ from cascade.base import MetaHandler, Traceable, TraceableOnDisk, default_meta_f
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_on_disk_create(tmp_path_str, ext):
     trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.sync_meta()
 
     meta_path = os.path.join(tmp_path_str, "meta" + ext)
 
@@ -21,11 +22,12 @@ def test_on_disk_create(tmp_path_str, ext):
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_on_disk_recreate(tmp_path_str, ext):
-    TraceableOnDisk(tmp_path_str, ext)
+    trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.sync_meta()
 
     meta = MetaHandler.read_dir(tmp_path_str)
 
-    TraceableOnDisk(tmp_path_str, ext)
+    TraceableOnDisk(tmp_path_str, ext).sync_meta()
 
     new_meta = MetaHandler.read_dir(tmp_path_str)
 
@@ -51,9 +53,11 @@ def test_on_disk_recreate_comment(tmp_path_str, ext):
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_on_disk_update_comment(tmp_path_str, ext):
     trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.sync_meta()
     trd.comment("Hello")
 
     trd = TraceableOnDisk(tmp_path_str, ext)
+    trd.sync_meta()
     trd.comment("World")
 
     new_meta = MetaHandler.read_dir(tmp_path_str)
@@ -128,20 +132,20 @@ def test_sync_idempotency(tmp_path_str):
 
 
 def test_default_meta_fmt(tmp_path_str):
-    TraceableOnDisk(tmp_path_str, meta_fmt=None)
+    TraceableOnDisk(tmp_path_str, meta_fmt=None).sync_meta()
     assert os.path.join(tmp_path_str, "meta" + default_meta_format)
 
 
 def test_infer_meta_fmt(tmp_path_str):
-    TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
-    TraceableOnDisk(tmp_path_str, None)
+    TraceableOnDisk(tmp_path_str, meta_fmt=".yml").sync_meta()
+    TraceableOnDisk(tmp_path_str, None).sync_meta()
     assert os.path.join(tmp_path_str, "meta.yml")
 
 
 def test_infer_meta_fmt_conflict(tmp_path_str):
-    TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
+    TraceableOnDisk(tmp_path_str, meta_fmt=".yml").sync_meta()
 
     with pytest.warns(UserWarning):
-        TraceableOnDisk(tmp_path_str, meta_fmt=".json")
+        TraceableOnDisk(tmp_path_str, meta_fmt=".json").sync_meta()
 
     assert os.path.join(tmp_path_str, "meta.yml")
