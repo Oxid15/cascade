@@ -62,14 +62,10 @@ class CustomEncoder(JSONEncoder):
         ):
             return int(obj)
 
-        elif isinstance(
-            obj, (np.float_, np.float16, np.float32, np.float64)  # type: ignore
-        ):
+        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):  # type: ignore
             return float(obj)
 
-        elif isinstance(
-            obj, (np.complex_, np.complex64, np.complex128)  # type: ignore
-        ):
+        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):  # type: ignore
             return {"real": obj.real, "imag": obj.imag}
 
         elif isinstance(obj, (np.ndarray,)):
@@ -106,9 +102,7 @@ class BaseHandler:
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         raise NotImplementedError()
 
-    def _raise_io_error(
-        self, path: str, exc: Optional[Exception] = None
-    ) -> NoReturn:
+    def _raise_io_error(self, path: str, exc: Optional[Exception] = None) -> NoReturn:
         # Any file decoding errors will be
         # prepended with filepath for user
         # to be able to identify broken file
@@ -260,11 +254,7 @@ class MetaHandler:
 
     # TODO: template should cover only supported fmts
     @classmethod
-    def read_dir(
-        cls,
-        path: str,
-        meta_template: str = "meta.*"
-    ) -> Meta:
+    def read_dir(cls, path: str, meta_template: str = "meta.*") -> Meta:
         """
         Reads a single meta file from a given directory
 
@@ -296,14 +286,16 @@ class MetaHandler:
             return cls.read(os.path.join(meta_paths[0]))
 
     @classmethod
-    def _determine_meta_fmt(cls, path: str, template: str) -> Optional[str]:
+    def determine_meta_fmt(cls, path: str, template: str) -> Optional[str]:
         meta_paths = glob.glob(os.path.join(path, template))
         if len(meta_paths) == 1:
             _, ext = os.path.splitext(meta_paths[0])
             return ext
 
     @classmethod
-    def write_dir(cls, path: str, obj: Any, overwrite: bool = True, meta_template: str = "meta.*") -> None:
+    def write_dir(
+        cls, path: str, obj: Any, overwrite: bool = True, meta_template: str = "meta.*"
+    ) -> None:
         """
         Writes meta to directory without specifying file name
 
@@ -320,7 +312,7 @@ class MetaHandler:
         meta_template : str, optional
             The template for meta files, by default "meta.*"
         """
-        ext = cls._determine_meta_fmt(path, meta_template)
+        ext = cls.determine_meta_fmt(path, meta_template)
 
         if not ext:
             ext = default_meta_format
