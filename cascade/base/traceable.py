@@ -21,7 +21,7 @@ import warnings
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from getpass import getuser
-from typing import Any, Dict, Iterable, Literal, Optional, Union
+from typing import Any, Callable, Dict, Iterable, Literal, Optional, Union
 
 import pendulum
 
@@ -77,7 +77,7 @@ class Traceable:
         cascade.base.MetaHandler
         """
         self._meta_prefix = {}
-        self.describe(description)
+        self.description = description
 
         if tags is not None:
             self.tags = set(tags)
@@ -145,8 +145,8 @@ class Traceable:
             if len(meta) != 1:
                 raise ValueError(
                     f"Object that was passed or read from path is a list of length {len(meta)}"
-                    f"There is no clear way to update this object's meta"
-                    f"using this kind of list"
+                    f" There is no clear way to update this object's meta"
+                    f" using this kind of list"
                 )
             self._meta_prefix.update(meta[0])
         else:
@@ -176,7 +176,7 @@ class Traceable:
             meta = [meta]
 
         if "description" in meta[0]:
-            self.describe(meta[0]["description"])
+            self.description = meta[0]["description"]
             del meta[0]["description"]
 
         if "comments" in meta[0]:
@@ -402,6 +402,7 @@ class TraceableOnDisk(Traceable):
                     f"Trying to set {meta_fmt} to the object that already has {ext} "
                     "on path {self._root}"
                 )
+        self.sync_meta()
 
     def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
@@ -476,3 +477,24 @@ class TraceableOnDisk(Traceable):
 
         meta = MetaHandler.read_dir(self._root)
         return meta
+
+    def _sync_meta_after(self, function: Callable[..., Any]):
+        def wrap(*args: Any, **kwargs: Any):
+            result = function(*args, **kwargs)
+            self.sync_meta()
+            return result
+        return wrap
+
+    def __getattribute__(self, name: str) -> Any:
+        attr = super().__getattribute__(name)
+        if name in (
+            "describe",
+            "comment",
+            "remove_comment",
+            "tag",
+            "remove_tag",
+            "link",
+            "remove_link",
+        ):
+            return self._sync_meta_after(attr)
+        return attr
