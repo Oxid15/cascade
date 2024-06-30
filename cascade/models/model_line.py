@@ -126,9 +126,7 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls.load(os.path.join(self._root, self._model_names[num]))
         if not only_meta:
-            model.load_artifact(
-                os.path.join(self._root, self._model_names[num], "artifacts")
-            )
+            model.load_artifact(os.path.join(self._root, self._model_names[num], "artifacts"))
 
         return model
 
@@ -162,9 +160,7 @@ class ModelLine(TraceableOnDisk):
             raise TypeError(f"The argument of type {type(model)} is not supported")
 
         if not name:
-            raise FileNotFoundError(
-                f"Failed to find the model {model} in the line at {self._root}"
-            )
+            raise FileNotFoundError(f"Failed to find the model {model} in the line at {self._root}")
         return name
 
     def load_model_meta(self, model: Union[str, int]) -> MetaFromFile:
@@ -209,16 +205,17 @@ class ModelLine(TraceableOnDisk):
         name = self._parse_model_name(model)
         model_folder = os.path.join(self._root, name)
 
-        result = {
-            "artifacts": [],
-            "files": []
-        }
+        result = {"artifacts": [], "files": []}
         artifact_path = os.path.join(model_folder, "artifacts")
         if os.path.exists(artifact_path):
-            result["artifacts"] = [os.path.join(self._root, "artifacts", name) for name in os.listdir(artifact_path)]
+            result["artifacts"] = [
+                os.path.join(self._root, "artifacts", name) for name in os.listdir(artifact_path)
+            ]
         file_path = os.path.join(model_folder, "files")
         if os.path.exists(file_path):
-            result["files"] = [os.path.join(self._root, "files", name) for name in os.listdir(file_path)]
+            result["files"] = [
+                os.path.join(self._root, "files", name) for name in os.listdir(file_path)
+            ]
         return result
 
     def save(self, model: Model, only_meta: bool = False) -> None:
@@ -307,9 +304,7 @@ class ModelLine(TraceableOnDisk):
             if artifact_tb is not None:
                 meta[0]["errors"]["save_artifact"] = artifact_tb
 
-        MetaHandler.write(
-            os.path.join(full_path, "meta" + self._meta_fmt), meta
-        )
+        MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
         self._model_names.append(folder_name)
         self.sync_meta()
 
@@ -324,7 +319,7 @@ class ModelLine(TraceableOnDisk):
                 "model_cls": repr(self._model_cls),
                 "len": len(self),
                 "type": "line",
-                "cascade_version": __version__
+                "cascade_version": __version__,
             }
         )
         return meta
