@@ -95,6 +95,7 @@ def cli(ctx):
         ctx.obj["meta"] = meta
         ctx.obj["type"] = meta[0].get("type")
         ctx.obj["len"] = meta[0].get("len")
+        ctx.obj["meta_fmt"] = MetaHandler.determine_meta_fmt(current_dir_full, "meta.*")
     except MetaIOError as e:
         click.echo(e)
         raise e
@@ -220,12 +221,9 @@ def comment_add(ctx, c):
     if not ctx.obj.get("meta"):
         return
 
-    from cascade.base import Traceable
-
-    tr = Traceable()
-    tr.from_meta(ctx.obj["meta"])
+    from cascade.base import TraceableOnDisk
+    tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
     tr.comment(c)
-    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @comment.command("ls")
@@ -264,12 +262,10 @@ def comment_rm(ctx, id):
     if not ctx.obj.get("meta"):
         return
 
-    from cascade.base import Traceable
+    from cascade.base import TraceableOnDisk
 
-    tr = Traceable()
-    tr.from_meta(ctx.obj["meta"])
+    tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
     tr.remove_comment(id)
-    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @cli.group
@@ -288,12 +284,10 @@ def tag_add(ctx, t):
     if not ctx.obj.get("meta"):
         return
 
-    from cascade.base import Traceable
+    from cascade.base import TraceableOnDisk
 
-    tr = Traceable()
-    tr.from_meta(ctx.obj["meta"])
+    tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
     tr.tag(t)
-    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @tag.command("ls")
@@ -313,12 +307,10 @@ def tag_rm(ctx, t):
     if not ctx.obj.get("meta"):
         return
 
-    from cascade.base import Traceable
+    from cascade.base import TraceableOnDisk
 
-    tr = Traceable()
-    tr.from_meta(ctx.obj["meta"])
+    tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
     tr.remove_tag(t)
-    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 @cli.command("migrate")
@@ -369,12 +361,10 @@ def desc_add(ctx, d):
     if not ctx.obj.get("meta"):
         return
 
-    from cascade.base import Traceable
+    from cascade.base import TraceableOnDisk
 
-    tr = Traceable()
-    tr.from_meta(ctx.obj["meta"])
+    tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
     tr.describe(d)
-    MetaHandler.write_dir(ctx.obj["cwd"], tr.get_meta())
 
 
 if __name__ == "__main__":

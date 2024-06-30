@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import os
-from typing import Any, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import pendulum
@@ -188,11 +188,11 @@ class MetricViewer:
         TypeError if metric objects cannot be sorted. If only one model in repo, then
         returns it without error since no sorting involved.
         """
-        assert metric in self.table, f"{metric} is not in {self.table.columns}"
-        t = self.table.loc[self.table[metric].notna()]
+        assert metric in self.table["name"].unique(), f"{metric} is not in {self.table.columns}"
+        t = self.table.loc[self.table["name"] == metric]
 
         try:
-            t = t.sort_values(metric, ascending=maximize)
+            t = t.sort_values("value", ascending=maximize)
         except TypeError as e:
             raise TypeError(f"Metric {metric} objects cannot be sorted") from e
 

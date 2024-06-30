@@ -21,7 +21,7 @@ from typing import Any, Callable, Optional, Union
 
 import pendulum
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import Meta, Traceable, raise_not_implemented
 from ..metrics import Metric, MetricType
 
 
@@ -32,7 +32,7 @@ class Model(Traceable):
     """
 
     def __init__(
-        self, *args: Any, meta_prefix: Union[PipeMeta, str, None] = None, **kwargs: Any
+        self, *args: Any, meta_prefix: Union[Meta, str, None] = None, **kwargs: Any
     ) -> None:
         """
         Should be called in any successor - initializes default meta needed.
@@ -140,7 +140,7 @@ class Model(Traceable):
         """
         raise_not_implemented("cascade.models.Model", "save_artifact")
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         # Successors may not call super().__init__
         # they may not have these default fields
 
@@ -275,6 +275,6 @@ class ModelModifier(Model):
         self._model = model
         super().__init__(*args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         prev_meta = self._model.get_meta()
         return super().get_meta() + prev_meta

@@ -17,24 +17,12 @@ limitations under the License.
 from typing import Any, Dict, List, NoReturn, Union
 
 """
-Single Meta of basic object is just a dict, however Cascade supports
-pipelines with lists of meta.
+Single meta of basic object is just a dict, however Cascade works with
+pipelines with lists of meta. This is why default meta is a list.
 
-Do not use Meta when returning from `get_meta` methods! Use PipeMeta instead.
-Meta type alias is designed for better readability and to explicitly state when the
-variable is meta.
-"""
-Meta = Dict[Any, Any]
-
-"""
 This type is used when `get_meta` is called on any Traceable
 """
-PipeMeta = List[Meta]
-
-"""
-This type described what we can get when reading previously written to meta object
-"""
-MetaFromFile = Union[List[Any], Dict[Any, Any]]
+Meta = List[Dict[Any, Any]]
 
 
 class MetaIOError(IOError):

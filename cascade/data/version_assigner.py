@@ -20,7 +20,7 @@ from typing import Any, Tuple
 
 import pendulum
 
-from ..base import MetaHandler, PipeMeta, supported_meta_formats
+from ..base import Meta, MetaHandler, supported_meta_formats
 from ..meta.utils import skeleton
 from .dataset import BaseDataset, T
 from .modifier import Modifier
@@ -186,7 +186,7 @@ class VersionAssigner(Modifier):
         versions = sorted(versions_flat)
         return versions[-1]
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["version"] = self.version
         return meta

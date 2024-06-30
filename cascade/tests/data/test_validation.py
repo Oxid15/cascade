@@ -27,6 +27,13 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import ValidationError, validate_in
 
 
+def test_empty_sig():
+    def one():
+        return 1
+
+    validate_in(one)()
+
+
 def test_no_annot():
     def add(a, b):
         return a + b
@@ -121,6 +128,7 @@ def test_pydantic_field():
     def identity(a: int = pydantic.Field(le=0)):
         return a
 
+    validate_in(identity)(-1)
     validate_in(identity)(0)
 
     with pytest.raises(ValidationError):

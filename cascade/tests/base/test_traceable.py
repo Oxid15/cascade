@@ -23,8 +23,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import (MetaHandler, Traceable, TraceableOnDisk,
-                          default_meta_format)
+from cascade.base import Traceable
 
 
 def test_meta():
@@ -72,125 +71,6 @@ def test_update_meta_from_file(tmp_path):
 
     assert "a" in meta[0]
     assert meta[0]["a"] == 1
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_create(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.sync_meta()
-
-    meta_path = os.path.join(tmp_path_str, "meta" + ext)
-
-    assert os.path.exists(meta_path)
-    assert trd.get_root() == os.path.dirname(meta_path)
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_recreate(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.sync_meta()
-
-    meta = MetaHandler.read_dir(tmp_path_str)
-
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.sync_meta()
-
-    new_meta = MetaHandler.read_dir(tmp_path_str)
-
-    assert list(meta[0].keys()) == list(new_meta[0].keys())
-    assert meta[0]["created_at"] == new_meta[0]["created_at"]
-    assert meta[0]["updated_at"] != new_meta[0]["updated_at"]
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_recreate_comment(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.comment("Hello")
-    trd.sync_meta()
-
-    meta = MetaHandler.read_dir(tmp_path_str)
-
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.sync_meta()
-
-    new_meta = MetaHandler.read_dir(tmp_path_str)
-
-    assert len(meta[0]["comments"]) == len(new_meta[0]["comments"])
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_update_comment(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.comment("Hello")
-    trd.sync_meta()
-
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.sync_meta()
-    trd.comment("World")
-    trd.sync_meta()
-
-    new_meta = MetaHandler.read_dir(tmp_path_str)
-
-    assert len(new_meta[0]["comments"]) == 2
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_recreate_description(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.describe("Hello")
-    trd.sync_meta()
-
-    meta = MetaHandler.read_dir(tmp_path_str)
-
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.sync_meta()
-
-    new_meta = MetaHandler.read_dir(tmp_path_str)
-
-    assert meta[0]["description"] == new_meta[0]["description"]
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_recreate_tags(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.tag(["hello", "world"])
-    trd.sync_meta()
-
-    meta = MetaHandler.read_dir(tmp_path_str)
-
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd.sync_meta()
-
-    new_meta = MetaHandler.read_dir(tmp_path_str)
-
-    assert meta[0]["tags"] == new_meta[0]["tags"]
-
-
-def test_default_meta_fmt(tmp_path_str):
-    trd = TraceableOnDisk(tmp_path_str, meta_fmt=None)
-    trd.sync_meta()
-
-    assert os.path.join(tmp_path_str, "meta" + default_meta_format)
-
-
-def test_infer_meta_fmt(tmp_path_str):
-    trd = TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
-    trd.sync_meta()
-
-    trd = TraceableOnDisk(tmp_path_str, None)
-
-    assert os.path.join(tmp_path_str, "meta.yml")
-
-
-def test_infer_meta_fmt_conflict(tmp_path_str):
-    trd = TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
-    trd.sync_meta()
-
-    with pytest.warns(UserWarning):
-        trd = TraceableOnDisk(tmp_path_str, meta_fmt=".json")
-
-    trd.sync_meta()
-    assert os.path.join(tmp_path_str, "meta.yml")
 
 
 def test_descriptions():
@@ -264,6 +144,9 @@ def test_from_meta():
     tr.comment("lol")
     tr.comment("kek")
 
+    another_tr = Traceable()
+    tr.link(another_tr)
+
     meta = tr.get_meta()
 
     tr = Traceable()
@@ -273,3 +156,5 @@ def test_from_meta():
     assert tr.tags == set(["tag"])
     assert tr.description == "description"
     assert [c.message for c in tr.comments] == ["lol", "kek"]
+    assert len(tr.links) == 1
+    assert tr.links[0].meta == another_tr.get_meta()

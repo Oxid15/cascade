@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import warnings
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -143,6 +144,7 @@ class DataCard:
         )
 
 
+@deprecated("This is deprecated and will be removed in 0.15.0")
 class DataRegistrator:
     """
     A tool for tracking lineage of datasets.

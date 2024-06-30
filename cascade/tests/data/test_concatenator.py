@@ -31,6 +31,7 @@ def test_meta():
 
     c = Concatenator([n1, n2])
     assert len(c.get_meta()[0]["data"]) == 2
+    assert c.get_meta()[0]["num_concatenated"] == 2
 
 
 def test_from_meta():
