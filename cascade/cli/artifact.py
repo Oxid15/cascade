@@ -102,6 +102,9 @@ def artifact(ctx):
 @artifact.command("rm")
 @click.pass_context
 def artifact_rm(ctx):
+    """
+    Remove artifacts from the whole container recursively
+    """
     results_list = []
     flat_results = []
     if ctx.obj["type"] == "model":
