@@ -61,7 +61,7 @@ def remove_files(path: str) -> List[RemoveResult]:
 
 
 def remove_model_artifacts(path) -> List[RemoveResult]:
-    return remove_files(path, "artifacts")
+    return remove_files(os.path.join(path, "artifacts"))
 
 
 def remove_line_artifacts(path) -> List[List[RemoveResult]]:
