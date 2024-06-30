@@ -17,9 +17,10 @@ limitations under the License.
 import os
 import warnings
 from typing import Any, Dict, Optional
+
 from typing_extensions import deprecated
 
-from ..base import MetaFromFile, MetaIOError, MetaHandler, supported_meta_formats
+from ..base import Meta, MetaHandler, MetaIOError, supported_meta_formats
 
 
 class MetaViewer:
@@ -59,11 +60,11 @@ class MetaViewer:
         if filt is not None:
             self.names = list(filter(self._filter, self.names))
 
-    def __getitem__(self, index: int) -> MetaFromFile:
+    def __getitem__(self, index: int) -> Meta:
         """
         Returns
         -------
-        meta: MetaFromFile
+        meta: Meta
             Meta object that was read from file
         """
         return MetaHandler.read(self.names[index])
@@ -82,7 +83,7 @@ class MetaViewer:
         )
 
     @deprecated("This method was removed in 0.14.0. Use MetaHandler.read instead")
-    def read(self, path: str) -> MetaFromFile:
+    def read(self, path: str) -> Meta:
         """
         Loads object from path
         """

@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import pickle
 import os
-from typing import Any, Type, Optional
+import pickle
+from typing import Any, Optional, Type
 
 import torch
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...models import BasicModel
 
 
@@ -128,7 +128,7 @@ class TorchModel(BasicModel):
         with open(checkpoint_path, "rb") as f:
             self._model = torch.load(f, *args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["module"] = repr(self._model)
         return meta

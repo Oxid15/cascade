@@ -15,12 +15,12 @@ limitations under the License.
 """
 
 from itertools import cycle
-from typing import Any, Dict, Tuple, Optional
+from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 from tqdm import trange
 
-from ..base import PipeMeta
+from ..base import Meta
 from ..data.dataset import Dataset, T
 from ..data.modifier import Sampler
 
@@ -196,7 +196,7 @@ class WeighedSampler(Sampler[T]):
         idx = self._indices[index]
         return self._dataset[idx]
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["partitioning"] = self._partitioning
         return meta

@@ -40,7 +40,7 @@ def test(repo_or_line, dummy_model):
     mtv = MetricViewer(repo_or_line)
     t = mtv.table
 
-    for item in ["line", "num", "created_at", "saved", "acc"]:
+    for item in ["line", "num", "created_at", "saved", "tags", "comment_count", "link_count", "name", "value"]:
         assert item in list(t.columns)
 
 

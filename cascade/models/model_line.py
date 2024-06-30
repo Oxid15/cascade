@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
 
-from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
+from ..base import Meta, MetaHandler, TraceableOnDisk
 from ..base.utils import (
     generate_slug,
     get_latest_commit_hash,
@@ -133,7 +133,7 @@ class ModelLine(TraceableOnDisk):
     def _model_name_by_num(self, num: int):
         return f"{num:0>5d}"
 
-    def _read_meta_by_name(self, name: str) -> MetaFromFile:
+    def _read_meta_by_name(self, name: str) -> Meta:
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
@@ -163,7 +163,7 @@ class ModelLine(TraceableOnDisk):
             raise FileNotFoundError(f"Failed to find the model {model} in the line at {self._root}")
         return name
 
-    def load_model_meta(self, model: Union[str, int]) -> MetaFromFile:
+    def load_model_meta(self, model: Union[str, int]) -> Meta:
         """
         Loads metadata of a model from disk
 
@@ -174,7 +174,7 @@ class ModelLine(TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -311,7 +311,7 @@ class ModelLine(TraceableOnDisk):
     def __repr__(self) -> str:
         return f"ModelLine of {len(self)} models of {self._model_cls}"
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -327,11 +327,17 @@ class ModelLine(TraceableOnDisk):
     def _save_only_meta(self, model: Model) -> None:
         self.save(model, only_meta=True)
 
-    def create_model(self, *args: Any, **kwargs: Any) -> Any:
+    def create_model(self, *args: Any, log_: bool = True, **kwargs: Any) -> Any:
         """
         Creates a model using the class given on
         creation, registers log callbacks for it
         and returns
+
+        Parameters
+        ----------
+        log_: bool, optional
+            Whether to register log callback at creation that
+            saves model with `only_meta`. By default True
 
         Returns
         -------
@@ -339,7 +345,8 @@ class ModelLine(TraceableOnDisk):
             Created and prepared model
         """
         model = self._model_cls(*args, **kwargs)
-        model.add_log_callback(self._save_only_meta)
+        if log_:
+            model.add_log_callback(self._save_only_meta)
         return model
 
     def get_model_names(self) -> List[str]:

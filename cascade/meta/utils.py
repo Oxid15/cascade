@@ -16,18 +16,18 @@ limitations under the License.
 
 from typing import Any, Dict, List, Optional, Union
 
-from ..base import Meta, PipeMeta
+from ..base import Meta
 
 default_keys = ["data", "dataset"]
 
 
 def skeleton(
-    meta: Union[PipeMeta, Meta], keys: Optional[List[Any]] = None
+    meta: Meta, keys: Optional[List[Any]] = None
 ) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
-    meta: Union[PipeMeta, Meta]
+    meta: Meta
         Meta of the pipeline
     keys: List[Any], optional
         The set of keys in meta where to search for previous dataset's meta.

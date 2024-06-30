@@ -14,10 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import warnings
 from dataclasses import asdict, dataclass
-from typing import Any, Dict, List, Tuple, Union, Optional
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import pendulum
+from typing_extensions import deprecated
 
 from ..base import HistoryHandler, MetaIOError
 
@@ -139,6 +141,7 @@ class DataCard:
         )
 
 
+@deprecated("This is deprecated and will be removed in 0.15.0")
 class DataRegistrator:
     """
     A tool for tracking lineage of datasets.

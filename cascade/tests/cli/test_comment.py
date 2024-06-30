@@ -30,7 +30,7 @@ def test_add(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        repo = ModelRepo(td)
+        ModelRepo(td)
 
         init_meta = mh.read_dir(td)
 
@@ -52,9 +52,9 @@ def test_ls(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        repo = ModelRepo(td)
+        ModelRepo(td)
 
-        init_meta = mh.read_dir(td)
+        mh.read_dir(td)
 
         result = runner.invoke(cli, args=["comment", "add"], input="Hello")
         assert result.exit_code == 0
@@ -69,7 +69,7 @@ def test_rm(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        repo = ModelRepo(td)
+        ModelRepo(td)
 
         init_meta = mh.read_dir(td)
 
