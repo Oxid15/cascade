@@ -15,7 +15,9 @@ limitations under the License.
 """
 
 from typing import Any
+
 from tqdm import tqdm, trange
+
 from .dataset import BaseDataset, T
 from .modifier import Modifier
 
@@ -50,7 +52,6 @@ class BruteforceCacher(Modifier[T]):
 
     See also
     --------
-    cascade.data.SequentialCacher
     cascade.data.Pickler
     """
 

@@ -17,7 +17,7 @@ limitations under the License.
 import os
 from typing import Any, List
 
-from ..base import PipeMeta, raise_not_implemented
+from ..base import Meta, raise_not_implemented
 from .dataset import Dataset, T
 
 
@@ -60,7 +60,7 @@ class FolderDataset(Dataset[T]):
         """
         return self._names
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Returns meta containing root folder
         """

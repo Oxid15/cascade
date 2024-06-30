@@ -20,7 +20,7 @@ from typing import Dict, Tuple
 import pendulum
 from deepdiff import DeepDiff
 
-from ...base import MetaFromFile, MetaHandler
+from ...base import Meta, MetaHandler
 from ..meta_viewer import MetaViewer
 from .base_diff_viewer import BaseDiffViewer
 
@@ -67,7 +67,7 @@ class RepoDiffViewer(BaseDiffViewer):
         if meta[0]["type"] not in meta_type:
             raise ValueError("The folder you provided is neither the repo nor line")
 
-    def _read_objects(self, path: str) -> Dict[str, MetaFromFile]:
+    def _read_objects(self, path: str) -> Dict[str, Meta]:
         self._check_path(path, ("repo", "line"))
 
         mev = MetaViewer(path, filt={"type": "model"})

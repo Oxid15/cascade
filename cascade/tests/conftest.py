@@ -27,10 +27,19 @@ from dateutil import tz
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (ApplyModifier, BruteforceCacher, Composer,
-                          Concatenator, CyclicSampler, BaseDataset, IteratorWrapper,
-                          RandomSampler, RangeSampler, SequentialCacher,
-                          Wrapper)
+from cascade.data import (
+    ApplyModifier,
+    BaseDataset,
+    BruteforceCacher,
+    Composer,
+    Concatenator,
+    CyclicSampler,
+    IteratorWrapper,
+    RandomSampler,
+    RangeSampler,
+    SequentialCacher,
+    Wrapper,
+)
 from cascade.models import BasicModel, ModelLine, ModelRepo
 
 
@@ -86,7 +95,6 @@ def tmp_path_str(tmp_path) -> str:
         CyclicSampler(Wrapper([0]), 1),
         RandomSampler(Wrapper([1, 2, 3]), 2),
         RangeSampler(Wrapper([0, 1, 2, 3]), 0, 3, 1),
-        SequentialCacher(Wrapper([0, 1, 2, 3])),
     ]
 )
 def dataset(request) -> BaseDataset:

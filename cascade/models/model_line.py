@@ -14,16 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import traceback
 import os
-from typing import Any, Literal, Type, Union, List, Dict, Optional
+import socket
+import traceback
+from getpass import getuser
+from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile
-from ..base.utils import generate_slug
-from .model import Model
+from ..base import Meta, MetaHandler, TraceableOnDisk
+from ..base.utils import (
+    generate_slug,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+)
 from ..version import __version__
+from .model import Model
 
 
 class ModelLine(TraceableOnDisk):
@@ -119,16 +126,14 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls.load(os.path.join(self._root, self._model_names[num]))
         if not only_meta:
-            model.load_artifact(
-                os.path.join(self._root, self._model_names[num], "artifacts")
-            )
+            model.load_artifact(os.path.join(self._root, self._model_names[num], "artifacts"))
 
         return model
 
     def _model_name_by_num(self, num: int):
         return f"{num:0>5d}"
 
-    def _read_meta_by_name(self, name: str) -> MetaFromFile:
+    def _read_meta_by_name(self, name: str) -> Meta:
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
@@ -155,12 +160,10 @@ class ModelLine(TraceableOnDisk):
             raise TypeError(f"The argument of type {type(model)} is not supported")
 
         if not name:
-            raise FileNotFoundError(
-                f"Failed to find the model {model} in the line at {self._root}"
-            )
+            raise FileNotFoundError(f"Failed to find the model {model} in the line at {self._root}")
         return name
 
-    def load_model_meta(self, model: Union[str, int]) -> MetaFromFile:
+    def load_model_meta(self, model: Union[str, int]) -> Meta:
         """
         Loads metadata of a model from disk
 
@@ -171,7 +174,7 @@ class ModelLine(TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -202,16 +205,17 @@ class ModelLine(TraceableOnDisk):
         name = self._parse_model_name(model)
         model_folder = os.path.join(self._root, name)
 
-        result = {
-            "artifacts": [],
-            "files": []
-        }
+        result = {"artifacts": [], "files": []}
         artifact_path = os.path.join(model_folder, "artifacts")
         if os.path.exists(artifact_path):
-            result["artifacts"] = [os.path.join(self._root, "artifacts", name) for name in os.listdir(artifact_path)]
+            result["artifacts"] = [
+                os.path.join(self._root, "artifacts", name) for name in os.listdir(artifact_path)
+            ]
         file_path = os.path.join(model_folder, "files")
         if os.path.exists(file_path):
-            result["files"] = [os.path.join(self._root, "files", name) for name in os.listdir(file_path)]
+            result["files"] = [
+                os.path.join(self._root, "files", name) for name in os.listdir(file_path)
+            ]
         return result
 
     def save(self, model: Model, only_meta: bool = False) -> None:
@@ -261,6 +265,18 @@ class ModelLine(TraceableOnDisk):
         meta[0]["path"] = full_path
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
+        meta[0]["python_version"] = get_python_version()
+        meta[0]["user"] = getuser()
+        meta[0]["host"] = socket.gethostname()
+
+        git_commit = get_latest_commit_hash()
+        if git_commit is not None:
+            meta[0]["cwd"] = os.getcwd()
+            meta[0]["git_commit"] = git_commit
+
+        git_uncommitted = get_uncommitted_changes()
+        if git_uncommitted is not None:
+            meta[0]["git_uncommitted_changes"] = git_uncommitted
 
         model_tb = None
         try:
@@ -288,16 +304,14 @@ class ModelLine(TraceableOnDisk):
             if artifact_tb is not None:
                 meta[0]["errors"]["save_artifact"] = artifact_tb
 
-        MetaHandler.write(
-            os.path.join(full_path, "meta" + self._meta_fmt), meta
-        )
+        MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
         self._model_names.append(folder_name)
         self.sync_meta()
 
     def __repr__(self) -> str:
         return f"ModelLine of {len(self)} models of {self._model_cls}"
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -305,7 +319,7 @@ class ModelLine(TraceableOnDisk):
                 "model_cls": repr(self._model_cls),
                 "len": len(self),
                 "type": "line",
-                "cascade_version": __version__
+                "cascade_version": __version__,
             }
         )
         return meta
@@ -313,11 +327,17 @@ class ModelLine(TraceableOnDisk):
     def _save_only_meta(self, model: Model) -> None:
         self.save(model, only_meta=True)
 
-    def create_model(self, *args: Any, **kwargs: Any) -> Any:
+    def create_model(self, *args: Any, log_: bool = True, **kwargs: Any) -> Any:
         """
         Creates a model using the class given on
         creation, registers log callbacks for it
         and returns
+
+        Parameters
+        ----------
+        log_: bool, optional
+            Whether to register log callback at creation that
+            saves model with `only_meta`. By default True
 
         Returns
         -------
@@ -325,7 +345,8 @@ class ModelLine(TraceableOnDisk):
             Created and prepared model
         """
         model = self._model_cls(*args, **kwargs)
-        model.add_log_callback(self._save_only_meta)
+        if log_:
+            model.add_log_callback(self._save_only_meta)
         return model
 
     def get_model_names(self) -> List[str]:

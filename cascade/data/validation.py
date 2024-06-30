@@ -65,7 +65,7 @@ class PydanticValidator(ValidationProvider):
         if (
             len(args) == 1
             and len(kwargs) == 0
-            and (isinstance(args[0], dict) or isinstance(args[0], self._base_model_cls))
+            and isinstance(args[0], self._base_model_cls)
         ):
             try:
                 self._schema.model_validate(args[0])
