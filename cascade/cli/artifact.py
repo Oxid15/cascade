@@ -22,6 +22,8 @@ from typing import List, Literal, Optional
 
 import click
 
+from .common import create_container
+
 
 @dataclass
 class RemoveResult:
@@ -58,6 +60,37 @@ def remove_files(path: str) -> List[RemoveResult]:
     return results
 
 
+def remove_model_artifacts(path) -> List[RemoveResult]:
+    return remove_files(path, "artifacts")
+
+
+def remove_line_artifacts(path) -> List[List[RemoveResult]]:
+    line = create_container("line", path)
+    line_results = []
+    for name in line.get_model_names():
+        results = remove_model_artifacts(os.path.join(path, name))
+        line_results.append(results)
+    return line_results
+
+
+def remove_repo_artifacts(path) -> List[List[List[RemoveResult]]]:
+    repo = create_container("repo", path)
+    repo_results = []
+    for name in repo.get_line_names():
+        results = remove_line_artifacts(os.path.join(path, name))
+        repo_results.append(results)
+    return repo_results
+
+
+def remove_wp_artifacts(path) -> List[List[List[List[RemoveResult]]]]:
+    wp = create_container("workspace", path)
+    wp_results = []
+    for name in wp.get_repo_names():
+        results = remove_repo_artifacts(os.path.join(path, name))
+        wp_results.append(results)
+    return wp_results
+
+
 @click.group("artifact")
 @click.pass_context
 def artifact(ctx):
@@ -72,11 +105,29 @@ def artifact_rm(ctx):
     results_list = []
     flat_results = []
     if ctx.obj["type"] == "model":
-        results = remove_files(os.path.join(ctx.obj["cwd"], "artifacts"))
+        results = remove_model_artifacts(ctx.obj["cwd"])
         results_list.append(results)
         flat_results.extend(results)
+    elif ctx.obj["type"] == "line":
+        line_results = remove_line_artifacts(ctx.obj["cwd"])
+        for results in line_results:
+            results_list.append(results)
+            flat_results.extend(results)
+    elif ctx.obj["type"] == "repo":
+        repo_results = remove_repo_artifacts(ctx.obj["cwd"])
+        for line_results in repo_results:
+            for results in line_results:
+                results_list.append(results)
+                flat_results.extend(results)
+    elif ctx.obj["type"] == "workspace":
+        wp_results = remove_wp_artifacts(ctx.obj["cwd"])
+        for repo_results in wp_results:
+            for line_results in repo_results:
+                for results in line_results:
+                    results_list.append(results)
+                    flat_results.extend(results)
     else:
-        raise NotImplementedError()
+        raise NotImplementedError(f"Cannot remove artifact from {ctx.obj['type']}")
 
     c = Counter(res.status for res in flat_results)
 
