@@ -32,16 +32,23 @@ class ObjectHandler(ABC):
 
 class Pickler(ObjectHandler):
     def load(self, path: str) -> Any:
-        with open(path, "rb") as f:
+        with open(os.path.join(path, "object.pkl"), "rb") as f:
             return pickle.load(f)
 
     def save(self, obj: Any, path: str) -> None:
-        with open(path, "wb") as f:
+        with open(os.path.join(path, "object.pkl"), "wb") as f:
             pickle.dump(obj, f)
 
 
 class Cache:
+    """
+    General interface for object caching
+    """
     def __init__(self, path: str, backend: Literal["pickle"] = "pickle") -> None:
+        if not os.path.isdir(path):
+            raise ValueError(f"path should be a folder, got {path}")
+        os.makedirs(path, exist_ok=True)
+
         self.path = path
         if backend == "pickle":
             self._handler = Pickler()
@@ -49,7 +56,11 @@ class Cache:
             raise ValueError(f"{backend} is not in (pickle,)")
 
     def exists(self) -> bool:
-        return os.path.exists(self.path)
+        """
+        Returns:
+            bool: True if the object was already cached in this path
+        """
+        return len(os.listdir(self.path)) > 0
 
     def save(self, obj: Any) -> None:
         return self._handler.save(obj, self.path)
