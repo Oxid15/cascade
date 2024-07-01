@@ -61,7 +61,7 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
 
             # Output comment's text by batches
             table += c["message"][row * w_right : min((row + 1) * w_right, len(c["message"]))]
-        table += "\n\n"
+        table += "\n"
     return table
 
 
@@ -74,6 +74,7 @@ def comment_add(ctx, c):
 
     from cascade.base import TraceableOnDisk
     tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
+    tr.sync_meta()
     tr.comment(c)
 
 
@@ -116,6 +117,7 @@ def comment_rm(ctx, id):
     from cascade.base import TraceableOnDisk
 
     tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
+    tr.sync_meta()
     tr.remove_comment(id)
 
 

@@ -35,4 +35,5 @@ def desc_add(ctx, d):
     from cascade.base import TraceableOnDisk
 
     tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
+    tr.sync_meta()
     tr.describe(d)

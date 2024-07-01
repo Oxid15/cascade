@@ -27,6 +27,7 @@ def tag_add(ctx, t):
     from cascade.base import TraceableOnDisk
 
     tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
+    tr.sync_meta()
     tr.tag(t)
 
 
@@ -50,6 +51,7 @@ def tag_rm(ctx, t):
     from cascade.base import TraceableOnDisk
 
     tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
+    tr.sync_meta()
     tr.remove_tag(t)
 
 
