@@ -60,7 +60,7 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
                 table += " " * (w_left + between_cols)
 
             # Output comment's text by batches
-            table += c["message"][row * w_right : min((row + 1) * w_right, len(c["message"]))]
+            table += c["message"][row * w_right : min((row + 1) * w_right, len(c["message"]))] + "\n"
         table += "\n"
     return table
 
