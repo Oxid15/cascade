@@ -149,3 +149,35 @@ def test_infer_meta_fmt_conflict(tmp_path_str):
         TraceableOnDisk(tmp_path_str, meta_fmt=".json").sync_meta()
 
     assert os.path.join(tmp_path_str, "meta.yml")
+
+
+def test_comments(tmp_path_str):
+    tr = TraceableOnDisk(tmp_path_str, ".json")
+
+    tr.comment("hello")
+
+    assert len(tr.comments) == 1
+    assert tr.comments[0].id == "1"
+    assert tr.comments[0].message == "hello"
+    assert hasattr(tr.comments[0], "user")
+    assert hasattr(tr.comments[0], "host")
+    assert hasattr(tr.comments[0], "timestamp")
+
+    disk_meta = MetaHandler.read_dir(tmp_path_str)
+    assert len(disk_meta[0]["comments"]) == 1
+    assert disk_meta[0]["comments"][0]["id"] == "1"
+
+    tr.comment("world")
+
+    disk_meta = MetaHandler.read_dir(tmp_path_str)
+    assert len(disk_meta[0]["comments"]) == 2
+    assert disk_meta[0]["comments"][1]["id"] == "2"
+
+    # Recreate and try again
+    tr = TraceableOnDisk(tmp_path_str, ".json")
+    tr.sync_meta()  # Will fail without this
+    tr.comment("!!!")
+
+    disk_meta = MetaHandler.read_dir(tmp_path_str)
+    assert len(disk_meta[0]["comments"]) == 3
+    assert disk_meta[0]["comments"][2]["id"] == "3"
