@@ -18,10 +18,14 @@ import os
 import pickle
 from typing import Any, Optional
 
+from typing_extensions import deprecated
+
 from .dataset import BaseDataset, T
 from .modifier import BaseModifier
 
 
+@deprecated("Pickler is deprecated since 0.14.0 and will be"
+            " removed in subsequent versions. Consider using cascade.base.Cache")
 class Pickler(BaseModifier[T]):
     """
     Pickles input dataset or unpickles one
