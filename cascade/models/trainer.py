@@ -167,10 +167,10 @@ class BasicTrainer(Trainer):
         })
         line.link(self)
 
-        if isinstance(train_data, BaseDataset):
+        if hasattr(train_data, "get_meta"):
             line.link(train_data)
 
-        if isinstance(test_data, BaseDataset):
+        if hasattr(test_data, "get_meta"):
             line.link(test_data)
 
         if start_from is not None:

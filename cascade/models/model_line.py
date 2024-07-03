@@ -15,14 +15,21 @@ limitations under the License.
 """
 
 import os
+import socket
 import traceback
 import warnings
+from getpass import getuser
 from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
 
 from ..base import Meta, MetaHandler, TraceableOnDisk
-from ..base.utils import generate_slug
+from ..base.utils import (
+    generate_slug,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+)
 from ..version import __version__
 from .model import Model
 
@@ -125,9 +132,7 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls.load(os.path.join(self._root, self._model_names[num]))
         if not only_meta:
-            model.load_artifact(
-                os.path.join(self._root, self._model_names[num], "artifacts")
-            )
+            model.load_artifact(os.path.join(self._root, self._model_names[num], "artifacts"))
 
         return model
 
@@ -161,9 +166,7 @@ class ModelLine(TraceableOnDisk):
             raise TypeError(f"The argument of type {type(model)} is not supported")
 
         if not name:
-            raise FileNotFoundError(
-                f"Failed to find the model {model} in the line at {self._root}"
-            )
+            raise FileNotFoundError(f"Failed to find the model {model} in the line at {self._root}")
         return name
 
     def load_model_meta(self, model: Union[str, int]) -> Meta:
@@ -270,6 +273,18 @@ class ModelLine(TraceableOnDisk):
         meta[0]["path"] = full_path
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
+        meta[0]["python_version"] = get_python_version()
+        meta[0]["user"] = getuser()
+        meta[0]["host"] = socket.gethostname()
+
+        git_commit = get_latest_commit_hash()
+        if git_commit is not None:
+            meta[0]["cwd"] = os.getcwd()
+            meta[0]["git_commit"] = git_commit
+
+        git_uncommitted = get_uncommitted_changes()
+        if git_uncommitted is not None:
+            meta[0]["git_uncommitted_changes"] = git_uncommitted
 
         model_tb = None
         try:
@@ -313,7 +328,7 @@ class ModelLine(TraceableOnDisk):
                 "root": self._root,
                 "model_cls": repr(self._model_cls),
                 "len": len(self),
-                "type": "model_line",
+                "type": "line",
                 "cascade_version": __version__,
             }
         )

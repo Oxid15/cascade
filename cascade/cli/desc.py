@@ -13,3 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+
+import click
+
+
+@click.group("desc")
+@click.pass_context
+def desc(ctx):
+    """
+    Manage descriptions
+    """
+
+
+@desc.command("add")
+@click.pass_context
+@click.option("-d", prompt="Description: ")
+def desc_add(ctx, d):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import TraceableOnDisk
+
+    tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
+    tr.sync_meta()
+    tr.describe(d)

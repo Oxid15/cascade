@@ -107,6 +107,15 @@ def test_comments():
     assert hasattr(tr.comments[0], "host")
     assert hasattr(tr.comments[0], "timestamp")
 
+    tr.comment("world")
+    assert len(tr.comments) == 2
+
+    tr.remove_comment("2")
+    assert len(tr.comments) == 1
+    tr.comment("again")
+    assert len(tr.comments) == 2
+    assert tr.comments[1].id == "2"
+
 
 def test_links():
     tr = Traceable()

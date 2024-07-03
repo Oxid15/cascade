@@ -1,6 +1,8 @@
 import os
 import re
-from typing import Any, Dict, List, Tuple
+import subprocess
+import sys
+from typing import Any, Dict, List, Optional, Tuple
 
 from coolname import generate
 
@@ -9,6 +11,30 @@ def generate_slug() -> str:
     words = generate(3)
     slug = "_".join(words)
     return slug
+
+
+def get_latest_commit_hash() -> Optional[str]:
+    try:
+        result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+        return result.stdout.strip()
+    except Exception:
+        return None
+
+
+def get_uncommitted_changes() -> Optional[List[str]]:
+    try:
+        result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        result = result.stdout.strip()
+        if result != "":
+            return result.split("\n ")
+        return None
+    except Exception:
+        return None
+
+
+def get_python_version() -> str:
+    info = sys.version
+    return info
 
 
 def parse_version(ver: str) -> Tuple[int, int, int]:
@@ -129,6 +155,6 @@ def migrate_repo_v0_13(path: str) -> None:
     try:
         update_version(path, new_version)
     except MetaIOError as e:
-        print(f"Faile to update repo version: {e}")
+        print(f"Failed to update repo version: {e}")
 
     print("Done")
