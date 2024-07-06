@@ -2,9 +2,69 @@ import os
 import re
 import subprocess
 import sys
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from coolname import generate
+
+from . import Meta
+
+default_keys = ["data", "dataset"]
+
+
+class Version:
+    def __init__(self, version: str):
+        major, minor = version.split(".")
+        self.major = int(major)
+        self.minor = int(minor)
+
+    def __str__(self) -> str:
+        return f"{self.major}.{self.minor}"
+
+    @staticmethod
+    def _check_other(other):
+        if not isinstance(other, Version):
+            raise TypeError(f"Can only compare Version with Version or string, got {type(other)}")
+
+    def __eq__(self, other: Union["Version", str]) -> bool:
+        if isinstance(other, str):
+            other = Version(other)
+        self._check_other(other)
+
+        return self.major == other.major and self.minor == other.minor
+
+    def __lt__(self, other: Union["Version", str]):
+        if isinstance(other, str):
+            other = Version(other)
+        self._check_other(other)
+
+        if self.major < other.major:
+            return True
+        elif self.major == other.major:
+            return self.minor < other.minor
+        return False
+
+    def __gt__(self, other: Union["Version", str]):
+        if isinstance(other, str):
+            other = Version(other)
+        self._check_other(other)
+
+        if self.major > other.major:
+            return True
+        elif self.major == other.major:
+            return self.minor > other.minor
+        return False
+
+    def __le__(self, other: Union["Version", str]) -> bool:
+        return self < other or self == other
+
+    def __ge__(self, other: Union["Version", str]) -> bool:
+        return self > other or self == other
+
+    def bump_major(self):
+        self.major += 1
+
+    def bump_minor(self):
+        self.minor += 1
 
 
 def generate_slug() -> str:
@@ -69,6 +129,53 @@ def update_version(path: str, version: str) -> None:
             return
 
 
+def skeleton(
+    meta: Meta, keys: Optional[List[Any]] = None
+) -> List[List[Dict[Any, Any]]]:
+    """
+    Parameters
+    ----------
+    meta: Meta
+        Meta of the pipeline
+    keys: List[Any], optional
+        The set of keys in meta where to search for previous dataset's meta.
+        For example Concatenator when get_meta() is called stores meta of its
+        datasets in the field called 'data'.
+        If nothing given uses the default set of keys. Use this parameter only if
+        your custom modifiers have additional fields you need to cover in this.
+
+    Returns
+    -------
+    skeleton: List[List[Dict[Any, Any]]]
+    """
+
+    if keys is not None:
+        keys += default_keys
+    else:
+        keys = default_keys
+
+    skel = []
+    # The pipeline is given - represent each one with a new list
+    if isinstance(meta, list):
+        for ds in meta:
+            s = skeleton(ds)
+            skel.append(s)
+    # The dataset is given - add it to the list and search for any
+    # additional info in it
+    elif isinstance(meta, dict):
+        if "name" in meta:
+            s = {"name": meta["name"]}
+        else:
+            raise KeyError("Name not in meta")
+
+        for key in keys:
+            if key in meta:
+                prev = skeleton(meta["data"])
+                s[key] = prev
+        skel.append(s)
+    return skel
+
+
 def migrate_repo_v0_13(path: str) -> None:
     """
     Changes format of meta data files written in previous
@@ -85,12 +192,11 @@ def migrate_repo_v0_13(path: str) -> None:
     path : str
         Path to the container to migrate
     """
-    from tqdm import tqdm
-
     from cascade.base import MetaHandler, MetaIOError
     from cascade.lines import ModelLine
     from cascade.metrics import Metric, MetricType
     from cascade.models import ModelRepo, SingleLineRepo
+    from tqdm import tqdm
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):

@@ -21,7 +21,7 @@ from typing import Any, Tuple
 import pendulum
 
 from ..base import Meta, MetaHandler, supported_meta_formats
-from ..meta.utils import skeleton
+from ..base.utils import skeleton
 from .dataset import BaseDataset, T
 from .modifier import Modifier
 
