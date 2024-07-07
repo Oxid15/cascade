@@ -61,10 +61,10 @@ class Version:
         return self > other or self == other
 
     def bump_major(self):
-        self.major += 1
+        return Version(f"{self.major + 1}.0")
 
     def bump_minor(self):
-        self.minor += 1
+        return Version(f"{self.major}.{self.minor + 1}")
 
 
 def generate_slug() -> str:
