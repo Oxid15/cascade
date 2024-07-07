@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import pendulum
 
-from ..base import MetaFromFile, MetaHandler, PipeMeta
+from ..base import Meta, MetaHandler
 from ..base.utils import generate_slug
 from ..models.model import Model
 from .disk_line import DiskLine
@@ -215,7 +215,7 @@ class ModelLine(DiskLine):
         self._item_names.append(folder_name)
         self.sync_meta()
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -237,7 +237,7 @@ class ModelLine(DiskLine):
         """
         return super().create_item(*args, **kwargs)
 
-    def load_model_meta(self, path_spec: Union[str, int]) -> MetaFromFile:
+    def load_model_meta(self, path_spec: Union[str, int]) -> Meta:
         """
         Given a model num or a slug, loads its metadata from disk
 

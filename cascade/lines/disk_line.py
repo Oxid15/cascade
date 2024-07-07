@@ -1,7 +1,7 @@
 import os
-from typing import Any, List, Literal, Type, Union
+from typing import Any, List, Literal, Type
 
-from ..base import MetaFromFile, MetaHandler, PipeMeta, TraceableOnDisk
+from ..base import Meta, MetaHandler, TraceableOnDisk
 from ..version import __version__
 from .line import Line
 
@@ -16,6 +16,8 @@ class DiskLine(TraceableOnDisk, Line):
         **kwargs: Any,
     ) -> None:
         root = os.path.abspath(root)
+        super().__init__(root, meta_fmt, *args, **kwargs)
+
         self._item_cls = item_cls
         self._item_names = []
 
@@ -23,8 +25,6 @@ class DiskLine(TraceableOnDisk, Line):
             self._load_item_names()
         else:
             os.mkdir(self._root)
-
-        super().__init__(root, meta_fmt, *args, **kwargs)
         self.sync_meta()
 
     def reload(self) -> None:
@@ -62,7 +62,7 @@ class DiskLine(TraceableOnDisk, Line):
         item = self._item_cls.load(os.path.join(self._root, self._item_names[num]))
         return item
 
-    def _read_meta_by_name(self, name: str) -> MetaFromFile:
+    def _read_meta_by_name(self, name: str) -> Meta:
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
@@ -84,7 +84,7 @@ class DiskLine(TraceableOnDisk, Line):
     def __repr__(self) -> str:
         return f"{self.__class__}({len(self)}) items of {self._item_cls}"
 
-    def load_obj_meta(self, path_spec: int) -> MetaFromFile:
+    def load_obj_meta(self, path_spec: int) -> Meta:
         """
         Loads metadata of a item from disk
 
@@ -138,7 +138,7 @@ class DiskLine(TraceableOnDisk, Line):
         item.add_log_callback(self._save_only_meta)
         return item
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {

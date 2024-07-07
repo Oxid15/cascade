@@ -14,7 +14,7 @@ limitations under the License.
 from abc import ABC, abstractmethod
 from typing import Any
 
-from ..base import MetaFromFile
+from ..base import Meta
 
 
 class Line(ABC):
@@ -34,7 +34,7 @@ class Line(ABC):
     def save(self, obj: Any, only_meta: bool = False) -> None: ...
 
     @abstractmethod
-    def load_obj_meta(self, pathspec: str) -> MetaFromFile: ...
+    def load_obj_meta(self, pathspec: str) -> Meta: ...
 
     @abstractmethod
     def get_root(self) -> str: ...

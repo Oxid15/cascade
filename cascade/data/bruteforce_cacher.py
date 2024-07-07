@@ -21,7 +21,6 @@ from tqdm import tqdm, trange
 from .dataset import BaseDataset, T
 from .modifier import Modifier
 
-from .dataset import Modifier, SizedDataset, T
 
 class BruteforceCacher(Modifier[T]):
     """
