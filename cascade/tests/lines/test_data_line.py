@@ -46,3 +46,17 @@ def test_save_load(tmp_path_str):
 
     assert [1, 2, 3] == [i for i in ds01]
     assert [2, 3, 4] == [i for i in ds10]
+
+
+def test_get_version(tmp_path_str):
+    line = DataLine(tmp_path_str)
+
+    ds = Wrapper([0, 1, 2])
+    ds01 = ApplyModifier(ds, add1)
+    line.save(ds01)
+
+    ds10 = ApplyModifier(ds01, add1)
+    line.save(ds10)
+
+    assert str(line.get_version(ds01)) == "0.1"
+    assert str(line.get_version(ds10)) == "1.0"

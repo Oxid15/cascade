@@ -1,7 +1,7 @@
 import os
 from collections import defaultdict
 from hashlib import md5
-from typing import Any, Literal, Type
+from typing import Any, Literal, Tuple, Type
 
 import pendulum
 
@@ -32,6 +32,41 @@ class DataLine(DiskLine):
                 self._hashes[skel_hash] = defaultdict(dict)
                 self._hashes[skel_hash][meta_hash] = Version(name)
 
+    def _get_hashes(self, meta: Meta) -> Tuple[str, str]:
+        skel = skeleton(meta)
+
+        skel_str = str(skel)
+        meta_str = str(meta)
+
+        skel_hash = md5(str.encode(skel_str, "utf-8")).hexdigest()
+        meta_hash = md5(str.encode(meta_str, "utf-8")).hexdigest()
+        return skel_hash, meta_hash
+
+    def get_version(self, ds: Dataset) -> Version:
+        meta = ds.get_meta()
+        skel_hash, meta_hash = self._get_hashes(meta)
+        return self._get_version(skel_hash, meta_hash)
+
+    def _get_version(self, skel_hash: str, meta_hash: str) -> Version:
+        if skel_hash in self._hashes:
+            if meta_hash in self._hashes[skel_hash]:
+                version = self._hashes[skel_hash][meta_hash]
+            else:
+                max_version = max(list(self._hashes[skel_hash].values()))
+                version = max_version.bump_minor()
+        else:
+            if len(self._hashes):
+                max_version = Version("0.1")
+                for sh in self._hashes:
+                    for mh in self._hashes[sh]:
+                        if self._hashes[sh][mh] > max_version:
+                            max_version = self._hashes[sh][mh]
+                version = max_version.bump_major()
+            else:
+                version = Version("0.1")
+
+        return version
+
     def load(self, num: int) -> None:
         if isinstance(num, int):
             path = os.path.join(self._root, self._item_names[num])
@@ -49,30 +84,8 @@ class DataLine(DiskLine):
                 f"Can only save meta of type `dataset` into a DataLine, got {obj_type}"
             )
 
-        skel = skeleton(meta)
-
-        skel_str = str(skel)
-        meta_str = str(meta)
-
-        skel_hash = md5(str.encode(skel_str, "utf-8")).hexdigest()
-        meta_hash = md5(str.encode(meta_str, "utf-8")).hexdigest()
-
-        if skel_hash in self._hashes:
-            if meta_hash in self._hashes[skel_hash]:
-                version = self._hashes[skel_hash][meta_hash]
-            else:
-                max_version = max(list(self._hashes[skel_hash].values()))
-                version = max_version.bump_minor()
-        else:
-            if len(self._hashes):
-                max_version = Version("0.1")
-                for sh in self._hashes:
-                    for mh in self._hashes[sh]:
-                        if self._hashes[sh][mh] > max_version:
-                            max_version = self._hashes[sh][mh]
-                version = max_version.bump_major()
-            else:
-                version = Version("0.1")
+        skel_hash, meta_hash = self._get_hashes(meta)
+        version = self._get_version(skel_hash, meta_hash)
 
         version_str = str(version)
 
@@ -95,7 +108,7 @@ class DataLine(DiskLine):
         self.sync_meta()
 
     def __getitem__(self, num: int) -> Any:
-        raise NotImplementedError()
+        return self.load(num)
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
