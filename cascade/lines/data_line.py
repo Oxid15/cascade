@@ -6,6 +6,7 @@ from typing import Any, Literal, Type
 import pendulum
 
 from ..base import Meta, MetaHandler
+from ..base.serialization import ObjectHandler
 from ..base.utils import Version, skeleton
 from ..data.dataset import Dataset
 from .disk_line import DiskLine
@@ -17,10 +18,13 @@ class DataLine(DiskLine):
         root: str,
         ds_cls: Type[Any] = Dataset,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
+        obj_backend: Literal["pickle"] = "pickle",
         *args: Any,
         **kwargs: Any,
     ) -> None:
         super().__init__(root, item_cls=ds_cls, meta_fmt=meta_fmt, *args, **kwargs)
+
+        self._obj_handler = ObjectHandler(obj_backend)
         self._hashes = defaultdict(dict)
         for name in self._item_names:
             with open(os.path.join(self._root, name, "HASHES"), "r") as f:
@@ -29,9 +33,15 @@ class DataLine(DiskLine):
                 self._hashes[skel_hash][meta_hash] = Version(name)
 
     def load(self, num: int) -> None:
-        raise NotImplementedError()
+        if isinstance(num, int):
+            path = os.path.join(self._root, self._item_names[num])
+        elif isinstance(num, str):
+            path = os.path.join(self._root, num)
+        else:
+            raise TypeError()
+        return self._obj_handler.load(path)
 
-    def save(self, ds: Dataset, only_meta: bool = True) -> None:
+    def save(self, ds: Dataset, only_meta: bool = False) -> None:
         meta = ds.get_meta()
         obj_type = meta[0].get("type")
         if obj_type != "dataset":
@@ -77,6 +87,9 @@ class DataLine(DiskLine):
 
         with open(os.path.join(self._root, version_str, "HASHES"), "w") as f:
             f.write("\n".join([skel_hash, meta_hash]))
+
+        if not only_meta:
+            self._obj_handler.save(ds, os.path.join(self._root, version_str))
 
         self._item_names.append(version_str)
         self.sync_meta()

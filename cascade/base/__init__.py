@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, List, NoReturn, Union
+from typing import Any, Dict, List, NoReturn
 
 """
 Single meta of basic object is just a dict, however Cascade works with
@@ -48,4 +48,5 @@ from .cache import Cache
 from .history_handler import HistoryHandler
 from .meta_handler import CustomEncoder as JSONEncoder
 from .meta_handler import MetaHandler, default_meta_format, supported_meta_formats
+from .serialization import ObjectHandler
 from .traceable import Traceable, TraceableOnDisk
