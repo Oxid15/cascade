@@ -17,14 +17,11 @@ limitations under the License.
 import os
 import sys
 
-import pytest
-
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import ApplyModifier, Wrapper
 from cascade.lines import DataLine
-from cascade.tests.conftest import DummyModel
 
 
 def add1(x):
@@ -60,3 +57,15 @@ def test_get_version(tmp_path_str):
 
     assert str(line.get_version(ds01)) == "0.1"
     assert str(line.get_version(ds10)) == "1.0"
+
+
+def test_idempotency(tmp_path_str, dataset):
+    line = DataLine(tmp_path_str)
+
+    line.save(dataset)
+    version = line.get_version(dataset)
+
+    line.save(dataset)
+    after_version = line.get_version(dataset)
+
+    assert version == after_version
