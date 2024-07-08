@@ -69,3 +69,4 @@ def test_idempotency(tmp_path_str, dataset):
     after_version = line.get_version(dataset)
 
     assert version == after_version
+    assert len(line) == 1
