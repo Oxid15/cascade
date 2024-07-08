@@ -1,13 +1,21 @@
 import os
+import socket
 from collections import defaultdict
+from getpass import getuser
 from hashlib import md5
-from typing import Any, Literal, Tuple, Type
+from typing import Any, Literal, Optional, Tuple, Type
 
 import pendulum
 
 from ..base import Meta, MetaHandler
 from ..base.serialization import ObjectHandler
-from ..base.utils import Version, skeleton
+from ..base.utils import (
+    Version,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+    skeleton,
+)
 from ..data.dataset import Dataset
 from .disk_line import DiskLine
 
@@ -22,10 +30,10 @@ class DataLine(DiskLine):
         *args: Any,
         **kwargs: Any,
     ) -> None:
+        self._hashes = defaultdict(dict)
         super().__init__(root, item_cls=ds_cls, meta_fmt=meta_fmt, *args, **kwargs)
 
         self._obj_handler = ObjectHandler(obj_backend)
-        self._hashes = defaultdict(dict)
         for name in self._item_names:
             with open(os.path.join(self._root, name, "HASHES"), "r") as f:
                 skel_hash, meta_hash = f.read().split("\n")
@@ -42,6 +50,16 @@ class DataLine(DiskLine):
         meta_hash = md5(str.encode(meta_str, "utf-8")).hexdigest()
         return skel_hash, meta_hash
 
+    def get_latest_version(self) -> Optional[Version]:
+        if len(self._hashes) > 0:
+            max_version = Version("0.1")
+            for sh in self._hashes:
+                for mh in self._hashes[sh]:
+                    if self._hashes[sh][mh] > max_version:
+                        max_version = self._hashes[sh][mh]
+            return max_version
+        return None
+
     def get_version(self, ds: Dataset) -> Version:
         meta = ds.get_meta()
         skel_hash, meta_hash = self._get_hashes(meta)
@@ -56,11 +74,7 @@ class DataLine(DiskLine):
                 version = max_version.bump_minor()
         else:
             if len(self._hashes):
-                max_version = Version("0.1")
-                for sh in self._hashes:
-                    for mh in self._hashes[sh]:
-                        if self._hashes[sh][mh] > max_version:
-                            max_version = self._hashes[sh][mh]
+                max_version = self.get_latest_version()
                 version = max_version.bump_major()
             else:
                 version = Version("0.1")
@@ -94,6 +108,19 @@ class DataLine(DiskLine):
 
         meta[0]["path"] = full_path
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
+        meta[0]["version"] = version_str
+        meta[0]["python_version"] = get_python_version()
+        meta[0]["user"] = getuser()
+        meta[0]["host"] = socket.gethostname()
+
+        git_commit = get_latest_commit_hash()
+        if git_commit:
+            meta[0]["cwd"] = os.getcwd()
+            meta[0]["git_commit"] = git_commit
+
+        git_uncommitted = get_uncommitted_changes()
+        if git_uncommitted is not None:
+            meta[0]["git_uncommitted_changes"] = git_uncommitted
 
         os.makedirs(full_path, exist_ok=True)
         MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
@@ -113,4 +140,5 @@ class DataLine(DiskLine):
     def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({"type": "data_line"})
+        meta[0]["latest_version"] = self.get_latest_version()
         return meta
