@@ -15,14 +15,15 @@ limitations under the License.
 """
 
 import logging
+import warnings
 from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 import pendulum
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
-from ..lines import ModelLine
-from ..models import Model
-from ..repos import Repo
+from ..base import Meta, Traceable, raise_not_implemented
+from ..lines.model_line import ModelLine
+from ..models.model import Model
+from ..repos.repo import Repo
 
 logger = logging.getLogger(__name__)
 
@@ -52,10 +53,9 @@ class Trainer(Traceable):
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise_not_implemented("cascade.models.Trainer", "train")
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
-        meta[0]["metrics"] = self.metrics
-        meta[0]["repo"] = self._repo.get_meta()
+        meta[0]["type"] = "trainer"
         return meta
 
 
@@ -67,6 +67,12 @@ class BasicTrainer(Trainer):
     """
 
     def __init__(self, repo: Union[Repo, str], *args: Any, **kwargs: Any) -> None:
+        warnings.warn(
+            "cascade.models.BasicTrainer is deprecated since 0.14.0"
+            " please, consider migrating to cascade.trainers.Trainer"
+            " See documentation and release notes on what's changed"
+        )
+
         self.train_start_at = None
         self.train_end_at = None
         super().__init__(repo, *args, **kwargs)
@@ -76,7 +82,7 @@ class BasicTrainer(Trainer):
         model_num = len(line) - 1
         while True:
             try:
-                model = line.load(model_num)
+                model = line.load(model_num, only_meta=False)
                 return model, model_num
             except Exception as e:
                 logger.warning(f"Model {model_num} files were not found\n{e}")
@@ -86,7 +92,6 @@ class BasicTrainer(Trainer):
                     raise FileNotFoundError(f"No model files were found in line {line}")
 
     def _handle(self, error: Exception, model: Model, line: ModelLine):
-        # TODO: write exception into meta?
         line.save(model, only_meta=True)
         logger.exception(error)
 
@@ -101,6 +106,7 @@ class BasicTrainer(Trainer):
         start_from: Optional[str] = None,
         eval_strategy: Optional[int] = None,
         save_strategy: Optional[int] = None,
+        save_meta_callback: bool = True,
     ) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
@@ -126,6 +132,9 @@ class BasicTrainer(Trainer):
             save_strategy: int, optional
                 Saving will take place every `save_strategy` epochs. Meta will be saved anyway.
                 If None - the strategy is 'save only meta'.
+            save_meta_callback: bool, optional
+                By default True - adds line.save(model, only_meta=True) as a callback
+                when model.log() is called
         """
 
         if train_kwargs is None:
@@ -151,6 +160,19 @@ class BasicTrainer(Trainer):
         self._repo.add_line(line_name, type(model))
         line = self._repo[line_name]
 
+        self.update_meta({
+            "epochs": epochs,
+            "eval_strategy": eval_strategy,
+            "save_strategy": save_strategy,
+        })
+        line.link(self)
+
+        if hasattr(train_data, "get_meta"):
+            line.link(train_data)
+
+        if hasattr(test_data, "get_meta"):
+            line.link(test_data)
+
         if start_from is not None:
             if len(line) == 0:
                 raise RuntimeError(f"Cannot start from line {line_name} as it is empty")
@@ -158,7 +180,8 @@ class BasicTrainer(Trainer):
 
         # Since the model is created externally, we
         # need to register a callback manually
-        model.add_log_callback(line._save_only_meta)
+        if save_meta_callback:
+            model.add_log_callback(line._save_only_meta)
 
         start_time = pendulum.now()
         self.train_start_at = start_time
@@ -209,9 +232,18 @@ class BasicTrainer(Trainer):
         logger.info(
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"
         )
+        logger.info(f"repo was {self._repo}")
+        logger.info(f"line was {line_name}")
+        if start_from is not None:
+            logger.info(f"started from model {model_num}")
+        logger.info(f"training ended on {epoch} epoch")
+        logger.info(f"Parameters:\n{train_kwargs}")
+        logger.info("Metrics:")
+        for metric in model.metrics:
+            logger.info(metric)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
-        meta[0]["train_start_at"] = self.train_start_at
-        meta[0]["train_end_at"] = self.train_end_at
+        meta[0]["training_started_at"] = self.train_start_at
+        meta[0]["training_ended_at"] = self.train_end_at
         return meta
