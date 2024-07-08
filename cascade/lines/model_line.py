@@ -15,15 +15,23 @@ limitations under the License.
 """
 
 import os
+import socket
 import traceback
 import warnings
-from typing import Any, Dict, List, Optional, Union
+from getpass import getuser
+from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
 
 from ..base import Meta, MetaHandler
-from ..base.utils import generate_slug
+from ..base.utils import (
+    generate_slug,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+)
 from ..models.model import Model
+from ..version import __version__
 from .disk_line import DiskLine
 
 
@@ -83,6 +91,8 @@ class ModelLine(DiskLine):
         ----------
         num : int
             Model number in line
+        only_meta : bool, optional
+            If True doesn't load model's artifacts, by default False
         """
         if only_meta is not None:
             warnings.warn(
@@ -180,6 +190,18 @@ class ModelLine(DiskLine):
         meta[0]["path"] = full_path
         meta[0]["slug"] = slug
         meta[0]["saved_at"] = pendulum.now(tz="UTC")
+        meta[0]["python_version"] = get_python_version()
+        meta[0]["user"] = getuser()
+        meta[0]["host"] = socket.gethostname()
+
+        git_commit = get_latest_commit_hash()
+        if git_commit:
+            meta[0]["cwd"] = os.getcwd()
+            meta[0]["git_commit"] = git_commit
+
+        git_uncommitted = get_uncommitted_changes()
+        if git_uncommitted is not None:
+            meta[0]["git_uncommitted_changes"] = git_uncommitted
 
         model_tb = None
         artifact_tb = None
