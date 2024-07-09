@@ -22,6 +22,9 @@ from typing import Any, Callable, Optional, Union
 import pendulum
 
 from ..base import Meta, Traceable, raise_not_implemented
+from ..base.utils import Version
+from ..data import Dataset
+from ..lines.data_line import DataLine
 from ..metrics import Metric, MetricType
 
 
@@ -224,9 +227,7 @@ class Model(Traceable):
         if isinstance(metric, str):
             metric = Metric(name=metric, value=value, **kwargs)
         elif not isinstance(metric, Metric):
-            raise TypeError(
-                f"Metric can be either str or Metric type, not {type(metric)}"
-            )
+            raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
 
         # Model be initialized not properly
         if not hasattr(self, "metrics"):
@@ -240,6 +241,43 @@ class Model(Traceable):
                 return
 
         self.metrics.append(metric)
+
+    def link_dataset(
+        self,
+        ds: Dataset,
+        name: Optional[str] = None,
+        split: Optional[str] = None,
+        line: Optional[DataLine] = None,
+    ) -> None:
+        """
+        Convenience function for linking datasets. Produces more readable meta files and records
+        useful info without much hassle
+
+        Parameters
+        ----------
+        ds : Dataset
+            Dataset to link
+        name : Optional[str], optional
+            Dataset name, by default None
+        split : Optional[str], optional
+            Split if applicable, may be "train", "test", etc, by default None
+        line : Optional[DataLine], optional
+            DataLine where this dataset is stored if applicable, by default None
+        """
+        ds_meta = ds.get_meta()
+        meta = {}
+        for key in ["type", "description", "tags", "comments"]:
+            if ds_meta[0].get(key):
+                meta[key] = ds_meta[0][key]
+
+        if split:
+            meta["split"] = split
+
+        if line is not None:
+            meta["version"] = str(line.get_version(ds))
+            meta["line_root"] = line.get_root()
+
+        self.link(name=name, meta=[meta])
 
     def log(self) -> None:
         """
