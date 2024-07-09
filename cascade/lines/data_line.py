@@ -3,7 +3,7 @@ import socket
 from collections import defaultdict
 from getpass import getuser
 from hashlib import md5
-from typing import Any, Literal, Optional, Tuple, Type
+from typing import Any, Literal, Optional, Tuple, Type, Union
 
 import pendulum
 
@@ -81,7 +81,7 @@ class DataLine(DiskLine):
 
         return version
 
-    def load(self, num: int) -> None:
+    def load(self, num: Union[int, str]) -> None:
         if isinstance(num, int):
             path = os.path.join(self._root, self._item_names[num])
         elif isinstance(num, str):
@@ -100,8 +100,10 @@ class DataLine(DiskLine):
 
         skel_hash, meta_hash = self._get_hashes(meta)
         version = self._get_version(skel_hash, meta_hash)
-
         version_str = str(version)
+
+        if skel_hash not in self._hashes or meta_hash not in self._hashes[skel_hash]:
+            self._item_names.append(version_str)
 
         self._hashes[skel_hash][meta_hash] = version
         full_path = os.path.join(self._root, version_str)
@@ -131,7 +133,6 @@ class DataLine(DiskLine):
         if not only_meta:
             self._obj_handler.save(ds, os.path.join(self._root, version_str))
 
-        self._item_names.append(version_str)
         self.sync_meta()
 
     def __getitem__(self, num: int) -> Any:
