@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, List
 
-from ..base import PipeMeta
+from ..base import Meta
 from ..base.traceable import Traceable
 from ..lines import Line
 from ..version import __version__
@@ -32,7 +32,7 @@ class BaseRepo(Traceable, ABC):
     @abstractmethod
     def __len__(self) -> int: ...
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {

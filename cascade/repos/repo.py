@@ -16,7 +16,7 @@ import shutil
 import warnings
 from typing import Any, Dict, Iterable, List, Literal, Optional, Type, Union
 
-from ..base import MetaFromFile, TraceableOnDisk, ZeroMetaError
+from ..base import Meta, TraceableOnDisk, ZeroMetaError
 from .base_repo import BaseRepo
 from .line_factory import LineFactory
 
@@ -188,7 +188,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         self._update_lines()
         self.sync_meta()
 
-    def load_obj_meta(self, obj: str) -> MetaFromFile:
+    def load_obj_meta(self, obj: str) -> Meta:
         """
         Loads metadata of an object inside repo from disk
 
@@ -199,7 +199,7 @@ class Repo(BaseRepo, TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Obj metadata
 
         Raises
