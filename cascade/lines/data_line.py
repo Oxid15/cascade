@@ -51,6 +51,10 @@ class DataLine(DiskLine):
         return skel_hash, meta_hash
 
     def get_latest_version(self) -> Optional[Version]:
+        """
+        Returns latest known version of a dataset or None
+        if empty.
+        """
         if len(self._hashes) > 0:
             max_version = Version("0.1")
             for sh in self._hashes:
@@ -61,6 +65,15 @@ class DataLine(DiskLine):
         return None
 
     def get_version(self, ds: Dataset) -> Version:
+        """
+        Given a dataset, returns its version. If
+        the dataset was seen previously, will retrieve the
+        version and if not, will assign appropriate latest
+        version.
+
+        Does not record the info about dataset - use save()
+        for that purposes.
+        """
         meta = ds.get_meta()
         skel_hash, meta_hash = self._get_hashes(meta)
         return self._get_version(skel_hash, meta_hash)
@@ -81,16 +94,27 @@ class DataLine(DiskLine):
 
         return version
 
-    def load(self, num: Union[int, str]) -> None:
+    def load(self, num: Union[int, str]) -> Dataset:
+        """
+        Loads a dataset by using its number or version string
+        """
         if isinstance(num, int):
             path = os.path.join(self._root, self._item_names[num])
         elif isinstance(num, str):
             path = os.path.join(self._root, num)
         else:
-            raise TypeError()
+            raise TypeError(f"Only accept the number of dataset or its version as input, got {type(num)}")
         return self._obj_handler.load(path)
 
     def save(self, ds: Dataset, only_meta: bool = False) -> None:
+        """
+        Saves a dataset into a folder corresponding with its version.
+        Version is determined by meta from get_meta method and consists of two parts.
+        Major and minor like 0.1 or 2.12 etc. If the
+        structure of the pipeline changed e.g. some new step added,
+        then major version updates. An when the structure is the same, but meta changed
+        in some way, then minor version is updated.
+        """
         meta = ds.get_meta()
         obj_type = meta[0].get("type")
         if obj_type != "dataset":
