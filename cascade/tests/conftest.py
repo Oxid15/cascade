@@ -37,7 +37,6 @@ from cascade.data import (
     IteratorWrapper,
     RandomSampler,
     RangeSampler,
-    SequentialCacher,
     Wrapper,
 )
 from cascade.models import BasicModel, ModelLine, ModelRepo
