@@ -42,7 +42,6 @@ class Repo(BaseRepo, TraceableOnDisk):
         self,
         folder: str,
         *args: Any,
-        lines: Optional[Iterable[Dict[str, Any]]] = None,
         overwrite: bool = False,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
         **kwargs: Any,
@@ -53,11 +52,6 @@ class Repo(BaseRepo, TraceableOnDisk):
         folder:
             Path to a folder where Repo needs to be created or already was created
             if folder does not exist, creates it
-        lines: Optional[Iterable[Dict[str, Any]]], by default is None
-            Deprecated, use add_model instead
-
-            A list with parameters of lines to add at creation
-            or to initialize (alias for `add_line`)
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
@@ -83,16 +77,8 @@ class Repo(BaseRepo, TraceableOnDisk):
             if os.path.isdir(os.path.join(self._root, name))
         }
 
-        if lines is not None:
-            warnings.warn(
-                "`lines` keyword is deprecated and will be removed in 0.15.0, "
-                "consider migrating to `add_line`"
-            )
-            for line in lines:
-                name = line["name"]
-                del line["name"]
-
-                self._lines[name] = {"args": [], "kwargs": line}
+        if "lines" in kwargs:
+            raise ValueError("lines was removed in 0.14.0, consider using add_line method instead")
 
         self.sync_meta()
 
