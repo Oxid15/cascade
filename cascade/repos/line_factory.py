@@ -26,13 +26,13 @@ class LineFactory:
         return line
 
     @classmethod
-    def read(cls, path: str) -> Line:
+    def read(cls, path: str, *args: Any, **kwargs: Any) -> Line:
         meta = MetaHandler.read_dir(path)
         obj_type = meta[0]["type"]
 
         if obj_type not in cls._type2cls:
             raise TypeError(f"Cannot read a line from obj of type `{obj_type}`")
         else:
-            line = cls._type2cls[obj_type](path)
+            line = cls._type2cls[obj_type](path, *args, **kwargs)
             line.from_meta(meta)  # Is this OK?
             return line
