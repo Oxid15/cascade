@@ -35,12 +35,12 @@ class AlwaysFailingModel(DummyModel):
         raise RuntimeError()
 
 
-def test_base(tmp_path_str, model_repo):
+def test_base(tmp_path_str, repo):
     t = Trainer(tmp_path_str)
     meta = t.get_meta()
     assert len(meta) == 1
 
-    t = Trainer(model_repo)
+    t = Trainer(repo)
     meta = t.get_meta()
     assert len(meta) == 1
 

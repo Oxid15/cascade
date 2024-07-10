@@ -49,26 +49,26 @@ def test_no_metric(repo_or_line, dummy_model):
         hv.plot("acc")
 
 
-def test_empty_model(model_repo, empty_model):
-    model_repo.add_line("test", EmptyModel)
+def test_empty_model(repo, empty_model):
+    repo.add_line("test", EmptyModel)
     empty_model.add_metric("acc", 0.9)
-    model_repo["test"].save(empty_model)
+    repo["test"].save(empty_model)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo)
     hv.plot("acc")
 
 
-def test_many_lines(model_repo, dummy_model):
+def test_many_lines(repo, dummy_model):
     model0 = dummy_model
     model0.evaluate()
 
     model1 = dummy_model
     model1.evaluate()
 
-    model_repo["0"].save(model0)
-    model_repo["1"].save(model1)
+    repo["0"].save(model0)
+    repo["1"].save(model1)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo)
     hv.plot("acc")
 
 

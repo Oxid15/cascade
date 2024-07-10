@@ -39,7 +39,9 @@ from cascade.data import (
     RangeSampler,
     Wrapper,
 )
-from cascade.models import BasicModel, ModelLine, ModelRepo
+from cascade.lines import ModelLine
+from cascade.models import BasicModel
+from cascade.repos import Repo
 
 
 class DummyModel(BasicModel):
@@ -155,10 +157,10 @@ def ones_model():
 
 
 @pytest.fixture
-def model_repo(tmp_path_factory):
+def repo(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("repo-", numbered=True)
     tmp_path = os.path.join(tmp_path, "repo")
-    repo = ModelRepo(
+    repo = Repo(
         str(tmp_path),
         lines=[dict(name=str(num), model_cls=DummyModel) for num in range(10)],
     )
@@ -166,8 +168,8 @@ def model_repo(tmp_path_factory):
 
 
 @pytest.fixture(params=[{"repo_or_line": True}, {"repo_or_line": False}])
-def repo_or_line(request, model_repo, model_line):
+def repo_or_line(request, repo, model_line):
     if request.param["repo_or_line"]:
-        return model_repo
+        return repo
     else:
         return model_line
