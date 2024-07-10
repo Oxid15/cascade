@@ -22,9 +22,7 @@ from typing import Any, Callable, Optional, Union
 import pendulum
 
 from ..base import Meta, Traceable, raise_not_implemented
-from ..base.utils import Version
 from ..data import Dataset
-from ..lines.data_line import DataLine
 from ..metrics import Metric, MetricType
 
 
@@ -247,7 +245,7 @@ class Model(Traceable):
         ds: Dataset,
         name: Optional[str] = None,
         split: Optional[str] = None,
-        line: Optional[DataLine] = None,
+        line: Optional["DataLine"] = None,
     ) -> None:
         """
         Convenience function for linking datasets. Produces more readable meta files and records

@@ -15,14 +15,15 @@ limitations under the License.
 """
 
 
-from hashlib import md5
-import pickle
 import os
+import pickle
 import warnings
+from hashlib import md5
+from typing import Any, Callable, List, Union
 
-from typing import Union, Callable, Any, List
-from ..base import raise_not_implemented, MetaHandler
-from .model import Metric, MetricType, Model, ModelModifier
+from ..base import MetaHandler, raise_not_implemented
+from ..metrics import Metric, MetricType
+from .model import Model, ModelModifier
 
 
 class BasicModel(Model):

@@ -23,7 +23,6 @@ from .meta_validator import MetaValidator
 from .meta_viewer import MetaViewer
 from .metric_viewer import MetricViewer
 from .server import Server
-from .utils import skeleton
 from .validator import (
     AggregateValidator,
     DataValidationException,
