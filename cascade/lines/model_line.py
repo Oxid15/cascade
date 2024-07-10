@@ -31,7 +31,6 @@ from ..base.utils import (
     get_uncommitted_changes,
 )
 from ..models.model import Model
-from ..version import __version__
 from .disk_line import DiskLine
 
 
@@ -46,6 +45,7 @@ class ModelLine(DiskLine):
         self,
         root: str,
         model_cls: Type[Any] = Model,
+        meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
         *args: Any,
         **kwargs: Any,
     ) -> None:
@@ -54,7 +54,7 @@ class ModelLine(DiskLine):
         """
 
         self._slug2name_cache = dict()
-        super().__init__(root, item_cls=model_cls, *args, **kwargs)
+        super().__init__(root, item_cls=model_cls, meta_fmt=meta_fmt, *args, **kwargs)
 
     def _find_name_by_slug(self, slug: str) -> Optional[str]:
         if slug in self._slug2name_cache:
