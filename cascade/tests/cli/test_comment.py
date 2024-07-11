@@ -67,7 +67,7 @@ def test_ls(tmp_path_str):
         result = runner.invoke(cli, args=["comment", "ls"])
         assert result.exit_code == 0
 
-        # assert "Hello" in result.output
+        assert "Hello" in result.output
 
 
 def test_rm(tmp_path_str):
