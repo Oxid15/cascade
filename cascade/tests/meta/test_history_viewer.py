@@ -23,13 +23,13 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.meta import HistoryViewer
-from cascade.models import ModelRepo
+from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel, EmptyModel
 
 
 def test_run(repo_or_line, dummy_model):
     dummy_model.evaluate()
-    if isinstance(repo_or_line, ModelRepo):
+    if isinstance(repo_or_line, Repo):
         repo_or_line["0"].save(dummy_model)
     else:
         repo_or_line.save(dummy_model)
@@ -39,7 +39,7 @@ def test_run(repo_or_line, dummy_model):
 
 
 def test_no_metric(repo_or_line, dummy_model):
-    if isinstance(repo_or_line, ModelRepo):
+    if isinstance(repo_or_line, Repo):
         repo_or_line["0"].save(dummy_model)
     else:
         repo_or_line.save(dummy_model)
@@ -50,7 +50,7 @@ def test_no_metric(repo_or_line, dummy_model):
 
 
 def test_empty_model(repo, empty_model):
-    repo.add_line("test", EmptyModel)
+    repo.add_line("test", model_cls=EmptyModel)
     empty_model.add_metric("acc", 0.9)
     repo["test"].save(empty_model)
 
@@ -74,7 +74,7 @@ def test_many_lines(repo, dummy_model):
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_missing_model_meta(tmp_path_str, dummy_model, ext):
-    model_repo = ModelRepo(tmp_path_str)
+    model_repo = Repo(tmp_path_str)
     model_repo.add_line("test", model_cls=DummyModel, meta_fmt=ext)
     dummy_model.evaluate()
     model_repo["test"].save(dummy_model)

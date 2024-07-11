@@ -195,7 +195,7 @@ def migrate_repo_v0_13(path: str) -> None:
     from cascade.base import MetaHandler, MetaIOError
     from cascade.lines import ModelLine
     from cascade.metrics import Metric, MetricType
-    from cascade.models import ModelRepo, SingleLineRepo
+    from cascade.repos import Repo, SingleLineRepo
     from tqdm import tqdm
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
@@ -218,7 +218,7 @@ def migrate_repo_v0_13(path: str) -> None:
 
     root_meta = MetaHandler.read_dir(path)
     if root_meta[0]["type"] == "repo":
-        repo = ModelRepo(path)
+        repo = Repo(path)
     elif root_meta[0]["type"] == "line":
         line = ModelLine(path)
         repo = SingleLineRepo(line)

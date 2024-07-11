@@ -23,7 +23,7 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.meta import MetricViewer
-from cascade.models import ModelRepo
+from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel
 
 
@@ -31,7 +31,7 @@ def test(repo_or_line, dummy_model):
     m = dummy_model
     m.evaluate()
 
-    if isinstance(repo_or_line, ModelRepo):
+    if isinstance(repo_or_line, Repo):
         first = repo_or_line.get_line_names()[0]
         repo_or_line[first].save(m)
     else:

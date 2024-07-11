@@ -160,10 +160,9 @@ def ones_model():
 def repo(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("repo-", numbered=True)
     tmp_path = os.path.join(tmp_path, "repo")
-    repo = Repo(
-        str(tmp_path),
-        lines=[dict(name=str(num), model_cls=DummyModel) for num in range(10)],
-    )
+    repo = Repo(str(tmp_path))
+    for num in range(10):
+        repo.add_line(str(num), model_cls=DummyModel)
     return repo
 
 
