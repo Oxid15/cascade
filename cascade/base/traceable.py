@@ -87,6 +87,15 @@ class Traceable:
         self.comments = list()
         self.links = list()
 
+    def _get_default_meta(self) -> Meta:
+        meta = {}
+        meta["name"] = repr(self)
+        meta["description"] = None
+        meta["tags"] = []
+        meta["comments"] = []
+        meta["links"] = []
+        return [meta]
+
     def get_meta(self) -> Meta:
         """
         Returns
@@ -100,7 +109,8 @@ class Traceable:
 
             Meta is a list (see Meta type alias) to allow the formation of pipelines.
         """
-        meta = {"name": repr(self)}
+        meta = {}
+        meta["name"] = repr(self)
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
@@ -430,7 +440,7 @@ class TraceableOnDisk(Traceable):
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
         # Object was created before -> update meta on disk
         if len(meta_path) > 0:
-            meta = {}
+            meta = [{}]
             from . import MetaHandler
 
             try:
@@ -438,11 +448,13 @@ class TraceableOnDisk(Traceable):
             except MetaIOError as e:
                 warnings.warn(f"File reading error ignored: {e}")
 
+            default_meta = self._get_default_meta()
             self_meta = self.get_meta()
             for self_block, block in zip(self_meta, meta):
                 for key in self_block:
-                    if key not in DO_NOT_UPDATE and self_block[key]:
-                        block[key] = self_block[key]
+                    if key not in DO_NOT_UPDATE and key in default_meta[0] and self_block[key] == default_meta[0][key]:
+                        continue
+                    block[key] = self_block[key]
 
             try:
                 MetaHandler.write_dir(self._root, meta)

@@ -22,6 +22,9 @@ def test_on_disk_create(tmp_path_str, ext):
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_on_disk_recreate(tmp_path_str, ext):
+    """
+    Meta should remain consistent after syncs
+    """
     trd = TraceableOnDisk(tmp_path_str, ext)
     trd.sync_meta()
 
@@ -38,6 +41,19 @@ def test_on_disk_recreate(tmp_path_str, ext):
     del meta[0]["updated_at"]
     del new_meta[0]["updated_at"]
     assert meta == new_meta
+
+
+def test_no_overwrites(tmp_path_str):
+    trd = TraceableOnDisk(tmp_path_str, ".json")
+    trd.update_meta({"name": "new_name"})
+    trd.sync_meta()
+
+    meta = MetaHandler.read_dir(tmp_path_str)
+
+    TraceableOnDisk(tmp_path_str, ".json").sync_meta()
+    new_meta = MetaHandler.read_dir(tmp_path_str)
+
+    assert meta[0]["name"] == new_meta[0]["name"]
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
