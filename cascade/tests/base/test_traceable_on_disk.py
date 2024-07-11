@@ -43,7 +43,7 @@ def test_on_disk_recreate(tmp_path_str, ext):
     assert meta == new_meta
 
 
-def test_no_overwrites(tmp_path_str):
+def test_no_name_overwrites(tmp_path_str):
     trd = TraceableOnDisk(tmp_path_str, ".json")
     trd.update_meta({"name": "new_name"})
     trd.sync_meta()

@@ -25,7 +25,8 @@ from typing import Any, Callable, Dict, Iterable, Literal, Optional, Union
 
 import pendulum
 
-from . import Meta, MetaIOError, MetaBlock, default_meta_format, supported_meta_formats
+from . import (Meta, MetaBlock, MetaHandler, MetaIOError, default_meta_format,
+               supported_meta_formats)
 
 DO_NOT_UPDATE = ["created_at"]
 
@@ -86,15 +87,6 @@ class Traceable:
 
         self.comments = list()
         self.links = list()
-
-    def _get_default_meta(self) -> Meta:
-        meta = {}
-        meta["name"] = repr(self)
-        meta["description"] = None
-        meta["tags"] = []
-        meta["comments"] = []
-        meta["links"] = []
-        return [meta]
 
     def get_meta(self) -> Meta:
         """
@@ -413,6 +405,11 @@ class TraceableOnDisk(Traceable):
                     "on path {self._root}"
                 )
 
+        # if meta exists
+        if ext: 
+            disk_meta = MetaHandler.read_dir(self._root)
+            self.from_meta(disk_meta)
+
     def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
@@ -448,27 +445,16 @@ class TraceableOnDisk(Traceable):
             except MetaIOError as e:
                 warnings.warn(f"File reading error ignored: {e}")
 
-            default_meta = self._get_default_meta()
             self_meta = self.get_meta()
             for self_block, block in zip(self_meta, meta):
                 for key in self_block:
-                    if (
-                        key not in DO_NOT_UPDATE
-                        and key in default_meta[0]
-                        and self_block[key] == default_meta[0][key]
-                    ):
-                        continue
-                    block[key] = self_block[key]
+                    if key not in DO_NOT_UPDATE:
+                        block[key] = self_block[key]
 
             try:
                 MetaHandler.write_dir(self._root, meta)
             except MetaIOError as e:
                 warnings.warn(f"File writing error ignored: {e}")
-
-            # Update internal fields from updated meta
-            # syncronizing its state with disk
-            self.from_meta(meta)
-            return
         else:
             created = str(pendulum.now(tz="UTC"))
             meta = self.get_meta()
