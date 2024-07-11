@@ -12,7 +12,7 @@ limitations under the License.
 """
 
 import warnings
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import (
     Any,
     Generator,
@@ -31,7 +31,7 @@ from .data_card import DataCard
 T = TypeVar("T", covariant=True)
 
 
-class BaseDataset(Generic[T], Traceable):
+class BaseDataset(ABC, Generic[T], Traceable):
     """
     Base class of any object that constitutes a step in a data-pipeline
 
@@ -43,9 +43,6 @@ class BaseDataset(Generic[T], Traceable):
     def __init__(self, data_card: Optional[DataCard] = None, *args: Any, **kwargs: Any) -> None:
         self._data_card = data_card
         super().__init__(*args, **kwargs)
-
-    @abstractmethod
-    def __getitem__(self, index: Any) -> T: ...
 
     def get_meta(self) -> Meta:
         """
@@ -85,6 +82,9 @@ class Dataset(BaseDataset[T], Sized):
     --------
     cascade.data.Iterator
     """
+
+    @abstractmethod
+    def __getitem__(self, index: Any): ...
 
     @abstractmethod
     def __len__(self) -> int: ...
