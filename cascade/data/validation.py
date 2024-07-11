@@ -97,6 +97,8 @@ class Validator:
 
 class SchemaValidator(Validator):
     def __init__(self, schema: Any) -> None:
+        super().__init__()
+
         name = self._resolve_validator(schema)
         self._validators.append(self.providers[name](schema))
 
