@@ -45,6 +45,11 @@ def test_add(tmp_path_str):
         assert meta[0]["comments"][0]["message"] == "Hello"
 
         meta[0]["comments"] = []
+
+        # Those will obviously different
+        del meta[0]["updated_at"]
+        del init_meta[0]["updated_at"]
+
         assert meta == init_meta
 
 
