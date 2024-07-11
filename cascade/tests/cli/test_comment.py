@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import sys
 
+import pytest
 from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
