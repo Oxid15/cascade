@@ -157,14 +157,14 @@ class BasicTrainer(Trainer):
                 # until it will become clear that some solution needed
                 raise RuntimeError(f"Line {line_name} already exists in {self._repo}")
 
-        self._repo.add_line(line_name, type(model))
+        self._repo.add_line(line_name, model_cls=type(model))
         line = self._repo[line_name]
 
-        self.update_meta({
+        self.update_meta([{
             "epochs": epochs,
             "eval_strategy": eval_strategy,
             "save_strategy": save_strategy,
-        })
+        }])
         line.link(self)
 
         if hasattr(train_data, "get_meta"):
