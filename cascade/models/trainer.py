@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2023 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,15 +15,12 @@ limitations under the License.
 """
 
 import logging
-import warnings
-from typing import Any, Dict, Iterable, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
 import pendulum
 
-from .model import Model
-from .model_line import ModelLine
-from .model_repo import ModelRepo
 from ..base import Meta, Traceable, raise_not_implemented
+from ..models import Model, ModelLine, ModelRepo
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +42,9 @@ class Trainer(Traceable):
         elif isinstance(repo, ModelRepo):
             self._repo = repo
         else:
-            raise TypeError(f"Repo should be either Repo or path, got {type(repo)}")
+            raise TypeError(
+                f"Repo should be either ModelRepo or path, got {type(repo)}"
+            )
 
         self.metrics = []
         super().__init__(*args, **kwargs)
@@ -53,9 +52,10 @@ class Trainer(Traceable):
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise_not_implemented("cascade.models.Trainer", "train")
 
-    def get_meta(self) -> Dict[Any, Any]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
-        meta[0]["type"] = "trainer"
+        meta[0]["metrics"] = self.metrics
+        meta[0]["repo"] = self._repo.get_meta()
         return meta
 
 
@@ -65,14 +65,7 @@ class BasicTrainer(Trainer):
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
-
     def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
-        warnings.warn(
-            "cascade.models.BasicTrainer is deprecated since 0.14.0"
-            " please, consider migrating to cascade.trainers.Trainer"
-            " See documentation and release notes on what's changed"
-        )
-
         self.train_start_at = None
         self.train_end_at = None
         super().__init__(repo, *args, **kwargs)
@@ -98,15 +91,16 @@ class BasicTrainer(Trainer):
     def train(
         self,
         model: Model,
-        train_data: Optional[Iterable[Any]] = None,
-        test_data: Optional[Iterable[Any]] = None,
-        train_kwargs: Optional[Dict[Any, Any]] = None,
-        test_kwargs: Optional[Dict[Any, Any]] = None,
+        *args: Any,
+        train_data: Union[Iterable[Any], None] = None,
+        test_data: Union[Iterable[Any], None] = None,
+        train_kwargs: Union[Dict[Any, Any], None] = None,
+        test_kwargs: Union[Dict[Any, Any], None] = None,
         epochs: int = 1,
-        start_from: Optional[str] = None,
-        eval_strategy: Optional[int] = None,
-        save_strategy: Optional[int] = None,
-        save_meta_callback: bool = True,
+        start_from: Union[str, None] = None,
+        eval_strategy: Union[int, None] = None,
+        save_strategy: Union[int, None] = None,
+        **kwargs: Any,
     ) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
@@ -132,9 +126,6 @@ class BasicTrainer(Trainer):
             save_strategy: int, optional
                 Saving will take place every `save_strategy` epochs. Meta will be saved anyway.
                 If None - the strategy is 'save only meta'.
-            save_meta_callback: bool, optional
-                By default True - adds line.save(model, only_meta=True) as a callback
-                when model.log() is called
         """
 
         if train_kwargs is None:
@@ -160,19 +151,6 @@ class BasicTrainer(Trainer):
         self._repo.add_line(line_name, type(model))
         line = self._repo[line_name]
 
-        self.update_meta({
-            "epochs": epochs,
-            "eval_strategy": eval_strategy,
-            "save_strategy": save_strategy,
-        })
-        line.link(self)
-
-        if hasattr(train_data, "get_meta"):
-            line.link(train_data)
-
-        if hasattr(test_data, "get_meta"):
-            line.link(test_data)
-
         if start_from is not None:
             if len(line) == 0:
                 raise RuntimeError(f"Cannot start from line {line_name} as it is empty")
@@ -180,8 +158,7 @@ class BasicTrainer(Trainer):
 
         # Since the model is created externally, we
         # need to register a callback manually
-        if save_meta_callback:
-            model.add_log_callback(line._save_only_meta)
+        model.add_log_callback(line._save_only_meta)
 
         start_time = pendulum.now()
         self.train_start_at = start_time
@@ -232,18 +209,9 @@ class BasicTrainer(Trainer):
         logger.info(
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"
         )
-        logger.info(f"repo was {self._repo}")
-        logger.info(f"line was {line_name}")
-        if start_from is not None:
-            logger.info(f"started from model {model_num}")
-        logger.info(f"training ended on {epoch} epoch")
-        logger.info(f"Parameters:\n{train_kwargs}")
-        logger.info("Metrics:")
-        for metric in model.metrics:
-            logger.info(metric)
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
-        meta[0]["training_started_at"] = self.train_start_at
-        meta[0]["training_ended_at"] = self.train_end_at
+        meta[0]["train_start_at"] = self.train_start_at
+        meta[0]["train_end_at"] = self.train_end_at
         return meta
