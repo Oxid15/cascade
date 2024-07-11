@@ -26,8 +26,8 @@ from cascade.tests.conftest import DummyModel
 
 def test_repo(tmp_path_str):
     repo = Repo(tmp_path_str)
-    repo.add_line("dummy_1", ModelLine)
-    repo.add_line("00001", ModelLine)
+    repo.add_line("dummy_1")
+    repo.add_line("00001")
 
     assert os.path.exists(os.path.join(tmp_path_str, "dummy_1"))
     assert os.path.exists(os.path.join(tmp_path_str, "00001"))
@@ -36,11 +36,11 @@ def test_repo(tmp_path_str):
 
 def test_save_load(tmp_path_str, dummy_model):
     repo = Repo(tmp_path_str)
-    repo.add_line("0", ModelLine, model_cls=ModelLine)
+    repo.add_line("0", model_cls=DummyModel)
     repo["0"].save(dummy_model)
 
     repo = Repo(tmp_path_str)
-    repo.add_line("0", ModelLine, model_cls=ModelLine)
+    repo.add_line("0", model_cls=DummyModel)
     model = repo["0"][0]
 
 
@@ -48,12 +48,12 @@ def test_save_load(tmp_path_str, dummy_model):
 def test_overwrite(tmp_path_str, ext):
     # If no overwrite repo will have 4 models
     repo = Repo(tmp_path_str, overwrite=True, meta_fmt=ext)
-    repo.add_line("vgg16", ModelLine, model_cls=DummyModel)
-    repo.add_line("resnet", ModelLine, model_cls=DummyModel)
+    repo.add_line("vgg16", model_cls=DummyModel)
+    repo.add_line("resnet", model_cls=DummyModel)
 
     repo = Repo(tmp_path_str, overwrite=True)
-    repo.add_line("densenet", ModelLine, model_cls=DummyModel)
-    repo.add_line("efficientnet", ModelLine, model_cls=DummyModel)
+    repo.add_line("densenet", model_cls=DummyModel)
+    repo.add_line("efficientnet", model_cls=DummyModel)
     assert 2 == len(repo)
 
 
@@ -71,7 +71,7 @@ def test_add_line(tmp_path_str):
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_reusage(tmp_path_str, ext):
     repo = Repo(tmp_path_str, meta_fmt=ext)
-    repo.add_line("vgg16", ModelLine, model_cls=DummyModel)
+    repo.add_line("vgg16", model_cls=DummyModel)
 
     model = DummyModel()
     repo["vgg16"].save(model)
@@ -79,7 +79,7 @@ def test_reusage(tmp_path_str, ext):
     # some time...
 
     repo = Repo(tmp_path_str, meta_fmt=ext)
-    repo.add_line("vgg16", ModelLine, model_cls=DummyModel)
+    repo.add_line("vgg16", model_cls=DummyModel)
     assert len(repo["vgg16"]) == 1
 
 
@@ -87,30 +87,29 @@ def test_reusage(tmp_path_str, ext):
 def test_reusage_init_alias(tmp_path_str, ext):
     repo = Repo(tmp_path_str, meta_fmt=ext)
 
-    repo.add_line("vgg16", ModelLine, model_cls=DummyModel)
+    repo.add_line("vgg16", model_cls=DummyModel)
 
     model = DummyModel()
     repo["vgg16"].save(model)
 
     # some time...
 
-    repo = Repo(
-        tmp_path_str, lines=[dict(name="vgg16", model_cls=ModelLine)], meta_fmt=ext
-    )
+    repo = Repo(tmp_path_str, meta_fmt=ext)
+    repo.add_line(name="vgg16", model_cls=DummyModel)
     assert len(repo["vgg16"]) == 1
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_meta(tmp_path_str, ext):
     repo = Repo(tmp_path_str, meta_fmt=ext)
-    repo.add_line("00000", ModelLine, model_cls=DummyModel)
-    repo.add_line("00001", ModelLine, model_cls=DummyModel)
+    repo.add_line("00000", model_cls=DummyModel)
+    repo.add_line("00001", model_cls=DummyModel)
 
     meta = repo.get_meta()
     assert meta[0]["len"] == 2
 
     repo = Repo(tmp_path_str, meta_fmt=ext)
-    repo.add_line("00002", ModelLine, model_cls=DummyModel)
+    repo.add_line("00002", model_cls=DummyModel)
 
     meta = repo.get_meta()
     assert meta[0]["len"] == 3
@@ -149,7 +148,7 @@ def test_add(tmp_path_str):
 def test_missing_repo_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
     repo = Repo(repo_path, meta_fmt=ext)
-    repo.add_line("0", ModelLine, model_cls=DummyModel)
+    repo.add_line("0", model_cls=DummyModel)
 
     model = DummyModel()
 
@@ -159,9 +158,8 @@ def test_missing_repo_meta(tmp_path_str, ext):
     meta_path = os.path.join(repo_path, "meta" + ext)
     os.remove(meta_path)
 
-    repo = Repo(
-        repo_path, lines=[dict(name="0", model_cls=DummyModel, meta_fmt=ext)]
-    )
+    repo = Repo(repo_path)
+    repo.add_line("0", model_cls=DummyModel, meta_fmt=ext)
     model = repo["0"][0]
 
 
@@ -169,7 +167,7 @@ def test_missing_repo_meta(tmp_path_str, ext):
 def test_missing_line_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
     repo = Repo(repo_path, meta_fmt=ext)
-    repo.add_line("0", ModelLine, model_cls=DummyModel)
+    repo.add_line("0", model_cls=DummyModel)
 
     model = DummyModel()
 
@@ -179,9 +177,8 @@ def test_missing_line_meta(tmp_path_str, ext):
     meta_path = os.path.join(repo_path, "0", "meta" + ext)
     os.remove(meta_path)
 
-    repo = Repo(
-        repo_path, lines=[dict(name="0", model_cls=DummyModel, meta_fmt=ext)]
-    )
+    repo = Repo(repo_path)
+    repo.add_line(name="0", model_cls=DummyModel, meta_fmt=ext)
     model = repo["0"][0]
 
 
@@ -189,7 +186,7 @@ def test_missing_line_meta(tmp_path_str, ext):
 def test_missing_model_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
     repo = Repo(repo_path, meta_fmt=ext)
-    repo.add_line("0", ModelLine, model_cls=DummyModel)
+    repo.add_line("0", model_cls=DummyModel)
 
     model = DummyModel()
 
@@ -199,9 +196,8 @@ def test_missing_model_meta(tmp_path_str, ext):
     meta_path = os.path.join(repo_path, "0", "00000", "meta" + ext)
     os.remove(meta_path)
 
-    repo = Repo(
-        repo_path, lines=[dict(name="0", model_cls=DummyModel, meta_fmt=ext)]
-    )
+    repo = Repo(repo_path)
+    repo.add_line(name="0", model_cls=DummyModel, meta_fmt=ext)
     model = repo["0"][0]
 
 
@@ -209,7 +205,7 @@ def test_missing_model_meta(tmp_path_str, ext):
 def test_failed_repo_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
     repo = Repo(repo_path, meta_fmt=ext)
-    repo.add_line("0", ModelLine, model_cls=DummyModel)
+    repo.add_line("0", model_cls=DummyModel)
 
     model = DummyModel()
 
@@ -221,9 +217,8 @@ def test_failed_repo_meta(tmp_path_str, ext):
     with open(meta_path, "w") as f:
         f.write("\t{{{: 'sorry, i am broken'")
 
-    repo = Repo(
-        repo_path, lines=[dict(name="0", model_cls=DummyModel, meta_fmt=ext)]
-    )
+    repo = Repo(repo_path)
+    repo.add_line(name="0", model_cls=DummyModel, meta_fmt=ext)
     model = repo["0"][0]
 
 
@@ -231,10 +226,9 @@ def test_failed_repo_meta(tmp_path_str, ext):
 def test_failed_line_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
     repo = Repo(repo_path, meta_fmt=ext)
-    repo.add_line("0", ModelLine, model_cls=DummyModel)
+    repo.add_line("0", model_cls=DummyModel)
 
     model = DummyModel()
-
     repo["0"].save(model)
 
     # simulate failed meta
@@ -243,9 +237,8 @@ def test_failed_line_meta(tmp_path_str, ext):
     with open(meta_path, "w") as f:
         f.write("\t{{{: 'sorry, i am broken'")
 
-    repo = Repo(
-        repo_path, lines=[dict(name="0", model_cls=ModelLine)], meta_fmt=ext
-    )
+    repo = Repo(repo_path)  # , meta_fmt=ext
+    repo.add_line("0", model_cls=DummyModel)
     model = repo["0"][0]
 
 
@@ -253,7 +246,7 @@ def test_failed_line_meta(tmp_path_str, ext):
 def test_failed_model_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
     repo = Repo(repo_path, meta_fmt=ext)
-    repo.add_line("0", ModelLine, model_cls=DummyModel)
+    repo.add_line("0", model_cls=DummyModel)
 
     model = DummyModel()
 
@@ -265,9 +258,8 @@ def test_failed_model_meta(tmp_path_str, ext):
     with open(meta_path, "w") as f:
         f.write("\t{{{: 'sorry, i am broken'")
 
-    repo = Repo(
-        repo_path, lines=[dict(name="0", model_cls=DummyModel, meta_fmt=ext)]
-    )
+    repo = Repo(repo_path)
+    repo.add_line("0", model_cls=DummyModel, meta_fmt=ext)
     model = repo["0"][0]
 
 
@@ -343,7 +335,7 @@ def test_load_model_meta(tmp_path_str, dummy_model, ext):
     with open(os.path.join(line.get_root(), "00000", "SLUG"), "r") as f:
         slug = f.read()
 
-    meta = repo.load_model_meta(slug)
+    meta = repo.load_obj_meta(slug)
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
