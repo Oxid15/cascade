@@ -90,7 +90,7 @@ def comment_ls(ctx):
 
     container = create_container(ctx.obj.get("type"), ctx.obj.get("cwd"))
     if container:
-        from cascade.models import ModelLine
+        from cascade.lines import ModelLine
 
         comment_counter = 0
         if isinstance(container, ModelLine):

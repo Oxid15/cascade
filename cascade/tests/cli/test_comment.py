@@ -24,14 +24,14 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.base import MetaHandler
 from cascade.cli.cli import cli
-from cascade.models import ModelRepo
+from cascade.repos import Repo
 
 
 def test_add(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        ModelRepo(td)
+        Repo(td)
 
         init_meta = mh.read_dir(td)
 
@@ -60,7 +60,7 @@ def test_ls(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        ModelRepo(td)
+        Repo(td)
 
         mh.read_dir(td)
 
@@ -77,7 +77,7 @@ def test_rm(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        ModelRepo(td)
+        Repo(td)
 
         init_meta = mh.read_dir(td)
 

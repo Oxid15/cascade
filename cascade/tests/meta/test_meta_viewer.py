@@ -23,7 +23,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler
 from cascade.meta import MetaViewer
-from cascade.models import ModelRepo
+from cascade.repos import Repo
 from cascade.tests import DummyModel
 
 
@@ -49,8 +49,8 @@ def test(tmp_path_str):
 
 
 def test_order(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
-    repo.add_line("line1", DummyModel)
+    repo = Repo(tmp_path_str)
+    repo.add_line("line1", model_cls=DummyModel)
 
     for i in range(3):
         model = DummyModel(real_num=i)

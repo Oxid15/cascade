@@ -22,13 +22,13 @@ from click.testing import CliRunner
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.cli.cli import cli
-from cascade.models import ModelRepo
+from cascade.repos import Repo
 
 
 def test(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        repo = ModelRepo(td)
+        repo = Repo(td)
         line = repo.add_line("line")
 
         result = runner.invoke(cli, args=["status"])

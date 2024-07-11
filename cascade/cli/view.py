@@ -50,9 +50,9 @@ def view_history(ctx, host, port, l, m, p):  # noqa: E741
 def view_metric(ctx, host, port, p, i, x):
     type = ctx.obj["type"]
     if type == "repo":
-        from ..models import ModelRepo
+        from ..repos import Repo
 
-        container = ModelRepo(ctx.obj["cwd"])
+        container = Repo(ctx.obj["cwd"])
     elif type == "line":
         from ..models import ModelLine
 
