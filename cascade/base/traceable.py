@@ -406,9 +406,13 @@ class TraceableOnDisk(Traceable):
                 )
 
         # if meta exists
-        if ext: 
-            disk_meta = MetaHandler.read_dir(self._root)
-            self.from_meta(disk_meta)
+        if ext:
+            try:
+                disk_meta = MetaHandler.read_dir(self._root)
+            except MetaIOError as e:
+                warnings.warn(f"File reading error ignored: {e}")
+            else:
+                self.from_meta(disk_meta)
 
     def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
