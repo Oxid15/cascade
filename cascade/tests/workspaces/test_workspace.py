@@ -67,7 +67,7 @@ def test_load_model_meta(tmp_path_str, dummy_model, ext):
     with open(os.path.join(line.get_root(), "00000", "SLUG"), "r") as f:
         slug = f.read()
 
-    meta = wp.load_model_meta(slug)
+    meta = wp.load_obj_meta(slug)
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
