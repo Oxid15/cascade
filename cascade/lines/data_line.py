@@ -165,5 +165,5 @@ class DataLine(DiskLine):
     def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({"type": "data_line"})
-        meta[0]["latest_version"] = self.get_latest_version()
+        meta[0]["latest_version"] = str(self.get_latest_version())
         return meta
