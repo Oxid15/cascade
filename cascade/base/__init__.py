@@ -22,7 +22,8 @@ pipelines with lists of meta. This is why default meta is a list.
 
 This type is used when `get_meta` is called on any Traceable
 """
-Meta = List[Dict[Any, Any]]
+MetaBlock = Dict[Any, Any]
+Meta = List[MetaBlock]
 
 
 class MetaIOError(IOError):

@@ -25,7 +25,7 @@ from typing import Any, Callable, Dict, Iterable, Literal, Optional, Union
 
 import pendulum
 
-from . import Meta, MetaIOError, default_meta_format, supported_meta_formats
+from . import Meta, MetaIOError, MetaBlock, default_meta_format, supported_meta_formats
 
 DO_NOT_UPDATE = ["created_at"]
 
@@ -132,7 +132,7 @@ class Traceable:
 
         return [meta]
 
-    def update_meta(self, meta: Meta) -> None:
+    def update_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called
@@ -170,7 +170,7 @@ class Traceable:
             "called somewhere"
         )
 
-    def from_meta(self, meta: Meta) -> None:
+    def from_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """
         Overwrites special fields like description,
         comments, tags and links from the given metadata
@@ -452,7 +452,11 @@ class TraceableOnDisk(Traceable):
             self_meta = self.get_meta()
             for self_block, block in zip(self_meta, meta):
                 for key in self_block:
-                    if key not in DO_NOT_UPDATE and key in default_meta[0] and self_block[key] == default_meta[0][key]:
+                    if (
+                        key not in DO_NOT_UPDATE
+                        and key in default_meta[0]
+                        and self_block[key] == default_meta[0][key]
+                    ):
                         continue
                     block[key] = self_block[key]
 
@@ -473,7 +477,9 @@ class TraceableOnDisk(Traceable):
             from . import MetaHandler
 
             try:
-                MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
+                MetaHandler.write(
+                    os.path.join(self._root, "meta" + self._meta_fmt), meta
+                )
             except MetaIOError as e:
                 warnings.warn(f"File writing error ignored: {e}")
 
