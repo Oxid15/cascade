@@ -14,10 +14,10 @@ limitations under the License.
 from abc import ABC, abstractmethod
 from typing import Any
 
-from ..base import Meta
+from ..base import Meta, Traceable
 
 
-class Line(ABC):
+class Line(ABC, Traceable):
     @abstractmethod
     def __len__(self) -> int: ...
 
