@@ -45,6 +45,8 @@ def test_add(tmp_path_str):
         assert "hello" in meta[0]["tags"]
 
         meta[0]["tags"] = []
+        del meta[0]["updated_at"]
+        del init_meta[0]["updated_at"]
         assert meta == init_meta
 
 
