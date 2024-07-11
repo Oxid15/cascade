@@ -36,11 +36,11 @@ def test_repo(tmp_path_str):
 
 def test_save_load(tmp_path_str, dummy_model):
     repo = Repo(tmp_path_str)
-    repo.add_line("0", ModelLine, model_cls=ModelLine, model_cls=DummyModel)
+    repo.add_line("0", ModelLine, model_cls=ModelLine)
     repo["0"].save(dummy_model)
 
     repo = Repo(tmp_path_str)
-    repo.add_line("0", ModelLine, model_cls=ModelLine, model_cls=DummyModel)
+    repo.add_line("0", ModelLine, model_cls=ModelLine)
     model = repo["0"][0]
 
 
@@ -95,7 +95,7 @@ def test_reusage_init_alias(tmp_path_str, ext):
     # some time...
 
     repo = Repo(
-        tmp_path_str, lines=[dict(name="vgg16", model_cls=ModelLine, model_cls=DummyModel)], meta_fmt=ext
+        tmp_path_str, lines=[dict(name="vgg16", model_cls=ModelLine)], meta_fmt=ext
     )
     assert len(repo["vgg16"]) == 1
 
@@ -243,7 +243,7 @@ def test_failed_line_meta(tmp_path_str, ext):
         f.write("\t{{{: 'sorry, i am broken'")
 
     repo = Repo(
-        repo_path, lines=[dict(name="0", model_cls=ModelLine, model_cls=DummyModel)], meta_fmt=ext
+        repo_path, lines=[dict(name="0", model_cls=ModelLine)], meta_fmt=ext
     )
     model = repo["0"][0]
 
