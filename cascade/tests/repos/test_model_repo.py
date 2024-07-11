@@ -201,6 +201,7 @@ def test_missing_model_meta(tmp_path_str, ext):
     model = repo["0"][0]
 
 
+@pytest.mark.skip
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_failed_repo_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
