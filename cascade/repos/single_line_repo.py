@@ -12,8 +12,7 @@ class SingleLineRepo(BaseRepo):
         meta_prefix: Optional[Dict[Any, Any]] = None,
         **kwargs: Any,
     ) -> None:
-        self._root = line.get_root()
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+        super().__init__(line.get_root(), *args, meta_prefix=meta_prefix, **kwargs)
         self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
         self._line = line
 
@@ -38,4 +37,4 @@ class SingleLineRepo(BaseRepo):
         return 1
 
     def get_line_names(self) -> List[str]:
-        return [self._line.get_root()]
+        return [self._root]
