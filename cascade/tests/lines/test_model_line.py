@@ -25,16 +25,17 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler, default_meta_format
-from cascade.models import BasicModel, ModelLine, ModelRepo
+from cascade.models import BasicModel
+from cascade.repos import Repo
+from cascade.lines import ModelLine
 from cascade.tests.conftest import DummyModel
 
 
-@pytest.mark.parametrize("only_meta", [True, False])
-def test_save_load(model_line, dummy_model, only_meta):
+def test_save_load(model_line, dummy_model):
     dummy_model.a = 0
     dummy_model.params.update({"b": "test"})
 
-    model_line.save(dummy_model, only_meta=only_meta)
+    model_line.save(dummy_model)
     model = model_line[0]
 
     assert len(model_line) == 1
@@ -46,7 +47,7 @@ def test_meta(model_line, dummy_model):
     model_line.save(dummy_model)
     meta = model_line.get_meta()
 
-    assert meta[0]["model_cls"] == repr(DummyModel)
+    assert meta[0]["item_cls"] == repr(DummyModel)
     assert meta[0]["len"] == 1
 
 
@@ -200,6 +201,6 @@ def test_line_comment(tmp_path_str):
     assert len(meta[0]["comments"]) > 0
 
     # Recreate alternative
-    line = ModelRepo(tmp_path_str).add_line("line")
+    line = Repo(tmp_path_str).add_line("line")
     meta = MetaHandler.read_dir(line_dir)
     assert len(meta[0]["comments"]) > 0

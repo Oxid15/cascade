@@ -26,8 +26,8 @@ import deepdiff
 import numpy as np
 import yaml
 
-from ..metrics import Metric
 from . import Meta, MetaIOError, MultipleMetaError, ZeroMetaError
+from .utils import Version
 
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
@@ -86,8 +86,11 @@ class CustomEncoder(JSONEncoder):
         elif is_dataclass(obj):
             return asdict(obj)
 
-        elif isinstance(obj, Metric):
+        elif hasattr(obj, "to_dict"):
             return obj.to_dict()
+
+        elif isinstance(obj, Version):
+            return str(obj)
 
         return super(CustomEncoder, self).default(obj)
 

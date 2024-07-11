@@ -25,7 +25,8 @@ from typing import Any, Callable, Dict, Iterable, Literal, Optional, Union
 
 import pendulum
 
-from . import Meta, MetaIOError, default_meta_format, supported_meta_formats
+from . import (Meta, MetaBlock, MetaHandler, MetaIOError, default_meta_format,
+               supported_meta_formats)
 
 DO_NOT_UPDATE = ["created_at"]
 
@@ -60,7 +61,7 @@ class Traceable:
 
     def __init__(
         self,
-        *args: Any,
+        *args: Any,  # TODO: why?
         description: Optional[str] = None,
         tags: Optional[Iterable[str]] = None,
         **kwargs: Any,
@@ -100,7 +101,8 @@ class Traceable:
 
             Meta is a list (see Meta type alias) to allow the formation of pipelines.
         """
-        meta = {"name": repr(self)}
+        meta = {}
+        meta["name"] = repr(self)
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
@@ -122,7 +124,7 @@ class Traceable:
 
         return [meta]
 
-    def update_meta(self, meta: Meta) -> None:
+    def update_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """
         Updates `_meta_prefix`, which then updates
         dataset's meta when `get_meta()` is called
@@ -160,7 +162,7 @@ class Traceable:
             "called somewhere"
         )
 
-    def from_meta(self, meta: Meta) -> None:
+    def from_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """
         Overwrites special fields like description,
         comments, tags and links from the given metadata
@@ -403,6 +405,11 @@ class TraceableOnDisk(Traceable):
                     "on path {self._root}"
                 )
 
+        # if meta exists
+        if ext: 
+            disk_meta = MetaHandler.read_dir(self._root)
+            self.from_meta(disk_meta)
+
     def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
@@ -430,7 +437,7 @@ class TraceableOnDisk(Traceable):
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
         # Object was created before -> update meta on disk
         if len(meta_path) > 0:
-            meta = {}
+            meta = [{}]
             from . import MetaHandler
 
             try:
@@ -441,18 +448,13 @@ class TraceableOnDisk(Traceable):
             self_meta = self.get_meta()
             for self_block, block in zip(self_meta, meta):
                 for key in self_block:
-                    if key not in DO_NOT_UPDATE and self_block[key]:
+                    if key not in DO_NOT_UPDATE:
                         block[key] = self_block[key]
 
             try:
                 MetaHandler.write_dir(self._root, meta)
             except MetaIOError as e:
                 warnings.warn(f"File writing error ignored: {e}")
-
-            # Update internal fields from updated meta
-            # syncronizing its state with disk
-            self.from_meta(meta)
-            return
         else:
             created = str(pendulum.now(tz="UTC"))
             meta = self.get_meta()
@@ -461,7 +463,9 @@ class TraceableOnDisk(Traceable):
             from . import MetaHandler
 
             try:
-                MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
+                MetaHandler.write(
+                    os.path.join(self._root, "meta" + self._meta_fmt), meta
+                )
             except MetaIOError as e:
                 warnings.warn(f"File writing error ignored: {e}")
 

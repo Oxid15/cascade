@@ -1,30 +1,7 @@
-"""
-Copyright 2022-2024 Ilia Moiseev
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-"""
-
-import warnings
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import pendulum
-from typing_extensions import deprecated
 
-from ..base import HistoryHandler, MetaIOError
-
-
-@deprecated("Use cascade.data.Assessor")
 @dataclass
 class Assessor:
     """
@@ -43,7 +20,6 @@ class Assessor:
     position: Optional[str] = None
 
 
-@deprecated("Use cascade.data.LabelingInfo")
 @dataclass
 class LabelingInfo:
     """
@@ -62,7 +38,6 @@ class LabelingInfo:
     docs: Optional[str] = None
 
 
-@deprecated("Use cascade.data.DataCard")
 class DataCard:
     """
     The container for the information
@@ -142,60 +117,3 @@ class DataCard:
             schema=schema,
             **kwargs
         )
-
-
-@deprecated("This is deprecated and will be removed in 0.15.0")
-class DataRegistrator:
-    """
-    A tool for tracking lineage of datasets.
-    I is useful if dataset is not a static object and
-    has some properties changed during the time.
-    """
-
-    def __init__(self, filepath: str, raise_on_fail: bool = False) -> None:
-        """
-        Parameters
-        ----------
-        filepath : str
-            Path to the log file for HistoryLogger
-        raise_on_fail : bool, optional
-            Whether to raise a warning or an exception in case when
-            logger failed to read a file for some reason, by default False
-        """
-        self._raise_on_fail = raise_on_fail
-        try:
-            self._logger = HistoryHandler(filepath)
-        except MetaIOError as e:
-            if self._raise_on_fail:
-                raise e
-            else:
-                warnings.warn(str(e))
-
-    def register(self, card: DataCard) -> None:
-        """
-        Each time this method is called - a new snapshot of
-        gived card is done in the log.
-        Call this method each time the dataset has changed automatically,
-        for example in data update script which is preferable way or
-        manually.
-
-        Parameters
-        ----------
-        card: DataCard
-            Container for all the info on data
-            see DataCard documentation for additional info.
-
-        See also
-        --------
-        cascade.meta.DataCard
-        """
-        now = str(pendulum.now(tz="UTC"))
-        card.data["updated_at"] = now
-
-        try:
-            self._logger.log(card.data)
-        except MetaIOError as e:
-            if self._raise_on_fail:
-                raise e
-            else:
-                warnings.warn(str(e))

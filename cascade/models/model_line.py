@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import socket
 import traceback
+import warnings
 from getpass import getuser
 from typing import Any, Dict, List, Literal, Optional, Type, Union
 
@@ -35,15 +36,15 @@ from .model import Model
 
 class ModelLine(TraceableOnDisk):
     """
-    A manager for a line of models. Used by ModelRepo for access to models on disk.
-    A line of models is typically a models with the same hyperparameters and architecture,
-    but different epochs or using different data.
+    A manager for a line of models. Used by Repo to access models on disk.
+    A line of models is typically models with the same hyperparameters and architecture,
+    but different epochs or trained using different data.
     """
 
     def __init__(
         self,
         folder: str,
-        model_cls: Type = Model,
+        model_cls: Type[Any] = Model,
         meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
         **kwargs: Any,
     ) -> None:
@@ -61,8 +62,13 @@ class ModelLine(TraceableOnDisk):
             Format in which to store meta data.
         See also
         --------
-        cascade.models.ModelRepo
+        cascade.repos.Repo
         """
+        warnings.warn(
+            "cascade.models.ModelLine is deprecated since 0.14.0"
+            " please, consider migrating to cascade.lines.ModelLine"
+            " See documentation and release notes on what's changed"
+        )
 
         super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
@@ -209,12 +215,14 @@ class ModelLine(TraceableOnDisk):
         artifact_path = os.path.join(model_folder, "artifacts")
         if os.path.exists(artifact_path):
             result["artifacts"] = [
-                os.path.join(self._root, "artifacts", name) for name in os.listdir(artifact_path)
+                os.path.join(self._root, "artifacts", name)
+                for name in os.listdir(artifact_path)
             ]
         file_path = os.path.join(model_folder, "files")
         if os.path.exists(file_path):
             result["files"] = [
-                os.path.join(self._root, "files", name) for name in os.listdir(file_path)
+                os.path.join(self._root, "files", name)
+                for name in os.listdir(file_path)
             ]
         return result
 
@@ -295,7 +303,9 @@ class ModelLine(TraceableOnDisk):
             except Exception as e:
                 artifact_exception = str(e)
                 artifact_tb = traceback.format_exc()
-                print(f"Failed to save artifact {full_path}\n{artifact_exception}\n{artifact_tb}")
+                print(
+                    f"Failed to save artifact {full_path}\n{artifact_exception}\n{artifact_tb}"
+                )
 
         if model_tb is not None or artifact_tb is not None:
             meta[0]["errors"] = {}

@@ -22,8 +22,11 @@ from deepdiff import DeepDiff
 from flatten_json import flatten
 
 from ..base import MetaHandler, ZeroMetaError
-from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
-from . import MetaViewer, Server
+from ..lines import ModelLine
+from ..models import Workspace
+from ..repos import Repo, SingleLineRepo
+from .meta_viewer import MetaViewer
+from .server import Server
 
 
 class HistoryViewer(Server):
@@ -35,7 +38,7 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        container: Union[Workspace, ModelRepo, ModelLine],
+        container: Union[Workspace, Repo, ModelLine],
         last_lines: Optional[int] = None,
         last_models: Optional[int] = None,
         update_period_sec: int = 3
@@ -43,7 +46,7 @@ class HistoryViewer(Server):
         """
         Parameters
         ----------
-        container: Union[Workspace, ModelRepo, ModelLine]
+        container: Union[Workspace, Repo, ModelLine]
             Container of models to be viewed
         last_lines: int, optional
             Constraints the number of lines back from the last one to view

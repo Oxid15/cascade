@@ -22,6 +22,7 @@ from typing import Any, Callable, Optional, Union
 import pendulum
 
 from ..base import Meta, Traceable, raise_not_implemented
+from ..data import Dataset
 from ..metrics import Metric, MetricType
 
 
@@ -196,8 +197,12 @@ class Model(Traceable):
         """
         self._log_callbacks.append(callback)
 
-    def add_metric(self, metric: Union[str, Metric],
-                   value: Optional[MetricType] = None, **kwargs: Any) -> None:
+    def add_metric(
+        self,
+        metric: Union[str, Metric],
+        value: Optional[MetricType] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Adds metric value to the model. If metric already exists in the list, updates its value.
 
@@ -235,6 +240,43 @@ class Model(Traceable):
 
         self.metrics.append(metric)
 
+    def link_dataset(
+        self,
+        ds: Dataset,
+        name: Optional[str] = None,
+        split: Optional[str] = None,
+        line: Optional["DataLine"] = None,
+    ) -> None:
+        """
+        Convenience function for linking datasets. Produces more readable meta files and records
+        useful info without much hassle
+
+        Parameters
+        ----------
+        ds : Dataset
+            Dataset to link
+        name : Optional[str], optional
+            Dataset name, by default None
+        split : Optional[str], optional
+            Split if applicable, may be "train", "test", etc, by default None
+        line : Optional[DataLine], optional
+            DataLine where this dataset is stored if applicable, by default None
+        """
+        ds_meta = ds.get_meta()
+        meta = {}
+        for key in ["type", "description", "tags", "comments"]:
+            if ds_meta[0].get(key):
+                meta[key] = ds_meta[0][key]
+
+        if split:
+            meta["split"] = split
+
+        if line is not None:
+            meta["version"] = str(line.get_version(ds))
+            meta["line_root"] = line.get_root()
+
+        self.link(name=name, meta=[meta])
+
     def log(self) -> None:
         """
         Sequentially calls every log callback.
@@ -242,7 +284,7 @@ class Model(Traceable):
         from inside the model. Callback should be a function that
         given the model saves it. For example ModelLine.save method.
         ModelLine.add_model registers callback with only_meta=True automatically
-        when creating a new model.
+        when creating a new model using `create_model`.
 
         See also
         --------

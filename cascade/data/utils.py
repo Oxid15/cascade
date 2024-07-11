@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 from math import floor
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
 from .dataset import Dataset, T
 from .range_sampler import RangeSampler

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, List, Sequence, Generator
+from typing import Any, Generator, List, Sequence
 
 import numpy as np
 
@@ -32,6 +32,7 @@ class SimpleDataloader:
     [[0, 1], [2]]
 
     """
+
     def __init__(self, data: Sequence[T], batch_size: int = 1) -> None:
         if batch_size == 0:
             raise ValueError("Batch size cannot be 0")

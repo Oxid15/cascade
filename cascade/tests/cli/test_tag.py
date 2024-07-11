@@ -21,8 +21,8 @@ from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from cascade.cli.cli import cli
 from cascade.base import MetaHandler
+from cascade.cli.cli import cli
 from cascade.models import ModelRepo
 
 
@@ -69,7 +69,7 @@ def test_rm(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        repo = ModelRepo(td)
+        ModelRepo(td)
 
         init_meta = mh.read_dir(td)
 
@@ -83,6 +83,9 @@ def test_rm(tmp_path_str):
 
         assert "tags" in meta[0]
         assert len(meta[0]["tags"]) == 0
+        
+        del meta[0]["updated_at"]
+        del init_meta[0]["updated_at"]
         assert meta == init_meta
 
         # Test of removing nonexisting tag

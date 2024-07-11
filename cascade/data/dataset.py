@@ -12,15 +12,26 @@ limitations under the License.
 """
 
 import warnings
-from abc import abstractmethod
-from typing import Any, Generator, Generic, Iterable, Iterator, Sequence, Sized, TypeVar
+from abc import abstractmethod, ABC
+from typing import (
+    Any,
+    Generator,
+    Generic,
+    Iterable,
+    Iterator,
+    Optional,
+    Sequence,
+    Sized,
+    TypeVar,
+)
 
 from ..base import Meta, Traceable
+from .data_card import DataCard
 
 T = TypeVar("T", covariant=True)
 
 
-class BaseDataset(Generic[T], Traceable):
+class BaseDataset(ABC, Generic[T], Traceable):
     """
     Base class of any object that constitutes a step in a data-pipeline
 
@@ -29,11 +40,9 @@ class BaseDataset(Generic[T], Traceable):
     cascade.base.Traceable
     """
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, data_card: Optional[DataCard] = None, *args: Any, **kwargs: Any) -> None:
+        self._data_card = data_card
         super().__init__(*args, **kwargs)
-
-    @abstractmethod
-    def __getitem__(self, index: Any) -> T:...
 
     def get_meta(self) -> Meta:
         """
@@ -46,6 +55,8 @@ class BaseDataset(Generic[T], Traceable):
         """
         meta = super().get_meta()
         meta[0]["type"] = "dataset"
+        if self._data_card is not None:
+            meta[0]["data_card"] = self._data_card.to_dict()
         return meta
 
 
@@ -71,6 +82,9 @@ class Dataset(BaseDataset[T], Sized):
     --------
     cascade.data.Iterator
     """
+
+    @abstractmethod
+    def __getitem__(self, index: Any): ...
 
     @abstractmethod
     def __len__(self) -> int: ...

@@ -86,9 +86,15 @@ class SingleLineRepo(Repo):
         self,
         line: ModelLine,
         *args: Any,
-        meta_prefix: Optional[Dict[Any, Any]] = None,
+        meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
+        warnings.warn(
+            "cascade.models.SingleLineRepo is deprecated since 0.14.0"
+            " please, consider migrating to cascade.repos.SingleLineRepo"
+            " See documentation and relsease notes on what's changed"
+        )
+
         self._root = line.get_root()
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
@@ -167,6 +173,12 @@ class ModelRepo(Repo, TraceableOnDisk):
         --------
         cascade.models.ModelLine
         """
+        warnings.warn(
+            "cascade.models.ModelRepo is deprecated since 0.14.0"
+            " please, consider migrating to cascade.repos.Repo"
+            " See documentation and release notes on what's changed"
+        )
+
         super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls
 
@@ -191,9 +203,9 @@ class ModelRepo(Repo, TraceableOnDisk):
 
     def add_line(
         self,
-        name: Optional[str] = None,
+        name: Union[str, None] = None,
         *args: Any,
-        meta_fmt: Optional[str] = None,
+        meta_fmt: Union[str, None] = None,
         **kwargs: Any,
     ) -> ModelLine:
         """

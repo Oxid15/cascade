@@ -23,7 +23,8 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler
 from cascade.data import Wrapper
-from cascade.models import BasicTrainer, ModelRepo, Trainer
+from cascade.trainers import Trainer, BasicTrainer
+from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel
 
 
@@ -35,18 +36,18 @@ class AlwaysFailingModel(DummyModel):
         raise RuntimeError()
 
 
-def test_base(tmp_path_str, model_repo):
+def test_base(tmp_path_str, repo):
     t = Trainer(tmp_path_str)
     meta = t.get_meta()
     assert len(meta) == 1
 
-    t = Trainer(model_repo)
+    t = Trainer(repo)
     meta = t.get_meta()
     assert len(meta) == 1
 
 
 def test_basic_trainer(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     t = BasicTrainer(repo)
 
     model = DummyModel()
@@ -75,7 +76,7 @@ def test_basic_trainer(tmp_path_str):
 
 
 def test_error_handling(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     t = BasicTrainer(repo)
 
     model = AlwaysFailingModel()

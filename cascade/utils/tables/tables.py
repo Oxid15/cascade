@@ -22,7 +22,7 @@ from tqdm import tqdm
 from ...base import Meta
 from ...data.dataset import Dataset, IteratorWrapper, T
 from ...data.modifier import Modifier
-from ...meta import AggregateValidator, DataValidationException
+from ...meta.validator import AggregateValidator, DataValidationException
 
 
 class TableDataset(Dataset[T]):

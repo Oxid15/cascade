@@ -15,29 +15,9 @@ limitations under the License.
 """
 
 import os
-import pickle
-from abc import ABC, abstractmethod
 from typing import Any, Literal
 
-
-class ObjectHandler(ABC):
-    @abstractmethod
-    def save(self, obj: Any, path: str) -> None:
-        ...
-
-    @abstractmethod
-    def load(self, path: str) -> Any:
-        ...
-
-
-class Pickler(ObjectHandler):
-    def load(self, path: str) -> Any:
-        with open(os.path.join(path, "object.pkl"), "rb") as f:
-            return pickle.load(f)
-
-    def save(self, obj: Any, path: str) -> None:
-        with open(os.path.join(path, "object.pkl"), "wb") as f:
-            pickle.dump(obj, f)
+from .serialization import ObjectHandler
 
 
 class Cache:
@@ -50,10 +30,7 @@ class Cache:
         os.makedirs(path, exist_ok=True)
 
         self.path = path
-        if backend == "pickle":
-            self._handler = Pickler()
-        else:
-            raise ValueError(f"{backend} is not in (pickle,)")
+        self._handler = ObjectHandler(backend)
 
     def exists(self) -> bool:
         """

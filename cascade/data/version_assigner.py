@@ -19,13 +19,17 @@ from hashlib import md5
 from typing import Any, Tuple
 
 import pendulum
+from typing_extensions import deprecated
 
 from ..base import Meta, MetaHandler, supported_meta_formats
-from ..meta.utils import skeleton
+from ..base.utils import skeleton
 from .dataset import BaseDataset, T
 from .modifier import Modifier
 
 
+@deprecated("Deprecated since 0.14.0. Consider using cascade.lines.DataLine"
+            " with line.save(ds, only_meta=True) if you do not want"
+            " to save pipeline objects, but only to track versions")
 class VersionAssigner(Modifier):
     """
     Class for automatic data versioning using metadata.
@@ -192,6 +196,8 @@ class VersionAssigner(Modifier):
         return meta
 
 
+@deprecated("Deprecated since 0.14.0 consider using"
+            " cascade.lines.DataLine.get_version method instead")
 def version(ds: BaseDataset[T], path: str) -> str:
     """
     Returns version of a dataset using VersionAssigner

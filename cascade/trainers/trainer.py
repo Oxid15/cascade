@@ -20,10 +20,11 @@ from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 import pendulum
 
-from .model import Model
-from .model_line import ModelLine
-from .model_repo import ModelRepo
 from ..base import Meta, Traceable, raise_not_implemented
+from ..data import Dataset
+from ..lines.model_line import ModelLine
+from ..models.model import Model
+from ..repos.repo import Repo
 
 logger = logging.getLogger(__name__)
 
@@ -33,16 +34,16 @@ class Trainer(Traceable):
     A class that encapsulates training, evaluation and saving of models.
     """
 
-    def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
+    def __init__(self, repo: Union[Repo, str], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
-        repo: Union[ModelRepo, str]
+        repo: Union[Repo, str]
             Either repo or path to it
         """
         if isinstance(repo, str):
-            self._repo = ModelRepo(repo)
-        elif isinstance(repo, ModelRepo):
+            self._repo = Repo(repo)
+        elif isinstance(repo, Repo):
             self._repo = repo
         else:
             raise TypeError(f"Repo should be either Repo or path, got {type(repo)}")
@@ -53,7 +54,7 @@ class Trainer(Traceable):
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise_not_implemented("cascade.models.Trainer", "train")
 
-    def get_meta(self) -> Dict[Any, Any]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["type"] = "trainer"
         return meta
@@ -66,7 +67,7 @@ class BasicTrainer(Trainer):
     Can start from checkpoint if model file exists.
     """
 
-    def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
+    def __init__(self, repo: Union[Repo, str], *args: Any, **kwargs: Any) -> None:
         warnings.warn(
             "cascade.models.BasicTrainer is deprecated since 0.14.0"
             " please, consider migrating to cascade.trainers.Trainer"
@@ -98,8 +99,8 @@ class BasicTrainer(Trainer):
     def train(
         self,
         model: Model,
-        train_data: Optional[Iterable[Any]] = None,
-        test_data: Optional[Iterable[Any]] = None,
+        train_data: Union[Dataset[Any], Iterable[Any], None] = None,
+        test_data: Union[Dataset[Any], Iterable[Any], None] = None,
         train_kwargs: Optional[Dict[Any, Any]] = None,
         test_kwargs: Optional[Dict[Any, Any]] = None,
         epochs: int = 1,
@@ -157,7 +158,7 @@ class BasicTrainer(Trainer):
                 # until it will become clear that some solution needed
                 raise RuntimeError(f"Line {line_name} already exists in {self._repo}")
 
-        self._repo.add_line(line_name, type(model))
+        self._repo.add_line(line_name, line_type="model", model_cls=type(model))
         line = self._repo[line_name]
 
         self.update_meta({
@@ -167,10 +168,10 @@ class BasicTrainer(Trainer):
         })
         line.link(self)
 
-        if hasattr(train_data, "get_meta"):
+        if isinstance(train_data, Traceable):
             line.link(train_data)
 
-        if hasattr(test_data, "get_meta"):
+        if isinstance(test_data, Traceable):
             line.link(test_data)
 
         if start_from is not None:

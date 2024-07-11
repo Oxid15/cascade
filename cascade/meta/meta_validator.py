@@ -22,7 +22,7 @@ from deepdiff import DeepDiff
 
 from ..base import Meta, MetaHandler, supported_meta_formats
 from ..data.dataset import BaseDataset, T
-from . import DataValidationException, Validator
+from .validator import DataValidationException, Validator
 
 
 class MetaValidator(Validator):
