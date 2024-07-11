@@ -117,3 +117,6 @@ class DataCard:
             schema=schema,
             **kwargs
         )
+
+    def to_dict(self) -> Dict[str, Any]:
+        return self.data

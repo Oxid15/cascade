@@ -19,14 +19,8 @@ from .bruteforce_cacher import BruteforceCacher
 from .composer import Composer
 from .concatenator import Concatenator
 from .cyclic_sampler import CyclicSampler
-from .dataset import (
-    BaseDataset,
-    Dataset,
-    IteratorDataset,
-    IteratorWrapper,
-    SizedDataset,
-    Wrapper,
-)
+from .dataset import (BaseDataset, Dataset, IteratorDataset, IteratorWrapper,
+                      SizedDataset, Wrapper)
 from .filter import Filter, IteratorFilter
 from .folder_dataset import FolderDataset
 from .functions import dataset, modifier

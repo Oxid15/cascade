@@ -12,18 +12,9 @@ limitations under the License.
 """
 
 import warnings
-from abc import abstractmethod, ABC
-from typing import (
-    Any,
-    Generator,
-    Generic,
-    Iterable,
-    Iterator,
-    Optional,
-    Sequence,
-    Sized,
-    TypeVar,
-)
+from abc import ABC, abstractmethod
+from typing import (Any, Generator, Generic, Iterable, Iterator, Optional,
+                    Sequence, Sized, TypeVar)
 
 from ..base import Meta, Traceable
 from .data_card import DataCard
@@ -40,7 +31,7 @@ class BaseDataset(ABC, Generic[T], Traceable):
     cascade.base.Traceable
     """
 
-    def __init__(self, data_card: Optional[DataCard] = None, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, data_card: Optional[DataCard] = None, **kwargs: Any) -> None:
         self._data_card = data_card
         super().__init__(*args, **kwargs)
 
