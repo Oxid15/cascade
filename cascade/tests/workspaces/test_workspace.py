@@ -18,12 +18,13 @@ import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
-from cascade.models import ModelRepo, Workspace
+from cascade.repos import Repo
+from cascade.workspaces import Workspace
 
 
 def test(tmp_path_str):
     for i in range(10):
-        ModelRepo(os.path.join(tmp_path_str, f"repo-{i}"))
+        Repo(os.path.join(tmp_path_str, f"repo-{i}"))
 
     wp = Workspace(tmp_path_str, default_repo="repo-1")
 
@@ -37,7 +38,7 @@ def test(tmp_path_str):
 def test_meta(tmp_path_str):
 
     for i in range(10):
-        ModelRepo(os.path.join(tmp_path_str, f"repo-{i}"))
+        Repo(os.path.join(tmp_path_str, f"repo-{i}"))
 
     wp = Workspace(tmp_path_str)
 
@@ -51,9 +52,9 @@ def test_meta(tmp_path_str):
 def test_load_model_meta(tmp_path_str, dummy_model, ext):
 
     for i in range(2):
-        ModelRepo(os.path.join(tmp_path_str, f"repo-{i}"))
+        Repo(os.path.join(tmp_path_str, f"repo-{i}"))
 
-    repo = ModelRepo(os.path.join(tmp_path_str, "repo"), meta_fmt=ext)
+    repo = Repo(os.path.join(tmp_path_str, "repo"), meta_fmt=ext)
     repo.add_line()
     repo.add_line()
     line = repo.add_line()
