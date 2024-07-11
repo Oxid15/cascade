@@ -13,9 +13,9 @@ limitations under the License.
 
 import os
 import shutil
-import warnings
-from typing import Any, Dict, Iterable, List, Literal, Optional, Type, Union
+from typing import Any, List, Literal, Optional, Union
 
+from ..lines import Line
 from ..base import Meta, TraceableOnDisk, ZeroMetaError
 from .base_repo import BaseRepo
 from .line_factory import LineFactory
@@ -85,11 +85,11 @@ class Repo(BaseRepo, TraceableOnDisk):
     def add_line(
         self,
         name: Optional[str] = None,
-        line_cls: Optional[Type[Any]] = None,
+        line_type: Literal["data", "model"] = "model",
         *args: Any,
-        meta_fmt: Optional[str] = None,
+        meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
         **kwargs: Any,
-    ):  # -> Line:
+    ) -> Line:
         """
         Adds new line to repo if it doesn't exist and returns it.
         If line exists, defines it in repo with parameters provided.
@@ -98,16 +98,38 @@ class Repo(BaseRepo, TraceableOnDisk):
 
         Parameters:
             name: str, optional
-                Name of the line. It is used to name a folder of line.
-                Repo prepends it with `self._root` before creating.
-                Optional argument. If omitted - names new line automatically
-                using f'{len(self):0>5d}'
+
             meta_fmt: str, optional
-                Format of meta files. Supported values are the same as for repo.
-                If omitted, inherits format from repo.
+                
         See also
         --------
             cascade.base.Line
+        Parameters
+        ----------
+        name : Optional[str], optional
+            Name of the line. It is used to name a folder of line.
+            Repo prepends it with `self._root` before creating.
+            Optional argument. If omitted - names new line automatically
+            using f'{len(self):0>5d}', by default None
+        line_type : Literal["data", "model"]], by default "model"
+            The type of model line to create, by default None
+        meta_fmt : Literal[".json", ".yml", ".yaml", None], by default None
+            Format of meta files. Supported values are the same as for repo.
+            If omitted, inherits format from repo., by default None
+
+        Returns
+        -------
+        Line
+            Created or recreated model line
+
+        Raises
+        ------
+        RuntimeError
+            If line with the computed name already exists
+        TypeError
+            _description_
+        IOError
+            _description_
         """
         if name is None:
             name = f"{len(self):0>5d}"
@@ -126,12 +148,12 @@ class Repo(BaseRepo, TraceableOnDisk):
         self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
         self.sync_meta()
 
-        if line_cls is None:
+        if line_type is None:
             try:
                 line = LineFactory.read(folder)
             except TypeError as e:
                 raise TypeError(
-                    f"line_cls was {line_cls}, which is incompatible with line {name}"
+                    f"line_type was {line_type}, which is incompatible with line {name}"
                 ) from e
             except ZeroMetaError as e:
                 raise IOError(
@@ -139,7 +161,7 @@ class Repo(BaseRepo, TraceableOnDisk):
                 ) from e
         else:
             line = LineFactory.create(
-                folder, line_cls, *args, meta_fmt=meta_fmt, **kwargs
+                folder, line_type=line_type, *args, meta_fmt=meta_fmt, **kwargs
             )
         return line
 
@@ -196,7 +218,7 @@ class Repo(BaseRepo, TraceableOnDisk):
 
         for name in self._lines:
             try:
-                line = LineFactory.create(
+                line = LineFactory.read(
                     os.path.join(self._root, name),
                     *self._lines[name]["args"],
                     **self._lines[name]["kwargs"],

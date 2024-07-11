@@ -11,17 +11,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Type
+from typing import Any, Literal
 
 from ..base import MetaHandler
 from ..lines import DataLine, Line, ModelLine
 
 
 class LineFactory:
-    _type2cls = {"model_line": ModelLine, "data_line": DataLine}
+    _type2cls = {"model_line": ModelLine, "data_line": DataLine, "model": ModelLine, "data": DataLine}
 
     @classmethod
-    def create(cls, path: str, line_cls: Type[Any], *args: Any, **kwargs: Any) -> Line:
+    def create(cls, path: str, *args: Any, line_type: Literal["model", "data", None] = None, **kwargs: Any) -> Line:
+        if line_type not in cls._type2cls:
+            raise TypeError(f"Cannot read a line from obj of type `{line_type}`")
+        else:
+            line_cls = cls._type2cls[line_type]
         line = line_cls(path, *args, **kwargs)
         return line
 
