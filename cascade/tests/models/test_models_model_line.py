@@ -25,26 +25,25 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler, default_meta_format
-from cascade.models import BasicModel
-from cascade.tests.conftest import DummyModel, ModelLine
+from cascade.models import BasicModel, ModelLine
+from cascade.tests.conftest import DummyModel
 
 
-# @pytest.mark.parametrize("only_meta", [True, False])
-def test_save_load(model_line, dummy_model):
+def test_save_load(old_model_line, dummy_model):
     dummy_model.a = 0
     dummy_model.params.update({"b": "test"})
 
-    model_line.save(dummy_model)
-    model = model_line[0]
+    old_model_line.save(dummy_model)
+    model = old_model_line[0]
 
-    assert len(model_line) == 1
+    assert len(old_model_line) == 1
     assert model.a == 0
     assert model.params["b"] == "test"
 
 
-def test_meta(model_line, dummy_model):
-    model_line.save(dummy_model)
-    meta = model_line.get_meta()
+def test_meta(old_model_line, dummy_model):
+    old_model_line.save(dummy_model)
+    meta = old_model_line.get_meta()
 
     assert meta[0]["model_cls"] == repr(DummyModel)
     assert meta[0]["len"] == 1
@@ -62,27 +61,27 @@ def test_change_of_format(tmp_path_str, ext):
     assert len(glob.glob(os.path.join(tmp_path_str, "meta.*"))) == 1
 
 
-def test_same_index_check(model_line):
+def test_same_index_check(old_model_line):
     for _ in range(5):
-        model_line.save(BasicModel())
+        old_model_line.save(BasicModel())
 
-    shutil.rmtree(os.path.join(model_line.get_root(), "00001"))
-    shutil.rmtree(os.path.join(model_line.get_root(), "00002"))
-    shutil.rmtree(os.path.join(model_line.get_root(), "00003"))
+    shutil.rmtree(os.path.join(old_model_line.get_root(), "00001"))
+    shutil.rmtree(os.path.join(old_model_line.get_root(), "00002"))
+    shutil.rmtree(os.path.join(old_model_line.get_root(), "00003"))
 
-    model_line.save(BasicModel())
+    old_model_line.save(BasicModel())
 
-    assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
+    assert os.path.exists(os.path.join(old_model_line.get_root(), "00005"))
 
 
 # TODO: write tests for exceptions
-def test_load_model_meta_slug(model_line, dummy_model):
+def test_load_model_meta_slug(old_model_line, dummy_model):
     dummy_model.evaluate()
-    model_line.save(dummy_model)
+    old_model_line.save(dummy_model)
 
-    with open(os.path.join(model_line.get_root(), "00000", "SLUG"), "r") as f:
+    with open(os.path.join(old_model_line.get_root(), "00000", "SLUG"), "r") as f:
         slug = f.read()
-    meta = model_line.load_model_meta(slug)
+    meta = old_model_line.load_model_meta(slug)
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
@@ -90,11 +89,11 @@ def test_load_model_meta_slug(model_line, dummy_model):
     assert slug == meta[0]["slug"]
 
 
-def test_load_model_meta_num(model_line, dummy_model):
+def test_load_model_meta_num(old_model_line, dummy_model):
     dummy_model.evaluate()
-    model_line.save(dummy_model)
+    old_model_line.save(dummy_model)
 
-    meta = model_line.load_model_meta(0)
+    meta = old_model_line.load_model_meta(0)
 
     assert len(meta) == 1
     assert "metrics" in meta[0]
@@ -102,23 +101,23 @@ def test_load_model_meta_num(model_line, dummy_model):
     assert meta[0]["metrics"][0]["value"] == dummy_model.metrics[0].value
 
 
-def test_load_artifact_paths(tmp_path_str, model_line, dummy_model):
+def test_load_artifact_paths(tmp_path_str, old_model_line, dummy_model):
     filename = os.path.join(tmp_path_str, "file.txt")
     with open(filename, "w") as f:
         f.write("hello")
 
     dummy_model.add_file(filename)
 
-    model_line.save(dummy_model)
+    old_model_line.save(dummy_model)
 
-    res = model_line.load_artifact_paths(0)
+    res = old_model_line.load_artifact_paths(0)
 
     assert "artifacts" in res
     assert "files" in res
     assert len(res["artifacts"]) == 1
     assert len(res["files"]) == 1
-    assert res["artifacts"][0] == os.path.join(model_line.get_root(), "artifacts", "model")
-    assert res["files"][0] == os.path.join(model_line.get_root(), "files", "file.txt")
+    assert res["artifacts"][0] == os.path.join(old_model_line.get_root(), "artifacts", "model")
+    assert res["files"][0] == os.path.join(old_model_line.get_root(), "files", "file.txt")
 
 
 def test_create_model(tmp_path_str):

@@ -115,6 +115,7 @@ def test_meta(tmp_path_str, ext):
     assert meta[0]["len"] == 3
 
 
+# Removed since 0.14.0
 @pytest.mark.skip
 def test_add(tmp_path_str):
 
@@ -201,7 +202,6 @@ def test_missing_model_meta(tmp_path_str, ext):
     model = repo["0"][0]
 
 
-@pytest.mark.skip
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_failed_repo_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
@@ -227,7 +227,6 @@ def test_failed_repo_meta(tmp_path_str, ext):
 # it is impossible to create a line without
 # reading its meta correctly
 # may fix this later
-@pytest.mark.skip
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_failed_line_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
