@@ -21,6 +21,7 @@ from typing import Any, Dict, Iterable, Optional, Tuple, Union
 import pendulum
 
 from ..base import Meta, Traceable, raise_not_implemented
+from ..data import Dataset
 from ..lines.model_line import ModelLine
 from ..models.model import Model
 from ..repos.repo import Repo
@@ -98,8 +99,8 @@ class BasicTrainer(Trainer):
     def train(
         self,
         model: Model,
-        train_data: Optional[Iterable[Any]] = None,
-        test_data: Optional[Iterable[Any]] = None,
+        train_data: Union[Dataset[Any], Iterable[Any], None] = None,
+        test_data: Union[Dataset[Any], Iterable[Any], None] = None,
         train_kwargs: Optional[Dict[Any, Any]] = None,
         test_kwargs: Optional[Dict[Any, Any]] = None,
         epochs: int = 1,
@@ -157,20 +158,20 @@ class BasicTrainer(Trainer):
                 # until it will become clear that some solution needed
                 raise RuntimeError(f"Line {line_name} already exists in {self._repo}")
 
-        self._repo.add_line(line_name, model_cls=type(model))
+        self._repo.add_line(line_name, line_type="model", model_cls=type(model))
         line = self._repo[line_name]
 
-        self.update_meta([{
+        self.update_meta({
             "epochs": epochs,
             "eval_strategy": eval_strategy,
             "save_strategy": save_strategy,
-        }])
+        })
         line.link(self)
 
-        if hasattr(train_data, "get_meta"):
+        if isinstance(train_data, Traceable):
             line.link(train_data)
 
-        if hasattr(test_data, "get_meta"):
+        if isinstance(test_data, Traceable):
             line.link(test_data)
 
         if start_from is not None:
