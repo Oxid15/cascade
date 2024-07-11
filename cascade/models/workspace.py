@@ -18,10 +18,13 @@ import os
 import warnings
 from typing import Any, Generator, List, Literal, Optional
 
+from typing_extensions import deprecated
+
 from ..base import Meta, MetaHandler, MetaIOError, TraceableOnDisk
 from ..models import ModelRepo
 
 
+@deprecated("cascade.models.Workspace is deprecated, consider using cascade.workspaces.Workspace instead")
 class Workspace(TraceableOnDisk):
     def __init__(
         self,

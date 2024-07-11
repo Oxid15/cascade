@@ -14,8 +14,8 @@ limitations under the License.
 import itertools
 import os
 import shutil
-import warnings
-from typing import Any, Dict, Generator, Iterable, List, Literal, Optional, Type, Union
+from typing import (Any, Dict, Generator, Iterable, List, Literal, Optional,
+                    Type, Union)
 
 from typing_extensions import deprecated
 
@@ -81,6 +81,7 @@ class Repo(Traceable):
         pass
 
 
+@deprecated("cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead")
 class SingleLineRepo(Repo):
     def __init__(
         self,
@@ -89,12 +90,6 @@ class SingleLineRepo(Repo):
         meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
-        warnings.warn(
-            "cascade.models.SingleLineRepo is deprecated since 0.14.0"
-            " please, consider migrating to cascade.repos.SingleLineRepo"
-            " See documentation and relsease notes on what's changed"
-        )
-
         self._root = line.get_root()
         super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
         self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
@@ -116,6 +111,7 @@ class SingleLineRepo(Repo):
         self._line.reload()
 
 
+@deprecated("cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead")
 class ModelRepo(Repo, TraceableOnDisk):
     """
     An interface to manage experiments with several lines of models.
@@ -173,11 +169,6 @@ class ModelRepo(Repo, TraceableOnDisk):
         --------
         cascade.models.ModelLine
         """
-        warnings.warn(
-            "cascade.models.ModelRepo is deprecated since 0.14.0"
-            " please, consider migrating to cascade.repos.Repo"
-            " See documentation and release notes on what's changed"
-        )
 
         super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls

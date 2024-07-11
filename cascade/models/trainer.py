@@ -15,9 +15,10 @@ limitations under the License.
 """
 
 import logging
-from typing import Any, Dict, Iterable, List, Tuple, Union
+from typing import Any, Dict, Iterable, Tuple, Union
 
 import pendulum
+from typing_extensions import deprecated
 
 from ..base import Meta, Traceable, raise_not_implemented
 from ..models import Model, ModelLine, ModelRepo
@@ -59,6 +60,7 @@ class Trainer(Traceable):
         return meta
 
 
+@deprecated("cascade.models.BasicTrainer is deprecated since 0.14.0, consider using cascade.trainers.BasicTrainer")
 class BasicTrainer(Trainer):
     """
     The most common of concrete Trainers.

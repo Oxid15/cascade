@@ -17,23 +17,22 @@ limitations under the License.
 import os
 import socket
 import traceback
-import warnings
 from getpass import getuser
 from typing import Any, Dict, List, Literal, Optional, Type, Union
 
 import pendulum
+from typing_extensions import deprecated
 
 from ..base import Meta, MetaHandler, TraceableOnDisk
-from ..base.utils import (
-    generate_slug,
-    get_latest_commit_hash,
-    get_python_version,
-    get_uncommitted_changes,
-)
+from ..base.utils import (generate_slug, get_latest_commit_hash,
+                          get_python_version, get_uncommitted_changes)
 from ..version import __version__
 from .model import Model
 
 
+@deprecated(
+    "cascade.models.ModelLine is deprecated, consider using cascade.lines.ModelLine instead"
+)
 class ModelLine(TraceableOnDisk):
     """
     A manager for a line of models. Used by Repo to access models on disk.
@@ -64,11 +63,6 @@ class ModelLine(TraceableOnDisk):
         --------
         cascade.repos.Repo
         """
-        warnings.warn(
-            "cascade.models.ModelLine is deprecated since 0.14.0"
-            " please, consider migrating to cascade.lines.ModelLine"
-            " See documentation and release notes on what's changed"
-        )
 
         super().__init__(folder, meta_fmt, **kwargs)
         self._model_cls = model_cls
@@ -132,7 +126,9 @@ class ModelLine(TraceableOnDisk):
         """
         model = self._model_cls.load(os.path.join(self._root, self._model_names[num]))
         if not only_meta:
-            model.load_artifact(os.path.join(self._root, self._model_names[num], "artifacts"))
+            model.load_artifact(
+                os.path.join(self._root, self._model_names[num], "artifacts")
+            )
 
         return model
 
@@ -166,7 +162,9 @@ class ModelLine(TraceableOnDisk):
             raise TypeError(f"The argument of type {type(model)} is not supported")
 
         if not name:
-            raise FileNotFoundError(f"Failed to find the model {model} in the line at {self._root}")
+            raise FileNotFoundError(
+                f"Failed to find the model {model} in the line at {self._root}"
+            )
         return name
 
     def load_model_meta(self, model: Union[str, int]) -> Meta:
