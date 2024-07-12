@@ -14,5 +14,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from .time_series import Align, Average, Interpolate
 from .time_series_dataset import TimeSeriesDataset
-from .time_series import Average, Interpolate, Align

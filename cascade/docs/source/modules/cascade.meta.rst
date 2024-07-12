@@ -1,6 +1,33 @@
 cascade.meta
 ============ 
 
+.. autoclass:: cascade.meta.Assessor
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.DataCard
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.DataRegistrator
+    :members:
+
+|
+
+|
+
+|
+
 .. autoclass:: cascade.meta.DataleakValidator
     :members:
 
@@ -10,7 +37,7 @@ cascade.meta
 
 |
 
-.. autoclass:: cascade.meta.numpy_md5
+.. autoclass:: cascade.meta.DiffViewer
     :members:
 
 |
@@ -20,6 +47,16 @@ cascade.meta
 |
 
 .. autoclass:: cascade.meta.HistoryViewer
+    :members:
+
+|
+
+|
+
+|
+
+
+.. autoclass:: cascade.meta.LabelingInfo
     :members:
 
 |
@@ -56,7 +93,8 @@ cascade.meta
 
 |
 
-.. autoclass:: cascade.meta.Validator
+
+.. autoclass:: cascade.meta.numpy_md5
     :members:
 
 |
@@ -65,7 +103,17 @@ cascade.meta
 
 |
 
+
 .. autoclass:: cascade.meta.AggregateValidator
+    :members:
+
+|
+
+|
+
+|
+
+.. autoclass:: cascade.meta.DataValidationException
     :members:
 
 |
@@ -83,43 +131,7 @@ cascade.meta
 
 |
 
-.. autoclass:: cascade.meta.Assessor
-    :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.meta.LabelingInfo
-    :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.meta.DataCard
-    :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.meta.DataRegistrator
-    :members:
-
-|
-
-|
-
-|
-
-.. autoclass:: cascade.meta.DiffViewer
+.. autoclass:: cascade.meta.Validator
     :members:
 
 |

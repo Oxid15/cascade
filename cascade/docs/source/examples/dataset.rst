@@ -34,5 +34,4 @@ and trace a pipeline as a whole starting at its last block.
 
 See also
 --------
-:py:class:`cascade.meta.DataCard`
-:py:class:`cascade.meta.DataRegistrator`
+:py:class:`cascade.data.DataCard`

@@ -17,12 +17,3 @@ cascade.base
 |
 
 |
-
-.. autoclass:: cascade.base.HistoryLogger
-   :members:
-
-|
-
-|
-
-|
