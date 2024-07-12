@@ -20,9 +20,9 @@ from typing import Literal, Optional
 
 from deepdiff import DeepDiff
 
-from ..base import MetaFromFile, MetaHandler, PipeMeta, supported_meta_formats
+from ..base import Meta, MetaHandler, supported_meta_formats
 from ..data.dataset import BaseDataset, T
-from . import DataValidationException, Validator
+from .validator import DataValidationException, Validator
 
 
 class MetaValidator(Validator):
@@ -110,14 +110,14 @@ class MetaValidator(Validator):
         else:
             self._save(meta, name)
 
-    def _save(self, meta: PipeMeta, name: str) -> None:
+    def _save(self, meta: Meta, name: str) -> None:
         MetaHandler.write(name, meta)
         print(f"Saved as {name}!")
 
-    def _load(self, name: str) -> MetaFromFile:
+    def _load(self, name: str) -> Meta:
         return MetaHandler.read(name)
 
-    def _check(self, query_meta: PipeMeta) -> None:
+    def _check(self, query_meta: Meta) -> None:
         diff = DeepDiff(self.base_meta, query_meta, verbose_level=2)
         if len(diff):
             print(diff.pretty())

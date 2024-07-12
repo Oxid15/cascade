@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2023 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@ limitations under the License.
 """
 
 import logging
-from typing import Any, Dict, Iterable, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, Tuple, Union
 
 import pendulum
+from typing_extensions import deprecated
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import Meta, Traceable, raise_not_implemented
 from ..models import Model, ModelLine, ModelRepo
 
 logger = logging.getLogger(__name__)
@@ -52,13 +53,14 @@ class Trainer(Traceable):
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise_not_implemented("cascade.models.Trainer", "train")
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["metrics"] = self.metrics
         meta[0]["repo"] = self._repo.get_meta()
         return meta
 
 
+@deprecated("cascade.models.BasicTrainer is deprecated since 0.14.0, consider using cascade.trainers.BasicTrainer")
 class BasicTrainer(Trainer):
     """
     The most common of concrete Trainers.
@@ -91,14 +93,16 @@ class BasicTrainer(Trainer):
     def train(
         self,
         model: Model,
-        train_data: Optional[Iterable[Any]] = None,
-        test_data: Optional[Iterable[Any]] = None,
-        train_kwargs: Optional[Dict[Any, Any]] = None,
-        test_kwargs: Optional[Dict[Any, Any]] = None,
+        *args: Any,
+        train_data: Union[Iterable[Any], None] = None,
+        test_data: Union[Iterable[Any], None] = None,
+        train_kwargs: Union[Dict[Any, Any], None] = None,
+        test_kwargs: Union[Dict[Any, Any], None] = None,
         epochs: int = 1,
-        start_from: Optional[str] = None,
-        eval_strategy: Optional[int] = None,
-        save_strategy: Optional[int] = None,
+        start_from: Union[str, None] = None,
+        eval_strategy: Union[int, None] = None,
+        save_strategy: Union[int, None] = None,
+        **kwargs: Any,
     ) -> None:
         """
         Trains, evaluates and saves given model. If specified, loads model from checkpoint.
@@ -208,7 +212,7 @@ class BasicTrainer(Trainer):
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"
         )
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["train_start_at"] = self.train_start_at
         meta[0]["train_end_at"] = self.train_end_at

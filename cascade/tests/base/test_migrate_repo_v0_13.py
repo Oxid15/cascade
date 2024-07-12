@@ -24,7 +24,8 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base.utils import migrate_repo_v0_13
 from cascade.base import MetaHandler
-from cascade.models import ModelRepo, Model
+from cascade.repos import Repo
+from cascade.models import Model
 
 
 class OldStyleModel(Model):
@@ -36,7 +37,7 @@ class OldStyleModel(Model):
 
 
 def test_scalars_only(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     line = repo.add_line()
 
     model = OldStyleModel()
@@ -67,7 +68,7 @@ def test_scalars_only(tmp_path_str):
 
 
 def test_complex_metrics(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     line = repo.add_line()
 
     model = OldStyleModel()
@@ -103,7 +104,7 @@ def test_complex_metrics(tmp_path_str):
 
 
 def test_idempotency(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     line = repo.add_line()
 
     model = OldStyleModel()

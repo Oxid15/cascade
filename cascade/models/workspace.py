@@ -18,10 +18,13 @@ import os
 import warnings
 from typing import Any, Generator, List, Literal, Optional
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
+from typing_extensions import deprecated
+
+from ..base import Meta, MetaHandler, MetaIOError, TraceableOnDisk
 from ..models import ModelRepo
 
 
+@deprecated("cascade.models.Workspace is deprecated, consider using cascade.workspaces.Workspace instead")
 class Workspace(TraceableOnDisk):
     def __init__(
         self,
@@ -36,6 +39,7 @@ class Workspace(TraceableOnDisk):
         self._default = default_repo
 
         abs_root = os.path.abspath(self._root)
+        os.makedirs(abs_root, exist_ok=True)
         dirs = sorted(
             [
                 name
@@ -67,7 +71,7 @@ class Workspace(TraceableOnDisk):
         for repo in self._repo_names:
             yield self.__getitem__(repo)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["root"] = self._root
         meta[0]["len"] = len(self)
@@ -84,18 +88,20 @@ class Workspace(TraceableOnDisk):
             if len(self._repo_names) > 0:
                 return self[self._repo_names[0]]
             else:
-                raise RuntimeError("Tried to get the default repo when the workspace is empty")
+                raise RuntimeError(
+                    "Tried to get the default repo when the workspace is empty"
+                )
 
     def set_default(self, repo: str) -> None:
         if repo in self._repo_names:
             self._default = repo
         else:
-            raise KeyError(f"Repo {repo} does not exist in Workspace {self._root}")
+            raise KeyError(f"ModelRepo {repo} does not exist in Workspace {self._root}")
 
     def reload(self) -> None:
         pass
 
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_model_meta(self, model: str) -> Meta:
         """
         Loads metadata of a model from disk
 
@@ -106,7 +112,7 @@ class Workspace(TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -147,7 +153,7 @@ class Workspace(TraceableOnDisk):
             If the repo already exists
         """
         if name in self._repo_names:
-            raise ValueError(f"Repo {name} already exists")
+            raise ValueError(f"ModelRepo {name} already exists")
 
         repo = ModelRepo(os.path.join(self._root, name), *args, **kwargs)
         self._repo_names.append(name)

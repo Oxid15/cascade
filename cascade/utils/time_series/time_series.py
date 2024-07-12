@@ -21,9 +21,8 @@ import numpy as np
 import pandas as pd
 import pendulum
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...data import Modifier
-
 from .time_series_dataset import TimeSeriesDataset
 
 
@@ -52,9 +51,16 @@ class Average(TimeSeriesDataset, Modifier):
             `unit='months'` and `amount=6`.
         """
         time, data = dataset.get_data()
-        reg_time = [
-            d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)
-        ]
+        try:
+            # This is pendulum 2.x
+            reg_time = [
+                d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)
+            ]
+        except AttributeError:
+            # If it doesn't work then try pendulum 3.x
+            reg_time = [
+                d for d in pendulum.interval(time[0], time[-1]).range(unit, amount=amount)
+            ]
 
         reg_data = self._avg(data, time, reg_time)
         assert len(reg_data) > 1, (
@@ -66,7 +72,7 @@ class Average(TimeSeriesDataset, Modifier):
 
         super().__init__(dataset, time=reg_time, data=reg_data, *args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({"unit": self._unit, "amount": self._amount})
         return meta
@@ -104,7 +110,7 @@ class Interpolate(TimeSeriesDataset, Modifier):
         self._method = method
         self._limit_direction = limit_direction
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {"method": self._method, "limit_direction": self._limit_direction}

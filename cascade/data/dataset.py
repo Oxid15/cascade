@@ -12,22 +12,17 @@ limitations under the License.
 """
 
 import warnings
-from typing import (
-    Any,
-    Generator,
-    Generic,
-    Iterable,
-    Sequence,
-    Sized,
-    TypeVar,
-)
+from abc import ABC, abstractmethod
+from typing import (Any, Generator, Generic, Iterable, Iterator, Optional,
+                    Sequence, Sized, TypeVar)
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import Meta, Traceable
+from .data_card import DataCard
 
 T = TypeVar("T", covariant=True)
 
 
-class BaseDataset(Generic[T], Traceable):
+class BaseDataset(ABC, Generic[T], Traceable):
     """
     Base class of any object that constitutes a step in a data-pipeline
 
@@ -36,26 +31,23 @@ class BaseDataset(Generic[T], Traceable):
     cascade.base.Traceable
     """
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: Any, data_card: Optional[DataCard] = None, **kwargs: Any) -> None:
+        self._data_card = data_card
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: Any) -> T:
-        """
-        Abstract method - should be defined in every successor
-        """
-        raise_not_implemented("cascade.data.Dataset", "__getitem__")
-
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Returns
         -------
-        meta: PipeMeta
+        meta: Meta
             A list where last element is this dataset's metadata.
             Meta can be anything that is worth to document about the dataset and its data.
             This is done in form of list to enable cascade-like calls in Modifiers and Samplers.
         """
         meta = super().get_meta()
         meta[0]["type"] = "dataset"
+        if self._data_card is not None:
+            meta[0]["data_card"] = self._data_card.to_dict()
         return meta
 
 
@@ -64,6 +56,8 @@ class IteratorDataset(BaseDataset[T], Iterable[T]):
     An abstract class to represent a dataset as
     an iterable object
     """
+    def __iter__(self) -> Iterator[T]:
+        return super().__iter__()
 
 
 class Dataset(BaseDataset[T], Sized):
@@ -80,10 +74,13 @@ class Dataset(BaseDataset[T], Sized):
     cascade.data.Iterator
     """
 
-    def __len__(self) -> int:
-        raise_not_implemented("cascade.data.Dataset", "__len__")
+    @abstractmethod
+    def __getitem__(self, index: Any): ...
 
-    def get_meta(self) -> PipeMeta:
+    @abstractmethod
+    def __len__(self) -> int: ...
+
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["len"] = len(self)
         return meta
@@ -102,7 +99,7 @@ class IteratorWrapper(BaseDataset[T]):
         for item in self._data:
             yield item
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))
         return meta
@@ -123,7 +120,7 @@ class Wrapper(Dataset):
     def __len__(self) -> int:
         return len(self._data)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))
         return meta

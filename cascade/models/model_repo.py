@@ -14,9 +14,12 @@ limitations under the License.
 import itertools
 import os
 import shutil
-from typing import Any, Dict, Generator, Iterable, List, Literal, Optional, Type, Union
+from typing import (Any, Dict, Generator, Iterable, List, Literal, Optional,
+                    Type, Union)
 
-from ..base import MetaFromFile, PipeMeta, Traceable, TraceableOnDisk
+from typing_extensions import deprecated
+
+from ..base import Meta, Traceable, TraceableOnDisk
 from ..version import __version__
 from .model import Model
 from .model_line import ModelLine
@@ -56,7 +59,7 @@ class Repo(Traceable):
         for line in self._lines:
             yield self.__getitem__(line)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -78,12 +81,13 @@ class Repo(Traceable):
         pass
 
 
+@deprecated("cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead")
 class SingleLineRepo(Repo):
     def __init__(
         self,
         line: ModelLine,
         *args: Any,
-        meta_prefix: Optional[Dict[Any, Any]] = None,
+        meta_prefix: Union[Dict[Any, Any], str, None] = None,
         **kwargs: Any,
     ) -> None:
         self._root = line.get_root()
@@ -95,9 +99,7 @@ class SingleLineRepo(Repo):
         if key in self._lines:
             return self._line
         else:
-            raise KeyError(
-                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist"
-            )
+            raise KeyError(f"The only line is {list(self._lines.keys())[0]}, {key} does not exist")
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._root}"
@@ -109,6 +111,7 @@ class SingleLineRepo(Repo):
         self._line.reload()
 
 
+@deprecated("cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead")
 class ModelRepo(Repo, TraceableOnDisk):
     """
     An interface to manage experiments with several lines of models.
@@ -166,6 +169,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         --------
         cascade.models.ModelLine
         """
+
         super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls
 
@@ -190,9 +194,9 @@ class ModelRepo(Repo, TraceableOnDisk):
 
     def add_line(
         self,
-        name: Optional[str] = None,
+        name: Union[str, None] = None,
         *args: Any,
-        meta_fmt: Optional[str] = None,
+        meta_fmt: Union[str, None] = None,
         **kwargs: Any,
     ) -> ModelLine:
         """
@@ -270,7 +274,7 @@ class ModelRepo(Repo, TraceableOnDisk):
     def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_model_meta(self, model: str) -> Meta:
         """
         Loads metadata of a model from disk
 
@@ -281,7 +285,7 @@ class ModelRepo(Repo, TraceableOnDisk):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -302,21 +306,25 @@ class ModelRepo(Repo, TraceableOnDisk):
                 continue
             else:
                 return meta
-        raise FileNotFoundError(
-            f"Failed to find the model {model} in the repo at {self._root}"
-        )
+        raise FileNotFoundError(f"Failed to find the model {model} in the repo at {self._root}")
 
     def _update_lines(self) -> None:
         for name in sorted(os.listdir(self._root)):
-            if (
-                os.path.isdir(os.path.join(self._root, name))
-                and name not in self._lines
-            ):
+            if os.path.isdir(os.path.join(self._root, name)) and name not in self._lines:
                 self._lines[name] = {"args": [], "kwargs": dict()}
 
 
+@deprecated(
+    "Concatenating Repos is deprecated since"
+    " 0.14.0 and will be removed by 0.15.0"
+    " Use Workspaces instead",
+    category=DeprecationWarning,
+    stacklevel=1
+)
 class ModelRepoConcatenator(Repo):
     """
+    Deprecated
+
     The class to concatenate different Repos.
     For the ease of use please, don't use it directly.
     Just do `repo = repo_1 + repo_2` to unify two or more repos.

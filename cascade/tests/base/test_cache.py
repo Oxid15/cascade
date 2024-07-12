@@ -1,9 +1,12 @@
 """
 Copyright 2022-2024 Ilia Moiseev
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
    http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,30 +17,24 @@ limitations under the License.
 import os
 import sys
 
+import pytest
+
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import SequentialCacher
+from cascade.base import Cache, Traceable
 
 
-def test(number_dataset):
-    ds = SequentialCacher(number_dataset, 2)
-    res = []
-    for i in range(len(ds)):
-        res.append(ds[i])
-    assert res == [item for item in number_dataset]
+@pytest.mark.parametrize("backend", ["pickle"])
+def test(tmp_path_str, backend):
+    cache = Cache(tmp_path_str, backend=backend)
 
+    assert cache.exists() is False
 
-def test_repeated_usage(number_dataset):
-    ds = SequentialCacher(number_dataset, 2)
-    res = []
-    for i in range(len(ds)):
-        res.append(ds[i])
+    cache.save(Traceable(description="Hello"))
 
-    assert res == [item for item in number_dataset]
+    assert cache.exists() is True
 
-    res = []
-    for i in range(len(ds)):
-        res.append(ds[i])
+    obj = cache.load()
 
-    assert res == [item for item in number_dataset]
+    assert obj.description == "Hello"

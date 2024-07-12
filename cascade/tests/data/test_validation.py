@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +25,13 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.data import ValidationError, validate_in
+
+
+def test_empty_sig():
+    def one():
+        return 1
+
+    validate_in(one)()
 
 
 def test_no_annot():
@@ -57,8 +64,8 @@ def test_default_types():
 def test_lists():
     def sum_list(a: List[float]):
         return sum(a)
-    
-    validate_in(sum_list)([1.2, 3.4, 5.])
+
+    validate_in(sum_list)([1.2, 3.4, 5.0])
 
     with pytest.raises(ValidationError):
         validate_in(sum_list)(None)
@@ -70,7 +77,7 @@ def test_lists():
 def test_dicts():
     def sum_dict(a: Dict[str, int]):
         return sum(a.values())
-    
+
     sum_dict({"a": 2, "b": 1})
 
     with pytest.raises(ValidationError):
@@ -99,16 +106,20 @@ def test_pydantic_model():
     def identity(a: LargeModel):
         return a
 
-    validate_in(
-        identity)(dict(
-            int_=0, float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
-        )
+    validate_in(identity)(
+        dict(int_=0, float_=0.0, str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.0})
     )
 
     with pytest.raises(ValidationError):
         validate_in(identity)(
             dict(
-                int_="err", float_=0., str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.}
+                int_="err",
+                float_=0.0,
+                str_="a",
+                dict_=dict(),
+                list_=list(),
+                li=[0, 1],
+                ds={"a": 1.0},
             )
         )
 
@@ -117,7 +128,27 @@ def test_pydantic_field():
     def identity(a: int = pydantic.Field(le=0)):
         return a
 
+    validate_in(identity)(-1)
     validate_in(identity)(0)
 
     with pytest.raises(ValidationError):
         validate_in(identity)(10000)
+
+
+def test_custom_types():
+    class MyType:
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+
+    def identity(a: MyType):
+        return a
+
+    validate_in(identity)(MyType(a=0, b=1))
+
+    # This will pass since this is a custom type
+    validate_in(identity)(MyType(a=None, b="lol"))
+
+    # This will fail since type is checked
+    with pytest.raises(ValidationError):
+        validate_in(identity)(None)

@@ -1,9 +1,10 @@
 import os
 import sys
+
 import setuptools
 
 sys.path.append(os.path.dirname(__file__))
-from cascade.version import __version__, __author__, __author_email__
+from cascade.version import __author__, __author_email__, __version__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -19,7 +20,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/oxid15/cascade",
     project_urls={
-        "Documentation": "https://oxid15.github.io/cascade",
+        "Documentation": "https://oxid15.github.io/cascade/en/latest/index.html",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -39,5 +40,6 @@ setuptools.setup(
         "pyyaml>=5.4.1",
         "coolname>=2.0.0",
         "click>=8.0.0",
+        "typing-extensions>=4.11.0,<5"
     ],
 )

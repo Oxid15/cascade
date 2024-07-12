@@ -15,21 +15,24 @@ limitations under the License.
 """
 
 import os
-from typing import Any, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import pendulum
 from flatten_json import flatten
 
 from ..base import MetaHandler
-from ..models import Model, ModelLine, Repo, SingleLineRepo
-from . import MetaViewer, Server
+from ..lines import ModelLine
+from ..models import Model
+from ..repos import Repo, SingleLineRepo
+from .meta_viewer import MetaViewer
+from .server import Server
 
 
 class MetricViewer:
     """
     Interface for viewing metrics in model meta files
-    uses ModelRepo to extract metrics of all models if any.
+    uses Repo to extract metrics of all models if any.
     As metrics it uses data from `metrics` field in models'
     meta and as parameters it uses `params` field.
     """
@@ -40,8 +43,8 @@ class MetricViewer:
         """
         Parameters
         ----------
-        repo: ModelRepo
-            ModelRepo object to extract metrics from
+        repo: Repo
+            Repo object to extract metrics from
         scope: Union[int, str, slice]
             Index or a name of line to view. Can be set using `__getitem__`
         """
@@ -50,10 +53,12 @@ class MetricViewer:
 
         meta = MetaHandler.read_dir(repo.get_root())
         if "cascade_version" not in meta[0]:
-            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
-                               f" metric format. Please, migrate the repo in {repo.get_root()}"
-                               " to be able to use the viewer."
-                               "Use cascade.base.utils.migrate_repo_v0_13")
+            raise RuntimeError(
+                "This repository was created before 0.13.0 and has incompatible"
+                f" metric format. Please, migrate the repo in {repo.get_root()}"
+                " to be able to use the viewer."
+                "Use cascade.base.utils.migrate_repo_v0_13"
+            )
 
         self._repo = repo
         self._scope = scope
@@ -183,11 +188,11 @@ class MetricViewer:
         TypeError if metric objects cannot be sorted. If only one model in repo, then
         returns it without error since no sorting involved.
         """
-        assert metric in self.table, f"{metric} is not in {self.table.columns}"
-        t = self.table.loc[self.table[metric].notna()]
+        assert metric in self.table["name"].unique(), f"{metric} is not in {self.table.columns}"
+        t = self.table.loc[self.table["name"] == metric]
 
         try:
-            t = t.sort_values(metric, ascending=maximize)
+            t = t.sort_values("value", ascending=maximize)
         except TypeError as e:
             raise TypeError(f"Metric {metric} objects cannot be sorted") from e
 

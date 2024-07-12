@@ -18,13 +18,13 @@ import os
 import sys
 from typing import NoReturn
 
-from cascade.models.trainer import BasicTrainer
-
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.base import MetaHandler
 from cascade.data import Wrapper
-from cascade.models import ModelRepo, Trainer
+from cascade.trainers import Trainer, BasicTrainer
+from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel
 
 
@@ -36,24 +36,18 @@ class AlwaysFailingModel(DummyModel):
         raise RuntimeError()
 
 
-def test_base(tmp_path_str, model_repo):
+def test_base(tmp_path_str, repo):
     t = Trainer(tmp_path_str)
     meta = t.get_meta()
-
     assert len(meta) == 1
-    assert "repo" in meta[0]
-    assert "metrics" in meta[0]
 
-    t = Trainer(model_repo)
+    t = Trainer(repo)
     meta = t.get_meta()
-
     assert len(meta) == 1
-    assert "repo" in meta[0]
-    assert "metrics" in meta[0]
 
 
 def test_basic_trainer(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     t = BasicTrainer(repo)
 
     model = DummyModel()
@@ -64,9 +58,25 @@ def test_basic_trainer(tmp_path_str):
     assert len(repo["00000"]) == 5
     assert len(t.metrics) == 5
 
+    trainer_meta = t.get_meta()
+
+    assert trainer_meta[0]["epochs"] == 5
+    assert trainer_meta[0]["eval_strategy"] is None
+    assert trainer_meta[0]["save_strategy"] is None
+
+    line_meta = MetaHandler.read_dir(repo["00000"].get_root())
+    assert len(line_meta[0]["links"]) == 3
+    for link in line_meta[0]["links"]:
+        if link["meta"][0].get("type") == "trainer":
+            assert "epochs" in link["meta"][0]
+            assert "eval_strategy" in link["meta"][0]
+            assert "save_strategy" in link["meta"][0]
+        elif link["meta"][0].get("type") == "dataset":
+            assert link["meta"][0]["len"] == 5
+
 
 def test_error_handling(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     t = BasicTrainer(repo)
 
     model = AlwaysFailingModel()

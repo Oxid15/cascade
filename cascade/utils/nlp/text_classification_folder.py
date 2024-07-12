@@ -19,8 +19,8 @@ from typing import Any, Tuple
 
 import numpy as np
 
-from ...base import PipeMeta
-from ...data.dataset import Dataset
+from ...base import Meta
+from ...data.dataset import Dataset, T
 
 
 class TextClassificationFolder(Dataset[T]):
@@ -71,7 +71,7 @@ class TextClassificationFolder(Dataset[T]):
         """
         return len(self._paths)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {

@@ -21,16 +21,16 @@ from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from cascade.cli.cli import cli
 from cascade.base import MetaHandler
-from cascade.models import ModelRepo
+from cascade.cli.cli import cli
+from cascade.repos import Repo
 
 
 def test_add(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        repo = ModelRepo(td)
+        repo = Repo(td)
 
         init_meta = mh.read_dir(td)
 
@@ -44,4 +44,6 @@ def test_add(tmp_path_str):
         assert meta[0]["description"] == "Hello"
 
         meta[0]["description"] = None
+        del meta[0]["updated_at"]
+        del init_meta[0]["updated_at"]
         assert meta == init_meta
