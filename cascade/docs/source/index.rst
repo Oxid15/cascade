@@ -33,10 +33,10 @@ Documentation
 
     .. grid-item::
         .. card:: Tutorials
-            :link: /examples.rst
+            :link: /tutorials/tutorials.rst
             :link-type: ref
 
-            Learn how you can use Cascade in your ML workflows
+            Learn how you can use Cascade in your ML workflows step-by-step
 
     .. grid-item::
         .. card:: How-to guides
@@ -59,4 +59,3 @@ Documentation
     quickstart
     examples
     modules
-    
