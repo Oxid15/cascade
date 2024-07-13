@@ -1,5 +1,5 @@
-Examples
-========
+How-to guides
+=============
 
 Examples by task
 ----------------

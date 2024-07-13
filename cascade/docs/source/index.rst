@@ -40,7 +40,7 @@ Documentation
 
     .. grid-item::
         .. card:: How-to guides
-            :link: /examples/model_training_trainers.ipynb
+            :link: /howto/howto.rst
             :link-type: ref
 
             Recipes for specific use-cases
@@ -57,5 +57,5 @@ Documentation
     :hidden:
 
     quickstart
-    examples
+    howto/howto
     modules
