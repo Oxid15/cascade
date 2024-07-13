@@ -1,131 +1,127 @@
 How-to guides
 =============
 
-Examples by task
-----------------
-
 .. grid:: 2
 
     .. grid-item::
-        .. card:: Pipeline Building
-            :link: /examples/pipeline_building.ipynb
+        .. card:: Build a pipeline
+            :link: /howto/pipeline_building.ipynb
             :link-type: ref
 
-            Learn how to build data processing pipelines with cascade.data module
+            How to build data processing pipelines with cascade.data module
 
     .. grid-item::
-        .. card:: Model Training
-            :link: /examples/model_training.ipynb
+        .. card:: Track model training experiment
+            :link: /howto/model_training.ipynb
             :link-type: ref
 
-            See how you can conduct model training experiments
+            How to conduct experiments with Cascade
 
     .. grid-item::
-        .. card:: Model Training with Trainer
-            :link: /examples/model_training_trainers.ipynb
+        .. card:: Use a Trainer
+            :link: /howto/model_training_trainers.ipynb
             :link-type: ref
 
-            Make model training even easier with Trainers
+            How to make model training even easier with Trainers
 
     .. grid-item::
-        .. card:: Dataset Zoo
-            :link: /examples/dataset_zoo.ipynb
+        .. card:: Validate Data
+            :link: /howto/data_validation.ipynb
             :link-type: ref
 
-            Find suitable ready-made data processing utilities in Zoo
+            How to ensure data quality with Cascade data validation tools
 
-    .. grid-item::
-        .. card:: Data Validation
-            :link: /examples/data_validation.ipynb
-            :link-type: ref
+    .. .. grid-item::
+    ..     .. card:: Dataset Zoo
+    ..         :link: /howto/dataset_zoo.ipynb
+    ..         :link-type: ref
 
-            See how you can ensure data quality with data validation tools
+    ..         Find suitable ready-made data processing utilities in Zoo
 
-Examples by entity
-------------------
 
-.. grid:: 2
+.. Examples by entity
+.. ------------------
 
-    .. grid-item::
-        .. card:: Dataset
-            :link: /examples/dataset.rst
-            :link-type: ref
+.. .. grid:: 2
 
-            Learn about datasets, modifiers and how to use them
+..     .. grid-item::
+..         .. card:: Dataset
+..             :link: /howto/dataset.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Traceable
-            :link: /examples/traceable.rst
-            :link-type: ref
+..             Learn about datasets, modifiers and how to use them
 
-            The basis of Cascade objects
+..     .. grid-item::
+..         .. card:: Traceable
+..             :link: /howto/traceable.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Comment
-            :link: /examples/comments.rst
-            :link-type: ref
+..             The basis of Cascade objects
 
-            Sometimes you really need to express your thought at the moment
+..     .. grid-item::
+..         .. card:: Comment
+..             :link: /howto/comments.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Tag
-            :link: /examples/tags.rst
-            :link-type: ref
+..             Sometimes you really need to express your thought at the moment
 
-            It's about building your own system
+..     .. grid-item::
+..         .. card:: Tag
+..             :link: /howto/tags.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Link
-            :link: /examples/links.rst
-            :link-type: ref
+..             It's about building your own system
 
-            To always know what data relates to an artifact at hand
+..     .. grid-item::
+..         .. card:: Link
+..             :link: /howto/links.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Artifact
-            :link: /examples/artifacts.rst
-            :link-type: ref
+..             To always know what data relates to an artifact at hand
 
-            The final result of most ML workflows
+..     .. grid-item::
+..         .. card:: Artifact
+..             :link: /howto/artifacts.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Model
-            :link: /examples/model.rst
-            :link-type: ref
+..             The final result of most ML workflows
 
-            Self-sufficient wrappers for training and inference
+..     .. grid-item::
+..         .. card:: Model
+..             :link: /howto/model.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Validator
-            :link: /examples/validator.rst
-            :link-type: ref
+..             Self-sufficient wrappers for training and inference
 
-            Thorough validation is a key to data quality
+..     .. grid-item::
+..         .. card:: Validator
+..             :link: /howto/validator.rst
+..             :link-type: ref
 
-    .. grid-item::
-        .. card:: Viewer
-            :link: /examples/viewer.rst
-            :link-type: ref
+..             Thorough validation is a key to data quality
 
-            Built-in viewers for meta data
+..     .. grid-item::
+..         .. card:: Viewer
+..             :link: /howto/viewer.rst
+..             :link-type: ref
 
-Contents
---------
+..             Built-in viewers for meta data
 
 .. toctree::
     :maxdepth: 1
+    :hidden:
 
-    examples/pipeline_building.ipynb
-    examples/model_training.ipynb
-    examples/model_training_trainers.ipynb
-    examples/dataset_zoo.ipynb
-    examples/data_validation.ipynb
-    examples/dataset.rst
-    examples/traceable.rst
-    examples/comments.rst
-    examples/tags.rst
-    examples/links.rst
-    examples/artifacts.rst
-    examples/model.rst
-    examples/validator.rst
-    examples/viewer.rst
+    howto/pipeline_building.ipynb
+    howto/model_training.ipynb
+    howto/model_training_trainers.ipynb
+    howto/dataset_zoo.ipynb
+    howto/data_validation.ipynb
+    .. howto/dataset.rst
+    .. howto/traceable.rst
+    .. howto/comments.rst
+    .. howto/tags.rst
+    .. howto/links.rst
+    .. howto/artifacts.rst
+    .. howto/model.rst
+    .. howto/validator.rst
+    .. howto/viewer.rst
