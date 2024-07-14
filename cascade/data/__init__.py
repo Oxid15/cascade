@@ -36,5 +36,3 @@ from .simple_dataloader import SimpleDataloader
 from .utils import split
 from .validation import ValidationError, validate_in
 from .version_assigner import VersionAssigner, version
-
-DatasetOrIterator = Union[Dataset[T], IteratorDataset[T]]
