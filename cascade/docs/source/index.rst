@@ -26,7 +26,7 @@ Documentation
 
     .. grid-item::
         .. card:: Quickstart
-            :link: /examples/pipeline_building.ipynb
+            :link: /quickstart.rst
             :link-type: ref
 
             Installation and basic setup
@@ -57,5 +57,6 @@ Documentation
     :hidden:
 
     quickstart
+    tutorials/tutorials
     howto/howto
     modules

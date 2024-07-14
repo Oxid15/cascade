@@ -8,3 +8,9 @@ you can use the library for your own projects, while
 completing this one.
 
 1. :ref:`/tutorials/pipelines.rst`
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    pipelines
