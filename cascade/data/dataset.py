@@ -56,8 +56,9 @@ class IteratorDataset(BaseDataset[T], Iterable[T]):
     An abstract class to represent a dataset as
     an iterable object
     """
-    def __iter__(self) -> Iterator[T]:
-        return super().__iter__()
+
+    @abstractmethod
+    def __iter__(self) -> Iterator[T]: ...
 
 
 class Dataset(BaseDataset[T], Sized):

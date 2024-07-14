@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable
+from typing import Any, Callable, Iterator
 
 from .dataset import Dataset, T
 from .modifier import Modifier
@@ -60,6 +60,6 @@ class ApplyModifier(Modifier[T]):
         else:
             raise TypeError(f"The underlying dataset is not a Dataset, but {type(self._dataset)}")
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[T]:
         for item in self._dataset:
             yield self._func(item)
