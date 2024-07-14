@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Generator, List, Sequence
+from typing import Any, Iterator, List, Sequence
 
 import numpy as np
 
@@ -52,7 +52,7 @@ class SimpleDataloader:
             batch.append(item)
         return batch
 
-    def __iter__(self) -> Generator[T, Any, None]:
+    def __iter__(self) -> Iterator[T]:
         for i in range(len(self)):
             yield self[i]
 

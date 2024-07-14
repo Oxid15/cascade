@@ -57,8 +57,8 @@ class IteratorDataset(BaseDataset[T], Iterable[T]):
     an iterable object
     """
 
-    @abstractmethod
-    def __iter__(self) -> Iterator[T]: ...
+    def __iter__(self) -> Iterator[T]:
+        return super().__iter__()
 
 
 class Dataset(BaseDataset[T], Sized):
@@ -100,7 +100,7 @@ class IteratorWrapper(IteratorDataset[T]):
         super().__init__(*args, **kwargs)
         self._data = data
 
-    def __iter__(self) -> Generator[T, Any, None]:
+    def __iter__(self) -> Iterator[T]:
         for item in self._data:
             yield item
 
