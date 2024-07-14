@@ -16,17 +16,20 @@ limitations under the License.
 
 from typing import Any, Callable
 
-from .dataset import Dataset, T
+from . import DatasetOrIterator
+from .dataset import Dataset, IteratorDataset, T
 from .modifier import Modifier
 
 
 class ApplyModifier(Modifier[T]):
     """
-    Modifier that applies a function to given dataset's items in each __getitem__ call
+    Modifier that applies a function to given dataset's items in each __getitem__ call.
+
+    Can be applied to Iterators too.
     """
 
     def __init__(
-        self, dataset: Dataset[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
+        self, dataset: DatasetOrIterator[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
     ) -> None:
         """
         Parameters
@@ -51,9 +54,15 @@ class ApplyModifier(Modifier[T]):
         self._func = func
 
     def __getitem__(self, index: int) -> Any:
-        item = self._dataset[index]
-        return self._func(item)
+        if isinstance(self._dataset, Dataset):
+            item = self._dataset[index]
+            return self._func(item)
+        else:
+            raise TypeError(f"The underlying dataset is not a Dataset, but {type(self._dataset)}")
 
-    # def __iter__(self):
-    #     for item in self._dataset:
-    #         yield self._func(item)
+    def __iter__(self):
+        if isinstance(self._dataset, IteratorDataset):
+            for item in self._dataset:
+                yield self._func(item)
+        else:
+            raise TypeError(f"The underlying dataset is not an IteratorDataset, but {type(self._dataset)}")

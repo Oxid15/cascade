@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Union
+
 from .apply_modifier import ApplyModifier
 from .bruteforce_cacher import BruteforceCacher
 from .composer import Composer
 from .concatenator import Concatenator
 from .cyclic_sampler import CyclicSampler
 from .dataset import (BaseDataset, Dataset, IteratorDataset, IteratorWrapper,
-                      SizedDataset, Wrapper)
+                      SizedDataset, T, Wrapper)
 from .filter import Filter, IteratorFilter
 from .folder_dataset import FolderDataset
 from .functions import dataset, modifier
@@ -34,3 +36,5 @@ from .simple_dataloader import SimpleDataloader
 from .utils import split
 from .validation import ValidationError, validate_in
 from .version_assigner import VersionAssigner, version
+
+DatasetOrIterator = Union[Dataset[T], IteratorDataset[T]]
