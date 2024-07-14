@@ -16,4 +16,5 @@ completing this one.
     :hidden:
 
     pipelines
+    metadata
     experiment_basics

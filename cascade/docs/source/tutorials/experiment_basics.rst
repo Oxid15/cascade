@@ -2,9 +2,12 @@ Experiment basics
 =================
 
 Cascade provides a rich set of ML-experiment tracking tools.
-You can track history of model changes, save and restore them.
+You can easily track history of model changes, save and restore models
+in a structured manner along with metadata.
 
-In this step
+In this step we create a wrapper around logistic regression model. Minimal setup
+for the model is not strictly defined as in Dataset case. We define `fit` and `predict`.
+`BasicModel` will handle everything else for us - saving and loading for example.
 
 .. code-block:: python
 
@@ -34,7 +37,10 @@ We can create and fit the model now using the dataset from :ref:`/tutorials/pipe
     model = LR()
     model.fit(ds)
 
-Model lines 
+Model lines are basic structured storage units in Cascade. They represent a lineage of
+a model. Usually they represent a single training run, but can be used arbitrarily.
+
+In this step we create a line for saving models and save our new model.
 
 .. code-block:: python
 
@@ -43,7 +49,9 @@ Model lines
     line = ModelLine("line", model_cls=BasicModel)
     line.save(model)
 
-Lines handle storage of models and can retrieve saved models by index or a name.
+Lines handle storage of models and their metadata and can retrieve saved models by index or a name.
+
+In the next step we load the model and infer it on a dataset.
 
 .. code-block:: python
 
@@ -51,3 +59,37 @@ Lines handle storage of models and can retrieve saved models by index or a name.
     y = model.predict(ds)
 
     print(y[0], ds[0][1])
+
+Lines also enhance model's meta by recording useful environment information.
+Let's see what was saved automatically about this experiment. We load model
+meta with a default line method.
+
+.. code-block:: python
+
+    from pprint import pprint
+    pprint(line.load_model_meta(0))
+
+.. code-block:: python
+
+    [{'comments': [],
+    'created_at': '2024-07-14T21:08:58.466812+00:00',
+    'cwd': '/home/ilia/local/cascade_proj/cascade/cascade/docs/source/tutorials',
+    'description': None,
+    'git_commit': '62de43afb7dbf51afe2d08dd0825366661c76055',
+    'git_uncommitted_changes': ['M '
+                                'cascade/docs/source/tutorials/experiment_basics.rst',
+                                'M cascade/docs/source/tutorials/tutorials.py',
+                                'M cascade/docs/source/tutorials/tutorials.rst\n'
+                                '?? cascade/docs/source/tutorials/line/'],
+    'host': 'my-pc-name',
+    'links': [],
+    'metrics': [],
+    'name': '__main__.LR',
+    'params': {},
+    'path': '/home/ilia/local/cascade_proj/cascade_repo/cascade/docs/source/tutorials/line/00000',
+    'python_version': '3.11.0rc1 (main, Aug 12 2022, 10:02:14) [GCC 11.2.0]',
+    'saved_at': '2024-07-14T21:09:01.453262+00:00',
+    'slug': 'imperial_magenta_cheetah',
+    'tags': [],
+    'type': 'model',
+    'user': 'ilia'}]

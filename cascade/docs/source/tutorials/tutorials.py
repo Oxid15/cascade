@@ -78,3 +78,10 @@ model = line.load(0)
 y = model.predict(ds)
 
 print(y[0], ds[0][1])
+
+# %%
+from pprint import pprint
+
+pprint(line.load_model_meta(0))
+
+# %%
