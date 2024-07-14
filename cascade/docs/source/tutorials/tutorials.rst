@@ -7,8 +7,9 @@ You can grasp an essence of how
 you can use the library for your own projects, while
 completing this one.
 
-1. :ref:`/tutorials/pipelines.rst`
-2. :ref:`/tutorials/experiment_basics.rst`
+1. :ref:`/tutorials/pipelines_basics.rst`
+2. :ref:`/tutorials/metadata.rst`
+3. :ref:`/tutorials/experiment_basics.rst`
 
 .. toctree::
     :maxdepth: 1

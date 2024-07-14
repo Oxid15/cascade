@@ -38,6 +38,11 @@ ds = Concatenator([ds, ds_noise])
 print(len(ds))
 
 # %%
+from pprint import pprint
+
+pprint(ds.get_meta())
+
+# %%
 from cascade.models import BasicModel
 from sklearn.linear_model import LogisticRegression
 

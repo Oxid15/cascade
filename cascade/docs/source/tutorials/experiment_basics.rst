@@ -2,7 +2,9 @@ Experiment basics
 =================
 
 Cascade provides a rich set of ML-experiment tracking tools.
+You can track history of model changes, save and restore them.
 
+In this step
 
 .. code-block:: python
 
@@ -25,7 +27,7 @@ Cascade provides a rich set of ML-experiment tracking tools.
         def predict(self, dataset):
             return self.model.predict([item[0] for item in dataset])
 
-We can create and fit the model now using the dataset from :ref:`/tutorials/pipelines.rst` step.
+We can create and fit the model now using the dataset from :ref:`/tutorials/pipelines_basics.rst` step.
 
 .. code-block:: python
 
