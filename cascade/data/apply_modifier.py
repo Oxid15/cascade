@@ -16,9 +16,9 @@ limitations under the License.
 
 from typing import Any, Callable
 
-from . import DatasetOrIterator
-from .dataset import Dataset, IteratorDataset, T
+from .dataset import Dataset, T
 from .modifier import Modifier
+from .utils import DatasetOrIterator
 
 
 class ApplyModifier(Modifier[T]):
@@ -61,8 +61,5 @@ class ApplyModifier(Modifier[T]):
             raise TypeError(f"The underlying dataset is not a Dataset, but {type(self._dataset)}")
 
     def __iter__(self):
-        if isinstance(self._dataset, IteratorDataset):
-            for item in self._dataset:
-                yield self._func(item)
-        else:
-            raise TypeError(f"The underlying dataset is not an IteratorDataset, but {type(self._dataset)}")
+        for item in self._dataset:
+            yield self._func(item)
