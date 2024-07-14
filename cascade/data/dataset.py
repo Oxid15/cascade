@@ -80,15 +80,19 @@ class Dataset(BaseDataset[T], Sized):
     @abstractmethod
     def __len__(self) -> int: ...
 
+    def __iter__(self) -> Iterator[T]:
+        for i in range(len(self)):
+            yield self.__getitem__(i)
+
     def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["len"] = len(self)
         return meta
 
 
-class IteratorWrapper(BaseDataset[T]):
+class IteratorWrapper(IteratorDataset[T]):
     """
-    Wraps BaseDataset around any Iterable. Does not have map-like interface.
+    Wraps IteratorDataset around any Iterable. Does not have map-like interface.
     """
 
     def __init__(self, data: Iterable[T], *args: Any, **kwargs: Any) -> None:
