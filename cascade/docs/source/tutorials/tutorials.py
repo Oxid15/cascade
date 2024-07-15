@@ -14,6 +14,7 @@ class DigitsDataset(Dataset):
     def __len__(self):
         return len(self.x)
 
+
 # %%
 ds = DigitsDataset()
 print(ds[0])
@@ -22,9 +23,11 @@ print(ds[0])
 import numpy as np
 from cascade.data import ApplyModifier
 
+NOISE_MAGNITUDE = 1
+
 
 def add_noise(x):
-    return np.clip(x[0] + np.random.randint(-1, 1), 0, 15), x[1]
+    return np.clip(x[0] + np.random.randint(-NOISE_MAGNITUDE, NOISE_MAGNITUDE), 0, 15), x[1]
 
 
 ds_noise = ApplyModifier(ds, add_noise)
@@ -59,8 +62,9 @@ class LR(BasicModel):
             y.append(item[1])
         self.model.fit(x, y)
 
-    def predict(self, dataset):
-        return self.model.predict([item[0] for item in dataset])
+    def predict(self, x):
+        return self.model.predict(x)
+
 
 # %%
 model = LR()
@@ -75,9 +79,10 @@ line.save(model)
 # %%
 
 model = line.load(0)
-y = model.predict(ds)
+x = [item[0] for item in ds]
+preds = model.predict(x)
 
-print(y[0], ds[0][1])
+print(preds[0], ds[0][1])
 
 # %%
 from pprint import pprint
@@ -85,3 +90,99 @@ from pprint import pprint
 pprint(line.load_model_meta(0))
 
 # %%
+from cascade.lines import DataLine
+
+ds.update_meta(
+    {
+        "long_description": "This is digits pipeline. It was augmented with some uniform noise",
+        "noise_magnitude": NOISE_MAGNITUDE,
+    }
+)
+
+dataline = DataLine("dataline")
+dataline.save(ds)
+
+# %%
+
+version = dataline.get_version(ds)
+print(version)
+
+# %%
+
+ds.update_meta({"detail_i_almost_forgot": "Changes in meta bump minor version"})
+
+dataline.save(ds)
+version = dataline.get_version(ds)
+print(version)
+
+# %%
+
+changed_ds = ApplyModifier(ds, add_noise)
+dataline.save(changed_ds)
+version = dataline.get_version(changed_ds)
+print(version)
+
+# %%
+version = dataline.get_version(ds)
+print(version)
+
+loaded_ds = dataline.load("0.2")
+version = dataline.get_version(loaded_ds)
+print(version)
+
+# %%
+from sklearn.metrics import f1_score
+
+x = [item[0] for item in loaded_ds]
+y = [item[1] for item in loaded_ds]
+
+model.evaluate(x, y, [lambda gt, pred: f1_score(gt, pred, average="macro")])
+
+pprint(model.metrics)
+
+# %%
+from cascade.metrics import Metric
+
+
+class Accuracy(Metric):
+    def __init__(self):
+        super().__init__(name="acc")
+
+    def compute(self, gt, pred):
+        self.value = sum([g == p for g, p in zip(gt, pred)]) / len(gt)
+        return self.value
+
+
+model.evaluate(x, y, [Accuracy()])
+
+pprint(model.metrics)
+
+# %%
+line.save(model)
+
+pprint(line.load_model_meta(1))
+
+# %%
+
+model.describe("This is simple linear model")
+
+# %%
+
+model.tag("tutorial")
+
+# %%
+
+model.link(ds)
+model.link(name="training_file", uri=__file__)
+
+pprint(model.get_meta())
+
+line.save(model)
+
+# %%
+
+from cascade.meta import MetricViewer
+
+mv = MetricViewer(line)
+
+print(mv.table.head())
