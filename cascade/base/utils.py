@@ -13,7 +13,13 @@ default_keys = ["data", "dataset"]
 
 class Version:
     def __init__(self, version: str):
-        major, minor = version.split(".")
+        components = version.split(".")
+        if len(components) != 2:
+            raise ValueError(
+                f"The string '{version}' is incorrect "
+                f"version string with {len(components)} parts instead of 2"
+            )
+        major, minor = components
         self.major = int(major)
         self.minor = int(minor)
 
