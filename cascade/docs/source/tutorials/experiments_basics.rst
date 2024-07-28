@@ -1,5 +1,5 @@
-3. Experiment basics
-====================
+3. Experiments basics
+=====================
 
 Cascade provides a rich set of ML-experiment tracking tools.
 You can easily track history of model changes, save and restore models

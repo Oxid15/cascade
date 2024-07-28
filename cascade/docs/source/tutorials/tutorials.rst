@@ -9,7 +9,7 @@ completing this one.
 
 :ref:`/tutorials/pipelines_basics.rst`
 :ref:`/tutorials/metadata.rst`
-:ref:`/tutorials/experiment_basics.rst`
+:ref:`/tutorials/experiments_basics.rst`
 :ref:`/tutorials/custom_meta_and_versioning.rst`
 
 If you completed the tutorial you can see How-to section
@@ -21,5 +21,5 @@ for more specific and complex workflows.
 
     pipelines
     metadata
-    experiment_basics
+    experiments_basics
     custom_meta_and_versioning
