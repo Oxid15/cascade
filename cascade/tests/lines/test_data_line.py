@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import random
 import sys
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -65,11 +66,19 @@ def test_idempotency(tmp_path_str, dataset):
     line.save(dataset)
     version = line.get_version(dataset)
 
-    line.save(dataset)
-    after_version = line.get_version(dataset)
+    another_ds = Wrapper([0, 1, 2])
+    another_ds.update_meta({"random_param": random.randint(0, 100)})
+    line.save(another_ds)
 
-    assert version == after_version
-    assert len(line) == 1
+    for _ in range(10):
+        line.save(dataset)
+        after_version = line.get_version(dataset)
+
+        assert version == after_version
+        assert len(line) == 2
+
+    _ = line.load(str(version))
+    assert len(line) == 2
 
 
 def test_load_obj_meta(tmp_path_str, dataset):
