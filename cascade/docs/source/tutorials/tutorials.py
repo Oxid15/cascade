@@ -1,4 +1,7 @@
 # %%
+# Pipelines basics
+
+# %%
 from cascade.data import Dataset
 from sklearn.datasets import load_digits
 
@@ -39,6 +42,9 @@ from cascade.data import Concatenator
 
 ds = Concatenator([ds, ds_noise])
 print(len(ds))
+
+# %%
+# Experiment basics
 
 # %%
 from pprint import pprint
@@ -90,6 +96,9 @@ from pprint import pprint
 pprint(line.load_model_meta(0))
 
 # %%
+# Custom Meta and Versioning
+
+# %%
 from cascade.lines import DataLine
 
 ds.update_meta(
@@ -98,6 +107,8 @@ ds.update_meta(
         "noise_magnitude": NOISE_MAGNITUDE,
     }
 )
+
+# %%
 
 dataline = DataLine("dataline")
 dataline.save(ds)
@@ -110,10 +121,10 @@ print(version)
 # %%
 
 ds.update_meta({"detail_i_almost_forgot": "Changes in meta bump minor version"})
+version = dataline.get_version(ds)
+print(version) # 0.2
 
 dataline.save(ds)
-version = dataline.get_version(ds)
-print(version)
 
 # %%
 
