@@ -1,5 +1,5 @@
 import os
-from typing import Any, List, Literal, Type
+from typing import Any, List, Literal, Optional, Type
 
 from ..base import Meta, MetaHandler, TraceableOnDisk
 from ..version import __version__
@@ -66,8 +66,11 @@ class DiskLine(TraceableOnDisk, Line):
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
-    def _item_name_by_num(self, num: int) -> str:
-        return f"{num:0>5d}"
+    def _item_name_by_num(self, num: int) -> Optional[str]:
+        if num < len(self._item_names):
+            return self._item_names[num]
+        else:
+            return None
 
     def _parse_item_name(self, item: int) -> str:
         if isinstance(item, int):

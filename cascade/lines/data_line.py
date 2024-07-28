@@ -167,3 +167,10 @@ class DataLine(DiskLine):
         meta[0].update({"type": "data_line"})
         meta[0]["latest_version"] = str(self.get_latest_version())
         return meta
+
+    def _parse_item_name(self, item: Union[int, str]) -> str:
+        if isinstance(item, str):
+            name = Version(item)
+            return str(name)
+        else:
+            return super()._parse_item_name(item)

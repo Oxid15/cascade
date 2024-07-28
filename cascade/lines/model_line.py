@@ -56,6 +56,9 @@ class ModelLine(DiskLine):
         self._slug2name_cache = dict()
         super().__init__(root, item_cls=model_cls, meta_fmt=meta_fmt, *args, **kwargs)
 
+    def _item_name_by_num(self, num: int) -> str:
+        return f"{num:0>5d}"
+
     def _find_name_by_slug(self, slug: str) -> Optional[str]:
         if slug in self._slug2name_cache:
             return self._slug2name_cache[slug]
@@ -71,18 +74,11 @@ class ModelLine(DiskLine):
                     return name
 
     def _parse_item_name(self, item: Union[int, str]) -> str:
-        if isinstance(item, int):
-            name = self._item_name_by_num(item)
-        elif isinstance(item, str):
+        if isinstance(item, str):
             name = self._find_name_by_slug(item)
+            return name
         else:
-            raise TypeError(f"The argument of type {type(item)} is not supported")
-
-        if not name:
-            raise FileNotFoundError(
-                f"Failed to find the item {item} in the line at {self._root}"
-            )
-        return name
+            return super()._parse_item_name(item)
 
     def load(self, num: int, only_meta: Optional[bool] = None) -> Model:
         """
@@ -264,7 +260,8 @@ class ModelLine(DiskLine):
 
     def load_model_meta(self, path_spec: Union[str, int]) -> Meta:
         """
-        Given a model num or a slug, loads its metadata from disk
+        Given a model num or a slug, loads its metadata from disk.
+        Alias for `load_obj_meta`
 
         Parameters
         ----------
@@ -281,8 +278,7 @@ class ModelLine(DiskLine):
         FileNotFoundError
             When the num or the slug was not found in the line
         """
-        name = self._parse_item_name(path_spec)
-        return self._read_meta_by_name(name)
+        return super().load_obj_meta(path_spec)
 
     def get_model_names(self) -> List[str]:
         """
