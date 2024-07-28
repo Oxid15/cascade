@@ -16,6 +16,7 @@ limitations under the License.
 
 import datetime
 import os
+import random
 import sys
 from typing import Any
 
@@ -164,6 +165,7 @@ def any_line(request, tmp_path_factory):
     line = request.param["line_cls"](tmp_path, model_cls=DummyModel)
     for _ in range(5):
         obj = request.param["obj_cls"]()
+        obj.update_meta({"random_param": random.randint(0, 1000000)})
         line.save(obj)
     return line
 
