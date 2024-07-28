@@ -16,11 +16,12 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, Generator, List, Literal, Optional
+from typing import Any, Iterator, List, Literal, Optional
 
 from typing_extensions import deprecated
 
 from ..base import Meta, MetaHandler, MetaIOError, TraceableOnDisk
+from ..data import T
 from ..models import ModelRepo
 
 
@@ -67,7 +68,7 @@ class Workspace(TraceableOnDisk):
     def __len__(self) -> int:
         return len(self._repo_names)
 
-    def __iter__(self) -> Generator[ModelRepo, None, None]:
+    def __iter__(self) -> Iterator[T]:
         for repo in self._repo_names:
             yield self.__getitem__(repo)
 

@@ -56,6 +56,7 @@ class IteratorDataset(BaseDataset[T], Iterable[T]):
     An abstract class to represent a dataset as
     an iterable object
     """
+
     def __iter__(self) -> Iterator[T]:
         return super().__iter__()
 
@@ -75,10 +76,14 @@ class Dataset(BaseDataset[T], Sized):
     """
 
     @abstractmethod
-    def __getitem__(self, index: Any): ...
+    def __getitem__(self, index: Any) -> T: ...
 
     @abstractmethod
     def __len__(self) -> int: ...
+
+    def __iter__(self) -> Iterator[T]:
+        for i in range(len(self)):
+            yield self.__getitem__(i)
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
@@ -86,16 +91,16 @@ class Dataset(BaseDataset[T], Sized):
         return meta
 
 
-class IteratorWrapper(BaseDataset[T]):
+class IteratorWrapper(IteratorDataset[T]):
     """
-    Wraps BaseDataset around any Iterable. Does not have map-like interface.
+    Wraps IteratorDataset around any Iterable. Does not have map-like interface.
     """
 
     def __init__(self, data: Iterable[T], *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._data = data
 
-    def __iter__(self) -> Generator[T, Any, None]:
+    def __iter__(self) -> Iterator[T]:
         for item in self._data:
             yield item
 

@@ -14,12 +14,12 @@ limitations under the License.
 import itertools
 import os
 import shutil
-from typing import (Any, Dict, Generator, Iterable, List, Literal, Optional,
-                    Type, Union)
+from typing import Any, Dict, Iterable, Iterator, List, Literal, Type, Union
 
 from typing_extensions import deprecated
 
 from ..base import Meta, Traceable, TraceableOnDisk
+from ..data import T
 from ..version import __version__
 from .model import Model
 from .model_line import ModelLine
@@ -55,7 +55,7 @@ class Repo(Traceable):
         """
         return len(self._lines)
 
-    def __iter__(self) -> Generator[ModelLine, None, None]:
+    def __iter__(self) -> Iterator[T]:
         for line in self._lines:
             yield self.__getitem__(line)
 
@@ -81,7 +81,9 @@ class Repo(Traceable):
         pass
 
 
-@deprecated("cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead")
+@deprecated(
+    "cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead"
+)
 class SingleLineRepo(Repo):
     def __init__(
         self,
@@ -99,7 +101,9 @@ class SingleLineRepo(Repo):
         if key in self._lines:
             return self._line
         else:
-            raise KeyError(f"The only line is {list(self._lines.keys())[0]}, {key} does not exist")
+            raise KeyError(
+                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist"
+            )
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._root}"
@@ -111,7 +115,9 @@ class SingleLineRepo(Repo):
         self._line.reload()
 
 
-@deprecated("cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead")
+@deprecated(
+    "cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead"
+)
 class ModelRepo(Repo, TraceableOnDisk):
     """
     An interface to manage experiments with several lines of models.
@@ -306,11 +312,16 @@ class ModelRepo(Repo, TraceableOnDisk):
                 continue
             else:
                 return meta
-        raise FileNotFoundError(f"Failed to find the model {model} in the repo at {self._root}")
+        raise FileNotFoundError(
+            f"Failed to find the model {model} in the repo at {self._root}"
+        )
 
     def _update_lines(self) -> None:
         for name in sorted(os.listdir(self._root)):
-            if os.path.isdir(os.path.join(self._root, name)) and name not in self._lines:
+            if (
+                os.path.isdir(os.path.join(self._root, name))
+                and name not in self._lines
+            ):
                 self._lines[name] = {"args": [], "kwargs": dict()}
 
 
@@ -319,7 +330,7 @@ class ModelRepo(Repo, TraceableOnDisk):
     " 0.14.0 and will be removed by 0.15.0"
     " Use Workspaces instead",
     category=DeprecationWarning,
-    stacklevel=1
+    stacklevel=1,
 )
 class ModelRepoConcatenator(Repo):
     """
@@ -350,7 +361,7 @@ class ModelRepoConcatenator(Repo):
     def __len__(self) -> int:
         return sum([len(repo) for repo in self._repos])
 
-    def __iter__(self) -> Generator[ModelLine, None, None]:
+    def __iter__(self) -> Iterator[T]:
         # this flattens the list of lines
         for line in itertools.chain(*[[line for line in repo] for repo in self._repos]):
             yield line

@@ -16,6 +16,7 @@ limitations under the License.
 
 import datetime
 import os
+import random
 import sys
 from typing import Any
 
@@ -27,11 +28,19 @@ from dateutil import tz
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (ApplyModifier, BaseDataset, BruteforceCacher,
-                          Composer, Concatenator, CyclicSampler,
-                          IteratorWrapper, RandomSampler, RangeSampler,
-                          Wrapper)
-from cascade.lines import ModelLine
+from cascade.data import (
+    ApplyModifier,
+    BaseDataset,
+    BruteforceCacher,
+    Composer,
+    Concatenator,
+    CyclicSampler,
+    IteratorWrapper,
+    RandomSampler,
+    RangeSampler,
+    Wrapper,
+)
+from cascade.lines import DataLine, ModelLine
 from cascade.models import BasicModel
 from cascade.models import ModelLine as OldModelLine
 from cascade.models import ModelRepo
@@ -142,6 +151,22 @@ def model_line(request, tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("line-", numbered=True)
     tmp_path = os.path.join(tmp_path, "line")
     line = ModelLine(str(tmp_path), **request.param)
+    return line
+
+
+@pytest.fixture(
+    params=[
+        {"line_cls": ModelLine, "obj_cls": DummyModel},
+        {"line_cls": DataLine, "obj_cls": BaseDataset},
+    ]
+)
+def any_line(request, tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("line-", numbered=True)
+    line = request.param["line_cls"](tmp_path, model_cls=DummyModel)
+    for _ in range(5):
+        obj = request.param["obj_cls"]()
+        obj.update_meta({"random_param": random.randint(0, 1000000)})
+        line.save(obj)
     return line
 
 
