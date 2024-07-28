@@ -133,10 +133,15 @@ print(version)
 # %%
 from sklearn.metrics import f1_score
 
+
+def f1(gt, pred):
+    return f1_score(gt, pred, average="macro")
+
+
 x = [item[0] for item in loaded_ds]
 y = [item[1] for item in loaded_ds]
 
-model.evaluate(x, y, [lambda gt, pred: f1_score(gt, pred, average="macro")])
+model.evaluate(x, y, [f1])
 
 pprint(model.metrics)
 
