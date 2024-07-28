@@ -21,7 +21,7 @@ import sys
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import ApplyModifier, Wrapper
+from cascade.data import ApplyModifier, Concatenator, Wrapper
 from cascade.lines import DataLine
 
 
@@ -59,6 +59,16 @@ def test_get_version(tmp_path_str):
     assert str(line.get_version(ds01)) == "0.1"
     assert str(line.get_version(ds10)) == "1.0"
 
+    ds01.update_meta({"a": 1})
+    line.save(ds01)
+
+    assert str(line.get_version(ds01)) == "0.2"
+
+    ds20 = ApplyModifier(ds10, add1)
+    line.save(ds20)
+
+    assert str(line.get_version(ds20)) == "2.0"
+
 
 def test_idempotency(tmp_path_str, dataset):
     line = DataLine(tmp_path_str)
@@ -79,6 +89,45 @@ def test_idempotency(tmp_path_str, dataset):
 
     _ = line.load(str(version))
     assert len(line) == 2
+
+
+def test_idempotency_after_recreation(tmp_path_str):
+    def run(tmp_path_str):
+        ds = Wrapper([0, 1, 2])
+
+        ds_noise = ApplyModifier(ds, add1)
+        ds = Concatenator([ds, ds_noise])
+        ds.update_meta(
+            {
+                "desc": "Hello",
+                "param": 1,
+            }
+        )
+
+        dataline = DataLine(tmp_path_str)
+        dataline.save(ds)
+        version = dataline.get_version(ds)
+        assert str(version) == "0.1"
+
+        ds.update_meta({"a": "b"})
+        dataline.save(ds)
+        version = dataline.get_version(ds)
+        assert str(version) == "0.2"
+
+        changed_ds = ApplyModifier(ds, add1)
+        dataline.save(changed_ds)
+        version = dataline.get_version(changed_ds)
+        assert str(version) == "1.0"
+
+        version = dataline.get_version(ds)
+        assert str(version) == "0.2"
+
+        loaded_ds = dataline.load("0.2")
+        version = dataline.get_version(loaded_ds)
+        assert str(version) == "0.2"
+
+    run(tmp_path_str)
+    run(tmp_path_str)
 
 
 def test_load_obj_meta(tmp_path_str, dataset):
