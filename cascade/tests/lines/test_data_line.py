@@ -70,3 +70,14 @@ def test_idempotency(tmp_path_str, dataset):
 
     assert version == after_version
     assert len(line) == 1
+
+
+def test_load_obj_meta(tmp_path_str, dataset):
+    line = DataLine(tmp_path_str)
+
+    dataset.update_meta({"test_param": 1})
+    line.save(dataset)
+    version = line.get_version(dataset)
+
+    meta = line.load_obj_meta(str(version))
+    assert meta[0]["test_param"] == 1
