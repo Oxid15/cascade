@@ -250,15 +250,17 @@ class ModelLine(DiskLine):
     def create_model(self, *args: Any, **kwargs: Any) -> Model:
         """
         Creates a model using the class given on line's
-        creation, registers log callbacks for it
-        and returns
+        creation, registers default log callback for it
+        and returns. Passes all args to the object constructor.
 
         Returns
         -------
         Any
             Created and prepared model
         """
-        return super().create_item(*args, **kwargs)
+        model = self._item_cls(*args, **kwargs)
+        model.add_log_callback(self._save_only_meta)
+        return model
 
     def load_model_meta(self, path_spec: Union[str, int]) -> Meta:
         """

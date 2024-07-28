@@ -101,7 +101,7 @@ class DiskLine(TraceableOnDisk, Line):
         Raises
         ------
         FileNotFoundError
-            Raises if failed to find the item with slug specified
+            Raises if failed to find the item with spec specified
         RuntimeError
             If found more than one metadata files in the specified
             item folder
@@ -122,21 +122,6 @@ class DiskLine(TraceableOnDisk, Line):
 
     def _save_only_meta(self, item: Any) -> None:
         self.save(item, only_meta=True)
-
-    def create_item(self, *args: Any, **kwargs: Any) -> Any:
-        """
-        Creates a item using the class given on
-        creation, registers log callbacks for it
-        and returns
-
-        Returns
-        -------
-        Any
-            Created and prepared item
-        """
-        item = self._item_cls(*args, **kwargs)
-        item.add_log_callback(self._save_only_meta)
-        return item
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
