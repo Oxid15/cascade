@@ -79,7 +79,7 @@ model.fit(ds)
 # %%
 from cascade.lines import ModelLine
 
-line = ModelLine("line", model_cls=BasicModel)
+line = ModelLine("line", model_cls=LR)
 line.save(model)
 
 # %%

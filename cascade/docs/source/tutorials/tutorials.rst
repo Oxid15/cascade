@@ -7,9 +7,10 @@ You can grasp an essence of how
 you can use the library for your own projects, while
 completing this one.
 
-1. :ref:`/tutorials/pipelines_basics.rst`
-2. :ref:`/tutorials/metadata.rst`
-3. :ref:`/tutorials/experiment_basics.rst`
+:ref:`/tutorials/pipelines_basics.rst`
+:ref:`/tutorials/metadata.rst`
+:ref:`/tutorials/experiment_basics.rst`
+:ref:`/tutorials/custom_meta_and_versioning.rst`
 
 .. toctree::
     :maxdepth: 1
@@ -18,3 +19,4 @@ completing this one.
     pipelines
     metadata
     experiment_basics
+    custom_meta_and_versioning
