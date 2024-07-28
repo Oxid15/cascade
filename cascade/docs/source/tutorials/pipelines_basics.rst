@@ -1,5 +1,5 @@
-Pipelines basics
-================
+1. Pipelines basics
+===================
 In this tutorial you will learn basic pipeline building blocks of Cascade.
 This is the first Cascade tutorial from a series. All of the tutorials are
 meant to form one big project and can be thought of as a series of lessons.

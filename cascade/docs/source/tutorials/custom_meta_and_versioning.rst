@@ -1,5 +1,5 @@
-Custom Meta and Versioning
-==========================
+4. Custom Meta and Versioning
+=============================
 
 Metadata is a very flexible tool. It contains lots of useful info by default,
 and can be customized.

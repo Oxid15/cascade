@@ -1,5 +1,5 @@
-Metadata
-========
+2. Metadata
+===========
 
 Data and model training in Cascade is based on metadata. It is the main
 reason why wrappers should be created - they allow automatically capturing
