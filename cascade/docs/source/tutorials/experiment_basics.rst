@@ -7,7 +7,7 @@ in a structured manner along with metadata.
 
 In this step we create a wrapper around logistic regression model. Minimal setup
 for the model is not strictly defined as in Dataset case. We define `fit` and `predict`.
-`BasicModel` will handle everything else for us - saving and loading for example.
+`BasicModel` will handle everything else for us - like saving and loading for example.
 
 .. code-block:: python
 
@@ -40,18 +40,21 @@ We can create and fit the model now using the dataset from :ref:`/tutorials/pipe
 Model lines are basic structured storage units in Cascade. They represent a lineage of
 a model. Usually they represent a single training run, but can be used arbitrarily.
 
-In this step we create a line for saving models and save our new model.
+In this step we create a line and save our new model.
 
 .. code-block:: python
 
     from cascade.lines import ModelLine
 
-    line = ModelLine("line", model_cls=BasicModel)
+    line = ModelLine("line", model_cls=LR)
     line.save(model)
 
 Lines handle storage of models and their metadata and can retrieve saved models by index or a name.
 
 In the next step we load the model and infer it on a dataset.
+
+The line knows little about models it manages - we provided a class of our model
+to be able to restore it correctly when loading.
 
 .. code-block:: python
 
