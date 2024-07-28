@@ -1,5 +1,5 @@
 import os
-from typing import Any, List, Literal, Type
+from typing import Any, List, Literal, Optional, Type
 
 from ..base import Meta, MetaHandler, TraceableOnDisk
 from ..version import __version__
@@ -66,8 +66,11 @@ class DiskLine(TraceableOnDisk, Line):
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
         return meta
 
-    def _item_name_by_num(self, num: int) -> str:
-        return f"{num:0>5d}"
+    def _item_name_by_num(self, num: int) -> Optional[str]:
+        if num < len(self._item_names):
+            return self._item_names[num]
+        else:
+            return None
 
     def _parse_item_name(self, item: int) -> str:
         if isinstance(item, int):
@@ -101,7 +104,7 @@ class DiskLine(TraceableOnDisk, Line):
         Raises
         ------
         FileNotFoundError
-            Raises if failed to find the item with slug specified
+            Raises if failed to find the item with spec specified
         RuntimeError
             If found more than one metadata files in the specified
             item folder
@@ -122,21 +125,6 @@ class DiskLine(TraceableOnDisk, Line):
 
     def _save_only_meta(self, item: Any) -> None:
         self.save(item, only_meta=True)
-
-    def create_item(self, *args: Any, **kwargs: Any) -> Any:
-        """
-        Creates a item using the class given on
-        creation, registers log callbacks for it
-        and returns
-
-        Returns
-        -------
-        Any
-            Created and prepared item
-        """
-        item = self._item_cls(*args, **kwargs)
-        item.add_log_callback(self._save_only_meta)
-        return item
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
