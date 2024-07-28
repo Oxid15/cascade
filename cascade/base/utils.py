@@ -82,6 +82,9 @@ class Version:
     def __ge__(self, other: Union["Version", str]) -> bool:
         return self > other or self == other
 
+    def __repr__(self):
+        return f"Version({self.major}.{self.minor})"
+
     def bump_major(self):
         return Version(f"{self.major + 1}.0")
 
