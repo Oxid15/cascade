@@ -30,14 +30,13 @@ class DataLine(DiskLine):
         *args: Any,
         **kwargs: Any,
     ) -> None:
-        self._hashes = defaultdict(dict)
+        self._hashes = defaultdict(lambda: defaultdict(dict))
         super().__init__(root, item_cls=ds_cls, meta_fmt=meta_fmt, *args, **kwargs)
 
         self._obj_handler = ObjectHandler(obj_backend)
         for name in self._item_names:
             with open(os.path.join(self._root, name, "HASHES"), "r") as f:
                 skel_hash, meta_hash = f.read().split("\n")
-                self._hashes[skel_hash] = defaultdict(dict)
                 self._hashes[skel_hash][meta_hash] = Version(name)
 
     def _get_hashes(self, meta: Meta) -> Tuple[str, str]:
