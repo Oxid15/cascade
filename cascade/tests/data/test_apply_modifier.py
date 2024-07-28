@@ -19,23 +19,28 @@ import sys
 
 import pytest
 
-from cascade.data import ApplyModifier
+from cascade.data import ApplyModifier, IteratorWrapper, Wrapper
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from cascade.data import Wrapper
+
+data = [
+    ([1, 2, 3, 4, 5], lambda x: x * 2),
+    ([1], lambda x: x**2),
+    ([1, 2, -3], lambda x: x),
+]
 
 
-@pytest.mark.parametrize(
-    "arr, func",
-    [
-        ([1, 2, 3, 4, 5], lambda x: x * 2),
-        ([1], lambda x: x**2),
-        ([1, 2, -3], lambda x: x),
-    ],
-)
+@pytest.mark.parametrize("arr, func", data)
 def test_apply_modifier(arr, func):
     ds = Wrapper(arr)
+    ds = ApplyModifier(ds, func)
+    assert list(map(func, arr)) == [item for item in ds]
+
+
+@pytest.mark.parametrize("arr, func", data)
+def test_apply_modifier_iterators(arr, func):
+    ds = IteratorWrapper(arr)
     ds = ApplyModifier(ds, func)
     assert list(map(func, arr)) == [item for item in ds]

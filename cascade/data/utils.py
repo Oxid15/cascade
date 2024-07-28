@@ -15,10 +15,12 @@ limitations under the License.
 """
 
 from math import floor
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
-from .dataset import Dataset, T
+from .dataset import Dataset, IteratorDataset, T
 from .range_sampler import RangeSampler
+
+DatasetOrIterator = Union[Dataset[T], IteratorDataset[T]]
 
 
 def split(
