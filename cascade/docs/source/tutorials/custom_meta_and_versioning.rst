@@ -9,6 +9,7 @@ parameter, that was not recorded in our meta. If it changes in code, we wouldn't
 see the effect in our logs. Now we can fix that issue.
 
 .. code-block:: python
+
     from cascade.lines import DataLine
 
     ds.update_meta(

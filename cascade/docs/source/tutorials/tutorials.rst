@@ -20,7 +20,7 @@ for more specific and complex workflows.
     :maxdepth: 1
     :hidden:
 
-    pipelines
+    pipelines_basics
     metadata
     experiments_basics
     custom_meta_and_versioning
