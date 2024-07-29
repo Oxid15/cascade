@@ -11,6 +11,7 @@ completing this one.
 :ref:`/tutorials/metadata.rst`
 :ref:`/tutorials/experiments_basics.rst`
 :ref:`/tutorials/custom_meta_and_versioning.rst`
+:ref:`/tutorials/metrics_and_evaluation.rst`
 
 If you completed the tutorial you can see How-to section
 for more specific and complex workflows.
@@ -23,3 +24,4 @@ for more specific and complex workflows.
     metadata
     experiments_basics
     custom_meta_and_versioning
+    metrics_and_evaluation

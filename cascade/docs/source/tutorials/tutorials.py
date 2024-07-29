@@ -142,6 +142,9 @@ version = dataline.get_version(loaded_ds)
 print(version)
 
 # %%
+# Metrics and evaluation
+
+# %%
 from sklearn.metrics import f1_score
 
 
