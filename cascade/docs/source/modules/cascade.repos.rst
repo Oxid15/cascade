@@ -1,5 +1,5 @@
 cascade.repos
-============== 
+=============
 
 .. autoclass:: cascade.repos.LineFactory
     :members:

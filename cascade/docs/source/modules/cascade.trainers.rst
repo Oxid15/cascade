@@ -1,5 +1,5 @@
 cascade.trainers
-============== 
+================
 
 .. autoclass:: cascade.trainers.BasicTrainer
     :members:

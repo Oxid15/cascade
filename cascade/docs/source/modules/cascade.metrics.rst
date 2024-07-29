@@ -1,5 +1,5 @@
 cascade.metrics
-============== 
+===============
 
 .. autoclass:: cascade.metrics.Accuracy
     :members:

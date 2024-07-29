@@ -1,5 +1,5 @@
 cascade.base
-============ 
+============
 .. autoclass:: cascade.base.Traceable
    :members:
 

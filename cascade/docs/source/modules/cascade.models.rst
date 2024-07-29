@@ -1,5 +1,5 @@
 cascade.models
-============== 
+==============
 
 .. autoclass:: cascade.models.BasicModel
     :members:

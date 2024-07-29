@@ -1,5 +1,5 @@
 cascade.data
-============ 
+============
 
 .. autoclass:: cascade.data.ApplyModifier
     :members:
