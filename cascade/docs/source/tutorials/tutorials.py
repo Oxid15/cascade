@@ -182,6 +182,8 @@ line.save(model)
 pprint(line.load_model_meta(1))
 
 # %%
+# Meta defaults
+# %%
 
 model.describe("This is simple linear model")
 
@@ -206,10 +208,27 @@ model.remove_tag("dummy")
 
 # %%
 
-model.remove_link(0)
+model.remove_link("1")
+
+# %%
+# Repos and Workspaces
+
+# %%
+from cascade.repos import Repo
+
+demo_repo = Repo("demo_repo")
+demo_modelline = demo_repo.add_line(line_type="model")
+demo_dataline = demo_repo.add_line(line_type="data")
 
 # %%
 
+from cascade.workspaces import Workspace
+
+ws = Workspace("demo_workspace")
+rp = ws.add_repo("repo")
+ln = rp.add_line("line")
+
+# %%
 from cascade.meta import MetricViewer
 
 mv = MetricViewer(line)
