@@ -33,9 +33,9 @@ There are also methods that allow removing certain fields. This part is mostly s
 
 .. code-block:: python
 
-    model.remove_link(0)
+    model.remove_link(1)
 
-Here we removed tag using its name and the first link using its index. It is the dataset link, just for example.
+Here we removed tag using its name and the first link using its ID. It is the dataset link, just for example.
 
 .. code-block:: python
 
