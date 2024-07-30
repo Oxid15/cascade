@@ -15,8 +15,8 @@ import os
 import shutil
 from typing import Any, List, Literal, Optional, Union
 
-from ..lines import Line
 from ..base import Meta, TraceableOnDisk, ZeroMetaError
+from ..lines import Line
 from .base_repo import BaseRepo
 from .line_factory import LineFactory
 
@@ -85,7 +85,7 @@ class Repo(BaseRepo, TraceableOnDisk):
     def add_line(
         self,
         name: Optional[str] = None,
-        line_type: Literal["data", "model"] = "model",
+        line_type: Literal["data", "model", None] = "model",
         *args: Any,
         meta_fmt: Literal[".json", ".yml", ".yaml", None] = None,
         **kwargs: Any,
