@@ -187,16 +187,26 @@ model.describe("This is simple linear model")
 
 # %%
 
-model.tag("tutorial")
+model.tag(["tutorial", "dummy"])
 
 # %%
 
 model.link(ds)
 model.link(name="training_file", uri=__file__)
 
+# %%
+
 pprint(model.get_meta())
 
 line.save(model)
+
+# %%
+
+model.remove_tag("dummy")
+
+# %%
+
+model.remove_link(0)
 
 # %%
 
