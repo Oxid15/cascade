@@ -33,8 +33,9 @@ class Workspace(TraceableOnDisk):
         **kwargs: Any,
     ) -> None:
         super().__init__(path, meta_fmt, *args, **kwargs)
-        self._root = path
         self._default = default_repo
+
+        os.makedirs(self._root, exist_ok=True)
 
         abs_root = os.path.abspath(self._root)
         dirs = sorted(
@@ -149,9 +150,9 @@ class Workspace(TraceableOnDisk):
         ValueError
             If the repo already exists
         """
-        if name in self._repo_names:
-            raise ValueError(f"Repo {name} already exists")
-
         repo = Repo(os.path.join(self._root, name), *args, **kwargs)
-        self._repo_names.append(name)
+        if name not in self._repo_names:
+            self._repo_names.append(name)
+
+        self.sync_meta()
         return repo

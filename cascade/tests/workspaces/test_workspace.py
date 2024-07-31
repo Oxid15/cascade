@@ -23,10 +23,10 @@ from cascade.workspaces import Workspace
 
 
 def test(tmp_path_str):
-    for i in range(10):
-        Repo(os.path.join(tmp_path_str, f"repo-{i}"))
-
     wp = Workspace(tmp_path_str, default_repo="repo-1")
+
+    for i in range(10):
+        wp.add_repo(f"repo-{i}")
 
     assert len(wp) == 10
     assert wp.get_repo_names() == [f"repo-{i}" for i in range(10)]
