@@ -21,6 +21,8 @@ completing this one.
 
 :ref:`/tutorials/repos_and_workspaces.rst`
 
+:ref:`/tutorials/cli.rst`
+
 If you completed the tutorial you can see How-to section
 for more specific and complex workflows.
 
@@ -35,3 +37,4 @@ for more specific and complex workflows.
     metrics_and_evaluation
     meta_defaults
     repos_and_workspaces
+    cli
