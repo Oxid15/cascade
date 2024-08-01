@@ -23,6 +23,8 @@ completing this one.
 
 :ref:`/tutorials/cli.rst`
 
+:ref:`/tutorials/viewers.rst`
+
 If you completed the tutorial you can see How-to section
 for more specific and complex workflows.
 
@@ -38,3 +40,4 @@ for more specific and complex workflows.
     meta_defaults
     repos_and_workspaces
     cli
+    viewers

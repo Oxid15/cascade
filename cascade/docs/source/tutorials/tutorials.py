@@ -58,7 +58,7 @@ from sklearn.linear_model import LogisticRegression
 
 class LR(BasicModel):
     def __init__(self, penalty):
-        self.model = LogisticRegression(penalty=penalty)
+        self.model = LogisticRegression(penalty=penalty, solver="liblinear")
         super().__init__()
 
     def fit(self, dataset):
@@ -238,5 +238,18 @@ ln = rp.add_line("line")
 from cascade.meta import MetricViewer
 
 mv = MetricViewer(line)
+print(mv.table)
 
+# %%
+
+model = LR("l1")
+model.fit(ds)
+model.params["penalty"] = "l1"
+model.evaluate(x, y, [Accuracy(), f1])
+
+line.save(model)
+
+# %%
+
+mv = MetricViewer(line)
 print(mv.table)
