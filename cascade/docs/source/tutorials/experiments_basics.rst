@@ -16,8 +16,8 @@ for the model is not strictly defined as in Dataset case. We define `fit` and `p
 
 
     class LR(BasicModel):
-        def __init__(self):
-            self.model = LogisticRegression()
+        def __init__(self, penalty):
+            self.model = LogisticRegression(penalty=penalty)
             super().__init__()
 
         def fit(self, dataset):
@@ -27,15 +27,25 @@ for the model is not strictly defined as in Dataset case. We define `fit` and `p
                 y.append(item[1])
             self.model.fit(x, y)
 
-        def predict(self, dataset):
-            return self.model.predict([item[0] for item in dataset])
+        def predict(self, x):
+            return self.model.predict(x)
 
 We can create and fit the model now using the dataset from :ref:`/tutorials/pipelines_basics.rst` step.
 
 .. code-block:: python
 
-    model = LR()
+    model = LR("l2")
     model.fit(ds)
+
+To track important hyperparameters and how they influence metrics, Cascade Models feature special field
+called `params`. This is an empty dict that you can fill with any (serializable) data. Cascade custom
+JSON serializer can also serialize some non-default things like numpy arrays.
+
+Here we fill our param externally, but could also do it above inside the class.
+
+.. code-block:: python
+
+    model.params["penalty"] = "l2"
 
 Model lines are basic structured storage units in Cascade. They represent a lineage of
 a model. Usually they represent a single training run, but can be used arbitrarily.
@@ -88,7 +98,7 @@ meta with a default line method.
     'links': [],
     'metrics': [],
     'name': '__main__.LR',
-    'params': {},
+    'params': {'penalty': 'l2'},
     'path': '/home/ilia/local/cascade_proj/cascade_repo/cascade/docs/source/tutorials/line/00000',
     'python_version': '3.11.0rc1 (main, Aug 12 2022, 10:02:14) [GCC 11.2.0]',
     'saved_at': '2024-07-14T21:09:01.453262+00:00',

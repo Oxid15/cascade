@@ -57,8 +57,8 @@ from sklearn.linear_model import LogisticRegression
 
 
 class LR(BasicModel):
-    def __init__(self):
-        self.model = LogisticRegression()
+    def __init__(self, penalty):
+        self.model = LogisticRegression(penalty=penalty)
         super().__init__()
 
     def fit(self, dataset):
@@ -73,8 +73,11 @@ class LR(BasicModel):
 
 
 # %%
-model = LR()
+model = LR("l2")
 model.fit(ds)
+
+# %%
+model.params["penalty"] = "l2"
 
 # %%
 from cascade.lines import ModelLine

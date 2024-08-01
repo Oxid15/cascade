@@ -82,7 +82,7 @@ Metrics are saved and written in metadata automatically after calling `evaluate`
                 'name': 'acc',
                 'value': 1.0}],
     'name': '__main__.LR',
-    'params': {},
+    'params': {'penalty': 'l2'},
     'path': '/home/ilia/local/cascade_proj/line/00001',
     'python_version': '3.11.0rc1 (main, Aug 12 2022, 10:02:14) [GCC 11.2.0]',
     'saved_at': '2024-07-28T14:47:32.902304+00:00',
