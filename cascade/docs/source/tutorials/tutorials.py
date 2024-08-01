@@ -203,8 +203,6 @@ model.link(name="training_file", uri=__file__)
 
 pprint(model.get_meta())
 
-line.save(model)
-
 # %%
 
 model.remove_tag("dummy")
@@ -212,6 +210,11 @@ model.remove_tag("dummy")
 # %%
 
 model.remove_link("1")
+
+# %%
+
+pprint(model.get_meta())
+line.save(model)
 
 # %%
 # Repos and Workspaces
@@ -236,4 +239,4 @@ from cascade.meta import MetricViewer
 
 mv = MetricViewer(line)
 
-print(mv.table.head())
+print(mv.table)
