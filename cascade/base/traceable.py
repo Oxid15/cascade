@@ -503,6 +503,7 @@ class TraceableOnDisk(Traceable):
         attr = super().__getattribute__(name)
         if name in (
             "describe",
+            "remove_description",
             "comment",
             "remove_comment",
             "tag",

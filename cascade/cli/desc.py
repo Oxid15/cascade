@@ -37,3 +37,15 @@ def desc_add(ctx, d):
     tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
     tr.sync_meta()
     tr.describe(d)
+
+@desc.command("rm")
+@click.pass_context
+def desc_rm(ctx):
+    if not ctx.obj.get("meta"):
+        return
+
+    from cascade.base import TraceableOnDisk
+
+    tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
+    tr.sync_meta()
+    tr.remove_description()
