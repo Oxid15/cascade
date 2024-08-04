@@ -47,3 +47,21 @@ def test_add(tmp_path_str):
         del meta[0]["updated_at"]
         del init_meta[0]["updated_at"]
         assert meta == init_meta
+
+
+def test_rm(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        mh = MetaHandler()
+        repo = Repo(td)
+
+        result = runner.invoke(cli, args=["desc", "add"], input="Hello")
+
+        assert result.exit_code == 0
+
+        runner.invoke(cli, args=["desc", "rm"])
+
+        meta = mh.read_dir(td)
+
+        assert "description" in meta[0]
+        assert meta[0]["description"] is None
