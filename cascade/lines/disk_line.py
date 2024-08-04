@@ -110,6 +110,8 @@ class DiskLine(TraceableOnDisk, Line):
             item folder
         """
         name = self._parse_item_name(path_spec)
+        if name is None:
+            raise FileNotFoundError(f"Couldn't find an object {path_spec} in the line {self._root}")
         return self._read_meta_by_name(name)
 
     def get_item_names(self) -> List[str]:

@@ -24,12 +24,8 @@ from typing import Any, Dict, List, Literal, Optional, Type, Union
 import pendulum
 
 from ..base import Meta, MetaHandler
-from ..base.utils import (
-    generate_slug,
-    get_latest_commit_hash,
-    get_python_version,
-    get_uncommitted_changes,
-)
+from ..base.utils import (generate_slug, get_latest_commit_hash,
+                          get_python_version, get_uncommitted_changes)
 from ..models.model import Model
 from .disk_line import DiskLine
 
@@ -73,7 +69,7 @@ class ModelLine(DiskLine):
                 if slug == slug_from_file:
                     return name
 
-    def _parse_item_name(self, item: Union[int, str]) -> str:
+    def _parse_item_name(self, item: Union[int, str]) -> Optional[str]:
         if isinstance(item, str):
             name = self._find_name_by_slug(item)
             return name
