@@ -1,5 +1,0 @@
-opencv-python
-scikit-learn
-pandera[io]
-torch
-Pillow
