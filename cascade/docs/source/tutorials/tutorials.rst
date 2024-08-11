@@ -25,6 +25,8 @@ completing this one.
 
 :ref:`/tutorials/viewers.rst`
 
+:ref:`/tutorials/data_validation.rst`
+
 If you completed the tutorial you can see How-to section
 for more specific and complex workflows.
 
@@ -41,3 +43,4 @@ for more specific and complex workflows.
     repos_and_workspaces
     cli
     viewers
+    data_validation

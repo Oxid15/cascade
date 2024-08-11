@@ -125,7 +125,7 @@ print(version)
 
 ds.update_meta({"detail_i_almost_forgot": "Changes in meta bump minor version"})
 version = dataline.get_version(ds)
-print(version) # 0.2
+print(version)  # 0.2
 
 dataline.save(ds)
 
@@ -253,3 +253,83 @@ line.save(model)
 
 mv = MetricViewer(line)
 print(mv.table)
+
+# %%
+from pydantic import BaseModel
+
+
+class LabeledImage(BaseModel):
+    image: np.ndarray
+    label: int
+
+    model_config = {"arbitrary_types_allowed": True}
+
+
+# %%
+from cascade.data import SchemaModifier
+
+
+class LabeledImageModifier(SchemaModifier):
+    def __getitem__(self, idx):
+        image, label = self._dataset[idx]
+        return LabeledImage(image=image, label=label)
+
+
+# %%
+
+
+class Pad5(SchemaModifier):
+    in_schema = LabeledImage
+
+    def __getitem__(self, idx):
+        item = self._dataset[idx]
+        image = item.image.reshape((8, 8))
+        h, w = image.shape
+        new_image = np.zeros((h + 2 * 5, w + 2 * 5))
+        new_image[5: 5 + h, 5: 5 + w] = image
+        item.image = new_image.flatten()
+        return item
+
+
+# %%
+
+
+ds = LabeledImageModifier(ds)
+pad = Pad5(ds)
+
+ds = Concatenator([pad, ds])
+
+# %%
+
+print(ds[0])
+
+# %%
+
+
+class FreakyImage(BaseModel):
+    image: np.ndarray
+    label: str
+
+    model_config = {"arbitrary_types_allowed": True}
+
+
+class EvilDataset(Dataset):
+    def __getitem__(self, idx):
+        return FreakyImage(image=np.zeros(18*18), label="hehe")
+
+    def __len__(self):
+        return 69
+
+# %%
+
+from cascade.data import ValidationError
+
+evil = EvilDataset()
+evil = Pad5(evil)
+
+try:
+    evil[0]
+except ValidationError as e:
+    print(e)
+
+# %%
