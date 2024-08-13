@@ -27,6 +27,8 @@ completing this one.
 
 :ref:`/tutorials/data_validation.rst`
 
+:ref:`/tutorials/artifacts.rst`
+
 If you completed the tutorial you can see How-to section
 for more specific and complex workflows.
 
@@ -44,3 +46,4 @@ for more specific and complex workflows.
     cli
     viewers
     data_validation
+    artifacts

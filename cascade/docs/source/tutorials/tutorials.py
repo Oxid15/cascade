@@ -332,4 +332,53 @@ try:
 except ValidationError as e:
     print(e)
 
+
 # %%
+
+import os
+import pickle
+
+from sklearn.neural_network import MLPClassifier
+
+
+class NeuralNet(BasicModel):
+    def __init__(self):
+        self._model = MLPClassifier()
+        super().__init__()
+
+    def save_artifact(self, path: str) -> None:
+        with open(os.path.join(path, "artifact.pkl"), "wb") as f:
+            pickle.dump(self._model, f)
+
+    def load_artifact(self, path: str) -> None:
+        with open(os.path.join(path, "artifact.pkl"), "rb") as f:
+            self._model = pickle.load(f)
+
+# %%
+
+nn = NeuralNet()
+line.save(nn)
+
+# %%
+last_model_dir = os.path.join(line.get_root(), line.get_model_names()[-1])
+print(os.listdir(last_model_dir))
+print(os.listdir(os.path.join(last_model_dir, "artifacts")))
+
+# %%
+import json
+
+dummy_predictions = [0, 1, 2, 3]
+
+with open("dummy_predictions.json", "w") as f:
+    json.dump(dummy_predictions, f)
+
+# %%
+
+nn.add_file("dummy_predictions.json")
+line.save(nn)
+
+# %%
+
+last_model_dir = os.path.join(line.get_root(), line.get_model_names()[-1])
+print(os.listdir(last_model_dir))
+print(os.listdir(os.path.join(last_model_dir, "files")))
