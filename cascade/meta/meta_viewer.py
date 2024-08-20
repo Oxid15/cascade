@@ -15,12 +15,22 @@ limitations under the License.
 """
 
 import os
+import re
 import warnings
 from typing import Any, Dict, Optional
 
 from typing_extensions import deprecated
 
 from ..base import Meta, MetaHandler, MetaIOError, supported_meta_formats
+
+
+def is_meta(file_path: str) -> bool:
+    name = os.path.split(file_path)[-1]
+    ext = os.path.splitext(file_path)[-1]
+
+    if ext in supported_meta_formats and re.findall("meta.*", name):
+        return True
+    return False
 
 
 class MetaViewer:
@@ -53,7 +63,7 @@ class MetaViewer:
             self.names += [
                 os.path.join(root, name)
                 for name in files
-                if os.path.splitext(name)[-1] in supported_meta_formats
+                if is_meta(name)
             ]
         self.names = sorted(self.names)
 
