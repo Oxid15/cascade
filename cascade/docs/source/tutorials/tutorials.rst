@@ -2,7 +2,8 @@ Tutorials
 =========
 
 Tutorials are a set of lessons that will teach you
-basics of Cascade. Lessons are connected in a single project.
+basics of Cascade. Lessons are connected in a single project
+and depend on each other.
 You can grasp the essence of how
 you can use the library for your own projects, while
 completing this one.
@@ -29,6 +30,10 @@ completing this one.
 
 :ref:`/tutorials/artifacts.rst`
 
+:ref:`/tutorials/sklearn.rst`
+
+:ref:`/tutorials/next.rst`
+
 If you completed the tutorial you can see How-to section
 for more specific and complex workflows.
 
@@ -47,3 +52,5 @@ for more specific and complex workflows.
     viewers
     data_validation
     artifacts
+    sklearn
+    next

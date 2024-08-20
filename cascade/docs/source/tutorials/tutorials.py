@@ -286,7 +286,7 @@ class Pad5(SchemaModifier):
         image = item.image.reshape((8, 8))
         h, w = image.shape
         new_image = np.zeros((h + 2 * 5, w + 2 * 5))
-        new_image[5: 5 + h, 5: 5 + w] = image
+        new_image[5 : 5 + h, 5 : 5 + w] = image
         item.image = new_image.flatten()
         return item
 
@@ -315,10 +315,11 @@ class FreakyImage(BaseModel):
 
 class EvilDataset(Dataset):
     def __getitem__(self, idx):
-        return FreakyImage(image=np.zeros(18*18), label="hehe")
+        return FreakyImage(image=np.zeros(18 * 18), label="hehe")
 
     def __len__(self):
         return 69
+
 
 # %%
 
@@ -354,6 +355,7 @@ class NeuralNet(BasicModel):
         with open(os.path.join(path, "artifact.pkl"), "rb") as f:
             self._model = pickle.load(f)
 
+
 # %%
 
 nn = NeuralNet()
@@ -382,3 +384,42 @@ line.save(nn)
 last_model_dir = os.path.join(line.get_root(), line.get_model_names()[-1])
 print(os.listdir(last_model_dir))
 print(os.listdir(os.path.join(last_model_dir, "files")))
+
+# %%
+
+from cascade.utils.sklearn import SkModel
+
+model = SkModel(blocks=[LogisticRegression()])
+
+# %%
+
+ds = DigitsDataset()
+
+x = [item[0] for item in ds]
+y = [item[1] for item in ds]
+
+model.fit(x, y)
+
+# %%
+
+from cascade.utils.sklearn import SkMetric
+
+model.evaluate(
+    x,
+    y,
+    [
+        SkMetric("f1_score", average="macro"),
+        SkMetric("acc"),
+    ],
+)
+
+# %%
+
+pprint(model.metrics)
+
+line.save(model)
+
+# %%
+
+last_model_dir = os.path.join(line.get_root(), line.get_model_names()[-1])
+print(os.listdir(last_model_dir))
