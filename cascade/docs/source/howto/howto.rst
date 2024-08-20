@@ -1,7 +1,7 @@
 How-to guides
 =============
 
-.. grid:: 2
+.. grid:: 1
 
     .. grid-item::
         .. card:: Build a pipeline
@@ -31,6 +31,20 @@ How-to guides
 
             How to ensure data quality with Cascade data validation tools
 
+    .. grid-item::
+        .. card:: Track a file
+            :link: /howto/track_a_file.rst
+            :link-type: ref
+
+            How to log files along with saved model
+
+    .. grid-item::
+        .. card:: Comment on results of an experiment
+            :link: /howto/track_a_file.rst
+            :link-type: ref
+
+            Filling bare numbers in results with some meaning and starting discussions
+
 
 .. toctree::
     :maxdepth: 1
@@ -41,3 +55,4 @@ How-to guides
     model_training_trainers.ipynb
     dataset_zoo.ipynb
     data_validation.ipynb
+    track_a_file.rst
