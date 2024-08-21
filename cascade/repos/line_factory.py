@@ -18,7 +18,8 @@ from ..lines import DataLine, Line, ModelLine
 
 
 class LineFactory:
-    _type2cls = {"model_line": ModelLine, "data_line": DataLine, "model": ModelLine, "data": DataLine}
+    # line is for repos before 0.14.0, which meant ModelLine
+    _type2cls = {"line": ModelLine, "model_line": ModelLine, "data_line": DataLine, "model": ModelLine, "data": DataLine}
 
     @classmethod
     def create(cls, path: str, *args: Any, line_type: Literal["model", "data", None] = None, **kwargs: Any) -> Line:
