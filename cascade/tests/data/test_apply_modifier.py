@@ -18,7 +18,6 @@ import os
 import sys
 
 import pytest
-
 from cascade.data import ApplyModifier, IteratorWrapper, Wrapper
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -44,3 +43,27 @@ def test_apply_modifier_iterators(arr, func):
     ds = IteratorWrapper(arr)
     ds = ApplyModifier(ds, func)
     assert list(map(func, arr)) == [item for item in ds]
+
+
+def test_p():
+    ds = Wrapper([0, 1, 2, 3])
+    ds = ApplyModifier(ds, lambda x: x + 1, 0.5, seed=42)
+
+    assert [i for i in ds] == [0, 2, 3, 4]
+
+    ds = Wrapper([0, 1, 2, 3])
+    ds = ApplyModifier(ds, lambda x: x + 1, 1)
+
+    assert [i for i in ds] == [1, 2, 3, 4]
+
+    ds = Wrapper([0, 1, 2, 3])
+    ds = ApplyModifier(ds, lambda x: x + 1, 0)
+
+    assert [i for i in ds] == [0, 1, 2, 3]
+
+
+def test_p_get():
+    ds = Wrapper([0, 1, 2, 3])
+    ds = ApplyModifier(ds, lambda x: x + 1, 0.5, seed=42)
+
+    assert [ds[i] for i in range(len(ds))] == [0, 2, 3, 4]
