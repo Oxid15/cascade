@@ -44,7 +44,7 @@ setuptools.setup(
     entry_points={'console_scripts': ['cascade = cascade.cli.cli:cli']},
     package_dir={"cascade": "./cascade"},
     packages=setuptools.find_packages(),
-    python_requires=">=3.8",
+    python_requires=">=3.6",
     install_requires=[
         "tqdm>=4.64.1",
         "numpy>=1.18.5,<2",
