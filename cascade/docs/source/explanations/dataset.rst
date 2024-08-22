@@ -2,7 +2,7 @@ Dataset
 =======
 :py:class:`cascade.data.Dataset`
 
-The main focus of Cascade are data pipelines.
+The main focus of Cascade is data pipelines.
 The library allows to construct them from many
 interchangeable blocks, which are self-sufficient
 in terms of managing their own meta-data.

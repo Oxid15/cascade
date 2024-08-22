@@ -1,6 +1,14 @@
 How-to guides
 =============
 
+This is a page of how-to guides. Guides are basically answers to the "How to ... with Cascade" type of questions.
+They should be practical and may require some background knowledge of Cascade.
+
+If you are new to the library, you may want to start from the :ref:`/tutorials/tutorials.rst` page.
+
+Pipelines
+---------
+
 .. grid:: 1
 
     .. grid-item::
@@ -9,6 +17,9 @@ How-to guides
             :link-type: ref
 
             How to build data processing pipelines with cascade.data module
+
+Experiment tracking
+-------------------
 
     .. grid-item::
         .. card:: Track model training experiment
@@ -31,12 +42,29 @@ How-to guides
 
             How to log files along with saved model
 
+Experiment management
+---------------------
+
     .. grid-item::
-        .. card:: Comment on results of an experiment
+        .. card:: Link Dataset to a Model
             :link: /howto/track_a_file.rst
             :link-type: ref
 
-            Filling bare numbers in results with some meaning and starting discussions
+            You can link anything to anything basically
+
+    .. grid-item::
+        .. card:: Comment on results of an experiment
+            :link: /howto/comments.rst
+            :link-type: ref
+
+            Filling bare numbers with some meaning and starting discussions
+
+    .. grid-item::
+        .. card:: Add Tags
+            :link: /howto/tags.rst
+            :link-type: ref
+
+            It is about building your own system
 
 
 .. toctree::
@@ -49,3 +77,5 @@ How-to guides
     dataset_zoo.ipynb
     data_validation.ipynb
     track_a_file.rst
+    comments.rst
+    tags.rst
