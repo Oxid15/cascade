@@ -25,14 +25,7 @@ Documentation
 .. grid:: 2
 
     .. grid-item::
-        .. card:: Quickstart
-            :link: /quickstart.rst
-            :link-type: ref
-
-            Installation and basic setup
-
-    .. grid-item::
-        .. card:: Tutorials
+        .. card:: Tutorial
             :link: /tutorials/tutorials.rst
             :link-type: ref
 
@@ -46,6 +39,13 @@ Documentation
             Recipes for specific use-cases
 
     .. grid-item::
+        .. card:: Explanations
+            :link: /explanations/explanations.rst
+            :link-type: ref
+
+            Theoretical basis of Cascade
+
+    .. grid-item::
         .. card:: Reference
             :link: /modules.rst
             :link-type: ref
@@ -56,7 +56,7 @@ Documentation
     :maxdepth: 1
     :hidden:
 
-    quickstart
     tutorials/tutorials
     howto/howto
+    explanations/explanations
     modules

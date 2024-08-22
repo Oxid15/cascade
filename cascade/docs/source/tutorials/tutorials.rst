@@ -1,12 +1,22 @@
-Tutorials
-=========
+Tutorial
+========
 
-Tutorials are a set of lessons that will teach you
+Tutorial is a set of lessons that will teach you
 basics of Cascade. Lessons are connected in a single project
 and depend on each other.
 You can grasp the essence of how
 you can use the library for your own projects, while
 completing this one.
+
+Installation
+------------
+
+Install the latest version using pip
+
+.. code-block:: bash
+
+    pip install cascade-ml
+
 
 :ref:`/tutorials/pipelines_basics.rst`
 
