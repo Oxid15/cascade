@@ -25,13 +25,6 @@ How-to guides
             How to make model training even easier with Trainers
 
     .. grid-item::
-        .. card:: Validate Data
-            :link: /howto/data_validation.ipynb
-            :link-type: ref
-
-            How to ensure data quality with Cascade data validation tools
-
-    .. grid-item::
         .. card:: Track a file
             :link: /howto/track_a_file.rst
             :link-type: ref
