@@ -33,8 +33,8 @@ class DataleakValidator(Validator):
         """
         Checks if two datasets have identical items
 
-        Calculates `hash_fn` to identify items
-        Uses python `hash` as default, but can be customized
+        Calculates ``hash_fn`` to identify items
+        Uses python ``hash`` as default, but can be customized
 
         Parameters
         ----------

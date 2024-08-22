@@ -1,5 +1,5 @@
-Viewer
-======
+Viewers
+#######
 :py:class:`cascade.meta.MetaViewer`, :py:class:`cascade.meta.MetricViewer`, :py:class:`cascade.meta.HistoryViewer`, :py:class:`cascade.meta.DiffViewer`
 
 Viewers are an interesting part of Cascade's set of tools. Their purpose is to give a user
@@ -8,7 +8,7 @@ the power to analyze their experiments and make sense of all meta that is stored
 MetaViewer is more high-level way to access meta than MetaHandler, but still abstract. It allows to read all 
 meta-data in the folder and every child-folders and display it in the console.
 
-MetricViewer is more specific - it reads `metrics` and `parameters` dicts in meta of models in each line and
+MetricViewer is more specific - it reads ``metrics`` and ``params`` dicts in meta of models in each line and
 build a table, which can be viewed in a variety of ways: it can be printed like pandas.DataFrame or plotted in the
 web-view by plotly's Table.
 

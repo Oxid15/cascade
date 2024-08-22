@@ -162,13 +162,13 @@ class ModelRepo(Repo, TraceableOnDisk):
             Path to a folder where ModelRepo needs to be created or already was created
             if folder does not exist, creates it
         lines: List[Dict]
-            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
+            A list with parameters of model lines to add at creation or to initialize (alias for ``add_model``)
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
         meta_fmt: Literal['.json', '.yml', '.yaml']
             extension of repo's metadata files and that will be assigned to the lines by default
-            `.json` and `.yml` or `.yaml` are supported
+            ``.json`` and ``.yml`` or ``.yaml`` are supported
         model_cls:
             Default class for any ModelLine in repo
         See also
@@ -214,9 +214,9 @@ class ModelRepo(Repo, TraceableOnDisk):
         Parameters:
             name: str, optional
                 Name of the line. It is used to name a folder of line.
-                Repo prepends it with `self._root` before creating.
+                Repo prepends it with ``self._root`` before creating.
                 Optional argument. If omitted - names new line automatically
-                using f'{len(self):0>5d}'
+                using ``f'{len(self):0>5d}'``
             meta_fmt: str, optional
                 Format of meta files. Supported values are the same as for repo.
                 If omitted, inherits format from repo.
@@ -250,7 +250,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         Returns
         -------
         line: ModelLine
-           existing line of the name passed in `key`
+           existing line of the name passed in ``key``
         """
         if isinstance(key, int):
             key = list(self._lines.keys())[key]
@@ -287,7 +287,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         Parameters
         ----------
         model : str
-            model slug e.g. `fair_squid_of_bliss`
+            model slug e.g. ``fair_squid_of_bliss``
 
         Returns
         -------
@@ -338,7 +338,7 @@ class ModelRepoConcatenator(Repo):
 
     The class to concatenate different Repos.
     For the ease of use please, don't use it directly.
-    Just do `repo = repo_1 + repo_2` to unify two or more repos.
+    Just do ``repo = repo_1 + repo_2`` to unify two or more repos.
     """
 
     def __init__(self, repos: Iterable[Repo], *args: Any, **kwargs: Any) -> None:
@@ -350,8 +350,8 @@ class ModelRepoConcatenator(Repo):
         if len(pair) <= 2:
             raise KeyError(
                 f"Key {key} is not in required format \
-            `<repo_idx>_..._<line_name>`. \
-            Please, use the key in this format. For example `0_line_1`"
+            ``<repo_idx>_..._<line_name>``. \
+            Please, use the key in this format. For example ``0_line_1``"
             )
         idx, line_name = pair[0], "_".join(pair[1:])
         idx = int(idx)

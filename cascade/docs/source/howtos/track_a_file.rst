@@ -1,5 +1,5 @@
 Track a file
-============
+############
 
 This article is about saving an arbitrary file along with a
 model in Cascade.
@@ -18,8 +18,8 @@ file artifacts easily using ``Model`` API.
 
     model.add_file("file.txt")
 
-This will copy `file.txt` into `files` folder within model's directory when a model is saved
-by `ModelLine`.
+This will copy ``file.txt`` into ``files`` folder within model's directory when a model is saved
+by ``ModelLine``.
 
 .. code-block:: python
 
@@ -28,7 +28,7 @@ by `ModelLine`.
     line = ModelLine("file_test")
     line.save(model)
 
-You can check the folder `file_test/00000/files` to see `file.txt` copied there.
+You can check the folder ``file_test/00000/files`` to see ``file.txt`` copied there.
 
 By using this tool you can log different file artifacts that are created during experiments.
 For example images, audio files, plots, prediction results in tables or anything else.

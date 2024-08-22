@@ -44,7 +44,7 @@ Install the latest version using pip
 
 :ref:`/tutorials/next.rst`
 
-If you completed the tutorial you can see How-to section
+If you completed the tutorial you can see the :ref:`/howtos/howtos.rst` section
 for more specific and complex workflows.
 
 .. toctree::

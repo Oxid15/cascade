@@ -8,10 +8,10 @@ Each lesson will come with a list of links for further reading or advanced
 how-to guides on related topics.
 
 Cascade pipelines allow building data processing routines from interchangeable
-steps called `Datasets` and `Modifiers`.
+steps called ``Datasets`` and ``Modifiers``.
 
 Datasets are the sources of data. In the first step let's make a Dataset
-for `digits` from `sklearn`.
+for ``digits`` from ``sklearn``.
 
 .. code-block:: python
 
@@ -30,7 +30,7 @@ for `digits` from `sklearn`.
         def __len__(self):
             return len(self.x)
 
-Minimal setup for a Dataset is a `__getitem__` and `__len__` methods.
+Minimal setup for a Dataset is a ``__getitem__`` and ``__len__`` methods.
 Now we can do basic access.
 
 .. code-block:: python
@@ -55,8 +55,8 @@ allow using rich set of defaults for data manipulation.
 
     print(ds_noise[0])
 
-`Modifiers` take datasets and transform their values.
-In previous example we added noise to digits by using `ApplyModifier`
+``Modifiers`` take datasets and transform their values.
+In previous example we added noise to digits by using ``ApplyModifier``
 and created new noisy dataset.
 
 We can augment our data by concatenating those two datasets.

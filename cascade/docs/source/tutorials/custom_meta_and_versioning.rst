@@ -1,5 +1,5 @@
 4. Custom Meta and Versioning
-=============================
+#############################
 
 Metadata is a very flexible tool. It contains lots of useful info by default,
 and can be customized.
@@ -39,7 +39,7 @@ Let's see how it works.
     version = dataline.get_version(ds)
     print(version) # 0.1
 
-Starting version is `0.1` and then, when metadata changes,
+The starting version is ``0.1`` and then, when metadata changes,
 parts of the version are bumped automatically. When saving
 the version of a dataset that already exists, line will
 notice that and overwrite older record with a new object.
@@ -56,7 +56,7 @@ In previous example minor version was bumped by changing the part of the
 pipeline's meta.
 
 In the next one we add a new pipeline stage, which is what will bump
-a major part of the version and we will see `1.0`.
+a major part of the version and we will see ``1.0``.
 
 .. code-block:: python
 

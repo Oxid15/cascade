@@ -6,7 +6,7 @@ Lines are not the only tool to organize model storage. They themselves can be un
 Repos can include both Data- and ModelLines. They can be used for access to a bunch of models and
 are basic input for most of Cascade operations.
 
-The following will give `demo_repo/00000` folder structure.
+The following will give ``demo_repo/00000`` folder structure.
 
 .. code-block:: python
 
@@ -18,9 +18,9 @@ The following will give `demo_repo/00000` folder structure.
 
 Sometimes Repos are piling up and to organize them effectively a Workspace was created. This is the highest unit
 of experiment organization. Best practice will be having one Workspace per ML-project. Every container
-share similar API. Using `add_something` methods you can create or just load an object if it already exists.
+share similar API. Using ``add_something`` methods you can create or just load an object if it already exists.
 
-The following will give `demo_workspace/repo/line` folder structure.
+The following will give ``demo_workspace/repo/line`` folder structure.
 
 .. code-block:: python
 

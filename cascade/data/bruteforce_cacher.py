@@ -25,9 +25,7 @@ from .modifier import Modifier
 class BruteforceCacher(Modifier[T]):
     """
     Special modifier that calls all previous pipeline in __init__ loading everything
-    in memory. This is useful in combination with `Pickler` when pipeline
-    has heavy operations upstream. You can load everything and pickle it to turn off
-    heavy part of the pipeline.
+    in memory.
 
     Examples
     --------

@@ -21,7 +21,7 @@ from ..data import Wrapper
 
 class NumpyWrapper(Wrapper):
     """
-    A wrapper around .npy files. Loads file in `__init__`.
+    A wrapper around .npy files. Loads file in ``__init__``.
 
     Important
     ---------

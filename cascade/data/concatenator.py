@@ -67,7 +67,7 @@ class Concatenator(Dataset[T]):
 
     def get_meta(self) -> Meta:
         """
-        Concatenator calls `get_meta()` of all its datasets
+        Concatenator calls ``get_meta()`` of all its datasets
         """
         meta = super().get_meta()
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
@@ -77,7 +77,7 @@ class Concatenator(Dataset[T]):
     def from_meta(self, meta: Meta) -> None:
         """
         Updates its own fields as usual and
-        if meta has `data` key then sequentially updates
+        if meta has ``data`` key then sequentially updates
         data of all its datasets
 
         Parameters

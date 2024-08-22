@@ -3,14 +3,14 @@
 
 Many of the things we implemented in this tutorial can be reused in similar projects.
 This is one of the main principles on which Cascade was built. This is why most of the
-things we done using `sklearn` library is already implemented in Cascade `utils` module.
+things we done using ``sklearn`` library is already implemented in Cascade ``utils`` module.
 
-In this tutorial we will overview `scikit-learn` library integration in Cascade. It features
-default model class that can wrap pipelines of `sklearn` transformers and also special metric
-wrapper for `sklearn.metrics` module.
+In this tutorial we will overview ``scikit-learn`` library integration in Cascade. It features
+default model class that can wrap pipelines of ``sklearn`` transformers and also special metric
+wrapper for ``sklearn.metrics`` module.
 
 Now we do not need to implement our own model wrapper or care about different methods. Everything
-is already implemented in `SkModel` class. Notice how we pass `blocks` as a list of transforms.
+is already implemented in ``SkModel`` class. Notice how we pass ``blocks`` as a list of transforms.
 The explicit use of keyword parameter here is required.
 
 .. code-block:: python
@@ -19,7 +19,7 @@ The explicit use of keyword parameter here is required.
 
     model = SkModel(blocks=[LogisticRegression()])
 
-The interface of this model's `fit` function accepts lists of elements.
+The interface of this model's ``fit`` function accepts lists of elements.
 
 .. code-block:: python
 
@@ -30,9 +30,9 @@ The interface of this model's `fit` function accepts lists of elements.
 
     model.fit(x, y)
 
-`SkMetric` class provides a wrapper around `metrics` module. You can pass
+``SkMetric`` class provides a wrapper around ``metrics`` module. You can pass
 a valid name from this module and it will be imported by Cascade for you.
-Cascade also features some aliases for metrics. `acc` will import `sklearn.metrics.accuracy_score`.
+Cascade also features some aliases for metrics. ``acc`` will import ``sklearn.metrics.accuracy_score``.
 
 If metrics require any keyword arguments, you can pass them at the creation time.
 
@@ -62,8 +62,8 @@ Let's save the model and see how everything is handled automatically.
     [SkMetric(name=f1_score, value=1.0, created_at=2024-08-14 19:37:46.556587+00:00),
     SkMetric(name=acc, value=1.0, created_at=2024-08-14 19:37:46.556701+00:00)]
 
-Notice how an artifact and a model are saved using the default implementation of `save`
-and `save_artifact`.
+Notice how an artifact and a model are saved using the default implementation of ``save``
+and ``save_artifact``.
 
 .. code-block:: python
 

@@ -363,7 +363,7 @@ class HistoryViewer(Server):
             Arguments for app.run_server() for example port or host
         Note
         ----
-        This feature needs `dash` to be installed.
+        This feature needs ``dash`` to be installed.
         """
         # Conditional import
         try:

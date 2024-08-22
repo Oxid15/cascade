@@ -1,5 +1,5 @@
 12. Artifacts and Files
-=======================
+#######################
 
 Cascade wrappers serve to provide unified interface for different ML solutions
 however in deployment scenarios they may obstruct underlying models.

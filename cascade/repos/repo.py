@@ -57,7 +57,7 @@ class Repo(BaseRepo, TraceableOnDisk):
             in that place
         meta_fmt: Literal['.json', '.yml', '.yaml']
             extension of repo's metadata files and that will be assigned to the lines by default
-            `.json` and `.yml` or `.yaml` are supported
+            ``.json`` and ``.yml`` or ``.yaml`` are supported
 
         See also
         --------
@@ -108,7 +108,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         ----------
         name : Optional[str], optional
             Name of the line. It is used to name a folder of line.
-            Repo prepends it with `self._root` before creating.
+            Repo prepends it with ``self._root`` before creating.
             Optional argument. If omitted - names new line automatically
             using f'{len(self):0>5d}', by default None
         line_type : Literal["data", "model"]], by default "model"
@@ -157,7 +157,7 @@ class Repo(BaseRepo, TraceableOnDisk):
                 ) from e
             except ZeroMetaError as e:
                 raise IOError(
-                    f"Did not found meta in {folder}, pass `line_cls` if you want to create a line"
+                    f"Did not found meta in {folder}, pass ``line_cls`` if you want to create a line"
                 ) from e
         else:
             line = LineFactory.create(
@@ -170,7 +170,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         Returns
         -------
         line: Line
-           existing line of the name passed in `key`
+           existing line of the name passed in ``key``
         """
         if isinstance(key, int):
             key = list(self._lines.keys())[key]
@@ -203,7 +203,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         Parameters
         ----------
         obj : str
-            obj slug e.g. `fair_squid_of_bliss`
+            obj slug e.g. ``fair_squid_of_bliss``
 
         Returns
         -------

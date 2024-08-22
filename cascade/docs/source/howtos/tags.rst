@@ -1,5 +1,5 @@
 Add Tags
-========
+########
 
 Any Traceable object can be tagged. Tags are highly customizable. You can
 use them in any way, building you own system.
@@ -7,7 +7,7 @@ use them in any way, building you own system.
 For example one can version models, mark important results, best models for deploy, etc.
 Since any Traceable is available you can tag lines and repos as well.
 
-Tags are a list, but guaranteed to be unique when added using `add_tag` method.
+Tags are a list, but guaranteed to be unique when added using ``add_tag`` method.
 
 
 .. code-block:: python

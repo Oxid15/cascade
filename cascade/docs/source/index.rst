@@ -5,11 +5,12 @@ Lightweight and modular MLOps library with the aim to make ML development more e
 
 Who could find it useful
 ************************
-The slope of adopting MLOps platforms can sometimes be too steep for individuals.
+The slope of adopting MLOps platforms can sometimes be too steep for small-scale teams.
 However, they can still benefit from some MLOps practices integrated into the workflow.
+
 Cascade offers the solution that enables those features for small projects while demanding little.
-In small-scale ML-projects there is usually no need for the whole MLOps setups (at least in early stages).
-Taking this in mind, Cascade is built modular to enable users to fit the solution to their specific needs
+There is usually no need for the whole MLOps setups in small-scale ML-projects (at least in early stages).
+Taking this in mind, Cascade is built modular to enable users to tailor the solution to their specific needs
 by using different parts of the library without the need to bring everything at once.
 
 Key Principles
@@ -33,7 +34,7 @@ Documentation
 
     .. grid-item::
         .. card:: How-to guides
-            :link: /howto/howto.rst
+            :link: /howtos/howtos.rst
             :link-type: ref
 
             Recipes for specific use-cases
@@ -57,6 +58,6 @@ Documentation
     :hidden:
 
     tutorials/tutorials
-    howto/howto
+    howtos/howtos
     explanations/explanations
     modules

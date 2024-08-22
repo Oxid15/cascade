@@ -1,5 +1,5 @@
-Dataset
-=======
+Datasets
+########
 :py:class:`cascade.data.Dataset`
 
 The main focus of Cascade is data pipelines.
@@ -23,15 +23,10 @@ Data Card and it can be used with DataRegistrator
 
 
 Modifier
---------
+********
 :py:class:`cascade.data.Modifier`
 
 Modifier - is a dataset that performs transformations on the dataset it accepts. 
 It stores a reference to the previous dataset and is responsible for handling not only its own
 meta data, but previous dataset's also. This mechanism allows to form
 and trace a pipeline as a whole starting at its last block.
-
-
-See also
---------
-:py:class:`cascade.data.DataCard`

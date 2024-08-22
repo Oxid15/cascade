@@ -1,5 +1,5 @@
 8. CLI
-======
+######
 
 Cascade features simple command line interface to manage storage
 of your models, metadata and experiments. You can comment on models,
@@ -8,14 +8,14 @@ edit tags, descriptions and manage artifacts from the command line.
 This tutorial is connected with :ref:`/tutorials/meta_defaults.rst`
 since CLI allows editing meta defaults without writing special scripts for it.
 
-Go to the directory of previously created `line` and execute the following.
+Go to the directory of previously created ``line`` and execute the following.
 
 .. code-block:: bash
 
     cascade status
 
 This is basic utility now just serves as a check that everything is okay with
-you installation and directory. Cascade will look for `meta.json` file in the folder
+you installation and directory. Cascade will look for ``meta.json`` file in the folder
 you are running a command and if found, output short description of what is in this folder.
 
 If everything is ok, previous command should output the following. If not, do not
@@ -31,7 +31,7 @@ To print the contents of objects metadata you can visit a folder of an object an
 
     cascade cat
 
-This will give you a nice prettyprint of `meta.json` that will look something like this.
+This will give you a nice prettyprint of ``meta.json`` that will look something like this.
 
 .. code-block:: text
 

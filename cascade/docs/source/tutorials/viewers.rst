@@ -48,7 +48,7 @@ Now we display the table once again.
     print(mv.table)
 
 It seems like l1 penalty gave slightly better results. Metric viewer can be used to identify optimal parameters
-according to metric values. Since `mv.table` is a pandas DataFrame you can do your own analysis and visualizations.
+according to metric values. Since ``mv.table`` is a pandas DataFrame you can do your own analysis and visualizations.
 
 .. code-block:: text
 
@@ -61,11 +61,11 @@ according to metric values. Since `mv.table` is a pandas DataFrame you can do yo
     5  line    3 2024-08-01 20:02:37.266971+00:00  a few seconds after      l1          []              0           0   f1  0.994946
 
 Metric viewer as other Cascade viewers has a special dash-based web interface. You can install dash and run it with
-CLI command or from the python code using `serve()` method.
+CLI command or from the python code using ``serve()`` method.
 
 After installing dash which is an optional dependency for web-based interfaces, you can run this.
 The command will start a server on the port 8050 by default which you can open in your browser.
-Go to `localhost:8050` to see the table of MetricViewer.
+Go to ``localhost:8050`` to see the table of MetricViewer.
 
 .. code-block:: text
 

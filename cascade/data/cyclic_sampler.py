@@ -20,7 +20,7 @@ from .modifier import Sampler
 
 class CyclicSampler(Sampler[T]):
     """
-    A Sampler that iterates `num_samples` times through an input Dataset in cyclic manner
+    A Sampler that iterates ``num_samples`` times through an input Dataset in cyclic manner
 
     Example
     -------

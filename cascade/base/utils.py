@@ -206,7 +206,7 @@ def migrate_repo_v0_13(path: str) -> None:
 
     Changes:
     - Metric formatting for compatibility with viewers of new version
-    - If metrics are not scalar, saves them in `old_metrics` dict in meta
+    - If metrics are not scalar, saves them in ``old_metrics`` dict in meta
     - Sets the cascade_version key to the current version in repos, lines and models
     - Skips meta files if fails to read them
 

@@ -126,8 +126,8 @@ class Traceable:
 
     def update_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """
-        Updates `_meta_prefix`, which then updates
-        dataset's meta when `get_meta()` is called
+        Updates ``_meta_prefix``, which then updates
+        dataset's meta when ``get_meta()`` is called
 
         Parameters
         ----------

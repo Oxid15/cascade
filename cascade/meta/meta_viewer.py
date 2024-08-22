@@ -36,7 +36,7 @@ class MetaViewer:
             path to the folder containing metadata files
         filt: Dict, optional
             dictionary that specifies which values that should be present in meta
-            for example to find all models use `filt={'type': 'model'}`
+            for example to find all models use ``filt={'type': 'model'}``
 
         See also
         --------

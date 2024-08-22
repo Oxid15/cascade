@@ -188,7 +188,7 @@ class MetaHandler:
     """
     Encapsulates the logic of reading and writing metadata to disk.
 
-    Supported read-write formats are `.json` and `.yml` or `.yaml`. Other formats
+    Supported read-write formats are ``.json`` and ``.yml`` or ``.yaml``. Other formats
     are supported as read-only. For example one can read meta from txt or md file.
 
     Examples

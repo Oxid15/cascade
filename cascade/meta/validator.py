@@ -35,7 +35,7 @@ def prettify_items(items: List[int]) -> str:
 
 class Validator(Modifier[T]):
     """
-    Base class for validators. Defines basic `__init__` structure
+    Base class for validators. Defines basic ``__init__`` structure
     """
 
     @deprecated("Whole cascade.meta.validation is deprecated since 0.14.0 and is planned to"
@@ -56,7 +56,7 @@ class Validator(Modifier[T]):
 class AggregateValidator(Validator[T]):
     """
     This validator accepts an aggregate function
-    that accepts a `Dataset` and returns `True` or `False`
+    that accepts a ``Dataset`` and returns ``True`` or ``False``
 
     Example
     -------
@@ -84,7 +84,7 @@ class AggregateValidator(Validator[T]):
 class PredicateValidator(Validator[T]):
     """
     This validator accepts function that is applied to each item in a dataset
-    and returns `True` or `False`. Calls `__getitem__`s of all previous datasets in `__init__`.
+    and returns ``True`` or ``False``. Calls ``__getitem__``s of all previous datasets in ``__init__``.
 
     Example
     -------

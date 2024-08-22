@@ -1,8 +1,8 @@
 Link anything
-=============
+#############
 
 Linking one object to an another is a mechanic that was
-introduced in `0.13.0`.
+introduced in ``0.13.0``.
 
 Its main purpose is to enable ability to tie one object to the other
 without using custom meta editing.

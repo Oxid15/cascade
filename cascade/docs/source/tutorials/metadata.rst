@@ -6,7 +6,7 @@ reason why wrappers should be created - they allow automatically capturing
 info about underlying objects that can be logged and analyzed later.
 
 To see what it looks like,
-you can call `get_meta` method on a Cascade object. In the next
+you can call ``get_meta`` method on a Cascade object. In the next
 step we will try calling it on the pipeline that was made on
 the :ref:`/tutorials/pipelines_basics.rst` step.
 

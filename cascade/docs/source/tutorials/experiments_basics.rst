@@ -6,8 +6,8 @@ You can easily track history of model changes, save and restore models
 in a structured manner along with metadata.
 
 In this step we create a wrapper around logistic regression model. Minimal setup
-for the model is not strictly defined as in Dataset case. We define `fit` and `predict`.
-`BasicModel` will handle everything else for us - like saving and loading for example.
+for the model is not strictly defined as in Dataset case. We define ``fit`` and ``predict``.
+``BasicModel`` will handle everything else for us - like saving and loading for example.
 
 .. code-block:: python
 
@@ -38,7 +38,7 @@ We can create and fit the model now using the dataset from :ref:`/tutorials/pipe
     model.fit(ds)
 
 To track important hyperparameters and how they influence metrics, Cascade Models feature special field
-called `params`. This is an empty dict that you can fill with any (serializable) data. Cascade custom
+called ``params``. This is an empty dict that you can fill with any (serializable) data. Cascade custom
 JSON serializer can also serialize some non-default things like numpy arrays.
 
 Here we fill our param externally, but could also do it above inside the class.

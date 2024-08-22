@@ -1,5 +1,5 @@
 Comment on results of an experiment
-===================================
+###################################
 
 Comments serve experiment tracking greatly since they allow record thoughts on
 experiment results or expectations before them. They are more flexible, expressive,
@@ -7,7 +7,7 @@ and less formal than parameters for example. They also are a basis for collabora
 since multiple people can comment in a shared repo.
 
 Add a Comment
--------------
+*************
 
 In Cascade you can have comments in any Traceable object.
 Comments are recorded in meta. In case of disk-based Traceables
@@ -30,7 +30,7 @@ sync meta with disk automatically.
     line.comment("Did you know that you can comment on any Traceable?")
 
 Remove a Comment
-----------------
+****************
 
 Every comment has an integer ID starting with ``1``, using which you can locate and
 delete the comment.
@@ -41,7 +41,7 @@ delete the comment.
 
 
 Using Cascade CLI
------------------
+*****************
 
 CLI is the best way to use this feature.
 

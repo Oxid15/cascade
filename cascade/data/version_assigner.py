@@ -33,9 +33,9 @@ from .modifier import Modifier
 class VersionAssigner(Modifier):
     """
     Class for automatic data versioning using metadata.
-    `VersionAssigner` is a simple `Modifier` that tracks changes in metadata and assigns
+    ``VersionAssigner`` is a simple ``Modifier`` that tracks changes in metadata and assigns
     dataset a version considering changes in meta.
-    The version consists of two parts, namely major and minor in the format `MAJOR.MINOR` just
+    The version consists of two parts, namely major and minor in the format ``MAJOR.MINOR`` just
     like in semantic versioning. The meaning of parts is the following: *major* number changes
     if there are changes in the structure of the pipeline e.g. some dataset was added/removed;
     *minor* number changes in case of any metadata change e.g. new data arrived and changed

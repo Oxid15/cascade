@@ -8,8 +8,8 @@ Metric API is very flexible - you have a freedom to define metrics
 in several ways. First case is the regular way metrics are usually defined
 in projects - as functions.
 
-Metric function can be passed in the default `evaluate` method of `BasicModel`.
-Evaluation of the model will return nothing, but fill its `metrics` field with a list
+Metric function can be passed in the default ``evaluate`` method of ``BasicModel``.
+Evaluation of the model will return nothing, but fill its ``metrics`` field with a list
 of metrics.
 
 .. code-block:: python
@@ -33,10 +33,10 @@ of metrics.
     [Metric(name=f1, value=1.0, created_at="2024-07-29 19:41:09.344039+00:00")]
 
 Let's try defining a metric in another, more flexible way. We need to implement
-a descendant of `cascade.metrics.Metric` class. The one required method is `compute`
-that should return value and also set `self.value`.
+a descendant of ``cascade.metrics.Metric`` class. The one required method is ``compute``
+that should return value and also set ``self.value``.
 
-After that `evaluate` can be called with a list of `Metric` objects.
+After that ``evaluate`` can be called with a list of ``Metric`` objects.
 
 .. code-block:: python
 
@@ -61,7 +61,7 @@ After that `evaluate` can be called with a list of `Metric` objects.
     [Metric(name=f1, value=1.0, created_at=2024-07-29 19:47:33.435828+00:00),
      Accuracy(name=acc, value=1.0, created_at=2024-07-29 19:47:33.437724+00:00)]
 
-Metrics are saved and written in metadata automatically after calling `evaluate`.
+Metrics are saved and written in metadata automatically after calling ``evaluate``.
 
 .. code-block:: python
 

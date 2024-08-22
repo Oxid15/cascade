@@ -54,8 +54,8 @@ class BasicModel(Model):
         """
         Receives x and y validation sequences. Passes x to the model's predict
         method along with any args or kwargs needed.
-        Then updates self.metrics with what objects in `metrics` return.
-        `metrics` should contain Metric with compute() method or callables with the interface:
+        Then updates self.metrics with what objects in ``metrics`` return.
+        ``metrics`` should contain Metric with compute() method or callables with the interface:
         f(true, predicted) -> metric_value, where metric_value is a scalar
 
         Parameters
@@ -122,7 +122,7 @@ class BasicModel(Model):
         Also copies any additional files in the model folder.
 
         Path should be a folder, which will be created
-        if not exists and saves there as `model.pkl`
+        if not exists and saves there as ``model.pkl``
         """
         super().save(path)
 

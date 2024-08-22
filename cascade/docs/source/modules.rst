@@ -1,5 +1,5 @@
 API reference
--------------
+#############
 
 .. toctree::
     modules/cascade.base

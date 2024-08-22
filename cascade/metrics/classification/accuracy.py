@@ -1,4 +1,5 @@
-from typing import Any, Dict, Sequence, Tuple, Optional
+from typing import Any, Dict, Optional, Sequence, Tuple
+
 from ..metric import Metric, MetricType
 
 
@@ -7,10 +8,10 @@ class Accuracy(Metric):
     Accuracy metric - the number of correct answers
     divided by the number of all
 
-    By default name is `accuracy`, can be changed
+    By default name is ``accuracy``, can be changed
     Direction is always up
 
-    Can be computed iteratively using `compute_add`
+    Can be computed iteratively using ``compute_add``
     """
     def __init__(
             self,
