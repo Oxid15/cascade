@@ -48,7 +48,7 @@ Documentation
 
     .. grid-item::
         .. card:: Reference
-            :link: /modules.rst
+            :link: /modules/modules.rst
             :link-type: ref
 
             Cascade API Reference
@@ -60,4 +60,4 @@ Documentation
     tutorials/tutorials
     howtos/howtos
     explanations/explanations
-    modules
+    modules/modules
