@@ -109,7 +109,7 @@ class Workspace(TraceableOnDisk):
         Parameters
         ----------
         model : str
-            model slug e.g. `fair_squid_of_bliss`
+            model slug e.g. ``fair_squid_of_bliss``
 
         Returns
         -------

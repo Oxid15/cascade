@@ -98,7 +98,7 @@ class Model(Traceable):
             If the path is not a folder
         FileNotFoundError
             If the file that should be copied does not exists and
-            it is not ok. See `add_file` for more info.
+            it is not ok. See ``add_file`` for more info.
 
         See also
         --------
@@ -284,7 +284,7 @@ class Model(Traceable):
         from inside the model. Callback should be a function that
         given the model saves it. For example ModelLine.save method.
         ModelLine.add_model registers callback with only_meta=True automatically
-        when creating a new model using `create_model`.
+        when creating a new model using ``create_model``.
 
         See also
         --------

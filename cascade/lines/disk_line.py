@@ -45,7 +45,7 @@ class DiskLine(TraceableOnDisk, Line):
 
     def __getitem__(self, num: int) -> Any:
         """
-        Loads the item using `load` method of a given class
+        Loads the item using ``load`` method of a given class
         """
         model = self.load(num)
         return model

@@ -137,7 +137,7 @@ class ModelLine(DiskLine):
         Saves a model and its metadata into a model's folder
 
         Model is automatically assigned a number and a slug
-        then it is saved using its own method `save`.
+        then it is saved using its own method ``save``.
 
         Folder names are assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
 
@@ -257,7 +257,7 @@ class ModelLine(DiskLine):
     def load_model_meta(self, path_spec: Union[str, int]) -> Meta:
         """
         Given a model num or a slug, loads its metadata from disk.
-        Alias for `load_obj_meta`
+        Alias for ``load_obj_meta``
 
         Parameters
         ----------

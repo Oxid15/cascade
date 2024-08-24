@@ -48,7 +48,7 @@ class Average(TimeSeriesDataset, Modifier):
             Time unit over which to average - years, month, etc.
         amount:
             The amount of units over which to average. For example for six month periods use
-            `unit='months'` and `amount=6`.
+            ``unit='months'`` and ``amount=6``.
         """
         time, data = dataset.get_data()
         try:

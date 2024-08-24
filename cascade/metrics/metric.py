@@ -73,14 +73,14 @@ class Metric:
     def compute(self, *args: Any, **kwargs: Any) -> MetricType:
         """
         The method to compute metric's value. Should always populate
-        the internal `self.value` field and return it.
+        the internal ``self.value`` field and return it.
         """
         raise NotImplementedError()
 
     def compute_add(self, *args: Any, **kwargs: Any) -> MetricType:
         """
         The method to compute the metric incrementally.
-        Should always populate the internal `self.value` field and return it.
+        Should always populate the internal ``self.value`` field and return it.
         """
         raise NotImplementedError()
 
@@ -135,7 +135,7 @@ class Metric:
 class Loss(Metric):
     """
     Loss is the convenience metric
-    which by default has name "loss"
+    which by default has name ``loss``
     and is always directed down
     """
     def __init__(

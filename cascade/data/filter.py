@@ -37,12 +37,12 @@ class Filter(Sampler):
             A dataset to filter
         filter_fn: Callable
             A function to be applied to every item of a dataset -
-            should return bool. Will be called on every item on `__init__`.
+            should return bool. Will be called on every item on ``__init__``.
 
         Raises
         ------
         RuntimeError
-            If `filter_fn` raises an exception
+            If ``filter_fn`` raises an exception
         """
         self._mask = []
         for i in range(len(dataset)):

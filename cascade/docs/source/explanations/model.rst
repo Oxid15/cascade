@@ -1,12 +1,13 @@
 Models
-======
+######
+
 Models are second part of two-fold Cascade concept scheme. They allow to wrap all models in
 the same interface an treat models from different frameworks the same. It also brings the
 order in the model-writing workflow since it forces you implement all abstract methods,
 which include evaluation, saving and loading that are usually being omitted and forgotten.
 
 Model
------
+*****
 :py:class:`cascade.models.Model`
 
 Descendants of Model are wrappers around some inference and intended to use only in training context.
@@ -18,7 +19,7 @@ abstract way.
 
 
 ModelLine
----------
+*********
 :py:class:`cascade.models.ModelLine`
 
 ModelLine is the entity that helps to track model's history in metrics and parameters.
@@ -34,14 +35,10 @@ through epochs or as a container for experiments with models with the same class
 parameters.
 
 ModelRepo
----------
+*********
 :py:class:`cascade.models.ModelRepo`
 
 ModelRepo constitutes a collection of lines.
 Its meta can contain the information about the experiments in general and about things that are
 applicable to all of the models. For example feature set, information about dataset (can be its meta)
 or validation procedure.
-
-See also
---------
-:py:class:`cascade.models.BasicModel`

@@ -27,7 +27,7 @@ from ...meta.validator import AggregateValidator, DataValidationException
 
 class TableDataset(Dataset[T]):
     """
-    Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
+    Wrapper for ``pd.DataFrame``s which allows to manage metadata and perform
     validation.
     """
 
@@ -81,7 +81,7 @@ class TableDataset(Dataset[T]):
     def to_csv(self, path: str, **kwargs: Any) -> None:
         """
         Saves the table to .csv file. Any kwargs are sent to
-        `pd.DataFrame.to_csv`.
+        ``pd.DataFrame.to_csv``.
         """
         self._table.to_csv(path, **kwargs)
 
@@ -116,7 +116,7 @@ class CSVDataset(TableDataset):
 
     def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Passes all args and kwargs to `pd.read_csv`
+        Passes all args and kwargs to ``pd.read_csv``
 
         Parameters
         ----------

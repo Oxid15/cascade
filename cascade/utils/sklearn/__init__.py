@@ -14,5 +14,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .sk_model import SkModel
 from .sk_metric import SkMetric
+from .sk_model import SkModel

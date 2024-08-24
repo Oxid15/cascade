@@ -20,5 +20,7 @@ docs/build
 .vscode/
 
 # Docs
-cascade/docs/source/examples/data
-cascade/docs/source/examples/trainer_repo
+cascade/docs/source/howtos/data
+cascade/docs/source/howtos/trainer_repo
+cascade/docs/source/howtos/repo
+cascade/docs/source/tutorials/line

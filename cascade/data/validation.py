@@ -114,9 +114,9 @@ class SchemaFactory:
                 from pydantic import create_model
             except ImportError as e:
                 raise ImportError(
-                    "Cannot import `pydantic` - it is optional dependency"
+                    "Cannot import ``pydantic`` - it is optional dependency"
                     " for general type checking"
-                    "\nYou can install it with `pip install 'pydantic==2.6.4'`"
+                    "\nYou can install it with ``pip install 'pydantic==2.6.4'``"
                 ) from e
             else:
                 return create_model(

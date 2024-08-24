@@ -24,8 +24,12 @@ import pendulum
 from typing_extensions import deprecated
 
 from ..base import Meta, MetaHandler, TraceableOnDisk
-from ..base.utils import (generate_slug, get_latest_commit_hash,
-                          get_python_version, get_uncommitted_changes)
+from ..base.utils import (
+    generate_slug,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+)
 from ..version import __version__
 from .model import Model
 
@@ -95,7 +99,7 @@ class ModelLine(TraceableOnDisk):
 
     def __getitem__(self, num: int) -> Model:
         """
-        Loads the model using `load` method of a given class
+        Loads the model using ``load`` method of a given class
 
         Returns
         -------
@@ -174,7 +178,7 @@ class ModelLine(TraceableOnDisk):
         Parameters
         ----------
         model : Union[str, int]
-            model slug e.g. `fair_squid_of_bliss` or number
+            model slug e.g. ``fair_squid_of_bliss`` or number
 
         Returns
         -------
@@ -229,8 +233,8 @@ class ModelLine(TraceableOnDisk):
         Saves a model and its metadata to a line's folder.
 
         Model is automatically assigned a number and a model is saved
-        using Model's method `save` in its own folder.
-        Folder's name is assigned using f'{idx:0>5d}'. For example: 00001 or 00042.
+        using Model's method ``save`` in its own folder.
+        Folder's name is assigned using ``f'{idx:0>5d}'``. For example: ``00001`` or ``00042``.
 
         It is Model's responsibility to correctly assign extension and save its own state.
 
@@ -345,7 +349,7 @@ class ModelLine(TraceableOnDisk):
         ----------
         log_: bool, optional
             Whether to register log callback at creation that
-            saves model with `only_meta`. By default True
+            saves model with ``only_meta``. By default True
 
         Returns
         -------

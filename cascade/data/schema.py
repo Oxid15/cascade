@@ -25,17 +25,17 @@ class SchemaModifier(Modifier):
     """
     Data validation modifier
 
-    When `self._dataset` is called and has
-    self.in_schema defined, wraps `self._dataset` into
-    validator, which is another `Modifier` that
-    checks the output of `__getitem__` of the
+    When ``self._dataset`` is called and has
+    self.in_schema defined, wraps ``self._dataset`` into
+    validator, which is another ``Modifier`` that
+    checks the output of ``__getitem__`` of the
     dataset that was wrapped.
 
     In the end it will look like this:
-        If `in_schema` is not None:
-            `dataset = SchemaModifier(ValidationWrapper(dataset))`
-        If `in_schema` is None:
-            `dataset = SchemaModifier(dataset)`
+        If ``in_schema`` is not None:
+            ``dataset = SchemaModifier(ValidationWrapper(dataset))``
+        If ``in_schema`` is None:
+            ``dataset = SchemaModifier(dataset)``
 
     How to use it:
     1. Define pydantic schema of input
@@ -49,7 +49,7 @@ class SchemaModifier(Modifier):
         bboxes: List[Tuple[int, int, int, int]]
     ```
 
-    2. Use schema as `in_schema`
+    2. Use schema as ``in_schema``
 
     ```python
     from cascade.data import SchemaModifier
@@ -58,7 +58,7 @@ class SchemaModifier(Modifier):
         in_schema = AnnotImage
     ```
 
-    3. Create a regular `Modifier` by
+    3. Create a regular ``Modifier`` by
     subclassing ImageModifier.
 
     ```python
@@ -69,8 +69,8 @@ class SchemaModifier(Modifier):
     ```
 
     4. That's all. Schema check will be held
-    automatically every time `self._dataset[idx]` is
-    accessed. If it is not `AnnotImage`, cascade.data.ValidationError
+    automatically every time ``self._dataset[idx]`` is
+    accessed. If it is not ``AnnotImage``, cascade.data.ValidationError
     will be raised.
 
     """

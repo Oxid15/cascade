@@ -109,7 +109,7 @@ class BasicTrainer(Trainer):
 
         Parameters:
             model: Model
-                a model to be trained or which to load from line specified in `start_from`
+                a model to be trained or which to load from line specified in ``start_from``
             train_data: Iterable
                 train data to be passed to model's fit()
             test_data: Iterable, optional
@@ -124,9 +124,9 @@ class BasicTrainer(Trainer):
                 name or index of line from which to start
                 starts from the latest model in line
             eval_strategy: int, optional
-                Evaluation will take place every `eval_strategy` epochs. If None - the strategy is 'no evaluation'.
+                Evaluation will take place every ``eval_strategy`` epochs. If None - the strategy is ``no evaluation``.
             save_strategy: int, optional
-                Saving will take place every `save_strategy` epochs. Meta will be saved anyway.
+                Saving will take place every ``save_strategy`` epochs. Meta will be saved anyway.
                 If None - the strategy is 'save only meta'.
         """
 

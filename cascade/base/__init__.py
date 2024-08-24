@@ -20,7 +20,7 @@ from typing import Any, Dict, List, NoReturn
 Single meta of basic object is just a dict, however Cascade works with
 pipelines with lists of meta. This is why default meta is a list.
 
-This type is used when `get_meta` is called on any Traceable
+This type is used when ``get_meta`` is called on any Traceable
 """
 MetaBlock = Dict[Any, Any]
 Meta = List[MetaBlock]

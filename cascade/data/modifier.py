@@ -22,7 +22,7 @@ class BaseModifier(BaseDataset[T]):
         """
         Overrides base method enabling cascade-like calls to previous datasets.
         The metadata of a pipeline that consist of several modifiers can be easily
-        obtained with `get_meta` of the last block.
+        obtained with ``get_meta`` of the last block.
         """
         self_meta = super().get_meta()
         self_meta += self._dataset.get_meta()
@@ -67,7 +67,7 @@ class IteratorModifier(BaseModifier[T], IteratorDataset[T]):
         """
         Overrides base method enabling cascade-like calls to previous datasets.
         The metadata of a pipeline that consist of several modifiers can be easily
-        obtained with `get_meta` of the last block.
+        obtained with ``get_meta`` of the last block.
         """
         self_meta = super().get_meta()
         self_meta += self._dataset.get_meta()
@@ -80,12 +80,12 @@ class Modifier(BaseModifier[T]):
     a successor of Sampler or Modifier.
 
     This structure enables having a data pipeline which consists of uniform blocks
-    each of them has a reference to the previous one in its `_dataset` field
+    each of them has a reference to the previous one in its ``_dataset`` field
 
     Basically Modifier defines an arbitrary transformation on every dataset's item that is applied
-    in a lazy manner on each `__getitem__` call.
+    in a lazy manner on each ``__getitem__`` call.
 
-    Applies no transformation if `__getitem__` is not overridden
+    Applies no transformation if ``__getitem__`` is not overridden
 
     Does not change the length of a dataset. See Sampler for this functionality
     """

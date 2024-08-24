@@ -45,7 +45,7 @@ class ApplyModifier(Modifier[T]):
             A dataset to modify
         func: Callable
             A function to be applied to every item of a dataset -
-            each `__getitem__` would call `func` on an item obtained from a previous dataset
+            each ``__getitem__`` calls ``func`` on an item obtained from a previous dataset
         p: Optional[float], by default None
             The probability [0, 1] with which to apply `func`
         seed: Optional[int], by default None

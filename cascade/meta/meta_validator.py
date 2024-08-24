@@ -31,13 +31,13 @@ class MetaValidator(Validator):
     on the first run and checks if it is consistent
     on the following runs.
 
-    `MetaValidator` is a `Modifier` that checks data
+    ``MetaValidator`` is a ``Modifier`` that checks data
     consistency in several pipeline runs. If pipeline of data
     processing consists of cascade Datasets it uses meta of all
     pipelines to ensure that data is unchanged.
 
     Capabilities of this validator are as powerful as pipelines meta and
-    is defined by extending `get_meta` methods.
+    is defined by extending ``get_meta`` methods.
 
     Example
     -------
@@ -60,7 +60,7 @@ class MetaValidator(Validator):
     meta's hash based on the names of blocks. This is needed to check if
     pipeline structure is changed.
     If it founds that pipeline has the same structure, then meta dicts are
-    compared using `deepdiff` and if everything is ok it returns.
+    compared using ``deepdiff`` and if everything is ok it returns.
 
     If the structure of pipeline is different it saves new meta file.
 

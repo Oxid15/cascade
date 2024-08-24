@@ -33,8 +33,8 @@ class MetricViewer:
     """
     Interface for viewing metrics in model meta files
     uses Repo to extract metrics of all models if any.
-    As metrics it uses data from `metrics` field in models'
-    meta and as parameters it uses `params` field.
+    As metrics it uses data from ``metrics`` field in models'
+    meta and as parameters it uses ``params`` field.
     """
 
     def __init__(
@@ -46,7 +46,7 @@ class MetricViewer:
         repo: Repo
             Repo object to extract metrics from
         scope: Union[int, str, slice]
-            Index or a name of line to view. Can be set using `__getitem__`
+            Index or a name of line to view. Can be set using ``__getitem__``
         """
         if isinstance(repo, ModelLine):
             repo = SingleLineRepo(repo)
@@ -180,8 +180,8 @@ class MetricViewer:
         metric: str
             Name of the metric
         maximize: bool
-            The direction of choosing the best model: `True` if greater is better
-            and `False` if less is better
+            The direction of choosing the best model: ``True`` if greater is better
+            and ``False`` if less is better
 
         Raises
         ------

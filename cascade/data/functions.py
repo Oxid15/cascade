@@ -66,7 +66,7 @@ def dataset(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[...,
     Use this if the function is the data source
 
     Will return FunctionDataset object. To get results of the execution
-    use `dataset.result` field
+    use ``dataset.result`` field
 
     Parameters
     ----------
@@ -93,8 +93,8 @@ def modifier(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[...
     Thin wrapper to turn any function into Cascade's Modifier
     Pass the returning value of a function
     that was previosly wrapped dataset or modifier. Will replace any
-    dataset with `dataset.result` automatically if the function
-    argument is `FunctionDataset`.
+    dataset with ``dataset.result`` automatically if the function
+    argument is ``FunctionDataset``.
 
     Parameters
     ----------

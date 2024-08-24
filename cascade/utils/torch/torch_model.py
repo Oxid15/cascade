@@ -26,7 +26,7 @@ from ...models import BasicModel
 
 class TorchModel(BasicModel):
     """
-    The wrapper around `nn.Module`s
+    The wrapper around ``nn.Module``
     """
 
     def __init__(
@@ -41,7 +41,7 @@ class TorchModel(BasicModel):
         model_class: type, optional
             The class created when new nn.Module was defined. Will be used
             to construct model. If any arguments needed, please pass them
-            into `kwargs`.
+            into ``kwargs``.
         model: torch.nn.Module, optional
             The module that should be used as a model. Have higher priority
             if provided. model_class and model cannot both be None.

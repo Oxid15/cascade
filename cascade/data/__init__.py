@@ -21,6 +21,7 @@ from .bruteforce_cacher import BruteforceCacher
 from .composer import Composer
 from .concatenator import Concatenator
 from .cyclic_sampler import CyclicSampler
+from .data_card import Assessor, DataCard, LabelingInfo
 from .dataset import (BaseDataset, Dataset, IteratorDataset, IteratorWrapper,
                       SizedDataset, T, Wrapper)
 from .filter import Filter, IteratorFilter

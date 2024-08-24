@@ -14,5 +14,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from .metric import Loss, Metric, MetricType
 from .classification import Accuracy
+from .metric import Loss, Metric, MetricType
