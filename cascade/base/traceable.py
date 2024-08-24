@@ -210,24 +210,29 @@ class Traceable:
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
 
-    def describe(self, desc: Optional[str]):
+    def describe(self, desc: str):
         """
         Add description to an object
 
         Parameters
         ----------
-        desc : Optional[str]
-            String description of an object.
-            May be None to use the method in default initializer
+        desc : str
+            String description of an object
 
         Raises
         ------
         TypeError
             If the input is not None and not a string either
         """
-        if not isinstance(desc, str) and desc is not None:
+        if not isinstance(desc, str):
             raise TypeError(f"Description should be str, got {type(desc)}")
         self.description = desc
+
+    def remove_description(self) -> None:
+        """
+        Empties object's description
+        """
+        self.description = None
 
     def tag(self, tag: Union[str, Iterable[str]]) -> None:
         """
@@ -498,6 +503,7 @@ class TraceableOnDisk(Traceable):
         attr = super().__getattribute__(name)
         if name in (
             "describe",
+            "remove_description",
             "comment",
             "remove_comment",
             "tag",

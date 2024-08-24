@@ -79,6 +79,9 @@ def test_descriptions():
     tr.describe("test2")
     assert tr.description == "test2"
 
+    tr.remove_description()
+    assert tr.description is None
+
 
 def test_tags():
     tr = Traceable(tags=["a", "b"])
