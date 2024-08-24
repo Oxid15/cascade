@@ -11,7 +11,7 @@ _extras_require = {
     "pandera": ["pandera[io]>=0.6.5,<1"],
     "pil": ["Pillow>=9,<11"],
     "pydantic": ["pydantic>=2,<3"],
-    "sklearn": ["scikit-learn>=1.0.2,<2"],
+    "sklearn": ["scikit-learn>=0.24.2,<2"],
     "torch": ["torch>=1.10.2,<3"],
     "view": ["dash<3", "dash-renderjson==0.0.1"]
 }
