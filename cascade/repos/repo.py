@@ -13,7 +13,9 @@ limitations under the License.
 
 import os
 import shutil
-from typing import Any, List, Literal, Optional, Union
+from typing import Any, List, Optional, Union
+
+from typing_extensions import Literal
 
 from ..base import Meta, TraceableOnDisk, ZeroMetaError
 from ..lines import Line

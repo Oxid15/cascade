@@ -15,7 +15,9 @@ limitations under the License.
 """
 
 import os
-from typing import Any, Literal
+from typing import Any
+
+from typing_extensions import Literal
 
 from .serialization import ObjectHandler
 

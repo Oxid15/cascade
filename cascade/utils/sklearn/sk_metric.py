@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, Literal, Tuple, Optional
+from typing import Any, Dict, Optional, Tuple
+
 from sklearn import metrics
+from typing_extensions import Literal
 
-from ...metrics import MetricType, Metric
-
+from ...metrics import Metric, MetricType
 
 METRIC_ALIASES = {
     "acc": "accuracy_score",

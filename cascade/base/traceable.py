@@ -21,12 +21,19 @@ import warnings
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from getpass import getuser
-from typing import Any, Callable, Dict, Iterable, Literal, Optional, Union
+from typing import Any, Callable, Dict, Iterable, Optional, Union
 
 import pendulum
+from typing_extensions import Literal
 
-from . import (Meta, MetaBlock, MetaHandler, MetaIOError, default_meta_format,
-               supported_meta_formats)
+from . import (
+    Meta,
+    MetaBlock,
+    MetaHandler,
+    MetaIOError,
+    default_meta_format,
+    supported_meta_formats,
+)
 
 DO_NOT_UPDATE = ["created_at"]
 

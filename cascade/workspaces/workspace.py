@@ -16,7 +16,9 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, Iterator, List, Literal, Optional
+from typing import Any, Iterator, List, Optional
+
+from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler, MetaIOError, TraceableOnDisk
 from ..data import T

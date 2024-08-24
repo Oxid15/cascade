@@ -18,10 +18,10 @@ import os
 import socket
 import traceback
 from getpass import getuser
-from typing import Any, Dict, List, Literal, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Type, Union
 
 import pendulum
-from typing_extensions import deprecated
+from typing_extensions import Literal, deprecated
 
 from ..base import Meta, MetaHandler, TraceableOnDisk
 from ..base.utils import (

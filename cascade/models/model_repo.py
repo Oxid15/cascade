@@ -14,9 +14,9 @@ limitations under the License.
 import itertools
 import os
 import shutil
-from typing import Any, Dict, Iterable, Iterator, List, Literal, Type, Union
+from typing import Any, Dict, Iterable, Iterator, List, Type, Union
 
-from typing_extensions import deprecated
+from typing_extensions import Literal, deprecated
 
 from ..base import Meta, Traceable, TraceableOnDisk
 from ..data import T

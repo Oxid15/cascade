@@ -1,5 +1,7 @@
 import os
-from typing import Any, List, Literal, Optional, Type
+from typing import Any, List, Optional, Type
+
+from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler, TraceableOnDisk
 from ..version import __version__

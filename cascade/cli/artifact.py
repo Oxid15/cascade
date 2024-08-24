@@ -18,9 +18,10 @@ import os
 import traceback
 from collections import Counter
 from dataclasses import dataclass
-from typing import List, Literal, Optional
+from typing import List, Optional
 
 import click
+from typing_extensions import Literal
 
 from .common import create_container
 

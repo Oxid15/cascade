@@ -3,9 +3,10 @@ import socket
 from collections import defaultdict
 from getpass import getuser
 from hashlib import md5
-from typing import Any, Literal, Optional, Tuple, Type, Union
+from typing import Any, Optional, Tuple, Type, Union
 
 import pendulum
+from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler
 from ..base.serialization import ObjectHandler

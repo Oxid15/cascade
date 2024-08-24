@@ -11,7 +11,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Literal
+from typing import Any
+
+from typing_extensions import Literal
 
 from ..base import MetaHandler
 from ..lines import DataLine, Line, ModelLine

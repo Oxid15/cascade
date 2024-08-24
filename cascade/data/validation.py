@@ -17,7 +17,9 @@ limitations under the License.
 import inspect
 from collections import defaultdict
 from functools import wraps
-from typing import Any, Callable, Dict, Literal, Optional, Tuple
+from typing import Any, Callable, Dict, Optional, Tuple
+
+from typing_extensions import Literal
 
 SupportedProviders = Literal["pydantic"]
 

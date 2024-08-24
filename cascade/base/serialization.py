@@ -17,7 +17,9 @@ limitations under the License.
 import os
 import pickle
 from abc import ABC, abstractmethod
-from typing import Any, Literal
+from typing import Any
+
+from typing_extensions import Literal
 
 
 class BaseObjectHandler(ABC):

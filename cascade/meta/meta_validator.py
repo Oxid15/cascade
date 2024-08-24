@@ -16,9 +16,10 @@ limitations under the License.
 
 import os
 from hashlib import md5
-from typing import Literal, Optional
+from typing import Optional
 
 from deepdiff import DeepDiff
+from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler, supported_meta_formats
 from ..data.dataset import BaseDataset, T

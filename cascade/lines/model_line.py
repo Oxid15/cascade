@@ -19,13 +19,18 @@ import socket
 import traceback
 import warnings
 from getpass import getuser
-from typing import Any, Dict, List, Literal, Optional, Type, Union
+from typing import Any, Dict, List, Optional, Type, Union
 
 import pendulum
+from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler
-from ..base.utils import (generate_slug, get_latest_commit_hash,
-                          get_python_version, get_uncommitted_changes)
+from ..base.utils import (
+    generate_slug,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+)
 from ..models.model import Model
 from .disk_line import DiskLine
 
