@@ -12,7 +12,7 @@ _extras_require = {
     "pil": ["Pillow>=9,<11"],
     "pydantic": ["pydantic>=2,<3"],
     "sklearn": ["scikit-learn>=1.0.2,<2"],
-    "torch": ["torch>=1.11.0,<3"],
+    "torch": ["torch>=1.10.2,<3"],
     "view": ["dash<3", "dash-renderjson==0.0.1"]
 }
 
