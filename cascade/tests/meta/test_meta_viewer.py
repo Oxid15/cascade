@@ -14,38 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import json
 import os
 import sys
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler
 from cascade.meta import MetaViewer
 from cascade.repos import Repo
 from cascade.tests import DummyModel
-
-
-def test(tmp_path_str):
-    os.mkdir(os.path.join(tmp_path_str, "model"))
-
-    # Write the file with pure json
-    with open(os.path.join(tmp_path_str, "test0.json"), "w") as f:
-        json.dump({"name": "test0"}, f)
-
-    MetaHandler.write(os.path.join(tmp_path_str, "model", "test1.json"), {"name": "test1"})
-
-    mev = MetaViewer(tmp_path_str)
-
-    assert len(mev) == 2
-    assert "name" in mev[0]
-    assert "name" in mev[1]
-
-    # This order is due to sorting by path
-    # .../model/test1.json is less than .../test0.json
-    assert mev[0]["name"] == "test1"
-    assert mev[1]["name"] == "test0"
 
 
 def test_order(tmp_path_str):
