@@ -55,7 +55,7 @@ setuptools.setup(
         "pyyaml>=5.4.1",
         "coolname>=2.0.0",
         "click>=8.0.0",
-        "typing-extensions>=4.11.0,<5"
+        "typing-extensions>=4.7.1,<5"
     ],
     extras_require=extras_require
 )
