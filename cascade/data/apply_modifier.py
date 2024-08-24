@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable, Iterator
+import random
+from typing import Any, Callable, Iterator, Optional
 
 from .dataset import Dataset, T
 from .modifier import Modifier
@@ -29,7 +30,13 @@ class ApplyModifier(Modifier[T]):
     """
 
     def __init__(
-        self, dataset: DatasetOrIterator[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
+        self,
+        dataset: DatasetOrIterator[T],
+        func: Callable[[T], Any],
+        p: Optional[float] = None,
+        seed: Optional[int] = None,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         """
         Parameters
@@ -39,6 +46,10 @@ class ApplyModifier(Modifier[T]):
         func: Callable
             A function to be applied to every item of a dataset -
             each `__getitem__` would call `func` on an item obtained from a previous dataset
+        p: Optional[float], by default None
+            The probability [0, 1] with which to apply `func`
+        seed: Optional[int], by default None
+            Random seed is used when p is not None
 
         Examples
         --------
@@ -52,8 +63,16 @@ class ApplyModifier(Modifier[T]):
         """
         super().__init__(dataset, *args, **kwargs)
         self._func = func
+        self._p = p
+        if seed is not None:
+            random.seed(seed)
 
     def __getitem__(self, index: int) -> Any:
+        if self._p is not None:
+            rnd = random.random()
+            if rnd > self._p:
+                return super().__getitem__(index)
+
         if isinstance(self._dataset, Dataset):
             item = self._dataset[index]
             return self._func(item)
@@ -62,4 +81,11 @@ class ApplyModifier(Modifier[T]):
 
     def __iter__(self) -> Iterator[T]:
         for item in self._dataset:
-            yield self._func(item)
+            if self._p is not None:
+                rnd = random.random()
+                if rnd > self._p:
+                    yield item
+                else:
+                    yield self._func(item)
+            else:
+                yield self._func(item)
