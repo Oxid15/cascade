@@ -49,7 +49,7 @@ setuptools.setup(
         "tqdm>=4.64.1",
         "numpy>=1.18.5,<2",
         "pandas>=1.1.5",
-        "deepdiff>=5.8.0",
+        "deepdiff>=5.0.2",
         "pendulum>=2.1.2",
         "flatten_json>=0.1.13",
         "pyyaml>=5.4.1",
