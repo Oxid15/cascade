@@ -217,7 +217,7 @@ def migrate_repo_v0_13(path: str) -> None:
     """
     from cascade.base import MetaHandler, MetaIOError
     from cascade.lines import ModelLine
-    from cascade.metrics import Metric, MetricType
+    from cascade.metrics import Metric
     from cascade.repos import Repo, SingleLineRepo
     from tqdm import tqdm
 
@@ -230,7 +230,7 @@ def migrate_repo_v0_13(path: str) -> None:
         for name in metrics:
             value = metrics[name]
 
-            if isinstance(value, MetricType):
+            if hasattr(value, "__float__"):
                 metric = Metric(name=name, value=value)
                 new_style.append(metric)
             else:
