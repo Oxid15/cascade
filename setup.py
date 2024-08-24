@@ -48,7 +48,7 @@ setuptools.setup(
     install_requires=[
         "tqdm>=4.64.1",
         "numpy>=1.18.5,<2",
-        "pandas>=1.3.5",
+        "pandas>=1.1.5",
         "deepdiff>=5.8.0",
         "pendulum>=2.1.2",
         "flatten_json>=0.1.13",
