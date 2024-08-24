@@ -6,6 +6,21 @@ import setuptools
 sys.path.append(os.path.dirname(__file__))
 from cascade.version import __author__, __author_email__, __version__
 
+_extras_require = {
+    "opencv": ["opencv-python"],
+    "pandera": ["pandera[io]>=0.20.3,<1"],
+    "pil": ["Pillow>=9,<11"],
+    "pydantic": ["pydantic>=2,<3"],
+    "sklearn": ["scikit-learn>=1.0.2,<2"],
+    "torch": ["torch>=1.11.0,<3"],
+    "view": ["dash<3", "dash-renderjson==0.0.1"]
+}
+
+extras_require = {
+    **_extras_require,
+    "all": list(set(x for y in _extras_require.values() for x in y)),
+}
+
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
@@ -29,7 +44,7 @@ setuptools.setup(
     entry_points={'console_scripts': ['cascade = cascade.cli.cli:cli']},
     package_dir={"cascade": "./cascade"},
     packages=setuptools.find_packages(),
-    python_requires=">=3.8",
+    python_requires=">=3.6",
     install_requires=[
         "tqdm>=4.64.1",
         "numpy>=1.18.5,<2",
@@ -42,4 +57,5 @@ setuptools.setup(
         "click>=8.0.0",
         "typing-extensions>=4.11.0,<5"
     ],
+    extras_require=extras_require
 )
