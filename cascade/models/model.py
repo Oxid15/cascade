@@ -245,7 +245,7 @@ class Model(Traceable):
         ds: Dataset,
         name: Optional[str] = None,
         split: Optional[str] = None,
-        line: Optional["DataLine"] = None,
+        line: Optional[Any] = None,
     ) -> None:
         """
         Convenience function for linking datasets. Produces more readable meta files and records
