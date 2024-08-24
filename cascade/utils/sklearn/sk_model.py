@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import pickle
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional
 
 from sklearn.pipeline import Pipeline
 
@@ -37,8 +37,6 @@ class SkModel(BasicModel):
         """
         Parameters
         ----------
-        name: str, optional
-            Name of the model
         blocks: list, optional
             List of sklearn transformers to make a pipeline from
         """
@@ -51,23 +49,17 @@ class SkModel(BasicModel):
     def _construct_pipeline(blocks: List[Any]) -> Pipeline:
         return Pipeline([(str(i), block) for i, block in enumerate(blocks)])
 
-    def fit(self, x: Any, y: Any, *args: Any, **kwargs: Any) -> None:
+    def fit(self, *args: Any, **kwargs: Any) -> None:
         """
         Wrapper for pipeline.fit
         """
-        self._pipeline.fit(x, y, *args, **kwargs)
+        self._pipeline.fit(*args, **kwargs)
 
-    def predict(self, x: Any, *args: Any, **kwargs: Any) -> Any:
+    def predict(self, *args: Any, **kwargs: Any) -> Any:
         """
         Wrapper for pipeline.predict
         """
-        return self._pipeline.predict(x, *args, **kwargs)
-
-    def predict_proba(self, x: Any, *args: Any, **kwargs: Any) -> Any:
-        """
-        Wrapper for pipeline.predict_proba
-        """
-        return self._pipeline.predict_proba(x, *args, **kwargs)
+        return self._pipeline.predict(*args, **kwargs)
 
     def save(self, path: str) -> None:
         """
