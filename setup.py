@@ -8,7 +8,7 @@ from cascade.version import __author__, __author_email__, __version__
 
 _extras_require = {
     "opencv": ["opencv-python"],
-    "pandera": ["pandera[io]>=0.20.3,<1"],
+    "pandera": ["pandera[io]>=0.6.5,<1"],
     "pil": ["Pillow>=9,<11"],
     "pydantic": ["pydantic>=2,<3"],
     "sklearn": ["scikit-learn>=1.0.2,<2"],
