@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, Optional, SupportsFloat, Tuple
+from typing import Any, Dict, Optional, Tuple, Union
 
 import pendulum
 from typing_extensions import Literal
 
-MetricType = SupportsFloat
+MetricType = Union[int, float]
 
 
 class Metric:
