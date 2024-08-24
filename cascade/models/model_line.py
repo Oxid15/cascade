@@ -34,7 +34,7 @@ from ..version import __version__
 from .model import Model
 
 
-@deprecated(
+# @deprecated(
     "cascade.models.ModelLine is deprecated, consider using cascade.lines.ModelLine instead"
 )
 class ModelLine(TraceableOnDisk):

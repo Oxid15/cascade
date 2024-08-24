@@ -81,7 +81,7 @@ class Repo(Traceable):
         pass
 
 
-@deprecated(
+# @deprecated(
     "cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead"
 )
 class SingleLineRepo(Repo):
@@ -115,7 +115,7 @@ class SingleLineRepo(Repo):
         self._line.reload()
 
 
-@deprecated(
+# @deprecated(
     "cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead"
 )
 class ModelRepo(Repo, TraceableOnDisk):
@@ -325,7 +325,7 @@ class ModelRepo(Repo, TraceableOnDisk):
                 self._lines[name] = {"args": [], "kwargs": dict()}
 
 
-@deprecated(
+# @deprecated(
     "Concatenating Repos is deprecated since"
     " 0.14.0 and will be removed by 0.15.0"
     " Use Workspaces instead",

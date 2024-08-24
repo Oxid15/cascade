@@ -82,7 +82,7 @@ class MetaViewer:
     def __len__(self) -> int:
         return len(self.names)
 
-    @deprecated("This method was removed in 0.14.0. Use MetaHandler.write instead")
+    # @deprecated("This method was removed in 0.14.0. Use MetaHandler.write instead")
     def write(self, path: str, obj: Any) -> None:
         """
         Dumps obj to path
@@ -92,7 +92,7 @@ class MetaViewer:
             "Consider using MetaHandler.write or switching to previous versions."
         )
 
-    @deprecated("This method was removed in 0.14.0. Use MetaHandler.read instead")
+    # @deprecated("This method was removed in 0.14.0. Use MetaHandler.read instead")
     def read(self, path: str) -> Meta:
         """
         Loads object from path

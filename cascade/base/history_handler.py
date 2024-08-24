@@ -27,7 +27,7 @@ from . import MetaIOError
 from .meta_handler import CustomEncoder, MetaHandler
 
 
-@deprecated("This is deprecated since 0.14.0 and will be removed in 0.15.0")
+# @deprecated("This is deprecated since 0.14.0 and will be removed in 0.15.0")
 class HistoryHandler:
     """
     An interface to log meta into history files
