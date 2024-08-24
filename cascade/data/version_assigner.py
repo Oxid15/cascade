@@ -28,8 +28,8 @@ from .modifier import Modifier
 
 
 # @deprecated("Deprecated since 0.14.0. Consider using cascade.lines.DataLine"
-            " with line.save(ds, only_meta=True) if you do not want"
-            " to save pipeline objects, but only to track versions")
+            # " with line.save(ds, only_meta=True) if you do not want"
+            # " to save pipeline objects, but only to track versions")
 class VersionAssigner(Modifier):
     """
     Class for automatic data versioning using metadata.

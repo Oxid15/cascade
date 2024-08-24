@@ -35,8 +35,8 @@ from .model import Model
 
 
 # @deprecated(
-    "cascade.models.ModelLine is deprecated, consider using cascade.lines.ModelLine instead"
-)
+    # "cascade.models.ModelLine is deprecated, consider using cascade.lines.ModelLine instead"
+# )
 class ModelLine(TraceableOnDisk):
     """
     A manager for a line of models. Used by Repo to access models on disk.

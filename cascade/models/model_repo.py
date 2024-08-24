@@ -82,8 +82,8 @@ class Repo(Traceable):
 
 
 # @deprecated(
-    "cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead"
-)
+    # "cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead"
+# )
 class SingleLineRepo(Repo):
     def __init__(
         self,
@@ -116,8 +116,8 @@ class SingleLineRepo(Repo):
 
 
 # @deprecated(
-    "cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead"
-)
+    # "cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead"
+# )
 class ModelRepo(Repo, TraceableOnDisk):
     """
     An interface to manage experiments with several lines of models.
@@ -326,12 +326,12 @@ class ModelRepo(Repo, TraceableOnDisk):
 
 
 # @deprecated(
-    "Concatenating Repos is deprecated since"
-    " 0.14.0 and will be removed by 0.15.0"
-    " Use Workspaces instead",
-    category=DeprecationWarning,
-    stacklevel=1,
-)
+#     "Concatenating Repos is deprecated since"
+#     " 0.14.0 and will be removed by 0.15.0"
+#     " Use Workspaces instead",
+#     category=DeprecationWarning,
+#     stacklevel=1,
+# )
 class ModelRepoConcatenator(Repo):
     """
     Deprecated

@@ -39,7 +39,7 @@ class Validator(Modifier[T]):
     """
 
     # @deprecated("Whole cascade.meta.validation is deprecated since 0.14.0 and is planned to"
-                " be removed in 0.15.0. Use cascade.data.SchemaDataset instead")
+                # " be removed in 0.15.0. Use cascade.data.SchemaDataset instead")
     def __init__(
         self,
         dataset: BaseDataset[T],
