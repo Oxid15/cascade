@@ -9,7 +9,7 @@ from cascade.version import __author__, __author_email__, __version__
 _extras_require = {
     "opencv": ["opencv-python"],
     "pandera": ["pandera[io]>=0.6.5,<1"],
-    "pil": ["Pillow>=9,<11"],
+    "pil": ["Pillow>=8.4.0,<11"],
     "pydantic": ["pydantic>=1.9.2,<3"],
     "sklearn": ["scikit-learn>=0.24.2,<2"],
     "torch": ["torch>=1.10.2,<3"],
