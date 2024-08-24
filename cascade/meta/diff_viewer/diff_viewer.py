@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@ limitations under the License.
 """
 
 import os
+from typing import Any
 
-from ...base import MetaHandler, supported_meta_formats, MetaIOError, ZeroMetaError
-from ...meta import Server
+from ...base import MetaHandler, MetaIOError, ZeroMetaError, supported_meta_formats
+from ...meta.server import Server
 from .dataset_version_diff_viewer import DatasetVersionDiffViewer
 from .history_diff_viewer import HistoryDiffViewer
 from .repo_diff_viewer import RepoDiffViewer
@@ -29,7 +30,7 @@ class DiffViewer(Server):
     The dash-based server to view meta-data
     and compare different snapshots using deep diff.
 
-    It can work with ModelRepo's, ModelLine's, files
+    It can work with Repo's, Line's, files
     that store version logs and history of entities
     such as data registration logs.
     """
@@ -109,5 +110,5 @@ class DiffViewer(Server):
                 "Available types are: for Repo or Line, for DatasetVersion logs or for History log."
             )
 
-    def serve(self, *args, **kwargs):
+    def serve(self, *args: Any, **kwargs: Any):
         return self._diff_viewer.serve(*args, **kwargs)

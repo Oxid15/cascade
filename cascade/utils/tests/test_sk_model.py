@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ MODULE_PATH = os.path.dirname(
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 
-import cascade as csd
+from cascade.repos import Repo
 from cascade.utils.sklearn import SkModel
 
 
@@ -36,7 +36,7 @@ from cascade.utils.sklearn import SkModel
 @pytest.mark.skip
 @pytest.mark.parametrize("ext", [".json", ".yml"])
 def test_hash_check(tmp_path_str, ext):
-    repo = csd.models.ModelRepo(tmp_path_str, overwrite=True, meta_fmt=ext)
+    repo = Repo(tmp_path_str, overwrite=True, meta_fmt=ext)
 
     tree = SkModel(blocks=[DecisionTreeClassifier()])
 

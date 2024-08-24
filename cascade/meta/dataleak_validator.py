@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,28 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable, Union
+from typing import Any, Callable, Optional
 
 from tqdm import tqdm
 
-from ..data import Dataset, T
-from . import DataValidationException, Validator
-from .validator import prettify_items
+from ..data.dataset import BaseDataset, T
+from .validator import DataValidationException, Validator, prettify_items
 
 
 class DataleakValidator(Validator):
     def __init__(
         self,
-        train_ds: Dataset[T],
-        test_ds: Dataset[T],
-        hash_fn: Union[Callable[[Any], str], None] = None,
+        train_ds: BaseDataset[T],
+        test_ds: BaseDataset[T],
+        hash_fn: Optional[Callable[[Any], str]] = None,
         **kwargs: Any,
     ) -> None:
         """
         Checks if two datasets have identical items
 
-        Calculates `hash_fn` to identify items
-        Uses python `hash` as default, but can be customized
+        Calculates ``hash_fn`` to identify items
+        Uses python ``hash`` as default, but can be customized
 
         Parameters
         ----------
@@ -43,7 +42,7 @@ class DataleakValidator(Validator):
             Train dataset
         test_ds : Dataset[T]
             Test or evaluation dataset
-        hash_fn : Union[Callable[[Any], str], None], optional
+        hash_fn : Optional[Callable[[Any], str]]
             Hash function, by default None
 
         Raises

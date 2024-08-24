@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@ limitations under the License.
 
 import os
 import pickle
-from typing import Any, List, Union
+from typing import Any, List, Optional, Union
 
 from sklearn.pipeline import Pipeline
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...models import BasicModel
 
 
@@ -32,7 +32,7 @@ class SkModel(BasicModel):
     """
 
     def __init__(
-        self, *args: Any, blocks: Union[List[Any], None] = None, **kwargs: Any
+        self, *args: Any, blocks: Optional[List[Any]] = None, **kwargs: Any
     ) -> None:
         """
         Parameters
@@ -133,7 +133,7 @@ class SkModel(BasicModel):
         with open(pipeline_path, "rb") as f:
             self._pipeline = pickle.load(f, *args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update({"pipeline": repr(self._pipeline)})
         return meta

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +15,17 @@ limitations under the License.
 """
 
 from itertools import cycle
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 from tqdm import trange
 
-from ..base import PipeMeta
-from ..data import Sampler, SizedDataset
+from ..base import Meta
+from ..data.dataset import Dataset, T
+from ..data.modifier import Sampler
 
 
-class OverSampler(Sampler):
+class OverSampler(Sampler[T]):
     """
     Accepts datasets which return tuples of objects and labels in the respected order.
     Isn't lazy - runs through all the items ones to determine key order.
@@ -43,7 +44,7 @@ class OverSampler(Sampler):
     """
 
     def __init__(
-        self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
+        self, dataset: Dataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
     ) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels, counts = np.unique(labels, return_counts=True)
@@ -73,7 +74,7 @@ class OverSampler(Sampler):
         return len(self._dataset) + len(self._add_indices)
 
 
-class UnderSampler(Sampler):
+class UnderSampler(Sampler[T]):
     """
     Accepts datasets which return tuples of objects and labels.
     Isn't lazy - runs through all the items ones to determine key order.
@@ -92,7 +93,7 @@ class UnderSampler(Sampler):
     """
 
     def __init__(
-        self, dataset: SizedDataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
+        self, dataset: Dataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
     ) -> None:
         labels = [int(dataset[i][1]) for i in trange(len(dataset))]
         ulabels, counts = np.unique(labels, return_counts=True)
@@ -119,7 +120,7 @@ class UnderSampler(Sampler):
         return len(self._rem_indices)
 
 
-class WeighedSampler(Sampler):
+class WeighedSampler(Sampler[T]):
     """
     Samples each class certain amount of times.
 
@@ -145,8 +146,8 @@ class WeighedSampler(Sampler):
 
     def __init__(
         self,
-        dataset: SizedDataset[Tuple[Any, Any]],
-        partitioning: Union[Dict[Any, int], None] = None,
+        dataset: Dataset[Tuple[Any, Any]],
+        partitioning: Optional[Dict[Any, int]] = None,
     ) -> None:
         """
         Parameters
@@ -195,7 +196,7 @@ class WeighedSampler(Sampler):
         idx = self._indices[index]
         return self._dataset[idx]
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["partitioning"] = self._partitioning
         return meta

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ from typing import Any, Tuple
 
 import numpy as np
 
-from ...base import PipeMeta
-from ...data import SizedDataset
+from ...base import Meta
+from ...data.dataset import Dataset, T
 
 
-class TextClassificationFolder(SizedDataset):
+class TextClassificationFolder(Dataset[T]):
     """
     Dataset to simplify loading of data for text classification.
     Texts of different classes should be placed in different folders.
@@ -71,7 +71,7 @@ class TextClassificationFolder(SizedDataset):
         """
         return len(self._paths)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {

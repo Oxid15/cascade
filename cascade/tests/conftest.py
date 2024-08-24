@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ limitations under the License.
 
 import datetime
 import os
+import random
 import sys
 from typing import Any
 
@@ -27,11 +28,23 @@ from dateutil import tz
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (ApplyModifier, BruteforceCacher, Composer,
-                          Concatenator, CyclicSampler, Dataset, Iterator,
-                          RandomSampler, RangeSampler, SequentialCacher,
-                          Wrapper)
-from cascade.models import BasicModel, ModelLine, ModelRepo
+from cascade.data import (
+    ApplyModifier,
+    BaseDataset,
+    BruteforceCacher,
+    Composer,
+    Concatenator,
+    CyclicSampler,
+    IteratorWrapper,
+    RandomSampler,
+    RangeSampler,
+    Wrapper,
+)
+from cascade.lines import DataLine, ModelLine
+from cascade.models import BasicModel
+from cascade.models import ModelLine as OldModelLine
+from cascade.models import ModelRepo
+from cascade.repos import Repo
 
 
 class DummyModel(BasicModel):
@@ -77,7 +90,7 @@ def tmp_path_str(tmp_path) -> str:
 
 @pytest.fixture(
     params=[
-        Iterator([0]),
+        IteratorWrapper([0]),
         Wrapper([0]),
         ApplyModifier(Wrapper([0, 1, 2]), f),
         BruteforceCacher(Wrapper([0, 2])),
@@ -86,10 +99,9 @@ def tmp_path_str(tmp_path) -> str:
         CyclicSampler(Wrapper([0]), 1),
         RandomSampler(Wrapper([1, 2, 3]), 2),
         RangeSampler(Wrapper([0, 1, 2, 3]), 0, 3, 1),
-        SequentialCacher(Wrapper([0, 1, 2, 3])),
     ]
 )
-def dataset(request) -> Dataset:
+def dataset(request) -> BaseDataset:
     return request.param
 
 
@@ -104,7 +116,7 @@ def number_dataset(request):
     params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(100, 0)]]
 )
 def number_iterator(request):
-    return Iterator(request.param)
+    return IteratorWrapper(request.param)
 
 
 @pytest.fixture(
@@ -142,25 +154,71 @@ def model_line(request, tmp_path_factory):
     return line
 
 
+@pytest.fixture(
+    params=[
+        {"line_cls": ModelLine, "obj_cls": DummyModel},
+        {"line_cls": DataLine, "obj_cls": BaseDataset},
+    ]
+)
+def any_line(request, tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("line-", numbered=True)
+    line = request.param["line_cls"](tmp_path, model_cls=DummyModel)
+    for _ in range(5):
+        obj = request.param["obj_cls"]()
+        obj.update_meta({"random_param": random.randint(0, 1000000)})
+        line.save(obj)
+    return line
+
+
 @pytest.fixture
 def ones_model():
     return OnesModel()
 
 
 @pytest.fixture
-def model_repo(tmp_path_factory):
+def repo(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("repo-", numbered=True)
     tmp_path = os.path.join(tmp_path, "repo")
-    repo = ModelRepo(
-        str(tmp_path),
-        lines=[dict(name=str(num), model_cls=DummyModel) for num in range(10)],
-    )
+    repo = Repo(str(tmp_path))
+    for num in range(10):
+        repo.add_line(str(num), model_cls=DummyModel)
     return repo
 
 
 @pytest.fixture(params=[{"repo_or_line": True}, {"repo_or_line": False}])
-def repo_or_line(request, model_repo, model_line):
+def repo_or_line(request, repo, model_line):
+    if request.param["repo_or_line"]:
+        return repo
+    else:
+        return model_line
+
+
+@pytest.fixture(
+    params=[
+        {"model_cls": DummyModel, "meta_fmt": ".json"},
+        {"model_cls": DummyModel, "meta_fmt": ".yml"},
+    ]
+)
+def old_model_line(request, tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("line-", numbered=True)
+    tmp_path = os.path.join(tmp_path, "line")
+    line = OldModelLine(str(tmp_path), **request.param)
+    return line
+
+
+@pytest.fixture
+def model_repo(tmp_path_factory):
+    tmp_path = tmp_path_factory.mktemp("repo-", numbered=True)
+    tmp_path = os.path.join(tmp_path, "repo")
+    repo = ModelRepo(str(tmp_path))
+    for num in range(10):
+        repo.add_line(str(num), model_cls=DummyModel)
+    return repo
+
+
+@pytest.fixture(params=[{"repo_or_line": True}, {"repo_or_line": False}])
+def old_repo_or_line(request, model_repo, old_model_line):
     if request.param["repo_or_line"]:
         return model_repo
     else:
-        return model_line
+        return old_model_line

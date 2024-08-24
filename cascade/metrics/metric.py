@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Union, Any, Literal, SupportsFloat, Tuple, Dict
+from typing import Any, Dict, Literal, Optional, SupportsFloat, Tuple
 
 import pendulum
 
@@ -34,14 +34,12 @@ class Metric:
     def __init__(
         self,
         name: str,
-        *args: None,
-        value: Union[MetricType, None] = None,
-        dataset: Union[str, None] = None,
-        split: Union[str, None] = None,
-        direction: Literal["up", "down", None] = None,
-        interval: Union[Tuple[MetricType, MetricType], None] = None,
-        extra: Union[Dict[str, MetricType], None] = None,
-        **kwargs: Any
+        value: Optional[MetricType] = None,
+        dataset: Optional[str] = None,
+        split: Optional[str] = None,
+        direction: Optional[Literal["up", "down"]] = None,
+        interval: Optional[Tuple[MetricType, MetricType]] = None,
+        extra: Optional[Dict[str, Any]] = None,
     ) -> None:
         """
         Creates Metric
@@ -50,17 +48,17 @@ class Metric:
         ----------
         name : str
             Name of the metric
-        value : Union[MetricType, None], optional
+        value : Optional[MetricType]
             Scalar value of the metric, by default None
-        dataset : Union[str, None], optional
+        dataset : Optional[str]
             Dataset on which metric was computed, by default None
-        split : Union[str, None], optional
+        split : Optional[str]
             The split of the dataset for example train or test, by default None
-        direction : Literal["up", "down", None], optional
+        direction : Literal["up", "down", None]
             Is metric better when it is greater or less, by default None
-        interval : Union[Tuple[MetricType, MetricType], None], optional
+        interval : Optional[Tuple[MetricType, MetricType]]
             Upper and lower boundaries of value, by default None
-        extra : Union[Dict[str, MetricType], None], optional
+        extra : Optional[Dict[str, Any]]
             Extra values that needs to be stored with metric, by default None
         """
         self.name = name
@@ -75,14 +73,14 @@ class Metric:
     def compute(self, *args: Any, **kwargs: Any) -> MetricType:
         """
         The method to compute metric's value. Should always populate
-        the internal `self.value` field and return it.
+        the internal ``self.value`` field and return it.
         """
         raise NotImplementedError()
 
     def compute_add(self, *args: Any, **kwargs: Any) -> MetricType:
         """
         The method to compute the metric incrementally.
-        Should always populate the internal `self.value` field and return it.
+        Should always populate the internal ``self.value`` field and return it.
         """
         raise NotImplementedError()
 
@@ -137,15 +135,15 @@ class Metric:
 class Loss(Metric):
     """
     Loss is the convenience metric
-    which by default has name "loss"
+    which by default has name ``loss``
     and is always directed down
     """
     def __init__(
         self,
-        value: Union[MetricType, None] = None,
+        value: Optional[MetricType] = None,
         name: str = "loss",
-        dataset: Union[str, None] = None,
-        split: Union[str, None] = None,
+        dataset: Optional[str] = None,
+        split: Optional[str] = None,
         **kwargs: Any
     ) -> None:
         """

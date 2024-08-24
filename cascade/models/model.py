@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@ limitations under the License.
 """
 
 import os
-from shutil import copyfile
 import warnings
-from typing import Any, Union, Callable
+from shutil import copyfile
+from typing import Any, Callable, Optional, Union
 
 import pendulum
 
-from ..metrics import MetricType, Metric
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import Meta, Traceable, raise_not_implemented
+from ..data import Dataset
+from ..metrics import Metric, MetricType
 
 
 class Model(Traceable):
@@ -32,7 +33,7 @@ class Model(Traceable):
     """
 
     def __init__(
-        self, *args: Any, meta_prefix: Union[PipeMeta, str, None] = None, **kwargs: Any
+        self, *args: Any, meta_prefix: Union[Meta, str, None] = None, **kwargs: Any
     ) -> None:
         """
         Should be called in any successor - initializes default meta needed.
@@ -97,7 +98,7 @@ class Model(Traceable):
             If the path is not a folder
         FileNotFoundError
             If the file that should be copied does not exists and
-            it is not ok. See `add_file` for more info.
+            it is not ok. See ``add_file`` for more info.
 
         See also
         --------
@@ -140,7 +141,7 @@ class Model(Traceable):
         """
         raise_not_implemented("cascade.models.Model", "save_artifact")
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         # Successors may not call super().__init__
         # they may not have these default fields
 
@@ -196,8 +197,12 @@ class Model(Traceable):
         """
         self._log_callbacks.append(callback)
 
-    def add_metric(self, metric: Union[str, Metric],
-                   value: Union[MetricType, None] = None, **kwargs: Any) -> None:
+    def add_metric(
+        self,
+        metric: Union[str, Metric],
+        value: Optional[MetricType] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Adds metric value to the model. If metric already exists in the list, updates its value.
 
@@ -205,7 +210,7 @@ class Model(Traceable):
         ----------
         metric : Union[str, Metric]
             Either metric name or metric object. If object, then second argument is ignored
-        value : Union[MetricType, None], optional
+        value : Optional[MetricType]
             Metric value when metric is str, by default None
 
         Any additional args will go to the Metric constructor for flexibility if metric is str
@@ -235,6 +240,43 @@ class Model(Traceable):
 
         self.metrics.append(metric)
 
+    def link_dataset(
+        self,
+        ds: Dataset,
+        name: Optional[str] = None,
+        split: Optional[str] = None,
+        line: Optional["DataLine"] = None,
+    ) -> None:
+        """
+        Convenience function for linking datasets. Produces more readable meta files and records
+        useful info without much hassle
+
+        Parameters
+        ----------
+        ds : Dataset
+            Dataset to link
+        name : Optional[str], optional
+            Dataset name, by default None
+        split : Optional[str], optional
+            Split if applicable, may be "train", "test", etc, by default None
+        line : Optional[DataLine], optional
+            DataLine where this dataset is stored if applicable, by default None
+        """
+        ds_meta = ds.get_meta()
+        meta = {}
+        for key in ["type", "description", "tags", "comments"]:
+            if ds_meta[0].get(key):
+                meta[key] = ds_meta[0][key]
+
+        if split:
+            meta["split"] = split
+
+        if line is not None:
+            meta["version"] = str(line.get_version(ds))
+            meta["line_root"] = line.get_root()
+
+        self.link(name=name, meta=[meta])
+
     def log(self) -> None:
         """
         Sequentially calls every log callback.
@@ -242,7 +284,7 @@ class Model(Traceable):
         from inside the model. Callback should be a function that
         given the model saves it. For example ModelLine.save method.
         ModelLine.add_model registers callback with only_meta=True automatically
-        when creating a new model.
+        when creating a new model using ``create_model``.
 
         See also
         --------
@@ -269,6 +311,6 @@ class ModelModifier(Model):
         self._model = model
         super().__init__(*args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         prev_meta = self._model.get_meta()
         return super().get_meta() + prev_meta

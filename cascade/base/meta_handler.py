@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,14 +20,14 @@ import json
 import os
 from dataclasses import asdict, is_dataclass
 from json import JSONEncoder
-from typing import Any, Dict, NoReturn, Union
+from typing import Any, Dict, NoReturn, Optional
 
 import deepdiff
 import numpy as np
 import yaml
 
-from ..metrics import Metric
-from . import MetaFromFile, MetaIOError, MultipleMetaError, ZeroMetaError
+from . import Meta, MetaIOError, MultipleMetaError, ZeroMetaError
+from .utils import Version
 
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
@@ -58,14 +58,14 @@ class CustomEncoder(JSONEncoder):
                 np.uint16,
                 np.uint32,
                 np.uint64,
-            ),
+            ),  # type: ignore
         ):
             return int(obj)
 
-        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
+        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):  # type: ignore
             return float(obj)
 
-        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):
+        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):  # type: ignore
             return {"real": obj.real, "imag": obj.imag}
 
         elif isinstance(obj, (np.ndarray,)):
@@ -77,7 +77,7 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
-        elif isinstance(obj, deepdiff.model.PrettyOrderedSet):
+        elif isinstance(obj, deepdiff.diff.PrettyOrderedSet):
             return list(obj)
 
         elif isinstance(obj, deepdiff.DeepDiff):
@@ -86,8 +86,11 @@ class CustomEncoder(JSONEncoder):
         elif is_dataclass(obj):
             return asdict(obj)
 
-        elif isinstance(obj, Metric):
+        elif hasattr(obj, "to_dict"):
             return obj.to_dict()
+
+        elif isinstance(obj, Version):
+            return str(obj)
 
         return super(CustomEncoder, self).default(obj)
 
@@ -96,15 +99,13 @@ class CustomEncoder(JSONEncoder):
 
 
 class BaseHandler:
-    def read(self, path: str) -> MetaFromFile:
+    def read(self, path: str) -> Meta:
         raise NotImplementedError()
 
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
         raise NotImplementedError()
 
-    def _raise_io_error(
-        self, path: str, exc: Union[Exception, None] = None
-    ) -> NoReturn:
+    def _raise_io_error(self, path: str, exc: Optional[Exception] = None) -> NoReturn:
         # Any file decoding errors will be
         # prepended with filepath for user
         # to be able to identify broken file
@@ -115,7 +116,7 @@ class BaseHandler:
 
 
 class JSONHandler(BaseHandler):
-    def read(self, path: str) -> MetaFromFile:
+    def read(self, path: str) -> Meta:
         _, ext = os.path.splitext(path)
         if ext == "":
             path += ".json"
@@ -138,7 +139,7 @@ class JSONHandler(BaseHandler):
 
 
 class YAMLHandler(BaseHandler):
-    def read(self, path: str) -> MetaFromFile:
+    def read(self, path: str) -> Meta:
         _, ext = os.path.splitext(path)
         if ext == "":
             path += ".yml"
@@ -187,7 +188,7 @@ class MetaHandler:
     """
     Encapsulates the logic of reading and writing metadata to disk.
 
-    Supported read-write formats are `.json` and `.yml` or `.yaml`. Other formats
+    Supported read-write formats are ``.json`` and ``.yml`` or ``.yaml``. Other formats
     are supported as read-only. For example one can read meta from txt or md file.
 
     Examples
@@ -200,7 +201,7 @@ class MetaHandler:
     """
 
     @classmethod
-    def read(cls, path: str) -> MetaFromFile:
+    def read(cls, path: str) -> Meta:
         """
         Reads object from path.
 
@@ -211,7 +212,7 @@ class MetaHandler:
 
         Returns
         -------
-            obj: MetaFromFile
+            obj: Meta
 
         Raises
         ------
@@ -256,11 +257,7 @@ class MetaHandler:
 
     # TODO: template should cover only supported fmts
     @classmethod
-    def read_dir(
-        cls,
-        path: str,
-        meta_template: str = "meta.*"
-    ) -> MetaFromFile:
+    def read_dir(cls, path: str, meta_template: str = "meta.*") -> Meta:
         """
         Reads a single meta file from a given directory
 
@@ -273,7 +270,7 @@ class MetaHandler:
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Meta
 
         Raises
@@ -292,14 +289,16 @@ class MetaHandler:
             return cls.read(os.path.join(meta_paths[0]))
 
     @classmethod
-    def _determine_meta_fmt(cls, path: str, template: str) -> Union[str, None]:
+    def determine_meta_fmt(cls, path: str, template: str) -> Optional[str]:
         meta_paths = glob.glob(os.path.join(path, template))
         if len(meta_paths) == 1:
             _, ext = os.path.splitext(meta_paths[0])
             return ext
 
     @classmethod
-    def write_dir(cls, path: str, obj: Any, overwrite: bool = True, meta_template: str = "meta.*") -> None:
+    def write_dir(
+        cls, path: str, obj: Any, overwrite: bool = True, meta_template: str = "meta.*"
+    ) -> None:
         """
         Writes meta to directory without specifying file name
 
@@ -316,7 +315,7 @@ class MetaHandler:
         meta_template : str, optional
             The template for meta files, by default "meta.*"
         """
-        ext = cls._determine_meta_fmt(path, meta_template)
+        ext = cls.determine_meta_fmt(path, meta_template)
 
         if not ext:
             ext = default_meta_format

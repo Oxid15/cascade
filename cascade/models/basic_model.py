@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@ limitations under the License.
 """
 
 
-from hashlib import md5
-import pickle
 import os
+import pickle
 import warnings
+from hashlib import md5
+from typing import Any, Callable, List, Union
 
-from typing import Union, Callable, Any, List
-from ..base import raise_not_implemented, MetaHandler
-from .model import Metric, MetricType, Model, ModelModifier
+from ..base import MetaHandler, raise_not_implemented
+from ..metrics import Metric, MetricType
+from .model import Model, ModelModifier
 
 
 class BasicModel(Model):
@@ -53,8 +54,8 @@ class BasicModel(Model):
         """
         Receives x and y validation sequences. Passes x to the model's predict
         method along with any args or kwargs needed.
-        Then updates self.metrics with what objects in `metrics` return.
-        `metrics` should contain Metric with compute() method or callables with the interface:
+        Then updates self.metrics with what objects in ``metrics`` return.
+        ``metrics`` should contain Metric with compute() method or callables with the interface:
         f(true, predicted) -> metric_value, where metric_value is a scalar
 
         Parameters
@@ -121,7 +122,7 @@ class BasicModel(Model):
         Also copies any additional files in the model folder.
 
         Path should be a folder, which will be created
-        if not exists and saves there as `model.pkl`
+        if not exists and saves there as ``model.pkl``
         """
         super().save(path)
 

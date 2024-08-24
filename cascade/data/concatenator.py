@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ from typing import Any, List, Union
 
 import numpy as np
 
-from ..base import Meta, PipeMeta
-from .dataset import SizedDataset, T
+from ..base import Meta
+from .dataset import Dataset, T
 
 
-class Concatenator(SizedDataset):
+class Concatenator(Dataset[T]):
     """
     Unifies several Datasets under one, calling them sequentially in the provided order.
 
@@ -36,7 +36,7 @@ class Concatenator(SizedDataset):
     """
 
     def __init__(
-        self, datasets: List[SizedDataset[T]], *args: Any, **kwargs: Any
+        self, datasets: List[Dataset[T]], *args: Any, **kwargs: Any
     ) -> None:
         """
         Creates concatenated dataset from the list of datasets provided
@@ -64,34 +64,25 @@ class Concatenator(SizedDataset):
         """
         return sum([len(ds) for ds in self._datasets])
 
-    def __repr__(self) -> str:
-        """
-        Mentions joined datasets in its repr in form:
-        Concatenator of
-        Dataset1
-        Dataset2
-        ...
-        """
-        rp = super().__repr__()
-        return f"{rp} of\n" + "\n".join(repr(ds) for ds in self._datasets)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
-        Concatenator calls `get_meta()` of all its datasets
+        Concatenator calls ``get_meta()`` of all its datasets
         """
         meta = super().get_meta()
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
+        meta[0]["num_concatenated"] = len(self._datasets)
         return meta
 
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def from_meta(self, meta: Meta) -> None:
         """
         Updates its own fields as usual and
-        if meta has `data` key then sequentially updates
+        if meta has ``data`` key then sequentially updates
         data of all its datasets
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
             Meta of a single object or a pipeline
         """
 

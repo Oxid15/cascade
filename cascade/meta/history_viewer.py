@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,15 +15,18 @@ limitations under the License.
 """
 
 import os
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 from deepdiff import DeepDiff
 from flatten_json import flatten
 
 from ..base import MetaHandler, ZeroMetaError
-from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
-from . import MetaViewer, Server
+from ..lines import ModelLine
+from ..models import Workspace
+from ..repos import Repo, SingleLineRepo
+from .meta_viewer import MetaViewer
+from .server import Server
 
 
 class HistoryViewer(Server):
@@ -35,15 +38,15 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        container: Union[Workspace, ModelRepo, ModelLine],
-        last_lines: Union[int, None] = None,
-        last_models: Union[int, None] = None,
+        container: Union[Workspace, Repo, ModelLine],
+        last_lines: Optional[int] = None,
+        last_models: Optional[int] = None,
         update_period_sec: int = 3
     ) -> None:
         """
         Parameters
         ----------
-        container: Union[Workspace, ModelRepo, ModelLine]
+        container: Union[Workspace, Repo, ModelLine]
             Container of models to be viewed
         last_lines: int, optional
             Constraints the number of lines back from the last one to view
@@ -307,7 +310,7 @@ class HistoryViewer(Server):
 
         return fig
 
-    def _layout(self, metric: Union[str, None]):
+    def _layout(self, metric: Optional[str]):
         try:
             import dash  # noqa: F401
         except ModuleNotFoundError:
@@ -347,7 +350,7 @@ class HistoryViewer(Server):
             ]
         )
 
-    def serve(self, metric: Union[str, None] = None, **kwargs: Any) -> None:
+    def serve(self, metric: Optional[str] = None, **kwargs: Any) -> None:
         """
         Runs dash-based server with HistoryViewer, updating plots in real-time.
 
@@ -360,7 +363,7 @@ class HistoryViewer(Server):
             Arguments for app.run_server() for example port or host
         Note
         ----
-        This feature needs `dash` to be installed.
+        This feature needs ``dash`` to be installed.
         """
         # Conditional import
         try:

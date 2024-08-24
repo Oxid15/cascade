@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ from ..tables import TableDataset
 
 class PaSchemaValidator(AggregateValidator):
     """
-    pandera-based data validator for `TableDataset`s.
+    pandera-based data validator for ``TableDataset``s.
     It accepts TableDataset and schema.
     For more details on schemas see pandera's documentation.
     """

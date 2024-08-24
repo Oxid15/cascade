@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,23 +15,26 @@ limitations under the License.
 """
 
 from math import floor
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
-from . import RangeSampler, SizedDataset, T
+from .dataset import Dataset, IteratorDataset, T
+from .range_sampler import RangeSampler
+
+DatasetOrIterator = Union[Dataset[T], IteratorDataset[T]]
 
 
 def split(
-    ds: SizedDataset[T], frac: Union[float, None] = 0.5, num: Union[int, None] = None
-) -> Tuple[SizedDataset, SizedDataset]:
+    ds: Dataset[T], frac: Optional[float] = 0.5, num: Optional[int] = None
+) -> Tuple[RangeSampler[T], RangeSampler[T]]:
     """
-    Splits dataset into two cascade.data.RangeSampler`s
+    Splits dataset into two cascade.data.RangeSampler
 
     Parameters
     ----------
     frac: float
         A fraction for division of dataset.
         For example if frac=0.8, then first dataset gets 80% of items and the second gets 20%.
-        Is not used, when `num` is specified.
+        Is not used, when ``num`` is specified.
     num: int
         A number of items that first dataset will get.
         The second one will get len(dataset) - num items.
