@@ -24,7 +24,7 @@ from typing_extensions import deprecated
 from ..base import HistoryHandler, MetaIOError
 
 
-# @deprecated("Moved since 0.14.0. Consider using cascade.data.Assessor")
+@deprecated("Moved since 0.14.0. Consider using cascade.data.Assessor")
 @dataclass
 class Assessor:
     """
@@ -43,7 +43,7 @@ class Assessor:
     position: Optional[str] = None
 
 
-# @deprecated("Moved since 0.14.0. Consider using cascade.data.LabelingInfo")
+@deprecated("Moved since 0.14.0. Consider using cascade.data.LabelingInfo")
 @dataclass
 class LabelingInfo:
     """
@@ -62,7 +62,7 @@ class LabelingInfo:
     docs: Optional[str] = None
 
 
-# @deprecated("Moved since 0.14.0. Consider using cascade.data.DataCard")
+@deprecated("Moved since 0.14.0. Consider using cascade.data.DataCard")
 class DataCard:
     """
     The container for the information
@@ -144,9 +144,9 @@ class DataCard:
         )
 
 
-# @deprecated(
-    # "This is deprecated since 0.14.0 and will be removed in 0.15.0. Consider using DataLines to manage pipeline lineage."
-# )
+@deprecated(
+    "This is deprecated since 0.14.0 and will be removed in 0.15.0. Consider using DataLines to manage pipeline lineage."
+)
 class DataRegistrator:
     """
     A tool for tracking lineage of datasets.

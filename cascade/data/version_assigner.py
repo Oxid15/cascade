@@ -27,9 +27,9 @@ from .dataset import BaseDataset, T
 from .modifier import Modifier
 
 
-# @deprecated("Deprecated since 0.14.0. Consider using cascade.lines.DataLine"
-            # " with line.save(ds, only_meta=True) if you do not want"
-            # " to save pipeline objects, but only to track versions")
+@deprecated("Deprecated since 0.14.0. Consider using cascade.lines.DataLine"
+            " with line.save(ds, only_meta=True) if you do not want"
+            " to save pipeline objects, but only to track versions")
 class VersionAssigner(Modifier):
     """
     Class for automatic data versioning using metadata.
@@ -196,7 +196,7 @@ class VersionAssigner(Modifier):
         return meta
 
 
-# @deprecated("Deprecated since 0.14.0 consider using"
+@deprecated("Deprecated since 0.14.0 consider using"
             " cascade.lines.DataLine.get_version method instead")
 def version(ds: BaseDataset[T], path: str) -> str:
     """

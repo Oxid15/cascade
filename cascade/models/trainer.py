@@ -60,7 +60,7 @@ class Trainer(Traceable):
         return meta
 
 
-# @deprecated("cascade.models.BasicTrainer is deprecated since 0.14.0, consider using cascade.trainers.BasicTrainer")
+@deprecated("cascade.models.BasicTrainer is deprecated since 0.14.0, consider using cascade.trainers.BasicTrainer")
 class BasicTrainer(Trainer):
     """
     The most common of concrete Trainers.

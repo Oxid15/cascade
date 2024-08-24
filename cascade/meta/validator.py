@@ -38,8 +38,8 @@ class Validator(Modifier[T]):
     Base class for validators. Defines basic ``__init__`` structure
     """
 
-    # @deprecated("Whole cascade.meta.validation is deprecated since 0.14.0 and is planned to"
-                # " be removed in 0.15.0. Use cascade.data.SchemaDataset instead")
+    @deprecated("Whole cascade.meta.validation is deprecated since 0.14.0 and is planned to"
+                " be removed in 0.15.0. Use cascade.data.SchemaDataset instead")
     def __init__(
         self,
         dataset: BaseDataset[T],
