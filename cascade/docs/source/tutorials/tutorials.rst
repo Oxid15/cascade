@@ -17,39 +17,11 @@ Install the latest version using pip
 
     pip install cascade-ml
 
-
-:ref:`/tutorials/pipelines_basics.rst`
-
-:ref:`/tutorials/metadata.rst`
-
-:ref:`/tutorials/experiments_basics.rst`
-
-:ref:`/tutorials/custom_meta_and_versioning.rst`
-
-:ref:`/tutorials/metrics_and_evaluation.rst`
-
-:ref:`/tutorials/meta_defaults.rst`
-
-:ref:`/tutorials/repos_and_workspaces.rst`
-
-:ref:`/tutorials/cli.rst`
-
-:ref:`/tutorials/viewers.rst`
-
-:ref:`/tutorials/data_validation.rst`
-
-:ref:`/tutorials/artifacts.rst`
-
-:ref:`/tutorials/sklearn.rst`
-
-:ref:`/tutorials/next.rst`
-
-If you completed the tutorial you can see the :ref:`/howtos/howtos.rst` section
+If you have completed the tutorial you can see the :ref:`/howtos/howtos.rst` section
 for more specific and complex workflows.
 
 .. toctree::
     :maxdepth: 1
-    :hidden:
 
     pipelines_basics
     metadata

@@ -1,4 +1,8 @@
 """
+# cascade.meta
+
+Meta analysis and viewing tools
+
 Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,9 +27,5 @@ from .meta_validator import MetaValidator
 from .meta_viewer import MetaViewer
 from .metric_viewer import MetricViewer
 from .server import Server
-from .validator import (
-    AggregateValidator,
-    DataValidationException,
-    PredicateValidator,
-    Validator,
-)
+from .validator import (AggregateValidator, DataValidationException,
+                        PredicateValidator, Validator)

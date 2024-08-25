@@ -7,7 +7,6 @@ on the specifics of usage, rather on foundational details.
 
 .. toctree::
     :maxdepth: 1
-    :hidden:
 
     traceable
     dataset
