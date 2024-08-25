@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ def test_meta():
 
     c = Concatenator([n1, n2])
     assert len(c.get_meta()[0]["data"]) == 2
+    assert c.get_meta()[0]["num_concatenated"] == 2
 
 
 def test_from_meta():

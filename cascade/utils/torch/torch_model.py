@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,25 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import pickle
 import os
-from typing import Any, Type, Union
+import pickle
+from typing import Any, Optional, Type
 
 import torch
 
-from ...base import PipeMeta
+from ...base import Meta
 from ...models import BasicModel
 
 
 class TorchModel(BasicModel):
     """
-    The wrapper around `nn.Module`s
+    The wrapper around ``nn.Module``
     """
 
     def __init__(
         self,
-        model_class: Union[Type, None] = None,
-        model: Union[torch.nn.Module, None] = None,
+        model_class: Optional[Type] = None,
+        model: Optional[torch.nn.Module] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -41,7 +41,7 @@ class TorchModel(BasicModel):
         model_class: type, optional
             The class created when new nn.Module was defined. Will be used
             to construct model. If any arguments needed, please pass them
-            into `kwargs`.
+            into ``kwargs``.
         model: torch.nn.Module, optional
             The module that should be used as a model. Have higher priority
             if provided. model_class and model cannot both be None.
@@ -128,7 +128,7 @@ class TorchModel(BasicModel):
         with open(checkpoint_path, "rb") as f:
             self._model = torch.load(f, *args, **kwargs)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["module"] = repr(self._model)
         return meta

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,29 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Union
+from typing import Any, Optional
 
-from numpy.random import random_integers, shuffle
+from numpy.random import randint, shuffle
 
-from . import Sampler, SizedDataset, T
+from .dataset import Dataset, T
+from .modifier import Sampler
 
 
-class RandomSampler(Sampler):
+class RandomSampler(Sampler[T]):
     """
     Shuffles a dataset
     """
 
     def __init__(
         self,
-        dataset: SizedDataset[T],
-        num_samples: Union[int, None] = None,
+        dataset: Dataset[T],
+        num_samples: Optional[int] = None,
         *args: Any,
         **kwargs: Any
     ) -> None:
         """
         Parameters
         ----------
-        dataset: Dataset
+        dataset: Dataset[T]
             Input dataset to sample from
         num_samples: int, optional
             If less or equal than len(dataset) samples without repetitions (shuffles indices)
@@ -50,8 +51,8 @@ class RandomSampler(Sampler):
             shuffle(self._indices)
             self._indices = self._indices[:num_samples]
         else:
-            self._indices = random_integers(0, len(dataset) - 1, num_samples)
-        super().__init__(dataset, num_samples, **kwargs)
+            self._indices = randint(0, len(dataset), num_samples)
+        super().__init__(dataset, num_samples, *args, **kwargs)
 
     def __getitem__(self, index: int) -> T:
         return super().__getitem__(self._indices[index])

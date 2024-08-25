@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ import os
 import sys
 
 import pytest
-
-from cascade.data import ApplyModifier
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -47,9 +45,20 @@ def test_batches(arr, bs, result):
     "arr, bs",
     [
         ([1], 0),
-        ([1], 2),
     ],
 )
 def test_illegal(arr, bs):
     with pytest.raises(ValueError):
         dl = SimpleDataloader(arr, batch_size=bs)
+
+
+@pytest.mark.parametrize(
+    "arr, bs",
+    [
+        ([1], 2),
+        ([1, 2], 1000),
+    ],
+)
+def test_larger_than_sequence(arr, bs):
+    dl = SimpleDataloader(arr, batch_size=bs)
+    assert list(dl) == [arr]

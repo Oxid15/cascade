@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@ limitations under the License.
 """
 
 from datetime import datetime
-from typing import Any, Iterable, Tuple, Union
+from typing import Any, Iterable, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
 
-from ...base import PipeMeta
-from ...data import Dataset
+from ...base import Meta
+from ...data.dataset import Dataset, T
 
 
-class TimeSeriesDataset(Dataset):
+class TimeSeriesDataset(Dataset[T]):
     """
     Dataset to simplify the work with time series.
     Manages the time and data. Reflects the list API
@@ -35,8 +35,8 @@ class TimeSeriesDataset(Dataset):
     def __init__(
         self,
         *args: Any,
-        time: Union[Iterable[datetime], None] = None,
-        data: Union[Iterable[Any], None] = None,
+        time: Optional[Iterable[datetime]] = None,
+        data: Optional[Iterable[Any]] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -168,7 +168,7 @@ class TimeSeriesDataset(Dataset):
     def __len__(self) -> int:
         return len(self._num_idx)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {

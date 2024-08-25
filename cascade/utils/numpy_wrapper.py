@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,15 +16,12 @@ limitations under the License.
 
 from typing import Any
 
-import numpy as np
-
-from ..base import PipeMeta
 from ..data import Wrapper
 
 
 class NumpyWrapper(Wrapper):
     """
-    A wrapper around .npy files. Loads file in `__init__`.
+    A wrapper around .npy files. Loads file in ``__init__``.
 
     Important
     ---------

@@ -1,5 +1,6 @@
 #python
 __pycache__/
+venv
 # docs/build
 
 #cascade
@@ -18,3 +19,9 @@ docs/build
 
 # VSCode
 .vscode/
+
+# Docs
+cascade/docs/source/howtos/data
+cascade/docs/source/howtos/trainer_repo
+cascade/docs/source/howtos/repo
+cascade/docs/source/tutorials/line

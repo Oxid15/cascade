@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,30 +24,33 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, Iterator, Modifier, Sampler, Wrapper
+from cascade.data import (BaseDataset, IteratorWrapper, Modifier, Sampler,
+                          Wrapper)
 
 
-def test_getitem():
-    ds = Dataset()
-    with pytest.raises(NotImplementedError):
-        ds[0]
+class DummyDataset(BaseDataset):
+    def __len__(self):
+        return 0
+
+    def __getitem__(self, index) -> None:
+        return None
 
 
 def test_meta():
     now = datetime.datetime.now()
-    ds = Dataset()
+    ds = DummyDataset()
     ds.update_meta({"time": now})
     meta = ds.get_meta()
 
-    assert type(meta) == list
+    assert type(meta) is list
     assert len(meta) == 1
-    assert type(meta[0]) == dict
+    assert type(meta[0]) is dict
     assert meta[0]["time"] == now
     assert "name" in meta[0]
 
 
 def test_update_meta():
-    ds = Dataset()
+    ds = DummyDataset()
     ds.update_meta({"a": 1, "b": 2})
     ds.update_meta({"b": 3})
     meta = ds.get_meta()
@@ -62,7 +65,7 @@ def test_meta_from_file(tmp_path):
     with open(os.path.join(tmp_path, "test_meta_from_file.json"), "w") as f:
         json.dump({"a": 1}, f)
 
-    ds = Dataset(meta_prefix=os.path.join(tmp_path, "test_meta_from_file.json"))
+    ds = DummyDataset(meta_prefix=os.path.join(tmp_path, "test_meta_from_file.json"))
     meta = ds.get_meta()
 
     assert "a" in meta[0]
@@ -70,7 +73,7 @@ def test_meta_from_file(tmp_path):
 
 
 def test_iterator():
-    it = Iterator([1, 2, 3, 4])
+    it = IteratorWrapper([1, 2, 3, 4])
     res = []
     for item in it:
         res.append(item)
@@ -105,36 +108,24 @@ def test_modifier_meta():
     ds = Modifier(ds)
 
     meta = ds.get_meta()
-    assert type(meta) == list
+    assert type(meta) is list
     assert len(meta) == 2
 
 
-def test_modifier_update_meta():
-    ds = Wrapper([1 ,2 ,3])
-    ds = Modifier(ds)
-    ds.update_meta([
-        {"a": 1}, {"b": 0}
-    ])
-
-    meta = ds.get_meta()
-    assert meta[0]["a"] == 1
-    assert meta[1]["b"] == 0
-
-
 def test_modifier_from_meta():
-    ds = Wrapper([1 ,2 ,3])
+    ds = Wrapper([1, 2, 3])
+    ds.update_meta({"a": 1})
     ds = Modifier(ds)
-    ds.update_meta([
-        {"a": 1}, {"b": 0}
-    ])
+    ds.update_meta({"b": 0})
     meta = ds.get_meta()
 
-    ds = Wrapper([1 ,2 ,3])
+    ds = Wrapper([1, 2, 3])
     ds = Modifier(ds)
     ds.from_meta(meta)
 
-    assert meta[0]["a"] == 1
-    assert meta[1]["b"] == 0
+    # The order of objects is from latest to oldest
+    assert meta[0]["b"] == 0
+    assert meta[1]["a"] == 1
 
 
 def test_sampler():

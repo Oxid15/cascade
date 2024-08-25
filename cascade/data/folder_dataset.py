@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@ limitations under the License.
 """
 
 import os
-from hashlib import md5
 from typing import Any, List
 
-from ..base import PipeMeta, raise_not_implemented
-from .dataset import SizedDataset, T
+from ..base import Meta, raise_not_implemented
+from .dataset import Dataset, T
 
 
-class FolderDataset(SizedDataset):
+class FolderDataset(Dataset[T]):
     """
     Basic "folder of files" dataset. Accepts root folder in which considers all files.
     Is abstract - getitem is not defined, since it is specific for each file type.
@@ -52,7 +51,7 @@ class FolderDataset(SizedDataset):
             ]
         )
 
-    def __getitem__(self, item: Any) -> T:
+    def __getitem__(self, index: Any) -> T:
         raise_not_implemented("cascade.data.FolderDataset", "__getitem__")
 
     def get_names(self) -> List[str]:
@@ -61,9 +60,9 @@ class FolderDataset(SizedDataset):
         """
         return self._names
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
-        Returns meta containing
+        Returns meta containing root folder
         """
         meta = super().get_meta()
         meta[0].update(

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,19 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable, List, Literal, Tuple, Union
+from typing import Any, Callable, List, Tuple, Union
 
 import pandas as pd
 from tqdm import tqdm
+from typing_extensions import Literal
 
-from ...base import PipeMeta
-from ...data import SizedDataset, Iterator, Modifier
-from ...meta import AggregateValidator, DataValidationException
+from ...base import Meta
+from ...data.dataset import Dataset, IteratorWrapper, T
+from ...data.modifier import Modifier
+from ...meta.validator import AggregateValidator, DataValidationException
 
 
-class TableDataset(SizedDataset):
+class TableDataset(Dataset[T]):
     """
-    Wrapper for `pd.DataFrame`s which allows to manage metadata and perform
+    Wrapper for ``pd.DataFrame``s which allows to manage metadata and perform
     validation.
     """
 
@@ -67,7 +69,7 @@ class TableDataset(SizedDataset):
         """
         return len(self._table)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -80,7 +82,7 @@ class TableDataset(SizedDataset):
     def to_csv(self, path: str, **kwargs: Any) -> None:
         """
         Saves the table to .csv file. Any kwargs are sent to
-        `pd.DataFrame.to_csv`.
+        ``pd.DataFrame.to_csv``.
         """
         self._table.to_csv(path, **kwargs)
 
@@ -115,7 +117,7 @@ class CSVDataset(TableDataset):
 
     def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
         """
-        Passes all args and kwargs to `pd.read_csv`
+        Passes all args and kwargs to ``pd.read_csv``
 
         Parameters
         ----------
@@ -127,7 +129,7 @@ class CSVDataset(TableDataset):
         super().__init__(t=t, **kwargs)
 
 
-class TableIterator(Iterator):
+class TableIterator(IteratorWrapper):
     """
     Iterates over the table from path by the chunks.
     """
@@ -303,7 +305,7 @@ class FeatureTable(TableDataset):
         self._computed_features_args[name] = args
         self._computed_features_kwargs[name] = kwargs
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["computed_columns"] = list(self._computed_features.keys())
         meta[0]["computed_functions"] = {
@@ -321,10 +323,14 @@ class FeatureTable(TableDataset):
 
 
 class PartedTableLoader(TableDataset):
-    def __init__(self, *args: Any, t = None, **kwargs: Any) -> None:
-        raise ImportError("PartedTableLoader was removed since 0.12.0, consider using older version")
+    def __init__(self, *args: Any, t=None, **kwargs: Any) -> None:
+        raise ImportError(
+            "PartedTableLoader was removed since 0.12.0, consider using older version"
+        )
 
 
 class LargeCSVDataset(TableDataset):
-    def __init__(self, *args: Any, t = None, **kwargs: Any) -> None:
-        raise ImportError("LargeCSVDataset was removed since 0.12.0, consider using older version")
+    def __init__(self, *args: Any, t=None, **kwargs: Any) -> None:
+        raise ImportError(
+            "LargeCSVDataset was removed since 0.12.0, consider using older version"
+        )

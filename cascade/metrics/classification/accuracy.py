@@ -1,4 +1,5 @@
-from typing import Any, Dict, Sequence, Tuple, Union
+from typing import Any, Dict, Optional, Sequence, Tuple
+
 from ..metric import Metric, MetricType
 
 
@@ -7,19 +8,19 @@ class Accuracy(Metric):
     Accuracy metric - the number of correct answers
     divided by the number of all
 
-    By default name is `accuracy`, can be changed
+    By default name is ``accuracy``, can be changed
     Direction is always up
 
-    Can be computed iteratively using `compute_add`
+    Can be computed iteratively using ``compute_add``
     """
     def __init__(
             self,
-            value: Union[MetricType, None] = None,
+            value: Optional[MetricType] = None,
             name: str = "accuracy",
-            dataset: Union[str, None] = None,
-            split: Union[str, None] = None,
-            interval: Union[Tuple[MetricType, MetricType], None] = None,
-            extra: Union[Dict[str, MetricType], None] = None,
+            dataset: Optional[str] = None,
+            split: Optional[str] = None,
+            interval: Optional[Tuple[MetricType, MetricType]] = None,
+            extra: Optional[Dict[str, MetricType]] = None,
             **kwargs: Any
     ) -> None:
         super().__init__(name, value=value, dataset=dataset, split=split,

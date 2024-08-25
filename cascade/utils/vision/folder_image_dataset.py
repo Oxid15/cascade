@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Literal, Union
+from typing import Any
+
+from typing_extensions import Literal
 
 from ...data import FolderDataset
 
@@ -54,7 +56,7 @@ class PILBackend(ImageBackend):
         try:
             img = self._image.open(path)
             if img.mode != "RGB":
-                img = img.convert('RGB')
+                img = img.convert("RGB")
         except Exception as e:
             raise IOError(f"PIL failed to read {path}") from e
         return img
@@ -69,7 +71,13 @@ class FolderImageDataset(FolderDataset):
     Supports opencv or pillow backends
     """
 
-    def __init__(self, root: str, backend: Literal["cv2", "PIL"] = "PIL", *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        root: str,
+        backend: Literal["cv2", "PIL"] = "PIL",
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         """
         Parameters
         ----------

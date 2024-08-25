@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,13 +18,12 @@ import os
 import random
 import sys
 
-import pytest
 import numpy as np
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.models import BasicModelModifier, BasicModel
+from cascade.models import BasicModel, BasicModelModifier
 
 
 def test_basic_model_with_concrete_case(ones_model):

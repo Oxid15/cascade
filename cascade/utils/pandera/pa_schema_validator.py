@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,11 +26,14 @@ from ..tables import TableDataset
 
 class PaSchemaValidator(AggregateValidator):
     """
-    pandera-based data validator for `TableDataset`s.
+    pandera-based data validator for ``TableDataset``s.
     It accepts TableDataset and schema.
     For more details on schemas see pandera's documentation.
     """
-    def __init__(self, dataset: TableDataset, schema: DataFrameSchema, *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, dataset: TableDataset, schema: DataFrameSchema, *args: Any, **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -45,12 +48,14 @@ class PaSchemaValidator(AggregateValidator):
         ------
         DataValidationException
         """
-        super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
+        super().__init__(
+            dataset, *args, func=lambda x: self._validate(x, schema), **kwargs
+        )
 
     @staticmethod
     def _validate(ds: TableDataset, schema) -> bool:
         try:
-            if type(schema) == str:
+            if type(schema) is str:
                 schema = paio.from_yaml(schema)
             schema.validate(ds._table)
         except SchemaError as e:

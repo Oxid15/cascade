@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-__ALL__ = ['__version__', '__author__', '__author_email__']
+__ALL__ = ["__version__", "__author__", "__author_email__"]
 
-__version__ = "0.13.0"
+__version__ = "0.14.0"
 __author__ = "Ilia Moiseev"
 __author_email__ = "ilia.moiseev.5@yandex.ru"

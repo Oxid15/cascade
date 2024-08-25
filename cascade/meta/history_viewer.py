@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import glob
 import os
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 from deepdiff import DeepDiff
 from flatten_json import flatten
 
-from ..base import MetaHandler, ZeroMetaError, MetaIOError
-from ..models import ModelLine, ModelRepo, SingleLineRepo, Workspace
-from . import MetaViewer, Server
+from ..base import MetaHandler, ZeroMetaError
+from ..lines import ModelLine
+from ..models import Workspace
+from ..repos import Repo, SingleLineRepo
+from .meta_viewer import MetaViewer
+from .server import Server
 
 
 class HistoryViewer(Server):
@@ -36,15 +38,15 @@ class HistoryViewer(Server):
 
     def __init__(
         self,
-        container: Union[Workspace, ModelRepo, ModelLine],
-        last_lines: Union[int, None] = None,
-        last_models: Union[int, None] = None,
-        update_period_sec: int = 3
+        container: Union[Workspace, Repo, ModelLine],
+        last_lines: Optional[int] = None,
+        last_models: Optional[int] = None,
+        update_period_sec: int = 3,
     ) -> None:
         """
         Parameters
         ----------
-        container: Union[Workspace, ModelRepo, ModelLine]
+        container: Union[Workspace, Repo, ModelLine]
             Container of models to be viewed
         last_lines: int, optional
             Constraints the number of lines back from the last one to view
@@ -55,7 +57,7 @@ class HistoryViewer(Server):
         """
 
         try:
-            import plotly
+            import plotly  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_plotly()
         else:
@@ -89,10 +91,12 @@ class HistoryViewer(Server):
 
         meta = MetaHandler.read_dir(repo.get_root())
         if "cascade_version" not in meta[0]:
-            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
-                               f" metric format. Please, migrate the repo in {repo.get_root()}"
-                               " to be able to use the viewer."
-                               "Use cascade.base.utils.migrate_repo_v0_13")
+            raise RuntimeError(
+                "This repository was created before 0.13.0 and has incompatible"
+                f" metric format. Please, migrate the repo in {repo.get_root()}"
+                " to be able to use the viewer."
+                "Use cascade.base.utils.migrate_repo_v0_13"
+            )
 
         self._make_table()
 
@@ -116,7 +120,7 @@ class HistoryViewer(Server):
             line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
         ]
 
-        return valid_lines[-self._last_lines :]
+        return valid_lines[-self._last_lines:]
 
     def _make_table(self) -> None:
         metas = []
@@ -175,7 +179,7 @@ class HistoryViewer(Server):
 
         self._table["time"] = time
         self._table["color"] = [line_cols[line] for line in self._table["line"]]
-        self._table = self._table.fillna("")
+        # self._table = self._table.fillna("")
 
         columns2fill = [
             col for col in self._table.columns if not col.startswith("metrics_")
@@ -252,7 +256,9 @@ class HistoryViewer(Server):
         if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
-        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+        fig = self._px.scatter(
+            self._table, x="time", y=metric, hover_data=hover_cols, color="line"
+        )
         lines = self._table["line"].unique()
 
         for line in lines:
@@ -267,7 +273,7 @@ class HistoryViewer(Server):
                     mode="lines",
                     name=line,
                     hoverinfo="none",
-                    marker_color=t["color"].iloc[0]
+                    marker_color=t["color"].iloc[0],
                 )
             )
 
@@ -283,13 +289,16 @@ class HistoryViewer(Server):
         if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
-        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+        fig = self._px.scatter(
+            self._table, x="time", y=metric, hover_data=hover_cols, color="line"
+        )
 
         for line in sorted(self._table.line.unique()):
             t = self._table.loc[self._table.line == line]
-            if (line in self._edges
-                and metric in self._edges
-                and len(t) == self._edges[line][metric]["len"]
+            if (
+                line in self._edges
+                and metric in self._edges  # noqa: W503
+                and len(t) == self._edges[line][metric]["len"]  # noqa: W503
             ):
                 xs, ys = self._edges[line][metric]["edges"]
             else:
@@ -301,19 +310,19 @@ class HistoryViewer(Server):
                     mode="lines",
                     name=line,
                     hoverinfo="none",
-                    marker_color=t["color"].iloc[0]
+                    marker_color=t["color"].iloc[0],
                 )
             )
 
         return fig
 
-    def _layout(self, metric: Union[str, None]):
+    def _layout(self, metric: Optional[str]):
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
-            from dash import Input, Output, dcc, html
+            from dash import dcc, html  # noqa: F401
 
         fig = self.plot(metric) if metric is not None else self._go.Figure()
 
@@ -343,11 +352,13 @@ class HistoryViewer(Server):
                     value=metric,
                 ),
                 dcc.Graph(id="history-figure", figure=fig),
-                dcc.Interval(id="history-interval", interval=1000 * self._update_period_sec),
+                dcc.Interval(
+                    id="history-interval", interval=1000 * self._update_period_sec
+                ),
             ]
         )
 
-    def serve(self, metric: Union[str, None] = None, **kwargs: Any) -> None:
+    def serve(self, metric: Optional[str] = None, **kwargs: Any) -> None:
         """
         Runs dash-based server with HistoryViewer, updating plots in real-time.
 
@@ -360,7 +371,7 @@ class HistoryViewer(Server):
             Arguments for app.run_server() for example port or host
         Note
         ----
-        This feature needs `dash` to be installed.
+        This feature needs ``dash`` to be installed.
         """
         # Conditional import
         try:
@@ -398,8 +409,9 @@ class HistoryViewer(Server):
         )
         def update_history(n_intervals, metric):
             self._update()
-            return (self._update_plot(metric)
-                    if metric is not None else self._go.Figure())
+            return (
+                self._update_plot(metric) if metric is not None else self._go.Figure()
+            )
 
         @app.callback(
             Output("metric-dropwdown", "value"),

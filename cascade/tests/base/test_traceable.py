@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import datetime
 import json
 import os
 import sys
@@ -24,29 +23,26 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler, Traceable, TraceableOnDisk, default_meta_format
+from cascade.base import Traceable
 
 
 def test_meta():
-    now = datetime.datetime.now()
-    tr = Traceable(meta_prefix={"time": now})
+    tr = Traceable()
     meta = tr.get_meta()
 
-    assert type(meta) == list
+    assert type(meta) is list
     assert len(meta) == 1
-    assert type(meta[0]) == dict
-    assert meta[0]["time"] == now
+    assert type(meta[0]) is dict
     assert "name" in meta[0]
     assert "description" in meta[0]
     assert "tags" in meta[0]
 
 
 def test_update_meta():
-    tr = Traceable(meta_prefix={"a": 1, "b": 2})
+    tr = Traceable()
     tr.update_meta({"b": 3})
     meta = tr.get_meta()
 
-    assert meta[0]["a"] == 1
     assert meta[0]["b"] == 3
 
 
@@ -77,66 +73,14 @@ def test_update_meta_from_file(tmp_path):
     assert meta[0]["a"] == 1
 
 
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_create(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd._create_meta()
-
-    meta_path = os.path.join(tmp_path_str, "meta" + ext)
-
-    assert os.path.exists(meta_path)
-    assert trd.get_root() == os.path.dirname(meta_path)
-
-
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_on_disk_recreate(tmp_path_str, ext):
-    trd = TraceableOnDisk(tmp_path_str, ext)
-    trd._create_meta()
-
-    meta_path = os.path.join(tmp_path_str, "meta" + ext)
-    meta = MetaHandler.read(meta_path)
-
-    trd._create_meta()
-
-    new_meta = MetaHandler.read(meta_path)
-
-    assert list(meta[0].keys()) == list(new_meta[0].keys())
-    assert meta[0]["created_at"] == new_meta[0]["created_at"]
-    assert meta[0]["updated_at"] != new_meta[0]["updated_at"]
-
-
-def test_default_meta_fmt(tmp_path_str):
-    trd = TraceableOnDisk(tmp_path_str, meta_fmt=None)
-    trd._create_meta()
-
-    assert os.path.join(tmp_path_str, "meta" + default_meta_format)
-
-
-def test_infer_meta_fmt(tmp_path_str):
-    trd = TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
-    trd._create_meta()
-
-    trd = TraceableOnDisk(tmp_path_str, None)
-
-    assert os.path.join(tmp_path_str, "meta.yml")
-
-
-def test_infer_meta_fmt_conflict(tmp_path_str):
-    trd = TraceableOnDisk(tmp_path_str, meta_fmt=".yml")
-    trd._create_meta()
-
-    with pytest.warns(UserWarning):
-        trd = TraceableOnDisk(tmp_path_str, meta_fmt=".json")
-
-    trd._update_meta()
-    assert os.path.join(tmp_path_str, "meta.yml")
-
-
 def test_descriptions():
     tr = Traceable(description="test")
     assert tr.description == "test"
     tr.describe("test2")
     assert tr.description == "test2"
+
+    tr.remove_description()
+    assert tr.description is None
 
 
 def test_tags():
@@ -165,6 +109,15 @@ def test_comments():
     assert hasattr(tr.comments[0], "user")
     assert hasattr(tr.comments[0], "host")
     assert hasattr(tr.comments[0], "timestamp")
+
+    tr.comment("world")
+    assert len(tr.comments) == 2
+
+    tr.remove_comment("2")
+    assert len(tr.comments) == 1
+    tr.comment("again")
+    assert len(tr.comments) == 2
+    assert tr.comments[1].id == "2"
 
 
 def test_links():
@@ -203,6 +156,9 @@ def test_from_meta():
     tr.comment("lol")
     tr.comment("kek")
 
+    another_tr = Traceable()
+    tr.link(another_tr)
+
     meta = tr.get_meta()
 
     tr = Traceable()
@@ -212,3 +168,5 @@ def test_from_meta():
     assert tr.tags == set(["tag"])
     assert tr.description == "description"
     assert [c.message for c in tr.comments] == ["lol", "kek"]
+    assert len(tr.links) == 1
+    assert tr.links[0].meta == another_tr.get_meta()

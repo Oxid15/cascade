@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ from ..server import Server
 
 
 class BaseDiffViewer(Server):
-    def __init__(self, path) -> None:
+    def __init__(self, path: str) -> None:
         super().__init__()
 
         # self._check_path(path)
@@ -43,23 +43,23 @@ class BaseDiffViewer(Server):
             "base0D": "#C92C6D",  # keys text
         }
 
-    def _check_path(self, path, meta_type):
+    def _check_path(self, path: str, meta_type):
         if not os.path.exists(path):
             raise FileNotFoundError(path)
 
-    def _read_objects(self, path):
+    def _read_objects(self, path: str):
         raise NotImplementedError()
 
     def _layout(self):
         try:
-            import dash
+            import dash  # noqa: F401
         except ModuleNotFoundError:
             self._raise_cannot_import_dash()
         else:
             from dash import dcc, html
 
         try:
-            import dash_renderjson
+            import dash_renderjson  # noqa: F401
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"

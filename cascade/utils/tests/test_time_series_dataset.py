@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -192,7 +192,7 @@ def test_slice_datetime():
     data = np.array([1, 2, 3, 4, 5])
     ts = TimeSeriesDataset(time=time, data=data)
 
-    sl = ts[datetime(2001, 1, 2) : datetime(2001, 1, 4)]
+    sl = ts[datetime(2001, 1, 2): datetime(2001, 1, 4)]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])
@@ -204,7 +204,7 @@ def test_slice_datetime():
         items.append(sl[i])
     assert items == [1, 2]
 
-    sl = ts[datetime(2001, 1, 3) :]
+    sl = ts[datetime(2001, 1, 3):]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])

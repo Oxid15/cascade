@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,23 +15,26 @@ limitations under the License.
 """
 
 import os
-from typing import Any, List, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import pendulum
 from flatten_json import flatten
 
 from ..base import MetaHandler
-from ..models import Model, ModelLine, Repo, SingleLineRepo
-from . import MetaViewer, Server
+from ..lines import ModelLine
+from ..models import Model
+from ..repos import Repo, SingleLineRepo
+from .meta_viewer import MetaViewer
+from .server import Server
 
 
 class MetricViewer:
     """
     Interface for viewing metrics in model meta files
-    uses ModelRepo to extract metrics of all models if any.
-    As metrics it uses data from `metrics` field in models'
-    meta and as parameters it uses `params` field.
+    uses Repo to extract metrics of all models if any.
+    As metrics it uses data from ``metrics`` field in models'
+    meta and as parameters it uses ``params`` field.
     """
 
     def __init__(
@@ -40,20 +43,22 @@ class MetricViewer:
         """
         Parameters
         ----------
-        repo: ModelRepo
-            ModelRepo object to extract metrics from
+        repo: Repo
+            Repo object to extract metrics from
         scope: Union[int, str, slice]
-            Index or a name of line to view. Can be set using `__getitem__`
+            Index or a name of line to view. Can be set using ``__getitem__``
         """
         if isinstance(repo, ModelLine):
             repo = SingleLineRepo(repo)
 
         meta = MetaHandler.read_dir(repo.get_root())
         if "cascade_version" not in meta[0]:
-            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
-                               f" metric format. Please, migrate the repo in {repo.get_root()}"
-                               " to be able to use the viewer."
-                               "Use cascade.base.utils.migrate_repo_v0_13")
+            raise RuntimeError(
+                "This repository was created before 0.13.0 and has incompatible"
+                f" metric format. Please, migrate the repo in {repo.get_root()}"
+                " to be able to use the viewer."
+                "Use cascade.base.utils.migrate_repo_v0_13"
+            )
 
         self._repo = repo
         self._scope = scope
@@ -68,6 +73,26 @@ class MetricViewer:
         return MetricViewer(self._repo, scope=key)
 
     def reload_table(self) -> None:
+        def create_metric(meta: Dict[str, Any]) -> Dict[str, Any]:
+            metric = {"line": line, "num": i}
+            if "created_at" in meta:
+                metric["created_at"] = pendulum.parse(meta["created_at"])
+                if "saved_at" in meta:
+                    metric["saved"] = pendulum.parse(
+                        meta["saved_at"]
+                    ).diff_for_humans(metric["created_at"])
+
+            if "params" in meta:
+                metric.update(meta["params"])
+            if "tags" in meta:
+                metric["tags"] = meta["tags"]
+            if "comments" in meta:
+                metric["comment_count"] = len(meta["comments"])
+            if "links" in meta:
+                metric["link_count"] = len(meta["links"])
+
+            return metric
+
         self._metrics = []
         selected_names = self._repo.get_line_names()
 
@@ -88,21 +113,23 @@ class MetricViewer:
                 except IndexError:
                     meta = {}
 
-                metric = {"line": viewer_root, "num": i}
-
-                if "created_at" in meta:
-                    metric["created_at"] = pendulum.parse(meta["created_at"])
-                    if "saved_at" in meta:
-                        metric["saved"] = pendulum.parse(
-                            meta["saved_at"]
-                        ).diff_for_humans(metric["created_at"])
-
+                _, line = os.path.split(viewer_root)
                 if "metrics" in meta:
-                    metric.update({m["name"]: m.get("value") for m in meta["metrics"]})
-                if "params" in meta:
-                    metric.update(meta["params"])
+                    # Need to generate new metric each time
+                    for m in meta["metrics"]:
+                        metric = create_metric(meta)
 
-                self._metrics.append(metric)
+                        metric["name"] = m.get("name")
+                        metric["value"] = m.get("value")
+
+                        for key in m.keys():
+                            if key not in ("name", "value", "created_at"):
+                                if m[key] is not None:
+                                    metric[key] = m[key]
+
+                        self._metrics.append(metric)
+                else:
+                    self._metrics.append(create_metric(meta))
         self.table = pd.DataFrame(self._metrics)
 
     def __repr__(self) -> str:
@@ -114,7 +141,7 @@ class MetricViewer:
         """
 
         try:
-            import plotly
+            import plotly  # noqa: F401
         except ModuleNotFoundError:
             raise ModuleNotFoundError(
                 """
@@ -153,19 +180,19 @@ class MetricViewer:
         metric: str
             Name of the metric
         maximize: bool
-            The direction of choosing the best model: `True` if greater is better
-            and `False` if less is better
+            The direction of choosing the best model: ``True`` if greater is better
+            and ``False`` if less is better
 
         Raises
         ------
         TypeError if metric objects cannot be sorted. If only one model in repo, then
         returns it without error since no sorting involved.
         """
-        assert metric in self.table, f"{metric} is not in {self.table.columns}"
-        t = self.table.loc[self.table[metric].notna()]
+        assert metric in self.table["name"].unique(), f"{metric} is not in {self.table.columns}"
+        t = self.table.loc[self.table["name"] == metric]
 
         try:
-            t = t.sort_values(metric, ascending=maximize)
+            t = t.sort_values("value", ascending=maximize)
         except TypeError as e:
             raise TypeError(f"Metric {metric} objects cannot be sorted") from e
 
@@ -207,8 +234,8 @@ class MetricServer(Server):
         self,
         mv: MetricViewer,
         page_size: int,
-        include: Union[List[str], None],
-        exclude: Union[List[str], None],
+        include: Optional[List[str]],
+        exclude: Optional[List[str]],
         **kwargs: Any,
     ) -> None:
         self._mv = mv
@@ -234,7 +261,7 @@ class MetricServer(Server):
             if x is not None and y is not None:
                 fig.add_trace(
                     go.Scatter(
-                        x=self._df_flatten[x], y=self._df_flatten[y], mode="markers"
+                        x=self._for_plots[x], y=self._for_plots[y], mode="markers"
                     )
                 )
                 fig.update_layout(title=f"{x} to {y} relation")
@@ -258,7 +285,19 @@ class MetricServer(Server):
         if self._include is not None:
             df = df[["line", "num"] + self._include]
 
-        self._df_flatten = pd.DataFrame(map(flatten, df.to_dict("records")))
+        self._df_flatten = pd.DataFrame(
+            map(lambda x: flatten(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
+        )
+        self._for_plots = self._df_flatten.copy()
+        for name in self._df_flatten.name.unique():
+            self._for_plots[name] = None
+            self._for_plots.loc[self._for_plots["name"] == name, name] = (
+                self._for_plots.loc[self._for_plots["name"] == name, "value"]
+            )
+        self._for_plots = self._for_plots.drop(["name", "value"], axis=1)
+
+        if any(df["tags"].apply(lambda x: x != [])):
+            self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
         dep_fig = go.Figure()
 
         return html.Div(
@@ -272,10 +311,10 @@ class MetricServer(Server):
                     },
                 ),
                 dcc.Dropdown(
-                    list(self._df_flatten.columns), id="dropdown-x", multi=False
+                    list(self._for_plots.columns), id="dropdown-x", multi=False
                 ),
                 dcc.Dropdown(
-                    list(self._df_flatten.columns), id="dropdown-y", multi=False
+                    list(self._for_plots.columns), id="dropdown-y", multi=False
                 ),
                 dcc.Graph(id="dependence-figure", figure=dep_fig),
                 dash_table.DataTable(

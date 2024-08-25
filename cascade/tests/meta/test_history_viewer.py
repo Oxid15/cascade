@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.meta import HistoryViewer
-from cascade.models import ModelRepo
+from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel, EmptyModel
 
 
 def test_run(repo_or_line, dummy_model):
     dummy_model.evaluate()
-    if isinstance(repo_or_line, ModelRepo):
+    if isinstance(repo_or_line, Repo):
         repo_or_line["0"].save(dummy_model)
     else:
         repo_or_line.save(dummy_model)
@@ -39,7 +39,7 @@ def test_run(repo_or_line, dummy_model):
 
 
 def test_no_metric(repo_or_line, dummy_model):
-    if isinstance(repo_or_line, ModelRepo):
+    if isinstance(repo_or_line, Repo):
         repo_or_line["0"].save(dummy_model)
     else:
         repo_or_line.save(dummy_model)
@@ -49,32 +49,32 @@ def test_no_metric(repo_or_line, dummy_model):
         hv.plot("acc")
 
 
-def test_empty_model(model_repo, empty_model):
-    model_repo.add_line("test", EmptyModel)
+def test_empty_model(repo, empty_model):
+    repo.add_line("test", model_cls=EmptyModel)
     empty_model.add_metric("acc", 0.9)
-    model_repo["test"].save(empty_model)
+    repo["test"].save(empty_model)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo)
     hv.plot("acc")
 
 
-def test_many_lines(model_repo, dummy_model):
+def test_many_lines(repo, dummy_model):
     model0 = dummy_model
     model0.evaluate()
 
     model1 = dummy_model
     model1.evaluate()
 
-    model_repo["0"].save(model0)
-    model_repo["1"].save(model1)
+    repo["0"].save(model0)
+    repo["1"].save(model1)
 
-    hv = HistoryViewer(model_repo)
+    hv = HistoryViewer(repo)
     hv.plot("acc")
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_missing_model_meta(tmp_path_str, dummy_model, ext):
-    model_repo = ModelRepo(tmp_path_str)
+    model_repo = Repo(tmp_path_str)
     model_repo.add_line("test", model_cls=DummyModel, meta_fmt=ext)
     dummy_model.evaluate()
     model_repo["test"].save(dummy_model)

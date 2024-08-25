@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ limitations under the License.
 import os
 import sys
 
-import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base.utils import migrate_repo_v0_13
 from cascade.base import MetaHandler
-from cascade.models import ModelRepo, Model
+from cascade.repos import Repo
+from cascade.models import Model
 
 
 class OldStyleModel(Model):
@@ -37,7 +37,7 @@ class OldStyleModel(Model):
 
 
 def test_scalars_only(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     line = repo.add_line()
 
     model = OldStyleModel()
@@ -68,7 +68,7 @@ def test_scalars_only(tmp_path_str):
 
 
 def test_complex_metrics(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     line = repo.add_line()
 
     model = OldStyleModel()
@@ -104,7 +104,7 @@ def test_complex_metrics(tmp_path_str):
 
 
 def test_idempotency(tmp_path_str):
-    repo = ModelRepo(tmp_path_str)
+    repo = Repo(tmp_path_str)
     line = repo.add_line()
 
     model = OldStyleModel()
