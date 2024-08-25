@@ -54,7 +54,7 @@ def test(repo_or_line, dummy_model):
         assert item in list(t.columns)
 
 
-def test_show_table(repo, dummy_model):
+def test_plot_table(repo, dummy_model):
     first = repo.get_line_names()[0]
     for _ in range(len(repo)):
         m = dummy_model
@@ -62,7 +62,7 @@ def test_show_table(repo, dummy_model):
         repo[first].save(m)
 
     mtv = MetricViewer(repo)
-    mtv.plot_table(show=True)
+    mtv.plot_table(show=False)
 
 
 @pytest.mark.skip
@@ -81,8 +81,8 @@ def test_missing_model_meta(tmp_path_str, dummy_model, ext):
 
     os.remove(os.path.join(tmp_path_str, "test", "00000", "meta" + ext))
 
-    mv = MetricViewer(model_repo)
-    mv.plot_table()
+    mtv = MetricViewer(model_repo)
+    mtv.plot_table(show=False)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
