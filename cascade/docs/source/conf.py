@@ -89,5 +89,8 @@ html_theme_options = {
     "logo": {
         "image_light": "_static/logo_light.svg",
         "image_dark": "_static/logo_dark.svg",
-   }
+   },
+    "analytics": {
+        "google_analytics_id": "G-KD8QDKDMD7"
+    }
 }
