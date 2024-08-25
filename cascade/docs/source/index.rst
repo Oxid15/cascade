@@ -53,6 +53,17 @@ Documentation
 
             Cascade API Reference
 
+If you have any questions
+*************************
+
+Any contributions are welcome!
+
+`Write an issue <https://github.com/Oxid15/cascade/issues>`_
+
+`Join GitHub discussions <https://github.com/Oxid15/cascade/discussions>`_
+
+`Cascade on X <https://x.com/cascade_mlops>`_
+
 .. toctree::
     :maxdepth: 1
     :hidden:

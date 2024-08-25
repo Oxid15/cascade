@@ -79,6 +79,12 @@ html_theme_options = {
             "url": "https://github.com/oxid15/cascade",
             "icon": "fa-brands fa-github",
             "type": "fontawesome",
+        },
+        {
+            "name": "Twitter",
+            "url": "https://x.com/cascade_mlops",
+            "icon": "fa-brands fa-twitter",
+            "type": "fontawesome",
         }
     ],
     "switcher": {
