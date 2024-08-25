@@ -2,10 +2,10 @@
 ===================
 In this tutorial you will learn basic pipeline building blocks of Cascade.
 This is the first Cascade tutorial from a series. All of the tutorials are
-meant to form one big project and can be thought of as a series of lessons.
+meant to form a single project and can be thought of as a series of lessons.
 
-Each lesson will come with a list of links for further reading or advanced
-how-to guides on related topics.
+.. Each lesson will come with a list of links for further reading or advanced
+.. how-to guides on related topics.
 
 Cascade pipelines allow building data processing routines from interchangeable
 steps called ``Datasets`` and ``Modifiers``.
