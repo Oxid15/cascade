@@ -6,7 +6,8 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler, Traceable, TraceableOnDisk, default_meta_format
+from cascade.base import (MetaHandler, Traceable, TraceableOnDisk,
+                          default_meta_format)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -37,7 +38,7 @@ def test_on_disk_recreate(tmp_path_str, ext):
     assert list(meta[0].keys()) == list(new_meta[0].keys())
     assert meta[0]["created_at"] == new_meta[0]["created_at"]
     assert meta[0]["updated_at"] != new_meta[0]["updated_at"]
-    
+
     del meta[0]["updated_at"]
     del new_meta[0]["updated_at"]
     assert meta == new_meta

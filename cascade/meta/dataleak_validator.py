@@ -61,7 +61,8 @@ class DataleakValidator(Validator):
         >>> DataleakValidator(train_ds, test_ds, hash_fn=numpy_md5)
         Traceback (most recent call last):
         ...
-        cascade.meta.validator.DataValidationException: Train and test datasets have 25 repeating pairs
+        cascade.meta.validator.DataValidationException:
+        Train and test datasets have 25 repeating pairs
         Train indices: 0, 0, 0, 0, 0 ... 4, 4, 4, 4, 4
         Test indices: 0, 1, 2, 3, 4 ... 0, 1, 2, 3, 4
         """

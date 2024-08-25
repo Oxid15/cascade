@@ -51,6 +51,7 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
         f"implemented it in the successor class"
     )
 
+
 from .cache import Cache
 from .history_handler import HistoryHandler
 from .meta_handler import CustomEncoder as JSONEncoder

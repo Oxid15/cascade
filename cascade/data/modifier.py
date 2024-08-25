@@ -1,4 +1,4 @@
-from typing import Any, Iterator, Union
+from typing import Any, Iterator
 
 from ..base import Meta
 from .dataset import BaseDataset, Dataset, IteratorDataset, T

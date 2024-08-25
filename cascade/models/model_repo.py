@@ -82,7 +82,8 @@ class Repo(Traceable):
 
 
 @deprecated(
-    "cascade.models.SingleLineRepo is deprecated, consider using cascade.repos.SingleLineRepo instead"
+    "cascade.models.SingleLineRepo is deprecated, consider using"
+    " cascade.repos.SingleLineRepo instead"
 )
 class SingleLineRepo(Repo):
     def __init__(
@@ -124,13 +125,14 @@ class ModelRepo(Repo, TraceableOnDisk):
     When created, initializes an empty folder constituting a repository of model lines.
 
     Stores its metadata in its root folder. With every run if the repo was already
-    created earlier, updates its meta and logs changes in human-readable format in history file
+    created earlier, updates its meta and logs changes in human-readable format in
+    history file
 
     Example
     -------
     >>> from cascade.models import ModelRepo
     >>> from cascade.utils.baselines import ConstantBaseline
-    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one line for the example.'})
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one line.'})
     >>> line = repo.add_line('model', ConstantBaseline)
     >>> model = ConstantBaseline(1)
     >>> model.fit()
@@ -162,7 +164,8 @@ class ModelRepo(Repo, TraceableOnDisk):
             Path to a folder where ModelRepo needs to be created or already was created
             if folder does not exist, creates it
         lines: List[Dict]
-            A list with parameters of model lines to add at creation or to initialize (alias for ``add_model``)
+            A list with parameters of model lines to add at creation or to
+            initialize (alias for ``add_model``)
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
@@ -320,7 +323,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         for name in sorted(os.listdir(self._root)):
             if (
                 os.path.isdir(os.path.join(self._root, name))
-                and name not in self._lines
+                and name not in self._lines  # noqa: W503
             ):
                 self._lines[name] = {"args": [], "kwargs": dict()}
 

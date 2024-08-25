@@ -145,7 +145,8 @@ class DataCard:
 
 
 @deprecated(
-    "This is deprecated since 0.14.0 and will be removed in 0.15.0. Consider using DataLines to manage pipeline lineage."
+    "This is deprecated since 0.14.0 and will be removed in 0.15.0."
+    " Consider using DataLines to manage pipeline lineage."
 )
 class DataRegistrator:
     """

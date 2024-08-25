@@ -13,8 +13,8 @@ limitations under the License.
 
 import warnings
 from abc import ABC, abstractmethod
-from typing import (Any, Generator, Generic, Iterable, Iterator, Optional,
-                    Sequence, Sized, TypeVar)
+from typing import (Any, Generic, Iterable, Iterator, Optional, Sequence,
+                    Sized, TypeVar)
 
 from ..base import Meta, Traceable
 from .data_card import DataCard

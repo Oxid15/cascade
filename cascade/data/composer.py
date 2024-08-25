@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Tuple
 
 from ..base import Meta
 from .dataset import Dataset, T
@@ -34,9 +33,7 @@ class Composer(Dataset[T]):
     >>> assert ds[0] == (0, 1)
     """
 
-    def __init__(
-        self, datasets: List[Dataset[Any]], *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, datasets: List[Dataset[Any]], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------

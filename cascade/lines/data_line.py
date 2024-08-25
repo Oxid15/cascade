@@ -111,7 +111,9 @@ class DataLine(DiskLine):
         elif isinstance(num, str):
             path = os.path.join(self._root, num)
         else:
-            raise TypeError(f"Only accept the number of dataset or its version as input, got {type(num)}")
+            raise TypeError(
+                f"Only accept the number of dataset or its version as input, got {type(num)}"
+            )
         return self._obj_handler.load(path)
 
     def save(self, ds: Dataset, only_meta: bool = False) -> None:

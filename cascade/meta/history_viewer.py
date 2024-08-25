@@ -41,7 +41,7 @@ class HistoryViewer(Server):
         container: Union[Workspace, Repo, ModelLine],
         last_lines: Optional[int] = None,
         last_models: Optional[int] = None,
-        update_period_sec: int = 3
+        update_period_sec: int = 3,
     ) -> None:
         """
         Parameters
@@ -91,10 +91,12 @@ class HistoryViewer(Server):
 
         meta = MetaHandler.read_dir(repo.get_root())
         if "cascade_version" not in meta[0]:
-            raise RuntimeError("This repository was created before 0.13.0 and has incompatible"
-                               f" metric format. Please, migrate the repo in {repo.get_root()}"
-                               " to be able to use the viewer."
-                               "Use cascade.base.utils.migrate_repo_v0_13")
+            raise RuntimeError(
+                "This repository was created before 0.13.0 and has incompatible"
+                f" metric format. Please, migrate the repo in {repo.get_root()}"
+                " to be able to use the viewer."
+                "Use cascade.base.utils.migrate_repo_v0_13"
+            )
 
         self._make_table()
 
@@ -254,7 +256,9 @@ class HistoryViewer(Server):
         if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
-        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+        fig = self._px.scatter(
+            self._table, x="time", y=metric, hover_data=hover_cols, color="line"
+        )
         lines = self._table["line"].unique()
 
         for line in lines:
@@ -269,7 +273,7 @@ class HistoryViewer(Server):
                     mode="lines",
                     name=line,
                     hoverinfo="none",
-                    marker_color=t["color"].iloc[0]
+                    marker_color=t["color"].iloc[0],
                 )
             )
 
@@ -285,14 +289,16 @@ class HistoryViewer(Server):
         if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
-        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+        fig = self._px.scatter(
+            self._table, x="time", y=metric, hover_data=hover_cols, color="line"
+        )
 
         for line in sorted(self._table.line.unique()):
             t = self._table.loc[self._table.line == line]
             if (
                 line in self._edges
-                and metric in self._edges
-                and len(t) == self._edges[line][metric]["len"]
+                and metric in self._edges  # noqa: W503
+                and len(t) == self._edges[line][metric]["len"]  # noqa: W503
             ):
                 xs, ys = self._edges[line][metric]["edges"]
             else:
@@ -304,7 +310,7 @@ class HistoryViewer(Server):
                     mode="lines",
                     name=line,
                     hoverinfo="none",
-                    marker_color=t["color"].iloc[0]
+                    marker_color=t["color"].iloc[0],
                 )
             )
 
@@ -346,7 +352,9 @@ class HistoryViewer(Server):
                     value=metric,
                 ),
                 dcc.Graph(id="history-figure", figure=fig),
-                dcc.Interval(id="history-interval", interval=1000 * self._update_period_sec),
+                dcc.Interval(
+                    id="history-interval", interval=1000 * self._update_period_sec
+                ),
             ]
         )
 
@@ -401,8 +409,9 @@ class HistoryViewer(Server):
         )
         def update_history(n_intervals, metric):
             self._update()
-            return (self._update_plot(metric)
-                    if metric is not None else self._go.Figure())
+            return (
+                self._update_plot(metric) if metric is not None else self._go.Figure()
+            )
 
         @app.callback(
             Output("metric-dropwdown", "value"),

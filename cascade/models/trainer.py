@@ -60,13 +60,17 @@ class Trainer(Traceable):
         return meta
 
 
-@deprecated("cascade.models.BasicTrainer is deprecated since 0.14.0, consider using cascade.trainers.BasicTrainer")
+@deprecated(
+    "cascade.models.BasicTrainer is deprecated since 0.14.0, consider using"
+    " cascade.trainers.BasicTrainer"
+)
 class BasicTrainer(Trainer):
     """
     The most common of concrete Trainers.
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
+
     def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
         self.train_start_at = None
         self.train_end_at = None
@@ -124,7 +128,8 @@ class BasicTrainer(Trainer):
                 name or index of line from which to start
                 starts from the latest model in line
             eval_strategy: int, optional
-                Evaluation will take place every ``eval_strategy`` epochs. If None - the strategy is ``no evaluation``.
+                Evaluation will take place every ``eval_strategy`` epochs. If None - the strategy
+                is ``no evaluation``.
             save_strategy: int, optional
                 Saving will take place every ``save_strategy`` epochs. Meta will be saved anyway.
                 If None - the strategy is 'save only meta'.

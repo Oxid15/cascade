@@ -38,6 +38,7 @@ def desc_add(ctx, d):
     tr.sync_meta()
     tr.describe(d)
 
+
 @desc.command("rm")
 @click.pass_context
 def desc_rm(ctx):

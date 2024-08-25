@@ -85,7 +85,7 @@ def test_rm(tmp_path_str):
 
         assert "tags" in meta[0]
         assert len(meta[0]["tags"]) == 0
-        
+
         del meta[0]["updated_at"]
         del init_meta[0]["updated_at"]
         assert meta == init_meta

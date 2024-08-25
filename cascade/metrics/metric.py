@@ -90,10 +90,10 @@ class Metric:
             # Compare all fields without `value` and `created_at`
             if (
                 __value.name == self.name
-                and __value.dataset == self.dataset
-                and __value.split == self.split
-                and __value.direction == self.direction
-                and __value.interval == self.interval
+                and __value.dataset == self.dataset  # noqa: W503
+                and __value.split == self.split  # noqa: W503
+                and __value.direction == self.direction  # noqa: W503
+                and __value.interval == self.interval  # noqa: W503
             ):
                 return True
             return False

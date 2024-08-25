@@ -68,9 +68,7 @@ class PydanticValidator(ValidationProvider):
 
     def __call__(self, *args: Any, **kwargs: Any) -> None:
         if (
-            len(args) == 1
-            and len(kwargs) == 0
-            and isinstance(args[0], self._base_model_cls)
+            len(args) == 1 and len(kwargs) == 0 and isinstance(args[0], self._base_model_cls)
         ):
             try:
                 self._schema.model_validate(args[0])
@@ -161,6 +159,7 @@ def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
     Callable[[Any], Any]
         Decorated function
     """
+
     @wraps(f)
     def wrapper(*args: Any, **kwargs: Any):
         sig = inspect.signature(f)
@@ -182,4 +181,5 @@ def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
         v = TypesValidator(sig_args)
         v(*args, **kwargs)
         return f(*args, **kwargs)
+
     return wrapper

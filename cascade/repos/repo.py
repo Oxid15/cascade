@@ -83,7 +83,9 @@ class Repo(BaseRepo, TraceableOnDisk):
         }
 
         if "lines" in kwargs:
-            raise ValueError("lines was removed in 0.14.0, consider using add_line method instead")
+            raise ValueError(
+                "lines was removed in 0.14.0, consider using add_line method instead"
+            )
 
         self.sync_meta()
 
@@ -105,7 +107,7 @@ class Repo(BaseRepo, TraceableOnDisk):
             name: str, optional
 
             meta_fmt: str, optional
-                
+
         See also
         --------
             cascade.base.Line
@@ -162,7 +164,8 @@ class Repo(BaseRepo, TraceableOnDisk):
                 ) from e
             except ZeroMetaError as e:
                 raise IOError(
-                    f"Did not found meta in {folder}, pass ``line_cls`` if you want to create a line"
+                    f"Did not found meta in {folder}, pass `line_cls`"
+                    " if you want to create a line"
                 ) from e
         else:
             line = LineFactory.create(
@@ -170,7 +173,7 @@ class Repo(BaseRepo, TraceableOnDisk):
             )
         return line
 
-    def __getitem__(self, key: Union[str, int]):  # -> "Line":
+    def __getitem__(self, key: Union[str, int]):
         """
         Returns
         -------
@@ -241,7 +244,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         for name in sorted(os.listdir(self._root)):
             if (
                 os.path.isdir(os.path.join(self._root, name))
-                and name not in self._lines
+                and name not in self._lines  # noqa: W503
             ):
                 self._lines[name] = {"args": [], "kwargs": dict()}
 

@@ -54,8 +54,10 @@ class HistoryHandler:
             try:
                 self._log = MetaHandler.read(self._log_file)
                 if not self._is_log_compatible(self._log):
-                    raise RuntimeError(f"Log {filepath} is incompatible with history handler"
-                                       f" in cascade {__version__}")
+                    raise RuntimeError(
+                        f"Log {filepath} is incompatible with history handler"
+                        f" in cascade {__version__}"
+                    )
 
                 if isinstance(self._log, list):
                     raise RuntimeError(
@@ -96,7 +98,7 @@ class HistoryHandler:
         ----------
         obj: Any
             Meta data of the object
-        
+
         Raises
         ------
         MetaIOError - if log writing fails
@@ -118,7 +120,11 @@ class HistoryHandler:
             # Log only if any change occured
             if delta:
                 self._log["history"].append(
-                    {"id": len(self._log["history"]), "time": pendulum.now(tz="UTC"), "delta": delta}
+                    {
+                        "id": len(self._log["history"]),
+                        "time": pendulum.now(tz="UTC"),
+                        "delta": delta,
+                    }
                 )
                 self._log["latest"] = obj
 

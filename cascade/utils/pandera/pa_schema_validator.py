@@ -30,7 +30,10 @@ class PaSchemaValidator(AggregateValidator):
     It accepts TableDataset and schema.
     For more details on schemas see pandera's documentation.
     """
-    def __init__(self, dataset: TableDataset, schema: DataFrameSchema, *args: Any, **kwargs: Any) -> None:
+
+    def __init__(
+        self, dataset: TableDataset, schema: DataFrameSchema, *args: Any, **kwargs: Any
+    ) -> None:
         """
         Parameters
         ----------
@@ -45,7 +48,9 @@ class PaSchemaValidator(AggregateValidator):
         ------
         DataValidationException
         """
-        super().__init__(dataset, *args, func=lambda x: self._validate(x, schema), **kwargs)
+        super().__init__(
+            dataset, *args, func=lambda x: self._validate(x, schema), **kwargs
+        )
 
     @staticmethod
     def _validate(ds: TableDataset, schema) -> bool:

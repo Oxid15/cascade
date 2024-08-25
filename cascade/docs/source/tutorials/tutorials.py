@@ -1,9 +1,10 @@
 # %%
 # Pipelines basics
 
+from sklearn.datasets import load_digits
+
 # %%
 from cascade.data import Dataset
-from sklearn.datasets import load_digits
 
 
 class DigitsDataset(Dataset):
@@ -24,6 +25,7 @@ print(ds[0])
 
 # %%
 import numpy as np
+
 from cascade.data import ApplyModifier
 
 NOISE_MAGNITUDE = 1
@@ -51,9 +53,10 @@ from pprint import pprint
 
 pprint(ds.get_meta())
 
+from sklearn.linear_model import LogisticRegression
+
 # %%
 from cascade.models import BasicModel
-from sklearn.linear_model import LogisticRegression
 
 
 class LR(BasicModel):
@@ -286,7 +289,7 @@ class Pad5(SchemaModifier):
         image = item.image.reshape((8, 8))
         h, w = image.shape
         new_image = np.zeros((h + 2 * 5, w + 2 * 5))
-        new_image[5 : 5 + h, 5 : 5 + w] = image
+        new_image[5: 5 + h, 5: 5 + w] = image
         item.image = new_image.flatten()
         return item
 

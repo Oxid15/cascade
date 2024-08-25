@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, List, Union
+from typing import Any, List
 
 import numpy as np
 
@@ -35,9 +35,7 @@ class Concatenator(Dataset[T]):
     >>> assert [item for item in ds] == [0, 1, 2, 2, 1, 0]
     """
 
-    def __init__(
-        self, datasets: List[Dataset[T]], *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, datasets: List[Dataset[T]], *args: Any, **kwargs: Any) -> None:
         """
         Creates concatenated dataset from the list of datasets provided
 
@@ -63,7 +61,6 @@ class Concatenator(Dataset[T]):
         Length of Concatenator is a sum of lengths of its datasets
         """
         return sum([len(ds) for ds in self._datasets])
-
 
     def get_meta(self) -> Meta:
         """

@@ -122,7 +122,8 @@ class BasicTrainer(Trainer):
                 name or index of line from which to start
                 starts from the latest model in line
             eval_strategy: int, optional
-                Evaluation will take place every ``eval_strategy`` epochs. If None - the strategy is ``no evaluation``.
+                Evaluation will take place every ``eval_strategy`` epochs.
+                If None - the strategy is ``no evaluation``.
             save_strategy: int, optional
                 Saving will take place every ``save_strategy`` epochs. Meta will be saved anyway.
                 If None - the strategy is 'save only meta'.
@@ -154,11 +155,13 @@ class BasicTrainer(Trainer):
         self._repo.add_line(line_name, line_type="model", model_cls=type(model))
         line = self._repo[line_name]
 
-        self.update_meta({
-            "epochs": epochs,
-            "eval_strategy": eval_strategy,
-            "save_strategy": save_strategy,
-        })
+        self.update_meta(
+            {
+                "epochs": epochs,
+                "eval_strategy": eval_strategy,
+                "save_strategy": save_strategy,
+            }
+        )
         line.link(self)
 
         if isinstance(train_data, Traceable):

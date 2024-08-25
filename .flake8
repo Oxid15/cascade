@@ -8,10 +8,13 @@ exclude =
     setup.py
 
 per-file-ignores =
-    __init__.py: F401,
+    __init__.py: F401 E402,
     cascade/tests/__init__.py: F401,
     cascade/tests/*: F841 E402,
     cascade/utils/tests/*: F841 E402,
     cascade/docs/source/conf.py: E402
+    cascade/docs/source/howtos/*: E402,
+    cascade/docs/source/tutorials/*: E402,
+    cascade/docs/source/modules/dataset_zoo.py: E402, E501
 
 max-line-length = 100

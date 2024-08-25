@@ -35,7 +35,10 @@ def test():
     assert np.all(model.predict([0, 0, 0]) == [[1, 0], [1, 0], [1, 0]])
 
     model = ConstantBaseline(constant=[[1, 0], [0, 1]])
-    assert np.all(model.predict([0, 0, 0]) == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]])
+    assert np.all(
+        model.predict([0, 0, 0])
+        == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]]  # noqa: W503
+    )
 
     model = ConstantBaseline(constant=None)
     assert np.all(model.predict([1]) == [None])

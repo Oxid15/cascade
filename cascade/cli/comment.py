@@ -52,7 +52,9 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
                     if len(comm_meta[i]) <= left_limit
                     else comm_meta[i][: left_limit - 3] + "..."
                 )
-                table += " " * (w_left - min(len(comm_meta[i]), left_limit) + between_cols)
+                table += " " * (
+                    w_left - min(len(comm_meta[i]), left_limit) + between_cols
+                )
             elif row == 1:
                 table += comm_date[i]
                 table += " " * (w_left - len(comm_date[i]) + between_cols)
@@ -60,7 +62,11 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
                 table += " " * (w_left + between_cols)
 
             # Output comment's text by batches
-            table += c["message"][row * w_right : min((row + 1) * w_right, len(c["message"]))] + "\n"
+            table += (
+                c["message"][
+                    row * w_right: min((row + 1) * w_right, len(c["message"]))
+                ] + "\n"
+            )
         table += "\n"
     return table
 
@@ -73,6 +79,7 @@ def comment_add(ctx, c):
         return
 
     from cascade.base import TraceableOnDisk
+
     tr = TraceableOnDisk(ctx.obj["cwd"], meta_fmt=ctx.obj["meta_fmt"])
     tr.sync_meta()
     tr.comment(c)
@@ -104,7 +111,9 @@ def comment_ls(ctx):
                 if "comments" in meta[0]:
                     comment_counter += len(meta[0]["comments"])
 
-        click.echo(f"{comment_counter} comment{'s' if comment_counter != 1 else ''} inside total")
+        click.echo(
+            f"{comment_counter} comment{'s' if comment_counter != 1 else ''} inside total"
+        )
 
 
 @click.command("rm")

@@ -84,7 +84,8 @@ class AggregateValidator(Validator[T]):
 class PredicateValidator(Validator[T]):
     """
     This validator accepts function that is applied to each item in a dataset
-    and returns ``True`` or ``False``. Calls ``__getitem__``s of all previous datasets in ``__init__``.
+    and returns ``True`` or ``False``. Calls ``__getitem__``s of all previous
+    datasets in ``__init__``.
 
     Example
     -------

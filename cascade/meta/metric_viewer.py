@@ -90,7 +90,7 @@ class MetricViewer:
                 metric["comment_count"] = len(meta["comments"])
             if "links" in meta:
                 metric["link_count"] = len(meta["links"])
-            
+
             return metric
 
         self._metrics = []
@@ -120,7 +120,7 @@ class MetricViewer:
                         metric = create_metric(meta)
 
                         metric["name"] = m.get("name")
-                        metric["value"] =  m.get("value")
+                        metric["value"] = m.get("value")
 
                         for key in m.keys():
                             if key not in ("name", "value", "created_at"):
