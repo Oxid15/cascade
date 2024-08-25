@@ -88,14 +88,14 @@ cascade.data
 
 
 .. autofunction:: cascade.data.dataset
-    :members:
-
  
+
+
 
 .. autofunction:: cascade.data.modifier
-    :members:
-
  
+
+
 
 .. autoclass:: cascade.data.BaseModifier
     :members:

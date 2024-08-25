@@ -51,7 +51,7 @@ Experiment management
 
     .. grid-item::
         .. card:: Link Dataset to a Model
-            :link: /howtos/track_a_file.rst
+            :link: /howtos/links.rst
             :link-type: ref
 
             You can link anything to anything basically
@@ -78,8 +78,7 @@ Experiment management
     pipeline_building.ipynb
     model_training.ipynb
     model_training_trainers.ipynb
-    dataset_zoo.ipynb
-    data_validation.ipynb
-    track_a_file.rst
-    comments.rst
-    tags.rst
+    track_a_file
+    links
+    comments
+    tags

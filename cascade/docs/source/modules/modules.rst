@@ -28,3 +28,4 @@ Modules
     cascade.utils.time_series
     cascade.utils.torch
     cascade.utils.vision
+    dataset_zoo
