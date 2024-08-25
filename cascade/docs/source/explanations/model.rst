@@ -34,11 +34,17 @@ This means that depending on your workflow you can use lines as the track of a s
 through epochs or as a container for experiments with models with the same class and different
 parameters.
 
-ModelRepo
-*********
-:py:class:`cascade.models.ModelRepo`
+Repo
+****
+:py:class:`cascade.repos.Repo`
 
-ModelRepo constitutes a collection of lines.
+Repo constitutes a collection of lines.
 Its meta can contain the information about the experiments in general and about things that are
-applicable to all of the models. For example feature set, information about dataset (can be its meta)
+applicable to all of the objects inside it. For example feature set, information about data
 or validation procedure.
+
+Workspace
+*********
+:py:class:`cascade.workspaces.Workspace`
+
+Workspace serves as the container of Repos and is the highest-level container in Cascade.
