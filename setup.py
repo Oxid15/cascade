@@ -13,7 +13,7 @@ _extras_require = {
     "pydantic": ["pydantic>=1.9.2,<3"],
     "sklearn": ["scikit-learn>=0.24.2,<2"],
     "torch": ["torch>=1.10.2,<3"],
-    "view": ["dash<3", "dash-renderjson==0.0.1"]
+    "view": ["dash<3", "plotly>=5.7.0", "dash-renderjson==0.0.1"]
 }
 
 extras_require = {
