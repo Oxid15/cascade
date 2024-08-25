@@ -1,4 +1,4 @@
-sphinx>=5.2.0
+sphinx>=5.2.0,<9
 pydata-sphinx-theme>=0.13.3
 sphinx-copybutton>=0.5.1
 nbsphinx>=0.8.8

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Union
+from typing import Any, Optional
 
-from . import Sampler, SizedDataset, T
+from .dataset import Dataset, T
+from .modifier import Sampler
 
 
-class RangeSampler(Sampler):
+class RangeSampler(Sampler[T]):
     """
     Implements an interface of standard range in a dataset.
 
@@ -46,10 +47,10 @@ class RangeSampler(Sampler):
 
     def __init__(
         self,
-        dataset: SizedDataset[T],
-        start: Union[int, None] = None,
-        stop: Union[int, None] = None,
-        step: Union[int, None] = 1,
+        dataset: Dataset[T],
+        start: Optional[int] = None,
+        stop: Optional[int] = None,
+        step: int = 1,
         *args: Any,
         **kwargs: Any,
     ) -> None:
@@ -62,7 +63,7 @@ class RangeSampler(Sampler):
                 Start index in range - included
             stop: int
                 Stop index in range - excluded
-            step: int, optional
+            step: int, default is 1
                 Step of range
         Raises
         ------

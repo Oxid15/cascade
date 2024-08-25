@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import MetaHandler, MetaIOError, ZeroMetaError, MultipleMetaError, default_meta_format
+from cascade.base import (MetaHandler, MetaIOError, MultipleMetaError,
+                          ZeroMetaError, default_meta_format)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -114,9 +115,7 @@ def test_random_pipeline_meta(tmp_path_str, dataset, ext):
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_directory_reading(tmp_path_str, ext):
-    meta = [{
-        "type": "model"
-    }]
+    meta = [{"type": "model"}]
 
     MetaHandler.write(os.path.join(tmp_path_str, "meta" + ext), meta)
 
@@ -130,9 +129,7 @@ def test_zero_meta(tmp_path_str):
 
 
 def test_multiple_meta(tmp_path_str):
-    meta = [{
-        "type": "model"
-    }]
+    meta = [{"type": "model"}]
 
     MetaHandler.write(os.path.join(tmp_path_str, "meta.json"), meta)
     MetaHandler.write(os.path.join(tmp_path_str, "meta.yaml"), meta)
@@ -142,9 +139,7 @@ def test_multiple_meta(tmp_path_str):
 
 
 def test_directory_writing(tmp_path_str):
-    meta = [{
-        "type": "model"
-    }]
+    meta = [{"type": "model"}]
 
     MetaHandler.write_dir(tmp_path_str, meta)
 
@@ -154,5 +149,7 @@ def test_directory_writing(tmp_path_str):
 
     MetaHandler.write_dir(tmp_path_str, meta)
 
-    from_file = MetaHandler.read(os.path.join(tmp_path_str, "meta" + default_meta_format))
+    from_file = MetaHandler.read(
+        os.path.join(tmp_path_str, "meta" + default_meta_format)
+    )
     assert from_file == meta

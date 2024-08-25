@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,18 +19,23 @@ from hashlib import md5
 from typing import Any, Tuple
 
 import pendulum
+from typing_extensions import deprecated
 
-from ..base import MetaHandler, PipeMeta, supported_meta_formats
-from ..meta import skeleton
-from . import Dataset, Modifier, T
+from ..base import Meta, MetaHandler, supported_meta_formats
+from ..base.utils import skeleton
+from .dataset import BaseDataset, T
+from .modifier import Modifier
 
 
+@deprecated("Deprecated since 0.14.0. Consider using cascade.lines.DataLine"
+            " with line.save(ds, only_meta=True) if you do not want"
+            " to save pipeline objects, but only to track versions")
 class VersionAssigner(Modifier):
     """
     Class for automatic data versioning using metadata.
-    `VersionAssigner` is a simple `Modifier` that tracks changes in metadata and assigns
+    ``VersionAssigner`` is a simple ``Modifier`` that tracks changes in metadata and assigns
     dataset a version considering changes in meta.
-    The version consists of two parts, namely major and minor in the format `MAJOR.MINOR` just
+    The version consists of two parts, namely major and minor in the format ``MAJOR.MINOR`` just
     like in semantic versioning. The meaning of parts is the following: *major* number changes
     if there are changes in the structure of the pipeline e.g. some dataset was added/removed;
     *minor* number changes in case of any metadata change e.g. new data arrived and changed
@@ -74,7 +79,7 @@ class VersionAssigner(Modifier):
 
     def __init__(
         self,
-        dataset: Dataset[T],
+        dataset: BaseDataset[T],
         path: str,
         verbose: bool = False,
         *args: Any,
@@ -185,13 +190,15 @@ class VersionAssigner(Modifier):
         versions = sorted(versions_flat)
         return versions[-1]
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["version"] = self.version
         return meta
 
 
-def version(ds: Dataset[T], path: str) -> str:
+@deprecated("Deprecated since 0.14.0 consider using"
+            " cascade.lines.DataLine.get_version method instead")
+def version(ds: BaseDataset[T], path: str) -> str:
     """
     Returns version of a dataset using VersionAssigner
 

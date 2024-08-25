@@ -1,5 +1,11 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+# cascade.base
+
+Core module of Cascade - contains basic objects and interfaces. Home for
+`Traceable` class and other things that are not directly related to other
+modules.
+
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,27 +20,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Dict, List, NoReturn, Union
+from typing import Any, Dict, List, NoReturn
 
 """
-Single Meta of basic object is just a dict, however Cascade supports
-pipelines with lists of meta.
+Single meta of basic object is just a dict, however Cascade works with
+pipelines with lists of meta. This is why default meta is a list.
 
-Do not use Meta when returning from `get_meta` methods! Use PipeMeta instead.
-Meta type alias is designed for better readability and to explicitly state when the
-variable is meta.
+This type is used when ``get_meta`` is called on any Traceable
 """
-Meta = Dict[Any, Any]
-
-"""
-This type is used when `get_meta` is called on any Traceable
-"""
-PipeMeta = List[Meta]
-
-"""
-This type described what we can get when reading previously written to meta object
-"""
-MetaFromFile = Union[List[Any], Dict[Any, Any]]
+MetaBlock = Dict[Any, Any]
+Meta = List[MetaBlock]
 
 
 class MetaIOError(IOError):
@@ -56,7 +51,11 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
         f"implemented it in the successor class"
     )
 
+
+from .cache import Cache
 from .history_handler import HistoryHandler
 from .meta_handler import CustomEncoder as JSONEncoder
-from .meta_handler import MetaHandler, default_meta_format, supported_meta_formats
+from .meta_handler import (MetaHandler, default_meta_format,
+                           supported_meta_formats)
+from .serialization import ObjectHandler
 from .traceable import Traceable, TraceableOnDisk

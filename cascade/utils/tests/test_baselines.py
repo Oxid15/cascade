@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,7 +35,10 @@ def test():
     assert np.all(model.predict([0, 0, 0]) == [[1, 0], [1, 0], [1, 0]])
 
     model = ConstantBaseline(constant=[[1, 0], [0, 1]])
-    assert np.all(model.predict([0, 0, 0]) == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]])
+    assert np.all(
+        model.predict([0, 0, 0])
+        == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]]  # noqa: W503
+    )
 
     model = ConstantBaseline(constant=None)
     assert np.all(model.predict([1]) == [None])

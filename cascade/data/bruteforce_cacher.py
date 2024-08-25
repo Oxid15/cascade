@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +15,17 @@ limitations under the License.
 """
 
 from typing import Any
+
 from tqdm import tqdm, trange
-from . import Dataset, Modifier, T
+
+from .dataset import BaseDataset, T
+from .modifier import Modifier
 
 
-class BruteforceCacher(Modifier):
+class BruteforceCacher(Modifier[T]):
     """
-    Identity modifier that calls all previous pipeline in __init__ loading everything
-    in memory. This is useful in combination with `Pickler` when pipeline
-    has heavy operations upstream. You can load everything and pickle it to turn off
-    heavy part of the pipeline.
+    Special modifier that calls all previous pipeline in __init__ loading everything
+    in memory.
 
     Examples
     --------
@@ -49,23 +50,22 @@ class BruteforceCacher(Modifier):
 
     See also
     --------
-    cascade.data.SequentialCacher
     cascade.data.Pickler
     """
-    def __init__(self, dataset: Dataset[T],
-                 *args: Any, **kwargs: Any) -> None:
+
+    def __init__(self, dataset: BaseDataset[T], *args: Any, **kwargs: Any) -> None:
         """
         Loads every item in dataset in internal list.
         """
         super().__init__(dataset, *args, **kwargs)
-        # forcibly calling all previous datasets in the init
-        if hasattr(self._dataset, '__len__') and hasattr(self._dataset, '__getitem__'):
+        # force calling all previous datasets in the init
+        if hasattr(self._dataset, "__len__") and hasattr(self._dataset, "__getitem__"):
             self._data = [self._dataset[i] for i in trange(len(self._dataset))]
-        elif hasattr(self._dataset, '__iter__'):
+        elif hasattr(self._dataset, "__iter__"):
             self._data = [item for item in tqdm(self._dataset)]
         else:
             raise AttributeError(
-                'Input dataset must provide __len__ and __getitem__ or __iter__'
+                "Input dataset must provide __len__ and __getitem__ or __iter__"
             )
 
     def __getitem__(self, index: int) -> T:

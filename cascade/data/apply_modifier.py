@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any, Callable
+import random
+from typing import Any, Callable, Iterator, Optional
 
-from . import Dataset, Modifier, T
+from .dataset import Dataset, T
+from .modifier import Modifier
+from .utils import DatasetOrIterator
 
 
-class ApplyModifier(Modifier):
+class ApplyModifier(Modifier[T]):
     """
-    Modifier that maps a function to given dataset's items in a lazy way.
+    Modifier that applies a function to given dataset's items in each __getitem__ call.
+
+    Can be applied to Iterators too.
     """
 
     def __init__(
-        self, dataset: Dataset[T], func: Callable[[T], Any], *args: Any, **kwargs: Any
+        self,
+        dataset: DatasetOrIterator[T],
+        func: Callable[[T], Any],
+        p: Optional[float] = None,
+        seed: Optional[int] = None,
+        *args: Any,
+        **kwargs: Any,
     ) -> None:
         """
         Parameters
@@ -34,7 +45,11 @@ class ApplyModifier(Modifier):
             A dataset to modify
         func: Callable
             A function to be applied to every item of a dataset -
-            each `__getitem__` would call `func` on an item obtained from a previous dataset
+            each ``__getitem__`` calls ``func`` on an item obtained from a previous dataset
+        p: Optional[float], by default None
+            The probability [0, 1] with which to apply `func`
+        seed: Optional[int], by default None
+            Random seed is used when p is not None
 
         Examples
         --------
@@ -48,7 +63,29 @@ class ApplyModifier(Modifier):
         """
         super().__init__(dataset, *args, **kwargs)
         self._func = func
+        self._p = p
+        if seed is not None:
+            random.seed(seed)
 
     def __getitem__(self, index: int) -> Any:
-        item = self._dataset[index]
-        return self._func(item)
+        if self._p is not None:
+            rnd = random.random()
+            if rnd > self._p:
+                return super().__getitem__(index)
+
+        if isinstance(self._dataset, Dataset):
+            item = self._dataset[index]
+            return self._func(item)
+        else:
+            raise TypeError(f"The underlying dataset is not a Dataset, but {type(self._dataset)}")
+
+    def __iter__(self) -> Iterator[T]:
+        for item in self._dataset:
+            if self._p is not None:
+                rnd = random.random()
+                if rnd > self._p:
+                    yield item
+                else:
+                    yield self._func(item)
+            else:
+                yield self._func(item)

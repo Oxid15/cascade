@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Any, List, Tuple
 
-from typing import Any, List, Tuple, Union
-
-from ..base import PipeMeta, Meta
-from . import SizedDataset
+from ..base import Meta
+from .dataset import Dataset, T
 
 
-class Composer(SizedDataset):
+class Composer(Dataset[T]):
     """
     Unifies two or more datasets element-wise.
 
@@ -34,9 +33,7 @@ class Composer(SizedDataset):
     >>> assert ds[0] == (0, 1)
     """
 
-    def __init__(
-        self, datasets: List[SizedDataset[Any]], *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, datasets: List[Dataset[Any]], *args: Any, **kwargs: Any) -> None:
         """
         Parameters
         ----------
@@ -50,7 +47,7 @@ class Composer(SizedDataset):
         # set the length of any dataset as the length of Composer
         self._len = len(self._datasets[0])
 
-    def _validate_input(self, datasets: List[SizedDataset[Any]]) -> None:
+    def _validate_input(self, datasets: List[Dataset[T]]) -> None:
         lengths = [len(ds) for ds in datasets]
         first = lengths[0]
         if not all([ln == first for ln in lengths]):
@@ -59,29 +56,29 @@ class Composer(SizedDataset):
                 f"Actual lengths: {lengths}"
             )
 
-    def __getitem__(self, index: int) -> Tuple[Any]:
+    def __getitem__(self, index: int) -> Tuple[T]:
         return tuple(ds[index] for ds in self._datasets)
 
     def __len__(self) -> int:
         return self._len
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
-        Composer calls `get_meta()` of all its datasets
+        Composer calls ``get_meta()`` of all its datasets
         """
         meta = super().get_meta()
         meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
         return meta
 
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def from_meta(self, meta: Meta) -> None:
         """
         Updates its own fields as usual and
-        if meta has `data` key then sequentially updates
+        if meta has ``data`` key then sequentially updates
         data of all its datasets
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
             Meta of a single object or a pipeline
         """
 

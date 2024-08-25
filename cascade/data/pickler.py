@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,12 +16,17 @@ limitations under the License.
 
 import os
 import pickle
-from typing import Any, Union
+from typing import Any, Optional
 
-from . import Dataset, Modifier, T
+from typing_extensions import deprecated
+
+from .dataset import BaseDataset, T
+from .modifier import BaseModifier
 
 
-class Pickler(Modifier):
+@deprecated("Pickler is deprecated since 0.14.0 and will be"
+            " removed in subsequent versions. Consider using cascade.base.Cache")
+class Pickler(BaseModifier[T]):
     """
     Pickles input dataset or unpickles one
     """
@@ -29,7 +34,7 @@ class Pickler(Modifier):
     def __init__(
         self,
         path: str,
-        dataset: Union[Dataset[T], None] = None,
+        dataset: Optional[BaseDataset[T]] = None,
         *args: Any,
         **kwargs: Any
     ) -> None:
@@ -43,7 +48,7 @@ class Pickler(Modifier):
         ----------
         path: str
             Path to the pickled dataset
-        dataset: Dataset, optional
+        dataset: BaseDataset, optional
             A dataset to be pickled
 
         Raises
@@ -69,7 +74,21 @@ class Pickler(Modifier):
         with open(self._path, "rb") as f:
             self._dataset = pickle.load(f)
 
-    def ds(self) -> Dataset[T]:
+    def __getitem__(self, index: int) -> T:
+        """
+        Forwards the call to the wrapped dataset regardless
+        of presence of this method in it
+        """
+        return self._dataset.__getitem__(index)
+
+    def __len__(self) -> int:
+        """
+        Forwards the call to the wrapped dataset regardless
+        of presence of this method in it
+        """
+        return self._dataset.__len__()
+
+    def ds(self) -> BaseDataset[T]:
         """
         Returns pickled dataset
         """

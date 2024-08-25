@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from dataclasses import dataclass, asdict
-from getpass import getuser
-import os
 import glob
+import os
 import socket
 import warnings
-from typing import Dict, Union, Any, Literal, Iterable
-import pendulum
+from dataclasses import asdict, dataclass
 from datetime import datetime
+from getpass import getuser
+from typing import Any, Callable, Dict, Iterable, Optional, Union
 
-from . import PipeMeta, Meta, default_meta_format, supported_meta_formats, MetaIOError
+import pendulum
+from typing_extensions import Literal
+
+from . import (
+    Meta,
+    MetaBlock,
+    MetaHandler,
+    MetaIOError,
+    default_meta_format,
+    supported_meta_formats,
+)
+
+DO_NOT_UPDATE = ["created_at"]
 
 
 @dataclass
@@ -39,9 +50,9 @@ class Comment:
 @dataclass
 class Link:
     id: str
-    name: Union[str, None]
-    uri: Union[str, None]
-    meta: Union[PipeMeta, None]
+    name: Optional[str]
+    uri: Optional[str]
+    meta: Optional[Meta]
     created_at: datetime
 
     def __post_init__(self) -> None:
@@ -57,9 +68,9 @@ class Traceable:
 
     def __init__(
         self,
-        *args: Any,
-        description: Union[str, None] = None,
-        tags: Union[Iterable[str], None] = None,
+        *args: Any,  # TODO: why?
+        description: Optional[str] = None,
+        tags: Optional[Iterable[str]] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -74,7 +85,7 @@ class Traceable:
         cascade.base.MetaHandler
         """
         self._meta_prefix = {}
-        self.describe(description)
+        self.description = description
 
         if tags is not None:
             self.tags = set(tags)
@@ -84,20 +95,21 @@ class Traceable:
         self.comments = list()
         self.links = list()
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         """
         Returns
         -------
-        meta: PipeMeta
+        meta: Meta
             A list where first element is this object's metadata.
             All other elements represent the other stages of pipeline if present.
 
             Meta can be anything that is worth to document about
             the object and its properties.
 
-            Meta is a list (see PipeMeta type alias) to allow the formation of pipelines.
+            Meta is a list (see Meta type alias) to allow the formation of pipelines.
         """
-        meta = {"name": repr(self)}
+        meta = {}
+        meta["name"] = repr(self)
         if hasattr(self, "_meta_prefix"):
             meta.update(self._meta_prefix)
         else:
@@ -119,14 +131,14 @@ class Traceable:
 
         return [meta]
 
-    def update_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def update_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """
-        Updates `_meta_prefix`, which then updates
-        dataset's meta when `get_meta()` is called
+        Updates ``_meta_prefix``, which then updates
+        dataset's meta when ``get_meta()`` is called
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
             The object to update with
 
         Raises
@@ -142,8 +154,8 @@ class Traceable:
             if len(meta) != 1:
                 raise ValueError(
                     f"Object that was passed or read from path is a list of length {len(meta)}"
-                    f"There is no clear way to update this object's meta"
-                    f"using this kind of list"
+                    f" There is no clear way to update this object's meta"
+                    f" using this kind of list"
                 )
             self._meta_prefix.update(meta[0])
         else:
@@ -157,34 +169,38 @@ class Traceable:
             "called somewhere"
         )
 
-    def from_meta(self, meta: Union[PipeMeta, Meta]) -> None:
+    def from_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """
-        Updates special fields from the given metadata
+        Overwrites special fields like description,
+        comments, tags and links from the given metadata
+
+        Updates meta_prefix too
 
         Parameters
         ----------
-        meta : Union[PipeMeta, Meta]
+        meta : Meta
         """
-        self.update_meta(meta)
 
         if not isinstance(meta, list):
             meta = [meta]
 
         if "description" in meta[0]:
-            self.describe(meta[0]["description"])
+            self.description = meta[0]["description"]
+            del meta[0]["description"]
+
         if "comments" in meta[0]:
-            for comment in meta[0]["comments"]:
-                self.comments.append(
-                    Comment(**comment)
-                )
+            self.comments = [Comment(**comment) for comment in meta[0]["comments"]]
+            del meta[0]["comments"]
+
         if "tags" in meta[0]:
-            self.tag(meta[0]["tags"])
+            self.tags = set(meta[0]["tags"])
+            del meta[0]["tags"]
 
         if "links" in meta[0]:
-            for link in meta[0]["links"]:
-                self.links.append(
-                    Link(**link)
-                )
+            self.links = [Link(**link) for link in meta[0]["links"]]
+            del meta[0]["links"]
+
+        self.update_meta(meta)
 
     def __repr__(self) -> str:
         """
@@ -201,24 +217,29 @@ class Traceable:
         # Removes adress part of basic object repr and leading < symbol
         return super().__repr__().split()[0][1:]
 
-    def describe(self, desc: Union[str, None]):
+    def describe(self, desc: str):
         """
         Add description to an object
 
         Parameters
         ----------
-        desc : Union[str, None]
-            String description of an object.
-            May be None to use the method in default initializer
+        desc : str
+            String description of an object
 
         Raises
         ------
         TypeError
             If the input is not None and not a string either
         """
-        if not isinstance(desc, str) and desc is not None:
+        if not isinstance(desc, str):
             raise TypeError(f"Description should be str, got {type(desc)}")
         self.description = desc
+
+    def remove_description(self) -> None:
+        """
+        Empties object's description
+        """
+        self.description = None
 
     def tag(self, tag: Union[str, Iterable[str]]) -> None:
         """
@@ -263,11 +284,7 @@ class Traceable:
     def comment(self, message: str) -> None:
         comment_id = str(int(self._find_latest_comment_id()) + 1)
         comment = Comment(
-            comment_id,
-            getuser(),
-            socket.gethostname(),
-            pendulum.now(),
-            message
+            comment_id, getuser(), socket.gethostname(), pendulum.now(tz="UTC"), message
         )
 
         self.comments.append(comment)
@@ -284,12 +301,14 @@ class Traceable:
             return "0"
         return self.links[-1].id
 
-    def link(self,
-             obj: Union["Traceable", None] = None,
-             name: Union[str, None] = None,
-             uri: Union[str, None] = None,
-             meta: Union[PipeMeta, None] = None,
-             include: bool = True) -> None:
+    def link(
+        self,
+        obj: Optional["Traceable"] = None,
+        name: Optional[str] = None,
+        uri: Optional[str] = None,
+        meta: Optional[Meta] = None,
+        include: bool = True,
+    ) -> None:
         """
         Links another object to this object. Links can contain
         name, URI and meta of the object.
@@ -313,15 +332,15 @@ class Traceable:
 
         Parameters
         ----------
-        obj : Union[Traceable, None]
+        obj : Optional[Traceable]
             The object to link
-        name : Union[str, None], optional
+        name : Optional[str]
             Name of the object, overrides obj name if passed, by default None
-        uri : Union[str, None], optional
+        uri : Optional[str]
             URI of the object, by default None
-        meta : Union[PipeMeta, None], optional
+        meta : Optional[Meta]
             Meta of the object, overrides obj meta if passed, by default None
-        include : bool, optional
+        include : bool, default is True
             Whether to include full meta of the object, by default True
         """
         if isinstance(obj, Traceable):
@@ -332,17 +351,18 @@ class Traceable:
                     meta = obj.get_meta()
                 else:
                     obj_meta = obj.get_meta()
-                    meta = [{
-                        "type": obj_meta[0].get("type"),
-                        "description": obj_meta[0].get("description"),
-                        "tags": obj_meta[0].get("tags"),
-                        "comments": obj_meta[0].get("comments"),
-                    }]
+                    meta = [
+                        {
+                            "name": name,
+                            "type": obj_meta[0].get("type"),
+                            "description": obj_meta[0].get("description"),
+                            "tags": obj_meta[0].get("tags"),
+                            "comments": obj_meta[0].get("comments"),
+                        }
+                    ]
 
         link_id = str(int(self._find_latest_link_id()) + 1)
-        self.links.append(
-            Link(link_id, name, uri, meta, pendulum.now(tz="UTC"))
-        )
+        self.links.append(Link(link_id, name, uri, meta, pendulum.now(tz="UTC")))
 
     def remove_link(self, id: str) -> None:
         """
@@ -365,6 +385,7 @@ class TraceableOnDisk(Traceable):
     Common interface for Traceables that have
     their meta-data written on disk
     """
+
     def __init__(
         self,
         root: str,
@@ -396,7 +417,16 @@ class TraceableOnDisk(Traceable):
                     "on path {self._root}"
                 )
 
-    def _determine_meta_fmt(self) -> Union[str, None]:
+        # if meta exists
+        if ext:
+            try:
+                disk_meta = MetaHandler.read_dir(self._root)
+            except MetaIOError as e:
+                warnings.warn(f"File reading error ignored: {e}")
+            else:
+                self.from_meta(disk_meta)
+
+    def _determine_meta_fmt(self) -> Optional[str]:
         # TODO: maybe meta.* should become a global setting
         meta_paths = glob.glob(os.path.join(self._root, "meta.*"))
         if len(meta_paths) == 0:
@@ -405,56 +435,88 @@ class TraceableOnDisk(Traceable):
             _, ext = os.path.splitext(meta_paths[0])
             return ext
         else:
-            warnings.warn(
-                f"Multiple meta files found in {self._root}"
-            )
+            warnings.warn(f"Multiple meta files found in {self._root}")
 
-    def _create_meta(self) -> None:
+    def sync_meta(self) -> None:
+        """
+        If meta was already written, updates every field
+        if the field in not None or empty except for creation time.
+
+        Then writes new meta on disk and updates its own meta
+        syncronizing both states.
+
+        If meta consists of several blocks, it zips two lists
+        and update accordingly
+
+        The object should already exist to be synced
+        """
         meta_path = sorted(glob.glob(os.path.join(self._root, "meta.*")))
-        # Object was created before -> update
+        # Object was created before -> update meta on disk
         if len(meta_path) > 0:
-            self._update_meta()
-            return
+            meta = [{}]
+            from . import MetaHandler
 
-        created = str(pendulum.now(tz="UTC"))
-        meta = self.get_meta()
-        meta[0].update({"created_at": created})
+            try:
+                meta = MetaHandler.read_dir(self._root)
+            except MetaIOError as e:
+                warnings.warn(f"File reading error ignored: {e}")
 
-        from . import MetaHandler
+            self_meta = self.get_meta()
+            for self_block, block in zip(self_meta, meta):
+                for key in self_block:
+                    if key not in DO_NOT_UPDATE:
+                        block[key] = self_block[key]
 
-        try:
-            MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
-        except MetaIOError as e:
-            warnings.warn(f"File writing error ignored: {e}")
+            try:
+                MetaHandler.write_dir(self._root, meta)
+            except MetaIOError as e:
+                warnings.warn(f"File writing error ignored: {e}")
+        else:
+            created = str(pendulum.now(tz="UTC"))
+            meta = self.get_meta()
+            meta[0].update({"created_at": created})
 
-    def _update_meta(self) -> None:
-        """
-        Reads meta if exists and updates it with new values
-        writes back to disk
+            from . import MetaHandler
 
-        If meta file exists and is only one, then reads it
-        and writes back in the same format
-        """
-
-        meta = {}
-        from . import MetaHandler
-
-        try:
-            meta = MetaHandler.read_dir(self._root)[0]
-        except MetaIOError as e:
-            warnings.warn(f"File reading error ignored: {e}")
-
-        meta.update(self.get_meta()[0])
-
-        try:
-            MetaHandler.write_dir(self._root, [meta])
-        except MetaIOError as e:
-            warnings.warn(f"File writing error ignored: {e}")
+            try:
+                MetaHandler.write(
+                    os.path.join(self._root, "meta" + self._meta_fmt), meta
+                )
+            except MetaIOError as e:
+                warnings.warn(f"File writing error ignored: {e}")
 
     def get_root(self) -> str:
         return self._root
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
-        meta[0]["updated_at"] = pendulum.now(tz="UTC")
+        meta[0]["updated_at"] = str(pendulum.now(tz="UTC"))
         return meta
+
+    def load_meta(self):
+        from . import MetaHandler
+
+        meta = MetaHandler.read_dir(self._root)
+        return meta
+
+    def _sync_meta_after(self, function: Callable[..., Any]):
+        def wrap(*args: Any, **kwargs: Any):
+            result = function(*args, **kwargs)
+            self.sync_meta()
+            return result
+        return wrap
+
+    def __getattribute__(self, name: str) -> Any:
+        attr = super().__getattribute__(name)
+        if name in (
+            "describe",
+            "remove_description",
+            "comment",
+            "remove_comment",
+            "tag",
+            "remove_tag",
+            "link",
+            "remove_link",
+        ):
+            return self._sync_meta_after(attr)
+        return attr

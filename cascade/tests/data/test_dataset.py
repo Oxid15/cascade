@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,18 +24,21 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, Iterator, Modifier, Sampler, Wrapper
+from cascade.data import (BaseDataset, IteratorWrapper, Modifier, Sampler,
+                          Wrapper)
 
 
-def test_getitem():
-    ds = Dataset()
-    with pytest.raises(NotImplementedError):
-        ds[0]
+class DummyDataset(BaseDataset):
+    def __len__(self):
+        return 0
+
+    def __getitem__(self, index) -> None:
+        return None
 
 
 def test_meta():
     now = datetime.datetime.now()
-    ds = Dataset()
+    ds = DummyDataset()
     ds.update_meta({"time": now})
     meta = ds.get_meta()
 
@@ -47,7 +50,7 @@ def test_meta():
 
 
 def test_update_meta():
-    ds = Dataset()
+    ds = DummyDataset()
     ds.update_meta({"a": 1, "b": 2})
     ds.update_meta({"b": 3})
     meta = ds.get_meta()
@@ -62,7 +65,7 @@ def test_meta_from_file(tmp_path):
     with open(os.path.join(tmp_path, "test_meta_from_file.json"), "w") as f:
         json.dump({"a": 1}, f)
 
-    ds = Dataset(meta_prefix=os.path.join(tmp_path, "test_meta_from_file.json"))
+    ds = DummyDataset(meta_prefix=os.path.join(tmp_path, "test_meta_from_file.json"))
     meta = ds.get_meta()
 
     assert "a" in meta[0]
@@ -70,7 +73,7 @@ def test_meta_from_file(tmp_path):
 
 
 def test_iterator():
-    it = Iterator([1, 2, 3, 4])
+    it = IteratorWrapper([1, 2, 3, 4])
     res = []
     for item in it:
         res.append(item)

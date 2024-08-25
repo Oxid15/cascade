@@ -15,11 +15,12 @@ limitations under the License.
 """
 
 import logging
-from typing import Any, Dict, Iterable, List, Tuple, Union
+from typing import Any, Dict, Iterable, Tuple, Union
 
 import pendulum
+from typing_extensions import deprecated
 
-from ..base import PipeMeta, Traceable, raise_not_implemented
+from ..base import Meta, Traceable, raise_not_implemented
 from ..models import Model, ModelLine, ModelRepo
 
 logger = logging.getLogger(__name__)
@@ -52,19 +53,24 @@ class Trainer(Traceable):
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
         raise_not_implemented("cascade.models.Trainer", "train")
 
-    def get_meta(self) -> List[Dict]:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["metrics"] = self.metrics
         meta[0]["repo"] = self._repo.get_meta()
         return meta
 
 
+@deprecated(
+    "cascade.models.BasicTrainer is deprecated since 0.14.0, consider using"
+    " cascade.trainers.BasicTrainer"
+)
 class BasicTrainer(Trainer):
     """
     The most common of concrete Trainers.
     Trains a model for a certain amount of epochs.
     Can start from checkpoint if model file exists.
     """
+
     def __init__(self, repo: Union[ModelRepo, str], *args: Any, **kwargs: Any) -> None:
         self.train_start_at = None
         self.train_end_at = None
@@ -107,7 +113,7 @@ class BasicTrainer(Trainer):
 
         Parameters:
             model: Model
-                a model to be trained or which to load from line specified in `start_from`
+                a model to be trained or which to load from line specified in ``start_from``
             train_data: Iterable
                 train data to be passed to model's fit()
             test_data: Iterable, optional
@@ -122,9 +128,10 @@ class BasicTrainer(Trainer):
                 name or index of line from which to start
                 starts from the latest model in line
             eval_strategy: int, optional
-                Evaluation will take place every `eval_strategy` epochs. If None - the strategy is 'no evaluation'.
+                Evaluation will take place every ``eval_strategy`` epochs. If None - the strategy
+                is ``no evaluation``.
             save_strategy: int, optional
-                Saving will take place every `save_strategy` epochs. Meta will be saved anyway.
+                Saving will take place every ``save_strategy`` epochs. Meta will be saved anyway.
                 If None - the strategy is 'save only meta'.
         """
 
@@ -210,7 +217,7 @@ class BasicTrainer(Trainer):
             f"Training finished in {end_time.diff_for_humans(start_time, True)}"
         )
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["train_start_at"] = self.train_start_at
         meta[0]["train_end_at"] = self.train_end_at

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,18 +16,25 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, List, Literal, Union
+from typing import Any, Iterator, List, Optional
 
-from ..base import MetaHandler, PipeMeta, TraceableOnDisk, MetaFromFile, MetaIOError
+from typing_extensions import Literal, deprecated
+
+from ..base import Meta, MetaHandler, MetaIOError, TraceableOnDisk
+from ..data import T
 from ..models import ModelRepo
 
 
+@deprecated(
+    "cascade.models.Workspace is deprecated, consider using"
+    " cascade.workspaces.Workspace instead"
+)
 class Workspace(TraceableOnDisk):
     def __init__(
         self,
         path: str,
         meta_fmt: Literal[".json", ".yml", ".yaml"] = ".json",
-        default_repo: Union[str, None] = None,
+        default_repo: Optional[str] = None,
         *args: Any,
         **kwargs: Any,
     ) -> None:
@@ -36,6 +43,7 @@ class Workspace(TraceableOnDisk):
         self._default = default_repo
 
         abs_root = os.path.abspath(self._root)
+        os.makedirs(abs_root, exist_ok=True)
         dirs = sorted(
             [
                 name
@@ -52,7 +60,7 @@ class Workspace(TraceableOnDisk):
             except MetaIOError as e:
                 warnings.warn(str(e))
 
-        self._create_meta()
+        self.sync_meta()
 
     def __getitem__(self, key: str) -> ModelRepo:
         if key in self._repo_names:
@@ -63,7 +71,11 @@ class Workspace(TraceableOnDisk):
     def __len__(self) -> int:
         return len(self._repo_names)
 
-    def get_meta(self) -> PipeMeta:
+    def __iter__(self) -> Iterator[T]:
+        for repo in self._repo_names:
+            yield self.__getitem__(repo)
+
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["root"] = self._root
         meta[0]["len"] = len(self)
@@ -80,29 +92,31 @@ class Workspace(TraceableOnDisk):
             if len(self._repo_names) > 0:
                 return self[self._repo_names[0]]
             else:
-                raise RuntimeError("Tried to get the default repo when the workspace is empty")
+                raise RuntimeError(
+                    "Tried to get the default repo when the workspace is empty"
+                )
 
     def set_default(self, repo: str) -> None:
         if repo in self._repo_names:
             self._default = repo
         else:
-            raise KeyError(f"Repo {repo} does not exist in Workspace {self._root}")
+            raise KeyError(f"ModelRepo {repo} does not exist in Workspace {self._root}")
 
     def reload(self) -> None:
         pass
 
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_model_meta(self, model: str) -> Meta:
         """
         Loads metadata of a model from disk
 
         Parameters
         ----------
         model : str
-            model slug e.g. `fair_squid_of_bliss`
+            model slug e.g. ``fair_squid_of_bliss``
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -143,7 +157,7 @@ class Workspace(TraceableOnDisk):
             If the repo already exists
         """
         if name in self._repo_names:
-            raise ValueError(f"Repo {name} already exists")
+            raise ValueError(f"ModelRepo {name} already exists")
 
         repo = ModelRepo(os.path.join(self._root, name), *args, **kwargs)
         self._repo_names.append(name)

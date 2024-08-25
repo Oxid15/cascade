@@ -1,5 +1,5 @@
 """
-Copyright 2022-2023 Ilia Moiseev
+Copyright 2022-2024 Ilia Moiseev
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -14,9 +14,12 @@ limitations under the License.
 import itertools
 import os
 import shutil
-from typing import Any, Dict, Generator, Iterable, List, Literal, Type, Union
+from typing import Any, Dict, Iterable, Iterator, List, Type, Union
 
-from ..base import MetaFromFile, PipeMeta, Traceable, TraceableOnDisk
+from typing_extensions import Literal, deprecated
+
+from ..base import Meta, Traceable, TraceableOnDisk
+from ..data import T
 from ..version import __version__
 from .model import Model
 from .model_line import ModelLine
@@ -52,11 +55,11 @@ class Repo(Traceable):
         """
         return len(self._lines)
 
-    def __iter__(self) -> Generator[ModelLine, None, None]:
+    def __iter__(self) -> Iterator[T]:
         for line in self._lines:
             yield self.__getitem__(line)
 
-    def get_meta(self) -> PipeMeta:
+    def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0].update(
             {
@@ -78,6 +81,10 @@ class Repo(Traceable):
         pass
 
 
+@deprecated(
+    "cascade.models.SingleLineRepo is deprecated, consider using"
+    " cascade.repos.SingleLineRepo instead"
+)
 class SingleLineRepo(Repo):
     def __init__(
         self,
@@ -109,19 +116,23 @@ class SingleLineRepo(Repo):
         self._line.reload()
 
 
+@deprecated(
+    "cascade.models.ModelRepo is deprecated, consider using cascade.repos.Repo instead"
+)
 class ModelRepo(Repo, TraceableOnDisk):
     """
     An interface to manage experiments with several lines of models.
     When created, initializes an empty folder constituting a repository of model lines.
 
     Stores its metadata in its root folder. With every run if the repo was already
-    created earlier, updates its meta and logs changes in human-readable format in history file
+    created earlier, updates its meta and logs changes in human-readable format in
+    history file
 
     Example
     -------
     >>> from cascade.models import ModelRepo
     >>> from cascade.utils.baselines import ConstantBaseline
-    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one line for the example.'})
+    >>> repo = ModelRepo('repo', meta_prefix={'description': 'This is a repo with one line.'})
     >>> line = repo.add_line('model', ConstantBaseline)
     >>> model = ConstantBaseline(1)
     >>> model.fit()
@@ -153,19 +164,21 @@ class ModelRepo(Repo, TraceableOnDisk):
             Path to a folder where ModelRepo needs to be created or already was created
             if folder does not exist, creates it
         lines: List[Dict]
-            A list with parameters of model lines to add at creation or to initialize (alias for `add_model`)
+            A list with parameters of model lines to add at creation or to
+            initialize (alias for ``add_model``)
         overwrite: bool
             if True will remove folder that is passed in first argument and start a new repo
             in that place
         meta_fmt: Literal['.json', '.yml', '.yaml']
             extension of repo's metadata files and that will be assigned to the lines by default
-            `.json` and `.yml` or `.yaml` are supported
+            ``.json`` and ``.yml`` or ``.yaml`` are supported
         model_cls:
             Default class for any ModelLine in repo
         See also
         --------
         cascade.models.ModelLine
         """
+
         super().__init__(folder, meta_fmt, *args, **kwargs)
         self._model_cls = model_cls
 
@@ -186,7 +199,7 @@ class ModelRepo(Repo, TraceableOnDisk):
 
                 self._lines[name] = {"args": [], "kwargs": line}
 
-        self._create_meta()
+        self.sync_meta()
 
     def add_line(
         self,
@@ -204,9 +217,9 @@ class ModelRepo(Repo, TraceableOnDisk):
         Parameters:
             name: str, optional
                 Name of the line. It is used to name a folder of line.
-                Repo prepends it with `self._root` before creating.
+                Repo prepends it with ``self._root`` before creating.
                 Optional argument. If omitted - names new line automatically
-                using f'{len(self):0>5d}'
+                using ``f'{len(self):0>5d}'``
             meta_fmt: str, optional
                 Format of meta files. Supported values are the same as for repo.
                 If omitted, inherits format from repo.
@@ -230,7 +243,7 @@ class ModelRepo(Repo, TraceableOnDisk):
             meta_fmt = self._meta_fmt
 
         self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
-        self._update_meta()
+        self.sync_meta()
 
         line = ModelLine(folder, *args, meta_fmt=meta_fmt, **kwargs)
         return line
@@ -240,7 +253,7 @@ class ModelRepo(Repo, TraceableOnDisk):
         Returns
         -------
         line: ModelLine
-           existing line of the name passed in `key`
+           existing line of the name passed in ``key``
         """
         if isinstance(key, int):
             key = list(self._lines.keys())[key]
@@ -265,23 +278,23 @@ class ModelRepo(Repo, TraceableOnDisk):
         """
         super().reload()
         self._update_lines()
-        self._update_meta()
+        self.sync_meta()
 
     def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
         return ModelRepoConcatenator([self, repo])
 
-    def load_model_meta(self, model: str) -> MetaFromFile:
+    def load_model_meta(self, model: str) -> Meta:
         """
         Loads metadata of a model from disk
 
         Parameters
         ----------
         model : str
-            model slug e.g. `fair_squid_of_bliss`
+            model slug e.g. ``fair_squid_of_bliss``
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -310,16 +323,25 @@ class ModelRepo(Repo, TraceableOnDisk):
         for name in sorted(os.listdir(self._root)):
             if (
                 os.path.isdir(os.path.join(self._root, name))
-                and name not in self._lines
+                and name not in self._lines  # noqa: W503
             ):
                 self._lines[name] = {"args": [], "kwargs": dict()}
 
 
+@deprecated(
+    "Concatenating Repos is deprecated since"
+    " 0.14.0 and will be removed by 0.15.0"
+    " Use Workspaces instead",
+    category=DeprecationWarning,
+    stacklevel=1,
+)
 class ModelRepoConcatenator(Repo):
     """
+    Deprecated
+
     The class to concatenate different Repos.
     For the ease of use please, don't use it directly.
-    Just do `repo = repo_1 + repo_2` to unify two or more repos.
+    Just do ``repo = repo_1 + repo_2`` to unify two or more repos.
     """
 
     def __init__(self, repos: Iterable[Repo], *args: Any, **kwargs: Any) -> None:
@@ -331,8 +353,8 @@ class ModelRepoConcatenator(Repo):
         if len(pair) <= 2:
             raise KeyError(
                 f"Key {key} is not in required format \
-            `<repo_idx>_..._<line_name>`. \
-            Please, use the key in this format. For example `0_line_1`"
+            ``<repo_idx>_..._<line_name>``. \
+            Please, use the key in this format. For example ``0_line_1``"
             )
         idx, line_name = pair[0], "_".join(pair[1:])
         idx = int(idx)
@@ -342,7 +364,7 @@ class ModelRepoConcatenator(Repo):
     def __len__(self) -> int:
         return sum([len(repo) for repo in self._repos])
 
-    def __iter__(self) -> Generator[ModelLine, None, None]:
+    def __iter__(self) -> Iterator[T]:
         # this flattens the list of lines
         for line in itertools.chain(*[[line for line in repo] for repo in self._repos]):
             yield line

@@ -17,13 +17,13 @@ Cascade was built especially for individuals or small teams that are in need of 
 pip install cascade-ml
 ```
 
-More info on installation can be found in [documentation](https://oxid15.github.io/cascade/en/latest/quickstart.html#installation)
+More info on installation can be found in [documentation](https://oxid15.github.io/cascade/en/latest/)
 
 ## Docs
 
 [Go to Cascade documentation](https://oxid15.github.io/cascade/en/latest)
 
-## Usage
+## Usage Examples
 
 This section is divided into blocks based on what problem you can solve using Cascade. These are the simplest examples
 of what the library is capable of. See more in documentation.
@@ -84,6 +84,7 @@ We see all the stages that we did in meta.
   "tags": [],
   "type": "dataset"},
  {"comments": [],
+  "description": null,
   "len": 1797,
   "links": [],
   "name": "cascade.data.dataset.Wrapper",
@@ -94,104 +95,70 @@ We see all the stages that we did in meta.
 
 </details>
 
-See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/examples/dataset_zoo.html)  
-See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
+See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/modules/dataset_zoo.html)  
+See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
-
-### Pipeline versioning
-
-Cascade offers automatic pipeline versioning
-utilities
-
-```python
-from cascade.data import Wrapper, Modifier, version
-
-ds = Wrapper([0, 1, 2])
-ds = Modifier(ds)
-
-ver = version(ds, "version_log.yml")
-```
-
-Will output `0.1` and for any change in the steps or any meta of the pipeline it will
-bump the version. If you return to the previous version, then will return to previous one as well.
 
 ### Experiment tracking
 
-Not only data and pipelines changes over time. Models change more frequently and require special system to handle experiments and artifacts.
+Cascade provides a rich set of ML-experiment tracking tools.
+You can easily track history of model changes, save and restore models
+in a structured manner along with metadata.
 
 ```python
 import random
-from cascade import models as cdm
-from cascade import data as cdd
+from cascade.models import Model
+from cascade.repos import Repo
 
-model = cdm.Model()
+model = Model()
 model.add_metric('acc', random.random())
 
-repo = cdm.ModelRepo('repos/use_case_repo')
+repo = Repo('./repo')
 
 line = repo.add_line('baseline')
 line.save(model, only_meta=True)
 ```
 
-`Repo` is the collection of model lines and `Line` can be a bunch of experiments on one model type.
+`Repo` is the collection of lines and `Line` can be a bunch of experiments on one model type.
+Lines can also store data pipelines.
 
 
 <details>
 <summary>Click to see full model metadata</summary>
 
 ```json
-[{"comments": [],
-  "created_at": "2023-11-06T07:42:42.737248+00:00",
-  "description": null,
-  "links": [],
-  "metrics": [{"created_at": "2023-11-06T07:42:43.004261+00:00",
-               "name": "acc",
-               "value": 0.3730907820891789}],
-  "name": "cascade.models.model.Model",
-  "params": {},
-  "path": "/home/user/repos/use_case_repo/baseline/00001",
-  "saved_at": "2023-11-06T07:43:17.325593+00:00",
-  "slug": "cerulean_jaguarundi_of_trust",
-  "tags": [],
-  "type": "model"}]
+[
+    {
+        "name": "cascade.models.model.Model",
+        "description": null,
+        "tags": [],
+        "comments": [],
+        "links": [],
+        "type": "model",
+        "created_at": "2024-08-25T19:15:24.658259+00:00",
+        "metrics": [
+            {
+                "name": "acc",
+                "value": 0.4323295098641783,
+                "created_at": "2024-08-25T19:15:24.658356+00:00"
+            }
+        ],
+        "params": {},
+        "path": "/home/user/repo/baseline/00000",
+        "slug": "rustling_finicky_hoatzin",
+        "saved_at": "2024-08-25T19:15:25.548339+00:00",
+        "python_version": "3.10.12 (main, Jul 29 2024, 16:56:48) [GCC 11.4.0]",
+        "user": "user",
+        "host": "hostname"
+    }
+]
 ```
 
 </details>
 
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
+See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
-### Data validation
-
-Validation is an important part of pipelines. Simple asserts can do the thing, but
-there are more useful validation tools.  
-Validators provide meaningful error messages and a way to perform many checks in one run over the dataset.
-
-```python
-from cascade import meta as cme
-from cascade import data as cdd
-
-from sklearn.datasets import load_digits
-import numpy as np
-
-
-X, y = load_digits(return_X_y=True)
-pairs = [(x, y) for (x, y) in zip(X, y)]
-
-ds = cdd.Wrapper(pairs)
-ds = cdd.RandomSampler(ds)
-train_ds, test_ds = cdd.split(ds)
-
-cme.PredicateValidator(
-    train_ds,
-    [
-        lambda pair: all(pair[0] < 20),
-        lambda pair: pair[1] in (i for i in range(10))
-    ]
-)
-```
-
-See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
 
 ### Metadata analysis
 
@@ -200,13 +167,13 @@ During experiments Cascade produces many metadata which can be analyzed later.
 metrics of all models in repository.
 
 ```python
-from cascade import meta as cme
-from cascade import models as cdm
+from cascade.meta import MetricViewer
+from cascade.repos import Repo
 
-repo = cdm.ModelRepo('repos/use_case_repo')
+repo = cdm.Repo("repo")
 
 # This runs web-server that relies on optional dependency
-cme.MetricViewer(repo).serve()
+MetricViewer(repo).serve()
 ```
 
 ![metric-viewer](cascade/docs/imgs/metric-viewer.gif)
@@ -215,25 +182,27 @@ cme.MetricViewer(repo).serve()
 
 ```python
 from cascade import meta as cme
-from cascade import models as cdm
+from cascade.repos import Repo
 
 
-repo = cdm.ModelRepo('repos/use_case_repo')
+repo = cdm.Repo("repo")
 
 # This returns plotly figure
 cme.HistoryViewer(repo).plot()
 
-# This runs a server ans allows to see changes in real time (for example while models are trained)
+# This runs a dash server and allows to see changes in real time (for example while models are trained)
 cme.HistoryViewer(repo).serve()
 ```
 
-See all use-cases in [documentation](https://oxid15.github.io/cascade/en/latest/examples.html)
+See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
 ![history-viewer](cascade/docs/imgs/history-viewer.gif)
 
 ## Who could find Cascade useful
 
-Small and fast-prototyping AI-teams could use it as a tradeoff between total missingness of any MLOps practices and demanding enterprise solutions.
+ML engineers and researchers in small teams or working individually.
+The price of integrating with large-scale MLOps solutions can be too high and the aim of
+Cascade is to bridge this gap for everyone.
 
 ## Principles
 

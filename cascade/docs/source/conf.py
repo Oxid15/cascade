@@ -21,7 +21,7 @@ import cascade
 
 project = "cascade"
 author = "Ilia Moiseev"
-copyright = f"2022-2023, {author}"
+copyright = f"2022-2024, {author}"
 
 # The full version, including alpha/beta/rc tags
 release = cascade.__version__
@@ -79,6 +79,12 @@ html_theme_options = {
             "url": "https://github.com/oxid15/cascade",
             "icon": "fa-brands fa-github",
             "type": "fontawesome",
+        },
+        {
+            "name": "Twitter",
+            "url": "https://x.com/cascade_mlops",
+            "icon": "fa-brands fa-twitter",
+            "type": "fontawesome",
         }
     ],
     "switcher": {
@@ -89,5 +95,8 @@ html_theme_options = {
     "logo": {
         "image_light": "_static/logo_light.svg",
         "image_dark": "_static/logo_dark.svg",
-   }
+   },
+    "analytics": {
+        "google_analytics_id": "G-KD8QDKDMD7"
+    }
 }
