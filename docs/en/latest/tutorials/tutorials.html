@@ -467,6 +467,17 @@ completing this one.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml
 </pre></div>
 </div>
+<p>Cascade has a set of optional dependencies, which can be installed with the following commands</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>opencv<span class="o">]</span><span class="w"> </span><span class="c1"># Use opencv as image backend</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pandera<span class="o">]</span><span class="w"> </span><span class="c1"># Validate pandas dataframes with Pandera</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pil<span class="o">]</span><span class="w"> </span><span class="c1"># Use Pillow as image backend</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pydantic<span class="o">]</span><span class="w"> </span><span class="c1"># Use data validation modifiers</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>sklearn<span class="o">]</span><span class="w"> </span><span class="c1"># Scikit-learn integration</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>torch<span class="o">]</span><span class="w"> </span><span class="c1"># PyTorch integration</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>view<span class="o">]</span><span class="w"> </span><span class="c1"># Cascade viewers based on dash</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>all<span class="o">]</span><span class="w"> </span><span class="c1"># Installs everything</span>
+</pre></div>
+</div>
 <p>If you have completed the tutorial you can see the <a class="reference internal" href="../howtos/howtos.html"><span class="std std-ref">How-to guides</span></a> section
 for more specific and complex workflows.</p>
 <div class="toctree-wrapper compound">
