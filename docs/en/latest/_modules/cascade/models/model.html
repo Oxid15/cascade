@@ -1,124 +1,144 @@
+
 <!DOCTYPE html>
 
 
-<html>
+<html lang="en" >
 
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cascade.models.model &#8212; cascade 0.13.0 documentation</title>
+    <title>cascade.models.model &#8212; cascade 0.14.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
+  
+  <link href="../../../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
+    <link rel="stylesheet" type="text/css" href="../../../pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../styles/pydata-sphinx-theme.css?v=3ab4e28d" />
+    <link rel="stylesheet" type="text/css" href="../../../copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../css/custom.css?v=9cb1bd10" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-cfasync="false">
-        document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-        document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
-    </script>
-
-    <!-- Loaded before other Sphinx assets -->
-    <link href="../../../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-    <link href="../../../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-    <link href="../../../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-
-
-    <link href="../../../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-        href="../../../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-        href="../../../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin
-        href="../../../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../styles/pydata-sphinx-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../../design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../css/custom.css" />
-
-    <!-- Pre-loaded scripts that we'll load fully later -->
-    <link rel="preload" as="script" href="../../../scripts/bootstrap.js?digest=e353d410970836974a52" />
-    <link rel="preload" as="script" href="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
-
-    <script data-url_root="../../../" id="documentation_options" src="../../../documentation_options.js"></script>
-    <script src="../../../jquery.js"></script>
-    <script src="../../../underscore.js"></script>
-    <script src="../../../doctools.js"></script>
-    <script src="../../../clipboard.min.js"></script>
-    <script src="../../../copybutton.js"></script>
-    <script src="../../../design-tabs.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA="
-        src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../documentation_options.js?v=361a893e"></script>
+    <script src="../../../doctools.js?v=9a2dae69"></script>
+    <script src="../../../sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../copybutton.js?v=f281be69"></script>
+    <script src="../../../design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-KD8QDKDMD7');
+            </script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-KD8QDKDMD7');
+            </script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/cascade/models/model';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
-    </script>
-    <link rel="shortcut icon" href="../../../logo_sq.svg" />
+        </script>
+    <link rel="icon" href="../../../logo_sq.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None" />
-</head>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-
-<body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%"
-    data-default-mode="">
-
-
-
-    <a class="skip-link" href="#main-content">Skip to main content</a>
-
-    <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary" />
-    <label class="overlay overlay-primary" for="__primary"></label>
-
-    <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary" />
-    <label class="overlay overlay-secondary" for="__secondary"></label>
-
-    <div class="search-button__wrapper">
-        <div class="search-button__overlay"></div>
-        <div class="search-button__search-container">
-            <form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..."
-                    aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off"
-                    spellcheck="false" />
-                <span class="search-button__kbd-shortcut"><kbd
-                        class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-            </form>
-        </div>
-    </div>
-
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
     <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-        <div class="bd-header__inner bd-page-width">
-            <label class="sidebar-toggle primary-toggle" for="__primary">
-                <span class="fa-solid fa-bars"></span>
-            </label>
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
-            <div class="navbar-header-items__start">
-
-                <div class="navbar-item">
-
-
-                    <a class="navbar-brand logo" href="../../../index.html">
-
-
-
-
-
-
-
-
-
-                        <img src="../../../logo_light.svg" class="logo__image only-light" alt="Logo image" />
-                        <script>document.write(`<img src="../../../logo_dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
-
-
-                    </a>
-                </div>
-
-                <div class="navbar-item">
-                    <script>
-                        document.write(`
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../logo_light.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../../logo_dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
   <div class="version-switcher__container dropdown">
     <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
       latest  <!-- this text may get changed later by javascript -->
@@ -129,261 +149,286 @@
     </div>
   </div>
 `);
-                    </script>
-                </div>
+</script></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
 
-            </div>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../howtos/howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
 
-            <div class="col-lg-9 navbar-header-items">
-
-                <div class="me-auto navbar-header-items__center">
-
-                    <div class="navbar-item">
-                        <nav class="navbar-nav">
-                            <p class="sidebar-header-items__title" role="heading" aria-level="1"
-                                aria-label="Site Navigation">
-                                Site Navigation
-                            </p>
-                            <ul class="bd-navbar-elements navbar-nav">
-
-                                <li class="nav-item">
-                                    <a class="nav-link nav-internal" href="../../../quickstart.html">
-                                        Quickstart
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link nav-internal" href="../../../examples.html">
-                                        Examples
-                                    </a>
-                                </li>
-
-
-                                <li class="nav-item">
-                                    <a class="nav-link nav-internal" href="../../../modules.html">
-                                        API reference
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </nav>
-                    </div>
-
-                </div>
-
-
-                <div class="navbar-header-items__end">
-
-                    <div class="navbar-item navbar-persistent--container">
-
-                        <script>
-                            document.write(`
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules/modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-                        </script>
-                    </div>
-
-
-                    <div class="navbar-item">
-                        <script>
-                            document.write(`
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-                        </script>
-                    </div>
-
-                    <div class="navbar-item">
-                        <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
-                            <li class="nav-item">
-
-
-
-
-
-
-
-
-                                <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
-                                    rel="noopener" target="_blank" data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-                                    <label class="sr-only">GitHub</label></a>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="navbar-persistent--mobile">
-                <script>
-                    document.write(`
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
   </button>
 `);
-                </script>
-            </div>
+</script>
+    </div>
+  
 
-
-
-        </div>
+  
+</div>
 
     </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
 
-    <div class="bd-container">
-        <div class="bd-container__inner bd-page-width">
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
 
-            <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../howtos/howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
 
-
-                <div class="sidebar-header-items sidebar-primary__section">
-
-
-                    <div class="sidebar-header-items__center">
-
-                        <div class="navbar-item">
-                            <nav class="navbar-nav">
-                                <p class="sidebar-header-items__title" role="heading" aria-level="1"
-                                    aria-label="Site Navigation">
-                                    Site Navigation
-                                </p>
-                                <ul class="bd-navbar-elements navbar-nav">
-
-                                    <li class="nav-item">
-                                        <a class="nav-link nav-internal" href="../../../quickstart.html">
-                                            Quickstart
-                                        </a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a class="nav-link nav-internal" href="../../../examples.html">
-                                            Examples
-                                        </a>
-                                    </li>
-
-
-                                    <li class="nav-item">
-                                        <a class="nav-link nav-internal" href="../../../modules.html">
-                                            API reference
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </nav>
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="sidebar-header-items__end">
-
-                        <div class="navbar-item">
-                            <script>
-                                document.write(`
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../modules/modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
   <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
-                            </script>
-                        </div>
-
-                        <div class="navbar-item">
-                            <ul class="navbar-icon-links navbar-nav" aria-label="Icon Links">
-                                <li class="nav-item">
-
-
-
-
-
-
-
-
-                                    <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link"
-                                        rel="noopener" target="_blank" data-bs-toggle="tooltip"
-                                        data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
-                                        <label class="sr-only">GitHub</label></a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="sidebar-primary-items__end sidebar-primary__section">
-                </div>
-
-                <div id="rtd-footer-container"></div>
-
-
-            </div>
-
-            <main id="main-content" class="bd-main">
-
-
-                <div class="bd-content">
-                    <div class="bd-article-container">
-
-                        <div class="bd-header-article">
-                            <div class="header-article-items header-article__inner">
-
-                                <div class="header-article-items__start">
-
-                                    <div class="header-article-item">
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-
-                                        <nav aria-label="Breadcrumbs">
-                                            <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
-
-                                                <li class="breadcrumb-item breadcrumb-home">
-                                                    <a href="../../../index.html" class="nav-link" aria-label="Home">
-                                                        <i class="fa-solid fa-home"></i>
-                                                    </a>
-                                                </li>
-
-                                                <li class="breadcrumb-item"><a href="../../index.html"
-                                                        class="nav-link">Module code</a></li>
-
-                                                <li class="breadcrumb-item active" aria-current="page">
-                                                    cascade.models.model</li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-                        </div>
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
 
 
 
-
-                        <div id="searchbox"></div>
-                        <article class="bd-article" role="main">
-
-                            <h1>Source code for cascade.models.model</h1>
-                            <div class="highlight">
-                                <pre>
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">cascade.models.model</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for cascade.models.model</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Copyright 2022-2023 Ilia Moiseev</span>
+<span class="sd">Copyright 2022-2024 Ilia Moiseev</span>
 
 <span class="sd">Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
 <span class="sd">you may not use this file except in compliance with the License.</span>
@@ -399,24 +444,29 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copyfile</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copyfile</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pendulum</span>
 
-<span class="kn">from</span> <span class="nn">..metrics</span> <span class="kn">import</span> <span class="n">MetricType</span><span class="p">,</span> <span class="n">Metric</span>
-<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">PipeMeta</span><span class="p">,</span> <span class="n">Traceable</span><span class="p">,</span> <span class="n">raise_not_implemented</span>
+<span class="kn">from</span> <span class="nn">..base</span> <span class="kn">import</span> <span class="n">Meta</span><span class="p">,</span> <span class="n">Traceable</span><span class="p">,</span> <span class="n">raise_not_implemented</span>
+<span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">..metrics</span> <span class="kn">import</span> <span class="n">Metric</span><span class="p">,</span> <span class="n">MetricType</span>
 
 
-<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">Traceable</span><span class="p">):</span>
+<div class="viewcode-block" id="Model">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model">[docs]</a>
+<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">Traceable</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for any model.</span>
 <span class="sd">    Used to provide unified interface to any model, store metadata including metrics.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Model.__init__"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PipeMeta</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+<div class="viewcode-block" id="Model.__init__">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Meta</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Should be called in any successor - initializes default meta needed.</span>
@@ -434,34 +484,49 @@
         <span class="c1"># Model accepts meta_prefix explicitly to not to record it in &#39;params&#39;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">meta_prefix</span><span class="o">=</span><span class="n">meta_prefix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.fit"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.fit">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method to encapsulate training loops.</span>
 <span class="sd">        May be provided with any training-related arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">raise_not_implemented</span><span class="p">(</span><span class="s2">&quot;cascade.models.Model&quot;</span><span class="p">,</span> <span class="s2">&quot;fit&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.predict"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.predict">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.predict">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method to encapsulate inference.</span>
 <span class="sd">        May include preprocessing steps to make model self-sufficient.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">raise_not_implemented</span><span class="p">(</span><span class="s2">&quot;cascade.models.Model&quot;</span><span class="p">,</span> <span class="s2">&quot;predict&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.evaluate"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.evaluate">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.evaluate">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluates model against any metrics. Should not return any value, just populate self.metrics</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">raise_not_implemented</span><span class="p">(</span><span class="s2">&quot;cascade.models.Model&quot;</span><span class="p">,</span> <span class="s2">&quot;evaluate&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.load"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.load">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Model.load">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.load">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Model&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads model from provided path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">raise_not_implemented</span><span class="p">(</span><span class="s2">&quot;cascade.models.Model&quot;</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.save"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.save">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Does additional saving routines. Call this if you call</span>
 <span class="sd">        save() in any subclass.</span>
@@ -481,7 +546,7 @@
 <span class="sd">            If the path is not a folder</span>
 <span class="sd">        FileNotFoundError</span>
 <span class="sd">            If the file that should be copied does not exists and</span>
-<span class="sd">            it is not ok. See `add_file` for more info.</span>
+<span class="sd">            it is not ok. See ``add_file`` for more info.</span>
 
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
@@ -512,19 +577,28 @@
 
             <span class="n">copyfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">files_folder</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Model.load_artifact"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.load_artifact">[docs]</a>    <span class="k">def</span> <span class="nf">load_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.load_artifact">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.load_artifact">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads standalone model&#39;s artifact using provided filepath and sets it inside the model</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">raise_not_implemented</span><span class="p">(</span><span class="s2">&quot;cascade.models.Model&quot;</span><span class="p">,</span> <span class="s2">&quot;load_artifact&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.save_artifact"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.save_artifact">[docs]</a>    <span class="k">def</span> <span class="nf">save_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.save_artifact">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.save_artifact">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Saves standalone model&#39;s artifact using provided filepath</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">raise_not_implemented</span><span class="p">(</span><span class="s2">&quot;cascade.models.Model&quot;</span><span class="p">,</span> <span class="s2">&quot;save_artifact&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.get_meta"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PipeMeta</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.get_meta">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.get_meta">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Meta</span><span class="p">:</span>
         <span class="c1"># Successors may not call super().__init__</span>
         <span class="c1"># they may not have these default fields</span>
 
@@ -546,7 +620,10 @@
 
         <span class="k">return</span> <span class="n">meta</span></div>
 
-<div class="viewcode-block" id="Model.add_file"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.add_file">[docs]</a>    <span class="k">def</span> <span class="nf">add_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">missing_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.add_file">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.add_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">missing_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add additional file artifact to the model</span>
 <span class="sd">        Copy the file to the model folder when saving model.</span>
@@ -563,7 +640,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_file_artifacts_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_file_artifact_missing_oks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">missing_ok</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.add_log_callback"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.add_log_callback">[docs]</a>    <span class="k">def</span> <span class="nf">add_log_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Model&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.add_log_callback">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.add_log_callback">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_log_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Model&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers a callback to be executed</span>
 <span class="sd">        while logging metrics. Usually is used internally</span>
@@ -580,8 +660,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.add_metric"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.add_metric">[docs]</a>    <span class="k">def</span> <span class="nf">add_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metric</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Metric</span><span class="p">],</span>
-                   <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">MetricType</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.add_metric">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.add_metric">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_metric</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">metric</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Metric</span><span class="p">],</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MetricType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds metric value to the model. If metric already exists in the list, updates its value.</span>
 
@@ -589,7 +676,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        metric : Union[str, Metric]</span>
 <span class="sd">            Either metric name or metric object. If object, then second argument is ignored</span>
-<span class="sd">        value : Union[MetricType, None], optional</span>
+<span class="sd">        value : Optional[MetricType]</span>
 <span class="sd">            Metric value when metric is str, by default None</span>
 
 <span class="sd">        Any additional args will go to the Metric constructor for flexibility if metric is str</span>
@@ -619,14 +706,57 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Model.log"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Model.link_dataset">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.link_dataset">[docs]</a>
+    <span class="k">def</span> <span class="nf">link_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ds</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">split</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">line</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience function for linking datasets. Produces more readable meta files and records</span>
+<span class="sd">        useful info without much hassle</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ds : Dataset</span>
+<span class="sd">            Dataset to link</span>
+<span class="sd">        name : Optional[str], optional</span>
+<span class="sd">            Dataset name, by default None</span>
+<span class="sd">        split : Optional[str], optional</span>
+<span class="sd">            Split if applicable, may be &quot;train&quot;, &quot;test&quot;, etc, by default None</span>
+<span class="sd">        line : Optional[DataLine], optional</span>
+<span class="sd">            DataLine where this dataset is stored if applicable, by default None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds_meta</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="s2">&quot;comments&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">ds_meta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                <span class="n">meta</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds_meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">split</span><span class="p">:</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;split&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">split</span>
+
+        <span class="k">if</span> <span class="n">line</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;line_root&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">[</span><span class="n">meta</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="Model.log">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.Model.log">[docs]</a>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sequentially calls every log callback.</span>
 <span class="sd">        Use this if you want to make a checkpoint of a model</span>
 <span class="sd">        from inside the model. Callback should be a function that</span>
 <span class="sd">        given the model saves it. For example ModelLine.save method.</span>
 <span class="sd">        ModelLine.add_model registers callback with only_meta=True automatically</span>
-<span class="sd">        when creating a new model.</span>
+<span class="sd">        when creating a new model using ``create_model``.</span>
 
 <span class="sd">        See also</span>
 <span class="sd">        --------</span>
@@ -634,16 +764,22 @@
 <span class="sd">        cascade.models.Model.add_log_callback</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_callbacks</span><span class="p">:</span>
-            <span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+            <span class="n">callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ModelModifier"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.ModelModifier">[docs]</a><span class="k">class</span> <span class="nc">ModelModifier</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ModelModifier">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.ModelModifier">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelModifier</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Analog of dataset&#39;s Modifier. Can be used to chain</span>
 <span class="sd">    two models in one.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ModelModifier.__init__"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.ModelModifier.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ModelModifier.__init__">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.ModelModifier.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -653,85 +789,84 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelModifier.get_meta"><a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.ModelModifier.get_meta">[docs]</a>    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PipeMeta</span><span class="p">:</span>
+
+<div class="viewcode-block" id="ModelModifier.get_meta">
+<a class="viewcode-back" href="../../../modules/cascade.models.html#cascade.models.ModelModifier.get_meta">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Meta</span><span class="p">:</span>
         <span class="n">prev_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span> <span class="o">+</span> <span class="n">prev_meta</span></div></div>
-</pre>
-                            </div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span> <span class="o">+</span> <span class="n">prev_meta</span></div>
+</div>
 
-                        </article>
+</pre></div>
 
-
-
-                        <footer class="bd-footer-article">
-
-                            <div class="footer-article-items footer-article__inner">
-
-                                <div class="footer-article-item"><!-- Previous / next buttons -->
-                                    <div class="prev-next-area">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </footer>
-
-                    </div>
-
-
-
-
-                </div>
-                <footer class="bd-footer-content">
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
 
                 </footer>
-
-            </main>
-        </div>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-    <!-- Scripts loaded after <body> so the DOM is not blocked -->
-    <script src="../../../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-    <script src="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2024, Ilia Moiseev.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
 
-    <footer class="bd-footer">
-        <div class="bd-footer__inner bd-page-width">
-
-            <div class="footer-items__start">
-
-                <div class="footer-item">
-                    <p class="copyright">
-
-                        © Copyright 2022-2023, Ilia Moiseev.
-                        <br />
-
-                    </p>
-                </div>
-
-                <div class="footer-item">
-                    <p class="sphinx-version">
-                        Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
-                        <br />
-                    </p>
-                </div>
-
-            </div>
-
-
-            <div class="footer-items__end">
-
-                <div class="footer-item">
-                    <p class="theme-version">
-                        Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData
-                            Sphinx Theme</a> 0.13.3.
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-
-    </footer>
-</body>
-
+  </footer>
+  </body>
 </html>
