@@ -16,6 +16,6 @@ limitations under the License.
 
 __ALL__ = ["__version__", "__author__", "__author_email__"]
 
-__version__ = "0.14.0"
+__version__ = "0.14.1"
 __author__ = "Ilia Moiseev"
 __author_email__ = "ilia.moiseev.5@yandex.ru"
