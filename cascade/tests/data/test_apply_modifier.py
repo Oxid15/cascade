@@ -18,6 +18,7 @@ import os
 import sys
 
 import pytest
+
 from cascade.data import ApplyModifier, IteratorWrapper, Wrapper
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -36,6 +37,16 @@ def test_apply_modifier(arr, func):
     ds = Wrapper(arr)
     ds = ApplyModifier(ds, func)
     assert list(map(func, arr)) == [item for item in ds]
+
+
+def test_ds_coverage(dataset):
+    ds = ApplyModifier(dataset, lambda x: x)
+    for item in ds:
+        pass
+
+    if hasattr(dataset, "__len__"):
+        for i in range(len(ds)):
+            ds[i]
 
 
 @pytest.mark.parametrize("arr, func", data)
