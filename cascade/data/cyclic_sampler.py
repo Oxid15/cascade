@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Iterator
+
 from .dataset import T
 from .modifier import Sampler
 
@@ -33,3 +35,7 @@ class CyclicSampler(Sampler[T]):
     def __getitem__(self, index: int) -> T:
         internal_index = index % len(self._dataset)
         return self._dataset[internal_index]
+
+    def __iter__(self) -> Iterator[T]:
+        for index in range(super().__len__()):
+            yield self.__getitem__(index)

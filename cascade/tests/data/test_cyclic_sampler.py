@@ -45,3 +45,13 @@ def test_cycle():
         4,
         0,
     ]
+
+
+def test():
+    ds = CyclicSampler(Wrapper([1]), 2)
+
+    for i in range(len(ds)):
+        ds[i]
+
+    for i in ds:
+        pass
