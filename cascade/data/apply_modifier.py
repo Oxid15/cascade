@@ -17,7 +17,7 @@ limitations under the License.
 import random
 from typing import Any, Callable, Iterator, Optional
 
-from .dataset import Dataset, T
+from .dataset import T
 from .modifier import Modifier
 from .utils import DatasetOrIterator
 
@@ -73,11 +73,8 @@ class ApplyModifier(Modifier[T]):
             if rnd > self._p:
                 return super().__getitem__(index)
 
-        if isinstance(self._dataset, Dataset):
             item = self._dataset[index]
             return self._func(item)
-        else:
-            raise TypeError(f"The underlying dataset is not a Dataset, but {type(self._dataset)}")
 
     def __iter__(self) -> Iterator[T]:
         for item in self._dataset:
