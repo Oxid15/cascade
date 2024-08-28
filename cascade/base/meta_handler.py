@@ -77,7 +77,7 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
-        elif isinstance(obj, deepdiff.diff.PrettyOrderedSet):
+        elif isinstance(obj, deepdiff.diff.SetOrdered):
             return list(obj)
 
         elif isinstance(obj, deepdiff.DeepDiff):
