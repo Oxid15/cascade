@@ -68,12 +68,14 @@ class ApplyModifier(Modifier[T]):
             random.seed(seed)
 
     def __getitem__(self, index: int) -> Any:
+        item = self._dataset[index]
         if self._p is not None:
             rnd = random.random()
             if rnd > self._p:
-                return super().__getitem__(index)
-
-            item = self._dataset[index]
+                return item
+            else:
+                return self._func(item)
+        else:
             return self._func(item)
 
     def __iter__(self) -> Iterator[T]:

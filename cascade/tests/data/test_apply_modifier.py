@@ -37,6 +37,7 @@ def test_apply_modifier(arr, func):
     ds = Wrapper(arr)
     ds = ApplyModifier(ds, func)
     assert list(map(func, arr)) == [item for item in ds]
+    assert list(map(func, arr)) == [ds[i] for i in range(len(ds))]
 
 
 def test_ds_coverage(dataset):
