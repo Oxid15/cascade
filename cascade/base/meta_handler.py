@@ -68,10 +68,10 @@ class CustomEncoder(JSONEncoder):
         ):
             return int(obj)
 
-        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):  # type: ignore
+        elif isinstance(obj, (np.float16, np.float32, np.float64)):  # type: ignore
             return float(obj)
 
-        elif isinstance(obj, (np.complex_, np.complex64, np.complex128)):  # type: ignore
+        elif isinstance(obj, (np.complex64, np.complex128)):  # type: ignore
             return {"real": obj.real, "imag": obj.imag}
 
         elif isinstance(obj, (np.ndarray,)):
