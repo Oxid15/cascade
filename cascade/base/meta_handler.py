@@ -32,6 +32,12 @@ from .utils import Version
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
 
+# This is for python 3.7
+# where latest deepdiff is 6.7.1
+if hasattr(deepdiff.diff, "PrettyOrderedSet"):
+    diff_set = getattr(deepdiff.diff, "PrettyOrderedSet")
+else:
+    diff_set = deepdiff.diff.SetOrdered
 
 class CustomEncoder(JSONEncoder):
     def default(self, obj: Any) -> Any:
@@ -77,7 +83,7 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
-        elif isinstance(obj, deepdiff.diff.SetOrdered):
+        elif isinstance(obj, diff_set):
             return list(obj)
 
         elif isinstance(obj, deepdiff.DeepDiff):
