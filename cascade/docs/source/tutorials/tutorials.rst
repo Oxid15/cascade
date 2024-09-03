@@ -114,7 +114,7 @@ info about underlying objects that can be logged and analyzed later.
 To see what it looks like,
 you can call ``get_meta`` method on a Cascade object. In the next
 step we will try calling it on the pipeline that was made on
-the :ref:`/tutorials/pipelines_basics.rst` step.
+the Pipelines step.
 
 .. code-block:: python
 
@@ -193,7 +193,7 @@ for the model is not strictly defined as in Dataset case. We define ``fit`` and 
         def predict(self, x):
             return self.model.predict(x)
 
-We can create and fit the model now using the dataset from :ref:`/tutorials/pipelines_basics.rst` step.
+We can create and fit the model now using the dataset from the Pipelines step.
 
 .. code-block:: python
 
@@ -531,7 +531,7 @@ Cascade features simple command line interface to manage storage
 of your models, metadata and experiments. You can comment on models,
 edit tags, descriptions and manage artifacts from the command line.
 
-This tutorial is connected with :ref:`/tutorials/meta_defaults.rst`
+This tutorial is connected with Meta Defaults step
 since CLI allows editing meta defaults without writing special scripts for it.
 
 Go to the directory of previously created ``line`` and execute the following.
