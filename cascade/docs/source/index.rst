@@ -3,8 +3,6 @@ Welcome to Cascade!
 
 Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
 
-Installation
-************
 
 .. code-block:: bash
 
@@ -26,25 +24,25 @@ by using different parts of the library without the need to bring everything at 
 .. grid:: 2
 
     .. grid-item::
-        .. card:: Pipeline building
+        .. card:: :octicon:`stack` Pipeline building
             :link: tutorials/tutorials.html#pipelines-basics
 
             Build traceable data transformations from modular blocks
 
     .. grid-item::
-        .. card:: Experiment management
+        .. card:: :octicon:`repo` Experiment management
             :link: tutorials/tutorials.html#experiments-basics
 
             Write your parameters and metrics in a structured way
 
     .. grid-item::
-        .. card:: Artifact and file storage
+        .. card:: :octicon:`file-binary` Artifact and file storage
             :link: tutorials/tutorials.html#artifacts-and-files
 
             Store your models and files locally
 
     .. grid-item::
-        .. card:: Data validation
+        .. card:: :octicon:`codescan-checkmark` Data validation
             :link: tutorials/tutorials.html#data-validation
 
             Be sure that your data is clean
@@ -55,21 +53,21 @@ Advanced features
 .. grid:: 2
 
     .. grid-item::
-        .. card:: CLI
+        .. card:: :octicon:`terminal` CLI
             :link: tutorials/tutorials.html#cli
 
             Comment, tag and write experiment descriptions from command line
 
     .. grid-item::
-        .. card:: Dash-based visualizations
+        .. card:: :octicon:`graph` Dash-based visualizations
             :link: tutorials/tutorials.html#viewers
 
             See plots and tables in dash-based web interface
 
     .. grid-item::
-        .. card:: Web-UI (Coming soon!)
+        .. card:: :octicon:`zap` Web-UI
 
-            Our own web interface is in development too
+            :bdg-info:`Coming soon!`
 
 
 Experiment management
@@ -141,28 +139,28 @@ Documentation
 .. grid:: 2
 
     .. grid-item::
-        .. card:: Tutorial
+        .. card:: :octicon:`mortar-board` Tutorial
             :link: /tutorials/tutorials.rst
             :link-type: ref
 
             Learn how you can use Cascade in your ML workflows step-by-step
 
     .. grid-item::
-        .. card:: How-to guides
+        .. card:: :octicon:`tasklist` How-to guides
             :link: /howtos/howtos.rst
             :link-type: ref
 
             Recipes for specific use-cases
 
     .. grid-item::
-        .. card:: Explanations
+        .. card:: :octicon:`book` Explanations
             :link: /explanations/explanations.rst
             :link-type: ref
 
             Theoretical basis of Cascade
 
     .. grid-item::
-        .. card:: Reference
+        .. card:: :octicon:`bookmark` Reference
             :link: /modules/modules.rst
             :link-type: ref
 
@@ -181,11 +179,11 @@ If you have any questions
 
 Any contributions are welcome!
 
-`Write an issue <https://github.com/Oxid15/cascade/issues>`_
+:octicon:`pencil` `Write an issue <https://github.com/Oxid15/cascade/issues>`_
 
-`Join GitHub discussions <https://github.com/Oxid15/cascade/discussions>`_
+:octicon:`flame` `Join GitHub discussions <https://github.com/Oxid15/cascade/discussions>`_
 
-`Cascade on X <https://x.com/cascade_mlops>`_
+:octicon:`megaphone` `Cascade on X <https://x.com/cascade_mlops>`_
 
 .. toctree::
     :maxdepth: 1
