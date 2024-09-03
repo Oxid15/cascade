@@ -352,7 +352,7 @@ pipeline object from disk.
     print(version) # 0.2
 
 
-5. Metrics and evaluation
+5. Metrics and Evaluation
 =========================
 
 Metrics are first-class citizens in Cascade.
