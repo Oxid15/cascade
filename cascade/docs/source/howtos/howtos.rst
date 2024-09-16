@@ -97,6 +97,7 @@ Experiment management
     model_training.ipynb
     model_training_trainers.ipynb
     track_a_file
+    sklearn
     links
     comments
     tags
