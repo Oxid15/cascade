@@ -103,6 +103,11 @@ We can augment our data by concatenating those two datasets.
     ds = Concatenator([ds, ds_noise])
     print(len(ds))
 
+Further reading
+***************
+- :ref:`How to build a Pipeline</howtos/pipeline_building.ipynb>`
+- :ref:`Dataset Zoo</modules/dataset_zoo.rst>`
+
 
 2. Metadata
 ===========
@@ -269,6 +274,12 @@ meta with a default line method.
     'tags': [],
     'type': 'model',
     'user': 'ilia'}]
+
+Further reading
+***************
+
+- `How to train a model</howtos/model_training.ipynb>`
+- `How to train a model with Trainer</howtos/model_training_trainers.ipynb>`
 
 
 4. Custom Meta and Versioning
