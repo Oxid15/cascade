@@ -482,14 +482,14 @@ completing this one.</p>
 </pre></div>
 </div>
 <p>Cascade has a set of optional dependencies, which can be installed with the following commands</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>opencv<span class="o">]</span><span class="w"> </span><span class="c1"># Use opencv as image backend</span>
-pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pandera<span class="o">]</span><span class="w"> </span><span class="c1"># Validate pandas dataframes with Pandera</span>
-pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pil<span class="o">]</span><span class="w"> </span><span class="c1"># Use Pillow as image backend</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>opencv<span class="o">]</span><span class="w">   </span><span class="c1"># Use opencv as image backend</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pandera<span class="o">]</span><span class="w">  </span><span class="c1"># Validate pandas dataframes with Pandera</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pil<span class="o">]</span><span class="w">      </span><span class="c1"># Use Pillow as image backend</span>
 pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pydantic<span class="o">]</span><span class="w"> </span><span class="c1"># Use data validation modifiers</span>
-pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>sklearn<span class="o">]</span><span class="w"> </span><span class="c1"># Scikit-learn integration</span>
-pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>torch<span class="o">]</span><span class="w"> </span><span class="c1"># PyTorch integration</span>
-pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>view<span class="o">]</span><span class="w"> </span><span class="c1"># Cascade viewers based on dash</span>
-pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>all<span class="o">]</span><span class="w"> </span><span class="c1"># Installs everything</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>sklearn<span class="o">]</span><span class="w">  </span><span class="c1"># Scikit-learn integration</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>torch<span class="o">]</span><span class="w">    </span><span class="c1"># PyTorch integration</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>view<span class="o">]</span><span class="w">     </span><span class="c1"># Cascade viewers based on dash</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>all<span class="o">]</span><span class="w">      </span><span class="c1"># Installs everything</span>
 </pre></div>
 </div>
 <p>If you have completed the tutorial you can see the <a class="reference internal" href="../howtos/howtos.html"><span class="std std-ref">How-to guides</span></a> section
@@ -551,6 +551,13 @@ and created new noisy dataset.</p>
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
 </pre></div>
 </div>
+<section id="further-reading">
+<h3>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../howtos/pipeline_building.html"><span class="std std-ref">How to build a Pipeline</span></a></p></li>
+<li><p><a class="reference internal" href="../modules/dataset_zoo.html"><span class="std std-ref">Dataset Zoo</span></a></p></li>
+</ul>
+</section>
 </section>
 <section id="metadata">
 <h2>2. Metadata<a class="headerlink" href="#metadata" title="Link to this heading">#</a></h2>
@@ -692,6 +699,13 @@ meta with a default line method.</p>
 <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="s1">&#39;ilia&#39;</span><span class="p">}]</span>
 </pre></div>
 </div>
+<section id="id1">
+<h3>Further reading<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><cite>How to train a model&lt;/howtos/model_training.ipynb&gt;</cite></p></li>
+<li><p><cite>How to train a model with Trainer&lt;/howtos/model_training_trainers.ipynb&gt;</cite></p></li>
+</ul>
+</section>
 </section>
 <section id="custom-meta-and-versioning">
 <h2>4. Custom Meta and Versioning<a class="headerlink" href="#custom-meta-and-versioning" title="Link to this heading">#</a></h2>
@@ -1289,7 +1303,8 @@ and <code class="docutils literal notranslate"><span class="pre">save_artifact</
 <section id="what-s-next">
 <h2>What’s Next<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h2>
 <p>Congratulations for completing the tutorial!</p>
-<p>Now you can proceed to the <a class="reference internal" href="../howtos/howtos.html"><span class="std std-ref">How-to guides</span></a> section.</p>
+<p>Now you can proceed to the <a class="reference internal" href="../howtos/howtos.html"><span class="std std-ref">How-to guides</span></a> section
+for specific usage recipes.</p>
 </section>
 </section>
 
@@ -1340,9 +1355,15 @@ and <code class="docutils literal notranslate"><span class="pre">save_artifact</
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelines-basics">1. Pipelines basics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelines-basics">1. Pipelines basics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metadata">2. Metadata</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiments-basics">3. Experiments basics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiments-basics">3. Experiments basics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Further reading</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-meta-and-versioning">4. Custom Meta and Versioning</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metrics-and-evaluation">5. Metrics and Evaluation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-defaults">6. Meta defaults</a></li>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Comment on results of an experiment &#8212; cascade 0.14.2 documentation</title>
+    <title>Track scikit-learn experiment &#8212; cascade 0.14.2 documentation</title>
   
   
   
@@ -58,7 +58,7 @@
                 gtag('js', new Date());
                 gtag('config', 'G-KD8QDKDMD7');
             </script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'howtos/comments';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'howtos/sklearn';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
@@ -68,8 +68,8 @@
     <link rel="icon" href="../logo_sq.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Add Tags" href="tags.html" />
-    <link rel="prev" title="Link anything" href="links.html" />
+    <link rel="next" title="Link anything" href="links.html" />
+    <link rel="prev" title="Track a file" href="track_a_file.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -419,9 +419,9 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="model_training.html">Model training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="model_training_trainers.html">Model training using trainers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="track_a_file.html">Track a file</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sklearn.html">Track scikit-learn experiment</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Track scikit-learn experiment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="links.html">Link anything</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Comment on results of an experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comments.html">Comment on results of an experiment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tags.html">Add Tags</a></li>
 </ul>
 </div>
@@ -463,7 +463,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="howtos.html" class="nav-link">How-to guides</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Comment on...</li>
+    <li class="breadcrumb-item active" aria-current="page">Track...</li>
   </ul>
 </nav>
 </div>
@@ -480,56 +480,94 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="comment-on-results-of-an-experiment">
-<h1>Comment on results of an experiment<a class="headerlink" href="#comment-on-results-of-an-experiment" title="Link to this heading">#</a></h1>
-<p>Comments serve experiment tracking greatly since they allow record thoughts on
-experiment results or expectations before them. They are more flexible, expressive,
-and less formal than parameters for example. They also are a basis for collaboration
-since multiple people can comment in a shared repo.</p>
-<section id="add-a-comment">
-<h2>Add a Comment<a class="headerlink" href="#add-a-comment" title="Link to this heading">#</a></h2>
-<p>In Cascade you can have comments in any Traceable object.
-Comments are recorded in meta. In case of disk-based Traceables
-they are automatically synced to disk after creation.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">ModelLine</span>
+  <section id="track-scikit-learn-experiment">
+<h1>Track scikit-learn experiment<a class="headerlink" href="#track-scikit-learn-experiment" title="Link to this heading">#</a></h1>
+<p>With Cascade you can track any ML experiment.
+And the workflow is usually the same for a single library.</p>
+<p>Cascade respects the tools ML engineers use every day and was built to
+simplify repetitive work.
+This is the reason why it features scikit-learn integration -
+it simplifies experiment tracking a lot.</p>
+<p>Everything is located in <code class="docutils literal notranslate"><span class="pre">cascade.utils.sklearn</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.sklearn</span> <span class="kn">import</span> <span class="n">SkModel</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectKBest</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">SkModel</span></code> class accepts a list of <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> blocks from <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.
+Everything you can put into a pipeline, you can pass as a list to the Cascade
+wrapper.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Remember to use the keyword <code class="docutils literal notranslate"><span class="pre">blocks</span></code>, it will not work without it!</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">k_best</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="n">line</span> <span class="o">=</span> <span class="n">ModelLine</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">SkModel</span><span class="p">(</span>
+    <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k_best</span><span class="p">),</span>
+        <span class="n">SVC</span><span class="p">(),</span>
+    <span class="p">],</span>
+    <span class="n">k</span><span class="o">=</span><span class="n">k_best</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>Notice how you can comment not only on models. Models will save
-comments to disk only when saved, when lines and repos will
-sync meta with disk automatically.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">comment</span><span class="p">(</span><span class="s2">&quot;This experiment will be the best&quot;</span><span class="p">)</span>
-<span class="n">line</span><span class="o">.</span><span class="n">comment</span><span class="p">(</span><span class="s2">&quot;Did you know that you can comment on any Traceable?&quot;</span><span class="p">)</span>
+<p>Notice how <code class="docutils literal notranslate"><span class="pre">k_best</span></code> was passed both into a transform and wrapper.
+This is how <code class="docutils literal notranslate"><span class="pre">SkModel</span></code> gets the parameters to track. You can pass
+anything else you want to be tracked as parameters. This may change to
+an automatic parameters tacking in future versions.</p>
+<p>After creating you can use the wrapper as you would
+use <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> estimator.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
+
+<span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-<section id="remove-a-comment">
-<h2>Remove a Comment<a class="headerlink" href="#remove-a-comment" title="Link to this heading">#</a></h2>
-<p>Every comment has an integer ID starting with <code class="docutils literal notranslate"><span class="pre">1</span></code>, using which you can locate and
-delete the comment.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">remove_comment</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<p>For example fit will look like this.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="using-cascade-cli">
-<h2>Using Cascade CLI<a class="headerlink" href="#using-cascade-cli" title="Link to this heading">#</a></h2>
-<p>CLI is the best way to use this feature.</p>
-<p>Locate to the repo, line or model folder and then use:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>comment<span class="w"> </span>add
+<p>And predict like this. Nothing unusual.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>You will be prompted to enter a comment afterwards. Hit enter when you are ready.</p>
-<p>You can display all the comments using:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>comment<span class="w"> </span>ls
+<p>Cascade allows to conveniently use metrics in evaluation.
+You can create metrics by using alias like &quot;acc&quot; or &quot;f1&quot; here or
+using a name that you would import from <code class="docutils literal notranslate"><span class="pre">sklearn.metrics</span></code> module.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.sklearn</span> <span class="kn">import</span> <span class="n">SkMetric</span>
+
+<span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;acc&quot;</span><span class="p">),</span>
+    <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">),</span>
+    <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;precision_score&quot;</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">),</span>
+    <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;recall_score&quot;</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">),</span>
+<span class="p">]</span>
 </pre></div>
 </div>
-<p>And delete using:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>comment<span class="w"> </span>rm<span class="w"> </span><span class="m">1</span>
+<p>To evaluate a model, pass the data and a list of metric objects.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<p>Evaluate will not return anything, instead it will fill metrics list
+inside a model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[SkMetric(name=acc, value=0.9533333333333334, created_at=2024-09-16 19:06:05.354980+00:00),
+ SkMetric(name=f1, value=0.9532912954992826, created_at=2024-09-16 19:06:05.355031+00:00),
+ SkMetric(name=precision_score, value=0.9543690619563763, created_at=2024-09-16 19:06:05.355048+00:00),
+ SkMetric(name=recall_score, value=0.9533333333333333, created_at=2024-09-16 19:06:05.355060+00:00)]
+</pre></div>
+</div>
+<p>Now to track all the results we can save the model to the line.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.lines</span> <span class="kn">import</span> <span class="n">ModelLine</span>
+
+<span class="n">line</span> <span class="o">=</span> <span class="n">ModelLine</span><span class="p">(</span><span class="s2">&quot;sklearn_demo&quot;</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">SkModel</span><span class="p">)</span>
+<span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 
 
@@ -543,20 +581,20 @@ delete the comment.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="links.html"
+       href="track_a_file.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Link anything</p>
+        <p class="prev-next-title">Track a file</p>
       </div>
     </a>
     <a class="right-next"
-       href="tags.html"
+       href="links.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Add Tags</p>
+        <p class="prev-next-title">Link anything</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -571,23 +609,9 @@ delete the comment.</p>
 
 
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-a-comment">Add a Comment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remove-a-comment">Remove a Comment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-cascade-cli">Using Cascade CLI</a></li>
-</ul>
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/howtos/comments.rst.txt">
+    <a href="../_sources/howtos/sklearn.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
