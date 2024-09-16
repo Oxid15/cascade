@@ -44,6 +44,24 @@ Experiment tracking
 
             How to log files along with saved model
 
+Integrations
+************
+
+.. grid:: 1
+
+    .. grid-item::
+        .. card:: scikit-learn
+            :link: /howtos/sklearn.rst
+            :link-type: ref
+
+            Effectively track your sklearn experiments
+
+    .. grid-item::
+        .. card:: PyTorch
+
+            :bdg-info:`To be written soon!`
+
+
 Experiment management
 *********************
 
