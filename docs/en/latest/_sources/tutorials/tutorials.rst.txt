@@ -278,8 +278,8 @@ meta with a default line method.
 Further reading
 ***************
 
-- `How to train a model</howtos/model_training.ipynb>`
-- `How to train a model with Trainer</howtos/model_training_trainers.ipynb>`
+- :ref:`How to train a model</howtos/model_training.ipynb>`
+- :ref:`How to train a model with Trainer</howtos/model_training_trainers.ipynb>`
 
 
 4. Custom Meta and Versioning
