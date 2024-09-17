@@ -641,6 +641,11 @@ When done, press enter and check your comment by doing similar ls command.
     1, ilia, my-pc-name   hello mlops
     a few seconds before
 
+Further reading
+***************
+
+- :ref:`Full Cascade CLI Reference</howtos/cli.rst>`
+
 
 9. Viewers
 ==========
