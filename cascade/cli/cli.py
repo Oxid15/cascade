@@ -23,6 +23,7 @@ from .artifact import artifact
 from .comment import comment
 from .common import create_container
 from .desc import desc
+from .run import run
 from .tag import tag
 from .view import view
 
@@ -46,7 +47,6 @@ def cli(ctx):
         ctx.obj["meta_fmt"] = MetaHandler.determine_meta_fmt(current_dir_full, "meta.*")
     except MetaIOError as e:
         click.echo(e)
-        raise e
 
 
 @cli.command
@@ -108,6 +108,7 @@ def migrate(ctx):
 cli.add_command(artifact)
 cli.add_command(comment)
 cli.add_command(desc)
+cli.add_command(run)
 cli.add_command(tag)
 cli.add_command(view)
 
