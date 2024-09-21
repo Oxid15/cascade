@@ -15,7 +15,8 @@ limitations under the License.
 """
 
 import ast
-from typing import Any, Dict, Optional
+from pprint import pformat
+from typing import Any, Dict, List, Optional
 
 import click
 
@@ -28,7 +29,7 @@ def cascade_config_imported(tree: ast.Module) -> bool:
     return False
 
 
-def find_config(tree: ast.Module):
+def find_config(tree: ast.Module) -> Optional[ast.ClassDef]:
     cfg_node = None
     for node in tree.body:
         if isinstance(node, ast.ClassDef):
@@ -39,12 +40,38 @@ def find_config(tree: ast.Module):
     return cfg_node
 
 
-def modify_assignments(tree: ast.Module, cfg_node: Optional[ast.ClassDef], kwargs: Dict[str, Any]) -> str:
-    if cfg_node:
-        for node in cfg_node.body:
+def parse_value(value: ast.expr) -> Any:
+    if isinstance(value, ast.Constant):
+        return value.value
+    elif isinstance(value, ast.Call):
+        return str(value.func.id) + "()"
+    return str(value)
+
+
+def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
+    cfg_dict = {}
+    for node in cfg_node.body:
+        if isinstance(node, ast.Assign):
+            key = node.targets[0].id
+        elif isinstance(node, ast.AnnAssign):
+            key = node.target.id
+        else:
+            continue
+
+        cfg_dict[key] = parse_value(node.value)
+    return cfg_dict
+
+
+def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]) -> str:
+    for node in cfg_node.body:
+        if isinstance(node, ast.Assign):
             target = node.targets[0].id
-            if isinstance(node, ast.Assign) and target in kwargs:
-                node.value = ast.Constant(value=kwargs[target])
+        elif isinstance(node, ast.AnnAssign):
+            target = node.target.id
+        else:
+            continue
+        if target in kwargs:
+            node.value = ast.Constant(value=kwargs[target])
     return ast.unparse(tree)
 
 
@@ -61,20 +88,30 @@ def parse_args(args):
 
 @click.command("run")
 @click.argument("script", type=str)
+@click.option("-y", is_flag=True, expose_value=True, help="Confirm run")
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
-def run(script, args):
+def run(script: str, y: bool, args: List[str]):
     click.echo(f"You are about to run {script}")
-
-    kwargs = parse_args(args)
-    click.echo(kwargs)
 
     with open(script, "r") as f:
         text = f.read()
 
     tree = ast.parse(text)
-
     cfg_node = find_config(tree)
 
-    text = modify_assignments(tree, cfg_node, kwargs)
+    if cfg_node:
+        cfg_dict = node2dict(cfg_node)
+        kwargs = parse_args(args)
+        cfg_dict.update(kwargs)
+
+        click.echo("The config is:")
+        click.echo(pformat(cfg_dict))
+        click.echo("The arguments you passed:")
+        click.echo(pformat(kwargs))
+
+        text = modify_assignments(tree, cfg_node, kwargs)
+
+    if not y:
+        click.confirm("Confirm?", abort=True)
 
     exec(text, globals())
