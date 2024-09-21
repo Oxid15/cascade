@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import ast
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import click
 
@@ -23,12 +23,12 @@ import click
 def cascade_config_imported(tree: ast.Module) -> bool:
     for node in tree.body:
         if isinstance(node, ast.ImportFrom):
-            return node.module == "cascade.base.config" and node.names[0].name == "Config"
+            if node.module == "cascade.base.config" and node.names[0].name == "Config":
+                return True
+    return False
 
 
-def modify_assignments(text: str, kwargs: Dict[str, Any]) -> str:
-    tree = ast.parse(text)
-
+def find_config(tree: ast.Module):
     cfg_node = None
     for node in tree.body:
         if isinstance(node, ast.ClassDef):
@@ -36,6 +36,10 @@ def modify_assignments(text: str, kwargs: Dict[str, Any]) -> str:
                 for base in node.bases:
                     if base.id == "Config" and cascade_config_imported(tree):
                         cfg_node = node
+    return cfg_node
+
+
+def modify_assignments(tree: ast.Module, cfg_node: Optional[ast.ClassDef], kwargs: Dict[str, Any]) -> str:
     if cfg_node:
         for node in cfg_node.body:
             target = node.targets[0].id
@@ -59,13 +63,18 @@ def parse_args(args):
 @click.argument("script", type=str)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def run(script, args):
-    click.echo(script)
-    click.echo(args)
+    click.echo(f"You are about to run {script}")
+
+    kwargs = parse_args(args)
+    click.echo(kwargs)
 
     with open(script, "r") as f:
         text = f.read()
 
-    kwargs = parse_args(args)
-    text = modify_assignments(text, kwargs)
+    tree = ast.parse(text)
 
-    exec(text)
+    cfg_node = find_config(tree)
+
+    text = modify_assignments(tree, cfg_node, kwargs)
+
+    exec(text, globals())
