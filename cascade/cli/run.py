@@ -15,6 +15,8 @@ limitations under the License.
 """
 
 import ast
+import os
+import subprocess
 from pprint import pformat
 from typing import Any, Dict, List, Optional
 
@@ -89,8 +91,9 @@ def parse_args(args):
 @click.command("run")
 @click.argument("script", type=str)
 @click.option("-y", is_flag=True, expose_value=True, help="Confirm run")
+@click.option("--log", type=str, default=None)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
-def run(script: str, y: bool, args: List[str]):
+def run(script: str, y: bool, log: Optional[str], args: List[str]):
     click.echo(f"You are about to run {script}")
 
     with open(script, "r") as f:
@@ -114,4 +117,25 @@ def run(script: str, y: bool, args: List[str]):
     if not y:
         click.confirm("Confirm?", abort=True)
 
-    exec(text, globals())
+    if log:
+        os.environ["CASCADE_RUN_LOG"] = os.path.abspath(log)
+
+    script_globals = f'__file__ = "{script}"\n__name__ = "__main__"\n'
+    text = script_globals + text
+
+    process = subprocess.Popen(
+        ["python", "-u", "-c", text],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        env=os.environ,
+    )
+
+    while True:
+        line = process.stdout.readline().decode("utf-8").strip()
+        if not line:
+            break
+        print(line)
+
+        if log:
+            with open(log, "a") as log_file:
+                log_file.write(line + "\n")
