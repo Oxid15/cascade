@@ -14,6 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from typing import Callable, List
+
 
 class Config:
-    pass
+    def _get_fields(self) -> List[str]:
+        fields = []
+        for name in dir(self):
+            if not name.startswith("_"):
+                attr = getattr(self, name)
+                if isinstance(attr, Callable):
+                    continue
+                fields.append(f"{name}={str(attr)}")
+        return fields
+
+    def __repr__(self):
+        prefix = "Config"
+        fields = self._get_fields()
+        fields_str = ", ".join(fields)
+        return f"{prefix}({fields_str})"
+
+    def to_dict(self):
+        fields = self._get_fields()
+        d = {}
+        for f in fields:
+            d[f] = getattr(self, f)
+
+        return d
