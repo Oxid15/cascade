@@ -84,7 +84,7 @@ def parse_args(args):
         key = key.strip()
         val = val.strip()
 
-        kwargs[key] = val
+        kwargs[key] = ast.literal_eval(val)
     return kwargs
 
 
