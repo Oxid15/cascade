@@ -16,11 +16,14 @@ limitations under the License.
 
 import ast
 import os
+import shutil
 import subprocess
+import warnings
 from pprint import pformat
 from typing import Any, Dict, List, Optional
 
 import click
+import pendulum
 
 
 def cascade_config_imported(tree: ast.Module) -> bool:
@@ -88,6 +91,54 @@ def parse_args(args):
     return kwargs
 
 
+def run_script(script: str, text: str, log: str) -> None:
+    script_globals = f'__file__ = "{script}"\n__name__ = "__main__"\n'
+    text = script_globals + text
+
+    process = subprocess.Popen(
+        ["python", "-u", "-c", text],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        env=os.environ,
+    )
+
+    while True:
+        line = process.stdout.readline().decode("utf-8").strip()
+        if not line:
+            break
+        print(line)
+
+        if log:
+            with open(log, "a") as log_file:
+                log_file.write(line + "\n")
+
+
+def generate_run_name() -> str:
+    now = pendulum.now().format("YYYYMMDD_HHmmss_SS")
+    return now
+
+
+class CascadeRun:
+    def __init__(self):
+        self.run_name = generate_run_name()
+        os.environ["CASCADE_RUN_ID"] = self.run_name
+
+    def __enter__(self):
+        base = os.getcwd()
+        os.makedirs(os.path.join(base, ".cascade", self.run_name))
+
+    def __exit__(self, *args):
+        base = os.getcwd()
+        run_path = os.path.join(base, ".cascade", self.run_name)
+        try:
+            shutil.rmtree(run_path)
+        except Exception as e:
+            warnings.warn(
+                f"Failed to remove run folder in {run_path} with the following error: {e}"
+            )
+        return False
+
+
 @click.command("run")
 @click.argument("script", type=str)
 @click.option("-y", is_flag=True, expose_value=True, help="Confirm run")
@@ -117,25 +168,5 @@ def run(script: str, y: bool, log: Optional[str], args: List[str]):
     if not y:
         click.confirm("Confirm?", abort=True)
 
-    if log:
-        os.environ["CASCADE_RUN_LOG"] = os.path.abspath(log)
-
-    script_globals = f'__file__ = "{script}"\n__name__ = "__main__"\n'
-    text = script_globals + text
-
-    process = subprocess.Popen(
-        ["python", "-u", "-c", text],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        env=os.environ,
-    )
-
-    while True:
-        line = process.stdout.readline().decode("utf-8").strip()
-        if not line:
-            break
-        print(line)
-
-        if log:
-            with open(log, "a") as log_file:
-                log_file.write(line + "\n")
+    with CascadeRun():
+        run_script(script, text, log)
