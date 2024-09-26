@@ -14,10 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Callable, List
+from argparse import Namespace
+from typing import Any, Callable, Dict, List, Union
 
 
 class Config:
+    def __init__(self, cfg: Union[Dict[str, Any], Namespace, None] = None):
+        if isinstance(cfg, Namespace):
+            cfg = vars(cfg)
+        elif cfg is None:
+            cfg = {}
+        elif not isinstance(cfg, dict):
+            raise TypeError(
+                f"Argument of type {type(cfg)} passed."
+                " You can initialize the Config only with dict or argparse.Namespace"
+            )
+
+        self.__dict__.update(cfg)
+
     def _get_fields(self) -> List[str]:
         fields = []
         for name in dir(self):
