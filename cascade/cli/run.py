@@ -101,10 +101,11 @@ class CascadeRun:
         base = os.getcwd()
         run_id = generate_run_id()
         self.run_dir = os.path.join(base, ".cascade", run_id)
-        os.environ["CASCADE_RUN_ID"] = run_id
+        os.environ["CASCADE_RUN_DIR"] = self.run_dir
 
     def __enter__(self):
         os.makedirs(self.run_dir)
+        return self
 
     def __exit__(self, *args):
         run_path = self.run_dir
@@ -127,6 +128,10 @@ class CascadeRun:
             env=os.environ,
         )
 
+        if log:
+            logs_dir = os.path.join(self.run_dir, "logs")
+            os.makedirs(logs_dir)
+
         while True:
             line = process.stdout.readline().decode("utf-8").strip()
             if not line:
@@ -134,7 +139,7 @@ class CascadeRun:
             print(line)
 
             if log:
-                with open(self.run_dir, "a") as log_file:
+                with open(os.path.join(logs_dir, "cascade_run.log"), "a") as log_file:
                     log_file.write(line + "\n")
 
 

@@ -119,11 +119,18 @@ class Model(Traceable):
             if not os.path.exists(filepath):
                 if but_its_ok:
                     continue
-                raise FileNotFoundError(
-                    f"File {filepath} not found when trying to copy an artifact of model at {path}"
-                )
-            filename = os.path.split(filepath)[-1]
+                elif "cascade_run.log" in filepath:
+                    warnings.warn(
+                        "Log was not found inside the run folder. To start recording the"
+                        " log, pass --log parameter to cascade run command"
+                    )
+                    continue
+                else:
+                    raise FileNotFoundError(
+                        f"File {filepath} not found when trying to copy an artifact of model at {path}"
+                    )
 
+            filename = os.path.split(filepath)[-1]
             files_folder = os.path.join(path, "files")
             os.makedirs(files_folder, exist_ok=True)
 
@@ -294,10 +301,22 @@ class Model(Traceable):
         for callback in self._log_callbacks:
             callback(self)
 
+    def add_log(self):
+        run_dir = os.getenv("CASCADE_RUN_DIR")
+        if run_dir is None:
+            warnings.warn(
+                "model.add_log called while not inside a run."
+                "Call a script with cascade run script.py and then use add_log inside"
+            )
+            return
+
+        log_path = os.path.join(run_dir, "logs", "cascade_run.log")
+        self.add_file(log_path)
+
 
 class ModelModifier(Model):
     """
-    Analog of dataset's Modifier. Can be used to chain
+    The Dataset's Modifier for Models. Can be used to chain
     two models in one.
     """
 
