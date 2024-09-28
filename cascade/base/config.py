@@ -33,13 +33,10 @@ class Config:
         self.__dict__.update(cfg)
 
     def _get_fields(self) -> List[str]:
+        d = self.to_dict()
         fields = []
-        for name in dir(self):
-            if not name.startswith("_"):
-                attr = getattr(self, name)
-                if isinstance(attr, Callable):
-                    continue
-                fields.append(f"{name}={str(attr)}")
+        for name in d:
+            fields.append(f"{name}={str(d[name])}")
         return fields
 
     def __repr__(self):
@@ -49,9 +46,11 @@ class Config:
         return f"{prefix}({fields_str})"
 
     def to_dict(self):
-        fields = self._get_fields()
         d = {}
-        for f in fields:
-            d[f] = getattr(self, f)
-
+        for name in dir(self):
+            if not name.startswith("_"):
+                attr = getattr(self, name)
+                if isinstance(attr, Callable):
+                    continue
+                d[name] = attr
         return d
