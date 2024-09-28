@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional
 
 import click
 import pendulum
+from cascade.base import MetaHandler
 
 
 def cascade_config_imported(tree: ast.Module) -> bool:
@@ -97,7 +98,11 @@ def generate_run_id() -> str:
 
 
 class CascadeRun:
-    def __init__(self):
+    def __init__(self, log: bool, config: Dict[str, Any], overrides: Dict[str, Any]) -> None:
+        self.log = log
+        self.config = config
+        self.overrides = overrides
+
         base = os.getcwd()
         run_id = generate_run_id()
         self.run_dir = os.path.join(base, ".cascade", run_id)
@@ -105,6 +110,10 @@ class CascadeRun:
 
     def __enter__(self):
         os.makedirs(self.run_dir)
+
+        MetaHandler.write(os.path.join(self.run_dir, "cascade_config.json"), self.config)
+        MetaHandler.write(os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides)
+
         return self
 
     def __exit__(self, *args):
@@ -117,7 +126,7 @@ class CascadeRun:
             )
         return False
 
-    def run_script(self, script: str, text: str, log: str) -> None:
+    def run_script(self, script: str, text: str) -> None:
         script_globals = f'__file__ = "{script}"\n__name__ = "__main__"\n'
         text = script_globals + text
 
@@ -128,7 +137,7 @@ class CascadeRun:
             env=os.environ,
         )
 
-        if log:
+        if self.log:
             logs_dir = os.path.join(self.run_dir, "logs")
             os.makedirs(logs_dir)
 
@@ -138,7 +147,7 @@ class CascadeRun:
                 break
             print(line)
 
-            if log:
+            if self.log:
                 with open(os.path.join(logs_dir, "cascade_run.log"), "a") as log_file:
                     log_file.write(line + "\n")
 
@@ -172,5 +181,5 @@ def run(script: str, y: bool, log: Optional[str], args: List[str]):
     if not y:
         click.confirm("Confirm?", abort=True)
 
-    with CascadeRun() as run:
-        run.run_script(script, text, log)
+    with CascadeRun(log, cfg_dict, kwargs) as run:
+        run.run_script(script, text)

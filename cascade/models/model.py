@@ -127,7 +127,8 @@ class Model(Traceable):
                     continue
                 else:
                     raise FileNotFoundError(
-                        f"File {filepath} not found when trying to copy an artifact of model at {path}"
+                        f"File {filepath} not found when trying to"
+                        f" copy an artifact of model at {path}"
                     )
 
             filename = os.path.split(filepath)[-1]
@@ -312,6 +313,21 @@ class Model(Traceable):
 
         log_path = os.path.join(run_dir, "logs", "cascade_run.log")
         self.add_file(log_path)
+
+    def add_config(self):
+        run_dir = os.getenv("CASCADE_RUN_DIR")
+        if run_dir is None:
+            warnings.warn(
+                "model.add_config called while not inside a run."
+                "Call a script with cascade run script.py and then use add_config inside"
+            )
+            return
+
+        cfg_path = os.path.join(run_dir, "cascade_config.json")
+        self.add_file(cfg_path)
+
+        overrides_path = os.path.join(run_dir, "cascade_overrides.json")
+        self.add_file(overrides_path)
 
 
 class ModelModifier(Model):
