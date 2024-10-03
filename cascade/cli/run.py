@@ -16,6 +16,7 @@ limitations under the License.
 
 import ast
 import os
+import re
 import shutil
 import subprocess
 import warnings
@@ -83,12 +84,9 @@ def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[st
 
 def parse_args(args):
     kwargs = {}
-    for keyval in args:
-        key, val = keyval.split("=")
-        key = key.strip()
-        val = val.strip()
-
-        kwargs[key] = ast.literal_eval(val)
+    for key, val in zip(args[::2], args[1::]):
+        key = re.sub(r"^-{1,2}\b", "", key)
+        kwargs[key] = val
     return kwargs
 
 
@@ -152,7 +150,7 @@ class CascadeRun:
                     log_file.write(line + "\n")
 
 
-@click.command("run")
+@click.command("run", context_settings={"ignore_unknown_options": True})
 @click.argument("script", type=str)
 @click.option("-y", is_flag=True, expose_value=True, help="Confirm run")
 @click.option("--log", is_flag=True, default=False)
@@ -168,13 +166,18 @@ def run(script: str, y: bool, log: Optional[str], args: List[str]):
 
     if cfg_node:
         cfg_dict = node2dict(cfg_node)
-        kwargs = parse_args(args)
-        cfg_dict.update(kwargs)
-
         click.echo("The config is:")
         click.echo(pformat(cfg_dict))
+
+        kwargs = parse_args(args)
         click.echo("The arguments you passed:")
         click.echo(pformat(kwargs))
+
+        for key in kwargs:
+            if key in cfg_dict:
+                cfg_dict[key] = kwargs[key]
+            else:
+                raise KeyError(f"Key `{key}` is missing in the original config")
 
         text = modify_assignments(tree, cfg_node, kwargs)
 
