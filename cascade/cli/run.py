@@ -182,6 +182,9 @@ def run(script: str, y: bool, log: Optional[str], args: List[str]):
                 raise KeyError(f"Key `{key}` is missing in the original config")
 
         text = modify_assignments(tree, cfg_node, kwargs)
+    else:
+        cfg_dict = {}
+        kwargs = {}
 
     if not y:
         click.confirm("Confirm?", abort=True)
