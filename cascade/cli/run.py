@@ -33,6 +33,8 @@ def cascade_config_imported(tree: ast.Module) -> bool:
         if isinstance(node, ast.ImportFrom):
             if node.module == "cascade.base.config" and node.names[0].name == "Config":
                 return True
+            if node.module == "cascade.base" and node.names[0].name == "Config":
+                return True
     return False
 
 
