@@ -57,3 +57,43 @@ def test_missing_config_key(tmp_path_str):
 
     assert result.exit_code == 1
     assert type(result.exception) == KeyError  # noqa: E721
+
+
+def test_different_types(tmp_path_str):
+    script = "\n".join(
+        [
+            "from cascade.base import Config",
+            "class ThisConfig(Config):",
+            "    a: int = 0",
+            "    b: float = 1.2",
+            "    c: str = 'hello'",
+            "    d = [0, 1, 2]",
+            "    e = {'key': 1}",
+            "    f = {1, 2, 3}",
+            "    g: str = 'hello again'",
+            "    h = []",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(
+        path,
+        "--a",
+        "1",
+        "--b",
+        "3.14",
+        "--c",
+        "'hii'",
+        "--d",
+        "[3, 4, 5]",
+        "--e",
+        "{'key': 2}",
+        "--f",
+        "{4, 5, 6}",
+        "--g",
+        "qwerty",
+        "--h",
+        "[i for i in range(10)]",
+    )
+
+    assert result.exit_code == 0
