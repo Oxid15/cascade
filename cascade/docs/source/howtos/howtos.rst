@@ -44,6 +44,36 @@ Experiment tracking
 
             How to log files along with saved model
 
+CLI
+***
+
+.. grid:: 1
+
+    .. grid-item::
+        .. card:: How to use Cascade CLI
+            :link: /howtos/cli.rst
+            :link-type: ref
+
+            Some things are more convenient when done in command line
+
+Integrations
+************
+
+.. grid:: 1
+
+    .. grid-item::
+        .. card:: scikit-learn
+            :link: /howtos/sklearn.rst
+            :link-type: ref
+
+            Effectively track your sklearn experiments
+
+    .. grid-item::
+        .. card:: PyTorch
+
+            :bdg-info:`To be written soon!`
+
+
 Experiment management
 *********************
 
@@ -79,6 +109,8 @@ Experiment management
     model_training.ipynb
     model_training_trainers.ipynb
     track_a_file
+    cli
+    sklearn
     links
     comments
     tags
