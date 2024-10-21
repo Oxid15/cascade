@@ -72,6 +72,7 @@ def test_different_types(tmp_path_str):
             "    f = {1, 2, 3}",
             "    g: str = 'hello again'",
             "    h = []",
+            "print([type(item) for item in ThisConfig().to_dict().values()])",
         ]
     )
 
@@ -91,9 +92,11 @@ def test_different_types(tmp_path_str):
         "--f",
         "{4, 5, 6}",
         "--g",
-        "qwerty",
-        "--h",
-        "[i for i in range(10)]",
+        "'qwerty'",
     )
 
     assert result.exit_code == 0
+    assert result.stdout.endswith(
+        "[<class 'int'>, <class 'float'>, <class 'str'>, <class 'list'>,"
+        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>]\n"
+    )
