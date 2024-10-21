@@ -86,7 +86,7 @@ def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[st
 
 def parse_args(args):
     kwargs = {}
-    for key, val in zip(args[::2], args[1::]):
+    for key, val in zip(args[::2], args[1::2]):
         key = re.sub(r"^-{1,2}\b", "", key)
         kwargs[key] = val
     return kwargs
