@@ -88,7 +88,7 @@ def parse_args(args):
     kwargs = {}
     for key, val in zip(args[::2], args[1::2]):
         key = re.sub(r"^-{1,2}\b", "", key)
-        kwargs[key] = val
+        kwargs[key] = ast.literal_eval(val)
     return kwargs
 
 
