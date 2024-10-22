@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -32,6 +33,13 @@ class Query:
     sort_expr: Optional[str] = None
     limit: Optional[int] = None
     offset: Optional[int] = None
+
+
+@dataclass
+class Result:
+    columns: List[str]
+    data: List[Dict[str, Any]]
+    time_s: int
 
 
 class QueryParser:
@@ -106,13 +114,45 @@ class QueryParser:
         return q
 
 
-def execute(q: Query, container: Any) -> List[Dict[str, Any]]:
-    results = []
-    return results
+class Executor:
+    def __init__(self, root: str, container_type: str):
+        container = create_container(container_type, root)
+        if container:
+            self.container = container
+            self.type = container_type
+        else:
+            raise ValueError("Can run queries only inside a container")
+
+    def iterate_over_container(self, container, container_type: str):
+        if container_type in ("line", "model_line", "data_line"):
+            for i in range(len(container)):
+                yield container.load_obj_meta(i)
+        elif container_type == "repo":
+            for name in container.get_line_names():
+                line = container.add_line(name)
+                for meta in self.iterate_over_container(line, "line"):
+                    yield meta
+
+    def execute(self, q: Query) -> Result:
+        start_time = time.time()
+        data = []
+
+        for meta in self.iterate_over_container(self.container, self.type):
+            item = {col: meta[0][col] for col in q.columns}  # TODO: somehow deal with lists
+            data.append(item)
+
+        if q.offset is not None:
+            data = data[q.offset :]
+
+        if q.limit is not None:
+            data = data[: q.limit]
+
+        end_time = time.time()
+        return Result(columns=q.columns, data=data, time_s=round(end_time - start_time, 4))
 
 
-def render_results(results: List[Dict[str, Any]]) -> None:
-    click.echo(results)
+def render_results(result: Result) -> None:
+    click.echo(result)
 
 
 @click.command("query", context_settings={"ignore_unknown_options": True})
@@ -125,8 +165,6 @@ def query(ctx, args: List[str]):
     if not ctx.obj.get("meta"):
         return
 
-    container = create_container(ctx.obj["type"], ctx.obj["cwd"])
-
-    results = execute(q, container)
-
+    ex = Executor(ctx.obj["cwd"], ctx.obj["type"])
+    results = ex.execute(q)
     render_results(results)
