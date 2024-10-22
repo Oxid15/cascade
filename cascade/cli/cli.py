@@ -23,6 +23,7 @@ from .artifact import artifact
 from .comment import comment
 from .common import create_container
 from .desc import desc
+from .query import query
 from .tag import tag
 from .view import view
 
@@ -108,6 +109,7 @@ def migrate(ctx):
 cli.add_command(artifact)
 cli.add_command(comment)
 cli.add_command(desc)
+cli.add_command(query)
 cli.add_command(tag)
 cli.add_command(view)
 
