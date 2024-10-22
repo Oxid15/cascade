@@ -49,7 +49,7 @@ class QueryParser:
             "limit": {"expression": "after_limit"},
             "after_limit": {"offset": "offset"},
             "offset": {"expression": "end"},
-            "end": {"expression": "error"},
+            "end": {"end of query": "error"},
         }
 
     def _report_error(self, i, token, tokens, state: Optional[str] = None):
