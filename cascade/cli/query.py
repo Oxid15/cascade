@@ -49,7 +49,16 @@ class QueryParser:
             "limit": {"expression": "after_limit"},
             "after_limit": {"offset": "offset"},
             "offset": {"expression": "end"},
+            "end": {"expression": "error"},
         }
+
+    def _report_error(self, i, token, tokens, state: Optional[str] = None):
+        tokens.insert(i + 1, "<-")
+        expression = " ".join(tokens)
+        expression = f"Unexpected token `{token}` at marked (<-) position: " + f"`{expression}`"
+        if state:
+            expression += f" Expected tokens are any of ({', '.join(self._states[state])})"
+        raise QueryParsingError(expression)
 
     def parse(self, tokens: List[str]) -> Query:
         state = "start"
@@ -64,13 +73,7 @@ class QueryParser:
                 new_state = self._states[state].get(token, "error")
 
                 if new_state == "error":
-                    tokens.insert(i + 1, "<-")
-                    expression = " ".join(tokens)
-                    expression = (
-                        f"Unexpected token `{token}` at marked (<-) position: " + f"`{expression}`"
-                    )
-                    expression += f" Expected tokens are any of ({', '.join(self._states[state])})"
-                    raise QueryParsingError(expression)
+                    self._report_error(i, token, tokens, state)
 
                 state = new_state
                 continue
@@ -85,12 +88,14 @@ class QueryParser:
                 limit = int(token)
             elif state == "offset":
                 offset = int(token)
+            elif state == "error":
+                self._report_error(i, token, tokens)
             else:
                 expected = tuple(self._states[state].keys())
                 raise QueryParsingError(
                     f"Expected {'one of ' if len(expected) > 1 else ''}"
                     f"{expected if len(expected) > 1 else expected[0]}"
-                    f", but got `{token}`"
+                    f", got `{token}`"
                 )
 
             state = self._states[state].get("expression", "error")
@@ -102,5 +107,5 @@ class QueryParser:
 @click.command("query", context_settings={"ignore_unknown_options": True})
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def query(args: List[str]):
-    q = QueryParser().parse(args)
+    q = QueryParser().parse(list(args))
     click.echo(q)
