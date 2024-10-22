@@ -15,9 +15,11 @@ limitations under the License.
 """
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 import click
+
+from .common import create_container
 
 
 class QueryParsingError(Exception): ...
@@ -104,8 +106,27 @@ class QueryParser:
         return q
 
 
+def execute(q: Query, container: Any) -> List[Dict[str, Any]]:
+    results = []
+    return results
+
+
+def render_results(results: List[Dict[str, Any]]) -> None:
+    click.echo(results)
+
+
 @click.command("query", context_settings={"ignore_unknown_options": True})
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
-def query(args: List[str]):
+@click.pass_context
+def query(ctx, args: List[str]):
     q = QueryParser().parse(list(args))
     click.echo(q)
+
+    if not ctx.obj.get("meta"):
+        return
+
+    container = create_container(ctx.obj["type"], ctx.obj["cwd"])
+
+    results = execute(q, container)
+
+    render_results(results)
