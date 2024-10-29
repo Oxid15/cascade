@@ -53,7 +53,8 @@ def find_config(tree: ast.Module) -> Optional[ast.ClassDef]:
         raise NotImplementedError(
             "Found more than one Config in a single file."
             " This Cascade version does not support multiple configs."
-            " However, it may be implemented in the future"
+            " However, it may be implemented in the future."
+            " Please, write me a GitHub issue if this functionality is needed"
         )
 
     return cfg_node
