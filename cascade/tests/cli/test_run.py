@@ -72,6 +72,35 @@ def test_different_types(tmp_path_str):
             "    f = {1, 2, 3}",
             "    g: str = 'hello again'",
             "    h = []",
+            "    i = (9, 8, 7)",
+            "print([type(item) for item in ThisConfig().to_dict().values()])",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+
+    assert result.exit_code == 0
+    assert result.stdout.endswith(
+        "[<class 'int'>, <class 'float'>, <class 'str'>, <class 'list'>,"
+        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>, <class 'tuple'>]\n"
+    )
+
+
+def test_different_types_override(tmp_path_str):
+    script = "\n".join(
+        [
+            "from cascade.base import Config",
+            "class ThisConfig(Config):",
+            "    a: int = 0",
+            "    b: float = 1.2",
+            "    c: str = 'hello'",
+            "    d = [0, 1, 2]",
+            "    e = {'key': 1}",
+            "    f = {1, 2, 3}",
+            "    g: str = 'hello again'",
+            "    h = []",
+            "    i = (9, 8, 7)",
             "print([type(item) for item in ThisConfig().to_dict().values()])",
         ]
     )
@@ -93,10 +122,12 @@ def test_different_types(tmp_path_str):
         "{4, 5, 6}",
         "--g",
         "'qwerty'",
+        "--i",
+        "(5, 6, 7)",
     )
 
     assert result.exit_code == 0
     assert result.stdout.endswith(
         "[<class 'int'>, <class 'float'>, <class 'str'>, <class 'list'>,"
-        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>]\n"
+        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>, <class 'tuple'>]\n"
     )
