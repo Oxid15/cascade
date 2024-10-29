@@ -59,6 +59,42 @@ def test_missing_config_key(tmp_path_str):
     assert type(result.exception) == KeyError  # noqa: E721
 
 
+def test_missing_config(tmp_path_str):
+    script = "print('hello')"
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+
+    assert result.exit_code == 0
+    assert result.stdout.endswith("hello\n")
+
+
+def test_key_without_config(tmp_path_str):
+    script = "print('hello')"
+    path = write_script(script, tmp_path_str)
+    result = run_run(path, "--a", "0", "--b", "(1, 2)")
+
+    assert result.exit_code == 0
+    assert result.stdout.endswith("hello\n")
+
+
+def test_more_than_one_config(tmp_path_str):
+    script = "\n".join(
+        [
+            "from cascade.base import Config",
+            "class ThisConfig(Config):",
+            "    a: int = 0",
+            "class ThatConfig(Config):",
+            "    b: int = 1",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path, "--b", "1")
+
+    assert result.exit_code == 1
+    assert type(result.exception) == NotImplementedError  # noqa: E721
+
+
 def test_different_types(tmp_path_str):
     script = "\n".join(
         [
