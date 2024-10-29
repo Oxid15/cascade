@@ -40,12 +40,22 @@ def cascade_config_imported(tree: ast.Module) -> bool:
 
 def find_config(tree: ast.Module) -> Optional[ast.ClassDef]:
     cfg_node = None
+    more_than_one = False
     for node in tree.body:
         if isinstance(node, ast.ClassDef):
             if len(node.bases):
                 for base in node.bases:
                     if base.id == "Config" and cascade_config_imported(tree):
+                        if cfg_node is not None:
+                            more_than_one = True
                         cfg_node = node
+    if more_than_one:
+        raise NotImplementedError(
+            "Found more than one Config in a single file."
+            " This Cascade version does not support multiple configs."
+            " However, it may be implemented in the future"
+        )
+
     return cfg_node
 
 
