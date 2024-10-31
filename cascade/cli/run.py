@@ -42,13 +42,23 @@ def cascade_config_imported(tree: ast.Module) -> bool:
 
 
 def find_config(tree: ast.Module) -> Optional[ast.ClassDef]:
+    """
+    Returns the first node that is cascade.base.Config.
+    Returns before checking if Config import was not detected.
+    Raises if more than one configs found - to actively restrict this
+    until needed.
+    """
+
+    if not cascade_config_imported(tree):
+        return None
+
     cfg_node = None
     more_than_one = False
     for node in tree.body:
         if isinstance(node, ast.ClassDef):
             if len(node.bases):
                 for base in node.bases:
-                    if base.id == "Config" and cascade_config_imported(tree):
+                    if base.id == "Config":
                         if cfg_node is not None:
                             more_than_one = True
                         cfg_node = node
@@ -64,6 +74,10 @@ def find_config(tree: ast.Module) -> Optional[ast.ClassDef]:
 
 
 def parse_value(value: ast.expr) -> Any:
+    """
+    Create node representation for dict
+    that will be printed
+    """
     if isinstance(value, ast.Constant):
         return value.value
     elif isinstance(value, ast.Call):
@@ -86,6 +100,9 @@ def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
 
 
 def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]) -> str:
+    """
+    Overrides cascade.base.Config class definition with user-provided values
+    """
     for node in cfg_node.body:
         if isinstance(node, ast.Assign):
             target = node.targets[0].id
@@ -184,6 +201,9 @@ class CascadeRun:
 @click.option("--log", is_flag=True, default=False)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def run(script: str, y: bool, log: Optional[str], args: List[str]):
+    """
+    Run python scripts with the ability to override Config values and record logs
+    """
     click.echo(f"You are about to run {script}")
 
     with open(script, "r") as f:
