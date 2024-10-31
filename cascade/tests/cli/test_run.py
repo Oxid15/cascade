@@ -22,6 +22,7 @@ from click.testing import CliRunner, Result
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.cli.cli import cli
+from cascade.cli.run import RunFailedException
 
 
 def write_script(script: str, d: str):
@@ -167,3 +168,12 @@ def test_different_types_override(tmp_path_str):
         "[<class 'int'>, <class 'float'>, <class 'str'>, <class 'list'>,"
         " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>, <class 'tuple'>]\n"
     )
+
+
+def test_exception(tmp_path_str):
+    script = "raise RuntimeError()"
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+
+    assert result.exit_code == 1
+    assert type(result.exception) == RunFailedException  # noqa: E721

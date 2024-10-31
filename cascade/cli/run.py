@@ -28,6 +28,9 @@ import pendulum
 from cascade.base import MetaHandler
 
 
+class RunFailedException(RuntimeError): ...
+
+
 def cascade_config_imported(tree: ast.Module) -> bool:
     for node in tree.body:
         if isinstance(node, ast.ImportFrom):
@@ -127,7 +130,10 @@ class CascadeRun:
 
         return self
 
-    def __exit__(self, *args):
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        if exc_type:
+            raise exc_value
+
         run_path = self.run_dir
         try:
             shutil.rmtree(run_path)
@@ -161,6 +167,15 @@ class CascadeRun:
             if self.log:
                 with open(os.path.join(logs_dir, "cascade_run.log"), "a") as log_file:
                     log_file.write(line + "\n")
+
+        returncode = process.wait()
+        if returncode:
+            raise RunFailedException(
+                f"Run of {script} failed. See traceback above."
+                " The config and logs"
+                f" will be kept at {self.run_dir}"
+                " for post-mortem analysis"
+            )
 
 
 @click.command("run", context_settings={"ignore_unknown_options": True})
