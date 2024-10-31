@@ -494,7 +494,7 @@ Here we removed tag using its name and the first link using its ID. It is the da
 7. Repos and Workspaces
 =======================
 
-This parts steps aside from previous task to demonstrate basic Cascade storage structure.
+This part steps aside from the previous task to demonstrate basic Cascade storage structure.
 Lines are not the only tool to organize model storage. They themselves can be unified using Repo.
 Repos can include both Data- and ModelLines. They can be used for access to a bunch of models and
 are basic input for most of Cascade operations.
@@ -705,7 +705,7 @@ Go to ``localhost:8050`` to see the table of MetricViewer.
     cascade view metric
 
 
-11. Data Validation
+10. Data Validation
 ===================
 
 Data quality in ML projects is as important as the quality of the model.
@@ -846,7 +846,7 @@ We can see that we didn't even get to the validation of a label. Our data was re
 for being freaky enough without that.
 
 
-12. Artifacts and Files
+11. Artifacts and Files
 =======================
 
 Cascade wrappers serve to provide unified interface for different ML solutions
@@ -942,7 +942,7 @@ Like previously we verify the files.
     ['dummy_predictions.json']
 
 
-13. Scikit-learn Integration
+12. Scikit-learn Integration
 ============================
 
 Many of the things we implemented in this tutorial can be reused in similar projects.
