@@ -16,7 +16,7 @@ limitations under the License.
 
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import click
 
@@ -123,6 +123,38 @@ class Executor:
         else:
             raise ValueError("Can run queries only inside a container")
 
+    def universal_get(self, obj: Union[Dict, List], key: str, default: Any = None):
+        if hasattr(obj, "get"):
+            return obj.get(key, default)
+        elif hasattr(obj, "__getitem__"):
+            try:
+                int_key = int(key)
+            except ValueError:
+                pass
+            else:
+                try:
+                    return obj[int_key]
+                except KeyError:
+                    pass
+
+            try:
+                return obj[key]
+            except KeyError:
+                return default
+        else:
+            raise ValueError(f"Universal get supports only dicts or lists, got {type(obj)}")
+
+    def deep_get(self, key: str, d: Dict[str, Any], default: Any = None, sep: str = "."):
+        parts = key.split(sep)
+        if len(parts) <= 1:
+            return self.universal_get(d, key, default)
+        else:
+            deeper = self.universal_get(d, parts[0], None)
+            if deeper is None:
+                return default
+            else:
+                return self.deep_get(sep.join(parts[1:]), deeper, default)
+
     def iterate_over_container(self, container, container_type: str):
         if container_type in ("line", "model_line", "data_line"):
             for i in range(len(container)):
@@ -138,8 +170,18 @@ class Executor:
         data = []
 
         for meta in self.iterate_over_container(self.container, self.type):
-            item = {col: meta[0][col] for col in q.columns}  # TODO: somehow deal with lists
+            item = {
+                col: self.deep_get(col, meta[0]) for col in q.columns
+            }  # TODO: somehow deal with lists
+            if q.filter_expr:
+                result = eval(q.filter_expr, meta[0])
+                if not result:
+                    continue
+
             data.append(item)
+
+        if q.sort_expr is not None:
+            data = sorted(data, key=lambda item: eval(q.sort_expr, item.copy()))
 
         if q.offset is not None:
             data = data[q.offset :]
