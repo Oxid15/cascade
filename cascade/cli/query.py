@@ -114,6 +114,57 @@ class QueryParser:
         return q
 
 
+class Field:
+    def __init__(self, d: Dict[str, Any]) -> None:
+        self._d = d
+        self._none = "__none__"
+
+    def __getattribute__(self, name: str) -> Any:
+        if name in super().__getattribute__("_d"):
+            value = super().__getattribute__("deep_get")(name, default=self._none)
+            if value == super().__getattribute__("_none"):
+                raise KeyError(name)
+            else:
+                return value
+        else:
+            return super().__getattribute__(name)
+
+    def _universal_get(self, key: str, default: Any = None):
+        if hasattr(self._d, "get"):
+            return self._d.get(key, default)
+        elif hasattr(self._d, "__getitem__"):
+            try:
+                int_key = int(key)
+            except ValueError:
+                pass
+            else:
+                try:
+                    return self._d[int_key]
+                except KeyError:
+                    pass
+
+            try:
+                return self._d[key]
+            except KeyError:
+                return default
+        else:
+            raise ValueError(f"Universal get supports only dicts or lists, got {type(obj)}")
+
+    def get(self, key: str, default: Any = None, sep: str = "."):
+        parts = key.split(sep)
+        if len(parts) <= 1:
+            return self._universal_get(self._d, key, default)
+        else:
+            deeper = self._universal_get(self._d, parts[0], None)
+            if deeper is None:
+                return default
+            else:
+                return self.deep_get(sep.join(parts[1:]), deeper, default)
+
+    def __repr__(self):
+        return f"Field({self._d})"
+
+
 class Executor:
     def __init__(self, root: str, container_type: str):
         container = create_container(container_type, root)
@@ -123,37 +174,8 @@ class Executor:
         else:
             raise ValueError("Can run queries only inside a container")
 
-    def universal_get(self, obj: Union[Dict, List], key: str, default: Any = None):
-        if hasattr(obj, "get"):
-            return obj.get(key, default)
-        elif hasattr(obj, "__getitem__"):
-            try:
-                int_key = int(key)
-            except ValueError:
-                pass
-            else:
-                try:
-                    return obj[int_key]
-                except KeyError:
-                    pass
-
-            try:
-                return obj[key]
-            except KeyError:
-                return default
-        else:
-            raise ValueError(f"Universal get supports only dicts or lists, got {type(obj)}")
-
-    def deep_get(self, key: str, d: Dict[str, Any], default: Any = None, sep: str = "."):
-        parts = key.split(sep)
-        if len(parts) <= 1:
-            return self.universal_get(d, key, default)
-        else:
-            deeper = self.universal_get(d, parts[0], None)
-            if deeper is None:
-                return default
-            else:
-                return self.deep_get(sep.join(parts[1:]), deeper, default)
+    def _make_context(self, d: Dict[str, Any]) -> Dict[str, Union[Field, Any]]:
+        return {k: Field(v) if isinstance(v, (list, dict)) else v for k, v in d.items()}
 
     def iterate_over_container(self, container, container_type: str):
         if container_type in ("line", "model_line", "data_line"):
@@ -170,11 +192,10 @@ class Executor:
         data = []
 
         for meta in self.iterate_over_container(self.container, self.type):
-            item = {
-                col: self.deep_get(col, meta[0]) for col in q.columns
-            }  # TODO: somehow deal with lists
+            item = self._make_context(meta[0])  # TODO: somehow deal with meta lists
+            item = self._make_context({k: item.get(k) for k in q.columns})
             if q.filter_expr:
-                result = eval(q.filter_expr, meta[0])
+                result = eval(q.filter_expr, item)
                 if not result:
                     continue
 
