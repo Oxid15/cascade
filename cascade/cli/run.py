@@ -82,7 +82,16 @@ def parse_value(value: ast.expr) -> Any:
         return value.value
     elif isinstance(value, ast.Call):
         return str(value.func.id) + "()"
-    return str(value)
+    elif isinstance(value, ast.List):
+        return [parse_value(v) for v in value.elts]
+    elif isinstance(value, ast.Tuple):
+        return tuple(parse_value(v) for v in value.elts)
+    elif isinstance(value, ast.Set):
+        return set(parse_value(v) for v in value.elts)
+    elif isinstance(value, ast.Dict):
+        return {parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)}
+    else:
+        raise ValueError(f"Unsupported config field type: {value} in {ast.unparse(value)}")
 
 
 def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
