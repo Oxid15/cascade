@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import json
 import os
 import sys
 
@@ -177,3 +178,46 @@ def test_exception(tmp_path_str):
 
     assert result.exit_code == 1
     assert type(result.exception) == RunFailedException  # noqa: E721
+
+
+def test_to_dict(tmp_path_str):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 0",
+            "    b = 1.2",
+            "    c = 'c'",
+            "    d = [1, 2]",
+            "    e = {0: 1, 1: 2}",
+            "    f = (11, 11)",
+            "    g = {1, 2, 3}",
+            "cfg = Config()",
+            "model = BasicModel()",
+            "model.add_config()",
+            "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
+            "line = ModelLine(line_dir)",
+            "line.save(model)",
+        ]
+    )
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+
+    assert result.exit_code == 0
+
+    config_path = os.path.join(tmp_path_str, "line", "00000", "files", "cascade_config.json")
+    assert os.path.exists(config_path)
+
+    with open(config_path, "r") as f:
+        cfg = json.load(f)
+
+    assert cfg["a"] == 0
+    assert cfg["b"] == 1.2
+    assert cfg["c"] == "c"
+    assert cfg["d"] == [1, 2]
+    assert cfg["e"] == {0: 1, 1: 2}
+    assert cfg["f"] == [11, 11]
+    assert cfg["g"] == [1, 2, 3]
