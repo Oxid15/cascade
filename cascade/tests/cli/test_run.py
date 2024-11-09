@@ -192,7 +192,7 @@ def test_to_dict(tmp_path_str):
             "    b = 1.2",
             "    c = 'c'",
             "    d = [1, 2]",
-            "    e = {0: 1, 1: 2}",
+            "    e = {'0': 1, '1': 2}",
             "    f = (11, 11)",
             "    g = {1, 2, 3}",
             "cfg = Config()",
@@ -218,6 +218,6 @@ def test_to_dict(tmp_path_str):
     assert cfg["b"] == 1.2
     assert cfg["c"] == "c"
     assert cfg["d"] == [1, 2]
-    assert cfg["e"] == {0: 1, 1: 2}
+    assert cfg["e"] == {"0": 1, "1": 2}
     assert cfg["f"] == [11, 11]
     assert cfg["g"] == [1, 2, 3]
