@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import time
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 
@@ -24,6 +25,9 @@ from .common import create_container
 
 
 class QueryParsingError(Exception): ...
+
+
+class NONE: ...
 
 
 @dataclass
@@ -114,55 +118,83 @@ class QueryParser:
         return q
 
 
-class Field:
-    def __init__(self, d: Dict[str, Any]) -> None:
-        self._d = d
-        self._none = "__none__"
+class Field(ABC):
+    def __init__(self, obj: Union[Dict[str, Any], List[Any]]) -> None:
+        if isinstance(obj, dict):
+            self._obj = {}
+            for k, v in obj.items():
+                if isinstance(v, list):
+                    self._obj[k] = ListField(v)
+                elif isinstance(v, dict):
+                    self._obj[k] = DictField(v)
+                else:
+                    self._obj[k] = v
+        elif isinstance(obj, list):
+            self._obj = []
+            for i in range(len(obj)):
+                v = obj[i]
+                if isinstance(v, list):
+                    self._obj.append(ListField(v))
+                elif isinstance(v, dict):
+                    self._obj.append(DictField(v))
+                else:
+                    self._obj.append(v)
+        else:
+            raise TypeError()
 
-    def __getattribute__(self, name: str) -> Any:
-        if name in super().__getattribute__("_d"):
-            value = super().__getattribute__("deep_get")(name, default=self._none)
-            if value == super().__getattribute__("_none"):
+    def __getattribute__(self, name: Union[str, int]) -> Any:
+        if name in super().__getattribute__("_obj"):
+            value = self.get(name, default=NONE())
+            if isinstance(value, NONE):
                 raise KeyError(name)
             else:
                 return value
         else:
             return super().__getattribute__(name)
 
-    def _universal_get(self, key: str, default: Any = None):
-        if hasattr(self._d, "get"):
-            return self._d.get(key, default)
-        elif hasattr(self._d, "__getitem__"):
-            try:
-                int_key = int(key)
-            except ValueError:
-                pass
-            else:
-                try:
-                    return self._d[int_key]
-                except KeyError:
-                    pass
-
-            try:
-                return self._d[key]
-            except KeyError:
-                return default
-        else:
-            raise ValueError(f"Universal get supports only dicts or lists, got {type(obj)}")
-
     def get(self, key: str, default: Any = None, sep: str = "."):
         parts = key.split(sep)
         if len(parts) <= 1:
-            return self._universal_get(self._d, key, default)
+            return self._leaf_get(key, default)
         else:
-            deeper = self._universal_get(self._d, parts[0], None)
-            if deeper is None:
+            deeper = self._leaf_get(parts[0], NONE())
+            if isinstance(deeper, NONE):
                 return default
             else:
-                return self.deep_get(sep.join(parts[1:]), deeper, default)
+                return deeper.get(sep.join(parts[1:]), default)
+
+    @abstractmethod
+    def _leaf_get(self, key, default): ...
 
     def __repr__(self):
-        return f"Field({self._d})"
+        return f"{self.__class__.__name__}({self._obj})"
+
+
+class DictField(Field):
+    def _leaf_get(self, key, default):
+        return self._obj.get(key, default)
+
+    def to_dict(self):
+        return self._obj
+
+
+class ListField(Field):
+    def _leaf_get(self, key, default: Any = None):
+        try:
+            return self._obj[key]
+        except IndexError:
+            return default
+
+
+class Context:
+    def __init__(self, ctx):
+        self._ctx = DictField(ctx)
+
+    def select(self, columns: List[str]) -> "Context":
+        return Context({col: self._ctx.get(col) for col in columns})
+
+    def to_dict(self):
+        return self._ctx.to_dict()
 
 
 class Executor:
@@ -173,9 +205,6 @@ class Executor:
             self.type = container_type
         else:
             raise ValueError("Can run queries only inside a container")
-
-    def _make_context(self, d: Dict[str, Any]) -> Dict[str, Union[Field, Any]]:
-        return {k: Field(v) if isinstance(v, (list, dict)) else v for k, v in d.items()}
 
     def iterate_over_container(self, container, container_type: str):
         if container_type in ("line", "model_line", "data_line"):
@@ -192,14 +221,15 @@ class Executor:
         data = []
 
         for meta in self.iterate_over_container(self.container, self.type):
-            item = self._make_context(meta[0])  # TODO: somehow deal with meta lists
-            item = self._make_context({k: item.get(k) for k in q.columns})
+            ctx = Context(meta[0])  # TODO: somehow deal with meta lists
+            ctx = ctx.select(q.columns)
+            ctx_dict = ctx.to_dict()
             if q.filter_expr:
-                result = eval(q.filter_expr, item)
+                result = eval(q.filter_expr, ctx_dict)
                 if not result:
                     continue
 
-            data.append(item)
+            data.append(ctx_dict)
 
         if q.sort_expr is not None:
             data = sorted(data, key=lambda item: eval(q.sort_expr, item.copy()))
