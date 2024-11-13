@@ -225,7 +225,7 @@ class Executor:
             ctx = ctx.select(q.columns)
             ctx_dict = ctx.to_dict()
             if q.filter_expr:
-                result = eval(q.filter_expr, ctx_dict)
+                result = eval(q.filter_expr, ctx_dict.copy())
                 if not result:
                     continue
 
