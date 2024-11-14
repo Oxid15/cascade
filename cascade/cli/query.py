@@ -15,8 +15,8 @@ limitations under the License.
 """
 
 import time
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from pprint import pformat
 from typing import Any, Dict, List, Optional, Union
 
 import click
@@ -35,6 +35,7 @@ class Query:
     columns: List[str]
     filter_expr: Optional[str] = None
     sort_expr: Optional[str] = None
+    desc: bool = False
     limit: Optional[int] = None
     offset: Optional[int] = None
 
@@ -59,7 +60,7 @@ class QueryParser:
             "filter": {"expression": "after_filter"},
             "after_filter": {"sort": "sort", "limit": "limit", "offset": "offset"},
             "sort": {"expression": "after_sort"},
-            "after_sort": {"limit": "limit", "offset": "offset"},
+            "after_sort": {"limit": "limit", "offset": "offset", "desc": "desc"},
             "limit": {"expression": "after_limit"},
             "after_limit": {"offset": "offset"},
             "offset": {"expression": "end"},
@@ -79,10 +80,12 @@ class QueryParser:
         columns = []
         filter_expr = None
         sort_expr = None
+        desc = False
         limit = None
         offset = None
 
         for i, token in enumerate(tokens):
+            print(token)
             if token in self._states:
                 new_state = self._states[state].get(token, "error")
 
@@ -102,6 +105,8 @@ class QueryParser:
                 limit = int(token)
             elif state == "offset":
                 offset = int(token)
+            elif state == "after_sort" and token == "desc":
+                desc = True
             elif state == "error":
                 self._report_error(i, token, tokens)
             else:
@@ -114,7 +119,14 @@ class QueryParser:
 
             state = self._states[state].get("expression", "error")
 
-        q = Query(columns, filter_expr=filter_expr, sort_expr=sort_expr, limit=limit, offset=offset)
+        q = Query(
+            columns,
+            filter_expr=filter_expr,
+            sort_expr=sort_expr,
+            desc=desc,
+            limit=limit,
+            offset=offset,
+        )
         return q
 
 
@@ -208,7 +220,7 @@ class Executor:
             data.append(ctx_dict)
 
         if q.sort_expr is not None:
-            data = sorted(data, key=lambda item: eval(q.sort_expr, item.copy()))
+            data = sorted(data, key=lambda item: eval(q.sort_expr, item.copy()), reverse=q.desc)
 
         if q.offset is not None:
             data = data[q.offset :]
@@ -221,7 +233,7 @@ class Executor:
 
 
 def render_results(result: Result) -> None:
-    click.echo(result)
+    click.echo(pformat(result))
 
 
 @click.command("query", context_settings={"ignore_unknown_options": True})
