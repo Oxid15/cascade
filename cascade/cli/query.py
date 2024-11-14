@@ -118,29 +118,23 @@ class QueryParser:
         return q
 
 
-class Field(ABC):
+class Field:
     def __init__(self, obj: Union[Dict[str, Any], List[Any]]) -> None:
         if isinstance(obj, dict):
             self._obj = {}
             for k, v in obj.items():
-                if isinstance(v, list):
-                    self._obj[k] = ListField(v)
-                elif isinstance(v, dict):
-                    self._obj[k] = DictField(v)
-                else:
-                    self._obj[k] = v
-        elif isinstance(obj, list):
-            self._obj = []
-            for i in range(len(obj)):
-                v = obj[i]
-                if isinstance(v, list):
-                    self._obj.append(ListField(v))
-                elif isinstance(v, dict):
-                    self._obj.append(DictField(v))
-                else:
-                    self._obj.append(v)
+                self._obj[k] = Field._field_or_instance(v)
         else:
-            raise TypeError()
+            self._obj = obj
+
+    @staticmethod
+    def _field_or_instance(x):
+        if isinstance(x, dict):
+            return Field(x)
+        elif isinstance(x, list):
+            return [Field._field_or_instance(item) for item in x]
+        else:
+            return x
 
     def __getattribute__(self, name: Union[str, int]) -> Any:
         if name in super().__getattribute__("_obj"):
@@ -163,38 +157,20 @@ class Field(ABC):
             else:
                 return deeper.get(sep.join(parts[1:]), default)
 
-    @abstractmethod
-    def _leaf_get(self, key, default): ...
+    def _leaf_get(self, key, default):
+        if isinstance(self._obj, list):
+            return self._obj[key]
+        else:
+            return self._obj.get(key, default)
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self._obj})"
 
-
-class DictField(Field):
-    def _leaf_get(self, key, default):
-        return self._obj.get(key, default)
+    def select(self, columns: List[str]) -> "Field":
+        return Field({col: self.get(col) for col in columns})
 
     def to_dict(self):
         return self._obj
-
-
-class ListField(Field):
-    def _leaf_get(self, key, default: Any = None):
-        try:
-            return self._obj[key]
-        except IndexError:
-            return default
-
-
-class Context:
-    def __init__(self, ctx):
-        self._ctx = DictField(ctx)
-
-    def select(self, columns: List[str]) -> "Context":
-        return Context({col: self._ctx.get(col) for col in columns})
-
-    def to_dict(self):
-        return self._ctx.to_dict()
 
 
 class Executor:
@@ -221,7 +197,7 @@ class Executor:
         data = []
 
         for meta in self.iterate_over_container(self.container, self.type):
-            ctx = Context(meta[0])  # TODO: somehow deal with meta lists
+            ctx = Field(meta[0])  # TODO: somehow deal with meta lists
             ctx = ctx.select(q.columns)
             ctx_dict = ctx.to_dict()
             if q.filter_expr:
