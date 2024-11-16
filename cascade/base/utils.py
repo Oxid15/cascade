@@ -287,3 +287,38 @@ def migrate_repo_v0_13(path: str) -> None:
         print(f"Failed to update repo version: {e}")
 
     print("Done")
+
+
+def flatten_dict(nested_json: dict, separator="_") -> dict:
+
+    """
+    It converts a nested JSON object into a flat dictionary.
+
+    Parameters
+    ----------
+    nested_json
+    separator
+
+    Returns
+    -------
+    flatted JSON
+
+    """
+
+    flattened = {}
+
+    def _flatten(data, prefix=''):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                new_prefix = f"{prefix}{separator}{key}" if prefix else key
+                _flatten(value, new_prefix)
+        elif isinstance(data, list):
+            for index, value in enumerate(data):
+                new_prefix = f"{prefix}{separator}{index}" if prefix else str(index)
+                _flatten(value, new_prefix)
+        else:
+            flattened[prefix] = data
+
+    _flatten(nested_json)
+    return flattened
+
