@@ -1,12 +1,6 @@
 Configuration management
 ########################
 
-.. toctree::
-    :maxdepth: 2
-    
-    tutorial
-
-
 Using ``cascade.base.Config`` class and ``cascade run`` CLI command you can:
 
 1. Configure your scripts in code using class definitions
