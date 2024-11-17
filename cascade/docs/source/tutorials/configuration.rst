@@ -1,7 +1,11 @@
 Configuration management
 ########################
 
-Configuration management is a part of every machine learning project.
+.. toctree::
+    :maxdepth: 2
+    
+    tutorial
+
 
 Using ``cascade.base.Config`` class and ``cascade run`` CLI command you can:
 
@@ -81,22 +85,24 @@ words you can write simple things like exponentials ``1e-10``,
 passing ``None`` or other constants, but nothing that requires evaluation
 or the use of variables.
 
-If you want to launch scripts without confirmation just pass `-y` flag.
+.. note::
+
+    If you want to launch scripts without confirmation just pass `-y` flag.
 
 Configuration tracking
 ======================
 
 Having the ability to override hardcoded values with CLI is great, but configs
 need to be attached to actual experiments they belong to.
-When we do `cascade run` it actually knows nothing about what kind of experiment is
+When we do ``cascade run`` it actually knows nothing about what kind of experiment is
 inside the script. This means that you can use overrides separately even if you do not track
 anything in your scripts. However, at the same time it creates tracking problems because only
-`run` knows about overrides and logs and only the script knows about repos and lines.
-To address this problem special `Model` methods come into play.
+``run`` knows about overrides and logs and only the script knows about repos and lines.
+To address this problem special ``Model`` methods come into play.
 
-Let's see next example, where we use special `add_config` method. Notice how
+Let's see next example, where we use special ``add_config`` method. Notice how
 even while having the actual config in code we do not pass it directly to the method.
-It is unnecessary since there is underlying communication between `run` and the script.
+It is unnecessary since there is underlying communication between ``run`` and the script.
 
 .. code-block:: python
 
@@ -123,30 +129,31 @@ It is unnecessary since there is underlying communication between `run` and the 
         line.save(model)
 
 You will find your configs at
-`line/00000/files/cascade_config.json` and `line/00000/files/cascade_overrides.json`.
+``line/00000/files/cascade_config.json``
+and overrides at ``line/00000/files/cascade_overrides.json``.
 
 .. note::
 
-    `run` creates temporary folder for every launch and stores everything there,
-    but only for the time script is executing. When you call `add_config` it remembers
-    the location of the file and saves it when `line.save` is called. The functionality is
-    very similar to `add_file` and under the hood it actually calls `add_file`.
+    ``run`` creates temporary folder for every launch and stores everything there,
+    but only for the time script is executing. When you call ``add_config`` it remembers
+    the location of the file and saves it when ``line.save`` is called. The functionality is
+    very similar to ``add_file`` and under the hood it actually calls ``add_file``.
 
 Logs tracking
 =============
 
-Another useful feature of `run` is log tracking. Logs are captured line by line and immediately displayed
-just as if you would run the script regularly. While displaying logs `cascade` also writes them
+Another useful feature of ``run`` is log tracking. Logs are captured line by line and immediately displayed
+just as if you would run the script regularly. While displaying logs ``cascade`` also writes them
 into the same temporary folder as configs.
 
-Logs tracking is not enabled by default and can be turned on by adding `--log` anywhere after `cascade run` command.
+Logs tracking is not enabled by default and can be turned on by adding ``--log`` anywhere after ``cascade run`` command.
 
 Error handling
 ==============
 
-Logs and configs are saved when `line.save` is called, but what if an error will occur before that moment?
-This will almost always be the case - something may go wrong in the script and `save` will never be called.
-This is why `run` will not delete temporary folder if an error occurs.
+Logs and configs are saved when ``line.save`` is called, but what if an error will occur before that moment?
+This will almost always be the case - something may go wrong in the script and ``save`` will never be called.
+This is why ``run`` will not delete temporary folder if an error occurs.
 Let's see an example.
 
 .. code-block:: python
@@ -178,7 +185,7 @@ Skipping the long trackeback this is what you should see:
     /home/ilia/local/cascade_proj/cascade_repo/cascade/docs/source/tutorials/.cascade/20241117_154453_72
     for post-mortem analysis
 
-This is what you should find in `.cascade/20241117_154453_72/logs/cascade_run.log`
+This is what you should find in ``.cascade/20241117_154453_72/logs/cascade_run.log``
 
 .. code-block:: text
 
@@ -187,4 +194,4 @@ This is what you should find in `.cascade/20241117_154453_72/logs/cascade_run.lo
     File "<string>", line 10, in <module>
     RuntimeError: An error occured!
 
-You will also find config and overrides in `.cascade` folder.
+You will also find config and overrides in ``.cascade`` folder.
