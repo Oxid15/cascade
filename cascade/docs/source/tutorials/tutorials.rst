@@ -1,12 +1,14 @@
-Tutorial
-########
+The Main Tutorial
+#################
 
-Tutorial is a set of lessons that will teach you
+The main tutorial is a set of lessons that will teach you
 basics of Cascade. Lessons are connected in a single project
 and depend on each other.
 You can grasp the essence of how
 you can use the library for your own projects, while
 completing this one.
+
+.. contents::
 
 Installation
 ============
@@ -1024,4 +1026,11 @@ What's Next
 
 Congratulations for completing the tutorial!
 
-Now you can proceed to the :ref:`/howtos/howtos.rst` section.
+You can see other more specific tutorials or
+you can proceed to the :ref:`/howtos/howtos.rst` section.
+
+.. toctree::
+    :maxdepth: 2
+
+    self
+    configuration
