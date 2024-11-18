@@ -85,7 +85,7 @@ def cat(ctx, p):
             except ValueError:
                 pass
 
-            meta = container.load_model_meta(p)
+            meta = container.load_obj_meta(p)
             click.echo(pformat(meta))
 
 

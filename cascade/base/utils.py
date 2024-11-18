@@ -287,3 +287,41 @@ def migrate_repo_v0_13(path: str) -> None:
         print(f"Failed to update repo version: {e}")
 
     print("Done")
+
+
+def flatten_dict(nested_dict: Dict[Any], separator: str = "_") -> Dict[Any]:
+    """
+    Converts a nested dict into a flat one using separator
+
+    Example
+    -------
+    Input: `{"a": {"b": 0}, "c": [1, 2, 3]}`
+    Separator: `_`
+    Output: `{"a_b": 0, "c_0": 1, "c_1": 2, "c_2": 3}`
+
+    Parameters
+    ----------
+    nested_dict: Dict[Any]
+    separator: str
+
+    Returns
+    -------
+    flattened_dict: Dict[Any]
+    """
+
+    flattened = {}
+
+    def _flatten(data, prefix=""):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                new_prefix = f"{prefix}{separator}{key}" if prefix else key
+                _flatten(value, new_prefix)
+        elif isinstance(data, list):
+            for index, value in enumerate(data):
+                new_prefix = f"{prefix}{separator}{index}" if prefix else str(index)
+                _flatten(value, new_prefix)
+        else:
+            flattened[prefix] = data
+
+    _flatten(nested_dict)
+    return flattened
