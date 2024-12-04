@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
 import time
 from dataclasses import dataclass
-from pprint import pformat
 from typing import Any, Dict, List, Optional, Union
 
 import click
@@ -85,7 +85,6 @@ class QueryParser:
         offset = None
 
         for i, token in enumerate(tokens):
-            print(token)
             if token in self._states:
                 new_state = self._states[state].get(token, "error")
 
@@ -207,6 +206,12 @@ class Field:
     def to_dict(self):
         return self._obj
 
+    def values(self):
+        if isinstance(self._obj, dict):
+            return self._obj.values()
+        else:
+            return self._obj
+
 
 class Executor:
     def __init__(self, root: str, container_type: str):
@@ -255,8 +260,44 @@ class Executor:
         return Result(columns=q.columns, data=data, time_s=round(end_time - start_time, 4))
 
 
+def calculate_column_width(n: int) -> List[int]:
+    w, _ = os.get_terminal_size()
+    return [w // n for _ in range(n)]
+
+
+def render_field(value: Union[Field, Any], width: int) -> str:
+    if isinstance(value, Field):
+        # Here we assume that each field in Result is a single value
+        # but nested deeply
+        s = ""
+        d = value.to_dict()
+        col = list(d.keys())[0]
+        while isinstance(d[col], Field):
+            d = d[col]
+            col = list(d.keys())[0]
+        s = str(d[col])
+    else:
+        s = str(value)
+    return s[:width]
+
+
+def render_row(values: List[Any], widths: List[int]) -> str:
+    result = []
+    for w, val in zip(widths, values):
+        rendered_val = render_field(val, w)
+        result.append(rendered_val + (w - len(rendered_val)) * " ")
+    return "".join(result)
+
+
 def render_results(result: Result) -> None:
-    click.echo(pformat(result))
+    widths = calculate_column_width(len(result.columns))
+
+    click.echo("─" * sum(widths))
+    click.echo(render_row(result.columns, widths))
+    click.echo("─" * sum(widths))
+    for field in result.data:
+        click.echo(render_row(field.values(), widths))
+    click.echo(f"Time: {result.time_s}s")
 
 
 @click.command("query", context_settings={"ignore_unknown_options": True})
@@ -264,7 +305,6 @@ def render_results(result: Result) -> None:
 @click.pass_context
 def query(ctx, args: List[str]):
     q = QueryParser().parse(list(args))
-    click.echo(q)
 
     if not ctx.obj.get("meta"):
         return
