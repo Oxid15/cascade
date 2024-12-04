@@ -20,6 +20,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 
 import click
+import pendulum
 
 from .common import create_container
 
@@ -297,6 +298,8 @@ def render_results(result: Result) -> None:
     click.echo("─" * sum(widths))
     for field in result.data:
         click.echo(render_row(field.values(), widths))
+    click.echo("─" * sum(widths))
+    click.echo(f"Finished: {pendulum.now()}")
     click.echo(f"Time: {result.time_s}s")
 
 
