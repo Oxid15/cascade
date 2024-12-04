@@ -131,6 +131,19 @@ def parse_version(ver: str) -> Tuple[int, int, int]:
         raise RuntimeError(f"Got unexpected version string {ver}")
 
 
+def get_terminal_width() -> int:
+    """
+    Wraps standard os method to be able to
+    work inside pytest
+    """
+    try:
+        w, _ = os.get_terminal_size()
+    except OSError:
+        return 80
+    else:
+        return w
+
+
 def update_version(path: str, version: str) -> None:
     def write_version(path: str, version: str) -> None:
         meta[0]["cascade_version"] = version

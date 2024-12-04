@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional, Union
 import click
 import pendulum
 
+from ..base.utils import get_terminal_width
 from .common import create_container
 
 
@@ -262,7 +263,7 @@ class Executor:
 
 
 def calculate_column_width(n: int) -> List[int]:
-    w, _ = os.get_terminal_size()
+    w = get_terminal_width()
     return [w // n for _ in range(n)]
 
 
