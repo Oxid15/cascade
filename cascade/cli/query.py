@@ -130,6 +130,17 @@ class QueryParser:
         return q
 
 
+def empty_field(col: str):
+    res = {}
+    parts = col.split(".")
+    if len(parts) == 1:
+        res[parts[0]] = None
+        return res
+    else:
+        res[parts[0]] = empty_field(".".join(parts[1:]))
+    return Field(res)
+
+
 class Field:
     def __init__(self, obj: Union[Dict[str, Any], List[Any]]) -> None:
         if isinstance(obj, dict):
@@ -179,7 +190,19 @@ class Field:
         return f"{self.__class__.__name__}({self._obj})"
 
     def select(self, columns: List[str]) -> "Field":
-        return Field({col: self.get(col) for col in columns})
+        res = {}
+        for col in columns:
+            parts = col.split(".")
+
+            if len(parts) == 1:
+                res[parts[0]] = self.get(parts[0])
+            else:
+                val = self.get(parts[0])
+                if isinstance(val, Field):
+                    res[parts[0]] = val.select([".".join(parts[1:])])
+                else:
+                    res[parts[0]] = empty_field(".".join(parts[1:]))
+        return Field(res)
 
     def to_dict(self):
         return self._obj
