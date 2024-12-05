@@ -136,7 +136,6 @@ def empty_field(col: str):
     parts = col.split(".")
     if len(parts) == 1:
         res[parts[0]] = None
-        return res
     else:
         res[parts[0]] = empty_field(".".join(parts[1:]))
     return Field(res)
@@ -150,6 +149,12 @@ class Field:
                 self._obj[k] = Field._field_or_instance(v)
         else:
             self._obj = obj
+
+    def __eq__(self, obj):
+        if isinstance(obj, Field):
+            return self._obj == obj._obj
+        else:
+            return super().__eq__(obj)
 
     @staticmethod
     def _field_or_instance(x):

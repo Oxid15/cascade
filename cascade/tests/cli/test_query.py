@@ -27,24 +27,34 @@ from cascade.models import BasicModel
 from cascade.repos import Repo
 
 
-def test(tmp_path_str):
+def init_repo(temp_dir):
+    repo = Repo(temp_dir)
+    line = repo.add_line()
+
+    model = BasicModel()
+    model.params["a"] = {"b": 0}
+    line.save(model)
+
+    model = BasicModel()
+    line.save(model)
+
+
+def test_columns(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        repo = Repo(td)
-        line = repo.add_line()
+        init_repo(td)
 
-        model = BasicModel()
-        model.params["a"] = {"b": 0}
-        line.save(model)
-
-        model = BasicModel()
-        line.save(model)
-
-        result = runner.invoke(cli, args=["query", "params.a.b"])
+        result = runner.invoke(cli, args=["query params.a.b"])
         assert result.exit_code == 0
 
-        result = runner.invoke(cli, args=["query", "params.c.d.e"])
+        result = runner.invoke(cli, args=["query params.c.d.e"])
         assert result.exit_code == 0
+
+
+def test_filter(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
 
         result = runner.invoke(
             cli, args=["query", "params.a.b", "filter", "params.a.b is not None"]
@@ -53,7 +63,8 @@ def test(tmp_path_str):
 
 
 def test_empty_field():
-    assert empty_field("")
+    assert empty_field("a") == Field({"a": None})
+    assert empty_field("a.b") == Field({"a": {"b": None}})
 
 
 def test_field():
