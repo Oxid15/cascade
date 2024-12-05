@@ -280,7 +280,7 @@ def render_field(value: Union[Field, Any], width: int) -> str:
         d = value.to_dict()
         col = list(d.keys())[0]
         while isinstance(d[col], Field):
-            d = d[col]
+            d = d[col].to_dict()
             col = list(d.keys())[0]
         s = str(d[col])
     else:
