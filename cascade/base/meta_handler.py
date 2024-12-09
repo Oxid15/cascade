@@ -39,6 +39,7 @@ if hasattr(deepdiff.diff, "PrettyOrderedSet"):
 else:
     diff_set = deepdiff.diff.SetOrdered
 
+
 class CustomEncoder(JSONEncoder):
     def default(self, obj: Any) -> Any:
         if isinstance(obj, type):
@@ -83,7 +84,7 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
-        elif isinstance(obj, diff_set):
+        elif isinstance(obj, (set, diff_set)):
             return list(obj)
 
         elif isinstance(obj, deepdiff.DeepDiff):
