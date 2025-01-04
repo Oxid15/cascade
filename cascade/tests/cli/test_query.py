@@ -36,6 +36,7 @@ def init_repo(temp_dir):
         {"l": [0, 1, 2, 3]},
         {"l": []},
         {"a": {"b": None}},
+        {"ld": [{"e": "f"}]},
         {},
     ]
 
@@ -71,6 +72,16 @@ def test_lists(tmp_path_str):
         result = runner.invoke(cli, args=["query", "params.l[0]"])
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "0"
+
+
+def test_list_of_dicts(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+
+        result = runner.invoke(cli, args=["query", "params.ld[0].e"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[7].strip() == "f"
 
 
 def test_filter(tmp_path_str):

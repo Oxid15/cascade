@@ -209,7 +209,7 @@ class Field:
             if len(parts) == 1:
                 res[parts[0]] = self.eval_col(parts[0])
             else:
-                val = self._obj.get(parts[0])
+                val = self.eval_col(parts[0])
                 if isinstance(val, Field):
                     res[parts[0]] = val.select([".".join(parts[1:])])
                 else:
