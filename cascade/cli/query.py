@@ -166,16 +166,12 @@ class Field:
             return x
 
     def __getattribute__(self, name: Union[str, int]) -> Any:
-        if name in super().__getattribute__("_obj"):
-            value = self.get(name, default=NONE())
-            if isinstance(value, NONE):
-                raise KeyError(name)
-            else:
-                return value
-        else:
+        try:
             return super().__getattribute__(name)
+        except AttributeError:
+            return super().__getattribute__("_get")(name, None)
 
-    def get(self, key: str, default: Any = None, sep: str = "."):
+    def _get(self, key: str, default: Any = None, sep: str = "."):
         parts = key.split(sep)
         if len(parts) <= 1:
             return self._leaf_get(key, default)
@@ -195,15 +191,22 @@ class Field:
     def __repr__(self):
         return f"{self.__class__.__name__}({self._obj})"
 
+    def eval_col(self, expr: str):
+        try:
+            val = eval(expr, self.to_dict().copy())
+        except NameError:
+            val = None
+        return val
+
     def select(self, columns: List[str]) -> "Field":
         res = {}
         for col in columns:
             parts = col.split(".")
 
             if len(parts) == 1:
-                res[parts[0]] = self.get(parts[0])
+                res[parts[0]] = self.eval_col(parts[0])
             else:
-                val = self.get(parts[0])
+                val = self._obj.get(parts[0])
                 if isinstance(val, Field):
                     res[parts[0]] = val.select([".".join(parts[1:])])
                 else:
@@ -252,7 +255,7 @@ class Executor:
                 if not result:
                     continue
 
-            data.append(ctx_dict)
+            data.append(ctx)
 
         if q.sort_expr is not None:
             data = sorted(
