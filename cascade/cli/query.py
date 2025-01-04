@@ -150,6 +150,9 @@ class Field:
         else:
             self._obj = obj
 
+    def __len__(self):
+        return len(self._obj)
+
     def __eq__(self, obj):
         if isinstance(obj, Field):
             return self._obj == obj._obj
@@ -169,9 +172,9 @@ class Field:
         try:
             return super().__getattribute__(name)
         except AttributeError:
-            return super().__getattribute__("_get")(name, None)
+            return super().__getattribute__("get")(name, None)
 
-    def _get(self, key: str, default: Any = None, sep: str = "."):
+    def get(self, key: str, default: Any = None, sep: str = "."):
         parts = key.split(sep)
         if len(parts) <= 1:
             return self._leaf_get(key, default)
@@ -189,7 +192,7 @@ class Field:
             return self._obj.get(key, default)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({self._obj})"
+        return self._obj.__repr__()
 
     def eval_col(self, expr: str):
         try:
@@ -278,29 +281,21 @@ def calculate_column_width(n: int) -> List[int]:
 
 
 def render_field(value: Union[Field, Any], width: int) -> str:
-    if isinstance(value, Field):
-        # Here we assume that each field in Result is a single value
-        # but nested deeply
-        s = ""
-        d = value.to_dict()
-
-        if len(d) == 0:
-            return s
-
-        col = list(d.keys())[0]
-        while isinstance(d[col], Field):
-            d = d[col].to_dict()
-            col = list(d.keys())[0]
-        s = str(d[col])
-    else:
-        s = str(value)
+    s = str(value)
     return s[:width]
 
 
-def render_row(values: List[Any], widths: List[int]) -> str:
+def render_header(columns, widths):
     result = []
-    for w, val in zip(widths, values):
-        rendered_val = render_field(val, w)
+    for w, col in zip(widths, columns):
+        result.append(col + (w - len(col)) * " ")
+    return "".join(result)
+
+
+def render_row(columns: List[str], field: Field, widths: List[int]) -> str:
+    result = []
+    for col, w in zip(columns, widths):
+        rendered_val = render_field(field.get(col), w)
         result.append(rendered_val + (w - len(rendered_val)) * " ")
     return "".join(result)
 
@@ -309,10 +304,10 @@ def render_results(result: Result) -> None:
     widths = calculate_column_width(len(result.columns))
 
     click.echo("─" * sum(widths))
-    click.echo(render_row(result.columns, widths))
+    click.echo(render_header(result.columns, widths))
     click.echo("─" * sum(widths))
     for field in result.data:
-        click.echo(render_row(field.values(), widths))
+        click.echo(render_row(result.columns, field, widths))
     click.echo("─" * sum(widths))
     click.echo(f"Finished: {pendulum.now()}")
     click.echo(f"Time: {result.time_s}s")
