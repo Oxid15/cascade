@@ -180,7 +180,7 @@ class Field:
         if len(parts) <= 1:
             return self._leaf_get(key, default)
         else:
-            deeper = self._leaf_get(parts[0], NONE())
+            deeper = self._leaf_get(parts[0], NONE)
             if isinstance(deeper, NONE):
                 return default
             else:
