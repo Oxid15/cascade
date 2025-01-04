@@ -34,6 +34,7 @@ def init_repo(temp_dir):
     params_list = [
         {"a": {"b": 0}, "l": [0, 1, 2, 3]},
         {"l": [0, 1, 2, 3]},
+        {"l": []},
         {"a": {"b": None}},
         {},
     ]

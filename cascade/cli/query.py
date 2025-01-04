@@ -197,7 +197,7 @@ class Field:
     def eval_col(self, expr: str):
         try:
             val = eval(expr, self.to_dict().copy())
-        except NameError:
+        except (NameError, IndexError):
             val = None
         return val
 
