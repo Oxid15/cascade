@@ -35,6 +35,7 @@ def init_repo(temp_dir):
         {"a": {"b": 0}, "l": [0, 1, 2, 3]},
         {"l": [0, 1, 2, 3]},
         {"a": {"b": None}},
+        {},
     ]
 
     for p in params_list:
@@ -42,14 +43,14 @@ def init_repo(temp_dir):
         model.params.update(p)
         line.save(model)
 
-        model = BasicModel()
-        line.save(model)
-
 
 def test_columns(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         init_repo(td)
+
+        result = runner.invoke(cli, args=["query", "params"])
+        assert result.exit_code == 0
 
         result = runner.invoke(cli, args=["query", "params.a.b"])
         assert result.exit_code == 0

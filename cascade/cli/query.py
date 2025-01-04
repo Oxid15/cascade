@@ -283,6 +283,10 @@ def render_field(value: Union[Field, Any], width: int) -> str:
         # but nested deeply
         s = ""
         d = value.to_dict()
+
+        if len(d) == 0:
+            return s
+
         col = list(d.keys())[0]
         while isinstance(d[col], Field):
             d = d[col].to_dict()
