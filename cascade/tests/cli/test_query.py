@@ -48,7 +48,7 @@ def test_columns(tmp_path_str):
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "0"
 
-        result = runner.invoke(cli, args=["query", " params.c.d.e"])
+        result = runner.invoke(cli, args=["query", "params.c.d.e"])
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "None"
 
