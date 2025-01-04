@@ -31,12 +31,19 @@ def init_repo(temp_dir):
     repo = Repo(temp_dir)
     line = repo.add_line()
 
-    model = BasicModel()
-    model.params["a"] = {"b": 0}
-    line.save(model)
+    params_list = [
+        {"a": {"b": 0}, "l": [0, 1, 2, 3]},
+        {"l": [0, 1, 2, 3]},
+        {"a": {"b": None}},
+    ]
 
-    model = BasicModel()
-    line.save(model)
+    for p in params_list:
+        model = BasicModel()
+        model.params.update(p)
+        line.save(model)
+
+        model = BasicModel()
+        line.save(model)
 
 
 def test_columns(tmp_path_str):
@@ -53,6 +60,16 @@ def test_columns(tmp_path_str):
         assert result.stdout.split("\n")[3].strip() == "None"
 
 
+def test_lists(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+
+        result = runner.invoke(cli, args=["query", "params.l[0]"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[3].strip() == "0"
+
+
 def test_filter(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
@@ -61,6 +78,7 @@ def test_filter(tmp_path_str):
         result = runner.invoke(
             cli, args=["query", "params.a.b", "filter", "params.a.b is not None"]
         )
+        assert result.stdout.split("\n")[3].strip() == "0"
         assert result.exit_code == 0
 
 
