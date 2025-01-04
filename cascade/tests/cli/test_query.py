@@ -70,11 +70,22 @@ def test_empty_field():
 
 
 def test_field():
-    f = Field({"params": {"a": 0}, "col": 1, "b": None})
+    f = Field({"params": {"a": 0}, "col": 1, "b": None, "l": [1, 2, 3]})
 
-    f.select(["b.c"]) == Field({"b": {"c": None}})
-    f.select(["col"]) == Field({"col": 1})
-    f.select(["d.e.f"]) == Field({"d": {"e": {"f": None}}})
-    f.select(["params.a"]) == Field({"params": {"a": 0}})
-    f.select(["params"]) == Field({"params": {"a": 0}})
-    f.select(["d"]) == Field({"d": None})
+    assert f.params.a == 0
+    assert f.l[0] == 1
+    assert f.no is None
+
+
+def test_field_select():
+    f = Field({"params": {"a": 0}, "col": 1, "b": None, "l": [1, 2, 3]})
+
+    assert f.select(["params"]) == Field({"params": {"a": 0}})
+    assert f.select(["params.a"]) == Field({"params": {"a": 0}})
+    assert f.select(["col"]) == Field({"col": 1})
+    assert f.select(["d"]) == Field({"d": None})
+    assert f.select(["b.c"]) == Field({"b": {"c": None}})
+    assert f.select(["d.e.f"]) == Field({"d": {"e": {"f": None}}})
+
+    assert f.select(["l[1]", "l[2]"]) == Field({"l[1]": 2, "l[2]": 3})
+    assert f.select(["l[0]"]) == Field({"l[0]": 1})
