@@ -255,7 +255,9 @@ class Executor:
             data.append(ctx_dict)
 
         if q.sort_expr is not None:
-            data = sorted(data, key=lambda item: eval(q.sort_expr, item.copy()), reverse=q.desc)
+            data = sorted(
+                data, key=lambda item: eval(q.sort_expr, item.to_dict().copy()), reverse=q.desc
+            )
 
         if q.offset is not None:
             data = data[q.offset :]
