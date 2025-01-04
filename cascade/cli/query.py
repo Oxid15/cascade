@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
@@ -22,6 +21,7 @@ from typing import Any, Dict, List, Optional, Union
 import click
 import pendulum
 
+from ..base import MetaIOError
 from ..base.utils import get_terminal_width
 from .common import create_container
 
@@ -238,7 +238,10 @@ class Executor:
     def iterate_over_container(self, container, container_type: str):
         if container_type in ("line", "model_line", "data_line"):
             for i in range(len(container)):
-                yield container.load_obj_meta(i)
+                try:
+                    yield container.load_obj_meta(i)
+                except MetaIOError:
+                    yield [{}]
         elif container_type == "repo":
             for name in container.get_line_names():
                 line = container.add_line(name)

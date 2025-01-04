@@ -37,6 +37,7 @@ def init_repo(temp_dir):
         {"l": []},
         {"a": {"b": None}},
         {"ld": [{"e": "f"}]},
+        {"ll": [[0, 1, 2, 3]]},
         {},
     ]
 
@@ -44,6 +45,11 @@ def init_repo(temp_dir):
         model = BasicModel()
         model.params.update(p)
         line.save(model)
+
+
+def corrupt_model_meta(repo_root):
+    with open(os.path.join(repo_root, "00000", "00000", "meta.json"), "w") as f:
+        f.write("{i am broken json")
 
 
 def test_columns(tmp_path_str):
@@ -73,6 +79,10 @@ def test_lists(tmp_path_str):
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "0"
 
+        result = runner.invoke(cli, args=["query", "params.ll[0][0]"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[8].strip() == "0"
+
 
 def test_list_of_dicts(tmp_path_str):
     runner = CliRunner()
@@ -94,6 +104,17 @@ def test_filter(tmp_path_str):
         )
         assert result.stdout.split("\n")[3].strip() == "0"
         assert result.exit_code == 0
+
+
+def test_corrupted_model_meta(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+        corrupt_model_meta(td)
+
+        result = runner.invoke(cli, args=["query", "params.a.b"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[3].strip() == "None"
 
 
 def test_empty_field():
