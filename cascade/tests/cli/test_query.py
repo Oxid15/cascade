@@ -94,6 +94,16 @@ def test_list_of_dicts(tmp_path_str):
         assert result.stdout.split("\n")[7].strip() == "f"
 
 
+def test_columns_validation(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+
+        result = runner.invoke(cli, args=["query", "[item for item in params.ld]"])
+        assert result.exit_code == 1
+        assert "Only alphanumeric" in result.exc_info[1].args[0]
+
+
 def test_filter(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
