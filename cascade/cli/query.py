@@ -69,13 +69,32 @@ class QueryParser:
             "end": {"end of query": "error"},
         }
 
-    def _report_error(self, i, token, tokens, state: Optional[str] = None):
+        self.expected = {"_", ".", "[", "]"}
+
+    def _report_error(
+        self,
+        i: int,
+        token: str,
+        tokens: List[str],
+        postfix: Optional[str] = None,
+    ):
         tokens.insert(i + 1, "<-")
         expression = " ".join(tokens)
         expression = f"Unexpected token `{token}` at marked (<-) position: " + f"`{expression}`"
-        if state:
-            expression += f" Expected tokens are any of ({', '.join(self._states[state])})"
+        expression = " ".join((expression, postfix))
         raise QueryParsingError(expression)
+
+    def _validate_column(self, col: str) -> None:
+        tokens = col.split(".")
+        for i, token in enumerate(tokens):
+            if not all(c.isalnum() or c in self.expected for c in token):
+                quoted = [f'"{c}"' for c in self.expected]
+                self._report_error(
+                    i,
+                    token,
+                    tokens,
+                    f"Only alphanumeric characters, {', '.join(quoted)} are allowed",
+                )
 
     def parse(self, tokens: List[str]) -> Query:
         state = "start"
@@ -91,12 +110,18 @@ class QueryParser:
                 new_state = self._states[state].get(token, "error")
 
                 if new_state == "error":
-                    self._report_error(i, token, tokens, state)
+                    self._report_error(
+                        i,
+                        token,
+                        tokens,
+                        postfix=f"Expected tokens are any of ({', '.join(self._states[state])})",
+                    )
 
                 state = new_state
                 continue
 
             if state == "start":
+                self._validate_column(token)
                 columns.append(token)
             elif state == "filter":
                 filter_expr = token
