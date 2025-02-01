@@ -22,7 +22,7 @@ from click.testing import CliRunner
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.cli.cli import cli
-from cascade.cli.query import Field, empty_field
+from cascade.cli.query import Field, QueryParsingError, empty_field
 from cascade.models import BasicModel
 from cascade.repos import Repo
 
@@ -50,6 +50,112 @@ def init_repo(temp_dir):
 def corrupt_model_meta(repo_root):
     with open(os.path.join(repo_root, "00000", "00000", "meta.json"), "w") as f:
         f.write("{i am broken json")
+
+
+def test_parsing(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+
+        result = runner.invoke(cli, args=["query", "params"])
+        assert result.exit_code == 0
+
+        result = runner.invoke(cli, args=["query", "params", "filter", "params is not None"])
+        assert result.exit_code == 0
+
+        result = runner.invoke(
+            cli,
+            args=[
+                "query",
+                "created_at",
+                "filter",
+                "created_at is not None",
+                "sort",
+                "created_at",
+            ],
+        )
+        assert result.exit_code == 0
+
+        result = runner.invoke(
+            cli,
+            args=[
+                "query",
+                "created_at",
+                "filter",
+                "created_at is not None",
+                "sort",
+                "created_at",
+                "desc",
+            ],
+        )
+        assert result.exit_code == 0
+
+        result = runner.invoke(
+            cli,
+            args=[
+                "query",
+                "created_at",
+                "filter",
+                "created_at is not None",
+                "sort",
+                "created_at",
+                "offset",
+                "5",
+            ],
+        )
+        assert result.exit_code == 0
+
+        result = runner.invoke(
+            cli,
+            args=[
+                "query",
+                "created_at",
+                "filter",
+                "created_at is not None",
+                "sort",
+                "created_at",
+                "desc",
+                "offset",
+                "5",
+            ],
+        )
+        assert result.exit_code == 0
+
+        result = runner.invoke(
+            cli,
+            args=[
+                "query",
+                "created_at",
+                "filter",
+                "created_at is not None",
+                "sort",
+                "created_at",
+                "desc",
+                "offset",
+                "5",
+                "limit",
+                "1",
+            ],
+        )
+        assert result.exit_code == 0
+
+
+def test_parsing_error(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+
+        # TODO: detect these
+        result = runner.invoke(cli, args=["query", "filter"])
+        assert result.exit_code == 1
+
+        result = runner.invoke(cli, args=["query", "metrics", "sort", "metrics[0]", "filter"])
+        assert result.exit_code == 1
+        assert type(result.exception) is QueryParsingError
+
+        result = runner.invoke(cli, args=["query", "metrics", "sort", "metrics[0]", "filter"])
+        assert result.exit_code == 1
+        assert type(result.exception) is QueryParsingError
 
 
 def test_columns(tmp_path_str):

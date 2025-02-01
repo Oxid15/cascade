@@ -53,7 +53,10 @@ class QueryParser:
     def __init__(self):
         self._states = {
             "start": {
-                "expression": "start",
+                "expression": "columns",
+            },
+            "columns": {
+                "expression": "columns",
                 "filter": "filter",
                 "sort": "sort",
                 "limit": "limit",
@@ -62,10 +65,11 @@ class QueryParser:
             "filter": {"expression": "after_filter"},
             "after_filter": {"sort": "sort", "limit": "limit", "offset": "offset"},
             "sort": {"expression": "after_sort"},
-            "after_sort": {"limit": "limit", "offset": "offset", "desc": "desc"},
-            "limit": {"expression": "after_limit"},
-            "after_limit": {"offset": "offset"},
-            "offset": {"expression": "end"},
+            "after_sort": {"desc": "desc", "limit": "limit", "offset": "offset"},
+            "desc": {"limit": "limit", "offset": "offset"},
+            "offset": {"expression": "after_offset"},
+            "after_offset": {"limit": "limit"},
+            "limit": {"expression": "end"},
             "end": {"end of query": "error"},
         }
 
