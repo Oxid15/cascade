@@ -289,7 +289,7 @@ def migrate_repo_v0_13(path: str) -> None:
     print("Done")
 
 
-def flatten_dict(nested_dict: Dict[Any], separator: str = "_") -> Dict[Any]:
+def flatten_dict(nested_dict: Dict[str, Any], separator: str = "_") -> Dict[str, Any]:
     """
     Converts a nested dict into a flat one using separator
 
@@ -306,7 +306,7 @@ def flatten_dict(nested_dict: Dict[Any], separator: str = "_") -> Dict[Any]:
 
     Returns
     -------
-    flattened_dict: Dict[Any]
+    flattened_dict: Dict[str, Any]
     """
 
     flattened = {}
@@ -316,7 +316,7 @@ def flatten_dict(nested_dict: Dict[Any], separator: str = "_") -> Dict[Any]:
             for key, value in data.items():
                 new_prefix = f"{prefix}{separator}{key}" if prefix else key
                 _flatten(value, new_prefix)
-        elif isinstance(data, list):
+        elif isinstance(data, (set, list, tuple)):
             for index, value in enumerate(data):
                 new_prefix = f"{prefix}{separator}{index}" if prefix else str(index)
                 _flatten(value, new_prefix)
