@@ -13,7 +13,7 @@ _extras_require = {
     "pydantic": ["pydantic>=1.9.2,<3"],
     "sklearn": ["scikit-learn>=0.24.2,<2"],
     "torch": ["torch>=1.10.2,<3"],
-    "view": ["dash<3", "plotly>=5.7.0", "dash-renderjson==0.0.1"]
+    "view": ["dash<3", "plotly>=5.7.0", "dash-renderjson==0.0.1"],
 }
 
 extras_require = {
@@ -41,7 +41,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    entry_points={'console_scripts': ['cascade = cascade.cli.cli:cli']},
+    entry_points={"console_scripts": ["cascade = cascade.cli.cli:cli"]},
     package_dir={"cascade": "./cascade"},
     packages=setuptools.find_packages(),
     python_requires=">=3.7",
@@ -51,11 +51,10 @@ setuptools.setup(
         "pandas>=1.1.5",
         "deepdiff>=5.0.2,<9",
         "pendulum>=2.1.2",
-        "flatten_json==0.1.13",
         "pyyaml>=5.4.1",
         "coolname>=2.0.0",
         "click>=8.0.0",
-        "typing-extensions>=4.1.1,<5"
+        "typing-extensions>=4.1.1,<5",
     ],
-    extras_require=extras_require
+    extras_require=extras_require,
 )
