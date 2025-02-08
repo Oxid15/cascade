@@ -184,11 +184,8 @@ class CascadeRun:
             logs_dir = os.path.join(self.run_dir, "logs")
             os.makedirs(logs_dir)
 
-        while True:
-            line = process.stdout.readline().decode("utf-8").strip()
-            if not line:
-                break
-            print(line)
+        for line in process.stdout:
+            print(line.decode("utf-8").strip())
 
             if self.log:
                 with open(os.path.join(logs_dir, "cascade_run.log"), "a") as log_file:
