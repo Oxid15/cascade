@@ -316,7 +316,7 @@ def flatten_dict(nested_dict: Dict[str, Any], separator: str = "_") -> Dict[str,
             for key, value in data.items():
                 new_prefix = f"{prefix}{separator}{key}" if prefix else key
                 _flatten(value, new_prefix)
-        elif isinstance(data, list):
+        elif isinstance(data, (set, list, tuple)):
             for index, value in enumerate(data):
                 new_prefix = f"{prefix}{separator}{index}" if prefix else str(index)
                 _flatten(value, new_prefix)
