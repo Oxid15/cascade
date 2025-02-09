@@ -264,6 +264,9 @@ class Executor:
         else:
             raise ValueError("Can run queries only inside a container")
 
+    def _sortable_item(self, item):
+        return (item is None, item)
+
     def iterate_over_container(self, container, container_type: str):
         if container_type in ("line", "model_line", "data_line"):
             for i in range(len(container)):
@@ -294,7 +297,9 @@ class Executor:
 
         if q.sort_expr is not None:
             data = sorted(
-                data, key=lambda item: eval(q.sort_expr, item.to_dict().copy()), reverse=q.desc
+                data,
+                key=lambda item: self._sortable_item(eval(q.sort_expr, item.to_dict().copy())),
+                reverse=q.desc,
             )
 
         if q.offset is not None:

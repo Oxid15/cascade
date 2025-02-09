@@ -222,6 +222,15 @@ def test_filter(tmp_path_str):
         assert result.exit_code == 0
 
 
+def test_sort(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+
+        result = runner.invoke(cli, args=["query", "params.a.b", "sort", "params.a.b"])
+        assert result.exit_code == 0
+
+
 def test_corrupted_model_meta(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
