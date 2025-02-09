@@ -290,7 +290,7 @@ class MetricServer(Server):
             ]
         self._for_plots = self._for_plots.drop(["name", "value"], axis=1)
 
-        if any(df["tags"].apply(lambda x: x != [])):
+        if any(df["tags"].apply(lambda x: len(x) > 0)):
             self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
         dep_fig = go.Figure()
 
