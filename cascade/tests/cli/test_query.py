@@ -81,6 +81,21 @@ def test_parsing(tmp_path_str):
             args=[
                 "query",
                 "created_at",
+                "slug",
+                "saved_at",
+                "filter",
+                "created_at is not None",
+                "sort",
+                "created_at",
+            ],
+        )
+        assert result.exit_code == 0
+
+        result = runner.invoke(
+            cli,
+            args=[
+                "query",
+                "created_at",
                 "filter",
                 "created_at is not None",
                 "sort",
@@ -159,7 +174,9 @@ def test_columns(tmp_path_str):
         init_repo(td)
 
         result = runner.invoke(cli, args=["query", "params"])
-        assert result.stdout.split("\n")[3].strip() == str({"a": {"b": 0}, "l": [0, 1, 2, 3]})
+        assert result.stdout.split("\n")[3].strip() == str(
+            {"a": {"b": 0}, "l": [0, 1, 2, 3], "ord": 0}
+        )
         assert result.exit_code == 0
 
         result = runner.invoke(cli, args=["query", "params.a.b"])

@@ -65,7 +65,7 @@ class QueryParser:
             "filter": {"expression": "after_filter"},
             "after_filter": {"sort": "sort", "limit": "limit", "offset": "offset"},
             "sort": {"expression": "after_sort"},
-            "after_sort": {"desc": "after_sort", "limit": "limit", "offset": "offset"},
+            "after_sort": {"expression": "after_sort", "limit": "limit", "offset": "offset"},
             "offset": {"expression": "after_offset"},
             "after_offset": {"limit": "limit"},
             "limit": {"expression": "end"},
@@ -123,7 +123,7 @@ class QueryParser:
                 state = new_state
                 continue
 
-            if state == "start":
+            if state == "start" or state == "columns":
                 self._validate_column(token)
                 columns.append(token)
             elif state == "filter":
