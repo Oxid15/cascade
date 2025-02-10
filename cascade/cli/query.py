@@ -51,6 +51,15 @@ class Result:
 
 class QueryParser:
     def __init__(self):
+        # This dictionary defines how queries are parsed
+        # Each key is the current state we're in
+        # then inside the internal dicts there are expected cases
+
+        # For example, when we are in the beginning, the state is "start"
+        # then we expect next thing to be the name of a column
+        # we switch to "columns" if we see anything
+        # then we expect another column or filter for example
+        # etc
         self._states = {
             "start": {
                 "expression": "columns",
