@@ -32,13 +32,13 @@ def init_repo(temp_dir):
     line = repo.add_line()
 
     params_list = [
-        {"a": {"b": 0}, "l": [0, 1, 2, 3]},
-        {"l": [0, 1, 2, 3]},
-        {"l": []},
-        {"a": {"b": None}},
-        {"ld": [{"e": "f"}]},
-        {"ll": [[0, 1, 2, 3]]},
-        {},
+        {"a": {"b": 0}, "l": [0, 1, 2, 3], "ord": 0},
+        {"l": [0, 1, 2, 3], "ord": 1},
+        {"l": [], "ord": 2},
+        {"a": {"b": None}, "ord": 3},
+        {"ld": [{"e": "f"}], "ord": 4},
+        {"ll": [[0, 1, 2, 3]], "ord": 5},
+        {"ord": 6},
     ]
 
     for p in params_list:
@@ -145,13 +145,8 @@ def test_parsing_error(tmp_path_str):
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         init_repo(td)
 
-        # TODO: detect these
         result = runner.invoke(cli, args=["query", "filter"])
         assert result.exit_code == 1
-
-        result = runner.invoke(cli, args=["query", "metrics", "sort", "metrics[0]", "filter"])
-        assert result.exit_code == 1
-        assert type(result.exception) is QueryParsingError
 
         result = runner.invoke(cli, args=["query", "metrics", "sort", "metrics[0]", "filter"])
         assert result.exit_code == 1
@@ -226,6 +221,14 @@ def test_sort(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         init_repo(td)
+
+        result = runner.invoke(cli, args=["query", "params.ord", "sort", "params.ord"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[3].strip() == "0"
+
+        result = runner.invoke(cli, args=["query", "params.ord", "sort", "params.ord", "desc"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[3].strip() == "6"
 
         result = runner.invoke(cli, args=["query", "params.a.b", "sort", "params.a.b"])
         assert result.exit_code == 0
