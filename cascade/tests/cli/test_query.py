@@ -160,8 +160,13 @@ def test_parsing_error(tmp_path_str):
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         init_repo(td)
 
+        result = runner.invoke(cli, args=["query"])
+        assert result.exit_code == 1
+        assert type(result.exception) is QueryParsingError
+
         result = runner.invoke(cli, args=["query", "filter"])
         assert result.exit_code == 1
+        assert type(result.exception) is QueryParsingError
 
         result = runner.invoke(cli, args=["query", "metrics", "sort", "metrics[0]", "filter"])
         assert result.exit_code == 1

@@ -117,6 +117,15 @@ class QueryParser:
         limit = None
         offset = None
 
+        if len(tokens) == 0:
+            raise QueryParsingError(
+                "Parser received empty query."
+                " Provide at least one column name or"
+                " a list of columns separated by spaces"
+                " after `cascade query` command."
+                " Example: cascade query created_at"
+            )
+
         for i, token in enumerate(tokens):
             if token in self._states:
                 new_state = self._states[state].get(token, "error")
