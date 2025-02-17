@@ -59,6 +59,12 @@ Advanced features
             Comment, tag and write experiment descriptions from command line
 
     .. grid-item::
+        .. card:: :octicon:`telescope` Query results
+            :link: tutorials/results_querying.html
+
+            Use CLI to access your experiments (if you have too many of them)
+
+    .. grid-item::
         .. card:: :octicon:`graph` Dash-based visualizations
             :link: tutorials/tutorials.html#viewers
 
