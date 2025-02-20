@@ -45,6 +45,7 @@ class Query:
 @dataclass
 class Result:
     columns: List[str]
+    rows: int
     data: List[Dict[str, Any]]
     time_s: int
 
@@ -96,18 +97,6 @@ class QueryParser:
         expression = " ".join((expression, postfix))
         raise QueryParsingError(expression)
 
-    def _validate_column(self, col: str) -> None:
-        tokens = col.split(".")
-        for i, token in enumerate(tokens):
-            if not all(c.isalnum() or c in self.expected for c in token):
-                quoted = [f'"{c}"' for c in self.expected]
-                self._report_error(
-                    i,
-                    token,
-                    tokens,
-                    f"Only alphanumeric characters, {', '.join(quoted)} are allowed",
-                )
-
     def parse(self, tokens: List[str]) -> Query:
         state = "start"
         columns = []
@@ -142,7 +131,7 @@ class QueryParser:
                 continue
 
             if state == "start" or state == "columns":
-                self._validate_column(token)
+                # self._validate_column(token)
                 columns.append(token)
             elif state == "filter":
                 filter_expr = token
@@ -196,15 +185,6 @@ class Field:
         else:
             self._obj = obj
 
-    def __len__(self):
-        return len(self._obj)
-
-    def __eq__(self, obj):
-        if isinstance(obj, Field):
-            return self._obj == obj._obj
-        else:
-            return super().__eq__(obj)
-
     @staticmethod
     def _field_or_instance(x):
         if isinstance(x, dict):
@@ -214,11 +194,37 @@ class Field:
         else:
             return x
 
+    def __len__(self):
+        return len(self._obj)
+
+    def __eq__(self, obj):
+        if isinstance(obj, Field):
+            return self._obj == obj._obj
+        else:
+            return super().__eq__(obj)
+
     def __getattribute__(self, name: Union[str, int]) -> Any:
         try:
             return super().__getattribute__(name)
         except AttributeError:
             return super().__getattribute__("get")(name, None)
+
+    def __repr__(self):
+        return self._obj.__repr__()
+
+    def __getitem__(self, index: int):
+        if isinstance(self._obj, dict):
+            raise ValueError(
+                f"Indexing with [{index}] was used for a dict field in query"
+                ", if you want to access a field, use field.param1"
+            )
+        if not isinstance(index, int):
+            raise TypeError(f"Tried to index a list with index {index}")
+
+        if self._obj is None or index >= len(self._obj):
+            return None
+
+        return self._obj.__getitem__(index)
 
     def get(self, key: str, default: Any = None, sep: str = "."):
         parts = key.split(sep)
@@ -236,31 +242,6 @@ class Field:
             return self._obj[key]
         else:
             return self._obj.get(key, default)
-
-    def __repr__(self):
-        return self._obj.__repr__()
-
-    def eval_col(self, expr: str):
-        try:
-            val = eval(expr, self.to_dict().copy())
-        except (NameError, IndexError):
-            val = None
-        return val
-
-    def select(self, columns: List[str]) -> "Field":
-        res = {}
-        for col in columns:
-            parts = col.split(".")
-
-            if len(parts) == 1:
-                res[parts[0]] = self.eval_col(parts[0])
-            else:
-                val = self.eval_col(parts[0])
-                if isinstance(val, Field):
-                    res[parts[0]] = val.select([".".join(parts[1:])])
-                else:
-                    res[parts[0]] = empty_field(".".join(parts[1:]))
-        return Field(res)
 
     def to_dict(self):
         return self._obj
@@ -281,9 +262,6 @@ class Executor:
         else:
             raise ValueError("Can run queries only inside a container")
 
-    def _sortable_item(self, item):
-        return (item is None, item)
-
     def iterate_over_container(self, container, container_type: str):
         if container_type in ("line", "model_line", "data_line"):
             for i in range(len(container)):
@@ -297,27 +275,52 @@ class Executor:
                 for meta in self.iterate_over_container(line, "line"):
                     yield meta
 
+    def safe_eval(self, expr: str, context: Dict[str, Any]) -> Optional[Any]:
+        try:
+            return eval(expr, context.copy())
+        except Exception:
+            return None
+
+    def select(self, ctx: Dict[str, Union[Field, Any]], columns: List[str]):
+        res = {}
+        for col in columns:
+            res[col] = self.safe_eval(col, ctx)
+        return res
+
     def execute(self, q: Query) -> Result:
         start_time = time.time()
         data = []
+        sorting_keys = []
 
         for meta in self.iterate_over_container(self.container, self.type):
-            ctx = Field(meta[0])  # TODO: somehow deal with meta lists
-            ctx = ctx.select(q.columns)
-            ctx_dict = ctx.to_dict()
+            full_ctx = Field(meta[0]).to_dict()  # TODO: somehow deal with meta lists
+            ctx = self.select(full_ctx, q.columns)
+
             if q.filter_expr:
-                result = eval(q.filter_expr, ctx_dict.copy())
+                result = self.safe_eval(q.filter_expr, full_ctx)
                 if not result:
                     continue
+
+            if q.sort_expr:
+                sorting_key = self.safe_eval(q.sort_expr, full_ctx)
+                sorting_keys.append(sorting_key)
 
             data.append(ctx)
 
         if q.sort_expr is not None:
-            data = sorted(
-                data,
-                key=lambda item: self._sortable_item(eval(q.sort_expr, item.to_dict().copy())),
-                reverse=q.desc,
-            )
+            # This one sorts the data by the order of sorting_keys
+            # First we make tuples of items and their indices
+            # then we use indices to make sortable elements
+            # we push values containing None to the end by
+            # placing boolean `is None` first
+            data = [
+                item
+                for _, item in sorted(
+                    enumerate(data),
+                    key=lambda i_item: (sorting_keys[i_item[0]] is None, sorting_keys[i_item[0]]),
+                    reverse=q.desc,
+                )
+            ]
 
         if q.offset is not None:
             data = data[q.offset :]
@@ -326,7 +329,9 @@ class Executor:
             data = data[: q.limit]
 
         end_time = time.time()
-        return Result(columns=q.columns, data=data, time_s=round(end_time - start_time, 4))
+        return Result(
+            columns=q.columns, rows=len(data), data=data, time_s=round(end_time - start_time, 4)
+        )
 
 
 def calculate_column_width(n: int) -> List[int]:
@@ -364,6 +369,7 @@ def render_results(result: Result) -> None:
         click.echo(render_row(result.columns, field, widths))
     click.echo("─" * sum(widths))
     click.echo(f"Finished: {pendulum.now()}")
+    click.echo(f"Returned rows: {result.rows}")
     click.echo(f"Time: {result.time_s}s")
 
 

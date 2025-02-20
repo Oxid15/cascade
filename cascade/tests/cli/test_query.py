@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import re
 import sys
 
 from click.testing import CliRunner
@@ -35,7 +36,7 @@ def init_repo(temp_dir):
         {"a": {"b": 0}, "l": [0, 1, 2, 3], "ord": 0},
         {"l": [0, 1, 2, 3], "ord": 1},
         {"l": [], "ord": 2},
-        {"a": {"b": None}, "ord": 3},
+        {"a": {"b": None}, "l": [1, 2, 3, 4], "ord": 3},
         {"ld": [{"e": "f"}], "ord": 4},
         {"ll": [[0, 1, 2, 3]], "ord": 5},
         {"ord": 6},
@@ -206,6 +207,13 @@ def test_lists(tmp_path_str):
         assert result.exit_code == 0
         assert result.stdout.split("\n")[8].strip() == "0"
 
+        result = runner.invoke(cli, args=["query", "params.l[0]", "params.l[1]"])
+        assert result.exit_code == 0
+        result_line = result.stdout.split("\n")[3]
+        result_line = re.sub(r"\s+", " ", result_line).strip()
+        values = result_line.split(" ")
+        assert values == ["0", "1"]
+
 
 def test_list_of_dicts(tmp_path_str):
     runner = CliRunner()
@@ -217,16 +225,6 @@ def test_list_of_dicts(tmp_path_str):
         assert result.stdout.split("\n")[7].strip() == "f"
 
 
-def test_columns_validation(tmp_path_str):
-    runner = CliRunner()
-    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
-
-        result = runner.invoke(cli, args=["query", "[item for item in params.ld]"])
-        assert result.exit_code == 1
-        assert "Only alphanumeric" in result.exc_info[1].args[0]
-
-
 def test_filter(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
@@ -236,6 +234,10 @@ def test_filter(tmp_path_str):
             cli, args=["query", "params.a.b", "filter", "params.a.b is not None"]
         )
         assert result.stdout.split("\n")[3].strip() == "0"
+        assert result.exit_code == 0
+
+        result = runner.invoke(cli, args=["query", "params.l[0]", "filter", "params.l[0] > 0"])
+        assert result.stdout.split("\n")[3].strip() == "1"
         assert result.exit_code == 0
 
 
@@ -252,7 +254,19 @@ def test_sort(tmp_path_str):
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "6"
 
+
+def test_advanced_sort(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td)
+
         result = runner.invoke(cli, args=["query", "params.a.b", "sort", "params.a.b"])
+        assert result.exit_code == 0
+
+        result = runner.invoke(cli, args=["query", "params.l", "sort", "params.l[0]"])
+        assert result.exit_code == 0
+
+        result = runner.invoke(cli, args=["query", "params.l[1]", "sort", "params.l[1]"])
         assert result.exit_code == 0
 
 
@@ -278,17 +292,3 @@ def test_field():
     assert f.params.a == 0
     assert f.l[0] == 1
     assert f.no is None
-
-
-def test_field_select():
-    f = Field({"params": {"a": 0}, "col": 1, "b": None, "l": [1, 2, 3]})
-
-    assert f.select(["params"]) == Field({"params": {"a": 0}})
-    assert f.select(["params.a"]) == Field({"params": {"a": 0}})
-    assert f.select(["col"]) == Field({"col": 1})
-    assert f.select(["d"]) == Field({"d": None})
-    assert f.select(["b.c"]) == Field({"b": {"c": None}})
-    assert f.select(["d.e.f"]) == Field({"d": {"e": {"f": None}}})
-
-    assert f.select(["l[1]", "l[2]"]) == Field({"l[1]": 2, "l[2]": 3})
-    assert f.select(["l[0]"]) == Field({"l[0]": 1})
