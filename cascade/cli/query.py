@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import ast
 import time
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
@@ -27,6 +28,9 @@ from .common import create_container
 
 
 class QueryParsingError(Exception): ...
+
+
+class QueryExecutionError(Exception): ...
 
 
 class NONE: ...
@@ -275,7 +279,32 @@ class Executor:
                 for meta in self.iterate_over_container(line, "line"):
                     yield meta
 
-    def safe_eval(self, expr: str, context: Dict[str, Any]) -> Optional[Any]:
+    def validate_eval(self, expr: str) -> None:
+        tree = ast.parse(expr)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                if node.func.id in ("eval", "exec"):
+                    raise QueryExecutionError("Nested eval/exec calls are not allowed")
+
+                if node.func.id in ("open", "socket", "subprocess"):
+                    raise QueryExecutionError(
+                        "File system or network related builtins are not allowed"
+                    )
+
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+                if isinstance(node.func.value, ast.Name):
+                    if node.func.value.id in ["subprocess", "socket"]:
+                        self.dangerous_calls.append(
+                            f"Found dangerous method call: {node.func.attr}"
+                        )
+
+            if isinstance(node, ast.FunctionDef):
+                raise QueryExecutionError("Function definitions are not allowed")
+
+            if isinstance(node, (ast.Import, ast.ImportFrom)):
+                raise QueryExecutionError("Imports are not allowed")
+
+    def eval_or_none(self, expr: str, context: Dict[str, Any]) -> Optional[Any]:
         try:
             return eval(expr, context.copy())
         except Exception:
@@ -284,7 +313,8 @@ class Executor:
     def select(self, ctx: Dict[str, Union[Field, Any]], columns: List[str]):
         res = {}
         for col in columns:
-            res[col] = self.safe_eval(col, ctx)
+            self.validate_eval(col)
+            res[col] = self.eval_or_none(col, ctx)
         return res
 
     def execute(self, q: Query) -> Result:
@@ -292,17 +322,25 @@ class Executor:
         data = []
         sorting_keys = []
 
+        # Validate once, then execute many times
+        # little optimization
+        if q.filter_expr:
+            self.validate_eval(q.filter_expr)
+        if q.sort_expr:
+            self.validate_eval(q.sort_expr)
+
+        # TODO: meta data is independent, can be highly parallel
         for meta in self.iterate_over_container(self.container, self.type):
             full_ctx = Field(meta[0]).to_dict()  # TODO: somehow deal with meta lists
             ctx = self.select(full_ctx, q.columns)
 
             if q.filter_expr:
-                result = self.safe_eval(q.filter_expr, full_ctx)
+                result = self.eval_or_none(q.filter_expr, full_ctx)
                 if not result:
                     continue
 
             if q.sort_expr:
-                sorting_key = self.safe_eval(q.sort_expr, full_ctx)
+                sorting_key = self.eval_or_none(q.sort_expr, full_ctx)
                 sorting_keys.append(sorting_key)
 
             data.append(ctx)
