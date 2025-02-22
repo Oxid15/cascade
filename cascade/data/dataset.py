@@ -13,8 +13,7 @@ limitations under the License.
 
 import warnings
 from abc import ABC, abstractmethod
-from typing import (Any, Generic, Iterable, Iterator, Optional, Sequence,
-                    Sized, TypeVar)
+from typing import Any, Generic, Iterable, Iterator, Optional, Sequence, Sized, TypeVar
 
 from ..base import Meta, Traceable
 from .data_card import DataCard
@@ -46,8 +45,13 @@ class BaseDataset(ABC, Generic[T], Traceable):
         """
         meta = super().get_meta()
         meta[0]["type"] = "dataset"
-        if self._data_card is not None:
-            meta[0]["data_card"] = self._data_card.to_dict()
+
+        # Someone may've missed the __init__ call and there
+        # will be no self._data_card
+        data_card = getattr(self, "_data_card", None)
+        if data_card:
+            data_card = data_card.to_dict()
+        meta[0]["data_card"] = data_card
         return meta
 
 
@@ -133,7 +137,9 @@ class Wrapper(Dataset):
 
 class SizedDataset(Dataset):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        warnings.warn("SizedDataset is deprecated since 0.14.0."
-                      " Consider using older version or migrate to"
-                      " Dataset, which is sized by default now")
+        warnings.warn(
+            "SizedDataset is deprecated since 0.14.0."
+            " Consider using older version or migrate to"
+            " Dataset, which is sized by default now"
+        )
         super().__init__(*args, **kwargs)
