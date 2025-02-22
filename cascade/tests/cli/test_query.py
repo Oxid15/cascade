@@ -24,28 +24,17 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.cli.cli import cli
 from cascade.cli.query import Field, QueryParsingError, empty_field
-from cascade.models import BasicModel
-from cascade.repos import Repo
+from cascade.tests.cli.common import init_repo
 
-
-def init_repo(temp_dir):
-    repo = Repo(temp_dir)
-    line = repo.add_line()
-
-    params_list = [
-        {"a": {"b": 0}, "l": [0, 1, 2, 3], "ord": 0},
-        {"l": [0, 1, 2, 3], "ord": 1},
-        {"l": [], "ord": 2},
-        {"a": {"b": None}, "l": [1, 2, 3, 4], "ord": 3},
-        {"ld": [{"e": "f"}], "ord": 4},
-        {"ll": [[0, 1, 2, 3]], "ord": 5},
-        {"ord": 6},
-    ]
-
-    for p in params_list:
-        model = BasicModel()
-        model.params.update(p)
-        line.save(model)
+PARAMS = [
+    {"a": {"b": 0}, "l": [0, 1, 2, 3], "ord": 0},
+    {"l": [0, 1, 2, 3], "ord": 1},
+    {"l": [], "ord": 2},
+    {"a": {"b": None}, "l": [1, 2, 3, 4], "ord": 3},
+    {"ld": [{"e": "f"}], "ord": 4},
+    {"ll": [[0, 1, 2, 3]], "ord": 5},
+    {"ord": 6},
+]
 
 
 def corrupt_model_meta(repo_root):
@@ -56,7 +45,7 @@ def corrupt_model_meta(repo_root):
 def test_parsing(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(cli, args=["query", "params"])
         assert result.exit_code == 0
@@ -159,7 +148,7 @@ def test_parsing(tmp_path_str):
 def test_parsing_error(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(cli, args=["query"])
         assert result.exit_code == 1
@@ -177,7 +166,7 @@ def test_parsing_error(tmp_path_str):
 def test_columns(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(cli, args=["query", "params"])
         assert result.stdout.split("\n")[3].strip() == str(
@@ -197,7 +186,7 @@ def test_columns(tmp_path_str):
 def test_lists(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(cli, args=["query", "params.l[0]"])
         assert result.exit_code == 0
@@ -218,7 +207,7 @@ def test_lists(tmp_path_str):
 def test_list_of_dicts(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(cli, args=["query", "params.ld[0].e"])
         assert result.exit_code == 0
@@ -228,7 +217,7 @@ def test_list_of_dicts(tmp_path_str):
 def test_filter(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(
             cli, args=["query", "params.a.b", "filter", "params.a.b is not None"]
@@ -244,7 +233,7 @@ def test_filter(tmp_path_str):
 def test_sort(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(cli, args=["query", "params.ord", "sort", "params.ord"])
         assert result.exit_code == 0
@@ -258,7 +247,7 @@ def test_sort(tmp_path_str):
 def test_advanced_sort(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
 
         result = runner.invoke(cli, args=["query", "params.a.b", "sort", "params.a.b"])
         assert result.exit_code == 0
@@ -273,7 +262,7 @@ def test_advanced_sort(tmp_path_str):
 def test_corrupted_model_meta(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td)
+        init_repo(td, PARAMS)
         corrupt_model_meta(td)
 
         result = runner.invoke(cli, args=["query", "params.a.b"])
