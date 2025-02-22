@@ -184,30 +184,35 @@ Top-5 experiments by accuracy
     cascade query slug created_at sort '[m for m in metrics if m.name == "acc"][0].value' limit 5
 
 Filtering by tag
+----------------
 
 .. code-block:: bash
 
     cascade query slug filter '"prod" in tags'
 
 Finding experiments by description
+----------------------------------
 
 .. code-block:: bash
 
     cascade query slug description filter 'description.startswith("LR scheduler experiment")'
 
 Filter by linked dataset
+------------------------
 
 .. code-block:: bash
 
     cascade query slug filter 'any([l.name == "mnist" for l in links])'
 
 Find experiments made on a specific git commit
+----------------------------------------------
 
 .. code-block:: bash
 
     cascade query git_commit filter 'git_commit.startswith("4870b9")'
 
 Compare two dataset versions
+----------------------------
 
 .. code-block:: bash
 
@@ -218,6 +223,6 @@ Notes on syntax, imports and extensibility
 
 For some specific use cases it can be hard to leverage pure Python without using some
 libraries. Some cases might require some Cascade-side syntax tweaks
-(like it was done with `.` syntax for accessing nested meta).
+(like it was done with ``.`` syntax for accessing nested meta).
 As the solution evolves some of those could be considered (via plugins mechanism or some
 other). Consider writing an issue if you have ideas!
