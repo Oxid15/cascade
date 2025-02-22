@@ -14,25 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any
+from typing import Any, Dict, List
+
+from cascade.models import BasicModel
+from cascade.repos import Repo
 
 
-def create_container(type: str, cwd: str) -> Any:
-    if type == "model_line":
-        from cascade.lines import ModelLine
+def init_repo(temp_dir: str, params_list: List[Dict[str, Any]]):
+    repo = Repo(temp_dir)
+    line = repo.add_line()
 
-        return ModelLine(cwd)
-    elif type == "data_line":
-        from cascade.lines import DataLine
-
-        return DataLine(cwd)
-    elif type == "repo":
-        from cascade.repos import Repo
-
-        return Repo(cwd)
-    elif type == "workspace":
-        from cascade.workspaces import Workspace
-
-        return Workspace(cwd)
-    else:
-        return
+    for p in params_list:
+        model = BasicModel()
+        model.params.update(p)
+        line.save(model)
