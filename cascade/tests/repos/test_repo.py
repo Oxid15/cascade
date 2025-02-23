@@ -306,6 +306,15 @@ def test_auto_line_name(tmp_path_str, ext):
     assert names == ["00000", "00002", "00003", "test"]
 
 
+def test_external_remove_first(tmp_path_str): ...
+
+
+def test_external_remove_middle(tmp_path_str): ...
+
+
+def test_external_remove_last(tmp_path_str): ...
+
+
 @pytest.mark.skip
 def test_no_logging(tmp_path_str):
     Repo(tmp_path_str, log_history=False)
