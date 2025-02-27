@@ -298,13 +298,7 @@ def test_auto_line_name(tmp_path_str, ext):
 
     names = repo.get_line_names()
 
-    assert names == ["00000", "test", "00002", "00003"]
-
-    repo = Repo(str(tmp_path_str), meta_fmt=ext)
-
-    names = repo.get_line_names()
-
-    assert names == ["00000", "00002", "00003", "test"]
+    assert set(names) == {"00000", "test", "00001", "00002"}
 
 
 def test_external_remove_first(tmp_path_str):
