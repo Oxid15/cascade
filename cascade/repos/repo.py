@@ -154,9 +154,9 @@ class Repo(BaseRepo, TraceableOnDisk):
         RuntimeError
             If line with the computed name already exists
         TypeError
-            _description_
+            If type passed is not compatible with line
         IOError
-            _description_
+            If no meta was found and no line_type was passed
         """
         if name is None:
             name = self._new_line_name()
