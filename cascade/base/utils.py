@@ -131,6 +131,19 @@ def parse_version(ver: str) -> Tuple[int, int, int]:
         raise RuntimeError(f"Got unexpected version string {ver}")
 
 
+def get_terminal_width() -> int:
+    """
+    Wraps standard os method to be able to
+    work inside pytest
+    """
+    try:
+        w, _ = os.get_terminal_size()
+    except OSError:
+        return 80
+    else:
+        return w
+
+
 def update_version(path: str, version: str) -> None:
     def write_version(path: str, version: str) -> None:
         meta[0]["cascade_version"] = version
@@ -287,3 +300,41 @@ def migrate_repo_v0_13(path: str) -> None:
         print(f"Failed to update repo version: {e}")
 
     print("Done")
+
+
+def flatten_dict(nested_dict: Dict[str, Any], separator: str = "_") -> Dict[str, Any]:
+    """
+    Converts a nested dict into a flat one using separator
+
+    Example
+    -------
+    Input: `{"a": {"b": 0}, "c": [1, 2, 3]}`
+    Separator: `_`
+    Output: `{"a_b": 0, "c_0": 1, "c_1": 2, "c_2": 3}`
+
+    Parameters
+    ----------
+    nested_dict: Dict[str, Any]
+    separator: str
+
+    Returns
+    -------
+    flattened_dict: Dict[str, Any]
+    """
+
+    flattened = {}
+
+    def _flatten(data, prefix=""):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                new_prefix = f"{prefix}{separator}{key}" if prefix else key
+                _flatten(value, new_prefix)
+        elif isinstance(data, (set, list, tuple)):
+            for index, value in enumerate(data):
+                new_prefix = f"{prefix}{separator}{index}" if prefix else str(index)
+                _flatten(value, new_prefix)
+        else:
+            flattened[prefix] = data
+
+    _flatten(nested_dict)
+    return flattened

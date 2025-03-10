@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import os
 from math import ceil
 from typing import Dict, List
 
 import click
 
+from ..base.utils import get_terminal_width
 from .common import create_container
 
 
@@ -28,7 +28,7 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
 
     left_limit = 50
     between_cols = 3
-    w, _ = os.get_terminal_size()
+    w = get_terminal_width()
 
     comm_meta = []
     comm_date = []
@@ -52,9 +52,7 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
                     if len(comm_meta[i]) <= left_limit
                     else comm_meta[i][: left_limit - 3] + "..."
                 )
-                table += " " * (
-                    w_left - min(len(comm_meta[i]), left_limit) + between_cols
-                )
+                table += " " * (w_left - min(len(comm_meta[i]), left_limit) + between_cols)
             elif row == 1:
                 table += comm_date[i]
                 table += " " * (w_left - len(comm_date[i]) + between_cols)
@@ -63,9 +61,7 @@ def comments_table(comments: List[Dict[str, str]]) -> str:
 
             # Output comment's text by batches
             table += (
-                c["message"][
-                    row * w_right: min((row + 1) * w_right, len(c["message"]))
-                ] + "\n"
+                c["message"][row * w_right : min((row + 1) * w_right, len(c["message"]))] + "\n"
             )
         table += "\n"
     return table
@@ -111,9 +107,7 @@ def comment_ls(ctx):
                 if "comments" in meta[0]:
                     comment_counter += len(meta[0]["comments"])
 
-        click.echo(
-            f"{comment_counter} comment{'s' if comment_counter != 1 else ''} inside total"
-        )
+        click.echo(f"{comment_counter} comment{'s' if comment_counter != 1 else ''} inside total")
 
 
 @click.command("rm")

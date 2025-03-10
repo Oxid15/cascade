@@ -1,12 +1,14 @@
 Tutorial
 ########
 
-Tutorial is a set of lessons that will teach you
+The main tutorial is a set of lessons that will teach you
 basics of Cascade. Lessons are connected in a single project
 and depend on each other.
 You can grasp the essence of how
 you can use the library for your own projects, while
 completing this one.
+
+.. contents::
 
 Installation
 ============
@@ -501,41 +503,7 @@ Here we removed tag using its name and the first link using its ID. It is the da
     pprint(model.get_meta())
     line.save(model)
 
-
-7. Repos and Workspaces
-=======================
-
-This parts steps aside from previous task to demonstrate basic Cascade storage structure.
-Lines are not the only tool to organize model storage. They themselves can be unified using Repo.
-Repos can include both Data- and ModelLines. They can be used for access to a bunch of models and
-are basic input for most of Cascade operations.
-
-The following will give ``demo_repo/00000`` folder structure.
-
-.. code-block:: python
-
-    from cascade.repos import Repo
-
-    demo_repo = Repo("demo_repo")
-    demo_modelline = demo_repo.add_line(line_type="model")
-    demo_dataline = demo_repo.add_line(line_type="data")
-
-Sometimes Repos are piling up and to organize them effectively a Workspace was created. This is the highest unit
-of experiment organization. Best practice will be having one Workspace per ML-project. Every container
-share similar API. Using ``add_something`` methods you can create or just load an object if it already exists.
-
-The following will give ``demo_workspace/repo/line`` folder structure.
-
-.. code-block:: python
-
-    from cascade.workspaces import Workspace
-
-    ws = Workspace("demo_workspace")
-    rp = ws.add_repo("repo")
-    ln = rp.add_line("line")
-
-
-8. CLI
+7. CLI
 ======
 
 Cascade features simple command line interface to manage storage
@@ -647,7 +615,7 @@ Further reading
 - :ref:`Full Cascade CLI Reference</howtos/cli.rst>`
 
 
-9. Viewers
+8. Viewers
 ==========
 
 After logging some amount of experiments with Cascade they can
@@ -721,7 +689,7 @@ Go to ``localhost:8050`` to see the table of MetricViewer.
     cascade view metric
 
 
-11. Data Validation
+9. Data Validation
 ===================
 
 Data quality in ML projects is as important as the quality of the model.
@@ -862,7 +830,7 @@ We can see that we didn't even get to the validation of a label. Our data was re
 for being freaky enough without that.
 
 
-12. Artifacts and Files
+10. Artifacts and Files
 =======================
 
 Cascade wrappers serve to provide unified interface for different ML solutions
@@ -958,7 +926,7 @@ Like previously we verify the files.
     ['dummy_predictions.json']
 
 
-13. Scikit-learn Integration
+11. Scikit-learn Integration
 ============================
 
 Many of the things we implemented in this tutorial can be reused in similar projects.
@@ -1040,5 +1008,13 @@ What's Next
 
 Congratulations for completing the tutorial!
 
-Now you can proceed to the :ref:`/howtos/howtos.rst` section
-for specific usage recipes.
+You can see other more specific tutorials or
+you can proceed to the :ref:`/howtos/howtos.rst` section.
+
+.. toctree::
+    :maxdepth: 2
+
+    self
+    configuration
+    advanced_experiment_management
+    results_querying

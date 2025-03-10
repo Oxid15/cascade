@@ -83,11 +83,31 @@ class Repo(BaseRepo, TraceableOnDisk):
         }
 
         if "lines" in kwargs:
-            raise ValueError(
-                "lines was removed in 0.14.0, consider using add_line method instead"
-            )
+            raise ValueError("lines was removed in 0.14.0, consider using add_line method instead")
 
         self.sync_meta()
+
+    def _new_line_name(self):
+        n = len(self)
+        index_name = f"{n:0>5d}"
+        if n == 0:
+            return index_name
+
+        line_names = self.get_line_names()
+
+        # Since lines are always sorted
+        # Latest will be the max
+        latest_numeric_name = None
+        for name in line_names[::-1]:
+            if name.isnumeric():
+                latest_numeric_name = name
+                break
+
+        if latest_numeric_name:
+            latest_line_num = int(latest_numeric_name)
+            return f"{latest_line_num + 1:0>5d}"
+        else:
+            return index_name
 
     def add_line(
         self,
@@ -139,14 +159,11 @@ class Repo(BaseRepo, TraceableOnDisk):
             _description_
         """
         if name is None:
-            name = f"{len(self):0>5d}"
-            if name in self.get_line_names():
-                # Name can appear in the repo if the user manually
-                # removed the lines from the middle of the repo
-
-                # This will be handled strictly
-                # until it will become clear that some solution needed
-                raise RuntimeError(f"Line {name} already exists in {self}")
+            name = self._new_line_name()
+            assert name not in self._lines, (
+                f"Tried creating line name `{name}` that is already in repo."
+                " This is unexpected, if you see this, please fill a GitHub issue"
+            )
 
         folder = os.path.join(self._root, name)
         if meta_fmt is None:
@@ -236,9 +253,7 @@ class Repo(BaseRepo, TraceableOnDisk):
                 continue
             else:
                 return meta
-        raise FileNotFoundError(
-            f"Failed to find the object {obj} in the repo at {self._root}"
-        )
+        raise FileNotFoundError(f"Failed to find the object {obj} in the repo at {self._root}")
 
     def _update_lines(self) -> None:
         for name in sorted(os.listdir(self._root)):

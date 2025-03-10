@@ -14,8 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-__ALL__ = ["__version__", "__author__", "__author_email__"]
+from typing import Any, Dict, List
 
-__version__ = "0.15.0"
-__author__ = "Ilia Moiseev"
-__author_email__ = "ilia.moiseev.5@yandex.ru"
+from cascade.models import BasicModel
+from cascade.repos import Repo
+
+
+def init_repo(temp_dir: str, params_list: List[Dict[str, Any]]):
+    repo = Repo(temp_dir)
+    line = repo.add_line()
+
+    for p in params_list:
+        model = BasicModel()
+        model.params.update(p)
+        line.save(model)

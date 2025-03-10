@@ -24,8 +24,14 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (BaseDataset, IteratorWrapper, Modifier, Sampler,
-                          Wrapper)
+from cascade.data import (
+    BaseDataset,
+    Dataset,
+    IteratorWrapper,
+    Modifier,
+    Sampler,
+    Wrapper,
+)
 
 
 class DummyDataset(BaseDataset):
@@ -131,3 +137,29 @@ def test_modifier_from_meta():
 def test_sampler():
     ds = Wrapper([1, 2, 3, 4])
     ds = Sampler(ds, 10)
+
+    assert len(ds) == 10
+
+
+class EmptyDataset(Dataset):
+    def __init__(self):
+        # Here we intenstionally do not call super().__init__()
+        # which is very common in practice and I think for now
+        # there is no need to actively forbid this
+        ...
+
+    def __getitem__(self, index):
+        return None
+
+    def __len__(self):
+        return 0
+
+
+def test_no_init_call():
+    ds = EmptyDataset()
+
+    assert ds[0] == None
+
+    meta = ds.get_meta()
+
+    assert len(meta) == 1
