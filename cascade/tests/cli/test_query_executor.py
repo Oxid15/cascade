@@ -16,6 +16,7 @@ limitations under the License.
 
 import os
 import sys
+from typing import List
 
 import pytest
 
@@ -213,7 +214,7 @@ def test_params_queries(tmp_path_str, params, query, result):
         ([{}, {}, {}], Query(columns=["def f(): return 0"])),
     ],
 )
-def test_dangerous_builtins(tmp_path_str: str, params: list[dict], query: Query):
+def test_dangerous_builtins(tmp_path_str: str, params: List[dict], query: Query):
     init_repo(tmp_path_str, params)
 
     executor = Executor(tmp_path_str, "repo")
