@@ -19,6 +19,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import warnings
 from pprint import pformat
 from typing import Any, Dict, List, Optional
@@ -27,16 +28,6 @@ import click
 import pendulum
 
 from cascade.base import MetaHandler
-
-# ast.unparse exists since python 3.9
-# for older versions Cascade will require external package
-
-try:
-    import astunparse
-except ImportError:
-    unparse_method = ast.unparse
-else:
-    unparse_method = astunparse.unparse
 
 
 class RunFailedException(RuntimeError): ...
@@ -89,6 +80,13 @@ def parse_value(value: ast.expr) -> Any:
     Create node representation for dict
     that will be printed
     """
+
+    if sys.version_info < (3, 9):
+        if isinstance(value, ast.Num):
+            return value.n
+        elif isinstance(value, ast.Str):
+            return value.s
+
     if isinstance(value, ast.Constant):
         return value.value
     elif isinstance(value, ast.Call):
@@ -100,9 +98,24 @@ def parse_value(value: ast.expr) -> Any:
     elif isinstance(value, ast.Set):
         return set(parse_value(v) for v in value.elts)
     elif isinstance(value, ast.Dict):
-        return {parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)}
+        return {
+            parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)
+        }
     else:
-        raise ValueError(f"Unsupported config field type: {value} in {unparse_method(value)}")
+        raise ValueError(
+            f"Unsupported config field type: {value} in {unparse_method(value)}"
+        )
+
+
+# ast.unparse exists since python 3.9
+# for older versions Cascade will require external package
+
+if sys.version_info < (3, 9):
+    import astunparse
+
+    unparse_method = astunparse.unparse
+else:
+    unparse_method = ast.unparse
 
 
 def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
@@ -119,7 +132,9 @@ def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
     return cfg_dict
 
 
-def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]) -> str:
+def modify_assignments(
+    tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]
+) -> str:
     """
     Overrides cascade.base.Config class definition with user-provided values
     """
@@ -131,7 +146,18 @@ def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[st
         else:
             continue
         if target in kwargs:
-            node.value = ast.Constant(value=kwargs[target])
+            if sys.version_info < (3, 9):
+                if isinstance(kwargs[target], (int, float)):
+                    node.value = ast.Num(kwargs[target])
+                elif isinstance(kwargs[target], str):
+                    node.value = ast.Str(kwargs[target])
+                else:
+                    raise TypeError(
+                        f"Can't find appropriate ast Class to wrap {kwargs[target]}"
+                        f" of type {type(kwargs[target])}"
+                    )
+            else:
+                node.value = ast.Constant(value=kwargs[target])
     return unparse_method(tree)
 
 
@@ -149,7 +175,9 @@ def generate_run_id() -> str:
 
 
 class CascadeRun:
-    def __init__(self, log: bool, config: Dict[str, Any], overrides: Dict[str, Any]) -> None:
+    def __init__(
+        self, log: bool, config: Dict[str, Any], overrides: Dict[str, Any]
+    ) -> None:
         self.log = log
         self.config = config
         self.overrides = overrides
@@ -162,8 +190,12 @@ class CascadeRun:
     def __enter__(self):
         os.makedirs(self.run_dir)
 
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_config.json"), self.config)
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides)
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_config.json"), self.config
+        )
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides
+        )
 
         return self
 
