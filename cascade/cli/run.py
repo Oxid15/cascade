@@ -82,7 +82,9 @@ def parse_value(value: ast.expr) -> Any:
     """
 
     if sys.version_info < (3, 9):
-        if isinstance(value, ast.Num):
+        if isinstance(value, ast.NameConstant):
+            return value.value
+        elif isinstance(value, ast.Num):
             return value.n
         elif isinstance(value, ast.Str):
             return value.s
@@ -147,7 +149,7 @@ def modify_assignments(
             continue
         if target in kwargs:
             if sys.version_info < (3, 9):
-                node.value = ast.NameConstant(kwargs[target])
+                node.value = ast.NameConstant(kwargs[target], kind=None)
             else:
                 node.value = ast.Constant(value=kwargs[target])
     return unparse_method(tree)
@@ -268,6 +270,7 @@ def run(script: str, y: bool, log: Optional[str], args: List[str]):
             else:
                 raise KeyError(f"Key `{key}` is missing in the original config")
 
+        print([item for item in tree.body])
         text = modify_assignments(tree, cfg_node, kwargs)
     else:
         cfg_dict = {}
