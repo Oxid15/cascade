@@ -110,6 +110,12 @@ class TorchModel(BasicModel):
     def load_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
         Loads torch module. Additional args and kwargs are passed to torch.load
+        
+        Note
+        ----
+        Since torch>=2.6.0 weights_only parameter is required.
+        Here it is set to False by default. Safe load could be implemented later.
+        You can override this method to gain control over artifact loading process.
 
         Parameters
         ----------
@@ -126,7 +132,7 @@ class TorchModel(BasicModel):
 
         checkpoint_path = os.path.join(path, "checkpoint.pt")
         with open(checkpoint_path, "rb") as f:
-            self._model = torch.load(f, *args, **kwargs)
+            self._model = torch.load(f, *args, weights_only=False, **kwargs)  # TODO: need option to use safe version
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
