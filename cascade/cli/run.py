@@ -147,15 +147,7 @@ def modify_assignments(
             continue
         if target in kwargs:
             if sys.version_info < (3, 9):
-                if isinstance(kwargs[target], (int, float)):
-                    node.value = ast.Num(kwargs[target])
-                elif isinstance(kwargs[target], str):
-                    node.value = ast.Str(kwargs[target])
-                else:
-                    raise TypeError(
-                        f"Can't find appropriate ast Class to wrap {kwargs[target]}"
-                        f" of type {type(kwargs[target])}"
-                    )
+                node.value = ast.NameConstant(kwargs[target])
             else:
                 node.value = ast.Constant(value=kwargs[target])
     return unparse_method(tree)
