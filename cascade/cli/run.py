@@ -25,7 +25,18 @@ from typing import Any, Dict, List, Optional
 
 import click
 import pendulum
+
 from cascade.base import MetaHandler
+
+# ast.unparse exists since python 3.9
+# for older versions Cascade will require external package
+
+try:
+    import astunparse
+except ImportError:
+    unparse_method = ast.unparse
+else:
+    unparse_method = astunparse.unparse
 
 
 class RunFailedException(RuntimeError): ...
@@ -91,7 +102,7 @@ def parse_value(value: ast.expr) -> Any:
     elif isinstance(value, ast.Dict):
         return {parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)}
     else:
-        raise ValueError(f"Unsupported config field type: {value} in {ast.unparse(value)}")
+        raise ValueError(f"Unsupported config field type: {value} in {unparse_method(value)}")
 
 
 def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
@@ -121,7 +132,7 @@ def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[st
             continue
         if target in kwargs:
             node.value = ast.Constant(value=kwargs[target])
-    return ast.unparse(tree)
+    return unparse_method(tree)
 
 
 def parse_args(args):

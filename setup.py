@@ -55,6 +55,7 @@ setuptools.setup(
         "coolname>=2.0.0",
         "click>=8.0.0",
         "typing-extensions>=4.1.1,<5",
+        'astunparse ; python_version<"3.9"',
     ],
     extras_require=extras_require,
 )
