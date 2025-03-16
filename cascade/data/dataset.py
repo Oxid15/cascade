@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -13,7 +13,8 @@ limitations under the License.
 
 import warnings
 from abc import ABC, abstractmethod
-from typing import Any, Generic, Iterable, Iterator, Optional, Sequence, Sized, TypeVar
+from typing import (Any, Generic, Iterable, Iterator, Optional, Sequence,
+                    Sized, TypeVar)
 
 from ..base import Meta, Traceable
 from .data_card import DataCard

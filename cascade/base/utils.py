@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -228,11 +228,12 @@ def migrate_repo_v0_13(path: str) -> None:
     path : str
         Path to the container to migrate
     """
+    from tqdm import tqdm
+
     from cascade.base import MetaHandler, MetaIOError
     from cascade.lines import ModelLine
     from cascade.metrics import Metric
     from cascade.repos import Repo, SingleLineRepo
-    from tqdm import tqdm
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):

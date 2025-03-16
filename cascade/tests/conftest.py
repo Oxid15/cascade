@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,18 +28,10 @@ from dateutil import tz
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (
-    ApplyModifier,
-    BaseDataset,
-    BruteforceCacher,
-    Composer,
-    Concatenator,
-    CyclicSampler,
-    IteratorWrapper,
-    RandomSampler,
-    RangeSampler,
-    Wrapper,
-)
+from cascade.data import (ApplyModifier, BaseDataset, BruteforceCacher,
+                          Composer, Concatenator, CyclicSampler,
+                          IteratorWrapper, RandomSampler, RangeSampler,
+                          Wrapper)
 from cascade.lines import DataLine, ModelLine
 from cascade.models import BasicModel
 from cascade.models import ModelLine as OldModelLine

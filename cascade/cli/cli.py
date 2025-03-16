@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ from .artifact import artifact
 from .comment import comment
 from .common import create_container
 from .desc import desc
-from .run import run
 from .query import query
+from .run import run
 from .tag import tag
 from .view import view
 

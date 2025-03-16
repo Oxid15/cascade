@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@ limitations under the License.
 import os
 from typing import Any
 
-from ...base import MetaHandler, MetaIOError, ZeroMetaError, supported_meta_formats
+from ...base import (MetaHandler, MetaIOError, ZeroMetaError,
+                     supported_meta_formats)
 from ...meta.server import Server
 from .dataset_version_diff_viewer import DatasetVersionDiffViewer
 from .history_diff_viewer import HistoryDiffViewer
