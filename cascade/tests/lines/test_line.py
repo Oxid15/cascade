@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+
 def test_load_obj_meta(any_line):
     meta0 = any_line.load_obj_meta(0)
     meta1 = any_line.load_obj_meta(1)

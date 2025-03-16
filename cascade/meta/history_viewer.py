@@ -118,7 +118,7 @@ class HistoryViewer(Server):
 
         valid_lines = [line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])]
 
-        return valid_lines[-self._last_lines :]
+        return valid_lines[-self._last_lines:]
 
     def _make_table(self) -> None:
         metas = []

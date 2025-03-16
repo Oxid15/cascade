@@ -27,13 +27,13 @@ from ..base.utils import get_terminal_width
 from .common import create_container
 
 
-class QueryParsingError(Exception): ...
+class QueryParsingError(Exception): ...  # noqa: E701
 
 
-class QueryExecutionError(Exception): ...
+class QueryExecutionError(Exception): ...  # noqa: E701
 
 
-class NONE: ...
+class NONE: ...  # noqa: E701
 
 
 @dataclass
@@ -361,7 +361,7 @@ class Executor:
             ]
 
         if q.offset is not None:
-            data = data[q.offset :]
+            data = data[q.offset:]
 
         if q.limit is not None:
             data = data[: q.limit]

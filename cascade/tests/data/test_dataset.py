@@ -152,7 +152,7 @@ class EmptyDataset(Dataset):
 def test_no_init_call():
     ds = EmptyDataset()
 
-    assert ds[0] == None
+    assert ds[0] is None
 
     meta = ds.get_meta()
 

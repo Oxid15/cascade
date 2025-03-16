@@ -45,7 +45,9 @@ class Version:
     @staticmethod
     def _check_other(other):
         if not isinstance(other, Version):
-            raise TypeError(f"Can only compare Version with Version or string, got {type(other)}")
+            raise TypeError(
+                f"Can only compare Version with Version or string, got {type(other)}"
+            )
 
     def __eq__(self, other: Union["Version", str]) -> bool:
         if isinstance(other, str):
@@ -100,7 +102,9 @@ def generate_slug() -> str:
 
 def get_latest_commit_hash() -> Optional[str]:
     try:
-        result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"], capture_output=True, text=True
+        )
         return result.stdout.strip()
     except Exception:
         return None
@@ -108,7 +112,9 @@ def get_latest_commit_hash() -> Optional[str]:
 
 def get_uncommitted_changes() -> Optional[List[str]]:
     try:
-        result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["git", "status", "--porcelain"], capture_output=True, text=True
+        )
         result = result.stdout.strip()
         if result != "":
             return result.split("\n ")
@@ -167,7 +173,9 @@ def update_version(path: str, version: str) -> None:
             return
 
 
-def skeleton(meta: Meta, keys: Optional[List[Any]] = None) -> List[List[Dict[Any, Any]]]:
+def skeleton(
+    meta: Meta, keys: Optional[List[Any]] = None
+) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
@@ -303,7 +311,11 @@ def migrate_repo_v0_13(path: str) -> None:
     print("Done")
 
 
-def flatten_dict(nested_dict: Dict[str, Any], separator: str = "_", root_keys_to_ignore: List[str]=None) -> Dict[str, Any]:
+def flatten_dict(
+    nested_dict: Dict[str, Any],
+    separator: str = "_",
+    root_keys_to_ignore: List[str] = None,
+) -> Dict[str, Any]:
     """
     Converts a nested dict into a flat one using separator
 
