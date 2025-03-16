@@ -69,3 +69,28 @@ def test_different_types():
     flattened_dict = flatten_dict(nested_dict)
 
     assert flattened_dict == expected_flattened_dict
+
+
+def test_ignore():
+    nested_dict = {
+        "set": {1, 2, 3},
+        "tuple": ("a", "b", "c"),
+        "none": None,
+        "bool": True,
+        "a": [0],
+        "bb": {"a": "abc", "tuple": "b"},
+    }
+
+    expected_flattened_dict = {
+        "set": {1, 2, 3},
+        "tuple": ("a", "b", "c"),
+        "none": None,
+        "bool": True,
+        "a_0": 0,
+        "bb_a": "abc",
+        "bb_tuple": "b",
+    }
+
+    flattened_dict = flatten_dict(nested_dict, root_keys_to_ignore=["set", "tuple", "none", "bool"])
+
+    assert flattened_dict == expected_flattened_dict
