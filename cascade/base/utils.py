@@ -335,6 +335,9 @@ def flatten_dict(
     flattened_dict: Dict[str, Any]
     """
 
+    if root_keys_to_ignore is None:
+        root_keys_to_ignore = ()
+
     flattened = {}
 
     def _flatten(data, prefix=""):
