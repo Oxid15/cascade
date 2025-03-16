@@ -613,6 +613,8 @@ Further reading
 ***************
 
 - :ref:`Full Cascade CLI Reference</howtos/cli.rst>`
+- :ref:`CLI Querying Tutorial</tutorials/results_querying.rst>`
+- :ref:`CLI Queries How To</howtos/queries.rst>`
 
 
 8. Viewers

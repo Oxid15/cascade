@@ -56,6 +56,13 @@ CLI
 
             Some things are more convenient when done in command line
 
+    .. grid-item::
+        .. card:: Query experiment results
+            :link: /howtos/queries.rst
+            :link-type: ref
+
+            Just like with database, but without database
+
 Integrations
 ************
 
@@ -110,6 +117,7 @@ Experiment management
     model_training_trainers.ipynb
     track_a_file
     cli
+    queries
     sklearn
     links
     comments
