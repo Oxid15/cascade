@@ -279,9 +279,6 @@ class ModelRepo(Repo, TraceableOnDisk):
         self._update_lines()
         self.sync_meta()
 
-    def __add__(self, repo: "ModelRepo") -> "ModelRepoConcatenator":
-        return ModelRepoConcatenator([self, repo])
-
     def load_model_meta(self, model: str) -> Meta:
         """
         Loads metadata of a model from disk

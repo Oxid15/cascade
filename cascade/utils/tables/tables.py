@@ -18,12 +18,10 @@ from typing import Any, Callable, List, Tuple, Union
 
 import pandas as pd
 from tqdm import tqdm
-from typing_extensions import Literal
 
 from ...base import Meta
 from ...data.dataset import Dataset, IteratorWrapper, T
 from ...data.modifier import Modifier
-from ...meta.validator import AggregateValidator, DataValidationException
 
 
 class TableDataset(Dataset[T]):
@@ -150,32 +148,6 @@ class TableIterator(IteratorWrapper):
 
     def __next__(self):
         return self._data.get_chunk(self.chunk_size)
-
-
-class NullValidator(TableDataset, AggregateValidator):
-    """
-    Checks that there are no null values in the table.
-    """
-
-    def __init__(self, dataset: TableDataset, *args: Any, **kwargs: Any) -> None:
-        super().__init__(dataset, self._check_nulls, *args, t=dataset._table, **kwargs)
-
-    def _check_nulls(self, x: TableDataset) -> Literal[True]:
-        mask = x._table.isnull().values
-        if ~(mask.any()):
-            return True
-        else:
-            total = mask.sum()
-            by_columns = mask.sum(axis=0)
-            missing = pd.DataFrame(
-                by_columns.reshape(1, len(by_columns)), columns=x._table.columns
-            )
-            raise DataValidationException(
-                f"There were NaN-values in {repr(self._dataset)}\n"
-                f"Total count: {total}\n"
-                f"By columns:\n"
-                f"{missing}"
-            )
 
 
 class FeatureTable(TableDataset):

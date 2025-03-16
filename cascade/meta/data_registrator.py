@@ -14,14 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import warnings
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-import pendulum
 from typing_extensions import deprecated
-
-from ..base import HistoryHandler, MetaIOError
 
 
 @deprecated("Moved since 0.14.0. Consider using cascade.data.Assessor")

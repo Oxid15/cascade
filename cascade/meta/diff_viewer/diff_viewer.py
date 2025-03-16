@@ -21,7 +21,6 @@ from ...base import (MetaHandler, MetaIOError, ZeroMetaError,
                      supported_meta_formats)
 from ...meta.server import Server
 from .dataset_version_diff_viewer import DatasetVersionDiffViewer
-from .history_diff_viewer import HistoryDiffViewer
 from .repo_diff_viewer import RepoDiffViewer
 from .workspace_diff_viewer import WorkspaceDiffViewer
 

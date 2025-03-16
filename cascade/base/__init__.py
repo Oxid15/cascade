@@ -54,7 +54,6 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
 
 from .cache import Cache
 from .config import Config
-from .history_handler import HistoryHandler
 from .meta_handler import CustomEncoder as JSONEncoder
 from .meta_handler import (MetaHandler, default_meta_format,
                            supported_meta_formats)
