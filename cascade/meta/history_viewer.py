@@ -23,8 +23,8 @@ from deepdiff import DeepDiff
 from ..base import MetaHandler, ZeroMetaError
 from ..base.utils import flatten_dict
 from ..lines import ModelLine
-from ..models import Workspace
 from ..repos import Repo, SingleLineRepo
+from ..workspaces import Workspace
 from .meta_viewer import MetaViewer
 from .server import Server
 
