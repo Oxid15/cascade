@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ class RepoDiffViewer(BaseDiffViewer):
 
         mev = MetaViewer(path, filt={"type": "model"})
         objs = [meta for meta in mev]
-        objs = {meta[0]["path"]: meta for meta in objs}
+        objs = {meta[0]["name"]: meta for meta in objs}
         return objs
 
     def _layout(self):

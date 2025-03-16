@@ -220,24 +220,6 @@ pprint(model.get_meta())
 line.save(model)
 
 # %%
-# Repos and Workspaces
-
-# %%
-from cascade.repos import Repo
-
-demo_repo = Repo("demo_repo")
-demo_modelline = demo_repo.add_line(line_type="model")
-demo_dataline = demo_repo.add_line(line_type="data")
-
-# %%
-
-from cascade.workspaces import Workspace
-
-ws = Workspace("demo_workspace")
-rp = ws.add_repo("repo")
-ln = rp.add_line("line")
-
-# %%
 from cascade.meta import MetricViewer
 
 mv = MetricViewer(line)

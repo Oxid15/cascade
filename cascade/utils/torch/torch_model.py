@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -111,6 +111,12 @@ class TorchModel(BasicModel):
         """
         Loads torch module. Additional args and kwargs are passed to torch.load
 
+        Note
+        ----
+        Since torch>=2.6.0 weights_only parameter is required.
+        Here it is set to False by default. Safe load could be implemented later.
+        You can override this method to gain control over artifact loading process.
+
         Parameters
         ----------
         path : str
@@ -126,7 +132,8 @@ class TorchModel(BasicModel):
 
         checkpoint_path = os.path.join(path, "checkpoint.pt")
         with open(checkpoint_path, "rb") as f:
-            self._model = torch.load(f, *args, **kwargs)
+            # TODO: need option to use safe version
+            self._model = torch.load(f, *args, weights_only=False, **kwargs)
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()

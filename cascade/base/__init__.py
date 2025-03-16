@@ -5,7 +5,7 @@ Core module of Cascade - contains basic objects and interfaces. Home for
 `Traceable` class and other things that are not directly related to other
 modules.
 
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
 
 
 from .cache import Cache
-from .history_handler import HistoryHandler
+from .config import Config
 from .meta_handler import CustomEncoder as JSONEncoder
 from .meta_handler import (MetaHandler, default_meta_format,
                            supported_meta_formats)

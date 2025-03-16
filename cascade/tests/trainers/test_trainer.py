@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler
 from cascade.data import Wrapper
-from cascade.trainers import Trainer, BasicTrainer
 from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel
+from cascade.trainers import BasicTrainer, Trainer
 
 
 class AlwaysFailingModel(DummyModel):

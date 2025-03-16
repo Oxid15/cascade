@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,12 +25,8 @@ import pendulum
 from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler
-from ..base.utils import (
-    generate_slug,
-    get_latest_commit_hash,
-    get_python_version,
-    get_uncommitted_changes,
-)
+from ..base.utils import (generate_slug, get_latest_commit_hash,
+                          get_python_version, get_uncommitted_changes)
 from ..models.model import Model
 from .disk_line import DiskLine
 

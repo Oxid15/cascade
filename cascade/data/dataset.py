@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -46,8 +46,13 @@ class BaseDataset(ABC, Generic[T], Traceable):
         """
         meta = super().get_meta()
         meta[0]["type"] = "dataset"
-        if self._data_card is not None:
-            meta[0]["data_card"] = self._data_card.to_dict()
+
+        # Someone may've missed the __init__ call and there
+        # will be no self._data_card
+        data_card = getattr(self, "_data_card", None)
+        if data_card:
+            data_card = data_card.to_dict()
+        meta[0]["data_card"] = data_card
         return meta
 
 
@@ -133,7 +138,9 @@ class Wrapper(Dataset):
 
 class SizedDataset(Dataset):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        warnings.warn("SizedDataset is deprecated since 0.14.0."
-                      " Consider using older version or migrate to"
-                      " Dataset, which is sized by default now")
+        warnings.warn(
+            "SizedDataset is deprecated since 0.14.0."
+            " Consider using older version or migrate to"
+            " Dataset, which is sized by default now"
+        )
         super().__init__(*args, **kwargs)

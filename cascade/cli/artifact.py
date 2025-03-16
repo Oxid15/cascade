@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ class RemoveResult:
 
     FAIL - something went wrong when removing a file
     """
+
     status: Literal["OKAY", "MISS", "FAIL"]
     path: Optional[str] = None
     traceback: Optional[str] = None
@@ -101,11 +102,16 @@ def artifact(ctx):
 
 
 @artifact.command("rm")
+@click.option("-y", is_flag=True, expose_value=True, help="Confirm")
 @click.pass_context
-def artifact_rm(ctx):
+def artifact_rm(ctx, y):
     """
     Remove artifacts from the whole container recursively
     """
+
+    if not y:
+        click.confirm("Confirm?", abort=True)
+
     results_list = []
     flat_results = []
     if ctx.obj["type"] == "model":

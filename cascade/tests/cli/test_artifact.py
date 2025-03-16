@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,16 +42,12 @@ def test_rm_model(tmp_path_str):
         model.save_artifact(artifact_path)
         MetaHandler.write_dir(td, model.get_meta())
 
-        assert os.path.exists(
-            os.path.join(td, "artifacts", "artifact.txt")
-        )
+        assert os.path.exists(os.path.join(td, "artifacts", "artifact.txt"))
 
-        result = runner.invoke(cli, args=["artifact", "rm"])
+        result = runner.invoke(cli, args=["artifact", "rm", "-y"])
         assert result.exit_code == 0
 
-        assert not os.path.exists(
-            os.path.join(td, "artifacts", "artifact.txt")
-        )
+        assert not os.path.exists(os.path.join(td, "artifacts", "artifact.txt"))
 
 
 def test_rm_model_error(tmp_path_str):
@@ -63,18 +59,14 @@ def test_rm_model_error(tmp_path_str):
         model.save_artifact(artifact_path)
         MetaHandler.write_dir(td, model.get_meta())
 
-        assert os.path.exists(
-            os.path.join(td, "artifacts", "artifact.txt")
-        )
+        assert os.path.exists(os.path.join(td, "artifacts", "artifact.txt"))
 
-        with patch('os.remove') as mocked_remove:
+        with patch("os.remove") as mocked_remove:
             mocked_remove.side_effect = OSError()
 
-            result = runner.invoke(cli, args=["artifact", "rm"])
+            result = runner.invoke(cli, args=["artifact", "rm", "-y"])
             assert result.exit_code == 0
 
             mocked_remove.assert_called_once_with(os.path.join(td, "artifacts", "artifact.txt"))
 
-            assert os.path.exists(
-                os.path.join(td, "artifacts", "artifact.txt")
-            )
+            assert os.path.exists(os.path.join(td, "artifacts", "artifact.txt"))

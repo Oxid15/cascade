@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,14 +18,13 @@ limitations under the License.
 import os
 import sys
 
-
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base.utils import migrate_repo_v0_13
 from cascade.base import MetaHandler
-from cascade.repos import Repo
+from cascade.base.utils import migrate_repo_v0_13
 from cascade.models import Model
+from cascade.repos import Repo
 
 
 class OldStyleModel(Model):

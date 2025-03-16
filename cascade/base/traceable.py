@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,14 +26,8 @@ from typing import Any, Callable, Dict, Iterable, Optional, Union
 import pendulum
 from typing_extensions import Literal
 
-from . import (
-    Meta,
-    MetaBlock,
-    MetaHandler,
-    MetaIOError,
-    default_meta_format,
-    supported_meta_formats,
-)
+from . import (Config, Meta, MetaBlock, MetaHandler, MetaIOError,
+               default_meta_format, supported_meta_formats)
 
 DO_NOT_UPDATE = ["created_at"]
 
@@ -131,14 +125,14 @@ class Traceable:
 
         return [meta]
 
-    def update_meta(self, meta: Union[Meta, MetaBlock]) -> None:
+    def update_meta(self, meta: Union[Meta, MetaBlock, Config]) -> None:
         """
         Updates ``_meta_prefix``, which then updates
         dataset's meta when ``get_meta()`` is called
 
         Parameters
         ----------
-        meta : Meta
+        meta : Union[Meta, MetaBlock, Config]
             The object to update with
 
         Raises
@@ -150,10 +144,13 @@ class Traceable:
             self._warn_no_prefix()
             self._meta_prefix = {}
 
+        if isinstance(meta, Config):
+            meta = meta.to_dict()
+
         if isinstance(meta, list):
             if len(meta) != 1:
                 raise ValueError(
-                    f"Object that was passed or read from path is a list of length {len(meta)}"
+                    f"Object that was passed is a list of length {len(meta)}"
                     f" There is no clear way to update this object's meta"
                     f" using this kind of list"
                 )
@@ -479,9 +476,7 @@ class TraceableOnDisk(Traceable):
             from . import MetaHandler
 
             try:
-                MetaHandler.write(
-                    os.path.join(self._root, "meta" + self._meta_fmt), meta
-                )
+                MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
             except MetaIOError as e:
                 warnings.warn(f"File writing error ignored: {e}")
 
@@ -504,6 +499,7 @@ class TraceableOnDisk(Traceable):
             result = function(*args, **kwargs)
             self.sync_meta()
             return result
+
         return wrap
 
     def __getattribute__(self, name: str) -> Any:

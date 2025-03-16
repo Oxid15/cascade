@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ if hasattr(deepdiff.diff, "PrettyOrderedSet"):
     diff_set = getattr(deepdiff.diff, "PrettyOrderedSet")
 else:
     diff_set = deepdiff.diff.SetOrdered
+
 
 class CustomEncoder(JSONEncoder):
     def default(self, obj: Any) -> Any:
@@ -83,7 +84,7 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
-        elif isinstance(obj, diff_set):
+        elif isinstance(obj, (set, diff_set)):
             return list(obj)
 
         elif isinstance(obj, deepdiff.DeepDiff):

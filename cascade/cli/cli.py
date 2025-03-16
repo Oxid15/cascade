@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ from .artifact import artifact
 from .comment import comment
 from .common import create_container
 from .desc import desc
+from .query import query
+from .run import run
 from .tag import tag
 from .view import view
 
@@ -46,7 +48,6 @@ def cli(ctx):
         ctx.obj["meta_fmt"] = MetaHandler.determine_meta_fmt(current_dir_full, "meta.*")
     except MetaIOError as e:
         click.echo(e)
-        raise e
 
 
 @cli.command
@@ -85,7 +86,7 @@ def cat(ctx, p):
             except ValueError:
                 pass
 
-            meta = container.load_model_meta(p)
+            meta = container.load_obj_meta(p)
             click.echo(pformat(meta))
 
 
@@ -108,6 +109,8 @@ def migrate(ctx):
 cli.add_command(artifact)
 cli.add_command(comment)
 cli.add_command(desc)
+cli.add_command(run)
+cli.add_command(query)
 cli.add_command(tag)
 cli.add_command(view)
 

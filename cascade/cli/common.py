@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,10 +18,14 @@ from typing import Any
 
 
 def create_container(type: str, cwd: str) -> Any:
-    if type == "line":
+    if type == "model_line":
         from cascade.lines import ModelLine
 
         return ModelLine(cwd)
+    elif type == "data_line":
+        from cascade.lines import DataLine
+
+        return DataLine(cwd)
     elif type == "repo":
         from cascade.repos import Repo
 
