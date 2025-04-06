@@ -2,48 +2,48 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>cascade.utils.vision &#8212; cascade 0.14.2 documentation</title>
+    <title>cascade.utils.vision &#8212; cascade 0.15.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../sphinx-design.min.css?v=87e54e7c" />
-    <link rel="stylesheet" type="text/css" href="../css/custom.css?v=9cb1bd10" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css?v=3ab4e28d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=9cb1bd10" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="../documentation_options.js?v=0dc20415"></script>
-    <script src="../doctools.js?v=9a2dae69"></script>
-    <script src="../sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../clipboard.min.js?v=a7894cd8"></script>
-    <script src="../copybutton.js?v=f281be69"></script>
-    <script src="../design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/documentation_options.js?v=52d5597a"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
     <script>
@@ -60,12 +60,10 @@
             </script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/cascade.utils.vision';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
-    <link rel="icon" href="../logo_sq.svg"/>
+    <link rel="icon" href="../_static/logo_sq.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Dataset Zoo" href="dataset_zoo.html" />
@@ -79,23 +77,19 @@
 
   
   
-  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
-  
-  <div id="pst-scroll-pixel-helper"></div>
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -117,29 +111,19 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <div class="pst-async-banner-revealer d-none">
-  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
-</div>
-
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
-  </button>
+  </label>
   
-  
-  <div class="col-lg-3 navbar-header-items__start">
+  <div class="navbar-header-items__start">
     
       <div class="navbar-item">
-
-  
-    
   
 
 <a class="navbar-brand logo" href="../index.html">
-  
   
   
   
@@ -149,8 +133,8 @@
       
     
     
-    <img src="../logo_light.svg" class="logo__image only-light" alt="cascade 0.14.2 documentation - Home"/>
-    <script>document.write(`<img src="../logo_dark.svg" class="logo__image only-dark" alt="cascade 0.14.2 documentation - Home"/>`);</script>
+    <img src="../logo_light.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../logo_dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
   
 </a></div>
@@ -159,21 +143,12 @@
 <script>
 document.write(`
   <div class="version-switcher__container dropdown">
-    <button id="pst-version-switcher-button-2"
-      type="button"
-      class="version-switcher__button btn btn-sm dropdown-toggle"
-      data-bs-toggle="dropdown"
-      aria-haspopup="listbox"
-      aria-controls="pst-version-switcher-list-2"
-      aria-label="Version switcher list"
-    >
-      Choose version  <!-- this text may get changed later by javascript -->
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      latest  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
-    <div id="pst-version-switcher-list-2"
-      class="version-switcher__menu dropdown-menu list-group-flush py-0"
-      role="listbox" aria-labelledby="pst-version-switcher-button-2">
-      <!-- dropdown will be populated by javascript on page load -->
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
     </div>
   </div>
 `);
@@ -181,41 +156,47 @@ document.write(`
     
   </div>
   
+  
   <div class="col-lg-9 navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item">
-<nav>
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
-    Tutorial
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../howtos/howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../howtos/howtos.html">
-    How-to guides
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations/explanations.html">
-    Explanations
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="modules.html">
-    API reference
-  </a>
-</li>
-
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -226,32 +207,28 @@ document.write(`
       
         <div class="navbar-item navbar-persistent--container">
           
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+  </button>
+`);
+</script>
         </div>
       
       
         <div class="navbar-item">
-
 <script>
 document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
 </script></div>
       
-        <div class="navbar-item"><ul class="navbar-icon-links"
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -262,8 +239,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
           
@@ -274,8 +251,8 @@ document.write(`
           
           
           
-          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Twitter</span></a>
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
         </li>
 </ul></div>
       
@@ -285,33 +262,27 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+  </button>
+`);
+</script>
     </div>
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
       <span class="fa-solid fa-outdent"></span>
-    </button>
+    </label>
   
 </div>
 
-    </header>
+    </nav>
   
-
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
-      
-      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -322,42 +293,44 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          
-          
-            <div class="navbar-item">
-<nav>
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
-    Tutorial
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../howtos/howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../howtos/howtos.html">
-    How-to guides
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations/explanations.html">
-    Explanations
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="modules.html">
-    API reference
-  </a>
-</li>
-
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
-          
         
       </div>
     
@@ -366,18 +339,17 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
-
 <script>
 document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
 </script></div>
         
-          <div class="navbar-item"><ul class="navbar-icon-links"
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -388,8 +360,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
           
@@ -400,8 +372,8 @@ document.write(`
           
           
           
-          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Twitter</span></a>
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
         </li>
 </ul></div>
         
@@ -410,8 +382,7 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
@@ -446,13 +417,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main" role="main">
+      <main id="main-content" class="bd-main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article d-print-none">
+              <div class="bd-header-article">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -461,8 +432,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb" class="d-print-none">
-  <ul class="bd-breadcrumbs">
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
@@ -487,7 +458,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article">
+                <article class="bd-article" role="main">
                   
   <section id="cascade-utils-vision">
 <h1>cascade.utils.vision<a class="headerlink" href="#cascade-utils-vision" title="Link to this heading">#</a></h1>
@@ -520,10 +491,11 @@ invokes opencv imread on image and returns it if it exists.</p>
               
               
               
-              
-              
-                <footer class="prev-next-footer d-print-none">
+                <footer class="bd-footer-article">
                   
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="cascade.utils.torch.html"
@@ -543,7 +515,10 @@ invokes opencv imread on image and returns it if it exists.</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -552,14 +527,11 @@ invokes opencv imread on image and returns it if it exists.</p>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
+  <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+  <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.utils.vision.FolderImageDataset"><code class="docutils literal notranslate"><span class="pre">FolderImageDataset</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.utils.vision.FolderImageDataset.__init__"><code class="docutils literal notranslate"><span class="pre">FolderImageDataset.__init__()</span></code></a></li>
@@ -569,7 +541,6 @@ invokes opencv imread on image and returns it if it exists.</p>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
   <div class="tocsection sourcelink">
     <a href="../_sources/modules/cascade.utils.vision.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
@@ -590,8 +561,8 @@ invokes opencv imread on image and returns it if it exists.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script src="../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -599,19 +570,17 @@ invokes opencv imread on image and returns it if it exists.</p>
     <div class="footer-items__start">
       
         <div class="footer-item">
-
   <p class="copyright">
     
-      © Copyright 2022-2024, Ilia Moiseev.
+      © Copyright 2022-2025, Ilia Moiseev.
       <br/>
     
   </p>
 </div>
       
         <div class="footer-item">
-
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>
@@ -619,12 +588,10 @@ invokes opencv imread on image and returns it if it exists.</p>
     </div>
   
   
-  
     <div class="footer-items__end">
       
-        <div class="footer-item">
-<p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
 </p></div>
       
     </div>

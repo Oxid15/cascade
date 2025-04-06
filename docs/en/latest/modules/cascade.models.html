@@ -2,48 +2,48 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>cascade.models &#8212; cascade 0.14.2 documentation</title>
+    <title>cascade.models &#8212; cascade 0.15.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../sphinx-design.min.css?v=87e54e7c" />
-    <link rel="stylesheet" type="text/css" href="../css/custom.css?v=9cb1bd10" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/pydata-sphinx-theme.css?v=3ab4e28d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=9cb1bd10" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="../documentation_options.js?v=0dc20415"></script>
-    <script src="../doctools.js?v=9a2dae69"></script>
-    <script src="../sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../clipboard.min.js?v=a7894cd8"></script>
-    <script src="../copybutton.js?v=f281be69"></script>
-    <script src="../design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/documentation_options.js?v=52d5597a"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
     <script>
@@ -60,12 +60,10 @@
             </script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'modules/cascade.models';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
-    <link rel="icon" href="../logo_sq.svg"/>
+    <link rel="icon" href="../_static/logo_sq.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="cascade.repos" href="cascade.repos.html" />
@@ -79,23 +77,19 @@
 
   
   
-  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
-  
-  <div id="pst-scroll-pixel-helper"></div>
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -117,29 +111,19 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
-
-  <div class="pst-async-banner-revealer d-none">
-  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
-</div>
-
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
-  </button>
+  </label>
   
-  
-  <div class="col-lg-3 navbar-header-items__start">
+  <div class="navbar-header-items__start">
     
       <div class="navbar-item">
-
-  
-    
   
 
 <a class="navbar-brand logo" href="../index.html">
-  
   
   
   
@@ -149,8 +133,8 @@
       
     
     
-    <img src="../logo_light.svg" class="logo__image only-light" alt="cascade 0.14.2 documentation - Home"/>
-    <script>document.write(`<img src="../logo_dark.svg" class="logo__image only-dark" alt="cascade 0.14.2 documentation - Home"/>`);</script>
+    <img src="../logo_light.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../logo_dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
   
 </a></div>
@@ -159,21 +143,12 @@
 <script>
 document.write(`
   <div class="version-switcher__container dropdown">
-    <button id="pst-version-switcher-button-2"
-      type="button"
-      class="version-switcher__button btn btn-sm dropdown-toggle"
-      data-bs-toggle="dropdown"
-      aria-haspopup="listbox"
-      aria-controls="pst-version-switcher-list-2"
-      aria-label="Version switcher list"
-    >
-      Choose version  <!-- this text may get changed later by javascript -->
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      latest  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
-    <div id="pst-version-switcher-list-2"
-      class="version-switcher__menu dropdown-menu list-group-flush py-0"
-      role="listbox" aria-labelledby="pst-version-switcher-button-2">
-      <!-- dropdown will be populated by javascript on page load -->
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
     </div>
   </div>
 `);
@@ -181,41 +156,47 @@ document.write(`
     
   </div>
   
+  
   <div class="col-lg-9 navbar-header-items">
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item">
-<nav>
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
-    Tutorial
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../howtos/howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../howtos/howtos.html">
-    How-to guides
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations/explanations.html">
-    Explanations
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="modules.html">
-    API reference
-  </a>
-</li>
-
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
       
@@ -226,32 +207,28 @@ document.write(`
       
         <div class="navbar-item navbar-persistent--container">
           
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+  </button>
+`);
+</script>
         </div>
       
       
         <div class="navbar-item">
-
 <script>
 document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
 </script></div>
       
-        <div class="navbar-item"><ul class="navbar-icon-links"
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -262,8 +239,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
           
@@ -274,8 +251,8 @@ document.write(`
           
           
           
-          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Twitter</span></a>
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
         </li>
 </ul></div>
       
@@ -285,33 +262,27 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+  </button>
+`);
+</script>
     </div>
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
       <span class="fa-solid fa-outdent"></span>
-    </button>
+    </label>
   
 </div>
 
-    </header>
+    </nav>
   
-
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
-      
-      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -322,42 +293,44 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          
-          
-            <div class="navbar-item">
-<nav>
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
-    Tutorial
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
 
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../howtos/howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../howtos/howtos.html">
-    How-to guides
-  </a>
-</li>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
 
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations/explanations.html">
-    Explanations
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="modules.html">
-    API reference
-  </a>
-</li>
-
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
   </ul>
 </nav></div>
-          
         
       </div>
     
@@ -366,18 +339,17 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
-
 <script>
 document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
   </button>
 `);
 </script></div>
         
-          <div class="navbar-item"><ul class="navbar-icon-links"
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -388,8 +360,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
           
@@ -400,8 +372,8 @@ document.write(`
           
           
           
-          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Twitter</span></a>
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
         </li>
 </ul></div>
         
@@ -410,8 +382,7 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-<nav class="bd-docs-nav bd-links"
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
@@ -446,13 +417,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main" role="main">
+      <main id="main-content" class="bd-main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article d-print-none">
+              <div class="bd-header-article">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -461,8 +432,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb" class="d-print-none">
-  <ul class="bd-breadcrumbs">
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
@@ -487,7 +458,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article">
+                <article class="bd-article" role="main">
                   
   <section id="cascade-models">
 <h1>cascade.models<a class="headerlink" href="#cascade-models" title="Link to this heading">#</a></h1>
@@ -586,6 +557,11 @@ can be put either in params or meta_prefix</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.add_config">
+<span class="sig-name descname"><span class="pre">add_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/models/model.html#Model.add_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.add_config" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.Model.add_file">
 <span class="sig-name descname"><span class="pre">add_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/model.html#Model.add_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.add_file" title="Link to this definition">#</a></dt>
 <dd><p>Add additional file artifact to the model
@@ -601,6 +577,11 @@ present when calling save()</p></li>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cascade.models.Model.add_log">
+<span class="sig-name descname"><span class="pre">add_log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/models/model.html#Model.add_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Model.add_log" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.Model.add_log_callback">
@@ -759,7 +740,7 @@ automatically</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="cascade.models.ModelModifier">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">ModelModifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/models/model.html#ModelModifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.ModelModifier" title="Link to this definition">#</a></dt>
-<dd><p>Analog of dataset’s Modifier. Can be used to chain
+<dd><p>The Dataset’s Modifier for Models. Can be used to chain
 two models in one.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cascade.models.ModelModifier.__init__">
@@ -791,214 +772,6 @@ the object and its properties.</p>
 
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.models.BasicTrainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">BasicTrainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/models/trainer.html#BasicTrainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer" title="Link to this definition">#</a></dt>
-<dd><p>The most common of concrete Trainers.
-Trains a model for a certain amount of epochs.
-Can start from checkpoint if model file exists.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.BasicTrainer.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ModelRepo</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/trainer.html#BasicTrainer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>repo</strong> (<em>Union</em><em>[</em><em>ModelRepo</em><em>, </em><em>str</em><em>]</em>) – Either repo or path to it</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.BasicTrainer.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/cascade/models/trainer.html#BasicTrainer.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer.get_meta" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><p><strong>meta</strong> – A list where first element is this object’s metadata.
-All other elements represent the other stages of pipeline if present.</p>
-<p>Meta can be anything that is worth to document about
-the object and its properties.</p>
-<p>Meta is a list (see Meta type alias) to allow the formation of pipelines.</p>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Meta</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.BasicTrainer.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_from</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/trainer.html#BasicTrainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.BasicTrainer.train" title="Link to this definition">#</a></dt>
-<dd><p>Trains, evaluates and saves given model. If specified, loads model from checkpoint.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> – Model
-a model to be trained or which to load from line specified in <code class="docutils literal notranslate"><span class="pre">start_from</span></code></p></li>
-<li><p><strong>train_data</strong> – Iterable
-train data to be passed to model’s fit()</p></li>
-<li><p><strong>test_data</strong> – Iterable, optional
-test data to be passed to model’s evaluate()</p></li>
-<li><p><strong>train_kwargs</strong> – Dict, optional
-arguments for fit()</p></li>
-<li><p><strong>test_kwargs</strong> – Dict, optional
-arguments for evaluate() - the most common is the dict of metrics</p></li>
-<li><p><strong>epochs</strong> – int, optional
-how many times to repeat training on data</p></li>
-<li><p><strong>start_from</strong> – str, optional
-name or index of line from which to start
-starts from the latest model in line</p></li>
-<li><p><strong>eval_strategy</strong> – int, optional
-Evaluation will take place every <code class="docutils literal notranslate"><span class="pre">eval_strategy</span></code> epochs. If None - the strategy
-is <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">evaluation</span></code>.</p></li>
-<li><p><strong>save_strategy</strong> – int, optional
-Saving will take place every <code class="docutils literal notranslate"><span class="pre">save_strategy</span></code> epochs. Meta will be saved anyway.
-If None - the strategy is ‘save only meta’.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.models.Trainer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">Trainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ModelRepo</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/models/trainer.html#Trainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Trainer" title="Link to this definition">#</a></dt>
-<dd><p>A class that encapsulates training, evaluation and saving of models.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Trainer.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ModelRepo</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/trainer.html#Trainer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Trainer.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>repo</strong> (<em>Union</em><em>[</em><em>ModelRepo</em><em>, </em><em>str</em><em>]</em>) – Either repo or path to it</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Trainer.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/cascade/models/trainer.html#Trainer.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Trainer.get_meta" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><p><strong>meta</strong> – A list where first element is this object’s metadata.
-All other elements represent the other stages of pipeline if present.</p>
-<p>Meta can be anything that is worth to document about
-the object and its properties.</p>
-<p>Meta is a list (see Meta type alias) to allow the formation of pipelines.</p>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Meta</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Trainer.train">
-<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#cascade.models.Model" title="cascade.models.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/trainer.html#Trainer.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Trainer.train" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="cascade.models.Workspace">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cascade.models.</span></span><span class="sig-name descname"><span class="pre">Workspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace" title="Link to this definition">#</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'.json'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'.yml'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'.yaml'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_repo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>description</strong> – String description of an object</p></li>
-<li><p><strong>tags</strong> (<em>Iterable</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The list of tags to be added</p></li>
-</ul>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference internal" href="cascade.base.html#cascade.base.MetaHandler" title="cascade.base.MetaHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.base.MetaHandler</span></code></a></p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.add_repo">
-<span class="sig-name descname"><span class="pre">add_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ModelRepo</span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.add_repo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.add_repo" title="Link to this definition">#</a></dt>
-<dd><p>Creates and adds repo to the Workspace</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of the repo</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Created repo</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ModelRepo</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the repo already exists</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.get_default">
-<span class="sig-name descname"><span class="pre">get_default</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ModelRepo</span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.get_default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.get_default" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.get_meta">
-<span class="sig-name descname"><span class="pre">get_meta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.get_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.get_meta" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><p><strong>meta</strong> – A list where first element is this object’s metadata.
-All other elements represent the other stages of pipeline if present.</p>
-<p>Meta can be anything that is worth to document about
-the object and its properties.</p>
-<p>Meta is a list (see Meta type alias) to allow the formation of pipelines.</p>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Meta</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.get_repo_names">
-<span class="sig-name descname"><span class="pre">get_repo_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.get_repo_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.get_repo_names" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.load_model_meta">
-<span class="sig-name descname"><span class="pre">load_model_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.load_model_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.load_model_meta" title="Link to this definition">#</a></dt>
-<dd><p>Loads metadata of a model from disk</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>str</em>) – model slug e.g. <code class="docutils literal notranslate"><span class="pre">fair_squid_of_bliss</span></code></p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Model metadata</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Meta</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>FileNotFoundError</strong> – Raises if failed to find the model with slug specified</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.reload">
-<span class="sig-name descname"><span class="pre">reload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.reload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.reload" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="cascade.models.Workspace.set_default">
-<span class="sig-name descname"><span class="pre">set_default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/cascade/models/workspace.html#Workspace.set_default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cascade.models.Workspace.set_default" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 </section>
 
 
@@ -1006,10 +779,11 @@ the object and its properties.</p>
               
               
               
-              
-              
-                <footer class="prev-next-footer d-print-none">
+                <footer class="bd-footer-article">
                   
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="cascade.metrics.html"
@@ -1029,7 +803,10 @@ the object and its properties.</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
+</div></div>
+  
 </div>
+
                 </footer>
               
             </div>
@@ -1038,14 +815,11 @@ the object and its properties.</p>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
+  <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+  <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.BasicModel"><code class="docutils literal notranslate"><span class="pre">BasicModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.BasicModel.evaluate"><code class="docutils literal notranslate"><span class="pre">BasicModel.evaluate()</span></code></a></li>
@@ -1060,7 +834,9 @@ the object and its properties.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.BasicModelModifier"><code class="docutils literal notranslate"><span class="pre">BasicModelModifier</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model.__init__"><code class="docutils literal notranslate"><span class="pre">Model.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model.add_config"><code class="docutils literal notranslate"><span class="pre">Model.add_config()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model.add_file"><code class="docutils literal notranslate"><span class="pre">Model.add_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model.add_log"><code class="docutils literal notranslate"><span class="pre">Model.add_log()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model.add_log_callback"><code class="docutils literal notranslate"><span class="pre">Model.add_log_callback()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model.add_metric"><code class="docutils literal notranslate"><span class="pre">Model.add_metric()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Model.evaluate"><code class="docutils literal notranslate"><span class="pre">Model.evaluate()</span></code></a></li>
@@ -1080,34 +856,10 @@ the object and its properties.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.ModelModifier.get_meta"><code class="docutils literal notranslate"><span class="pre">ModelModifier.get_meta()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.BasicTrainer"><code class="docutils literal notranslate"><span class="pre">BasicTrainer</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.BasicTrainer.__init__"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.BasicTrainer.get_meta"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.get_meta()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.BasicTrainer.train"><code class="docutils literal notranslate"><span class="pre">BasicTrainer.train()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Trainer"><code class="docutils literal notranslate"><span class="pre">Trainer</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Trainer.__init__"><code class="docutils literal notranslate"><span class="pre">Trainer.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Trainer.get_meta"><code class="docutils literal notranslate"><span class="pre">Trainer.get_meta()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Trainer.train"><code class="docutils literal notranslate"><span class="pre">Trainer.train()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace"><code class="docutils literal notranslate"><span class="pre">Workspace</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.__init__"><code class="docutils literal notranslate"><span class="pre">Workspace.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.add_repo"><code class="docutils literal notranslate"><span class="pre">Workspace.add_repo()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.get_default"><code class="docutils literal notranslate"><span class="pre">Workspace.get_default()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.get_meta"><code class="docutils literal notranslate"><span class="pre">Workspace.get_meta()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.get_repo_names"><code class="docutils literal notranslate"><span class="pre">Workspace.get_repo_names()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.load_model_meta"><code class="docutils literal notranslate"><span class="pre">Workspace.load_model_meta()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.reload"><code class="docutils literal notranslate"><span class="pre">Workspace.reload()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cascade.models.Workspace.set_default"><code class="docutils literal notranslate"><span class="pre">Workspace.set_default()</span></code></a></li>
-</ul>
-</li>
 </ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
   <div class="tocsection sourcelink">
     <a href="../_sources/modules/cascade.models.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
@@ -1128,8 +880,8 @@ the object and its properties.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script src="../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1137,19 +889,17 @@ the object and its properties.</p>
     <div class="footer-items__start">
       
         <div class="footer-item">
-
   <p class="copyright">
     
-      © Copyright 2022-2024, Ilia Moiseev.
+      © Copyright 2022-2025, Ilia Moiseev.
       <br/>
     
   </p>
 </div>
       
         <div class="footer-item">
-
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>
@@ -1157,12 +907,10 @@ the object and its properties.</p>
     </div>
   
   
-  
     <div class="footer-items__end">
       
-        <div class="footer-item">
-<p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
 </p></div>
       
     </div>

@@ -1,0 +1,1445 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tutorial &#8212; cascade 0.14.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../css/custom.css?v=9cb1bd10" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../documentation_options.js?v=0dc20415"></script>
+    <script src="../doctools.js?v=9a2dae69"></script>
+    <script src="../sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../clipboard.min.js?v=a7894cd8"></script>
+    <script src="../copybutton.js?v=f281be69"></script>
+    <script src="../design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-KD8QDKDMD7');
+            </script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-KD8QDKDMD7');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/tutorials';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../logo_sq.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How-to guides" href="../howtos/howtos.html" />
+    <link rel="prev" title="Welcome to Cascade!" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../logo_light.svg" class="logo__image only-light" alt="cascade 0.14.2 documentation - Home"/>
+    <script>document.write(`<img src="../logo_dark.svg" class="logo__image only-dark" alt="cascade 0.14.2 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Tutorial
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../howtos/howtos.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations/explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../modules/modules.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Tutorial
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../howtos/howtos.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations/explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../modules/modules.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Tutorial</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading">#</a></h1>
+<p>Tutorial is a set of lessons that will teach you
+basics of Cascade. Lessons are connected in a single project
+and depend on each other.
+You can grasp the essence of how
+you can use the library for your own projects, while
+completing this one.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
+<p>Install the latest version using pip</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml
+</pre></div>
+</div>
+<p>Cascade has a set of optional dependencies, which can be installed with the following commands</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>opencv<span class="o">]</span><span class="w">   </span><span class="c1"># Use opencv as image backend</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pandera<span class="o">]</span><span class="w">  </span><span class="c1"># Validate pandas dataframes with Pandera</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pil<span class="o">]</span><span class="w">      </span><span class="c1"># Use Pillow as image backend</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pydantic<span class="o">]</span><span class="w"> </span><span class="c1"># Use data validation modifiers</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>sklearn<span class="o">]</span><span class="w">  </span><span class="c1"># Scikit-learn integration</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>torch<span class="o">]</span><span class="w">    </span><span class="c1"># PyTorch integration</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>view<span class="o">]</span><span class="w">     </span><span class="c1"># Cascade viewers based on dash</span>
+pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>all<span class="o">]</span><span class="w">      </span><span class="c1"># Installs everything</span>
+</pre></div>
+</div>
+<p>If you have completed the tutorial you can see the <a class="reference internal" href="../howtos/howtos.html"><span class="std std-ref">How-to guides</span></a> section
+for more specific and complex workflows.</p>
+</section>
+<section id="pipelines-basics">
+<h2>1. Pipelines basics<a class="headerlink" href="#pipelines-basics" title="Link to this heading">#</a></h2>
+<p>In this tutorial you will learn basic pipeline building blocks of Cascade.
+This is the first Cascade tutorial from a series. All of the tutorials are
+meant to form a single project and can be thought of as a series of lessons.</p>
+<p>Cascade pipelines allow building data processing routines from interchangeable
+steps called <code class="docutils literal notranslate"><span class="pre">Datasets</span></code> and <code class="docutils literal notranslate"><span class="pre">Modifiers</span></code>.</p>
+<p>Datasets are the sources of data. In the first step let’s make a Dataset
+for <code class="docutils literal notranslate"><span class="pre">digits</span></code> from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_digits</span>
+
+
+<span class="k">class</span> <span class="nc">DigitsDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Minimal setup for a Dataset is a <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> and <code class="docutils literal notranslate"><span class="pre">__len__</span></code> methods.
+Now we can do basic access.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">DigitsDataset</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Cascade Datasets are not only a system of data organization. They
+allow using rich set of defaults for data manipulation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">cascade.data</span> <span class="kn">import</span> <span class="n">ApplyModifier</span>
+
+
+<span class="k">def</span> <span class="nf">add_noise</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="n">ds_noise</span> <span class="o">=</span> <span class="n">ApplyModifier</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ds_noise</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Modifiers</span></code> take datasets and transform their values.
+In previous example we added noise to digits by using <code class="docutils literal notranslate"><span class="pre">ApplyModifier</span></code>
+and created new noisy dataset.</p>
+<p>We can augment our data by concatenating those two datasets.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.data</span> <span class="kn">import</span> <span class="n">Concatenator</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">Concatenator</span><span class="p">([</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds_noise</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">))</span>
+</pre></div>
+</div>
+<section id="further-reading">
+<h3>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../howtos/pipeline_building.html"><span class="std std-ref">How to build a Pipeline</span></a></p></li>
+<li><p><a class="reference internal" href="../modules/dataset_zoo.html"><span class="std std-ref">Dataset Zoo</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="metadata">
+<h2>2. Metadata<a class="headerlink" href="#metadata" title="Link to this heading">#</a></h2>
+<p>Data and model training in Cascade is based on metadata. It is the main
+reason why wrappers should be created - they allow automatically capturing
+info about underlying objects that can be logged and analyzed later.</p>
+<p>To see what it looks like,
+you can call <code class="docutils literal notranslate"><span class="pre">get_meta</span></code> method on a Cascade object. In the next
+step we will try calling it on the pipeline that was made on
+the Pipelines step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[[{</span><span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;len&#39;</span><span class="p">:</span> <span class="mi">1797</span><span class="p">,</span>
+            <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;__main__.DigitsDataset&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;dataset&#39;</span><span class="p">}],</span>
+        <span class="p">[{</span><span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;len&#39;</span><span class="p">:</span> <span class="mi">1797</span><span class="p">,</span>
+            <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;cascade.data.apply_modifier.ApplyModifier&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;dataset&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;len&#39;</span><span class="p">:</span> <span class="mi">1797</span><span class="p">,</span>
+            <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;__main__.DigitsDataset&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;dataset&#39;</span><span class="p">}]],</span>
+<span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="s1">&#39;len&#39;</span><span class="p">:</span> <span class="mi">3594</span><span class="p">,</span>
+<span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;cascade.data.concatenator.Concatenator&#39;</span><span class="p">,</span>
+<span class="s1">&#39;num_concatenated&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+<span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;dataset&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>You can see all the pipeline stages in this metadata. It is a list of
+dicts with JSON-serializable fields, each block in this list represents a pipeline step.</p>
+<p>Datasets, Models and some other objects have metadata. It is a very flexible tool, that
+can be easily customized to record valuable info about training process. We will see the power
+of it in the following tutorials.</p>
+</section>
+<section id="experiments-basics">
+<h2>3. Experiments basics<a class="headerlink" href="#experiments-basics" title="Link to this heading">#</a></h2>
+<p>Cascade provides a rich set of ML-experiment tracking tools.
+You can easily track history of model changes, save and restore models
+in a structured manner along with metadata.</p>
+<p>In this step we create a wrapper around logistic regression model. Minimal setup
+for the model is not strictly defined as in Dataset case. We define <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">predict</span></code>.
+<code class="docutils literal notranslate"><span class="pre">BasicModel</span></code> will handle everything else for us - like saving and loading for example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.models</span> <span class="kn">import</span> <span class="n">BasicModel</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+
+<span class="k">class</span> <span class="nc">LR</span><span class="p">(</span><span class="n">BasicModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">penalty</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="n">penalty</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can create and fit the model now using the dataset from the Pipelines step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LR</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To track important hyperparameters and how they influence metrics, Cascade Models feature special field
+called <code class="docutils literal notranslate"><span class="pre">params</span></code>. This is an empty dict that you can fill with any (serializable) data. Cascade custom
+JSON serializer can also serialize some non-default things like numpy arrays.</p>
+<p>Here we fill our param externally, but could also do it above inside the class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;penalty&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;l2&quot;</span>
+</pre></div>
+</div>
+<p>Model lines are basic structured storage units in Cascade. They represent a lineage of
+a model. Usually they represent a single training run, but can be used arbitrarily.</p>
+<p>In this step we create a line and save our new model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.lines</span> <span class="kn">import</span> <span class="n">ModelLine</span>
+
+<span class="n">line</span> <span class="o">=</span> <span class="n">ModelLine</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">LR</span><span class="p">)</span>
+<span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Lines handle storage of models and their metadata and can retrieve saved models by index or a name.</p>
+<p>In the next step we load the model and infer it on a dataset.</p>
+<p>The line knows little about models it manages - we provided a class of our model
+to be able to restore it correctly when loading.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Lines also enhance model’s meta by recording useful environment information.
+Let’s see what was saved automatically about this experiment. We load model
+meta with a default line method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">load_model_meta</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;created_at&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-07-14T21:08:58.466812+00:00&#39;</span><span class="p">,</span>
+<span class="s1">&#39;cwd&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/ilia/local/cascade_proj/cascade/cascade/docs/source/tutorials&#39;</span><span class="p">,</span>
+<span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="s1">&#39;git_commit&#39;</span><span class="p">:</span> <span class="s1">&#39;62de43afb7dbf51afe2d08dd0825366661c76055&#39;</span><span class="p">,</span>
+<span class="s1">&#39;git_uncommitted_changes&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;M &#39;</span>
+                            <span class="s1">&#39;cascade/docs/source/tutorials/experiment_basics.rst&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;M cascade/docs/source/tutorials/tutorials.py&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;M cascade/docs/source/tutorials/tutorials.rst</span><span class="se">\n</span><span class="s1">&#39;</span>
+                            <span class="s1">&#39;?? cascade/docs/source/tutorials/line/&#39;</span><span class="p">],</span>
+<span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;my-pc-name&#39;</span><span class="p">,</span>
+<span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;metrics&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;__main__.LR&#39;</span><span class="p">,</span>
+<span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;penalty&#39;</span><span class="p">:</span> <span class="s1">&#39;l2&#39;</span><span class="p">},</span>
+<span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/ilia/local/cascade_proj/cascade_repo/cascade/docs/source/tutorials/line/00000&#39;</span><span class="p">,</span>
+<span class="s1">&#39;python_version&#39;</span><span class="p">:</span> <span class="s1">&#39;3.11.0rc1 (main, Aug 12 2022, 10:02:14) [GCC 11.2.0]&#39;</span><span class="p">,</span>
+<span class="s1">&#39;saved_at&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-07-14T21:09:01.453262+00:00&#39;</span><span class="p">,</span>
+<span class="s1">&#39;slug&#39;</span><span class="p">:</span> <span class="s1">&#39;imperial_magenta_cheetah&#39;</span><span class="p">,</span>
+<span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span>
+<span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="s1">&#39;ilia&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<section id="id1">
+<h3>Further reading<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../howtos/model_training.html"><span class="std std-ref">How to train a model</span></a></p></li>
+<li><p><a class="reference internal" href="../howtos/model_training_trainers.html"><span class="std std-ref">How to train a model with Trainer</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="custom-meta-and-versioning">
+<h2>4. Custom Meta and Versioning<a class="headerlink" href="#custom-meta-and-versioning" title="Link to this heading">#</a></h2>
+<p>Metadata is a very flexible tool. It contains lots of useful info by default,
+and can be customized.</p>
+<p>In previous steps of the tutorial we created a dataset with an important
+parameter, that was not recorded in our meta. If it changes in code, we wouldn’t
+see the effect in our logs. Now we can fix that issue.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.lines</span> <span class="kn">import</span> <span class="n">DataLine</span>
+
+<span class="n">ds</span><span class="o">.</span><span class="n">update_meta</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;long_description&quot;</span><span class="p">:</span> <span class="s2">&quot;This is digits pipeline. It was augmented with some uniform noise&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;noise_magnitude&quot;</span><span class="p">:</span> <span class="n">NOISE_MAGNITUDE</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>DataLines are the same thing as ModelLine but for data pipelines. You can use
+them to track only metadata of your pipelines or even save and load whole pipelines
+to reproduce an experiment.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dataline</span> <span class="o">=</span> <span class="n">DataLine</span><span class="p">(</span><span class="s2">&quot;dataline&quot;</span><span class="p">)</span>
+<span class="n">dataline</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Unlike models, data pipelines are not numbered, but versioned.
+Versions are derived from metadata of a pipeline and consist of two
+parts - major and minor.</p>
+<p>Let’s see how it works.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="o">=</span> <span class="n">dataline</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">version</span><span class="p">)</span> <span class="c1"># 0.1</span>
+</pre></div>
+</div>
+<p>The starting version is <code class="docutils literal notranslate"><span class="pre">0.1</span></code> and then, when metadata changes,
+parts of the version are bumped automatically. When saving
+the version of a dataset that already exists, line will
+notice that and overwrite older record with a new object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">update_meta</span><span class="p">({</span><span class="s2">&quot;detail_i_almost_forgot&quot;</span><span class="p">:</span> <span class="s2">&quot;Changes in meta bump minor version&quot;</span><span class="p">})</span>
+<span class="n">version</span> <span class="o">=</span> <span class="n">dataline</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">version</span><span class="p">)</span> <span class="c1"># 0.2</span>
+
+<span class="n">dataline</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In previous example minor version was bumped by changing the part of the
+pipeline’s meta.</p>
+<p>In the next one we add a new pipeline stage, which is what will bump
+a major part of the version and we will see <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">changed_ds</span> <span class="o">=</span> <span class="n">ApplyModifier</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">add_noise</span><span class="p">)</span>
+<span class="n">dataline</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">changed_ds</span><span class="p">)</span>
+<span class="n">version</span> <span class="o">=</span> <span class="n">dataline</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">changed_ds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">version</span><span class="p">)</span> <span class="c1"># 1.0</span>
+</pre></div>
+</div>
+<p>If we plug in an old dataset it will still get us the same version.
+As long as meta is the same. Using version string we can load saved
+pipeline object from disk.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">version</span> <span class="o">=</span> <span class="n">dataline</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">version</span><span class="p">)</span> <span class="c1"># 0.2</span>
+
+<span class="n">loaded_ds</span> <span class="o">=</span> <span class="n">dataline</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;0.2&quot;</span><span class="p">)</span>
+<span class="n">version</span> <span class="o">=</span> <span class="n">dataline</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">loaded_ds</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">version</span><span class="p">)</span> <span class="c1"># 0.2</span>
+</pre></div>
+</div>
+</section>
+<section id="metrics-and-evaluation">
+<h2>5. Metrics and Evaluation<a class="headerlink" href="#metrics-and-evaluation" title="Link to this heading">#</a></h2>
+<p>Metrics are first-class citizens in Cascade.
+For every ML-project they should be a central aspect.</p>
+<p>Metric API is very flexible - you have a freedom to define metrics
+in several ways. First case is the regular way metrics are usually defined
+in projects - as functions.</p>
+<p>Metric function can be passed in the default <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> method of <code class="docutils literal notranslate"><span class="pre">BasicModel</span></code>.
+Evaluation of the model will return nothing, but fill its <code class="docutils literal notranslate"><span class="pre">metrics</span></code> field with a list
+of metrics.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">f1_score</span>
+
+
+<span class="k">def</span> <span class="nf">f1</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">)</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">loaded_ds</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">loaded_ds</span><span class="p">]</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="n">f1</span><span class="p">])</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Metric</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">created_at</span><span class="o">=</span><span class="s2">&quot;2024-07-29 19:41:09.344039+00:00&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Let’s try defining a metric in another, more flexible way. We need to implement
+a descendant of <code class="docutils literal notranslate"><span class="pre">cascade.metrics.Metric</span></code> class. The one required method is <code class="docutils literal notranslate"><span class="pre">compute</span></code>
+that should return value and also set <code class="docutils literal notranslate"><span class="pre">self.value</span></code>.</p>
+<p>After that <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> can be called with a list of <code class="docutils literal notranslate"><span class="pre">Metric</span></code> objects.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.metrics</span> <span class="kn">import</span> <span class="n">Metric</span>
+
+
+<span class="k">class</span> <span class="nc">Accuracy</span><span class="p">(</span><span class="n">Metric</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;acc&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">g</span> <span class="o">==</span> <span class="n">p</span> <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">)])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+
+
+<span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="n">Accuracy</span><span class="p">()])</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">Metric</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">created_at</span><span class="o">=</span><span class="mi">2024</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">29</span> <span class="mi">19</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="mf">33.435828</span><span class="o">+</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">),</span>
+ <span class="n">Accuracy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">acc</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">created_at</span><span class="o">=</span><span class="mi">2024</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">29</span> <span class="mi">19</span><span class="p">:</span><span class="mi">47</span><span class="p">:</span><span class="mf">33.437724</span><span class="o">+</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Metrics are saved and written in metadata automatically after calling <code class="docutils literal notranslate"><span class="pre">evaluate</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">load_model_meta</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[{</span><span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;created_at&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-07-28T14:47:30.451860+00:00&#39;</span><span class="p">,</span>
+<span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;my-pc-name&#39;</span><span class="p">,</span>
+<span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;metrics&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;created_at&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-07-28T14:47:32.860739+00:00&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;f1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;created_at&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-07-28T14:47:32.862089+00:00&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;acc&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}],</span>
+<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;__main__.LR&#39;</span><span class="p">,</span>
+<span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;penalty&#39;</span><span class="p">:</span> <span class="s1">&#39;l2&#39;</span><span class="p">},</span>
+<span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/home/ilia/local/cascade_proj/line/00001&#39;</span><span class="p">,</span>
+<span class="s1">&#39;python_version&#39;</span><span class="p">:</span> <span class="s1">&#39;3.11.0rc1 (main, Aug 12 2022, 10:02:14) [GCC 11.2.0]&#39;</span><span class="p">,</span>
+<span class="s1">&#39;saved_at&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-07-28T14:47:32.902304+00:00&#39;</span><span class="p">,</span>
+<span class="s1">&#39;slug&#39;</span><span class="p">:</span> <span class="s1">&#39;pompous_lori_from_lemuria&#39;</span><span class="p">,</span>
+<span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span>
+<span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="s1">&#39;ilia&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+</section>
+<section id="meta-defaults">
+<h2>6. Meta defaults<a class="headerlink" href="#meta-defaults" title="Link to this heading">#</a></h2>
+<p>Cascade objects feature methods for managing some useful meta default fields.</p>
+<p>For example descriptions - they can be useful if you want to convey basic information
+about the model not only in code, but in saved metadata of this model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">&quot;This is simple linear model&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Tags can be used to identify certain models, or filter them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">tag</span><span class="p">([</span><span class="s2">&quot;tutorial&quot;</span><span class="p">,</span> <span class="s2">&quot;dummy&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Links allow connecting a model to any relevant external media.
+You can link a file using its URI, or a Cascade object like training data
+or some other related model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;training_file&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="vm">__file__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are also methods that allow removing certain fields. This part is mostly self-explanatory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">remove_tag</span><span class="p">(</span><span class="s2">&quot;dummy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">remove_link</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we removed tag using its name and the first link using its ID. It is the dataset link, just for example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_meta</span><span class="p">())</span>
+<span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="repos-and-workspaces">
+<h2>7. Repos and Workspaces<a class="headerlink" href="#repos-and-workspaces" title="Link to this heading">#</a></h2>
+<p>This parts steps aside from previous task to demonstrate basic Cascade storage structure.
+Lines are not the only tool to organize model storage. They themselves can be unified using Repo.
+Repos can include both Data- and ModelLines. They can be used for access to a bunch of models and
+are basic input for most of Cascade operations.</p>
+<p>The following will give <code class="docutils literal notranslate"><span class="pre">demo_repo/00000</span></code> folder structure.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.repos</span> <span class="kn">import</span> <span class="n">Repo</span>
+
+<span class="n">demo_repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;demo_repo&quot;</span><span class="p">)</span>
+<span class="n">demo_modelline</span> <span class="o">=</span> <span class="n">demo_repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">line_type</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+<span class="n">demo_dataline</span> <span class="o">=</span> <span class="n">demo_repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">line_type</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sometimes Repos are piling up and to organize them effectively a Workspace was created. This is the highest unit
+of experiment organization. Best practice will be having one Workspace per ML-project. Every container
+share similar API. Using <code class="docutils literal notranslate"><span class="pre">add_something</span></code> methods you can create or just load an object if it already exists.</p>
+<p>The following will give <code class="docutils literal notranslate"><span class="pre">demo_workspace/repo/line</span></code> folder structure.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.workspaces</span> <span class="kn">import</span> <span class="n">Workspace</span>
+
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Workspace</span><span class="p">(</span><span class="s2">&quot;demo_workspace&quot;</span><span class="p">)</span>
+<span class="n">rp</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">add_repo</span><span class="p">(</span><span class="s2">&quot;repo&quot;</span><span class="p">)</span>
+<span class="n">ln</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="cli">
+<h2>8. CLI<a class="headerlink" href="#cli" title="Link to this heading">#</a></h2>
+<p>Cascade features simple command line interface to manage storage
+of your models, metadata and experiments. You can comment on models,
+edit tags, descriptions and manage artifacts from the command line.</p>
+<p>This tutorial is connected with Meta Defaults step
+since CLI allows editing meta defaults without writing special scripts for it.</p>
+<p>Go to the directory of previously created <code class="docutils literal notranslate"><span class="pre">line</span></code> and execute the following.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>status
+</pre></div>
+</div>
+<p>This is basic utility now just serves as a check that everything is okay with
+you installation and directory. Cascade will look for <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> file in the folder
+you are running a command and if found, output short description of what is in this folder.</p>
+<p>If everything is ok, previous command should output the following. If not, do not
+hesitate filling a GitHub issue.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>This is model_line of len 25
+</pre></div>
+</div>
+<p>To print the contents of objects metadata you can visit a folder of an object and run.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>cat
+</pre></div>
+</div>
+<p>This will give you a nice prettyprint of <code class="docutils literal notranslate"><span class="pre">meta.json</span></code> that will look something like this.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[{&#39;cascade_version&#39;: &#39;0.14.0-alpha&#39;,
+&#39;comments&#39;: [],
+&#39;created_at&#39;: &#39;2024-07-28 14:47:31.825546+00:00&#39;,
+&#39;description&#39;: None,
+&#39;item_cls&#39;: &quot;&lt;class &#39;__main__.LR&#39;&gt;&quot;,
+&#39;len&#39;: 25,
+&#39;links&#39;: [],
+&#39;name&#39;: &quot;&lt;class &#39;cascade.lines.model_line.ModelLine&#39;&gt;(3) items of &lt;class &quot;
+        &quot;&#39;cascade.models.basic_model.BasicModel&#39;&gt;&quot;,
+&#39;root&#39;: &#39;/home/ilia/local/cascade_proj/line&#39;,
+&#39;tags&#39;: [],
+&#39;type&#39;: &#39;model_line&#39;,
+&#39;updated_at&#39;: &#39;2024-07-31 20:03:03.111970+00:00&#39;}]
+</pre></div>
+</div>
+<p>For different objects commands are similar. For example to list tags of the current objects you run.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>tag<span class="w"> </span>ls
+</pre></div>
+</div>
+<p>Since no tags in this line yet, it wil show an empty list.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[]
+</pre></div>
+</div>
+<p>Let’s add two tags with one command and check.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>tag<span class="w"> </span>add<span class="w"> </span>one<span class="w"> </span>two
+cascade<span class="w"> </span>tag<span class="w"> </span>ls
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Now we remove one tag and check again.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>tag<span class="w"> </span>rm<span class="w"> </span>one
+cascade<span class="w"> </span>tag<span class="w"> </span>ls
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[&#39;two&#39;]
+</pre></div>
+</div>
+<p>Comments are whole separate thing to consider in Cascade. They proved to be very useful for logging your progress
+in a project. You can log your take on experiment results or your future plans inside a ModelLine, using comments as
+notes. Or you can add sequential comments to a model so that they will be recorded in its metadata.</p>
+<p>Comments differ from descriptions in this sense because they store username, host and date when comment was written.
+This allows to have a log of notes with time that you can use to track your progress and if used on a shared machine
+as a collaboration tool.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cascade<span class="w"> </span>comment<span class="w"> </span>add
+cascade<span class="w"> </span>comment<span class="w"> </span>ls
+</pre></div>
+</div>
+<p>After writing a command you will see a prompt for typing your comment in.
+When done, press enter and check your comment by doing similar ls command.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1, ilia, my-pc-name   hello mlops
+a few seconds before
+</pre></div>
+</div>
+</section>
+<section id="viewers">
+<h2>9. Viewers<a class="headerlink" href="#viewers" title="Link to this heading">#</a></h2>
+<p>After logging some amount of experiments with Cascade they can
+become harder to analyze. To allow analysis of information in meta
+Cascade features viewers. In this tutorial step basic MetricViewer will be
+considered.</p>
+<p>MetricViewer allows to map parameters of the model to its metrics.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.meta</span> <span class="kn">import</span> <span class="n">MetricViewer</span>
+
+<span class="n">mv</span> <span class="o">=</span> <span class="n">MetricViewer</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mv</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the output we can see all of the models we saved inside this line. Viewers usually accepts Repos, but can
+work with single lines also.</p>
+<p>This viewer reads all the metadata and build a pandas table around metric values.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>   line  num                       created_at                saved penalty        tags  comment_count  link_count name     value
+0  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0   f1  0.993826
+1  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0  acc  0.993879
+2  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1   f1  0.993826
+3  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1  acc  0.993879
+</pre></div>
+</div>
+<p>Let’s use metric viewer to identify the best parameter of penalty for this dataset. We will retrain the model,
+evaluate it and save in the same way as before.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LR</span><span class="p">(</span><span class="s2">&quot;l1&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;penalty&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;l1&quot;</span>
+<span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="n">Accuracy</span><span class="p">(),</span> <span class="n">f1</span><span class="p">])</span>
+
+<span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we display the table once again.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mv</span> <span class="o">=</span> <span class="n">MetricViewer</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mv</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It seems like l1 penalty gave slightly better results. Metric viewer can be used to identify optimal parameters
+according to metric values. Since <code class="docutils literal notranslate"><span class="pre">mv.table</span></code> is a pandas DataFrame you can do your own analysis and visualizations.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>   line  num                       created_at                saved penalty        tags  comment_count  link_count name     value
+0  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0   f1  0.993826
+1  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0  acc  0.993879
+2  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1   f1  0.993826
+3  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1  acc  0.993879
+4  line    3 2024-08-01 20:02:37.266971+00:00  a few seconds after      l1          []              0           0  acc  0.994992
+5  line    3 2024-08-01 20:02:37.266971+00:00  a few seconds after      l1          []              0           0   f1  0.994946
+</pre></div>
+</div>
+<p>Metric viewer as other Cascade viewers has a special dash-based web interface. You can install dash and run it with
+CLI command or from the python code using <code class="docutils literal notranslate"><span class="pre">serve()</span></code> method.</p>
+<p>After installing dash which is an optional dependency for web-based interfaces, you can run this.
+The command will start a server on the port 8050 by default which you can open in your browser.
+Go to <code class="docutils literal notranslate"><span class="pre">localhost:8050</span></code> to see the table of MetricViewer.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>cascade view metric
+</pre></div>
+</div>
+</section>
+<section id="data-validation">
+<h2>11. Data Validation<a class="headerlink" href="#data-validation" title="Link to this heading">#</a></h2>
+<p>Data quality in ML projects is as important as the quality of the model.
+This is why Cascade focuses on integrated and effortless data validation.</p>
+<p>When the project grows, it becomes hard to control what is going on with
+different Modifiers. Some may accept on certain formats of data and it is
+hard to explicitly define those requirements within Modifier API.</p>
+<p>This is where SchemaModifiers come in. They are special kind of Modifiers
+that allow defining input schema for when we do <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>.</p>
+<p>Schema is defined using <code class="docutils literal notranslate"><span class="pre">pydantic</span></code> - an established tool for data validation
+and also an optional dependency, you’ll need to install it if you haven’t yet.</p>
+<p>The problem with our initial setup is that we operated with tuples, making
+our schema implicit. If we were to reuse our datasets later, it would be hard
+for us or other engineers to quickly grasp the return value layout and it will
+also be easy to introduce errors in datasets that will be hard to debug.</p>
+<p>Let’s define a simple schema for our dataset from the beginning of the tutorial.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="k">class</span> <span class="nc">LabeledImage</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="c1"># This is for numpy array</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;arbitrary_types_allowed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Previous part is how we define schema in pydantic. You can use complex
+schemas and Fields to place requirements on the input of your Modifiers.</p>
+<p>Let’s convert our dataset to a dataset with schema using this modifier.
+It will just wrap the input into a model.</p>
+<p>This is the entry point of data in our pipeline, so this part is important.
+However, we also can ensure data integrity inside of the pipeline.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.data</span> <span class="kn">import</span> <span class="n">SchemaModifier</span>
+
+<span class="k">class</span> <span class="nc">LabeledImageModifier</span><span class="p">(</span><span class="n">SchemaModifier</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">LabeledImage</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we define a simple constant padding transform that uses our pydantic model
+as an input schema for itself. Each time <code class="docutils literal notranslate"><span class="pre">self._dataset[idx]</span></code> is called, it will
+automatically check the returned value against our model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pad5</span><span class="p">(</span><span class="n">SchemaModifier</span><span class="p">):</span>
+    <span class="n">in_schema</span> <span class="o">=</span> <span class="n">LabeledImage</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+        <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">new_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">h</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">w</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="n">new_image</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">h</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">image</span>
+        <span class="n">item</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">new_image</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+<p>Here we build a pipeline and augment our data using padding.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">LabeledImageModifier</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="n">pad</span> <span class="o">=</span> <span class="n">Pad5</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">Concatenator</span><span class="p">([</span><span class="n">pad</span><span class="p">,</span> <span class="n">ds</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Let’s see the output.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Nothing special - validators are made to be effortless. They allow avoiding
+writing manual checks in every instance of a dataset. We just define a schema
+inside the whole class of datasets and they automatically check values that they
+accept. And the return values stay the same.</p>
+<p>Next example will show an actual case of input validation.</p>
+<p>We will purposefully define some erroneous data to place before our padding transform.
+In this case we mess up the type of a label. This seems to be very real practical situation
+that would easily pass in our previous setup at would take some time to debug.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FreakyImage</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;arbitrary_types_allowed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">EvilDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FreakyImage</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">18</span><span class="o">*</span><span class="mi">18</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;hehe&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">69</span>
+</pre></div>
+</div>
+<p>The following code will raise ValidationError, which we will catch and
+display the latest message.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.data</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+
+<span class="n">evil</span> <span class="o">=</span> <span class="n">EvilDataset</span><span class="p">()</span>
+<span class="n">evil</span> <span class="o">=</span> <span class="n">Pad5</span><span class="p">(</span><span class="n">evil</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">evil</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If we comment try/except out and see the whole traceback
+(which is very long), we will see the following lines produced for us
+by pydantic.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Input should be a valid dictionary or instance of LabeledImage
+[type=model_type, input_value=FreakyImage(image=array([...     0.]), label=&#39;hehe&#39;), input_type=FreakyImage]
+</pre></div>
+</div>
+<p>We can see that we didn’t even get to the validation of a label. Our data was rejected
+for being freaky enough without that.</p>
+</section>
+<section id="artifacts-and-files">
+<h2>12. Artifacts and Files<a class="headerlink" href="#artifacts-and-files" title="Link to this heading">#</a></h2>
+<p>Cascade wrappers serve to provide unified interface for different ML solutions
+however in deployment scenarios they may obstruct underlying models.</p>
+<p>To solve this problem artifacts were created. They are special methods that
+when implemented save only the artifact of the model and not the wrapper.</p>
+<p>In the next block we implement those methods - they accept a folder
+(usually from ModelLine) and should save/load their artifact using it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
+
+
+<span class="k">class</span> <span class="nc">NeuralNet</span><span class="p">(</span><span class="n">BasicModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">MLPClassifier</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">save_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;artifact.pkl&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">load_artifact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;artifact.pkl&quot;</span><span class="p">),</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We create and save this model in line.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nn</span> <span class="o">=</span> <span class="n">NeuralNet</span><span class="p">()</span>
+<span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To verify what is saved, let’s peek into the folder of the model.
+Special <code class="docutils literal notranslate"><span class="pre">artifacts</span></code> folder was created by the line where the model
+saved its artifact.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">last_model_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">get_root</span><span class="p">(),</span> <span class="n">line</span><span class="o">.</span><span class="n">get_model_names</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">last_model_dir</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">last_model_dir</span><span class="p">,</span> <span class="s2">&quot;artifacts&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[&#39;model.pkl&#39;, &#39;meta.json&#39;, &#39;artifacts&#39;, &#39;SLUG&#39;]
+[&#39;artifact.pkl&#39;]
+</pre></div>
+</div>
+<p>Lots of cases may require linking files to the saved model. It can be
+sample predictions, figures and plots, logs or anything you want to keep around
+each model you save.</p>
+<p>To allow this, Cascade features special method. Call <code class="docutils literal notranslate"><span class="pre">add_file</span></code> with a path
+to the required file and it will be copied into <code class="docutils literal notranslate"><span class="pre">files</span></code> folder inside a folder
+of the model in line.</p>
+<p>Here we create dummy file with fake predictions and save it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">dummy_predictions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;dummy_predictions.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dummy_predictions</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We link the file by putting its path in <code class="docutils literal notranslate"><span class="pre">add_file</span></code> method. ModelLine
+will copy it on save.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nn</span><span class="o">.</span><span class="n">add_file</span><span class="p">(</span><span class="s2">&quot;dummy_predictions.json&quot;</span><span class="p">)</span>
+<span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">nn</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Like previously we verify the files.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">last_model_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">get_root</span><span class="p">(),</span> <span class="n">line</span><span class="o">.</span><span class="n">get_model_names</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">last_model_dir</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">last_model_dir</span><span class="p">,</span> <span class="s2">&quot;files&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[&#39;model.pkl&#39;, &#39;meta.json&#39;, &#39;files&#39;, &#39;artifacts&#39;, &#39;SLUG&#39;]
+[&#39;dummy_predictions.json&#39;]
+</pre></div>
+</div>
+</section>
+<section id="scikit-learn-integration">
+<h2>13. Scikit-learn Integration<a class="headerlink" href="#scikit-learn-integration" title="Link to this heading">#</a></h2>
+<p>Many of the things we implemented in this tutorial can be reused in similar projects.
+This is one of the main principles on which Cascade was built. This is why most of the
+things we done using <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> library is already implemented in Cascade <code class="docutils literal notranslate"><span class="pre">utils</span></code> module.</p>
+<p>In this tutorial we will overview <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> library integration in Cascade. It features
+default model class that can wrap pipelines of <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> transformers and also special metric
+wrapper for <code class="docutils literal notranslate"><span class="pre">sklearn.metrics</span></code> module.</p>
+<p>Now we do not need to implement our own model wrapper or care about different methods. Everything
+is already implemented in <code class="docutils literal notranslate"><span class="pre">SkModel</span></code> class. Notice how we pass <code class="docutils literal notranslate"><span class="pre">blocks</span></code> as a list of transforms.
+The explicit use of keyword parameter here is required.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.sklearn</span> <span class="kn">import</span> <span class="n">SkModel</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SkModel</span><span class="p">(</span><span class="n">blocks</span><span class="o">=</span><span class="p">[</span><span class="n">LogisticRegression</span><span class="p">()])</span>
+</pre></div>
+</div>
+<p>The interface of this model’s <code class="docutils literal notranslate"><span class="pre">fit</span></code> function accepts lists of elements.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">DigitsDataset</span><span class="p">()</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">SkMetric</span></code> class provides a wrapper around <code class="docutils literal notranslate"><span class="pre">metrics</span></code> module. You can pass
+a valid name from this module and it will be imported by Cascade for you.
+Cascade also features some aliases for metrics. <code class="docutils literal notranslate"><span class="pre">acc</span></code> will import <code class="docutils literal notranslate"><span class="pre">sklearn.metrics.accuracy_score</span></code>.</p>
+<p>If metrics require any keyword arguments, you can pass them at the creation time.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.sklearn</span> <span class="kn">import</span> <span class="n">SkMetric</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;f1_score&quot;</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">),</span>
+        <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;acc&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s save the model and see how everything is handled automatically.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metrics</span><span class="p">)</span>
+
+<span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[SkMetric(name=f1_score, value=1.0, created_at=2024-08-14 19:37:46.556587+00:00),
+SkMetric(name=acc, value=1.0, created_at=2024-08-14 19:37:46.556701+00:00)]
+</pre></div>
+</div>
+<p>Notice how an artifact and a model are saved using the default implementation of <code class="docutils literal notranslate"><span class="pre">save</span></code>
+and <code class="docutils literal notranslate"><span class="pre">save_artifact</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">last_model_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">get_root</span><span class="p">(),</span> <span class="n">line</span><span class="o">.</span><span class="n">get_model_names</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">last_model_dir</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[&#39;model.pkl&#39;, &#39;meta.json&#39;, &#39;artifacts&#39;, &#39;SLUG&#39;]
+</pre></div>
+</div>
+</section>
+<section id="what-s-next">
+<h2>What’s Next<a class="headerlink" href="#what-s-next" title="Link to this heading">#</a></h2>
+<p>Congratulations for completing the tutorial!</p>
+<p>Now you can proceed to the <a class="reference internal" href="../howtos/howtos.html"><span class="std std-ref">How-to guides</span></a> section
+for specific usage recipes.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to Cascade!</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../howtos/howtos.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">How-to guides</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelines-basics">1. Pipelines basics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metadata">2. Metadata</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiments-basics">3. Experiments basics</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Further reading</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-meta-and-versioning">4. Custom Meta and Versioning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metrics-and-evaluation">5. Metrics and Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#meta-defaults">6. Meta defaults</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repos-and-workspaces">7. Repos and Workspaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cli">8. CLI</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viewers">9. Viewers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-validation">11. Data Validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#artifacts-and-files">12. Artifacts and Files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scikit-learn-integration">13. Scikit-learn Integration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-s-next">What’s Next</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/tutorials/tutorials.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022-2024, Ilia Moiseev.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

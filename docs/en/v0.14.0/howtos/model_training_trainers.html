@@ -1,0 +1,1148 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Model training using trainers &#8212; cascade 0.14.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../css/custom.css?v=9cb1bd10" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../documentation_options.js?v=0dc20415"></script>
+    <script src="../doctools.js?v=9a2dae69"></script>
+    <script src="../sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../clipboard.min.js?v=a7894cd8"></script>
+    <script src="../copybutton.js?v=f281be69"></script>
+    <script src="../design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-KD8QDKDMD7');
+            </script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-KD8QDKDMD7');
+            </script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'howtos/model_training_trainers';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../logo_sq.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Track a file" href="track_a_file.html" />
+    <link rel="prev" title="Model training" href="model_training.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../logo_light.svg" class="logo__image only-light" alt="cascade 0.14.2 documentation - Home"/>
+    <script>document.write(`<img src="../logo_dark.svg" class="logo__image only-dark" alt="cascade 0.14.2 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
+    Tutorial
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="howtos.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations/explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../modules/modules.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/tutorials.html">
+    Tutorial
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="howtos.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations/explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../modules/modules.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pipeline_building.html">Pipeline building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_training.html">Model training</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Model training using trainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="track_a_file.html">Track a file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sklearn.html">Track scikit-learn experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Link anything</a></li>
+<li class="toctree-l1"><a class="reference internal" href="comments.html">Comment on results of an experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tags.html">Add Tags</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="howtos.html" class="nav-link">How-to guides</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Model...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Model-training-using-trainers">
+<h1>Model training using trainers<a class="headerlink" href="#Model-training-using-trainers" title="Link to this heading">#</a></h1>
+<p>This use-case is model training - the same, but now the usage of Trainer will be shown.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># !pip3 install torchvision</span>
+<span class="c1"># !pip3 install scikit-learn</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cascade.data</span> <span class="k">as</span> <span class="nn">cdd</span>
+<span class="kn">import</span> <span class="nn">cascade.models</span> <span class="k">as</span> <span class="nn">cdm</span>
+<span class="kn">from</span> <span class="nn">cascade.utils.torch</span> <span class="kn">import</span> <span class="n">TorchModel</span>
+<span class="kn">from</span> <span class="nn">cascade.utils.sklearn</span> <span class="kn">import</span> <span class="n">SkMetric</span>
+
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">from</span> <span class="nn">torchvision.transforms</span> <span class="kn">import</span> <span class="n">functional</span> <span class="k">as</span> <span class="n">F</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cascade</span>
+<span class="n">cascade</span><span class="o">.</span><span class="n">__version__</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;0.14.0-alpha&#39;
+</pre></div></div>
+</div>
+<section id="Defining-data-pipeline">
+<h2>Defining data pipeline<a class="headerlink" href="#Defining-data-pipeline" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MNIST_ROOT</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
+<span class="n">INPUT_SIZE</span> <span class="o">=</span> <span class="mi">784</span>
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NoiseModifier</span><span class="p">(</span><span class="n">cdd</span><span class="o">.</span><span class="n">Modifier</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="n">img</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">img</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand_like</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">img</span><span class="p">,</span> <span class="n">label</span>
+
+
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">MNIST_ROOT</span><span class="p">,</span>
+                                     <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">transform</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">,</span>
+                                     <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">MNIST_ROOT</span><span class="p">,</span>
+                                    <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">transform</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">)</span>
+
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
+<span class="n">train_ds</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">&quot;This is MNIST dataset of handwritten images, TRAIN PART&quot;</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">(</span><span class="n">test_ds</span><span class="p">)</span>
+
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">NoiseModifier</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">NoiseModifier</span><span class="p">(</span><span class="n">test_ds</span><span class="p">)</span>
+
+<span class="c1"># We will constraint the number of samples to speed up learning in example</span>
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">CyclicSampler</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">CyclicSampler</span><span class="p">(</span><span class="n">test_ds</span><span class="p">,</span> <span class="mi">5000</span><span class="p">)</span>
+
+<span class="n">train_dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">train_ds</span><span class="p">,</span>
+                                       <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+                                       <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_dl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">test_ds</span><span class="p">,</span>
+                                      <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+                                      <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;name&#39;: &#39;cascade.data.cyclic_sampler.CyclicSampler&#39;, &#39;description&#39;: None, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 10000}, {&#39;name&#39;: &#39;__main__.NoiseModifier&#39;, &#39;description&#39;: None, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000}, {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;, &#39;description&#39;: &#39;This is MNIST dataset of handwritten images, TRAIN PART&#39;, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000, &#39;obj_type&#39;: &#34;&lt;class &#39;torchvision.datasets.mnist.MNIST&#39;&gt;&#34;}]
+</pre></div></div>
+</div>
+</section>
+<section id="Model-definition">
+<h2>Model definition<a class="headerlink" href="#Model-definition" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SimpleNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">l2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l1</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+         <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<p>Next Cascade’s wrapper is defined. The most of the interactions with pytorch modules is already implemented in <code class="docutils literal notranslate"><span class="pre">cascade.utils.TorchModel</span></code> so we need to only define how to train and evaluate this model.</p>
+<p>The difference between previous example and this one is in the <code class="docutils literal notranslate"><span class="pre">fit</span></code> function - now it only fits one epoch per call and doesn’t need additional logging - Trainer will cover this functionality.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Classifier</span><span class="p">(</span><span class="n">TorchModel</span><span class="p">):</span>
+    <span class="c1"># In train we copy-paste regular pytorch trainloop,</span>
+    <span class="c1"># but use self._model, where our SimpleNN is placed</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_dl</span><span class="p">,</span> <span class="n">lr</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+        <span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+
+        <span class="n">ds_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_dl</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">train_dl</span><span class="p">):</span>
+            <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+            <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+
+    <span class="c1"># Evaluate function takes the metrics from arguments</span>
+    <span class="c1"># and populates self.metrics without returning anything</span>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_dl</span><span class="p">,</span> <span class="n">metrics</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">gt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">imgs</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">test_dl</span><span class="p">):</span>
+            <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">input_size</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">pred</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">gt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="n">gt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">metrics</span><span class="p">:</span>
+            <span class="n">metric</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_metric</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Model-initialization">
+<h3>Model initialization<a class="headerlink" href="#Model-initialization" title="Link to this heading">#</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">LR</span> <span class="o">=</span> <span class="mf">1e-3</span>
+
+<span class="c1"># Classifier will initialize SimpleNN with all the parameters passed</span>
+<span class="c1"># but some of them are not for the SimpleNN, but to be recorded in metadata</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Classifier</span><span class="p">(</span><span class="n">SimpleNN</span><span class="p">,</span>
+    <span class="c1"># These arguments are needed by SimpleNN,</span>
+    <span class="c1"># but passed as keywords to be recorded in meta</span>
+    <span class="n">input_size</span><span class="o">=</span><span class="n">INPUT_SIZE</span><span class="p">,</span>
+    <span class="n">hidden_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="c1"># These arguments will be skipped by SimpleNN,</span>
+    <span class="c1"># but will be added to meta</span>
+    <span class="n">num_epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span>
+    <span class="n">lr</span><span class="o">=</span><span class="n">LR</span><span class="p">,</span>
+    <span class="n">bs</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Set-up-trainer">
+<h2>Set up trainer<a class="headerlink" href="#Set-up-trainer" title="Link to this heading">#</a></h2>
+<p>Let’s set up logging first to catch trainer’s logs</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)],</span>
+    <span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.trainers</span> <span class="kn">import</span> <span class="n">BasicTrainer</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">BasicTrainer</span><span class="p">(</span><span class="s1">&#39;trainer_repo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The main method of course is train It will do all the stuff needed for us including training, evaluating, saving and logging</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">train_data</span><span class="o">=</span><span class="n">train_dl</span><span class="p">,</span>
+    <span class="n">test_data</span><span class="o">=</span><span class="n">test_dl</span><span class="p">,</span>
+    <span class="n">train_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">LR</span><span class="p">,</span> <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="n">BATCH_SIZE</span><span class="p">},</span> <span class="c1"># will be passed into model.fit()</span>
+    <span class="n">test_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;accuracy_score&quot;</span><span class="p">)]},</span> <span class="c1"># will be passed into model.evaluate()</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span>
+    <span class="n">start_from</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># can start from checkpoint if line name is specified,</span>
+    <span class="n">save_strategy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">eval_strategy</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Training started with parameters:
+{&#39;lr&#39;: 0.001, &#39;bs&#39;: 10}
+INFO:cascade.trainers.trainer:repo is Repo in trainer_repo of 1 lines
+INFO:cascade.trainers.trainer:line is 00000
+INFO:cascade.trainers.trainer:training will last 5 epochs
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 101.35it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 0
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.874, created_at=2024-08-24 11:08:21.482021+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:04&lt;00:00, 122.69it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 1
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.8956, created_at=2024-08-24 11:08:21.482021+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:04&lt;00:00, 118.09it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 2
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.9092, created_at=2024-08-24 11:08:21.482021+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 115.79it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 3
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.9202, created_at=2024-08-24 11:08:21.482021+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:04&lt;00:00, 121.44it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 4
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.919, created_at=2024-08-24 11:08:21.482021+00:00)
+INFO:cascade.trainers.trainer:Training finished in 1 minute
+INFO:cascade.trainers.trainer:repo was Repo in trainer_repo of 1 lines
+INFO:cascade.trainers.trainer:line was 00000
+INFO:cascade.trainers.trainer:training ended on 4 epoch
+INFO:cascade.trainers.trainer:Parameters:
+{&#39;lr&#39;: 0.001, &#39;bs&#39;: 10}
+INFO:cascade.trainers.trainer:Metrics:
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.919, created_at=2024-08-24 11:08:21.482021+00:00)
+</pre></div></div>
+</div>
+</section>
+<section id="Results">
+<h2>Results<a class="headerlink" href="#Results" title="Link to this heading">#</a></h2>
+<p>We can obtain the results of training from trainer’s meta data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[{&#39;name&#39;: &#39;cascade.trainers.trainer.BasicTrainer&#39;, &#39;epochs&#39;: 5, &#39;eval_strategy&#39;: 1, &#39;save_strategy&#39;: 2, &#39;description&#39;: None, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;trainer&#39;, &#39;training_started_at&#39;: DateTime(2024, 8, 24, 14, 8, 21, 498283, tzinfo=Timezone(&#39;Europe/Moscow&#39;)), &#39;training_ended_at&#39;: DateTime(2024, 8, 24, 14, 9, 45, 93067, tzinfo=Timezone(&#39;Europe/Moscow&#39;))}]
+</pre></div></div>
+</div>
+</section>
+<section id="Start-from-checkpoint">
+<h2>Start from checkpoint<a class="headerlink" href="#Start-from-checkpoint" title="Link to this heading">#</a></h2>
+<p>Let’s try continue learning where we finished using the same line as before.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">train_data</span><span class="o">=</span><span class="n">train_dl</span><span class="p">,</span>
+    <span class="n">test_data</span><span class="o">=</span><span class="n">test_dl</span><span class="p">,</span>
+    <span class="n">train_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="n">LR</span><span class="p">,</span> <span class="s1">&#39;bs&#39;</span><span class="p">:</span> <span class="n">BATCH_SIZE</span><span class="p">},</span>
+    <span class="n">test_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;metrics&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;accuracy_score&quot;</span><span class="p">)]},</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">start_from</span><span class="o">=</span><span class="s1">&#39;00000&#39;</span><span class="p">,</span>
+    <span class="n">save_strategy</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">eval_strategy</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Training started with parameters:
+{&#39;lr&#39;: 0.001, &#39;bs&#39;: 10}
+INFO:cascade.trainers.trainer:repo is Repo in trainer_repo of 1 lines
+INFO:cascade.trainers.trainer:line is 00000
+INFO:cascade.trainers.trainer:started from model 9
+INFO:cascade.trainers.trainer:training will last 5 epochs
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 108.53it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 0
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.9408, created_at=2024-08-24 11:13:04.420271+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:05&lt;00:00, 89.71it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 1
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.9378, created_at=2024-08-24 11:13:04.420271+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:04&lt;00:00, 121.56it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 2
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.934, created_at=2024-08-24 11:13:04.420271+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+100%|██████████| 500/500 [00:04&lt;00:00, 118.74it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 3
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.9398, created_at=2024-08-24 11:13:04.420271+00:00)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 500/500 [00:04&lt;00:00, 124.65it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INFO:cascade.trainers.trainer:Epoch: 4
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.939, created_at=2024-08-24 11:13:04.420271+00:00)
+INFO:cascade.trainers.trainer:Training finished in 1 minute
+INFO:cascade.trainers.trainer:repo was Repo in trainer_repo of 1 lines
+INFO:cascade.trainers.trainer:line was 00000
+INFO:cascade.trainers.trainer:started from model 9
+INFO:cascade.trainers.trainer:training ended on 4 epoch
+INFO:cascade.trainers.trainer:Parameters:
+{&#39;lr&#39;: 0.001, &#39;bs&#39;: 10}
+INFO:cascade.trainers.trainer:Metrics:
+INFO:cascade.trainers.trainer:SkMetric(name=accuracy_score, value=0.939, created_at=2024-08-24 11:13:04.420271+00:00)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">trainer</span><span class="o">.</span><span class="n">metrics</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[SkMetric(name=accuracy_score, value=0.939, created_at=2024-08-24 11:13:04.420271+00:00)], [SkMetric(name=accuracy_score, value=0.939, created_at=2024-08-24 11:13:04.420271+00:00)], [SkMetric(name=accuracy_score, value=0.939, created_at=2024-08-24 11:13:04.420271+00:00)], [SkMetric(name=accuracy_score, value=0.939, created_at=2024-08-24 11:13:04.420271+00:00)], [SkMetric(name=accuracy_score, value=0.939, created_at=2024-08-24 11:13:04.420271+00:00)]]
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="model_training.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Model training</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="track_a_file.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Track a file</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Defining-data-pipeline">Defining data pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-definition">Model definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-initialization">Model initialization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Set-up-trainer">Set up trainer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Results">Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Start-from-checkpoint">Start from checkpoint</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/howtos/model_training_trainers.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022-2024, Ilia Moiseev.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
