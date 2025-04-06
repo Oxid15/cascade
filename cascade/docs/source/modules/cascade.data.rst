@@ -24,11 +24,6 @@ cascade.data
 .. autoclass:: cascade.data.CyclicSampler
     :members:
 
- 
-
-.. autoclass:: cascade.data.BaseDataset
-    :members:
-
 
 
 .. autoclass:: cascade.data.Assessor
@@ -42,6 +37,11 @@ cascade.data
 
 
 .. autoclass:: cascade.data.LabelingInfo
+    :members:
+
+
+
+.. autoclass:: cascade.data.BaseDataset
     :members:
 
 
@@ -129,19 +129,22 @@ cascade.data
  
 
 .. autoclass:: cascade.data.RangeSampler
-
+    :members:
  
 
 .. autoclass:: cascade.data.SchemaModifier
+    :members:
 
- 
+
+.. autoclass:: cascade.data.SequentialCacher
+    :members:
+
 
 .. autoclass:: cascade.data.SimpleDataloader
-
+    :members:
  
 
 .. autofunction:: cascade.data.split
-
 
  
 
@@ -154,9 +157,7 @@ cascade.data
  
 
 .. autoclass:: cascade.data.VersionAssigner
-
+    :members:
  
 
 .. autofunction:: cascade.data.version
-
- 

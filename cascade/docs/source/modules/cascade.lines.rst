@@ -18,6 +18,3 @@ cascade.lines
 
 .. autoclass:: cascade.lines.ModelLine
     :members:
-
-
-
