@@ -1,5 +1,6 @@
 """
-# cascade.metrics
+cascade.metrics
+===============
 
 Copyright 2022-2025 Ilia Moiseev
 
