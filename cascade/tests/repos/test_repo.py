@@ -1,9 +1,12 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
    http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,6 +16,7 @@ limitations under the License.
 
 import glob
 import os
+import shutil
 import sys
 
 import pytest
@@ -297,13 +301,90 @@ def test_auto_line_name(tmp_path_str, ext):
 
     names = repo.get_line_names()
 
-    assert names == ["00000", "test", "00002", "00003"]
+    assert set(names) == {"00000", "test", "00001", "00002"}
 
-    repo = Repo(str(tmp_path_str), meta_fmt=ext)
 
-    names = repo.get_line_names()
+def test_external_remove_first(tmp_path_str):
+    repo = Repo(str(tmp_path_str))
+    repo.add_line()
+    repo.add_line()
+    repo.add_line()
+    repo.add_line()
 
-    assert names == ["00000", "00002", "00003", "test"]
+    shutil.rmtree(os.path.join(repo.get_root(), "00000"))
+
+    repo = Repo(str(tmp_path_str))
+    repo.add_line()
+
+    assert repo.get_line_names() == [
+        "00001",
+        "00002",
+        "00003",
+        "00004",
+    ]
+
+
+def test_external_remove_middle(tmp_path_str):
+    repo = Repo(str(tmp_path_str))
+    repo.add_line()
+    repo.add_line()
+    repo.add_line()
+    repo.add_line()
+
+    shutil.rmtree(os.path.join(repo.get_root(), "00001"))
+
+    repo = Repo(str(tmp_path_str))
+    repo.add_line()
+
+    assert repo.get_line_names() == [
+        "00000",
+        "00002",
+        "00003",
+        "00004",
+    ]
+
+
+def test_external_remove_last(tmp_path_str):
+    repo = Repo(str(tmp_path_str))
+    repo.add_line()
+    repo.add_line()
+    repo.add_line()
+    repo.add_line()
+
+    shutil.rmtree(os.path.join(repo.get_root(), "00003"))
+
+    repo = Repo(str(tmp_path_str))
+    repo.add_line()
+
+    assert repo.get_line_names() == [
+        "00000",
+        "00001",
+        "00002",
+        "00003",
+    ]
+
+
+def test_mixed_formats(tmp_path_str):
+    repo = Repo(str(tmp_path_str))
+    repo.add_line("00000")
+    repo.add_line("00001")
+    repo.add_line("a")
+    repo.add_line("b")
+    repo.add_line("c")
+
+    shutil.rmtree(os.path.join(repo.get_root(), "b"))
+
+    repo = Repo(str(tmp_path_str))
+    repo.add_line()
+
+    # I do not care about order here
+    assert set(repo.get_line_names()) == {
+        "00000",
+        "00001",
+        "00002",
+        "a",
+        "c",
+    }
 
 
 @pytest.mark.skip

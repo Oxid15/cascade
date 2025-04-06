@@ -114,6 +114,8 @@ def test_meta(tmp_path_str, ext):
     assert meta[0]["len"] == 3
 
 
+# Concatenation removed since 0.15.0
+@pytest.mark.skip()
 def test_add(tmp_path_str):
 
     repo_1 = ModelRepo(os.path.join(tmp_path_str, "repo_1"))

@@ -18,20 +18,3 @@ cascade.models
 
 .. autoclass:: cascade.models.ModelModifier
     :members:
-
-
-
-.. autoclass:: cascade.models.BasicTrainer
-    :members:
-
-
-
-.. autoclass:: cascade.models.Trainer
-    :members:
-
-
-
-.. autoclass:: cascade.models.Workspace
-    :members:
-
-

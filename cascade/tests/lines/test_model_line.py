@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
 from cascade.base import MetaHandler, default_meta_format
+from cascade.lines import ModelLine
 from cascade.models import BasicModel
 from cascade.repos import Repo
-from cascade.lines import ModelLine
 from cascade.tests.conftest import DummyModel
 
 
@@ -63,17 +63,40 @@ def test_change_of_format(tmp_path_str, ext):
     assert len(glob.glob(os.path.join(tmp_path_str, "meta.*"))) == 1
 
 
-def test_same_index_check(model_line):
+def test_external_remove_first(model_line):
     for _ in range(5):
         model_line.save(BasicModel())
 
-    shutil.rmtree(os.path.join(model_line.get_root(), "00001"))
-    shutil.rmtree(os.path.join(model_line.get_root(), "00002"))
-    shutil.rmtree(os.path.join(model_line.get_root(), "00003"))
+    shutil.rmtree(os.path.join(model_line.get_root(), "00000"))
 
+    model_line = ModelLine(model_line.get_root())
     model_line.save(BasicModel())
 
     assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
+
+
+def test_external_remove_middle(model_line):
+    for _ in range(5):
+        model_line.save(BasicModel())
+
+    shutil.rmtree(os.path.join(model_line.get_root(), "00002"))
+
+    model_line = ModelLine(model_line.get_root())
+    model_line.save(BasicModel())
+
+    assert os.path.exists(os.path.join(model_line.get_root(), "00005"))
+
+
+def test_external_remove_last(model_line):
+    for _ in range(5):
+        model_line.save(BasicModel())
+
+    shutil.rmtree(os.path.join(model_line.get_root(), "00004"))
+
+    model_line = ModelLine(model_line.get_root())
+    model_line.save(BasicModel())
+
+    assert os.path.exists(os.path.join(model_line.get_root(), "00004"))
 
 
 # TODO: write tests for exceptions
@@ -183,6 +206,7 @@ def test_model_names(tmp_path_str):
 
     line = ModelLine(tmp_path_str)
     assert line.get_model_names() == ["00000", "00001", "00002"]
+
 
 # TODO: write test for restoring line from repo
 

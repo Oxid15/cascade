@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,7 +45,9 @@ class Version:
     @staticmethod
     def _check_other(other):
         if not isinstance(other, Version):
-            raise TypeError(f"Can only compare Version with Version or string, got {type(other)}")
+            raise TypeError(
+                f"Can only compare Version with Version or string, got {type(other)}"
+            )
 
     def __eq__(self, other: Union["Version", str]) -> bool:
         if isinstance(other, str):
@@ -100,7 +102,9 @@ def generate_slug() -> str:
 
 def get_latest_commit_hash() -> Optional[str]:
     try:
-        result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"], capture_output=True, text=True
+        )
         return result.stdout.strip()
     except Exception:
         return None
@@ -108,7 +112,9 @@ def get_latest_commit_hash() -> Optional[str]:
 
 def get_uncommitted_changes() -> Optional[List[str]]:
     try:
-        result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["git", "status", "--porcelain"], capture_output=True, text=True
+        )
         result = result.stdout.strip()
         if result != "":
             return result.split("\n ")
@@ -129,6 +135,19 @@ def parse_version(ver: str) -> Tuple[int, int, int]:
         return int(major), int(minor), int(debug)
     else:
         raise RuntimeError(f"Got unexpected version string {ver}")
+
+
+def get_terminal_width() -> int:
+    """
+    Wraps standard os method to be able to
+    work inside pytest
+    """
+    try:
+        w, _ = os.get_terminal_size()
+    except OSError:
+        return 80
+    else:
+        return w
 
 
 def update_version(path: str, version: str) -> None:
@@ -154,7 +173,9 @@ def update_version(path: str, version: str) -> None:
             return
 
 
-def skeleton(meta: Meta, keys: Optional[List[Any]] = None) -> List[List[Dict[Any, Any]]]:
+def skeleton(
+    meta: Meta, keys: Optional[List[Any]] = None
+) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
@@ -215,11 +236,12 @@ def migrate_repo_v0_13(path: str) -> None:
     path : str
         Path to the container to migrate
     """
+    from tqdm import tqdm
+
     from cascade.base import MetaHandler, MetaIOError
     from cascade.lines import ModelLine
     from cascade.metrics import Metric
     from cascade.repos import Repo, SingleLineRepo
-    from tqdm import tqdm
 
     def process_metrics(metrics: Dict[str, Any]) -> Tuple[List[Metric], Dict[str, Any]]:
         if not isinstance(metrics, dict):
@@ -287,3 +309,51 @@ def migrate_repo_v0_13(path: str) -> None:
         print(f"Failed to update repo version: {e}")
 
     print("Done")
+
+
+def flatten_dict(
+    nested_dict: Dict[str, Any],
+    separator: str = "_",
+    root_keys_to_ignore: List[str] = None,
+) -> Dict[str, Any]:
+    """
+    Converts a nested dict into a flat one using separator
+
+    Example
+    -------
+    Input: `{"a": {"b": 0}, "c": [1, 2, 3]}`
+    Separator: `_`
+    Output: `{"a_b": 0, "c_0": 1, "c_1": 2, "c_2": 3}`
+
+    Parameters
+    ----------
+    nested_dict: Dict[str, Any]
+    separator: str
+
+    Returns
+    -------
+    flattened_dict: Dict[str, Any]
+    """
+
+    if root_keys_to_ignore is None:
+        root_keys_to_ignore = ()
+
+    flattened = {}
+
+    def _flatten(data, prefix=""):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if key in root_keys_to_ignore and prefix == "":
+                    flattened[key] = data[key]
+                else:
+                    new_prefix = f"{prefix}{separator}{key}" if prefix else key
+                    _flatten(value, new_prefix)
+        elif isinstance(data, (set, list, tuple)):
+            for index, value in enumerate(data):
+                new_prefix = f"{prefix}{separator}{index}" if prefix else str(index)
+                _flatten(value, new_prefix)
+        else:
+            flattened[prefix] = data
+
+    _flatten(nested_dict)
+    return flattened

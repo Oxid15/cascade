@@ -1,5 +1,5 @@
 """
-Copyright 2022-2024 Ilia Moiseev
+Copyright 2022-2025 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
 import pendulum
-from flatten_json import flatten
 
 from ..base import MetaHandler
+from ..base.utils import flatten_dict
 from ..lines import ModelLine
 from ..models import Model
 from ..repos import Repo, SingleLineRepo
@@ -78,9 +78,9 @@ class MetricViewer:
             if "created_at" in meta:
                 metric["created_at"] = pendulum.parse(meta["created_at"])
                 if "saved_at" in meta:
-                    metric["saved"] = pendulum.parse(
-                        meta["saved_at"]
-                    ).diff_for_humans(metric["created_at"])
+                    metric["saved"] = pendulum.parse(meta["saved_at"]).diff_for_humans(
+                        metric["created_at"]
+                    )
 
             if "params" in meta:
                 metric.update(meta["params"])
@@ -152,13 +152,11 @@ class MetricViewer:
         else:
             from plotly import graph_objects as go
 
-        data = pd.DataFrame(map(flatten, self.table.to_dict("records")))
+        data = pd.DataFrame(map(flatten_dict, self.table.to_dict("records")))
         fig = go.Figure(
             data=[
                 go.Table(
-                    header=dict(
-                        values=list(data.columns), fill_color="#f4c9c7", align="left"
-                    ),
+                    header=dict(values=list(data.columns), fill_color="#f4c9c7", align="left"),
                     cells=dict(
                         values=[data[col] for col in data.columns],
                         fill_color="#bcced4",
@@ -223,9 +221,7 @@ class MetricViewer:
         **kwargs:
             Arguments of dash app. Can be ip or port for example
         """
-        server = MetricServer(
-            self, page_size=page_size, include=include, exclude=exclude
-        )
+        server = MetricServer(self, page_size=page_size, include=include, exclude=exclude)
         server.serve(**kwargs)
 
 
@@ -260,9 +256,7 @@ class MetricServer(Server):
             fig = go.Figure()
             if x is not None and y is not None:
                 fig.add_trace(
-                    go.Scatter(
-                        x=self._for_plots[x], y=self._for_plots[y], mode="markers"
-                    )
+                    go.Scatter(x=self._for_plots[x], y=self._for_plots[y], mode="markers")
                 )
                 fig.update_layout(title=f"{x} to {y} relation")
             return fig
@@ -286,17 +280,17 @@ class MetricServer(Server):
             df = df[["line", "num"] + self._include]
 
         self._df_flatten = pd.DataFrame(
-            map(lambda x: flatten(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
+            map(lambda x: flatten_dict(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
         )
         self._for_plots = self._df_flatten.copy()
         for name in self._df_flatten.name.unique():
             self._for_plots[name] = None
-            self._for_plots.loc[self._for_plots["name"] == name, name] = (
-                self._for_plots.loc[self._for_plots["name"] == name, "value"]
-            )
+            self._for_plots.loc[self._for_plots["name"] == name, name] = self._for_plots.loc[
+                self._for_plots["name"] == name, "value"
+            ]
         self._for_plots = self._for_plots.drop(["name", "value"], axis=1)
 
-        if any(df["tags"].apply(lambda x: x != [])):
+        if any(df["tags"].apply(lambda x: len(x) > 0)):
             self._df_flatten["tags"] = df["tags"].apply(lambda x: ",".join(x))
         dep_fig = go.Figure()
 
@@ -310,12 +304,8 @@ class MetricServer(Server):
                         "font-family": "Montserrat",
                     },
                 ),
-                dcc.Dropdown(
-                    list(self._for_plots.columns), id="dropdown-x", multi=False
-                ),
-                dcc.Dropdown(
-                    list(self._for_plots.columns), id="dropdown-y", multi=False
-                ),
+                dcc.Dropdown(list(self._for_plots.columns), id="dropdown-x", multi=False),
+                dcc.Dropdown(list(self._for_plots.columns), id="dropdown-y", multi=False),
                 dcc.Graph(id="dependence-figure", figure=dep_fig),
                 dash_table.DataTable(
                     columns=[
