@@ -1,0 +1,712 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Model training\n",
+    "This use-case is model training.  \n",
+    "By going through this you will know how to use Cascade for metadata tracking, hyperparameter tuning and model selection.  \n",
+    "  \n",
+    "Previous part is the pipeline building and is taken without comments.  \n",
+    "For more detailed description of it see Pipeline building example."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#!pip3 install torchvision"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import cascade.data as cdd\n",
+    "import cascade.models as cdm\n",
+    "import cascade.meta as cde\n",
+    "from cascade.utils.torch import TorchModel\n",
+    "from cascade.utils.sklearn import SkMetric\n",
+    "\n",
+    "from tqdm import tqdm\n",
+    "import torch\n",
+    "import torchvision\n",
+    "from torchvision.transforms import functional as F\n",
+    "from torch import nn"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'0.14.0-alpha'"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import cascade\n",
+    "cascade.__version__"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Data Pipeline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "MNIST_ROOT = 'data'\n",
+    "INPUT_SIZE = 784\n",
+    "BATCH_SIZE = 10"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class NoiseModifier(cdd.Modifier):\n",
+    "    def __getitem__(self, index):\n",
+    "        img, label = self._dataset[index]\n",
+    "        img += torch.rand_like(img) * 0.1\n",
+    "        img = torch.clip(img, 0, 255)\n",
+    "        return img, label\n",
+    "\n",
+    "\n",
+    "train_ds = torchvision.datasets.MNIST(root=MNIST_ROOT,\n",
+    "                                     train=True, \n",
+    "                                     transform=F.to_tensor,\n",
+    "                                     download=True)\n",
+    "test_ds = torchvision.datasets.MNIST(root=MNIST_ROOT, \n",
+    "                                    train=False, \n",
+    "                                    transform=F.to_tensor)\n",
+    "\n",
+    "train_ds = cdd.Wrapper(train_ds)\n",
+    "train_ds.describe(\"This is MNIST dataset of handwritten images, TRAIN PART\")\n",
+    "test_ds = cdd.Wrapper(test_ds)\n",
+    "\n",
+    "train_ds = NoiseModifier(train_ds)\n",
+    "test_ds = NoiseModifier(test_ds)\n",
+    "\n",
+    "train_dl = torch.utils.data.DataLoader(dataset=train_ds, \n",
+    "                                       batch_size=BATCH_SIZE,\n",
+    "                                       shuffle=True)\n",
+    "test_dl = torch.utils.data.DataLoader(dataset=test_ds,\n",
+    "                                      batch_size=BATCH_SIZE,\n",
+    "                                      shuffle=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Module definition"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class SimpleNN(nn.Module):\n",
+    "    def __init__(self, input_size, hidden_size, num_classes, *args, **kwargs):\n",
+    "        super().__init__()\n",
+    "\n",
+    "        self.input_size = input_size\n",
+    "        self.hidden_size = hidden_size\n",
+    "        self.l1 = nn.Linear(input_size, hidden_size)\n",
+    "        self.l2 = nn.Linear(hidden_size, num_classes)\n",
+    "        self.relu = nn.ReLU()\n",
+    "\n",
+    "    def forward(self, y):\n",
+    "         out = self.l1(y)\n",
+    "         out = self.relu(out)\n",
+    "         out = self.l2(out)\n",
+    "\n",
+    "         return out"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Cascade wrapper"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class Classifier(TorchModel):\n",
+    "    # In train we copy-paste regular pytorch trainloop, \n",
+    "    # but use self._model, where our SimpleNN is placed\n",
+    "    def fit(self, train_dl, num_epochs, lr, *args, **kwargs):\n",
+    "        criterion = nn.CrossEntropyLoss()\n",
+    "        optim = torch.optim.Adam(self._model.parameters(), lr=lr)\n",
+    "\n",
+    "        ds_size = len(train_dl)\n",
+    "        for epoch in range(num_epochs):\n",
+    "            for x, (imgs, labels) in enumerate(train_dl): \n",
+    "                imgs = imgs.reshape(-1, self._model.input_size)\n",
+    "\n",
+    "                out = self._model(imgs)\n",
+    "                loss = criterion(out, labels)\n",
+    "\n",
+    "                optim.zero_grad()\n",
+    "                loss.backward()\n",
+    "                optim.step() \n",
+    "\n",
+    "                if x % 500 == 0:\n",
+    "                    print (f'Epochs [{epoch}/{num_epochs}], Step[{x}/{ds_size}], Loss: {loss.item():.4f}')\n",
+    "\n",
+    "    # Evaluate function takes the metrics from arguments\n",
+    "    # and populates self.metrics without returning anything\n",
+    "    def evaluate(self, test_dl, metrics, *args, **kwargs):\n",
+    "        pred = []\n",
+    "        gt = []\n",
+    "        for imgs, labels in tqdm(test_dl): \n",
+    "            imgs = imgs.reshape(-1, self._model.input_size)\n",
+    "            out = torch.argmax(self._model(imgs, *args, **kwargs), -1)\n",
+    "\n",
+    "            pred.append(out)\n",
+    "            gt.append(labels)\n",
+    "\n",
+    "        pred = torch.concat(pred).detach().numpy()\n",
+    "        gt = torch.concat(gt).detach().numpy()\n",
+    "\n",
+    "        for metric in metrics:\n",
+    "            metric.compute(gt, pred)\n",
+    "            self.add_metric(metric)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Model training\n",
+    "Now we are ready to train our model. We define hyperparameters and pass them to our wrapper. Wrapper accepts pytorch module's class and all the parameters that are needed to initialize it.  \n",
+    "Additionally we pass keyword arguments that are connected to training. It is done to add them to the model's metadata."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Epochs [0/2], Step[0/6000], Loss: 2.2891\n",
+      "Epochs [0/2], Step[500/6000], Loss: 0.4226\n",
+      "Epochs [0/2], Step[1000/6000], Loss: 0.2755\n",
+      "Epochs [0/2], Step[1500/6000], Loss: 0.1671\n",
+      "Epochs [0/2], Step[2000/6000], Loss: 0.1510\n",
+      "Epochs [0/2], Step[2500/6000], Loss: 0.2112\n",
+      "Epochs [0/2], Step[3000/6000], Loss: 0.1839\n",
+      "Epochs [0/2], Step[3500/6000], Loss: 0.0139\n",
+      "Epochs [0/2], Step[4000/6000], Loss: 0.0661\n",
+      "Epochs [0/2], Step[4500/6000], Loss: 0.0417\n",
+      "Epochs [0/2], Step[5000/6000], Loss: 0.2169\n",
+      "Epochs [0/2], Step[5500/6000], Loss: 0.2178\n",
+      "Epochs [1/2], Step[0/6000], Loss: 0.0850\n",
+      "Epochs [1/2], Step[500/6000], Loss: 0.0512\n",
+      "Epochs [1/2], Step[1000/6000], Loss: 0.0338\n",
+      "Epochs [1/2], Step[1500/6000], Loss: 0.0106\n",
+      "Epochs [1/2], Step[2000/6000], Loss: 0.4859\n",
+      "Epochs [1/2], Step[2500/6000], Loss: 0.0068\n",
+      "Epochs [1/2], Step[3000/6000], Loss: 0.1055\n",
+      "Epochs [1/2], Step[3500/6000], Loss: 0.1380\n",
+      "Epochs [1/2], Step[4000/6000], Loss: 0.0124\n",
+      "Epochs [1/2], Step[4500/6000], Loss: 1.1131\n",
+      "Epochs [1/2], Step[5000/6000], Loss: 0.1694\n",
+      "Epochs [1/2], Step[5500/6000], Loss: 0.0235\n"
+     ]
+    }
+   ],
+   "source": [
+    "NUM_EPOCHS = 2\n",
+    "LR = 1e-3\n",
+    "\n",
+    "# Classifier will initialize SimpleNN with all the parameters passed\n",
+    "# but some of them are not for the SimpleNN, but to be recorded in metadata\n",
+    "model = Classifier(SimpleNN,\n",
+    "    # These arguments are needed by SimpleNN, \n",
+    "    # but passed as keywords to be recorded in meta\n",
+    "    input_size=INPUT_SIZE,\n",
+    "    hidden_size=100,\n",
+    "    num_classes=10,\n",
+    "    # These arguments will be skipped by SimpleNN,\n",
+    "    # but will be added to meta\n",
+    "    num_epochs=NUM_EPOCHS,\n",
+    "    lr=LR,\n",
+    "    bs=BATCH_SIZE)\n",
+    "model.fit(train_dl, NUM_EPOCHS, LR)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Evaluate the model\n",
+    "Now we can evaluate model performance on test dataset. We pass the data and one metric that is a wrapper around sklearn's metric."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 1000/1000 [00:07<00:00, 125.10it/s]\n"
+     ]
+    }
+   ],
+   "source": [
+    "model.evaluate(test_dl, [SkMetric(\"accuracy_score\")])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Check the metadata\n",
+    "Let's examine metadata obtained from the model after training."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '__main__.Classifier', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'model', 'created_at': DateTime(2024, 8, 24, 10, 52, 54, 681116, tzinfo=Timezone('UTC')), 'metrics': [SkMetric(name=accuracy_score, value=0.9652, created_at=2024-08-24 10:55:07.930148+00:00)], 'params': {'input_size': 784, 'hidden_size': 100, 'num_classes': 10, 'num_epochs': 2, 'lr': 0.001, 'bs': 10}, 'module': 'SimpleNN(\\n  (l1): Linear(in_features=784, out_features=100, bias=True)\\n  (l2): Linear(in_features=100, out_features=10, bias=True)\\n  (relu): ReLU()\\n)'}]"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can notice several things. The model is tracking the time of creation. It's metrics in place as expected after evaluation.  \n",
+    "Let's look at the params dict. We can see all the parameters that we passed using keywords in the wrapper. The wrapper recorded them in the metadata for us automatically."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Saving the model\n",
+    "It's time to save the trained model. We can just use model.save() method, but let's look at another Cascade's tool for model management.  \n",
+    "It is called `Repo`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from cascade.repos import Repo\n",
+    "\n",
+    "repo = Repo('repo')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This is the repository of models. It manages a series of experiments over a sets of models of different architectures called model lines."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<class 'cascade.lines.model_line.ModelLine'>(0) items of <class 'cascade.models.model.Model'>"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "repo.add_line('linear_nn', type=\"model\", obj_cls=Classifier)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Model line is the manager of models with similar architecture, but different parameters or different epochs. It manages saving of model and its meta and also loading of model."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Aside from model's metadata we would like to know on what data model was trained."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[{'name': '__main__.Classifier', 'description': None, 'tags': [], 'comments': [], 'links': [{'id': '1', 'name': 'train_data', 'uri': None, 'meta': [{'name': '__main__.NoiseModifier', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'len': 60000}, {'name': 'cascade.data.dataset.Wrapper', 'description': 'This is MNIST dataset of handwritten images, TRAIN PART', 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'len': 60000, 'obj_type': \"<class 'torchvision.datasets.mnist.MNIST'>\"}], 'created_at': DateTime(2024, 8, 24, 10, 55, 16, 169857, tzinfo=Timezone('UTC'))}], 'type': 'model', 'created_at': DateTime(2024, 8, 24, 10, 52, 54, 681116, tzinfo=Timezone('UTC')), 'metrics': [SkMetric(name=accuracy_score, value=0.9652, created_at=2024-08-24 10:55:07.930148+00:00)], 'params': {'input_size': 784, 'hidden_size': 100, 'num_classes': 10, 'num_epochs': 2, 'lr': 0.001, 'bs': 10}, 'module': 'SimpleNN(\\n  (l1): Linear(in_features=784, out_features=100, bias=True)\\n  (l2): Linear(in_features=100, out_features=10, bias=True)\\n  (relu): ReLU()\\n)'}]"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.link(meta=train_ds.get_meta(), name='train_data')\n",
+    "model.get_meta()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We are ready to save the model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "repo['linear_nn'].save(model)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This will save the model to the path:  \n",
+    "`repo/linear_nn/00000/model`  \n",
+    "And metadata:  \n",
+    "`repo/linear_nn/00000/meta.json`"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Peeking inside repo\n",
+    "To see model's metrics and parameters we don't need to manually go to the folders mentioned or print large metadata in console. Cascade has tools for conveniently show metrics. One of them is `MetricViewer`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "        line  num                       created_at            saved  \\\n",
+       "0  linear_nn    0 2024-08-24 10:52:54.681116+00:00  2 minutes after   \n",
+       "\n",
+       "   input_size  hidden_size  num_classes  num_epochs     lr  bs tags  \\\n",
+       "0         784          100           10           2  0.001  10   []   \n",
+       "\n",
+       "   comment_count  link_count            name   value  \n",
+       "0              0           1  accuracy_score  0.9652  "
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mv = cde.MetricViewer(repo)\n",
+    "# We can show the table like this\n",
+    "# mv.plot_table()\n",
+    "# Or we can open web-application like this\n",
+    "# mv.serve()\n",
+    "# but it will not be rendered in the documentation, so...\n",
+    "mv.table"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It accepts the repo object and can show tables of metrics and metadata. However, when the table is too big and we need more powerful tool, mv also has method `serve` that opens fully interactive table of metrics with the ability to sort and filter results."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## More experiments\n",
+    "What if we want to automatically run a number of experiments and then choose the best model?  \n",
+    "The workflow is pretty similar. In the example below we try to find the best option for hidden size of the model.  \n",
+    "We define the set of parameters for our experiments and run them in loop every time saving the results."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "params = [\n",
+    "    {'hidden_size': 10,  'num_epochs': 2, 'lr': 0.001, 'bs': 10},\n",
+    "    {'hidden_size': 50,  'num_epochs': 2, 'lr': 0.001, 'bs': 10},\n",
+    "    {'hidden_size': 100, 'num_epochs': 2, 'lr': 0.001, 'bs': 10}\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Epochs [0/2], Step[0/6000], Loss: 2.4026\n",
+      "Epochs [0/2], Step[500/6000], Loss: 1.1337\n",
+      "Epochs [0/2], Step[1000/6000], Loss: 0.6567\n",
+      "Epochs [0/2], Step[1500/6000], Loss: 0.0914\n",
+      "Epochs [0/2], Step[2000/6000], Loss: 0.2892\n",
+      "Epochs [0/2], Step[2500/6000], Loss: 0.0613\n",
+      "Epochs [0/2], Step[3000/6000], Loss: 0.2035\n",
+      "Epochs [0/2], Step[3500/6000], Loss: 0.4300\n",
+      "Epochs [0/2], Step[4000/6000], Loss: 0.8379\n",
+      "Epochs [0/2], Step[4500/6000], Loss: 0.1027\n",
+      "Epochs [0/2], Step[5000/6000], Loss: 0.5138\n",
+      "Epochs [0/2], Step[5500/6000], Loss: 0.0586\n",
+      "Epochs [1/2], Step[0/6000], Loss: 0.1320\n",
+      "Epochs [1/2], Step[500/6000], Loss: 0.2849\n",
+      "Epochs [1/2], Step[1000/6000], Loss: 0.0615\n",
+      "Epochs [1/2], Step[1500/6000], Loss: 0.2261\n",
+      "Epochs [1/2], Step[2000/6000], Loss: 0.3681\n",
+      "Epochs [1/2], Step[2500/6000], Loss: 0.7509\n",
+      "Epochs [1/2], Step[3000/6000], Loss: 0.7053\n",
+      "Epochs [1/2], Step[3500/6000], Loss: 0.1424\n",
+      "Epochs [1/2], Step[4000/6000], Loss: 0.6824\n",
+      "Epochs [1/2], Step[4500/6000], Loss: 0.2610\n",
+      "Epochs [1/2], Step[5000/6000], Loss: 0.2609\n",
+      "Epochs [1/2], Step[5500/6000], Loss: 0.4192\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 1000/1000 [00:06<00:00, 148.56it/s]\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Epochs [0/2], Step[0/6000], Loss: 2.2791\n",
+      "Epochs [0/2], Step[500/6000], Loss: 0.3728\n",
+      "Epochs [0/2], Step[1000/6000], Loss: 0.4797\n",
+      "Epochs [0/2], Step[1500/6000], Loss: 0.3007\n",
+      "Epochs [0/2], Step[2000/6000], Loss: 0.5284\n",
+      "Epochs [0/2], Step[2500/6000], Loss: 0.1441\n",
+      "Epochs [0/2], Step[3000/6000], Loss: 0.0626\n",
+      "Epochs [0/2], Step[3500/6000], Loss: 0.1782\n",
+      "Epochs [0/2], Step[4000/6000], Loss: 0.2281\n",
+      "Epochs [0/2], Step[4500/6000], Loss: 0.1399\n",
+      "Epochs [0/2], Step[5000/6000], Loss: 0.0370\n",
+      "Epochs [0/2], Step[5500/6000], Loss: 0.1297\n",
+      "Epochs [1/2], Step[0/6000], Loss: 0.2715\n",
+      "Epochs [1/2], Step[500/6000], Loss: 0.4796\n",
+      "Epochs [1/2], Step[1000/6000], Loss: 0.0554\n",
+      "Epochs [1/2], Step[1500/6000], Loss: 0.0662\n",
+      "Epochs [1/2], Step[2000/6000], Loss: 0.0662\n",
+      "Epochs [1/2], Step[2500/6000], Loss: 0.1186\n",
+      "Epochs [1/2], Step[3000/6000], Loss: 0.0965\n",
+      "Epochs [1/2], Step[3500/6000], Loss: 1.1392\n",
+      "Epochs [1/2], Step[4000/6000], Loss: 0.6301\n",
+      "Epochs [1/2], Step[4500/6000], Loss: 0.0048\n",
+      "Epochs [1/2], Step[5000/6000], Loss: 0.0046\n",
+      "Epochs [1/2], Step[5500/6000], Loss: 0.0098\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 1000/1000 [00:07<00:00, 131.16it/s]\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Epochs [0/2], Step[0/6000], Loss: 2.3463\n",
+      "Epochs [0/2], Step[500/6000], Loss: 0.2545\n",
+      "Epochs [0/2], Step[1000/6000], Loss: 0.1970\n",
+      "Epochs [0/2], Step[1500/6000], Loss: 0.0619\n",
+      "Epochs [0/2], Step[2000/6000], Loss: 0.0328\n",
+      "Epochs [0/2], Step[2500/6000], Loss: 0.0237\n",
+      "Epochs [0/2], Step[3000/6000], Loss: 0.7900\n",
+      "Epochs [0/2], Step[3500/6000], Loss: 0.0399\n",
+      "Epochs [0/2], Step[4000/6000], Loss: 0.0198\n",
+      "Epochs [0/2], Step[4500/6000], Loss: 0.0266\n",
+      "Epochs [0/2], Step[5000/6000], Loss: 0.1952\n",
+      "Epochs [0/2], Step[5500/6000], Loss: 0.2487\n",
+      "Epochs [1/2], Step[0/6000], Loss: 0.5751\n",
+      "Epochs [1/2], Step[500/6000], Loss: 0.0471\n",
+      "Epochs [1/2], Step[1000/6000], Loss: 0.0931\n",
+      "Epochs [1/2], Step[1500/6000], Loss: 0.0056\n",
+      "Epochs [1/2], Step[2000/6000], Loss: 0.0699\n",
+      "Epochs [1/2], Step[2500/6000], Loss: 0.1815\n",
+      "Epochs [1/2], Step[3000/6000], Loss: 1.2539\n",
+      "Epochs [1/2], Step[3500/6000], Loss: 0.4243\n",
+      "Epochs [1/2], Step[4000/6000], Loss: 0.3889\n",
+      "Epochs [1/2], Step[4500/6000], Loss: 0.0390\n",
+      "Epochs [1/2], Step[5000/6000], Loss: 0.0132\n",
+      "Epochs [1/2], Step[5500/6000], Loss: 0.0530\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "100%|██████████| 1000/1000 [00:07<00:00, 130.79it/s]\n"
+     ]
+    }
+   ],
+   "source": [
+    "for p in params:\n",
+    "    model = Classifier(SimpleNN,\n",
+    "        **p,\n",
+    "        input_size=INPUT_SIZE,\n",
+    "        num_classes=10)\n",
+    "    model.fit(train_dl, **p)\n",
+    "    model.evaluate(test_dl, [SkMetric(\"accuracy_score\")])\n",
+    "    repo['linear_nn'].save(model)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Results\n",
+    "We can see the results of our experiments - all of them are present in the table and we can choose the best option."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "        line  num                       created_at            saved  \\\n",
+       "0  linear_nn    0 2024-08-24 10:52:54.681116+00:00  2 minutes after   \n",
+       "1  linear_nn    1 2024-08-24 10:55:16.503485+00:00  2 minutes after   \n",
+       "2  linear_nn    2 2024-08-24 10:57:21.684847+00:00  2 minutes after   \n",
+       "3  linear_nn    3 2024-08-24 10:59:35.747805+00:00  2 minutes after   \n",
+       "\n",
+       "   input_size  hidden_size  num_classes  num_epochs     lr  bs tags  \\\n",
+       "0         784          100           10           2  0.001  10   []   \n",
+       "1         784           10           10           2  0.001  10   []   \n",
+       "2         784           50           10           2  0.001  10   []   \n",
+       "3         784          100           10           2  0.001  10   []   \n",
+       "\n",
+       "   comment_count  link_count            name   value  \n",
+       "0              0           1  accuracy_score  0.9652  \n",
+       "1              0           0  accuracy_score  0.9186  \n",
+       "2              0           0  accuracy_score  0.9590  \n",
+       "3              0           0  accuracy_score  0.9674  "
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mv = cde.MetricViewer(repo)\n",
+    "# mv.plot_table()\n",
+    "mv.table"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "cascade_full_env",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.0rc1"
+  },
+  "orig_nbformat": 4,
+  "vscode": {
+   "interpreter": {
+    "hash": "faab9700dd378963078e8736d2f2a2135ebae0340eb64481dd59710303e6f8c4"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
