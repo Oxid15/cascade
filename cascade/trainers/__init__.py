@@ -1,5 +1,6 @@
 """
-# cascade.trainers
+cascade.trainers
+================
 
 Copyright 2022-2025 Ilia Moiseev
 

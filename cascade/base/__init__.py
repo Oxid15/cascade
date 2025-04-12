@@ -1,5 +1,6 @@
 """
-# cascade.base
+cascade.base
+============
 
 Core module of Cascade - contains basic objects and interfaces. Home for
 `Traceable` class and other things that are not directly related to other
