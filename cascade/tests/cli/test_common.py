@@ -14,27 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Any
+import os
+import sys
+
+import pytest
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+from cascade.cli.common import create_container
 
 
-def create_container(type: str, cwd: str) -> Any:
-    # "line" fallback here is for compatibility
-    # with older versions
-    if type in ("line", "model_line"):
-        from cascade.lines import ModelLine
-
-        return ModelLine(cwd)
-    elif type == "data_line":
-        from cascade.lines import DataLine
-
-        return DataLine(cwd)
-    elif type == "repo":
-        from cascade.repos import Repo
-
-        return Repo(cwd)
-    elif type == "workspace":
-        from cascade.workspaces import Workspace
-
-        return Workspace(cwd)
+@pytest.mark.parametrize("container_type", ["line", "model_line", "data_line", "repo", "workspace"])
+def test(tmp_path_str, container_type):
+    c = create_container(container_type, os.path.join(tmp_path_str, container_type))
+    meta = c.get_meta()
+    if container_type != "line":
+        assert meta[0]["type"] == container_type
     else:
-        return
+        assert meta[0]["type"] == "model_line"

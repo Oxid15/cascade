@@ -18,12 +18,14 @@ import os
 import sys
 from unittest.mock import patch
 
+import pytest
 from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.base import MetaHandler
 from cascade.cli.cli import cli
+from cascade.lines import DataLine, ModelLine
 from cascade.models import BasicModel
 
 
@@ -31,6 +33,22 @@ class TestModel(BasicModel):
     def save_artifact(self, path: str):
         with open(os.path.join(path, "artifact.txt"), "w") as f:
             f.write("Hello")
+
+
+def test_rm_line(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        line = ModelLine(td)
+        for i in range(5):
+            model = TestModel()
+            line.save(model)
+            assert os.path.exists(os.path.join(td, f"{i:0>5d}", "artifacts", "artifact.txt"))
+        
+        result = runner.invoke(cli, args=["artifact", "rm", "-y"])
+        assert result.exit_code == 0
+
+        for i in range(5):
+            assert not os.path.exists(os.path.join(td, f"{i:0>5d}", "artifacts", "artifact.txt"))
 
 
 def test_rm_model(tmp_path_str):
