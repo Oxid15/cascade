@@ -1,7 +1,7 @@
-Cascade - small-scale MLOps library with experiment tracking
-############################################################
+Small-scale MLOps library
+#########################
 
-Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
+Cascade is a lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
 
 .. meta::
    :description: Open-source MLOps library for lightweight experiment tracking. Configuration management, ML pipeline building and data validation tools for small-scale development.

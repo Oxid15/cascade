@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Dataset Zoo &#8212; cascade 0.15.0 documentation</title>
+    <title>Dataset Zoo &#8212; cascade 0.15.1 documentation</title>
   
   
   
@@ -18,28 +18,27 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
   
-  <link href="../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../styles/pydata-sphinx-theme.css?v=3ab4e28d" />
+    <link rel="stylesheet" type="text/css" href="../pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../css/custom.css?v=9cb1bd10" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
-    <script src="../documentation_options.js?v=52d5597a"></script>
-    <script src="../doctools.js?v=9a2dae69"></script>
+    <script src="../documentation_options.js?v=fb952d1c"></script>
+    <script src="../doctools.js?v=9bcbadda"></script>
     <script src="../sphinx_highlight.js?v=dc90522c"></script>
     <script src="../clipboard.min.js?v=a7894cd8"></script>
     <script src="../copybutton.js?v=f281be69"></script>
@@ -63,7 +62,6 @@
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
-    <link rel="icon" href="../logo_sq.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="cascade.utils.vision" href="cascade.utils.vision.html" />
@@ -472,7 +470,7 @@ how to use them in your workflow.</p>
 <p>If your solution has some data source that is already accesible in python-code, but you
 need to plug it in Cascade’s workflow it may be all you need. <cite>Wrapper</cite> gives the items
 from the source one by one, adding some info about the undelying data to its metadata.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.data</span> <span class="kn">import</span> <span class="n">Wrapper</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Wrapper</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
 
@@ -485,9 +483,9 @@ from the source one by one, adding some info about the undelying data to its met
 <h2>Iterators<a class="headerlink" href="#iterators" title="Link to this heading">#</a></h2>
 <p>If data source doesn’t have length - you cannot use <a href="#id3"><span class="problematic" id="id4">`</span></a>Wrapper`s, but it is not a problem,
 you can use <a href="#id5"><span class="problematic" id="id6">`</span></a>Iterator`s instead! It is basically the same dataset, but using different interface.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
-<span class="k">def</span> <span class="nf">gen</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gen</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
         <span class="k">yield</span> <span class="n">number</span>
 
@@ -502,11 +500,11 @@ you can use <a href="#id5"><span class="problematic" id="id6">`</span></a>Iterat
 <h2>ApplyModifier<a class="headerlink" href="#applymodifier" title="Link to this heading">#</a></h2>
 <p>The pipelines are frequently applying some python-functions to the items in datasets.
 In Cascade this is done by using <cite>ApplyModifier</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 
 <span class="n">The</span> <span class="n">function</span> <span class="n">that</span> <span class="n">will</span> <span class="n">be</span> <span class="n">applied</span>
-<span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
@@ -521,7 +519,7 @@ In Cascade this is done by using <cite>ApplyModifier</cite>.</p>
 <h2>Concatenator<a class="headerlink" href="#concatenator" title="Link to this heading">#</a></h2>
 <p>Concatenation is also frequent operation that is done to unify several datasets
 into one. In Cascade it is done easily using <cite>Concatenator</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">ds_1</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
 <span class="n">ds_2</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>
@@ -538,7 +536,7 @@ into one. In Cascade it is done easily using <cite>Concatenator</cite>.</p>
 <h2>split<a class="headerlink" href="#split" title="Link to this heading">#</a></h2>
 <p>This is the opposite of concatenate - we can split one dataset into train and
 test parts easily with <cite>cdd.split()</cite></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
 <span class="n">train_ds</span><span class="p">,</span> <span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
@@ -557,7 +555,7 @@ test parts easily with <cite>cdd.split()</cite></p>
 <p>Composer is another way of unifying two datasets, but in this case the
 union dataset returns tuples of item from composed datasets. This is useful,
 when items and labels for classification are from different datasets.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">items</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -572,7 +570,7 @@ when items and labels for classification are from different datasets.</p>
 <h2>CyclicSampler<a class="headerlink" href="#cyclicsampler" title="Link to this heading">#</a></h2>
 <p>When you need an easy way to repeat your dataset several times or the opposite -
 restrict the number of items in dataset, you can use this.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">CyclicSampler</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
@@ -586,7 +584,7 @@ restrict the number of items in dataset, you can use this.</p>
 <h2>RandomSampler<a class="headerlink" href="#randomsampler" title="Link to this heading">#</a></h2>
 <p>Undeterministic counterpart of CyclicSampler. Ideal solution for shuffling the data in lazy way.</p>
 <p>import numpy as np</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
@@ -610,7 +608,7 @@ restrict the number of items in dataset, you can use this.</p>
 <section id="rangesampler">
 <h2>RangeSampler<a class="headerlink" href="#rangesampler" title="Link to this heading">#</a></h2>
 <p>This is if you need python’s range in Cascade realm. Has just similar interface as <cite>range</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">RangeSampler</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -626,19 +624,19 @@ restrict the number of items in dataset, you can use this.</p>
 are big and do not fit into memory, but can slow down some processes. If your data fits
 into memory, you can cache previous stages of pipeline to speed up next stages.</p>
 <p>Suppose for example that we need to obtain our data through very slow network</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 
-<span class="k">class</span> <span class="nc">LongLoadingDataSource</span><span class="p">(</span><span class="n">cdd</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LongLoadingDataSource</span><span class="p">(</span><span class="n">cdd</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_length</span> <span class="o">=</span> <span class="n">length</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">index</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">LongLoadingDataSource</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -657,7 +655,7 @@ then load it and use without problems.</p>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Pickler</span><span class="p">(</span><span class="s1">&#39;ds.pkl&#39;</span><span class="p">,</span> <span class="n">ds</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Pickler</span><span class="p">(</span><span class="s1">&#39;ds.pkl&#39;</span><span class="p">)</span>
 
@@ -675,8 +673,8 @@ they emit tuples and the second element of each tuple is a classification label.
 are lazy, but to obtain label distribution, they load elements one-by-one not storing them in memory in initialization.</p>
 <p>They are also deterministic and place elements with similar labels together. Consider using <cite>RandomSampler</cite> to
 shuffle datasets before passing them to learning.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
-<span class="kn">from</span> <span class="nn">cascade.utils.samplers</span> <span class="kn">import</span> <span class="n">OverSampler</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.samplers</span><span class="w"> </span><span class="kn">import</span> <span class="n">OverSampler</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span>
     <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -689,7 +687,7 @@ shuffle datasets before passing them to learning.</p>
 <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.samplers</span> <span class="kn">import</span> <span class="n">UnderSampler</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.samplers</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnderSampler</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span>
     <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -706,8 +704,8 @@ shuffle datasets before passing them to learning.</p>
 <section id="weighedsampler">
 <h2>WeighedSampler<a class="headerlink" href="#weighedsampler" title="Link to this heading">#</a></h2>
 <p>If you need more freedom in how to sample your data according to the label you have, you can use this</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
-<span class="kn">from</span> <span class="nn">cascade.utils.samplers</span> <span class="kn">import</span> <span class="n">WeighedSampler</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.samplers</span><span class="w"> </span><span class="kn">import</span> <span class="n">WeighedSampler</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span>
     <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
@@ -732,9 +730,9 @@ contain a number of useful tools and features.</p>
 <section id="timeseriesdataset">
 <h3>TimeSeriesDataset<a class="headerlink" href="#timeseriesdataset" title="Link to this heading">#</a></h3>
 <p><cite>TimeSeriesDataset</cite> contains whole time series data. They require separate time and data channels to initialize.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
-<span class="kn">from</span> <span class="nn">cascade.utils.time_series</span> <span class="kn">import</span> <span class="n">TimeSeriesDataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.time_series</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeriesDataset</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">[</span>
     <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
@@ -793,7 +791,7 @@ TableDataset and its keyword <cite>t</cite> for table.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="n">matplotlib</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">ds</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
 </pre></div>
@@ -804,7 +802,7 @@ TableDataset and its keyword <cite>t</cite> for table.</p>
 </div>
 <p>Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in <cite>Modifier</cite>.</p>
 <p>First - dataset is initialized with nan-value. Nan-value is <cite>numpy.nan</cite> because Interpolate uses pandas under-the-hood.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">[</span>
     <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
@@ -815,14 +813,14 @@ TableDataset and its keyword <cite>t</cite> for table.</p>
 <span class="n">ds</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.time_series</span> <span class="kn">import</span> <span class="n">Interpolate</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.time_series</span><span class="w"> </span><span class="kn">import</span> <span class="n">Interpolate</span>
 
 <span class="n">Interpolate</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">limit_direction</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span> <span class="n">These</span> <span class="n">arguments</span> <span class="n">are</span> <span class="n">defaults</span>
 </pre></div>
 </div>
 <p>Averaging over some time-window is also a frequent task in work with time-series. Here in <cite>Average</cite> you
 can set the time grain and a quantity to average.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pendulum</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pendulum</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">[</span>
     <span class="n">pendulum</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
@@ -832,12 +830,12 @@ can set the time grain and a quantity to average.</p>
 <span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.time_series</span> <span class="kn">import</span> <span class="n">Average</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.time_series</span><span class="w"> </span><span class="kn">import</span> <span class="n">Average</span>
 
 <span class="n">Average</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;days&#39;</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.time_series</span> <span class="kn">import</span> <span class="n">Align</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.time_series</span><span class="w"> </span><span class="kn">import</span> <span class="n">Align</span>
 
 <span class="n">Align</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">[</span><span class="n">pendulum</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">)])</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
 </pre></div>
@@ -846,8 +844,8 @@ can set the time grain and a quantity to average.</p>
 <section id="tabledataset">
 <h3>TableDataset<a class="headerlink" href="#tabledataset" title="Link to this heading">#</a></h3>
 <p>Frequently the work with tables is done. To track them efficiently using Cascade this wrapper was created.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">cascade.utils.tables</span> <span class="kn">import</span> <span class="n">TableDataset</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">TableDataset</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">TableDataset</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]))</span>
 </pre></div>
@@ -857,7 +855,7 @@ can set the time grain and a quantity to average.</p>
 </pre></div>
 </div>
 <p>Filtering is common when using tables. This modifier accepts binary mask and records new stage in the pipeline’s metadata.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cascade.utils.tables</span> <span class="kn">import</span> <span class="n">TableFilter</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">TableFilter</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">TableFilter</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -879,10 +877,7 @@ can set the time grain and a quantity to average.</p>
               
               
                 <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="cascade.utils.vision.html"
@@ -893,10 +888,7 @@ can set the time grain and a quantity to average.</p>
         <p class="prev-next-title">cascade.utils.vision</p>
       </div>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -946,7 +938,7 @@ can set the time grain and a quantity to average.</p>
             
           </div>
           <footer class="bd-footer-content">
-            
+            <div class="bd-footer-content__inner"></div>
           </footer>
         
       </main>
@@ -954,8 +946,8 @@ can set the time grain and a quantity to average.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -973,7 +965,7 @@ can set the time grain and a quantity to average.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -984,7 +976,7 @@ can set the time grain and a quantity to average.</p>
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.0.
 </p></div>
       
     </div>
