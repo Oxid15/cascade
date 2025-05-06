@@ -1,5 +1,5 @@
 cascade.meta
-============
+############
 
 .. autoclass:: cascade.meta.DiffViewer
     :members:

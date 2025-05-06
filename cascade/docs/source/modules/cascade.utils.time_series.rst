@@ -1,5 +1,5 @@
 cascade.utils.time_series
-=========================
+#########################
 
 .. autoclass:: cascade.utils.time_series.Align
     :members:

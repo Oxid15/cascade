@@ -1,5 +1,5 @@
 cascade.utils.sklearn
-=====================
+#####################
 
 .. autoclass:: cascade.utils.sklearn.SkMetric
     :members:
