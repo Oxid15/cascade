@@ -56,6 +56,7 @@ setuptools.setup(
         "click>=8.0.0",
         "typing-extensions>=4.1.1,<5",
         'astunparse ; python_version<"3.9"',
+        'orderly-set==5.3.2; python_version=="3.8"'
     ],
     extras_require=extras_require,
 )
