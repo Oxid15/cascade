@@ -31,10 +31,13 @@ def ui(ctx, path, host, port):
         return
 
     try:
-        from cascade_ui.server import run
-    except ImportError:
-        raise ImportError(
-            "cascade_ui package is required to run UI. Install it with 'pip install cascade-ui'"
-        )
+        from cascade_ui.app import run
+    except ImportError as e:
+        if "No module named 'cascade_ui'" in e.msg:
+            raise ImportError(
+                "cascade_ui package is required to run UI. Install it with 'pip install cascade-ui'"
+            ) from e
+        else:
+            raise e
     else:
         run(path, host, port)
