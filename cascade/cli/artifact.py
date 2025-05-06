@@ -66,8 +66,8 @@ def remove_model_artifacts(path) -> List[RemoveResult]:
     return remove_files(os.path.join(path, "artifacts"))
 
 
-def remove_line_artifacts(path) -> List[List[RemoveResult]]:
-    line = create_container("line", path)
+def remove_line_artifacts(path, type) -> List[List[RemoveResult]]:
+    line = create_container(type, path)
     line_results = []
     for name in line.get_model_names():
         results = remove_model_artifacts(os.path.join(path, name))
@@ -119,7 +119,12 @@ def artifact_rm(ctx, y):
         results_list.append(results)
         flat_results.extend(results)
     elif ctx.obj["type"] == "line":
-        line_results = remove_line_artifacts(ctx.obj["cwd"])
+        line_results = remove_line_artifacts(ctx.obj["cwd"], "model_line")
+        for results in line_results:
+            results_list.append(results)
+            flat_results.extend(results)
+    elif ctx.obj["type"] == "model_line":
+        line_results = remove_line_artifacts(ctx.obj["cwd"], "model_line")
         for results in line_results:
             results_list.append(results)
             flat_results.extend(results)
