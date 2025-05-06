@@ -26,6 +26,7 @@ from typing import Any, Dict, List, Optional
 
 import click
 import pendulum
+
 from cascade.base import MetaHandler
 
 
@@ -209,11 +210,12 @@ class CascadeRun:
             os.makedirs(logs_dir)
 
         for line in process.stdout:
-            print(line.decode("utf-8").strip())
+            line_str = line.decode("utf-8").strip()
+            print(line_str)
 
             if self.log:
                 with open(os.path.join(logs_dir, "cascade_run.log"), "a") as log_file:
-                    log_file.write(line + "\n")
+                    log_file.write(line_str + "\n")
 
         returncode = process.wait()
         if returncode:
