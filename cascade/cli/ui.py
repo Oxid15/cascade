@@ -35,6 +35,9 @@ def ui(ctx, path, host, port):
 
             Workspace(path)
             init_ctx(ctx, path)
+        else:
+            click.echo("Exiting...")
+            return
 
     if ctx.obj["meta"][0]["type"] != "workspace":
         click.echo("UI is only available inside workspaces")
