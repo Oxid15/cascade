@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
+
 import click
+
+from .common import init_ctx
 
 
 @click.command("ui")
@@ -23,8 +27,14 @@ import click
 @click.option("--port", default=8000)
 @click.pass_context
 def ui(ctx, path, host, port):
-    if not ctx.obj.get("meta"):
-        return
+    if not os.path.exists(os.path.join(path, "meta.json")):
+        click.echo("This folder is not a Cascade Workspace, would you like to create one?")
+        response = input("y/n: ")
+        if response.lower() == "y":
+            from cascade.workspaces import Workspace
+
+            Workspace(path)
+            init_ctx(ctx, path)
 
     if ctx.obj["meta"][0]["type"] != "workspace":
         click.echo("UI is only available inside workspaces")
