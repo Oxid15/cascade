@@ -25,8 +25,12 @@ import pendulum
 from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler
-from ..base.utils import (generate_slug, get_latest_commit_hash,
-                          get_python_version, get_uncommitted_changes)
+from ..base.utils import (
+    generate_slug,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+)
 from ..models.model import Model
 from .disk_line import DiskLine
 
@@ -96,9 +100,7 @@ class ModelLine(DiskLine):
             )
 
         model = super().load(num)
-        model.load_artifact(
-            os.path.join(self._root, self._item_names[num], "artifacts")
-        )
+        model.load_artifact(os.path.join(self._root, self._item_names[num], "artifacts"))
         return model
 
     def load_artifact_paths(self, model: Union[int, str]) -> Dict[str, List[str]]:
@@ -122,14 +124,12 @@ class ModelLine(DiskLine):
         artifact_path = os.path.join(model_folder, "artifacts")
         if os.path.exists(artifact_path):
             result["artifacts"] = [
-                os.path.join(self._root, "artifacts", name)
-                for name in os.listdir(artifact_path)
+                os.path.join(model_folder, "artifacts", name) for name in os.listdir(artifact_path)
             ]
         file_path = os.path.join(model_folder, "files")
         if os.path.exists(file_path):
             result["files"] = [
-                os.path.join(self._root, "files", name)
-                for name in os.listdir(file_path)
+                os.path.join(model_folder, "files", name) for name in os.listdir(file_path)
             ]
         return result
 
@@ -205,9 +205,7 @@ class ModelLine(DiskLine):
             except Exception as e:
                 model_exception = str(e)
                 model_tb = traceback.format_exc()
-                print(
-                    f"Failed to save model {full_path}\n{model_exception}\n{model_tb}"
-                )
+                print(f"Failed to save model {full_path}\n{model_exception}\n{model_tb}")
 
             artifacts_folder = os.path.join(full_path, "artifacts")
             os.makedirs(artifacts_folder)
@@ -216,9 +214,7 @@ class ModelLine(DiskLine):
             except Exception as e:
                 artifact_exception = str(e)
                 artifact_tb = traceback.format_exc()
-                print(
-                    f"Failed to save artifact {full_path}\n{artifact_exception}\n{artifact_tb}"
-                )
+                print(f"Failed to save artifact {full_path}\n{artifact_exception}\n{artifact_tb}")
 
         if model_tb is not None or artifact_tb is not None:
             meta[0]["errors"] = {}
