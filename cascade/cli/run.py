@@ -26,7 +26,6 @@ from typing import Any, Dict, List, Optional
 
 import click
 import pendulum
-
 from cascade.base import MetaHandler
 
 
@@ -60,7 +59,7 @@ def find_config(tree: ast.Module) -> Optional[ast.ClassDef]:
         if isinstance(node, ast.ClassDef):
             if len(node.bases):
                 for base in node.bases:
-                    if base.id == "Config":
+                    if getattr(base, "id", None) == "Config":
                         if cfg_node is not None:
                             more_than_one = True
                         cfg_node = node
