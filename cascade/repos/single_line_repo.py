@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
 from typing import Any, Dict, List, Optional
 
 from typing_extensions import Literal
@@ -31,16 +32,14 @@ class SingleLineRepo(BaseRepo):
         **kwargs: Any,
     ) -> None:
         super().__init__(line.get_root(), *args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {line.get_root(): {"args": [], "kwargs": dict()}}
+        self._lines = {os.path.split(line.get_root())[-1]: {"args": [], "kwargs": dict()}}
         self._line = line
 
     def __getitem__(self, key: str) -> Line:
         if key in self._lines:
             return self._line
         else:
-            raise KeyError(
-                f"The only line is {list(self._lines.keys())[0]}, {key} does not exist"
-            )
+            raise KeyError(f"The only line is {list(self._lines.keys())[0]}, {key} does not exist")
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._root}"
@@ -55,4 +54,4 @@ class SingleLineRepo(BaseRepo):
         return 1
 
     def get_line_names(self) -> List[str]:
-        return [self._root]
+        return list(self._lines.keys())
