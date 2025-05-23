@@ -46,6 +46,14 @@ def test_update_meta():
     assert meta[0]["b"] == 3
 
 
+def test_update_meta_list():
+    tr = Traceable()
+    tr.update_meta([{"b": 3}])
+    meta = tr.get_meta()
+
+    assert meta[0]["b"] == 3
+
+
 # This is deprecated since 0.13.0
 @pytest.mark.skip
 def test_meta_from_file(tmp_path):
