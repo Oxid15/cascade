@@ -16,6 +16,21 @@ limitations under the License.
 
 from typing import Any
 
+import click
+
+from ..base import MetaHandler, MetaIOError
+
+
+def init_ctx(ctx, path):
+    try:
+        meta = MetaHandler.read_dir(path)
+        ctx.obj["meta"] = meta
+        ctx.obj["type"] = meta[0].get("type")
+        ctx.obj["len"] = meta[0].get("len")
+        ctx.obj["meta_fmt"] = MetaHandler.determine_meta_fmt(path, "meta.*")
+    except MetaIOError as e:
+        click.echo(e)
+
 
 def create_container(type: str, cwd: str) -> Any:
     # "line" fallback here is for compatibility
