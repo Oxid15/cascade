@@ -1,8 +1,8 @@
 Cascade UI
 ##########
 
-Cascade UI is a web-based dashboard for your machine learning experiments.
-It provides a visual overview of your experiment results,
+Cascade UI is a lightweight dashboard for your machine learning experiments.
+The tool provides a visual overview of your experiment results,
 metadata, parameters, metrics and more.
 
 This single interface is a replacement for dash-based Viewers, that
@@ -79,8 +79,8 @@ experiment metadata, tracked parameters and metrics.
 Configs
 -------
 
-Here you can see configs produced by Cascade's configuration management
-system. If your model has a config saved it will be displayed here.
+Here you can see configs produced by Cascade's :ref:`configuration management
+system</tutorials/configuration.rst>`. If your model has a config saved it will be displayed here.
 
 .. image:: imgs/model-config.png
   :alt: Model config page of Cascade - Small scale MLOps library
@@ -88,7 +88,7 @@ system. If your model has a config saved it will be displayed here.
 Logs
 ----
 
-If you used ``cascade run`` with log tracking, you will be able to see your logs here.
+If you used ``cascade run`` with :ref:`log tracking</howtos/track_logs.rst>`, you will be able to see your logs here.
 
 .. image:: imgs/model-logs.png
   :alt: Model logs page of Cascade - Small scale MLOps library
