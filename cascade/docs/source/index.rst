@@ -56,6 +56,12 @@ Advanced features
 .. grid:: 2
 
     .. grid-item::
+        .. card:: :octicon:`zap` Web-UI
+            :link: tutorials/tutorials.html#viewers
+
+            Just do ``cascade ui`` to get your experiments visualized
+
+    .. grid-item::
         .. card:: :octicon:`terminal` CLI
             :link: tutorials/tutorials.html#cli
 
@@ -66,17 +72,6 @@ Advanced features
             :link: tutorials/results_querying.html
 
             Use CLI to access your experiments (if you have too many of them)
-
-    .. grid-item::
-        .. card:: :octicon:`graph` Dash-based visualizations
-            :link: tutorials/tutorials.html#viewers
-
-            See plots and tables in dash-based web interface
-
-    .. grid-item::
-        .. card:: :octicon:`zap` Web-UI
-
-            :bdg-info:`Coming soon!`
 
 
 Experiment management
