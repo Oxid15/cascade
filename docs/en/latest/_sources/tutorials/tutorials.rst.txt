@@ -1017,6 +1017,7 @@ you can proceed to the :ref:`/howtos/howtos.rst` section.
     :maxdepth: 2
 
     self
+    ui
     configuration
     advanced_experiment_management
     results_querying

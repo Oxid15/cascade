@@ -10,7 +10,7 @@
 <meta content="Open-source MLOps library for lightweight experiment tracking. Configuration management, ML pipeline building and data validation tools for small-scale development." name="description" />
 <meta content="cascade, mlops, ml, experiment tracking, pipelines, data validation" name="keywords" />
 
-    <title>Small-scale MLOps library &#8212; cascade 0.15.1 documentation</title>
+    <title>Small-scale MLOps library &#8212; cascade 0.16.0 documentation</title>
   
   
   
@@ -31,6 +31,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="styles/pydata-sphinx-theme.css?v=1629a501" />
     <link rel="stylesheet" type="text/css" href="copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="css/custom.css?v=9cb1bd10" />
@@ -39,7 +40,7 @@
   <link rel="preload" as="script" href="scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
 <link rel="preload" as="script" href="scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
-    <script src="documentation_options.js?v=fb952d1c"></script>
+    <script src="documentation_options.js?v=ff8529b6"></script>
     <script src="doctools.js?v=9bcbadda"></script>
     <script src="sphinx_highlight.js?v=dc90522c"></script>
     <script src="clipboard.min.js?v=a7894cd8"></script>
@@ -66,11 +67,10 @@
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         </script>
-
-    <link rel="icon" href="logo_sq.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorial" href="tutorials/tutorials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
   
@@ -472,6 +472,15 @@ by using different parts of the library without the need to bring everything at 
 <div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm sd-card-hover docutils">
 <div class="sd-card-body docutils">
 <div class="sd-card-title sd-font-weight-bold docutils">
+<span class="sd-sphinx-override sd-badge sd-bg-info sd-bg-text-info">NEW</span> Web-UI</div>
+<p class="sd-card-text">Just do <code class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">ui</span></code> to get a nice dashboard for your experiments</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference external" href="tutorials/ui.html"><span>tutorials/ui.html</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-column docutils">
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
 <svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-terminal" viewBox="0 0 16 16" aria-hidden="true"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z"></path></svg> CLI</div>
 <p class="sd-card-text">Comment, tag and write experiment descriptions from command line</p>
 </div>
@@ -485,24 +494,6 @@ by using different parts of the library without the need to bring everything at 
 <p class="sd-card-text">Use CLI to access your experiments (if you have too many of them)</p>
 </div>
 <a class="sd-stretched-link sd-hide-link-text reference external" href="tutorials/results_querying.html"><span>tutorials/results_querying.html</span></a></div>
-</div>
-<div class="sd-col sd-d-flex-column docutils">
-<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm sd-card-hover docutils">
-<div class="sd-card-body docutils">
-<div class="sd-card-title sd-font-weight-bold docutils">
-<svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-graph" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path></svg> Dash-based visualizations</div>
-<p class="sd-card-text">See plots and tables in dash-based web interface</p>
-</div>
-<a class="sd-stretched-link sd-hide-link-text reference external" href="tutorials/tutorials.html#viewers"><span>tutorials/tutorials.html#viewers</span></a></div>
-</div>
-<div class="sd-col sd-d-flex-column docutils">
-<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm docutils">
-<div class="sd-card-body docutils">
-<div class="sd-card-title sd-font-weight-bold docutils">
-<svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-zap" viewBox="0 0 16 16" aria-hidden="true"><path d="M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.249 1.249 0 0 1-.871.354h-.302a1.25 1.25 0 0 1-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004L9.503.429Zm1.047 1.074L3.286 8.571A.25.25 0 0 0 3.462 9H6.75a.75.75 0 0 1 .694 1.034l-1.713 4.188 6.982-6.793A.25.25 0 0 0 12.538 7H9.25a.75.75 0 0 1-.683-1.06l2.008-4.418.003-.006a.036.036 0 0 0-.004-.009l-.006-.006-.008-.001c-.003 0-.006.002-.009.004Z"></path></svg> Web-UI</div>
-<p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-info sd-bg-text-info">Coming soon!</span></p>
-</div>
-</div>
 </div>
 </div>
 </div>

@@ -1,5 +1,5 @@
 cascade.lines
-=============
+#############
 
 .. autoclass:: cascade.lines.DataLine
     :members:

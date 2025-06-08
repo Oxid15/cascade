@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Dataset Zoo &#8212; cascade 0.15.1 documentation</title>
+    <title>Dataset Zoo &#8212; cascade 0.16.0 documentation</title>
   
   
   
@@ -29,6 +29,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../styles/pydata-sphinx-theme.css?v=1629a501" />
     <link rel="stylesheet" type="text/css" href="../copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../css/custom.css?v=9cb1bd10" />
@@ -37,7 +38,7 @@
   <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
 <link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
-    <script src="../documentation_options.js?v=fb952d1c"></script>
+    <script src="../documentation_options.js?v=ff8529b6"></script>
     <script src="../doctools.js?v=9bcbadda"></script>
     <script src="../sphinx_highlight.js?v=dc90522c"></script>
     <script src="../clipboard.min.js?v=a7894cd8"></script>
@@ -460,15 +461,15 @@ document.write(`
   <section id="dataset-zoo">
 <h1>Dataset Zoo<a class="headerlink" href="#dataset-zoo" title="Link to this heading">#</a></h1>
 <p>Cascade has many solutions - basic that are added to the core and more specific
-that are in the special <cite>utils</cite> module. And if you didn’t found suitable component,
+that are in the special <code class="docutils literal notranslate"><span class="pre">utils</span></code> module. And if you didn’t found suitable component,
 you can write it yourself.</p>
-<p>Here some of already-made components are presented. These are the <a href="#id1"><span class="problematic" id="id2">`</span></a>Dataset`s - building
+<p>Here some of already-made components are presented. These are the <a href="#id1"><span class="problematic" id="id2">``</span></a>Dataset``s - building
 blocks of Cascade’s pipelines, their description and short examples of
 how to use them in your workflow.</p>
 <section id="wrappers">
 <h2>Wrappers<a class="headerlink" href="#wrappers" title="Link to this heading">#</a></h2>
 <p>If your solution has some data source that is already accesible in python-code, but you
-need to plug it in Cascade’s workflow it may be all you need. <cite>Wrapper</cite> gives the items
+need to plug it in Cascade’s workflow it may be all you need. <code class="docutils literal notranslate"><span class="pre">Wrapper</span></code> gives the items
 from the source one by one, adding some info about the undelying data to its metadata.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Wrapper</span>
 
@@ -481,8 +482,8 @@ from the source one by one, adding some info about the undelying data to its met
 </section>
 <section id="iterators">
 <h2>Iterators<a class="headerlink" href="#iterators" title="Link to this heading">#</a></h2>
-<p>If data source doesn’t have length - you cannot use <a href="#id3"><span class="problematic" id="id4">`</span></a>Wrapper`s, but it is not a problem,
-you can use <a href="#id5"><span class="problematic" id="id6">`</span></a>Iterator`s instead! It is basically the same dataset, but using different interface.</p>
+<p>If data source doesn’t have length - you cannot use <a href="#id3"><span class="problematic" id="id4">``</span></a>Wrapper``s, but it is not a problem,
+you can use <a href="#id5"><span class="problematic" id="id6">``</span></a>Iterator``s instead! It is basically the same dataset, but using different interface.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gen</span><span class="p">():</span>
@@ -499,7 +500,7 @@ you can use <a href="#id5"><span class="problematic" id="id6">`</span></a>Iterat
 <section id="applymodifier">
 <h2>ApplyModifier<a class="headerlink" href="#applymodifier" title="Link to this heading">#</a></h2>
 <p>The pipelines are frequently applying some python-functions to the items in datasets.
-In Cascade this is done by using <cite>ApplyModifier</cite>.</p>
+In Cascade this is done by using <code class="docutils literal notranslate"><span class="pre">ApplyModifier</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 
@@ -518,7 +519,7 @@ In Cascade this is done by using <cite>ApplyModifier</cite>.</p>
 <section id="concatenator">
 <h2>Concatenator<a class="headerlink" href="#concatenator" title="Link to this heading">#</a></h2>
 <p>Concatenation is also frequent operation that is done to unify several datasets
-into one. In Cascade it is done easily using <cite>Concatenator</cite>.</p>
+into one. In Cascade it is done easily using <code class="docutils literal notranslate"><span class="pre">Concatenator</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">ds_1</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
@@ -535,7 +536,7 @@ into one. In Cascade it is done easily using <cite>Concatenator</cite>.</p>
 <section id="split">
 <h2>split<a class="headerlink" href="#split" title="Link to this heading">#</a></h2>
 <p>This is the opposite of concatenate - we can split one dataset into train and
-test parts easily with <cite>cdd.split()</cite></p>
+test parts easily with <code class="docutils literal notranslate"><span class="pre">cdd.split()</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
@@ -607,7 +608,7 @@ restrict the number of items in dataset, you can use this.</p>
 </section>
 <section id="rangesampler">
 <h2>RangeSampler<a class="headerlink" href="#rangesampler" title="Link to this heading">#</a></h2>
-<p>This is if you need python’s range in Cascade realm. Has just similar interface as <cite>range</cite>.</p>
+<p>This is if you need python’s range in Cascade realm. Has just similar interface as <code class="docutils literal notranslate"><span class="pre">range</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
@@ -648,7 +649,7 @@ But what if we have a script that should be executed every time and then caching
 </section>
 <section id="pickler">
 <h2>Pickler<a class="headerlink" href="#pickler" title="Link to this heading">#</a></h2>
-<p>For these purposes <cite>Pickler</cite> was implemented. You can cache and then pickle previous pipeline on the disk,
+<p>For these purposes <code class="docutils literal notranslate"><span class="pre">Pickler</span></code> was implemented. You can cache and then pickle previous pipeline on the disk,
 then load it and use without problems.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">LongLoadingDataSource</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">BruteforceCacher</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
@@ -671,7 +672,7 @@ then load it and use without problems.</p>
 they emit tuples and the second element of each tuple is a classification label.</p>
 <p>Using that labels they equalize label distribution by repeating or deleting some elements. The sampler themselves
 are lazy, but to obtain label distribution, they load elements one-by-one not storing them in memory in initialization.</p>
-<p>They are also deterministic and place elements with similar labels together. Consider using <cite>RandomSampler</cite> to
+<p>They are also deterministic and place elements with similar labels together. Consider using <code class="docutils literal notranslate"><span class="pre">RandomSampler</span></code> to
 shuffle datasets before passing them to learning.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.samplers</span><span class="w"> </span><span class="kn">import</span> <span class="n">OverSampler</span>
@@ -729,7 +730,7 @@ shuffle datasets before passing them to learning.</p>
 contain a number of useful tools and features.</p>
 <section id="timeseriesdataset">
 <h3>TimeSeriesDataset<a class="headerlink" href="#timeseriesdataset" title="Link to this heading">#</a></h3>
-<p><cite>TimeSeriesDataset</cite> contains whole time series data. They require separate time and data channels to initialize.</p>
+<p><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code> contains whole time series data. They require separate time and data channels to initialize.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.time_series</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeSeriesDataset</span>
@@ -744,8 +745,8 @@ contain a number of useful tools and features.</p>
 </pre></div>
 </div>
 <p>The important thing about these datasets is that they <em>always should be initialized with keywords</em>. The usage
-of <cite>time</cite> and <cite>data</cite> is mandatory for dataset to work. The same applies to other specific datasets such as
-TableDataset and its keyword <cite>t</cite> for table.</p>
+of <code class="docutils literal notranslate"><span class="pre">time</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> is mandatory for dataset to work. The same applies to other specific datasets such as
+TableDataset and its keyword <code class="docutils literal notranslate"><span class="pre">t</span></code> for table.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">([</span>
     <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
     <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
@@ -755,7 +756,7 @@ TableDataset and its keyword <cite>t</cite> for table.</p>
 <span class="n">ds</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This is due to unification of two interfaces in <cite>Modifier`s for these datasets. A `Modifier</cite> should be also <cite>TimeSeriesDataset</cite>.</p>
+<p>This is due to unification of two interfaces in <code class="docutils literal notranslate"><span class="pre">Modifier``s</span> <span class="pre">for</span> <span class="pre">these</span> <span class="pre">datasets.</span> <span class="pre">A</span> <span class="pre">``Modifier</span></code> should be also <code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code>.</p>
 <p>Let’s initialize ds again:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">[</span>
     <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
@@ -779,7 +780,7 @@ TableDataset and its keyword <cite>t</cite> for table.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">6</span><span class="p">):]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span> <span class="n">Or</span> <span class="n">using</span> <span class="n">time</span>
 </pre></div>
 </div>
-<p>Note that every slice returns new <cite>TimeSerisDataset</cite> instance.</p>
+<p>Note that every slice returns new <code class="docutils literal notranslate"><span class="pre">TimeSerisDataset</span></code> instance.</p>
 <p>There is always a general way to extract all data, which is most useful for plotting data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
 </pre></div>
@@ -796,12 +797,12 @@ TableDataset and its keyword <cite>t</cite> for table.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">ds</span><span class="o">.</span><span class="n">get_data</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>You can always get the data alone using <cite>to_numpy()</cite></p>
+<p>You can always get the data alone using <code class="docutils literal notranslate"><span class="pre">to_numpy()</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in <cite>Modifier</cite>.</p>
-<p>First - dataset is initialized with nan-value. Nan-value is <cite>numpy.nan</cite> because Interpolate uses pandas under-the-hood.</p>
+<p>Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in <code class="docutils literal notranslate"><span class="pre">Modifier</span></code>.</p>
+<p>First - dataset is initialized with nan-value. Nan-value is <code class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> because Interpolate uses pandas under-the-hood.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">ds</span> <span class="o">=</span> <span class="n">TimeSeriesDataset</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="p">[</span>
@@ -818,7 +819,7 @@ TableDataset and its keyword <cite>t</cite> for table.</p>
 <span class="n">Interpolate</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">limit_direction</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span> <span class="n">These</span> <span class="n">arguments</span> <span class="n">are</span> <span class="n">defaults</span>
 </pre></div>
 </div>
-<p>Averaging over some time-window is also a frequent task in work with time-series. Here in <cite>Average</cite> you
+<p>Averaging over some time-window is also a frequent task in work with time-series. Here in <code class="docutils literal notranslate"><span class="pre">Average</span></code> you
 can set the time grain and a quantity to average.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pendulum</span>
 
