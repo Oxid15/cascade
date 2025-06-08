@@ -22,24 +22,56 @@ from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from cascade.base import MetaHandler
+from cascade.base import MetaHandler, TraceableOnDisk
 from cascade.cli.cli import cli
+from cascade.data import BaseDataset
+from cascade.lines import DataLine, ModelLine
 from cascade.repos import Repo
+from cascade.workspaces import Workspace
 
 
-def test_add(tmp_path_str):
+class DummyDataset(BaseDataset):
+    def __len__(self):
+        return 0
+
+    def __getitem__(self, index) -> None:
+        return None
+
+
+def create_entity(entity_type: str, root: str) -> None:
+    if entity_type == "workspace":
+        Workspace(root)
+    if entity_type == "repo":
+        Repo(root)
+    elif entity_type == "model_line":
+        ModelLine(root)
+    elif entity_type == "data_line":
+        DataLine(root)
+    elif entity_type == "traceable":
+        TraceableOnDisk(root, ".yaml").sync_meta()
+
+@pytest.mark.parametrize(
+    "entity_type",
+    [
+        "workspace",
+        "repo",
+        "model_line",
+        "data_line",
+        "traceable",
+    ],
+)
+def test_add(tmp_path_str, entity_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        mh = MetaHandler()
-        Repo(td)
+        create_entity(entity_type, td)
 
-        init_meta = mh.read_dir(td)
+        init_meta = MetaHandler.read_dir(td)
 
         result = runner.invoke(cli, args=["comment", "add"], input="Hello")
 
         assert result.exit_code == 0
 
-        meta = mh.read_dir(td)
+        meta = MetaHandler.read_dir(td)
 
         assert "comments" in meta[0]
         assert len(meta[0]["comments"]) == 1
@@ -47,7 +79,7 @@ def test_add(tmp_path_str):
 
         meta[0]["comments"] = []
 
-        # Those will obviously different
+        # Those will obviously be different
         del meta[0]["updated_at"]
         del init_meta[0]["updated_at"]
 

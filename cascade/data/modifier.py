@@ -28,6 +28,14 @@ class BaseModifier(BaseDataset[T]):
         self_meta += self._dataset.get_meta()
         return self_meta
 
+    def update_meta(self, meta):
+        if isinstance(meta, list):
+            super().update_meta(meta[0])
+            if len(meta) > 1:
+                self._dataset.update_meta(meta[1:])
+        else:
+            super().update_meta(meta)
+
     def from_meta(self, meta: Meta) -> None:
         """
         Calls the same method as base class but does

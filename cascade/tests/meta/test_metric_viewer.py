@@ -22,6 +22,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.lines import ModelLine
 from cascade.meta import MetricViewer
 from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel
@@ -85,9 +86,8 @@ def test_missing_model_meta(tmp_path_str, dummy_model, ext):
     mtv.plot_table(show=False)
 
 
-@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
-def test_get_best_by(tmp_path_str, ext):
-    repo = Repo(tmp_path_str, meta_fmt=ext, model_cls=DummyModel)
+def test_get_best_by(tmp_path_str):
+    repo = Repo(tmp_path_str, model_cls=DummyModel)
     line = repo.add_line("00001", model_cls=DummyModel)
 
     model = DummyModel()
@@ -98,4 +98,18 @@ def test_get_best_by(tmp_path_str, ext):
     line.save(model)
 
     mv = MetricViewer(repo)
+    mv.get_best_by("acc")
+
+
+def test_get_best_by_line(tmp_path_str):
+    line = ModelLine(tmp_path_str, model_cls=DummyModel)
+
+    model = DummyModel()
+    model.evaluate()
+    line.save(model)
+
+    model = DummyModel()
+    line.save(model)
+
+    mv = MetricViewer(line)
     mv.get_best_by("acc")

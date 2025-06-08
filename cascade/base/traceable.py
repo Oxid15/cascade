@@ -20,6 +20,7 @@ import socket
 import warnings
 from dataclasses import asdict, dataclass
 from datetime import datetime
+from functools import wraps
 from getpass import getuser
 from typing import Any, Callable, Dict, Iterable, Optional, Union
 
@@ -52,6 +53,18 @@ class Link:
     def __post_init__(self) -> None:
         if self.uri is not None and os.path.exists(self.uri):
             self.uri = os.path.abspath(self.uri)
+
+
+def apply_prefix(get_meta):
+    @wraps(get_meta)
+    def wrapper(self, *args, **kwargs):
+        meta = get_meta(self, *args, **kwargs)
+        if hasattr(self, "_meta_prefix"):
+            meta[0].update(self._meta_prefix)
+        else:
+            self._warn_no_prefix()
+        return meta
+    return wrapper
 
 
 class Traceable:
@@ -89,6 +102,7 @@ class Traceable:
         self.comments = list()
         self.links = list()
 
+    @apply_prefix
     def get_meta(self) -> Meta:
         """
         Returns
@@ -104,10 +118,6 @@ class Traceable:
         """
         meta = {}
         meta["name"] = repr(self)
-        if hasattr(self, "_meta_prefix"):
-            meta.update(self._meta_prefix)
-        else:
-            self._warn_no_prefix()
 
         if hasattr(self, "description"):
             meta["description"] = self.description
@@ -197,7 +207,7 @@ class Traceable:
             self.links = [Link(**link) for link in meta[0]["links"]]
             del meta[0]["links"]
 
-        self.update_meta(meta)
+        self.update_meta(meta[0])
 
     def __repr__(self) -> str:
         """
