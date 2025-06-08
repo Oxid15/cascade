@@ -22,11 +22,11 @@ from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from cascade.base import MetaHandler
-from cascade.data import BaseDataset, Modifier
+from cascade.base import MetaHandler, TraceableOnDisk
 from cascade.cli.cli import cli
+from cascade.data import BaseDataset
+from cascade.lines import DataLine, ModelLine
 from cascade.repos import Repo
-from cascade.lines import ModelLine, DataLine
 from cascade.workspaces import Workspace
 
 
@@ -38,30 +38,17 @@ class DummyDataset(BaseDataset):
         return None
 
 
-def create_entity(entity_type: str, root: str) -> str:
+def create_entity(entity_type: str, root: str) -> None:
     if entity_type == "workspace":
         Workspace(root)
-        return root
     if entity_type == "repo":
         Repo(root)
-        return root
     elif entity_type == "model_line":
         ModelLine(root)
-        return root
     elif entity_type == "data_line":
         DataLine(root)
-        return root
-    elif entity_type == "model":
-        line = ModelLine(root)
-        model = line.create_model()
-        line.save(model, only_meta=True)
-        return os.path.join(root, "00000")
-    elif entity_type == "dataset":
-        line = DataLine(root)
-        ds = DummyDataset()
-        ds = Modifier(ds)
-        line.save(ds, only_meta=True)
-        return os.path.join(root, "0.1")
+    elif entity_type == "traceable":
+        TraceableOnDisk(root, ".yaml").sync_meta()
 
 @pytest.mark.parametrize(
     "entity_type",
@@ -70,14 +57,13 @@ def create_entity(entity_type: str, root: str) -> str:
         "repo",
         "model_line",
         "data_line",
-        "model",
-        "dataset",
+        "traceable",
     ],
 )
 def test_add(tmp_path_str, entity_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        td = create_entity(entity_type, td)
+        create_entity(entity_type, td)
 
         init_meta = MetaHandler.read_dir(td)
 
