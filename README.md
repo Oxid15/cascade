@@ -174,7 +174,7 @@ cascade ui
 
 [Cascade UI](https://github.com/Laiserk/cascade_ui) is a separate project, that provides visual interface for Cascade experiments. For more detailed explanation you can visit [UI docs](https://oxid15.github.io/cascade/en/latest/tutorials/ui.html).
 
-![Cascade UI Model Page](cascade/docs/imgs/model-page.png)
+![Cascade UI Model Page](cascade/docs/source/_static/model-page.png)
 
 ## Who could find Cascade useful
 
