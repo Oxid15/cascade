@@ -31,6 +31,13 @@ Experiment tracking
             How to conduct experiments with Cascade
 
     .. grid-item::
+        .. card:: Track logs
+            :link: /howtos/track_logs.rst
+            :link-type: ref
+
+            How to save a log of a machine learning script
+
+    .. grid-item::
         .. card:: Use a Trainer
             :link: /howtos/model_training_trainers.ipynb
             :link-type: ref
