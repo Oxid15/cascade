@@ -53,13 +53,15 @@ by using different parts of the library without the need to bring everything at 
 Advanced features
 *****************
 
+.. :octicon:`zap`
+
 .. grid:: 2
 
     .. grid-item::
-        .. card:: :octicon:`zap` Web-UI
-            :link: tutorials/tutorials.html#viewers
+        .. card::  :bdg-info:`NEW` Web-UI
+            :link: tutorials/ui.html
 
-            Just do ``cascade ui`` to get your experiments visualized
+            Just do ``cascade ui`` to get a nice dashboard for your experiments
 
     .. grid-item::
         .. card:: :octicon:`terminal` CLI

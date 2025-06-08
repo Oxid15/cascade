@@ -17,6 +17,8 @@ Install the latest version using pip
 
     pip install cascade-ui
 
+Note that UI support in Cascade starts with the version ``0.16.0``.
+
 Basic Usage
 ===========
 
@@ -32,6 +34,8 @@ your browser you will see your workspace overview.
 
 .. image:: imgs/workspace-page.png
   :alt: Workspace page of Cascade - Small scale MLOps library
+
+|
 
 You can interact with the workspace itself or go deeper into any repo.
 
@@ -96,7 +100,7 @@ If you used ``cascade run`` with :ref:`log tracking</howtos/track_logs.rst>`, yo
 Comments
 ========
 
-You can comment on each container using UI too.
+You can comment on each container using UI.
 
 .. image:: imgs/model-comments.png
   :alt: Model comments page of Cascade - Small scale MLOps library
