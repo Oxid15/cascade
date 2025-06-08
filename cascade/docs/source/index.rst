@@ -53,7 +53,15 @@ by using different parts of the library without the need to bring everything at 
 Advanced features
 *****************
 
+.. :octicon:`zap`
+
 .. grid:: 2
+
+    .. grid-item::
+        .. card::  :bdg-info:`NEW` Web-UI
+            :link: tutorials/ui.html
+
+            Just do ``cascade ui`` to get a nice dashboard for your experiments
 
     .. grid-item::
         .. card:: :octicon:`terminal` CLI
@@ -66,17 +74,6 @@ Advanced features
             :link: tutorials/results_querying.html
 
             Use CLI to access your experiments (if you have too many of them)
-
-    .. grid-item::
-        .. card:: :octicon:`graph` Dash-based visualizations
-            :link: tutorials/tutorials.html#viewers
-
-            See plots and tables in dash-based web interface
-
-    .. grid-item::
-        .. card:: :octicon:`zap` Web-UI
-
-            :bdg-info:`Coming soon!`
 
 
 Experiment management

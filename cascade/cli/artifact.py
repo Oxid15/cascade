@@ -79,7 +79,9 @@ def remove_repo_artifacts(path) -> List[List[List[RemoveResult]]]:
     repo = create_container("repo", path)
     repo_results = []
     for name in repo.get_line_names():
-        results = remove_line_artifacts(os.path.join(path, name))
+        line_meta = repo[name].get_meta()
+        line_type = line_meta[0].get("type", "model_line")
+        results = remove_line_artifacts(os.path.join(path, name), line_type)
         repo_results.append(results)
     return repo_results
 

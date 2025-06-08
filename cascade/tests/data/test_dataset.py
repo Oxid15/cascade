@@ -59,6 +59,19 @@ def test_update_meta():
     assert meta[0]["b"] == 3
 
 
+def test_update_meta_list():
+    ds = DummyDataset()
+    ds = Modifier(ds)
+    ds = Modifier(ds)
+
+    ds.update_meta([{"a": 1}, {"a": 2}, {"a": 3}])
+    ds.update_meta([{}, {}, {"a": 4}])
+    meta = ds.get_meta()
+
+    assert meta[0]["a"] == 1
+    assert meta[1]["a"] == 2
+    assert meta[2]["a"] == 4
+
 # This is deprecated since 0.13.0
 @pytest.mark.skip
 def test_meta_from_file(tmp_path):

@@ -1,3 +1,7 @@
+# Cascade - Small-scale MLOps Library
+
+Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
+
 ![header](cascade/docs/imgs/header.png)
 
 ![ver](https://img.shields.io/github/v/release/oxid15/cascade?style=plastic)
@@ -5,9 +9,7 @@
 [![Downloads](https://pepy.tech/badge/cascade-ml)](https://pepy.tech/project/cascade-ml)
 [![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
 
-Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
-
-Cascade was built especially for individuals or small teams that are in need of MLOps, but don't have time or resources to integrate with platforms.
+Cascade offers the solution that enables MLOps features for small projects while demanding little. There is usually no need for the full MLOps setups in most of the small-scale ML-projects.
 
 **Included in [Model Lifecycle](https://github.com/kelvins/awesome-mlops#model-lifecycle) section of Awesome MLOps list**
 
@@ -50,7 +52,7 @@ ds = cdd.RandomSampler(ds)
 train_ds, test_ds = cdd.split(ds)
 train_ds = cdd.ApplyModifier(
     train_ds,
-    lambda pair: pair + np.random.random() * 0.1 - 0.05
+    lambda pair: pair[0] + np.random.random() * 0.1 - 0.05, pair[1]
 )
 
 pprint(train_ds.get_meta())
@@ -98,7 +100,6 @@ We see all the stages that we did in meta.
 See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/modules/dataset_zoo.html)  
 See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
-
 ### Experiment tracking
 
 Cascade provides a rich set of ML-experiment tracking tools.
@@ -121,7 +122,6 @@ line.save(model, only_meta=True)
 
 `Repo` is the collection of lines and `Line` can be a bunch of experiments on one model type.
 Lines can also store data pipelines.
-
 
 <details>
 <summary>Click to see full model metadata</summary>
@@ -156,47 +156,25 @@ Lines can also store data pipelines.
 
 </details>
 
-
 See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
+## Cascade UI
 
-### Metadata analysis
+Cascade features web-based experiment dashboard. You can install it with:
 
-During experiments Cascade produces many metadata which can be analyzed later.
-`MetricViewer` is the tool that allows to see the relationship between parameters and
-metrics of all models in repository.
-
-```python
-from cascade.meta import MetricViewer
-from cascade.repos import Repo
-
-repo = cdm.Repo("repo")
-
-# This runs web-server that relies on optional dependency
-MetricViewer(repo).serve()
+```bash
+pip install cascade-ui
 ```
 
-![metric-viewer](cascade/docs/imgs/metric-viewer.gif)
+Then locate your Cascade Workspace and run:
 
-`HistoryViewer` allows to see model's lineage, what parameters resulted in what metrics
-
-```python
-from cascade import meta as cme
-from cascade.repos import Repo
-
-
-repo = cdm.Repo("repo")
-
-# This returns plotly figure
-cme.HistoryViewer(repo).plot()
-
-# This runs a dash server and allows to see changes in real time (for example while models are trained)
-cme.HistoryViewer(repo).serve()
+```bash
+cascade ui
 ```
 
-See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
+[Cascade UI](https://github.com/Laiserk/cascade_ui) is a separate project, that provides visual interface for Cascade experiments. For more detailed explanation you can visit [UI docs](https://oxid15.github.io/cascade/en/latest/tutorials/ui.html).
 
-![history-viewer](cascade/docs/imgs/history-viewer.gif)
+![Cascade UI Model Page](cascade/docs/source/_static/model-page.png)
 
 ## Who could find Cascade useful
 

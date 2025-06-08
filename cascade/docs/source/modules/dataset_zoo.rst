@@ -2,18 +2,18 @@ Dataset Zoo
 ###########
 
 Cascade has many solutions - basic that are added to the core and more specific
-that are in the special `utils` module. And if you didn't found suitable component,
+that are in the special ``utils`` module. And if you didn't found suitable component,
 you can write it yourself.
-  
-Here some of already-made components are presented. These are the `Dataset`s - building
+
+Here some of already-made components are presented. These are the ``Dataset``s - building
 blocks of Cascade's pipelines, their description and short examples of
 how to use them in your workflow.
 
 Wrappers
-========
+********
 
 If your solution has some data source that is already accesible in python-code, but you
-need to plug it in Cascade's workflow it may be all you need. `Wrapper` gives the items
+need to plug it in Cascade's workflow it may be all you need. ``Wrapper`` gives the items
 from the source one by one, adding some info about the undelying data to its metadata.
 
 .. code-block:: python
@@ -26,10 +26,10 @@ from the source one by one, adding some info about the undelying data to its met
         print(item, end=' ')
 
 Iterators
-=========
+********
 
-If data source doesn't have length - you cannot use `Wrapper`s, but it is not a problem,
-you can use `Iterator`s instead! It is basically the same dataset, but using different interface.
+If data source doesn't have length - you cannot use ``Wrapper``s, but it is not a problem,
+you can use ``Iterator``s instead! It is basically the same dataset, but using different interface.
 
 .. code-block:: python
 
@@ -46,10 +46,10 @@ you can use `Iterator`s instead! It is basically the same dataset, but using dif
 
 
 ApplyModifier
-=============
+*************
 
 The pipelines are frequently applying some python-functions to the items in datasets.
-In Cascade this is done by using `ApplyModifier`.
+In Cascade this is done by using ``ApplyModifier``.
 
 .. code-block:: python
 
@@ -68,10 +68,10 @@ In Cascade this is done by using `ApplyModifier`.
 
 
 Concatenator
-============
+************
 
 Concatenation is also frequent operation that is done to unify several datasets
-into one. In Cascade it is done easily using `Concatenator`.
+into one. In Cascade it is done easily using ``Concatenator``.
 
 .. code-block:: python
 
@@ -89,10 +89,10 @@ into one. In Cascade it is done easily using `Concatenator`.
 In addition, it also stores metadata of all its datasets.
 
 split
-=====
+*****
 
 This is the opposite of concatenate - we can split one dataset into train and
-test parts easily with `cdd.split()`
+test parts easily with ``cdd.split()``
 
 .. code-block:: python
 
@@ -112,7 +112,7 @@ Basically, this function creates two RangeSampler dividing input dataset into tw
 
 
 Composer
-========
+********
 
 Composer is another way of unifying two datasets, but in this case the
 union dataset returns tuples of item from composed datasets. This is useful,
@@ -131,7 +131,7 @@ when items and labels for classification are from different datasets.
 
 
 CyclicSampler
-=============
+********
 
 When you need an easy way to repeat your dataset several times or the opposite -
 restrict the number of items in dataset, you can use this.
@@ -148,7 +148,7 @@ restrict the number of items in dataset, you can use this.
 
 
 RandomSampler
-=============
+********
 
 Undeterministic counterpart of CyclicSampler. Ideal solution for shuffling the data in lazy way.
 
@@ -180,9 +180,9 @@ With no arguments - shuffles the dataset.
 
 
 RangeSampler
-============
+************
 
-This is if you need python's range in Cascade realm. Has just similar interface as `range`.
+This is if you need python's range in Cascade realm. Has just similar interface as ``range``.
 
 .. code-block:: python
 
@@ -196,7 +196,7 @@ This is if you need python's range in Cascade realm. Has just similar interface 
 
 
 BruteforceCacher
-================
+****************
 
 Modifiers are lazy and not storing all data in memory. This is important when datasets
 are big and do not fit into memory, but can slow down some processes. If your data fits
@@ -230,9 +230,9 @@ But what if we have a script that should be executed every time and then caching
 
 
 Pickler
-========
+*******
 
-For these purposes `Pickler` was implemented. You can cache and then pickle previous pipeline on the disk,
+For these purposes ``Pickler`` was implemented. You can cache and then pickle previous pipeline on the disk,
 then load it and use without problems. 
 
 .. code-block:: python
@@ -255,7 +255,7 @@ Note that after unpickling we don't need to wait for loading again.
 
 
 OverSampler and UnderSampler
-============================
+****************************
 
 These sampling strategies placed into utils module because they make quite big assumtions about datasets - that
 they emit tuples and the second element of each tuple is a classification label. 
@@ -263,7 +263,7 @@ they emit tuples and the second element of each tuple is a classification label.
 Using that labels they equalize label distribution by repeating or deleting some elements. The sampler themselves
 are lazy, but to obtain label distribution, they load elements one-by-one not storing them in memory in initialization.  
   
-They are also deterministic and place elements with similar labels together. Consider using `RandomSampler` to
+They are also deterministic and place elements with similar labels together. Consider using ``RandomSampler`` to
 shuffle datasets before passing them to learning.
 
 .. code-block:: python
@@ -297,7 +297,7 @@ shuffle datasets before passing them to learning.
 
 
 WeighedSampler
-==============
+**************
 
 If you need more freedom in how to sample your data according to the label you have, you can use this
 
@@ -322,15 +322,15 @@ If you need more freedom in how to sample your data according to the label you h
 
 
 Specific datasets
-=================
+*****************
   
 Some data types require specific functionality from its dataset wrapper. Some wrappers are already implemented and
 contain a number of useful tools and features.
 
 
 TimeSeriesDataset
------------------
-`TimeSeriesDataset` contains whole time series data. They require separate time and data channels to initialize.
+=================
+``TimeSeriesDataset`` contains whole time series data. They require separate time and data channels to initialize.
 
 .. code-block:: python
 
@@ -348,8 +348,8 @@ TimeSeriesDataset
 
 
 The important thing about these datasets is that they *always should be initialized with keywords*. The usage
-of `time` and `data` is mandatory for dataset to work. The same applies to other specific datasets such as
-TableDataset and its keyword `t` for table.
+of ``time`` and ``data`` is mandatory for dataset to work. The same applies to other specific datasets such as
+TableDataset and its keyword ``t`` for table.
 
 .. code-block:: python
 
@@ -362,7 +362,7 @@ TableDataset and its keyword `t` for table.
     ds.to_pandas()
 
 
-This is due to unification of two interfaces in `Modifier`s for these datasets. A `Modifier` should be also `TimeSeriesDataset`. 
+This is due to unification of two interfaces in ``Modifier``s for these datasets. A ``Modifier`` should be also ``TimeSeriesDataset``. 
    
 Let's initialize ds again:
 
@@ -398,7 +398,7 @@ The slices are also available.
     ds[datetime.datetime(2022, 11, 6):].to_pandas() Or using time
 
 
-Note that every slice returns new `TimeSerisDataset` instance.
+Note that every slice returns new ``TimeSerisDataset`` instance.
 
 
 There is always a general way to extract all data, which is most useful for plotting data.
@@ -422,16 +422,16 @@ Install matplotlib if required
     plt.plot(*ds.get_data())
 
 
-You can always get the data alone using `to_numpy()`
+You can always get the data alone using ``to_numpy()``
 
 .. code-block:: python
 
     ds.to_numpy()
 
 
-Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in `Modifier`.  
+Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in ``Modifier``.  
   
-First - dataset is initialized with nan-value. Nan-value is `numpy.nan` because Interpolate uses pandas under-the-hood.
+First - dataset is initialized with nan-value. Nan-value is ``numpy.nan`` because Interpolate uses pandas under-the-hood.
 
 .. code-block:: python
 
@@ -452,7 +452,7 @@ First - dataset is initialized with nan-value. Nan-value is `numpy.nan` because 
     Interpolate(ds, method='linear', limit_direction='both').to_pandas() These arguments are defaults
 
 
-Averaging over some time-window is also a frequent task in work with time-series. Here in `Average` you
+Averaging over some time-window is also a frequent task in work with time-series. Here in ``Average`` you
 can set the time grain and a quantity to average.
 
 .. code-block:: python
@@ -480,7 +480,7 @@ can set the time grain and a quantity to average.
 
 
 TableDataset
-------------
+============
 
 Frequently the work with tables is done. To track them efficiently using Cascade this wrapper was created.
 
@@ -513,6 +513,6 @@ Filtering is common when using tables. This modifier accepts binary mask and rec
 
 
 More to come
-============
+************
 
 Cascade is rapidly developing and shaped to the needs of its users, so there are more new tools to come!

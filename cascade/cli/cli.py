@@ -18,14 +18,14 @@ import os
 
 import click
 
-from ..base import MetaHandler, MetaIOError
 from .artifact import artifact
 from .comment import comment
-from .common import create_container
+from .common import create_container, init_ctx
 from .desc import desc
 from .query import query
 from .run import run
 from .tag import tag
+from .ui import ui
 from .view import view
 
 
@@ -40,14 +40,7 @@ def cli(ctx):
     current_dir_full = os.getcwd()
     ctx.obj["cwd"] = current_dir_full
 
-    try:
-        meta = MetaHandler.read_dir(current_dir_full)
-        ctx.obj["meta"] = meta
-        ctx.obj["type"] = meta[0].get("type")
-        ctx.obj["len"] = meta[0].get("len")
-        ctx.obj["meta_fmt"] = MetaHandler.determine_meta_fmt(current_dir_full, "meta.*")
-    except MetaIOError as e:
-        click.echo(e)
+    init_ctx(ctx, current_dir_full)
 
 
 @cli.command
@@ -112,6 +105,7 @@ cli.add_command(desc)
 cli.add_command(run)
 cli.add_command(query)
 cli.add_command(tag)
+cli.add_command(ui)
 cli.add_command(view)
 
 
