@@ -13,13 +13,31 @@ limitations under the License.
 
 import warnings
 from abc import ABC, abstractmethod
-from typing import (Any, Generic, Iterable, Iterator, Optional, Sequence,
-                    Sized, TypeVar)
+from typing import Any, Generic, Iterable, Iterator, Optional, Sequence, Sized, TypeVar
 
 from ..base import Meta, Traceable
 from .data_card import DataCard
 
 T = TypeVar("T", covariant=True)
+
+
+class GetItemException(Exception): ...
+
+
+class GetItemHandler:
+    def __init__(self, ds, index) -> None:
+        self.dataset = str(ds.__class__)
+        self.index = index
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        if exc_type:
+            raise GetItemException(
+                f"Failed to get item from {self.dataset} at index {self.index}"
+            ) from exc_value
+        return False
 
 
 class BaseDataset(ABC, Generic[T], Traceable):
@@ -79,6 +97,10 @@ class Dataset(BaseDataset[T], Sized):
     --------
     cascade.data.Iterator
     """
+
+    def get(self, index: Any) -> T:
+        with GetItemHandler(self, index):
+            return self.__getitem__(index)
 
     @abstractmethod
     def __getitem__(self, index: Any) -> T: ...

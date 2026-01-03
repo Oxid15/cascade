@@ -1,7 +1,7 @@
 from typing import Any, Iterator
 
 from ..base import Meta
-from .dataset import BaseDataset, Dataset, IteratorDataset, T
+from .dataset import BaseDataset, Dataset, GetItemHandler, IteratorDataset, T
 
 
 class BaseModifier(BaseDataset[T]):
@@ -98,6 +98,10 @@ class Modifier(BaseModifier[T]):
     Does not change the length of a dataset. See Sampler for this functionality
     """
 
+    def get(self, index: Any) -> T:
+        with GetItemHandler(self, index):
+            return self.__getitem__(index)
+
     def __getitem__(self, index: Any) -> T:
         return self._dataset[index]
 
@@ -126,9 +130,7 @@ class Sampler(Modifier[T]):
     cascade.data.RangeSampler
     """
 
-    def __init__(
-        self, dataset: Dataset[T], num_samples: int, *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, dataset: Dataset[T], num_samples: int, *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Sampler.
 
