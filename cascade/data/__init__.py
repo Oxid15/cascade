@@ -4,7 +4,7 @@ cascade.data
 
 The home for Cascade pipeline building tools
 
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
