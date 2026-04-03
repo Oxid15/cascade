@@ -2,7 +2,7 @@
 cascade.models
 ==============
 
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,3 @@ limitations under the License.
 
 from .basic_model import BasicModel, BasicModelModifier
 from .model import Model, ModelModifier
-from .model_line import ModelLine
-from .model_repo import ModelRepo, Repo, SingleLineRepo
-from .trainer import BasicTrainer, Trainer
-from .workspace import Workspace

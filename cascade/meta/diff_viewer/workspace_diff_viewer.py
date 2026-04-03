@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import os
 import pendulum
 from deepdiff import DeepDiff
 
-from ...models import Workspace
+from ...workspaces import Workspace
 from .repo_diff_viewer import RepoDiffViewer
 
 
