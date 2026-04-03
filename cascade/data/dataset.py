@@ -11,7 +11,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import warnings
 from abc import ABC, abstractmethod
 from typing import (Any, Generic, Iterable, Iterator, Optional, Sequence,
                     Sized, TypeVar)
@@ -134,13 +133,3 @@ class Wrapper(Dataset):
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))
         return meta
-
-
-class SizedDataset(Dataset):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        warnings.warn(
-            "SizedDataset is deprecated since 0.14.0."
-            " Consider using older version or migrate to"
-            " Dataset, which is sized by default now"
-        )
-        super().__init__(*args, **kwargs)

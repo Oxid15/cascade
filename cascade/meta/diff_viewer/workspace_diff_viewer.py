@@ -19,7 +19,7 @@ import os
 import pendulum
 from deepdiff import DeepDiff
 
-from ...models import Workspace
+from ...workspaces import Workspace
 from .repo_diff_viewer import RepoDiffViewer
 
 

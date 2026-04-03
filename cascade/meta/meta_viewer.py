@@ -19,8 +19,6 @@ import re
 import warnings
 from typing import Any, Dict, Optional
 
-from typing_extensions import deprecated
-
 from ..base import Meta, MetaHandler, MetaIOError, supported_meta_formats
 
 
@@ -81,26 +79,6 @@ class MetaViewer:
 
     def __len__(self) -> int:
         return len(self.names)
-
-    @deprecated("This method was removed in 0.14.0. Use MetaHandler.write instead")
-    def write(self, path: str, obj: Any) -> None:
-        """
-        Dumps obj to path
-        """
-        raise ValueError(
-            "This method was removed in 0.14.0. "
-            "Consider using MetaHandler.write or switching to previous versions."
-        )
-
-    @deprecated("This method was removed in 0.14.0. Use MetaHandler.read instead")
-    def read(self, path: str) -> Meta:
-        """
-        Loads object from path
-        """
-        raise ValueError(
-            "This method was removed in 0.14.0. "
-            "Consider using MetaHandler.read or switching to previous versions."
-        )
 
     def _filter(self, name: str) -> bool:
         try:
