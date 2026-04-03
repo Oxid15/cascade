@@ -82,7 +82,7 @@ class IteratorModifier(BaseModifier[T], IteratorDataset[T]):
         return self_meta
 
 
-class Modifier(BaseModifier[T]):
+class Modifier(BaseModifier[T], Dataset[T]):
     """
     Basic pipeline building block in Cascade. Every block which is not a data source should be
     a successor of Sampler or Modifier.
@@ -97,10 +97,6 @@ class Modifier(BaseModifier[T]):
 
     Does not change the length of a dataset. See Sampler for this functionality
     """
-
-    def get(self, index: Any) -> T:
-        with GetItemHandler(self, index):
-            return self.__getitem__(index)
 
     def __getitem__(self, index: Any) -> T:
         return self._dataset[index]
