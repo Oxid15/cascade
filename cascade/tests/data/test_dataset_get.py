@@ -23,7 +23,17 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import ApplyModifier, Dataset, GetItemException, Wrapper
+from cascade.data import ApplyModifier, Dataset, GetItemException, Modifier, Wrapper
+
+
+class NoGetModifierGetItem(Modifier):
+    def __getitem__(self, index):
+        return self._dataset[index]
+
+
+class NoGetModifierGet(Modifier):
+    def __getitem__(self, index):
+        return self._dataset.get(index)
 
 
 class RaiseDataset(Dataset):
@@ -121,3 +131,41 @@ def test_pipeline_get_pipelines():
     assert ds[0] == 2
     assert ds[2] == 6
     assert ds[4] == 10
+
+
+def test_no_get_modifier_invisible():
+    ds = Wrapper([i for i in range(10)])
+    ds = FailingModifier(ds, fail_indices=[0])
+    ds = NoGetModifierGetItem(ds)
+    ds = ApplyModifier(ds, lambda x: x)
+    ds = ApplyModifier(ds, lambda x: x)
+
+    with pytest.raises(GetItemException) as exc_info:
+        ds[0]
+
+    tb_str = "".join(
+        traceback.format_exception(
+            type(exc_info.value), exc_info.value, exc_info.value.__traceback__
+        )
+    )
+    assert "NoGetModifierGetItem" not in tb_str
+    assert "FailingModifier" in tb_str
+
+
+def test_no_get_modifier_hides_previous():
+    ds = Wrapper([i for i in range(10)])
+    ds = FailingModifier(ds, fail_indices=[0])
+    ds = NoGetModifierGet(ds)
+    ds = ApplyModifier(ds, lambda x: x)
+    ds = ApplyModifier(ds, lambda x: x)
+
+    with pytest.raises(GetItemException) as exc_info:
+        ds[0]
+
+    tb_str = "".join(
+        traceback.format_exception(
+            type(exc_info.value), exc_info.value, exc_info.value.__traceback__
+        )
+    )
+    assert "NoGetModifierGet" not in tb_str
+    assert "FailingModifier" not in tb_str
