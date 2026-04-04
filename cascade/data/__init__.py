@@ -33,7 +33,6 @@ from .modifier import BaseModifier, IteratorModifier, Modifier, Sampler
 from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
 from .schema import SchemaModifier
-from .sequential_cacher import SequentialCacher
 from .simple_dataloader import SimpleDataloader
 from .utils import split
 from .validation import ValidationError, validate_in
