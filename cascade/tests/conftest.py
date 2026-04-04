@@ -28,10 +28,19 @@ from dateutil import tz
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (ApplyModifier, BaseDataset, BruteforceCacher,
-                          Composer, Concatenator, CyclicSampler,
-                          IteratorWrapper, RandomSampler, RangeSampler,
-                          Wrapper)
+from cascade.data import (
+    ApplyModifier,
+    BaseDataset,
+    Dataset,
+    BruteforceCacher,
+    Composer,
+    Concatenator,
+    CyclicSampler,
+    IteratorWrapper,
+    RandomSampler,
+    RangeSampler,
+    Wrapper,
+)
 from cascade.lines import DataLine, ModelLine
 from cascade.models import BasicModel
 from cascade.repos import Repo
@@ -95,12 +104,16 @@ def dataset(request) -> BaseDataset:
     return request.param
 
 
-@pytest.fixture(params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(0, 100)]])
+@pytest.fixture(
+    params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(0, 100)]]
+)
 def number_dataset(request):
     return Wrapper(request.param)
 
 
-@pytest.fixture(params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(100, 0)]])
+@pytest.fixture(
+    params=[[1, 2, 3, 4, 5], [0], [0, 0, 0, 0], [-i for i in range(100, 0)]]
+)
 def number_iterator(request):
     return IteratorWrapper(request.param)
 

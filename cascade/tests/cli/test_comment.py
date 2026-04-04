@@ -34,7 +34,7 @@ class DummyDataset(BaseDataset):
     def __len__(self):
         return 0
 
-    def __getitem__(self, index) -> None:
+    def get(self, index) -> None:
         return None
 
 

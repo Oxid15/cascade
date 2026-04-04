@@ -102,7 +102,11 @@ class Dataset(BaseDataset[T], Sized):
             return self.__getitem__(index)
 
     @abstractmethod
-    def __getitem__(self, index: Any) -> T: ...
+    def get(self, index: Any) -> T: ...
+
+    def __getitem__(self, index: Any) -> T:
+        with GetItemHandler(self, index):
+            return self.get(index)
 
     @abstractmethod
     def __len__(self) -> int: ...
@@ -145,7 +149,7 @@ class Wrapper(Dataset):
         self._data = obj
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: Any) -> T:
+    def get(self, index: Any) -> T:
         return self._data[index]
 
     def __len__(self) -> int:

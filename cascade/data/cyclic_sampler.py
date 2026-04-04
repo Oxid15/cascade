@@ -32,7 +32,7 @@ class CyclicSampler(Sampler[T]):
     >>> assert [item for item in ds] == [1, 2, 3, 1, 2, 3, 1]
     """
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         internal_index = index % len(self._dataset)
         return self._dataset[internal_index]
 

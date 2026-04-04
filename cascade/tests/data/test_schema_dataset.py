@@ -24,11 +24,11 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, SchemaModifier, ValidationError
+from cascade.data import Dataset, GetItemException, SchemaModifier, ValidationError
 
 
 class FiveIdenticalImages(Dataset):
-    def __getitem__(self, idx):
+    def get(self, idx):
         return AnnotImage(
             image=[[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
             segments=[[0, 1, 2], [0, 1, 2]],
@@ -50,7 +50,7 @@ class ImagesDataset(SchemaModifier):
 
 
 class IDoNothing(ImagesDataset):
-    def __getitem__(self, idx):
+    def get(self, idx):
         item = self._dataset[idx]
         return item
 
@@ -83,7 +83,7 @@ class BrokenImage(pydantic.BaseModel):
 
 
 class FiveBrokenImageDataset(Dataset):
-    def __getitem__(self, index: int):
+    def get(self, index: int):
         return BrokenImage(image=[[0.]], segments=["lol"])
 
     def __len__(self) -> int:
@@ -94,6 +94,5 @@ def test_wrong_schema():
     ds = FiveBrokenImageDataset()
     ds = IDoNothing(ds)
 
-    with pytest.raises(ValidationError) as e:
+    with pytest.raises(GetItemException)as e:
         item = ds[0]
-    assert e.value.error_index == 0

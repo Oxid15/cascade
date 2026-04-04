@@ -98,7 +98,7 @@ class Modifier(BaseModifier[T], Dataset[T]):
     Does not change the length of a dataset. See Sampler for this functionality
     """
 
-    def __getitem__(self, index: Any) -> T:
+    def get(self, index: Any) -> T:
         return self._dataset[index]
 
     def __len__(self) -> int:

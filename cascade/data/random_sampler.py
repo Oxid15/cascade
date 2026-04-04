@@ -54,5 +54,5 @@ class RandomSampler(Sampler[T]):
             self._indices = randint(0, len(dataset), num_samples)
         super().__init__(dataset, num_samples, *args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
-        return super().__getitem__(self._indices[index])
+    def get(self, index: int) -> T:
+        return super().get(self._indices[index])

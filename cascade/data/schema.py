@@ -63,7 +63,7 @@ class SchemaModifier(Modifier):
 
     ```python
     class IDoNothing(ImageModifier):
-        def __getitem__(self, idx):
+        def get(self, idx):
             item = self._dataset[idx]
             return item
     ```
@@ -98,8 +98,8 @@ class ValidationWrapper(Modifier):
         self.validator = SchemaValidator(schema)
         super().__init__(dataset, *args, **kwargs)
 
-    def __getitem__(self, index: Any):
-        item = super().__getitem__(index)
+    def get(self, index: Any):
+        item = super().get(index)
         try:
             self.validator(item)
         except ValidationError as e:

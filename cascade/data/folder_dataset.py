@@ -51,8 +51,8 @@ class FolderDataset(Dataset[T]):
             ]
         )
 
-    def __getitem__(self, index: Any) -> T:
-        raise_not_implemented("cascade.data.FolderDataset", "__getitem__")
+    def get(self, index: Any) -> T:
+        raise_not_implemented("cascade.data.FolderDataset", "get")
 
     def get_names(self) -> List[str]:
         """

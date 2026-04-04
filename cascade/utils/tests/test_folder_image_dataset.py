@@ -26,6 +26,7 @@ MODULE_PATH = os.path.dirname(
 )
 sys.path.append(os.path.dirname(MODULE_PATH))
 
+from cascade.data.dataset import GetItemException
 from cascade.utils.vision import FolderImageDataset
 
 
@@ -68,7 +69,7 @@ def test_raises(backend, not_image_folder):
     ds = FolderImageDataset(not_image_folder, backend=backend)
 
     assert len(ds) == 1
-    with pytest.raises(IOError):
+    with pytest.raises(GetItemException):
         ds[0]
 
 

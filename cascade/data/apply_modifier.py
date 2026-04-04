@@ -67,7 +67,7 @@ class ApplyModifier(Modifier[T]):
         if seed is not None:
             random.seed(seed)
 
-    def __getitem__(self, index: int) -> Any:
+    def get(self, index: int) -> Any:
         item = self._dataset[index]
         if self._p is not None:
             rnd = random.random()

@@ -93,6 +93,6 @@ class RangeSampler(Sampler[T]):
 
         super().__init__(dataset, len(self._indices), *args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         internal_index = self._indices[index]
-        return super().__getitem__(internal_index)
+        return super().get(internal_index)
