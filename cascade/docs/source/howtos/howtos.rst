@@ -18,6 +18,13 @@ Pipelines
 
             How to build data processing pipelines with cascade.data module
 
+    .. grid-item::
+        .. card:: Track errors in a dataset
+            :link: /howtos/track_dataset_errors.rst
+            :link-type: ref
+
+            How to find the source of and exception deep inside a pipeline
+
 Experiment tracking
 *******************
 
