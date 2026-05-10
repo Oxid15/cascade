@@ -54,7 +54,7 @@ class Filter(Sampler):
                 raise RuntimeError(f"Error when filtering dataset on index: {i}") from e
         super().__init__(dataset, len(self._mask), *args, **kwargs)
 
-    def __getitem__(self, index: Any):
+    def get(self, index: Any):
         return self._dataset[self._mask[index]]
 
 

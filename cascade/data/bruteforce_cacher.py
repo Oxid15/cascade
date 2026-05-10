@@ -68,7 +68,7 @@ class BruteforceCacher(Modifier[T]):
                 "Input dataset must provide __len__ and __getitem__ or __iter__"
             )
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         return self._data[index]
 
     def __len__(self) -> int:

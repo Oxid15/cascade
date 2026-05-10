@@ -59,7 +59,7 @@ class TextClassificationFolder(Dataset[T]):
         ]
         print(f"Found {len(folders)} classes: {classes}")
 
-    def __getitem__(self, index: int) -> Tuple[str, int]:
+    def get(self, index: int) -> Tuple[str, int]:
         with open(self._paths[index], "r", encoding=self._encoding) as f:
             text = " ".join(f.readlines())
             label = self._labels[index]

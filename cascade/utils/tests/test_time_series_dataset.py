@@ -38,7 +38,7 @@ from cascade.utils.time_series import (Align, Average, Interpolate,
         [
             d.to_pydatetime()
             for d in pd.date_range(
-                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1d"
+                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1D"
             )
         ],
         [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],

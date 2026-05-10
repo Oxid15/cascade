@@ -65,7 +65,7 @@ class PILBackend(ImageBackend):
 class FolderImageDataset(FolderDataset):
     """
     Simple dataset for image folder with lazy loading.
-    Accepts the path to the folder with images. In each __getitem__ call
+    Accepts the path to the folder with images. In each get() call
     invokes opencv imread on image and returns it if it exists.
 
     Supports opencv or pillow backends
@@ -95,7 +95,7 @@ class FolderImageDataset(FolderDataset):
         else:
             raise ValueError(f"Only cv2 or PIL backends are supported, got: {backend}")
 
-    def __getitem__(self, index: int):
+    def get(self, index: int):
         name = self._names[index]
         img = self._backend.read(name)
         return img

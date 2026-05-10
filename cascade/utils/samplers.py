@@ -63,7 +63,7 @@ class OverSampler(Sampler[T]):
 
         super().__init__(dataset, num_samples=ln, *args, **kwargs)
 
-    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+    def get(self, index: int) -> Tuple[Any, Any]:
         if index < len(self._dataset):
             return self._dataset[index]
         else:
@@ -112,7 +112,7 @@ class UnderSampler(Sampler[T]):
         print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln, *args, **kwargs)
 
-    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+    def get(self, index: int) -> Tuple[Any, Any]:
         idx = self._rem_indices[index]
         return self._dataset[idx]
 
@@ -192,7 +192,7 @@ class WeighedSampler(Sampler[T]):
         print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln)
 
-    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+    def get(self, index: int) -> Tuple[Any, Any]:
         idx = self._indices[index]
         return self._dataset[idx]
 

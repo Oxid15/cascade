@@ -12,13 +12,31 @@ limitations under the License.
 """
 
 from abc import ABC, abstractmethod
-from typing import (Any, Generic, Iterable, Iterator, Optional, Sequence,
-                    Sized, TypeVar)
+from typing import Any, Generic, Iterable, Iterator, Optional, Sequence, Sized, TypeVar
 
 from ..base import Meta, Traceable
 from .data_card import DataCard
 
 T = TypeVar("T", covariant=True)
+
+
+class GetItemException(Exception): ...
+
+
+class GetItemHandler:
+    def __init__(self, ds, index) -> None:
+        self.dataset = str(ds.__class__)
+        self.index = index
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        if exc_type:
+            raise GetItemException(
+                f"Failed to get item from {self.dataset} at index {self.index}"
+            ) from exc_value
+        return False
 
 
 class BaseDataset(ABC, Generic[T], Traceable):
@@ -30,7 +48,9 @@ class BaseDataset(ABC, Generic[T], Traceable):
     cascade.base.Traceable
     """
 
-    def __init__(self, *args: Any, data_card: Optional[DataCard] = None, **kwargs: Any) -> None:
+    def __init__(
+        self, *args: Any, data_card: Optional[DataCard] = None, **kwargs: Any
+    ) -> None:
         self._data_card = data_card
         super().__init__(*args, **kwargs)
 
@@ -80,7 +100,11 @@ class Dataset(BaseDataset[T], Sized):
     """
 
     @abstractmethod
-    def __getitem__(self, index: Any) -> T: ...
+    def get(self, index: Any) -> T: ...
+
+    def __getitem__(self, index: Any) -> T:
+        with GetItemHandler(self, index):
+            return self.get(index)
 
     @abstractmethod
     def __len__(self) -> int: ...
@@ -123,7 +147,7 @@ class Wrapper(Dataset):
         self._data = obj
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: Any) -> T:
+    def get(self, index: Any) -> T:
         return self._data[index]
 
     def __len__(self) -> int:
