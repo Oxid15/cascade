@@ -48,7 +48,9 @@ class BaseDataset(ABC, Generic[T], Traceable):
     cascade.base.Traceable
     """
 
-    def __init__(self, *args: Any, data_card: Optional[DataCard] = None, **kwargs: Any) -> None:
+    def __init__(
+        self, *args: Any, data_card: Optional[DataCard] = None, **kwargs: Any
+    ) -> None:
         self._data_card = data_card
         super().__init__(*args, **kwargs)
 
@@ -96,10 +98,6 @@ class Dataset(BaseDataset[T], Sized):
     --------
     cascade.data.Iterator
     """
-
-    def get(self, index: Any) -> T:
-        with GetItemHandler(self, index):
-            return self.__getitem__(index)
 
     @abstractmethod
     def get(self, index: Any) -> T: ...
