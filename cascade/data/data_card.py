@@ -76,8 +76,6 @@ class DataCard:
     ...     metrics={"quality": 100},
     ...     schema={"label": "value"},
     ...     custom_field="hello")
-    >>> dr = DataRegistrator('data_log.yml')
-    >>> dr.register(dc)
     """
 
     def __init__(
@@ -125,9 +123,9 @@ class DataCard:
             desc=desc,
             source=source,
             goal=goal,
-            labeling_info=asdict(labeling_info)
-            if labeling_info is not None
-            else labeling_info,
+            labeling_info=(
+                asdict(labeling_info) if labeling_info is not None else labeling_info
+            ),
             size=size,
             metrics=metrics,
             schema=schema,
