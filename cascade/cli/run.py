@@ -328,31 +328,31 @@ def run(
             if not ok and not f:
                 raise
 
+            cfg_dict = base_cfg
+
             click.echo(f"Taking base config from {base}")
-        else:
-            base_cfg = cfg_dict
 
         click.echo("The config is:")
-        click.echo(pformat(base_cfg))
+        click.echo(pformat(cfg_dict))
 
         kwargs = parse_args(args)
         click.echo("The arguments you passed:")
         click.echo(pformat(kwargs))
 
         for key in kwargs:
-            if key in base_cfg:
-                base_cfg[key] = kwargs[key]
+            if key in cfg_dict:
+                cfg_dict[key] = kwargs[key]
             else:
                 raise KeyError(f"Key `{key}` is missing in the original config")
 
-        base_cfg.update(kwargs)
-        text = modify_assignments(tree, cfg_node, base_cfg)
+        cfg_dict.update(kwargs)
+        text = modify_assignments(tree, cfg_node, cfg_dict)
     else:
-        base_cfg = {}
+        cfg_dict = {}
         kwargs = {}
 
     if not y:
         click.confirm("Confirm?", abort=True)
 
-    with CascadeRun(log, base_cfg, kwargs) as run:
+    with CascadeRun(log, cfg_dict, kwargs) as run:
         run.run_script(script, text)

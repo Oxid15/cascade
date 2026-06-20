@@ -226,6 +226,7 @@ def test_to_dict(tmp_path_str: str):
 
 
 def test_base_config(tmp_path_str: str):
+    # Create a base experiment
     script = "\n".join(
         [
             "import os",
@@ -250,6 +251,7 @@ def test_base_config(tmp_path_str: str):
     result = run_run(path)
     assert result.exit_code == 0
 
+    # Change the config in the file
     script = "\n".join(
         [
             "import os",
@@ -267,8 +269,9 @@ def test_base_config(tmp_path_str: str):
 
     path = write_script(script, tmp_path_str)
 
+    # Use the previous run config saved in the line as the base
     result = run_run(path, "--base", f"{tmp_path_str}/line/00000")
-    print(result.stdout)
 
+    # Verify that changed config was overridden by the base
     assert result.exit_code == 0
     assert "{'a': 0, 'b': 1, 'c': 2}" in result.stdout
