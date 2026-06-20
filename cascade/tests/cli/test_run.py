@@ -45,7 +45,7 @@ def test_missing_script():
     assert type(result.exception) == FileNotFoundError  # noqa: E721
 
 
-def test_missing_config_key(tmp_path_str):
+def test_missing_config_key(tmp_path_str: str):
     script = "\n".join(
         [
             "from cascade.base import Config",
@@ -61,7 +61,7 @@ def test_missing_config_key(tmp_path_str):
     assert type(result.exception) == KeyError  # noqa: E721
 
 
-def test_missing_config(tmp_path_str):
+def test_missing_config(tmp_path_str: str):
     script = "print('hello')"
     path = write_script(script, tmp_path_str)
     result = run_run(path)
@@ -70,7 +70,7 @@ def test_missing_config(tmp_path_str):
     assert result.stdout.endswith("hello\n")
 
 
-def test_key_without_config(tmp_path_str):
+def test_key_without_config(tmp_path_str: str):
     script = "print('hello')"
     path = write_script(script, tmp_path_str)
     result = run_run(path, "--a", "0", "--b", "(1, 2)")
@@ -79,7 +79,7 @@ def test_key_without_config(tmp_path_str):
     assert result.stdout.endswith("hello\n")
 
 
-def test_more_than_one_config(tmp_path_str):
+def test_more_than_one_config(tmp_path_str: str):
     script = "\n".join(
         [
             "from cascade.base import Config",
@@ -97,7 +97,7 @@ def test_more_than_one_config(tmp_path_str):
     assert type(result.exception) == NotImplementedError  # noqa: E721
 
 
-def test_different_types(tmp_path_str):
+def test_different_types(tmp_path_str: str):
     script = "\n".join(
         [
             "from cascade.base import Config",
@@ -125,7 +125,7 @@ def test_different_types(tmp_path_str):
     )
 
 
-def test_different_types_override(tmp_path_str):
+def test_different_types_override(tmp_path_str: str):
     script = "\n".join(
         [
             "from cascade.base import Config",
@@ -171,7 +171,7 @@ def test_different_types_override(tmp_path_str):
     )
 
 
-def test_exception(tmp_path_str):
+def test_exception(tmp_path_str: str):
     script = "raise RuntimeError()"
     path = write_script(script, tmp_path_str)
     result = run_run(path)
@@ -180,7 +180,7 @@ def test_exception(tmp_path_str):
     assert type(result.exception) == RunFailedException  # noqa: E721
 
 
-def test_to_dict(tmp_path_str):
+def test_to_dict(tmp_path_str: str):
     script = "\n".join(
         [
             "import os",
@@ -195,7 +195,7 @@ def test_to_dict(tmp_path_str):
             "    e = {'0': 1, '1': 2}",
             "    f = (11, 11)",
             "    g = {1, 2, 3}",
-            "cfg = Config()",
+            "cfg = NewConfig()",
             "model = BasicModel()",
             "model.add_config()",
             "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
@@ -208,7 +208,9 @@ def test_to_dict(tmp_path_str):
 
     assert result.exit_code == 0
 
-    config_path = os.path.join(tmp_path_str, "line", "00000", "files", "cascade_config.json")
+    config_path = os.path.join(
+        tmp_path_str, "line", "00000", "files", "cascade_config.json"
+    )
     assert os.path.exists(config_path)
 
     with open(config_path, "r") as f:
@@ -221,3 +223,52 @@ def test_to_dict(tmp_path_str):
     assert cfg["e"] == {"0": 1, "1": 2}
     assert cfg["f"] == [11, 11]
     assert cfg["g"] == [1, 2, 3]
+
+
+def test_base_config(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 0",
+            "    b = 1",
+            "    c = 2",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+            "model = BasicModel()",
+            "model.add_config()",
+            "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
+            "line = ModelLine(line_dir)",
+            "line.save(model)",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+    assert result.exit_code == 0
+
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 3",
+            "    b = 4",
+            "    c = 5",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+
+    result = run_run(path, "--base", f"{tmp_path_str}/line/00000")
+    print(result.stdout)
+
+    assert result.exit_code == 0
+    assert "{'a': 0, 'b': 1, 'c': 2}" in result.stdout
