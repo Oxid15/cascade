@@ -99,9 +99,13 @@ def parse_value(value: ast.expr) -> Any:
     elif isinstance(value, ast.Set):
         return set(parse_value(v) for v in value.elts)
     elif isinstance(value, ast.Dict):
-        return {parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)}
+        return {
+            parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)
+        }
     else:
-        raise ValueError(f"Unsupported config field type: {value} in {unparse_method(value)}")
+        raise ValueError(
+            f"Unsupported config field type: {value} in {unparse_method(value)}"
+        )
 
 
 # ast.unparse exists since python 3.9
@@ -129,7 +133,9 @@ def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
     return cfg_dict
 
 
-def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]) -> str:
+def modify_assignments(
+    tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]
+) -> str:
     """
     Overrides cascade.base.Config class definition with user-provided values
     """
@@ -155,7 +161,9 @@ def parse_args(args):
         try:
             kwargs[key] = ast.literal_eval(val)
         except Exception as e:
-            raise RuntimeError(f"Failed to parse the following argument: {orig_key} {val} See traceback above.") from e
+            raise RuntimeError(
+                f"Failed to parse the following argument: {orig_key} {val} See traceback above."
+            ) from e
     return kwargs
 
 
@@ -164,22 +172,66 @@ def generate_run_id() -> str:
     return now
 
 
+def load_config(path):
+    dirname, basename = os.path.split(path)
+    # Check if the last part of path is a model name
+    if len(re.findall("^[0-9][0-9][0-9][0-9][0-9]$", basename)) == 1:
+        meta = MetaHandler.read_dir(path)
+        if (
+            not isinstance(meta, list)
+            or len(meta) == 0
+            or "type" not in meta[0]
+            or meta[0]["type"] != "model"
+        ):
+            raise RuntimeError("Provided path to base is not a path to a model")
+
+        config = MetaHandler.read(os.path.join(path, "files", "cascade_config.json"))
+
+    else:
+        # We assume that the last part of path is a slug then
+        config = {}
+
+    return config
+
+
+def can_safely_replace(cfg, new_cfg):
+    for key in new_cfg:
+        if key not in cfg:
+            raise KeyError("")
+
+    return True
+
+
 class CascadeRun:
-    def __init__(self, log: bool, config: Dict[str, Any], overrides: Dict[str, Any]) -> None:
+    def __init__(
+        self,
+        log: bool,
+        config: Dict[str, Any],
+        overrides: Dict[str, Any],
+        base_config_path: Optional[str] = None,
+    ) -> None:
         self.log = log
         self.config = config
         self.overrides = overrides
+        self.base_config_path = base_config_path
 
-        base = os.getcwd()
-        run_id = generate_run_id()
-        self.run_dir = os.path.join(base, ".cascade", run_id)
+        cwd = os.getcwd()
+        self.run_id = generate_run_id()
+        self.run_dir = os.path.join(cwd, ".cascade", self.run_id)
         os.environ["CASCADE_RUN_DIR"] = self.run_dir
 
     def __enter__(self):
         os.makedirs(self.run_dir)
 
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_config.json"), self.config)
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides)
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_config.json"), self.config
+        )
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides
+        )
+
+        run_meta = {"run_id": self.run_id, "base_config_path": self.base_config_path}
+        MetaHandler.write(os.path.join(self.run_dir, "cascade_run_meta.json"), run_meta)
 
         return self
 
@@ -233,8 +285,28 @@ class CascadeRun:
 @click.argument("script", type=str)
 @click.option("-y", is_flag=True, expose_value=True, help="Confirm run")
 @click.option("--log", is_flag=True, default=False)
+@click.option(
+    "--base",
+    default=None,
+    help="Rerun previous experiment using slug"
+    " or path to a model with saved run configuration",
+)
+@click.option(
+    "-f",
+    is_flag=True,
+    default=False,
+    help="Ignore errors, e.g."
+    " base config has fields that do not exist in target config",
+)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
-def run(script: str, y: bool, log: Optional[str], args: List[str]):
+def run(
+    script: str,
+    y: bool,
+    log: Optional[str],
+    base: Optional[str],
+    f: bool,
+    args: List[str],
+):
     """
     Run python scripts with the ability to override Config values and record logs
     """
@@ -248,26 +320,39 @@ def run(script: str, y: bool, log: Optional[str], args: List[str]):
 
     if cfg_node:
         cfg_dict = node2dict(cfg_node)
+
+        if base:
+            base_cfg = load_config(base)
+
+            ok = can_safely_replace(cfg_dict, base_cfg)
+            if not ok and not f:
+                raise
+
+            click.echo(f"Taking base config from {base}")
+        else:
+            base_cfg = cfg_dict
+
         click.echo("The config is:")
-        click.echo(pformat(cfg_dict))
+        click.echo(pformat(base_cfg))
 
         kwargs = parse_args(args)
         click.echo("The arguments you passed:")
         click.echo(pformat(kwargs))
 
         for key in kwargs:
-            if key in cfg_dict:
-                cfg_dict[key] = kwargs[key]
+            if key in base_cfg:
+                base_cfg[key] = kwargs[key]
             else:
                 raise KeyError(f"Key `{key}` is missing in the original config")
 
-        text = modify_assignments(tree, cfg_node, kwargs)
+        base_cfg.update(kwargs)
+        text = modify_assignments(tree, cfg_node, base_cfg)
     else:
-        cfg_dict = {}
+        base_cfg = {}
         kwargs = {}
 
     if not y:
         click.confirm("Confirm?", abort=True)
 
-    with CascadeRun(log, cfg_dict, kwargs) as run:
+    with CascadeRun(log, base_cfg, kwargs) as run:
         run.run_script(script, text)
