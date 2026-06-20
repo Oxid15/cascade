@@ -21,6 +21,7 @@ import shutil
 import subprocess
 import sys
 import warnings
+from dataclasses import dataclass
 from pprint import pformat
 from typing import Any, Dict, List, Optional
 
@@ -30,6 +31,12 @@ from cascade.base import MetaHandler
 
 
 class RunFailedException(RuntimeError): ...  # noqa: E701
+
+
+@dataclass
+class ConfigFieldCheckResult:
+    ok: bool
+    missing_fields: Optional[List[str]] = None
 
 
 def cascade_config_imported(tree: ast.Module) -> bool:
@@ -195,11 +202,17 @@ def load_config(path):
 
 
 def can_safely_replace(cfg, new_cfg):
+    missing_fields = []
     for key in new_cfg:
         if key not in cfg:
-            raise KeyError("")
+            missing_fields.append(key)
 
-    return True
+    if missing_fields:
+        return ConfigFieldCheckResult(
+            ok=False,
+            missing_fields=missing_fields,
+        )
+    return ConfigFieldCheckResult(ok=True)
 
 
 class CascadeRun:
@@ -312,8 +325,8 @@ def run(
     """
     click.echo(f"You are about to run {script}")
 
-    with open(script, "r") as f:
-        text = f.read()
+    with open(script, "r") as script_file:
+        text = script_file.read()
 
     tree = ast.parse(text)
     cfg_node = find_config(tree)
@@ -324,9 +337,10 @@ def run(
         if base:
             base_cfg = load_config(base)
 
-            ok = can_safely_replace(cfg_dict, base_cfg)
-            if not ok and not f:
-                raise
+            check_result = can_safely_replace(cfg_dict, base_cfg)
+            print(check_result, f)
+            if not check_result.ok and not f:
+                raise Exception()
 
             cfg_dict = base_cfg
 

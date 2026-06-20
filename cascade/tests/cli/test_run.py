@@ -18,6 +18,7 @@ import json
 import os
 import sys
 
+import pytest
 from click.testing import CliRunner, Result
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
@@ -275,3 +276,54 @@ def test_base_config(tmp_path_str: str):
     # Verify that changed config was overridden by the base
     assert result.exit_code == 0
     assert "{'a': 0, 'b': 1, 'c': 2}" in result.stdout
+
+
+@pytest.mark.parametrize("force", [True, False])
+def test_missing_field(tmp_path_str: str, force: bool):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 0",
+            "    b = 1",
+            "    c = 2",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+            "model = BasicModel()",
+            "model.add_config()",
+            "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
+            "line = ModelLine(line_dir)",
+            "line.save(model)",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+    assert result.exit_code == 0
+
+    # Let's say we deprecated parameter c
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 0",
+            "    b = 1",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+
+    if force:
+        result = run_run(path, "--base", f"{tmp_path_str}/line/00000", "-f")
+        assert result.exit_code == 0
+    else:
+        result = run_run(path, "--base", f"{tmp_path_str}/line/00000")
+        assert result.exit_code == 1
