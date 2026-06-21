@@ -305,6 +305,7 @@ def test_missing_field(tmp_path_str: str, force: bool):
     assert result.exit_code == 0
 
     # Let's say we deprecated parameter c
+    # Using base with c would mean adding c to the script
     script = "\n".join(
         [
             "import os",
@@ -324,6 +325,7 @@ def test_missing_field(tmp_path_str: str, force: bool):
     if force:
         result = run_run(path, "--base", f"{tmp_path_str}/line/00000", "-f")
         assert result.exit_code == 0
+        assert "{'a': 0, 'b': 1, 'c': 2}" in result.stdout
     else:
         result = run_run(path, "--base", f"{tmp_path_str}/line/00000")
         assert result.exit_code == 1

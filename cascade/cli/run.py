@@ -146,6 +146,7 @@ def modify_assignments(
     """
     Overrides cascade.base.Config class definition with user-provided values
     """
+    used_keys = set()
     for node in cfg_node.body:
         if isinstance(node, ast.Assign):
             target = node.targets[0].id
@@ -154,10 +155,26 @@ def modify_assignments(
         else:
             continue
         if target in kwargs:
+            used_keys.add(target)
             if sys.version_info < (3, 9):
                 node.value = ast.NameConstant(kwargs[target], kind=None)
             else:
                 node.value = ast.Constant(value=kwargs[target])
+
+    # Account for fields from base that were missing in original config
+    # This will work only if a special override flag was passed
+    for key in kwargs:
+        if key in used_keys:
+            continue
+
+        cfg_node.body.append(
+            ast.Assign(
+                targets=[ast.Name(id=key, ctx=ast.Store())],
+                value=ast.Constant(kwargs[key]),
+            )
+        )
+
+    ast.fix_missing_locations(cfg_node)
     return unparse_method(tree)
 
 
