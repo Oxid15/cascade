@@ -167,10 +167,15 @@ def modify_assignments(
         if key in used_keys:
             continue
 
+        if sys.version_info < (3, 9):
+            value = ast.NameConstant(kwargs[key], kind=None)
+        else:
+            value = ast.Constant(value=kwargs[key])
+
         cfg_node.body.append(
             ast.Assign(
                 targets=[ast.Name(id=key, ctx=ast.Store())],
-                value=ast.Constant(kwargs[key]),
+                value=value,
             )
         )
 
