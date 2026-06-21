@@ -22,7 +22,9 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.models import Model
+from cascade.base import MetaHandler
+from cascade.models import BasicModel, Model
+from cascade.lines import ModelLine
 
 
 def test_add_file(tmp_path_str):
@@ -67,3 +69,28 @@ def test_add_callback():
     assert model.metrics[0].name == "acc"
     assert model.metrics[0].value == 0.0
     assert model.a == 1
+
+
+def test_add_config(tmp_path_str):
+    run_dir = os.path.join(tmp_path_str, "run_dir")
+    line_dir = os.path.join(tmp_path_str, "line_dir")
+
+    os.makedirs(run_dir)
+    os.environ["CASCADE_RUN_DIR"] = run_dir
+
+    # Imitate run files
+    MetaHandler.write(os.path.join(run_dir, "cascade_run_meta.json"), {})
+    MetaHandler.write(os.path.join(run_dir, "cascade_config.json"), {})
+    MetaHandler.write(os.path.join(run_dir, "cascade_overrides.json"), {})
+
+    model = BasicModel()
+    model.add_config()
+
+    line = ModelLine(line_dir)
+    line.save(model)
+
+    files_dir = os.path.join(line_dir, "00000", "files")
+    assert os.path.exists(files_dir)
+    assert os.path.exists(os.path.join(files_dir, "cascade_run_meta.json"))
+    assert os.path.exists(os.path.join(files_dir, "cascade_config.json"))
+    assert os.path.exists(os.path.join(files_dir, "cascade_overrides.json"))

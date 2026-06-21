@@ -362,7 +362,14 @@ def run(
             check_result = can_safely_replace(cfg_dict, base_cfg)
             print(check_result, f)
             if not check_result.ok and not f:
-                raise Exception()
+                raise Exception(
+                    f"Cannot initialize the config in the file using base from {base}."
+                    " Base has {check_result.missing_fields} fields, which are missing in"
+                    " the file's config."
+                    " You can update the config in the file, or pass -f flag."
+                    " If -f flag is passed it will automatically add missing fields"
+                    " to the config on-the-fly."
+                )
 
             cfg_dict = base_cfg
 

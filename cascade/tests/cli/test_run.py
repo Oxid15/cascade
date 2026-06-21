@@ -278,6 +278,57 @@ def test_base_config(tmp_path_str: str):
     assert "{'a': 0, 'b': 1, 'c': 2}" in result.stdout
 
 
+def test_base_config_with_overrides(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 0",
+            "    b = 1",
+            "    c = 2",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+            "model = BasicModel()",
+            "model.add_config()",
+            "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
+            "line = ModelLine(line_dir)",
+            "line.save(model)",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+    assert result.exit_code == 0
+
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 1",
+            "    b = 2",
+            "    c = 5",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+
+    result = run_run(
+        path, "--base", f"{tmp_path_str}/line/00000", "-b", "1", "-c", "42"
+    )
+
+    # Verify that changed config was overridden by the base and overrides
+    assert result.exit_code == 0
+    assert "{'a': 0, 'b': 1, 'c': 42}" in result.stdout
+
+
 @pytest.mark.parametrize("force", [True, False])
 def test_missing_field(tmp_path_str: str, force: bool):
     script = "\n".join(

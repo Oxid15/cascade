@@ -233,7 +233,9 @@ class Model(Traceable):
         if isinstance(metric, str):
             metric = Metric(name=metric, value=value, **kwargs)
         elif not isinstance(metric, Metric):
-            raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
+            raise TypeError(
+                f"Metric can be either str or Metric type, not {type(metric)}"
+            )
 
         # Model be initialized not properly
         if not hasattr(self, "metrics"):
@@ -322,6 +324,11 @@ class Model(Traceable):
                 "Call a script with cascade run script.py and then use add_config inside"
             )
             return
+
+        # Run meta was introduced in v0.17.0, can be missing in runs made with older versions
+        run_meta_path = os.path.join(run_dir, "cascade_run_meta.json")
+        if os.path.exists(run_meta_path):
+            self.add_file(run_meta_path)
 
         cfg_path = os.path.join(run_dir, "cascade_config.json")
         self.add_file(cfg_path)
