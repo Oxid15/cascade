@@ -91,7 +91,9 @@ def migrate(ctx):
     """
     supported_types = ["repo", "line"]
     if not ctx.obj.get("type") in supported_types:
-        click.echo(f"Cannot migrate {ctx.obj['type']}, only {supported_types} are supported")
+        click.echo(
+            f"Cannot migrate {ctx.obj['type']}, only {supported_types} are supported"
+        )
         return
 
     from cascade.base.utils import migrate_repo_v0_13

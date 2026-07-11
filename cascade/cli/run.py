@@ -28,6 +28,7 @@ from typing import Any, Dict, List, Optional
 import click
 import pendulum
 from cascade.base import MetaHandler
+from .common import create_container
 
 
 class RunFailedException(RuntimeError): ...  # noqa: E701
@@ -203,7 +204,8 @@ def generate_run_id() -> str:
 
 def load_config(path):
     dirname, basename = os.path.split(path)
-    # Check if the last part of path is a model name
+
+    # Check if basename is a model name
     if len(re.findall("^[0-9][0-9][0-9][0-9][0-9]$", basename)) == 1:
         meta = MetaHandler.read_dir(path)
         if (
@@ -215,10 +217,16 @@ def load_config(path):
             raise RuntimeError("Provided path to base is not a path to a model")
 
         config = MetaHandler.read(os.path.join(path, "files", "cascade_config.json"))
-
     else:
-        # We assume that the last part of path is a slug then
-        config = {}
+        # We assume that basename is a slug then
+        container_meta = MetaHandler.read_dir(dirname)
+        container = create_container(container_meta[0]["type"], dirname)
+        if container is None:
+            raise RuntimeError("Provided path is not a path to a Cascade object")
+        meta = container.load_obj_meta(basename)
+        config = MetaHandler.read(
+            os.path.join(meta[0]["path"], "files", "cascade_config.json")
+        )
 
     return config
 
