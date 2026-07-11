@@ -27,6 +27,14 @@ from cascade.base import MetaHandler
 from cascade.cli.cli import cli
 from cascade.cli.run import RunFailedException
 
+CONFIGS_WITH_DICT = [
+    ("class NewConfig(Config):\n    a=0\n    b=1\n    c=2", dict(a=0, b=1, c=2)),
+    (
+        "class NewConfig(Config):\n    a='lol'\n    b=[1, 2, 3]\n    c={'d': 'e'}",
+        dict(a="lol", b=[1, 2, 3], c={"d": "e"}),
+    ),
+]
+
 
 def write_script(script: str, d: str):
     path = os.path.join(d, "script.py")
@@ -227,7 +235,7 @@ def test_to_dict(tmp_path_str: str):
     assert cfg["g"] == [1, 2, 3]
 
 
-def test_base_config(tmp_path_str: str):
+def run_base_experiment(path, config):
     # Create a base experiment
     script = "\n".join(
         [
@@ -235,10 +243,7 @@ def test_base_config(tmp_path_str: str):
             "from cascade.base import Config",
             "from cascade.models import BasicModel",
             "from cascade.lines import ModelLine",
-            "class NewConfig(Config):",
-            "    a = 0",
-            "    b = 1",
-            "    c = 2",
+            config,
             "cfg = NewConfig()",
             "print(cfg.to_dict())",
             "model = BasicModel()",
@@ -249,8 +254,14 @@ def test_base_config(tmp_path_str: str):
         ]
     )
 
-    path = write_script(script, tmp_path_str)
-    result = run_run(path)
+    script_path = write_script(script, path)
+    result = run_run(script_path)
+    return result
+
+
+@pytest.mark.parametrize("config,config_dict", CONFIGS_WITH_DICT)
+def test_base_config(tmp_path_str: str, config: str, config_dict):
+    result = run_base_experiment(tmp_path_str, config)
     assert result.exit_code == 0
 
     # Change the config in the file
@@ -276,32 +287,12 @@ def test_base_config(tmp_path_str: str):
 
     # Verify that changed config was overridden by the base
     assert result.exit_code == 0
-    assert "{'a': 0, 'b': 1, 'c': 2}" in result.stdout
+    assert str(config_dict) in result.stdout
 
 
-def test_base_config_with_slug(tmp_path_str: str):
-    script = "\n".join(
-        [
-            "import os",
-            "from cascade.base import Config",
-            "from cascade.models import BasicModel",
-            "from cascade.lines import ModelLine",
-            "class NewConfig(Config):",
-            "    a = 0",
-            "    b = 1",
-            "    c = 2",
-            "cfg = NewConfig()",
-            "print(cfg.to_dict())",
-            "model = BasicModel()",
-            "model.add_config()",
-            "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
-            "line = ModelLine(line_dir)",
-            "line.save(model)",
-        ]
-    )
-
-    path = write_script(script, tmp_path_str)
-    result = run_run(path)
+@pytest.mark.parametrize("config,config_dict", CONFIGS_WITH_DICT)
+def test_base_config_with_slug_line(tmp_path_str: str, config: str, config_dict):
+    result = run_base_experiment(tmp_path_str, config)
     assert result.exit_code == 0
 
     meta = MetaHandler.read_dir(os.path.join(tmp_path_str, "line", "00000"))
@@ -326,10 +317,17 @@ def test_base_config_with_slug(tmp_path_str: str):
     result = run_run(path, "--base", f"{tmp_path_str}/line/{slug}")
 
     assert result.exit_code == 0
-    assert "{'a': 0, 'b': 1, 'c': 2}" in result.stdout
+    assert str(config_dict) in result.stdout
 
 
-def test_base_config_with_overrides(tmp_path_str: str):
+@pytest.mark.parametrize("config,config_dict", CONFIGS_WITH_DICT)
+def test_base_config_with_slug_repo(tmp_path_str: str, config: str, config_dict):
+    result = run_base_experiment(tmp_path_str, config)
+    assert result.exit_code == 0
+
+    meta = MetaHandler.read_dir(os.path.join(tmp_path_str, "line", "00000"))
+    slug = meta[0]["slug"]
+
     script = "\n".join(
         [
             "import os",
@@ -337,21 +335,24 @@ def test_base_config_with_overrides(tmp_path_str: str):
             "from cascade.models import BasicModel",
             "from cascade.lines import ModelLine",
             "class NewConfig(Config):",
-            "    a = 0",
-            "    b = 1",
-            "    c = 2",
+            "    a = 3",
+            "    b = 4",
+            "    c = 5",
             "cfg = NewConfig()",
             "print(cfg.to_dict())",
-            "model = BasicModel()",
-            "model.add_config()",
-            "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
-            "line = ModelLine(line_dir)",
-            "line.save(model)",
         ]
     )
 
     path = write_script(script, tmp_path_str)
-    result = run_run(path)
+    result = run_run(path, "--base", f"{tmp_path_str}/line/{slug}")
+
+    assert result.exit_code == 0
+    assert str(config_dict) in result.stdout
+
+
+@pytest.mark.parametrize("config,config_dict", CONFIGS_WITH_DICT)
+def test_base_config_with_overrides(tmp_path_str: str, config: str, config_dict):
+    result = run_base_experiment(tmp_path_str, config)
     assert result.exit_code == 0
 
     script = "\n".join(
@@ -377,33 +378,12 @@ def test_base_config_with_overrides(tmp_path_str: str):
 
     # Verify that changed config was overridden by the base and overrides
     assert result.exit_code == 0
-    assert "{'a': 0, 'b': 1, 'c': 42}" in result.stdout
+    assert "'c': 42" in result.stdout
 
 
 @pytest.mark.parametrize("force", [True, False])
 def test_missing_field(tmp_path_str: str, force: bool):
-    script = "\n".join(
-        [
-            "import os",
-            "from cascade.base import Config",
-            "from cascade.models import BasicModel",
-            "from cascade.lines import ModelLine",
-            "class NewConfig(Config):",
-            "    a = 0",
-            "    b = 1",
-            "    c = 2",
-            "cfg = NewConfig()",
-            "print(cfg.to_dict())",
-            "model = BasicModel()",
-            "model.add_config()",
-            "line_dir = os.path.join(os.path.dirname(__file__), 'line')",
-            "line = ModelLine(line_dir)",
-            "line.save(model)",
-        ]
-    )
-
-    path = write_script(script, tmp_path_str)
-    result = run_run(path)
+    result = run_base_experiment(tmp_path_str, CONFIGS_WITH_DICT[0][0])
     assert result.exit_code == 0
 
     # Let's say we deprecated parameter c
