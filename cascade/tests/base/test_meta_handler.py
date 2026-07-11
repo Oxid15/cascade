@@ -24,8 +24,13 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.base import (MetaHandler, MetaIOError, MultipleMetaError,
-                          ZeroMetaError, default_meta_format)
+from cascade.base import (
+    MetaHandler,
+    MetaIOError,
+    MultipleMetaError,
+    ZeroMetaError,
+    default_meta_format,
+)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -126,6 +131,11 @@ def test_directory_reading(tmp_path_str, ext):
 def test_zero_meta(tmp_path_str):
     with pytest.raises(ZeroMetaError):
         MetaHandler.read_dir(tmp_path_str)
+
+
+def test_file_not_found():
+    with pytest.raises(FileNotFoundError):
+        MetaHandler.read_dir("i/do/not/exist")
 
 
 def test_multiple_meta(tmp_path_str):
