@@ -23,13 +23,6 @@ limitations under the License.
 
 from typing import Any, Dict, List, NoReturn
 
-from .cache import Cache
-from .config import Config
-from .meta_handler import CustomEncoder as JSONEncoder
-from .meta_handler import MetaHandler, default_meta_format, supported_meta_formats
-from .serialization import ObjectHandler
-from .traceable import Traceable, TraceableOnDisk
-
 """
 Single meta of basic object is just a dict, however Cascade works with
 pipelines with lists of meta. This is why default meta is a list.
@@ -59,6 +52,13 @@ def raise_not_implemented(class_name: str, name: str) -> NoReturn:
         f"implemented it in the successor class"
     )
 
+
+from .cache import Cache
+from .config import Config
+from .meta_handler import CustomEncoder as JSONEncoder
+from .meta_handler import MetaHandler, default_meta_format, supported_meta_formats
+from .serialization import ObjectHandler
+from .traceable import Traceable, TraceableOnDisk
 
 __all__ = [
     "Cache",
