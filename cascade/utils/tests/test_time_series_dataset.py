@@ -28,8 +28,7 @@ MODULE_PATH = os.path.dirname(
 )
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils.time_series import (Align, Average, Interpolate,
-                                       TimeSeriesDataset)
+from cascade.utils.time_series import Align, Average, Interpolate, TimeSeriesDataset
 
 
 @pytest.mark.parametrize(
@@ -49,7 +48,7 @@ def test_create_lists(arr):
     # Lists of datetime
     time = arr
     data = [i for i in range(len(time))]
-    ts = TimeSeriesDataset(time=time, data=data)
+    TimeSeriesDataset(time=time, data=data)
 
 
 @pytest.mark.parametrize(
@@ -71,7 +70,7 @@ def test_create_arrays(arr):
     # Arrays of datetime
     time = arr
     data = np.array([i for i in range(len(arr))])
-    ts = TimeSeriesDataset(time=time, data=data)
+    TimeSeriesDataset(time=time, data=data)
 
 
 @pytest.mark.parametrize(
@@ -109,21 +108,21 @@ def test_no_datetime():
 
     # Only datetime instances in time
     with pytest.raises(AssertionError):
-        ts = TimeSeriesDataset(time=time, data=data)
+        TimeSeriesDataset(time=time, data=data)
 
 
 def test_length_check():
     time = np.array([datetime(2000, 1, 1), datetime(2000, 1, 2), datetime(2000, 1, 3)])
     data = np.array([1, 2])
     with pytest.raises(AssertionError):
-        ts = TimeSeriesDataset(time=time, data=data)
+        TimeSeriesDataset(time=time, data=data)
 
 
 def test_shape_check():
     time = np.array([datetime(2000, 1, 1), datetime(2000, 1, 2), datetime(2000, 1, 3)])
     data = np.array([[1, 2], [1, 2], [1, 2]])
     with pytest.raises(AssertionError):
-        ts = TimeSeriesDataset(time=time, data=data)
+        TimeSeriesDataset(time=time, data=data)
 
 
 def test_get_int():
@@ -193,7 +192,7 @@ def test_slice_datetime():
     data = np.array([1, 2, 3, 4, 5])
     ts = TimeSeriesDataset(time=time, data=data)
 
-    sl = ts[datetime(2001, 1, 2): datetime(2001, 1, 4)]
+    sl = ts[datetime(2001, 1, 2) : datetime(2001, 1, 4)]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])
@@ -205,7 +204,7 @@ def test_slice_datetime():
         items.append(sl[i])
     assert items == [1, 2]
 
-    sl = ts[datetime(2001, 1, 3):]
+    sl = ts[datetime(2001, 1, 3) :]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])

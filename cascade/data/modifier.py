@@ -1,7 +1,7 @@
 from typing import Any, Iterator
 
 from ..base import Meta
-from .dataset import BaseDataset, Dataset, GetItemHandler, IteratorDataset, T
+from .dataset import BaseDataset, Dataset, IteratorDataset, T
 
 
 class BaseModifier(BaseDataset[T]):
@@ -126,7 +126,9 @@ class Sampler(Modifier[T]):
     cascade.data.RangeSampler
     """
 
-    def __init__(self, dataset: Dataset[T], num_samples: int, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self, dataset: Dataset[T], num_samples: int, *args: Any, **kwargs: Any
+    ) -> None:
         """
         Constructs a Sampler.
 

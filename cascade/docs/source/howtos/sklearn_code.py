@@ -36,9 +36,7 @@ metrics = [
 
 # %%
 
-metrics.append(
-    SkMetric()
-)
+metrics.append(SkMetric())
 
 # %%
 
@@ -49,10 +47,10 @@ from pprint import pprint
 
 pprint(model.metrics)
 # %%
-# [SkMetric(name=acc, value=0.9533333333333334, created_at=2024-09-16 19:06:05.354980+00:00),
-#  SkMetric(name=f1, value=0.9532912954992826, created_at=2024-09-16 19:06:05.355031+00:00),
-#  SkMetric(name=precision_score, value=0.9543690619563763, created_at=2024-09-16 19:06:05.355048+00:00),
-#  SkMetric(name=recall_score, value=0.9533333333333333, created_at=2024-09-16 19:06:05.355060+00:00)]
+# [SkMetric(name=acc, value=0.9533333333333, created_at=2024-09-16 19:06:05.354980+00:00),
+#  SkMetric(name=f1, value=0.9532912954992, created_at=2024-09-16 19:06:05.355031+00:00),
+#  SkMetric(name=precision_score, value=0.95436906195, created_at=2024-09-16 19:06:05.355048+00:00),
+#  SkMetric(name=recall_score, value=0.9533333333333, created_at=2024-09-16 19:06:05.355060+00:00)]
 
 # %%
 

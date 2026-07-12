@@ -99,9 +99,13 @@ def parse_value(value: ast.expr) -> Any:
     elif isinstance(value, ast.Set):
         return set(parse_value(v) for v in value.elts)
     elif isinstance(value, ast.Dict):
-        return {parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)}
+        return {
+            parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)
+        }
     else:
-        raise ValueError(f"Unsupported config field type: {value} in {unparse_method(value)}")
+        raise ValueError(
+            f"Unsupported config field type: {value} in {unparse_method(value)}"
+        )
 
 
 # ast.unparse exists since python 3.9
@@ -129,7 +133,9 @@ def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
     return cfg_dict
 
 
-def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]) -> str:
+def modify_assignments(
+    tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]
+) -> str:
     """
     Overrides cascade.base.Config class definition with user-provided values
     """
@@ -155,7 +161,10 @@ def parse_args(args):
         try:
             kwargs[key] = ast.literal_eval(val)
         except Exception as e:
-            raise RuntimeError(f"Failed to parse the following argument: {orig_key} {val} See traceback above.") from e
+            raise RuntimeError(
+                f"Failed to parse the following argument: {orig_key} {val} "
+                "See traceback above."
+            ) from e
     return kwargs
 
 
@@ -165,7 +174,9 @@ def generate_run_id() -> str:
 
 
 class CascadeRun:
-    def __init__(self, log: bool, config: Dict[str, Any], overrides: Dict[str, Any]) -> None:
+    def __init__(
+        self, log: bool, config: Dict[str, Any], overrides: Dict[str, Any]
+    ) -> None:
         self.log = log
         self.config = config
         self.overrides = overrides
@@ -178,8 +189,12 @@ class CascadeRun:
     def __enter__(self):
         os.makedirs(self.run_dir)
 
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_config.json"), self.config)
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides)
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_config.json"), self.config
+        )
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides
+        )
 
         return self
 
