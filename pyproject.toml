@@ -1,3 +1,10 @@
 [build-system]
 requires = ["setuptools>=18.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "W", "F"]
+exclude = [".git", "__pycache__", "build"]
