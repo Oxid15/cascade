@@ -39,7 +39,7 @@ class BaseRepo(Traceable, ABC):
         **kwargs: Any,
     ) -> None:
         self._root = path
-        self._lines = dict()
+        self._lines = {}
         super().__init__(*args, **kwargs)
 
     @abstractmethod

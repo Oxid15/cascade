@@ -167,7 +167,7 @@ def update_version(path: str, version: str) -> None:
     old_parts = parse_version(ver)
     new_parts = parse_version(ver)
 
-    for new, old in zip(new_parts, old_parts, strict=True):
+    for new, old in zip(new_parts, old_parts):
         if new > old:
             write_version(path, version)
             return

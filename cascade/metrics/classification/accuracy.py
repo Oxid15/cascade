@@ -58,11 +58,11 @@ class Accuracy(Metric):
             raise ValueError(
                 f"Length of gt and pred should match, got {len(gt)} and {len(pred)}"
             )
-        self.value = sum([g == p for g, p in zip(gt, pred, strict=True)]) / len(gt)
+        self.value = sum([g == p for g, p in zip(gt, pred)]) / len(gt)
         return self.value
 
     def compute_add(self, gt: Sequence[Any], pred: Sequence[Any]) -> MetricType:
-        self._running_sum += sum([g == p for g, p in zip(gt, pred, strict=True)])
+        self._running_sum += sum([g == p for g, p in zip(gt, pred)])
         self._running_count += len(gt)
         self.value = self._running_sum / self._running_count
         return self.value

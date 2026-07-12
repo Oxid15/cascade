@@ -171,7 +171,7 @@ class WeighedSampler(Sampler[T]):
         self._partitioning = partitioning
 
         # If label is omitted in partitioning, add it with true count
-        for ulabel, count in zip(ulabels, counts, strict=True):
+        for ulabel, count in zip(ulabels, counts):
             if ulabel not in self._partitioning:
                 self._partitioning[ulabel] = count
 

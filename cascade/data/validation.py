@@ -77,8 +77,8 @@ class PydanticValidator(ValidationProvider):
             except self._exc_type as e:
                 raise ValidationError("Validation failed, see traceback above") from e
         else:
-            from_args = dict()
-            for name, arg in zip(self._schema.model_fields, args, strict=True):
+            from_args = {}
+            for name, arg in zip(self._schema.model_fields, args):
                 from_args[name] = arg
 
             try:
@@ -123,7 +123,7 @@ class SchemaFactory:
             else:
                 return create_model(
                     "pydantic_validator",
-                    __config__=dict(arbitrary_types_allowed=True),
+                    __config__={"arbitrary_types_allowed": True},
                     **types,
                 )  # type: ignore
 

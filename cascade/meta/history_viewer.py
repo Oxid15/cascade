@@ -85,7 +85,7 @@ class HistoryViewer(Server):
             for repo in repos:
                 repo.reload()
 
-        self._edges = dict()
+        self._edges = {}
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
@@ -117,10 +117,7 @@ class HistoryViewer(Server):
             valid_lines.append(line)
 
         valid_lines = [
-            line
-            for line, _ in sorted(
-                zip(valid_lines, updated_at, strict=True), key=lambda x: x[1]
-            )
+            line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
         ]
 
         return valid_lines[-self._last_lines :]
@@ -145,7 +142,7 @@ class HistoryViewer(Server):
                 try:
                     meta = view[i][0]
 
-                    metrics = dict()
+                    metrics = {}
                     for metric in meta["metrics"]:
                         name = metric["name"]
                         for key in ["dataset", "split"]:
@@ -173,7 +170,7 @@ class HistoryViewer(Server):
             self._table = self._table.sort_values("saved_at")
 
         # turn time into evenly spaced intervals
-        time = [i for i in range(len(self._table))]
+        time = list(range(len(self._table)))
         lines = self._table["line"].unique()
 
         cmap = self._px.colors.qualitative.Plotly
@@ -187,7 +184,7 @@ class HistoryViewer(Server):
         columns2fill = [
             col for col in self._table.columns if not col.startswith("metrics_")
         ]
-        self._table = self._table.fillna({name: "" for name in columns2fill})
+        self._table = self._table.fillna(dict.fromkeys(columns2fill, ""))
 
     @staticmethod
     def _diff(p1: Dict[Any, Any], params: Dict[Any, Any]) -> List:
@@ -255,7 +252,7 @@ class HistoryViewer(Server):
         # with all metadata on hover
         metric = self._preprocess_metric(metric)
 
-        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        hover_cols = list(pd.DataFrame(self._params).columns)
         if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
@@ -288,7 +285,7 @@ class HistoryViewer(Server):
     def _update_plot(self, metric: str) -> Any:
         metric = self._preprocess_metric(metric)
 
-        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        hover_cols = list(pd.DataFrame(self._params).columns)
         if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols

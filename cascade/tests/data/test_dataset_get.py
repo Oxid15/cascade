@@ -134,7 +134,7 @@ def test_pipeline_get_pipelines():
 
 
 def test_no_get_modifier_invisible():
-    ds = Wrapper([i for i in range(10)])
+    ds = Wrapper(list(range(10)))
     ds = FailingModifier(ds, fail_indices=[0])
     ds = NoGetModifierGetItem(ds)
     ds = ApplyModifier(ds, lambda x: x)
@@ -153,7 +153,7 @@ def test_no_get_modifier_invisible():
 
 
 def test_no_get_modifier_hides_previous():
-    ds = Wrapper([i for i in range(10)])
+    ds = Wrapper(list(range(10)))
     ds = FailingModifier(ds, fail_indices=[0])
     ds = NoGetModifierGet(ds)
     ds = ApplyModifier(ds, lambda x: x)

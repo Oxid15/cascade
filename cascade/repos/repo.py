@@ -77,7 +77,7 @@ class Repo(BaseRepo, TraceableOnDisk):
 
         os.makedirs(self._root, exist_ok=True)
         self._lines = {
-            name: {"args": [], "kwargs": dict()}
+            name: {"args": [], "kwargs": {}}
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))
         }
@@ -265,7 +265,7 @@ class Repo(BaseRepo, TraceableOnDisk):
                 os.path.isdir(os.path.join(self._root, name))
                 and name not in self._lines  # noqa: W503
             ):
-                self._lines[name] = {"args": [], "kwargs": dict()}
+                self._lines[name] = {"args": [], "kwargs": {}}
 
     def __len__(self) -> int:
         """

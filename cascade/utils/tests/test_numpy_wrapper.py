@@ -35,4 +35,4 @@ def test(tmp_path):
     np.save(path, arr)
 
     ds = NumpyWrapper(path)
-    assert arr.tolist() == [item for item in ds]
+    assert arr.tolist() == list(ds)

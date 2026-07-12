@@ -192,9 +192,9 @@ class FeatureTable(TableDataset):
             The table to wrap
         """
         super().__init__(*args, t=table, **kwargs)
-        self._computed_features = dict()
-        self._computed_features_args = dict()
-        self._computed_features_kwargs = dict()
+        self._computed_features = {}
+        self._computed_features_args = {}
+        self._computed_features_kwargs = {}
         self._features = list(self._table.columns)
 
     def _validate_features(self, features: List[Union[str, Tuple[str]]]):
@@ -231,7 +231,7 @@ class FeatureTable(TableDataset):
             feat = (feat,)
             result = (result,)
 
-        for name, res in zip(feat, result, strict=True):
+        for name, res in zip(feat, result):
             self._table[name] = res
             self._features.append(name)
 
@@ -255,7 +255,7 @@ class FeatureTable(TableDataset):
                     continue
             else:
                 flat_features += [*feat]
-                if all([f in self._table.columns for f in feat]):
+                if all(f in self._table.columns for f in feat):
                     continue
 
             if feat in self._computed_features:

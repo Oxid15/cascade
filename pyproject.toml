@@ -6,10 +6,12 @@ build-backend = "setuptools.build_meta"
 line-length = 100
 
 [tool.ruff.lint]
-select = ["E", "W", "F", "I", "N", "B"]
+select = ["E", "W", "F", "I", "N", "B", "C4"]
 exclude = [".git", "__pycache__", "build"]
 
 [tool.ruff.lint.per-file-ignores]
+"setup.py" = ["C401"] # need to check if this can be removed
+"cascade/**/*.py" = ["B905"] # zip strict is not compatible with Python<3.10
 "cascade/base/__init__.py" = [
     "E402",
 ] # imports are arranged to avoid going circular in base

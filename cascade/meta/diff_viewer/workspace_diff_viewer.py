@@ -88,7 +88,7 @@ class WorkspaceDiffViewer(RepoDiffViewer):
                 style={"text-align": "left"},
             )
 
-        lines = dict()
+        lines = {}
         for name in self._objs:
             # /full/path/repo/line/model/file.ext
             tail, _ = os.path.split(name)
@@ -104,7 +104,7 @@ class WorkspaceDiffViewer(RepoDiffViewer):
         for i, line in enumerate(lines):
             children = []
             keys = list(lines[line].keys())
-            for name, prev_name in zip(keys, [keys[0], *keys[:-1]], strict=True):
+            for name, prev_name in zip(keys, [keys[0], *keys[:-1]]):
                 children.append(table_row(name, prev_name))
 
             line_divs += [

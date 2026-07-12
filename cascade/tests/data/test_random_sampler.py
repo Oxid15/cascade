@@ -38,7 +38,7 @@ def test(arr, result):
     ds = Wrapper(arr)
     ds = RandomSampler(ds)
 
-    for item, res in zip(ds, result, strict=True):
+    for item, res in zip(ds, result):
         assert item == res
 
 
@@ -52,5 +52,5 @@ def test_over_and_under(arr, result):
     ds = Wrapper(arr)
     ds = RandomSampler(ds, 3)
 
-    for item, res in zip(ds, result, strict=True):
+    for item, res in zip(ds, result):
         assert item == res

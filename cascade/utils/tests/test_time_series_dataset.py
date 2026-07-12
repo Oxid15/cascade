@@ -47,7 +47,7 @@ from cascade.utils.time_series import Align, Average, Interpolate, TimeSeriesDat
 def test_create_lists(arr):
     # Lists of datetime
     time = arr
-    data = [i for i in range(len(time))]
+    data = list(range(len(time)))
     TimeSeriesDataset(time=time, data=data)
 
 
@@ -69,7 +69,7 @@ def test_create_lists(arr):
 def test_create_arrays(arr):
     # Arrays of datetime
     time = arr
-    data = np.array([i for i in range(len(arr))])
+    data = np.array(list(range(len(arr))))
     TimeSeriesDataset(time=time, data=data)
 
 
@@ -89,8 +89,8 @@ def test_create_arrays(arr):
 def test_unsorted_time(arr):
     # Unsorted datetime
     time = arr
-    data = np.array([i for i in range(len(time))])
-    indices = np.array([i for i in range(len(time))])
+    data = np.array(list(range(len(time))))
+    indices = np.array(list(range(len(time))))
     np.random.shuffle(indices)
     data = data[indices]
     time = np.array(time)[indices]
@@ -103,8 +103,8 @@ def test_unsorted_time(arr):
 
 
 def test_no_datetime():
-    time = [i for i in range(10)]
-    data = [i for i in range(len(time))]
+    time = list(range(10))
+    data = list(time)
 
     # Only datetime instances in time
     with pytest.raises(AssertionError):

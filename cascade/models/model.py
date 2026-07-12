@@ -117,7 +117,6 @@ class Model(Traceable):
         for filepath, but_its_ok in zip(
             self._file_artifacts_paths,
             self._file_artifact_missing_oks,
-            strict=True,
         ):
             if not os.path.exists(filepath):
                 if but_its_ok:

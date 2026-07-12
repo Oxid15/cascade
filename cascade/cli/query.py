@@ -396,14 +396,14 @@ def render_field(value: Union[Field, Any], width: int) -> str:
 
 def render_header(columns, widths):
     result = []
-    for w, col in zip(widths, columns, strict=True):
+    for w, col in zip(widths, columns):
         result.append(col + (w - len(col)) * " ")
     return "".join(result)
 
 
 def render_row(columns: List[str], field: Field, widths: List[int]) -> str:
     result = []
-    for col, w in zip(columns, widths, strict=True):
+    for col, w in zip(columns, widths):
         rendered_val = render_field(field.get(col), w)
         result.append(rendered_val + (w - len(rendered_val)) * " ")
     return "".join(result)

@@ -71,7 +71,7 @@ class RepoDiffViewer(BaseDiffViewer):
         self._check_path(path, ("repo", "line"))
 
         mev = MetaViewer(path, filt={"type": "model"})
-        objs = [meta for meta in mev]
+        objs = list(mev)
         objs = {meta[0]["name"]: meta for meta in objs}
         return objs
 
@@ -117,7 +117,7 @@ class RepoDiffViewer(BaseDiffViewer):
         def line_table(line):
             children = []
             keys = list(lines[line].keys())
-            for name, prev_name in zip(keys, [keys[0], *keys[:-1]], strict=True):
+            for name, prev_name in zip(keys, [keys[0], *keys[:-1]]):
                 children.append(_table_row(name, prev_name))
 
             return html.Div(
@@ -147,7 +147,7 @@ class RepoDiffViewer(BaseDiffViewer):
 
         self._objs = self._read_objects(self._path)
 
-        lines = dict()
+        lines = {}
         for name in self._objs:
             # /full/path/repo/line/model/file.ext
             tail, _ = os.path.split(name)

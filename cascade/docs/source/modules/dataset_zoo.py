@@ -144,7 +144,7 @@ labels = cdd.Wrapper([0, 1, 0, 1])
 
 ds = cdd.Composer((items, labels))
 
-[item for item in ds]
+list(ds)
 
 # %% [markdown]
 # ## CyclicSampler
@@ -333,7 +333,7 @@ ds = cdd.Wrapper(
 )
 
 ds = OverSampler(ds)
-[item for item in ds]
+list(ds)
 
 # %%
 from cascade.utils.samplers import UnderSampler
@@ -348,7 +348,7 @@ ds = cdd.Wrapper(
 )
 
 ds = UnderSampler(ds)
-[item for item in ds]
+list(ds)
 
 # %% [markdown]
 # ## WeighedSampler
@@ -372,7 +372,7 @@ ds = cdd.Wrapper(
 
 ds = WeighedSampler(ds, partitioning={0: 4, 1: 2})
 
-[item for item in ds]
+list(ds)
 
 # %% [markdown]
 # ## Specific datasets

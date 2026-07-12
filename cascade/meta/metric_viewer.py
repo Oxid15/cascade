@@ -156,14 +156,16 @@ class MetricViewer:
         fig = go.Figure(
             data=[
                 go.Table(
-                    header=dict(
-                        values=list(data.columns), fill_color="#f4c9c7", align="left"
-                    ),
-                    cells=dict(
-                        values=[data[col] for col in data.columns],
-                        fill_color="#bcced4",
-                        align="left",
-                    ),
+                    header={
+                        "values": list(data.columns),
+                        "fill_color": "#f4c9c7",
+                        "align": "left",
+                    },
+                    cells={
+                        "values": [data[col] for col in data.columns],
+                        "fill_color": "#bcced4",
+                        "align": "left",
+                    },
                 )
             ]
         )
@@ -288,10 +290,8 @@ class MetricServer(Server):
             df = df[["line", "num"] + self._include]
 
         self._df_flatten = pd.DataFrame(
-            map(
-                lambda x: flatten_dict(x, root_keys_to_ignore=["tags"]),
-                df.to_dict("records"),
-            )
+            lambda x: flatten_dict(x, root_keys_to_ignore=["tags"])
+            for x in df.to_dict("records")
         )
         self._for_plots = self._df_flatten.copy()
         for name in self._df_flatten.name.unique():

@@ -107,8 +107,8 @@ class Traceable:
         else:
             self.tags = set()
 
-        self.comments = list()
-        self.links = list()
+        self.comments = []
+        self.links = []
 
     @apply_prefix
     def get_meta(self) -> Meta:
@@ -479,7 +479,7 @@ class TraceableOnDisk(Traceable):
                 warnings.warn(f"File reading error ignored: {e}", stacklevel=2)
 
             self_meta = self.get_meta()
-            for self_block, block in zip(self_meta, meta, strict=True):
+            for self_block, block in zip(self_meta, meta, True):
                 for key in self_block:
                     if key not in DO_NOT_UPDATE:
                         block[key] = self_block[key]

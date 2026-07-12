@@ -98,11 +98,10 @@ def parse_value(value: ast.expr) -> Any:
     elif isinstance(value, ast.Tuple):
         return tuple(parse_value(v) for v in value.elts)
     elif isinstance(value, ast.Set):
-        return set(parse_value(v) for v in value.elts)
+        return {parse_value(v) for v in value.elts}
     elif isinstance(value, ast.Dict):
         return {
-            parse_value(k): parse_value(v)
-            for k, v in zip(value.keys, value.values, strict=True)
+            parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)
         }
     else:
         raise ValueError(
@@ -158,7 +157,7 @@ def modify_assignments(
 
 def parse_args(args):
     kwargs = {}
-    for orig_key, val in zip(args[::2], args[1::2], strict=True):
+    for orig_key, val in zip(args[::2], args[1::2]):
         key = re.sub(r"^-{1,2}\b", "", orig_key)
         try:
             kwargs[key] = ast.literal_eval(val)

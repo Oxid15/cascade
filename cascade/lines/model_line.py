@@ -53,7 +53,7 @@ class ModelLine(DiskLine):
         All models in line should be instances of the same class.
         """
 
-        self._slug2name_cache = dict()
+        self._slug2name_cache = {}
         super().__init__(root, *args, item_cls=model_cls, meta_fmt=meta_fmt, **kwargs)
 
     def _item_name_by_num(self, num: int) -> str:
