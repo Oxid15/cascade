@@ -479,7 +479,7 @@ class TraceableOnDisk(Traceable):
                 warnings.warn(f"File reading error ignored: {e}", stacklevel=2)
 
             self_meta = self.get_meta()
-            for self_block, block in zip(self_meta, meta, True):
+            for self_block, block in zip(self_meta, meta):
                 for key in self_block:
                     if key not in DO_NOT_UPDATE:
                         block[key] = self_block[key]
