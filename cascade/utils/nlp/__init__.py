@@ -15,3 +15,5 @@ limitations under the License.
 """
 
 from .text_classification_folder import TextClassificationFolder
+
+__all__ = ["TextClassificationFolder"]
