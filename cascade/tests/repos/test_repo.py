@@ -144,7 +144,7 @@ def test_add(tmp_path_str):
 
     line_lens = [1, 0, 0, 0, 0]
 
-    for name, length in zip(line_names, line_lens):
+    for name, length in zip(line_names, line_lens, strict=True):
         line = repo[name]
         assert len(line) == length
 

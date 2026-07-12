@@ -83,7 +83,9 @@ class BasicTrainer(Trainer):
                 model_num -= 1
 
                 if model_num == -1:
-                    raise FileNotFoundError(f"No model files were found in line {line}")
+                    raise FileNotFoundError(
+                        f"No model files were found in line {line}"
+                    ) from None
 
     def _handle(self, error: Exception, model: Model, line: ModelLine):
         line.save(model, only_meta=True)

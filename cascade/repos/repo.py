@@ -70,7 +70,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         cascade.data.DataLine
         cascade.models.ModelLine
         """
-        super().__init__(path=folder, root=folder, meta_fmt=meta_fmt, *args, **kwargs)
+        super().__init__(*args, path=folder, root=folder, meta_fmt=meta_fmt, **kwargs)
 
         if overwrite and os.path.exists(self._root):
             shutil.rmtree(self._root)
@@ -83,7 +83,9 @@ class Repo(BaseRepo, TraceableOnDisk):
         }
 
         if "lines" in kwargs:
-            raise ValueError("lines was removed in 0.14.0, consider using add_line method instead")
+            raise ValueError(
+                "lines was removed in 0.14.0, consider using add_line method instead"
+            )
 
         self.sync_meta()
 
@@ -186,7 +188,7 @@ class Repo(BaseRepo, TraceableOnDisk):
                 ) from e
         else:
             line = LineFactory.create(
-                folder, line_type=line_type, *args, meta_fmt=meta_fmt, **kwargs
+                folder, *args, line_type=line_type, meta_fmt=meta_fmt, **kwargs
             )
         return line
 
@@ -253,7 +255,9 @@ class Repo(BaseRepo, TraceableOnDisk):
                 continue
             else:
                 return meta
-        raise FileNotFoundError(f"Failed to find the object {obj} in the repo at {self._root}")
+        raise FileNotFoundError(
+            f"Failed to find the object {obj} in the repo at {self._root}"
+        )
 
     def _update_lines(self) -> None:
         for name in sorted(os.listdir(self._root)):

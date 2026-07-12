@@ -79,7 +79,11 @@ class QueryParser:
             "filter": {"expression": "after_filter"},
             "after_filter": {"sort": "sort", "limit": "limit", "offset": "offset"},
             "sort": {"expression": "after_sort"},
-            "after_sort": {"expression": "after_sort", "limit": "limit", "offset": "offset"},
+            "after_sort": {
+                "expression": "after_sort",
+                "limit": "limit",
+                "offset": "offset",
+            },
             "offset": {"expression": "after_offset"},
             "after_offset": {"limit": "limit"},
             "limit": {"expression": "end"},
@@ -97,7 +101,9 @@ class QueryParser:
     ):
         tokens.insert(i + 1, "<-")
         expression = " ".join(tokens)
-        expression = f"Unexpected token `{token}` at marked (<-) position: " + f"`{expression}`"
+        expression = (
+            f"Unexpected token `{token}` at marked (<-) position: " + f"`{expression}`"
+        )
         expression = " ".join((expression, postfix))
         raise QueryParsingError(expression)
 
@@ -355,20 +361,26 @@ class Executor:
                 item
                 for _, item in sorted(
                     enumerate(data),
-                    key=lambda i_item: (sorting_keys[i_item[0]] is None, sorting_keys[i_item[0]]),
+                    key=lambda i_item: (
+                        sorting_keys[i_item[0]] is None,
+                        sorting_keys[i_item[0]],
+                    ),
                     reverse=q.desc,
                 )
             ]
 
         if q.offset is not None:
-            data = data[q.offset:]
+            data = data[q.offset :]
 
         if q.limit is not None:
             data = data[: q.limit]
 
         end_time = time.time()
         return Result(
-            columns=q.columns, rows=len(data), data=data, time_s=round(end_time - start_time, 4)
+            columns=q.columns,
+            rows=len(data),
+            data=data,
+            time_s=round(end_time - start_time, 4),
         )
 
 
@@ -384,14 +396,14 @@ def render_field(value: Union[Field, Any], width: int) -> str:
 
 def render_header(columns, widths):
     result = []
-    for w, col in zip(widths, columns):
+    for w, col in zip(widths, columns, strict=True):
         result.append(col + (w - len(col)) * " ")
     return "".join(result)
 
 
 def render_row(columns: List[str], field: Field, widths: List[int]) -> str:
     result = []
-    for col, w in zip(columns, widths):
+    for col, w in zip(columns, widths, strict=True):
         rendered_val = render_field(field.get(col), w)
         result.append(rendered_val + (w - len(rendered_val)) * " ")
     return "".join(result)

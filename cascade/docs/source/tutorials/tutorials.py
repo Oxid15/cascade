@@ -32,7 +32,10 @@ NOISE_MAGNITUDE = 1
 
 
 def add_noise(x):
-    return np.clip(x[0] + np.random.randint(-NOISE_MAGNITUDE, NOISE_MAGNITUDE), 0, 15), x[1]
+    return (
+        np.clip(x[0] + np.random.randint(-NOISE_MAGNITUDE, NOISE_MAGNITUDE), 0, 15),
+        x[1],
+    )
 
 
 ds_noise = ApplyModifier(ds, add_noise)
@@ -271,7 +274,7 @@ class Pad5(SchemaModifier):
         image = item.image.reshape((8, 8))
         h, w = image.shape
         new_image = np.zeros((h + 2 * 5, w + 2 * 5))
-        new_image[5: 5 + h, 5: 5 + w] = image
+        new_image[5 : 5 + h, 5 : 5 + w] = image
         item.image = new_image.flatten()
         return item
 

@@ -23,7 +23,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import ApplyModifier, Dataset, GetItemException, Modifier, Wrapper
+from cascade.data import ApplyModifier, Dataset, GetItemError, Modifier, Wrapper
 
 
 class NoGetModifierGetItem(Modifier):
@@ -66,7 +66,7 @@ def test_dataset_get_success():
 def test_dataset_get_exception_wrapping():
     ds = RaiseDataset()
 
-    with pytest.raises(GetItemException) as exc_info:
+    with pytest.raises(GetItemError) as exc_info:
         ds[0]
 
     assert "RaiseDataset" in str(exc_info.value)
@@ -79,11 +79,11 @@ def test_dataset_get_exception_wrapping():
 def test_dataset_get_exception_with_different_index_types():
     ds = RaiseDataset()
 
-    with pytest.raises(GetItemException) as exc_info:
+    with pytest.raises(GetItemError) as exc_info:
         ds["some_key"]
     assert "index some_key" in str(exc_info.value)
 
-    with pytest.raises(GetItemException) as exc_info:
+    with pytest.raises(GetItemError) as exc_info:
         ds[(0, 1)]
     assert "index (0, 1)" in str(exc_info.value)
 
@@ -104,7 +104,7 @@ def test_pipeline_get_pipelines():
     ds = FailingModifier(ds, fail_indices=[3])
     ds = ApplyModifier(ds, lambda x: x * 2)
 
-    with pytest.raises(GetItemException) as exc_info:
+    with pytest.raises(GetItemError) as exc_info:
         ds[1]
 
     assert "ApplyModifier" in str(exc_info.value)
@@ -116,7 +116,7 @@ def test_pipeline_get_pipelines():
     )
     assert "Intentional failure at index 1" in tb_str
 
-    with pytest.raises(GetItemException) as exc_info:
+    with pytest.raises(GetItemError) as exc_info:
         ds[3]
 
     assert "ApplyModifier" in str(exc_info.value)
@@ -140,7 +140,7 @@ def test_no_get_modifier_invisible():
     ds = ApplyModifier(ds, lambda x: x)
     ds = ApplyModifier(ds, lambda x: x)
 
-    with pytest.raises(GetItemException) as exc_info:
+    with pytest.raises(GetItemError) as exc_info:
         ds[0]
 
     tb_str = "".join(
@@ -159,7 +159,7 @@ def test_no_get_modifier_hides_previous():
     ds = ApplyModifier(ds, lambda x: x)
     ds = ApplyModifier(ds, lambda x: x)
 
-    with pytest.raises(GetItemException) as exc_info:
+    with pytest.raises(GetItemError) as exc_info:
         ds[0]
 
     tb_str = "".join(

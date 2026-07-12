@@ -42,11 +42,11 @@ class WorkspaceDiffViewer(RepoDiffViewer):
 
         try:
             import dash_renderjson  # noqa: F401
-        except ModuleNotFoundError:
+        except ModuleNotFoundError as e:
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
                 " and can be installed via `pip install dash_renderjson`"
-            )
+            ) from e
         else:
             from dash_renderjson import DashRenderjson
 
@@ -104,7 +104,7 @@ class WorkspaceDiffViewer(RepoDiffViewer):
         for i, line in enumerate(lines):
             children = []
             keys = list(lines[line].keys())
-            for name, prev_name in zip(keys, [keys[0], *keys[:-1]]):
+            for name, prev_name in zip(keys, [keys[0], *keys[:-1]], strict=True):
                 children.append(table_row(name, prev_name))
 
             line_divs += [
@@ -134,7 +134,7 @@ class WorkspaceDiffViewer(RepoDiffViewer):
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
                 " and can be installed via `pip install dash_renderjson`"
-            )
+            ) from None
         else:
             from dash_renderjson import DashRenderjson
 

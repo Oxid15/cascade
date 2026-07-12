@@ -61,7 +61,7 @@ class OverSampler(Sampler[T]):
         ln = len(dataset) + len(self._add_indices)
         print(f"Original length was {len(dataset)} and new is {ln}")
 
-        super().__init__(dataset, num_samples=ln, *args, **kwargs)
+        super().__init__(dataset, *args, num_samples=ln, **kwargs)
 
     def get(self, index: int) -> Tuple[Any, Any]:
         if index < len(self._dataset):
@@ -171,7 +171,7 @@ class WeighedSampler(Sampler[T]):
         self._partitioning = partitioning
 
         # If label is omitted in partitioning, add it with true count
-        for ulabel, count in zip(ulabels, counts):
+        for ulabel, count in zip(ulabels, counts, strict=True):
             if ulabel not in self._partitioning:
                 self._partitioning[ulabel] = count
 

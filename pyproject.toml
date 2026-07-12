@@ -6,15 +6,19 @@ build-backend = "setuptools.build_meta"
 line-length = 100
 
 [tool.ruff.lint]
-select = ["E", "W", "F"]
+select = ["E", "W", "F", "I", "N", "B"]
 exclude = [".git", "__pycache__", "build"]
 
 [tool.ruff.lint.per-file-ignores]
+"cascade/base/__init__.py" = [
+    "E402",
+] # imports are arranged to avoid going circular in base
 "cascade/tests/**/*.py" = ["E402"] # tests use different imports
 "cascade/utils/tests/**/*.py" = ["E402"]
 "cascade/docs/source/tutorials/*.py" = [
     "E402",
+    "B905",
 ] # tutorials are built as long interactive scripts
-"cascade/docs/source/howtos/*.py" = ["E402"]
-"cascade/docs/source/howtos/*.ipynb" = ["E402"]
-"cascade/docs/source/modules/*.py" = ["E402"]
+"cascade/docs/source/howtos/*.py" = ["E402", "B905"]
+"cascade/docs/source/howtos/*.ipynb" = ["E402", "I001", "N812"]
+"cascade/docs/source/modules/*.py" = ["E402", "B018"]

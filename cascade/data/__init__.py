@@ -27,8 +27,8 @@ from .cyclic_sampler import CyclicSampler
 from .data_card import Assessor, DataCard, LabelingInfo
 from .dataset import (
     BaseDataset,
-    GetItemException,
     Dataset,
+    GetItemError,
     IteratorDataset,
     IteratorWrapper,
     T,
@@ -55,7 +55,7 @@ __all__ = [
     "DataCard",
     "LabelingInfo",
     "BaseDataset",
-    "GetItemException",
+    "GetItemError",
     "Dataset",
     "IteratorDataset",
     "IteratorWrapper",

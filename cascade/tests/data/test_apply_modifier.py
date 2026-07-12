@@ -42,7 +42,7 @@ def test_apply_modifier(arr, func):
 
 def test_ds_coverage(dataset):
     ds = ApplyModifier(dataset, lambda x: x)
-    for item in ds:
+    for _ in ds:
         pass
 
     if hasattr(dataset, "__len__"):

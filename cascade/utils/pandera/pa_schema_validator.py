@@ -59,6 +59,6 @@ class PaSchemaValidator(AggregateValidator):
                 schema = paio.from_yaml(schema)
             schema.validate(ds._table)
         except SchemaError as e:
-            raise DataValidationException(e)
+            raise DataValidationException(e) from None
         else:
             return True

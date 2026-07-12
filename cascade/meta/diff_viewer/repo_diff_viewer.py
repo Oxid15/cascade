@@ -117,7 +117,7 @@ class RepoDiffViewer(BaseDiffViewer):
         def line_table(line):
             children = []
             keys = list(lines[line].keys())
-            for name, prev_name in zip(keys, [keys[0], *keys[:-1]]):
+            for name, prev_name in zip(keys, [keys[0], *keys[:-1]], strict=True):
                 children.append(_table_row(name, prev_name))
 
             return html.Div(
@@ -137,11 +137,11 @@ class RepoDiffViewer(BaseDiffViewer):
 
         try:
             import dash_renderjson  # noqa: F401
-        except ModuleNotFoundError:
+        except ModuleNotFoundError as e:
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
                 " and can be installed via `pip install dash_renderjson`"
-            )
+            ) from e
         else:
             from dash_renderjson import DashRenderjson
 

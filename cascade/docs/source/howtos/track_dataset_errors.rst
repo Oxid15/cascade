@@ -78,8 +78,8 @@ Let's try a simple update - replace all `__getitem__` with `get` methods:
    File "/home/user/cascade/cascade/data/dataset.py", line 106, in __getitem__
       with GetItemHandler(self, index):
    File "/home/user/cascade/cascade/data/dataset.py", line 36, in __exit__
-      raise GetItemException(
-   cascade.data.dataset.GetItemException: Failed to get item from <class '__main__.RaiseDataset'> at index 1
+      raise GetItemError(
+   cascade.data.dataset.GetItemError: Failed to get item from <class '__main__.RaiseDataset'> at index 1
 
    The above exception was the direct cause of the following exception:
 
@@ -90,8 +90,8 @@ Let's try a simple update - replace all `__getitem__` with `get` methods:
    File "/home/user/cascade/cascade/data/dataset.py", line 106, in __getitem__
       with GetItemHandler(self, index):
    File "/home/user/cascade/cascade/data/dataset.py", line 36, in __exit__
-      raise GetItemException(
-   cascade.data.dataset.GetItemException: Failed to get item from <class '__main__.ModifierWithGet'> at index 1
+      raise GetItemError(
+   cascade.data.dataset.GetItemError: Failed to get item from <class '__main__.ModifierWithGet'> at index 1
 
 From the traceback like this we can clearly see that the error originates in the dataset at index 1 and then proparates to modifier at the same index.
 In our simplified example it is obvious what the index is and that it is the same for all pipeline steps but in real life with different samplers, dataloaders and lots of steps it can be hard to trace the error to a datapoint.

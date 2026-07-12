@@ -23,7 +23,7 @@ from click.testing import CliRunner, Result
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.cli.cli import cli
-from cascade.cli.run import RunFailedException
+from cascade.cli.run import RunFailedError
 
 
 def write_script(script: str, d: str):
@@ -177,7 +177,7 @@ def test_exception(tmp_path_str):
     result = run_run(path)
 
     assert result.exit_code == 1
-    assert type(result.exception) == RunFailedException  # noqa: E721
+    assert type(result.exception) == RunFailedError  # noqa: E721
 
 
 def test_to_dict(tmp_path_str):
@@ -208,7 +208,9 @@ def test_to_dict(tmp_path_str):
 
     assert result.exit_code == 0
 
-    config_path = os.path.join(tmp_path_str, "line", "00000", "files", "cascade_config.json")
+    config_path = os.path.join(
+        tmp_path_str, "line", "00000", "files", "cascade_config.json"
+    )
     assert os.path.exists(config_path)
 
     with open(config_path, "r") as f:

@@ -78,7 +78,7 @@ class DiffViewer(Server):
                     else:
                         raise ValueError(
                             f"No viewer found for folder with objects of type {meta[0]['type']}"
-                        )
+                        ) from None
         else:  # The given meta is a file
             raise ValueError("DiffViewer only supports folders")
 

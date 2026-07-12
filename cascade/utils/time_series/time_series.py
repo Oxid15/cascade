@@ -59,7 +59,8 @@ class Average(TimeSeriesDataset, Modifier):
         except AttributeError:
             # If it doesn't work then try pendulum 3.x
             reg_time = [
-                d for d in pendulum.interval(time[0], time[-1]).range(unit, amount=amount)
+                d
+                for d in pendulum.interval(time[0], time[-1]).range(unit, amount=amount)
             ]
 
         reg_data = self._avg(data, time, reg_time)
@@ -70,7 +71,7 @@ class Average(TimeSeriesDataset, Modifier):
         self._unit = unit
         self._amount = amount
 
-        super().__init__(dataset, time=reg_time, data=reg_data, *args, **kwargs)
+        super().__init__(dataset, *args, time=reg_time, data=reg_data, **kwargs)
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
@@ -133,4 +134,4 @@ class Align(TimeSeriesDataset, Modifier):
         *args: Any,
         **kwargs: Any,
     ) -> None:
-        super().__init__(dataset, time=time, data=dataset[time], *args, **kwargs)
+        super().__init__(dataset, *args, time=time, data=dataset[time], **kwargs)

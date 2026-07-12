@@ -109,12 +109,15 @@ class Model(Traceable):
         if not hasattr(self, "_file_artifacts_paths"):
             warnings.warn(
                 "Failed to perform basic Model.save since some attributes are missing"
-                "maybe you haven't call super().__init__ in Model's subclass?"
+                "maybe you haven't call super().__init__ in Model's subclass?",
+                stacklevel=2,
             )
             return
 
         for filepath, but_its_ok in zip(
-            self._file_artifacts_paths, self._file_artifact_missing_oks
+            self._file_artifacts_paths,
+            self._file_artifact_missing_oks,
+            strict=True,
         ):
             if not os.path.exists(filepath):
                 if but_its_ok:
@@ -122,7 +125,8 @@ class Model(Traceable):
                 elif "cascade_run.log" in filepath:
                     warnings.warn(
                         "Log was not found inside the run folder. To start recording the"
-                        " log, pass --log parameter to cascade run command"
+                        " log, pass --log parameter to cascade run command",
+                        stacklevel=2,
                     )
                     continue
                 else:
@@ -166,7 +170,8 @@ class Model(Traceable):
         if not all_default_exist:
             warnings.warn(
                 "Model's meta is incomplete, "
-                "maybe you haven't call super().__init__ in subclass?"
+                "maybe you haven't call super().__init__ in subclass?",
+                stacklevel=2,
             )
 
         return meta
@@ -233,7 +238,9 @@ class Model(Traceable):
         if isinstance(metric, str):
             metric = Metric(name=metric, value=value, **kwargs)
         elif not isinstance(metric, Metric):
-            raise TypeError(f"Metric can be either str or Metric type, not {type(metric)}")
+            raise TypeError(
+                f"Metric can be either str or Metric type, not {type(metric)}"
+            )
 
         # Model be initialized not properly
         if not hasattr(self, "metrics"):
@@ -307,7 +314,8 @@ class Model(Traceable):
         if run_dir is None:
             warnings.warn(
                 "model.add_log called while not inside a run."
-                "Call a script with cascade run script.py and then use add_log inside"
+                "Call a script with cascade run script.py and then use add_log inside",
+                stacklevel=2,
             )
             return
 
@@ -319,7 +327,8 @@ class Model(Traceable):
         if run_dir is None:
             warnings.warn(
                 "model.add_config called while not inside a run."
-                "Call a script with cascade run script.py and then use add_config inside"
+                "Call a script with cascade run script.py and then use add_config inside",
+                stacklevel=2,
             )
             return
 

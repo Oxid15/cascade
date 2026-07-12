@@ -26,10 +26,11 @@ from typing import Any, Dict, List, Optional
 
 import click
 import pendulum
+
 from cascade.base import MetaHandler
 
 
-class RunFailedException(RuntimeError): ...  # noqa: E701
+class RunFailedError(RuntimeError): ...  # noqa: E701
 
 
 def cascade_config_imported(tree: ast.Module) -> bool:
@@ -100,7 +101,8 @@ def parse_value(value: ast.expr) -> Any:
         return set(parse_value(v) for v in value.elts)
     elif isinstance(value, ast.Dict):
         return {
-            parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)
+            parse_value(k): parse_value(v)
+            for k, v in zip(value.keys, value.values, strict=True)
         }
     else:
         raise ValueError(
@@ -156,7 +158,7 @@ def modify_assignments(
 
 def parse_args(args):
     kwargs = {}
-    for orig_key, val in zip(args[::2], args[1::2]):
+    for orig_key, val in zip(args[::2], args[1::2], strict=True):
         key = re.sub(r"^-{1,2}\b", "", orig_key)
         try:
             kwargs[key] = ast.literal_eval(val)
@@ -207,7 +209,8 @@ class CascadeRun:
             shutil.rmtree(run_path)
         except Exception as e:
             warnings.warn(
-                f"Failed to remove run folder in {run_path} with the following error: {e}"
+                f"Failed to remove run folder in {run_path} with the following error: {e}",
+                stacklevel=2,
             )
         return False
 
@@ -236,7 +239,7 @@ class CascadeRun:
 
         returncode = process.wait()
         if returncode:
-            raise RunFailedException(
+            raise RunFailedError(
                 f"Run of {script} failed. See traceback above."
                 " The config and logs"
                 f" will be kept at {self.run_dir}"

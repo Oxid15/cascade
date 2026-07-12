@@ -54,7 +54,7 @@ class ModelLine(DiskLine):
         """
 
         self._slug2name_cache = dict()
-        super().__init__(root, item_cls=model_cls, meta_fmt=meta_fmt, *args, **kwargs)
+        super().__init__(root, *args, item_cls=model_cls, meta_fmt=meta_fmt, **kwargs)
 
     def _item_name_by_num(self, num: int) -> str:
         return f"{num:0>5d}"

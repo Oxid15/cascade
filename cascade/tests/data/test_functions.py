@@ -55,7 +55,7 @@ def test_multiple_inputs():
         return [0, 1, 2]
 
     def sum_two(x, y):
-        return [i + j for i, j in zip(x, y)]
+        return [i + j for i, j in zip(x, y, strict=True)]
 
     x = dataset(read_data)()
     x = modifier(sum_two)(x, x)

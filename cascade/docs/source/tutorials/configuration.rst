@@ -174,7 +174,7 @@ Skipping the long trackeback this is what you should see:
 
 .. code-block:: text
 
-    cascade.cli.run.RunFailedException: Run of run_error_handling.py failed.
+    cascade.cli.run.RunFailedError: Run of run_error_handling.py failed.
     See traceback above. The config and logs will be kept at
     /home/ilia/local/cascade_proj/cascade_repo/cascade/docs/source/tutorials/.cascade/20241117_154453_72
     for post-mortem analysis

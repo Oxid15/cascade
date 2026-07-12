@@ -35,7 +35,7 @@ supported_meta_formats = (".json", ".yml", ".yaml")
 # This is for python 3.7
 # where latest deepdiff is 6.7.1
 if hasattr(deepdiff.diff, "PrettyOrderedSet"):
-    diff_set = getattr(deepdiff.diff, "PrettyOrderedSet")
+    diff_set = deepdiff.diff.PrettyOrderedSet
 else:
     diff_set = deepdiff.diff.SetOrdered
 

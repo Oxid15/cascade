@@ -68,7 +68,9 @@ class PydanticValidator(ValidationProvider):
 
     def __call__(self, *args: Any, **kwargs: Any) -> None:
         if (
-            len(args) == 1 and len(kwargs) == 0 and isinstance(args[0], self._base_model_cls)
+            len(args) == 1
+            and len(kwargs) == 0
+            and isinstance(args[0], self._base_model_cls)
         ):
             try:
                 self._schema.model_validate(args[0])
@@ -76,7 +78,7 @@ class PydanticValidator(ValidationProvider):
                 raise ValidationError("Validation failed, see traceback above") from e
         else:
             from_args = dict()
-            for name, arg in zip(self._schema.model_fields, args):
+            for name, arg in zip(self._schema.model_fields, args, strict=True):
                 from_args[name] = arg
 
             try:

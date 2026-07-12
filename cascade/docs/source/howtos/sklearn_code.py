@@ -1,7 +1,8 @@
 # %%
-from cascade.utils.sklearn import SkModel
 from sklearn.feature_selection import SelectKBest
 from sklearn.svm import SVC
+
+from cascade.utils.sklearn import SkModel
 
 # %%
 k_best = 2
