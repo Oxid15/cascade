@@ -24,8 +24,14 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (BaseDataset, Dataset, IteratorWrapper, Modifier,
-                          Sampler, Wrapper)
+from cascade.data import (
+    BaseDataset,
+    Dataset,
+    IteratorWrapper,
+    Modifier,
+    Sampler,
+    Wrapper,
+)
 
 
 class DummyDataset(BaseDataset):
@@ -71,6 +77,7 @@ def test_update_meta_list():
     assert meta[0]["a"] == 1
     assert meta[1]["a"] == 2
     assert meta[2]["a"] == 4
+
 
 # This is deprecated since 0.13.0
 @pytest.mark.skip

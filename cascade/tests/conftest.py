@@ -31,7 +31,6 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import (
     ApplyModifier,
     BaseDataset,
-    Dataset,
     BruteforceCacher,
     Composer,
     Concatenator,

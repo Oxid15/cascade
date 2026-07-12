@@ -50,6 +50,7 @@ def create_entity(entity_type: str, root: str) -> None:
     elif entity_type == "traceable":
         TraceableOnDisk(root, ".yaml").sync_meta()
 
+
 @pytest.mark.parametrize(
     "entity_type",
     [
