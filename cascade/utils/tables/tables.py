@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ class TableDataset(Dataset[T]):
         else:
             raise TypeError("Input table is not a pandas.DataFrame nor TableDataset")
 
-    def __getitem__(self, index: int) -> pd.Series:
+    def get(self, index: int) -> pd.Series:
         """
         Returns a row from table by index
         """

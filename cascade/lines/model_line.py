@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ class ModelLine(DiskLine):
         else:
             return super()._parse_item_name(item)
 
-    def load(self, num: int, only_meta: Optional[bool] = None) -> Model:
+    def load(self, num: int) -> Model:
         """
         Loads a model
 
@@ -89,15 +89,7 @@ class ModelLine(DiskLine):
         ----------
         num : int
             Model number in line
-        only_meta : bool, optional
-            If True doesn't load model's artifacts, by default False
         """
-        if only_meta is not None:
-            warnings.warn(
-                "`only_meta` is deprecated since 0.14.0,"
-                " if you need to load model's meta, then"
-                " use `line.load_model_meta()` instead"
-            )
 
         model = super().load(num)
         model.load_artifact(os.path.join(self._root, self._item_names[num], "artifacts"))

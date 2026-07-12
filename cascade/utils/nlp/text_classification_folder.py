@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ class TextClassificationFolder(Dataset[T]):
         ]
         print(f"Found {len(folders)} classes: {classes}")
 
-    def __getitem__(self, index: int) -> Tuple[str, int]:
+    def get(self, index: int) -> Tuple[str, int]:
         with open(self._paths[index], "r", encoding=self._encoding) as f:
             text = " ".join(f.readlines())
             label = self._labels[index]

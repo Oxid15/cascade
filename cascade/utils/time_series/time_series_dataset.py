@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -149,7 +149,7 @@ class TimeSeriesDataset(Dataset[T]):
             new_data[k] = self[i]
         return TimeSeriesDataset(time=new_time, data=new_data)
 
-    def __getitem__(self, index: Union[int, slice, datetime, Iterable[int]]):
+    def get(self, index: Union[int, slice, datetime, Iterable[int]]):
         if isinstance(index, slice):
             if index.step is not None:
                 raise NotImplementedError()
@@ -162,7 +162,7 @@ class TimeSeriesDataset(Dataset[T]):
             return self._get_where(index)
         else:
             raise NotImplementedError(
-                f"__getitem__ is not implemented for {type(index)}"
+                f"get is not implemented for {type(index)}"
             )
 
     def __len__(self) -> int:

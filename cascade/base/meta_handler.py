@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -287,6 +287,10 @@ class MetaHandler:
         MultipleMetaError
             If the number of files filtered by the template are more than 1
         """
+        # If we don't raise FileNotFoundError here, it will not be raised if file does not exist
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
+
         meta_paths = glob.glob(os.path.join(path, meta_template))
         if len(meta_paths) == 0:
             raise ZeroMetaError(f"There is no {meta_template} file in {path}")

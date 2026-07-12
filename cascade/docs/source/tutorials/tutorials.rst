@@ -61,13 +61,13 @@ for ``digits`` from ``sklearn``.
             self.x, self.y = load_digits(return_X_y=True)
             super().__init__()
 
-        def __getitem__(self, index):
+        def get(self, index):
             return self.x[index], self.y[index]
 
         def __len__(self):
             return len(self.x)
 
-Minimal setup for a Dataset is a ``__getitem__`` and ``__len__`` methods.
+Minimal setup for a Dataset is a ``get`` and ``__len__`` methods.
 Now we can do basic access.
 
 .. code-block:: python
@@ -739,7 +739,7 @@ However, we also can ensure data integrity inside of the pipeline.
     from cascade.data import SchemaModifier
 
     class LabeledImageModifier(SchemaModifier):
-        def __getitem__(self, idx):
+        def get(self, idx):
             image, label = self._dataset[idx]
             return LabeledImage(image=image, label=label)
 
@@ -752,7 +752,7 @@ automatically check the returned value against our model.
     class Pad5(SchemaModifier):
         in_schema = LabeledImage
 
-        def __getitem__(self, idx):
+        def get(self, idx):
             item = self._dataset[idx]
             image = item.image.reshape((8, 8))
             h, w = image.shape
@@ -797,7 +797,7 @@ that would easily pass in our previous setup at would take some time to debug.
 
 
     class EvilDataset(Dataset):
-        def __getitem__(self, idx):
+        def get(self, idx):
             return FreakyImage(image=np.zeros(18*18), label="hehe")
 
         def __len__(self):

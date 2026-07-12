@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ class Composer(Dataset[T]):
                 f"Actual lengths: {lengths}"
             )
 
-    def __getitem__(self, index: int) -> Tuple[T]:
+    def get(self, index: int) -> Tuple[T]:
         return tuple(ds[index] for ds in self._datasets)
 
     def __len__(self) -> int:

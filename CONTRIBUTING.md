@@ -60,7 +60,6 @@ Format of docstrings is `numpy`.
 
 ### Code
 
-Cascade uses `flake8`, `black` and `isort`. Be sure that `flake8` passes
-before pushing the code.
+Cascade uses `ruff`. Be sure that `ruff check .` passes before pushing the code.
 
 Each file should have license notice in the header - be sure it is included.

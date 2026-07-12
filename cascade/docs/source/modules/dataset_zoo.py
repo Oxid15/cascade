@@ -211,7 +211,7 @@ class LongLoadingDataSource(cdd.Dataset):
         super().__init__(*args, **kwargs)
         self._length = length
 
-    def __getitem__(self, index):
+    def get(self, index):
         time.sleep(1)
         return index
 

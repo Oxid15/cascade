@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ class BruteforceCacher(Modifier[T]):
                 "Input dataset must provide __len__ and __getitem__ or __iter__"
             )
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         return self._data[index]
 
     def __len__(self) -> int:

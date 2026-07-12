@@ -1,7 +1,7 @@
 from typing import Any, Iterator
 
 from ..base import Meta
-from .dataset import BaseDataset, Dataset, IteratorDataset, T
+from .dataset import BaseDataset, Dataset, GetItemHandler, IteratorDataset, T
 
 
 class BaseModifier(BaseDataset[T]):
@@ -82,7 +82,7 @@ class IteratorModifier(BaseModifier[T], IteratorDataset[T]):
         return self_meta
 
 
-class Modifier(BaseModifier[T]):
+class Modifier(BaseModifier[T], Dataset[T]):
     """
     Basic pipeline building block in Cascade. Every block which is not a data source should be
     a successor of Sampler or Modifier.
@@ -98,7 +98,7 @@ class Modifier(BaseModifier[T]):
     Does not change the length of a dataset. See Sampler for this functionality
     """
 
-    def __getitem__(self, index: Any) -> T:
+    def get(self, index: Any) -> T:
         return self._dataset[index]
 
     def __len__(self) -> int:
@@ -126,9 +126,7 @@ class Sampler(Modifier[T]):
     cascade.data.RangeSampler
     """
 
-    def __init__(
-        self, dataset: Dataset[T], num_samples: int, *args: Any, **kwargs: Any
-    ) -> None:
+    def __init__(self, dataset: Dataset[T], num_samples: int, *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Sampler.
 

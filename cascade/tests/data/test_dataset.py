@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class DummyDataset(BaseDataset):
     def __len__(self):
         return 0
 
-    def __getitem__(self, index) -> None:
+    def get(self, index) -> None:
         return None
 
 
@@ -155,7 +155,7 @@ class EmptyDataset(Dataset):
         # there is no need to actively forbid this
         ...
 
-    def __getitem__(self, index):
+    def get(self, index):
         return None
 
     def __len__(self):

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ from cascade.utils.time_series import (Align, Average, Interpolate,
         [
             d.to_pydatetime()
             for d in pd.date_range(
-                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1d"
+                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1D"
             )
         ],
         [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,14 +18,13 @@ import os
 import sys
 from unittest.mock import patch
 
-import pytest
 from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.base import MetaHandler
 from cascade.cli.cli import cli
-from cascade.lines import DataLine, ModelLine
+from cascade.lines import ModelLine
 from cascade.models import BasicModel
 
 
@@ -43,7 +42,7 @@ def test_rm_line(tmp_path_str):
             model = TestModel()
             line.save(model)
             assert os.path.exists(os.path.join(td, f"{i:0>5d}", "artifacts", "artifact.txt"))
-        
+
         result = runner.invoke(cli, args=["artifact", "rm", "-y"])
         assert result.exit_code == 0
 

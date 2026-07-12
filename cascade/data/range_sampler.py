@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -93,6 +93,6 @@ class RangeSampler(Sampler[T]):
 
         super().__init__(dataset, len(self._indices), *args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         internal_index = self._indices[index]
-        return super().__getitem__(internal_index)
+        return super().get(internal_index)

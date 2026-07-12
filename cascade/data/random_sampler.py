@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -54,5 +54,5 @@ class RandomSampler(Sampler[T]):
             self._indices = randint(0, len(dataset), num_samples)
         super().__init__(dataset, num_samples, *args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
-        return super().__getitem__(self._indices[index])
+    def get(self, index: int) -> T:
+        return super().get(self._indices[index])

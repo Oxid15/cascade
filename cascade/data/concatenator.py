@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ class Concatenator(Dataset[T]):
         self._shifts = np.cumsum([0] + lengths)
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         ds_index = 0
         for sh in self._shifts[1:]:
             if index >= sh:

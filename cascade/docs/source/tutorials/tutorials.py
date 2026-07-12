@@ -12,7 +12,7 @@ class DigitsDataset(Dataset):
         self.x, self.y = load_digits(return_X_y=True)
         super().__init__()
 
-    def __getitem__(self, index):
+    def get(self, index):
         return self.x[index], self.y[index]
 
     def __len__(self):
@@ -255,7 +255,7 @@ from cascade.data import SchemaModifier
 
 
 class LabeledImageModifier(SchemaModifier):
-    def __getitem__(self, idx):
+    def get(self, idx):
         image, label = self._dataset[idx]
         return LabeledImage(image=image, label=label)
 
@@ -266,7 +266,7 @@ class LabeledImageModifier(SchemaModifier):
 class Pad5(SchemaModifier):
     in_schema = LabeledImage
 
-    def __getitem__(self, idx):
+    def get(self, idx):
         item = self._dataset[idx]
         image = item.image.reshape((8, 8))
         h, w = image.shape
@@ -299,7 +299,7 @@ class FreakyImage(BaseModel):
 
 
 class EvilDataset(Dataset):
-    def __getitem__(self, idx):
+    def get(self, idx):
         return FreakyImage(image=np.zeros(18 * 18), label="hehe")
 
     def __len__(self):

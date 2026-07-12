@@ -12,7 +12,7 @@ class WineDataset(cdd.Dataset):
         self.x, self.y = load_wine(return_X_y=True)
         super().__init__(*args, **kwargs)
 
-    def __getitem__(self, i: int):
+    def get(self, i: int):
         return self.x[i], self.y[i]
 
     def __len__(self):
