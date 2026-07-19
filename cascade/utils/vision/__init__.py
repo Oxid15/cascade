@@ -15,3 +15,5 @@ limitations under the License.
 """
 
 from .folder_image_dataset import FolderImageDataset
+
+__all__ = ["FolderImageDataset"]

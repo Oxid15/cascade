@@ -61,7 +61,7 @@ class OverSampler(Sampler[T]):
         ln = len(dataset) + len(self._add_indices)
         print(f"Original length was {len(dataset)} and new is {ln}")
 
-        super().__init__(dataset, num_samples=ln, *args, **kwargs)
+        super().__init__(dataset, *args, num_samples=ln, **kwargs)
 
     def get(self, index: int) -> Tuple[Any, Any]:
         if index < len(self._dataset):

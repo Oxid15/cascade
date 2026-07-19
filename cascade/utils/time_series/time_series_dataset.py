@@ -57,16 +57,12 @@ class TimeSeriesDataset(Dataset[T]):
             data = np.array([])
             time = np.array([])
 
-        assert len(time) == len(
-            data
-        ), f"Time and data should have same \
+        assert len(time) == len(data), f"Time and data should have same \
             length, got {len(time)} and {len(data)}"
-        assert (
-            len(data.shape) == 1
-        ), f"series must be 1d, \
+        assert len(data.shape) == 1, f"series must be 1d, \
             got shape {data.shape}"
         assert all(
-            [isinstance(t, datetime) for t in time]
+            isinstance(t, datetime) for t in time
         ), "time elements should be instances of datetime.datetime"
 
         # Time can be non-monotonic (don't increase or decrease on every step)
@@ -76,7 +72,7 @@ class TimeSeriesDataset(Dataset[T]):
         data = data[index]
 
         self._time = time
-        self._num_idx = [i for i in range(len(data))]
+        self._num_idx = list(data)
         index = pd.MultiIndex.from_frame(pd.DataFrame(self._time, self._num_idx))
         self._table = pd.DataFrame(data, index=index)
         super().__init__(*args, **kwargs)
@@ -142,7 +138,7 @@ class TimeSeriesDataset(Dataset[T]):
         if isinstance(index[0], datetime):
             new_time = np.array(index)
         else:
-            new_time = self._time[[i for i in index]]
+            new_time = self._time[list(index)]
 
         new_data = np.zeros(len(index))
         for k, i in enumerate(index):
@@ -161,9 +157,7 @@ class TimeSeriesDataset(Dataset[T]):
         elif isinstance(index, Iterable):
             return self._get_where(index)
         else:
-            raise NotImplementedError(
-                f"get is not implemented for {type(index)}"
-            )
+            raise NotImplementedError(f"get is not implemented for {type(index)}")
 
     def __len__(self) -> int:
         return len(self._num_idx)

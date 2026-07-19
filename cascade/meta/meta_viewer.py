@@ -58,11 +58,7 @@ class MetaViewer:
 
         self.names = []
         for root, _, files in os.walk(self._root):
-            self.names += [
-                os.path.join(root, name)
-                for name in files
-                if is_meta(name)
-            ]
+            self.names += [os.path.join(root, name) for name in files if is_meta(name)]
         self.names = sorted(self.names)
 
         if filt is not None:
@@ -84,7 +80,7 @@ class MetaViewer:
         try:
             meta = MetaHandler.read(name)
         except MetaIOError as e:
-            warnings.warn(str(e))
+            warnings.warn(str(e), stacklevel=2)
             return False
 
         if isinstance(meta, list):
@@ -93,7 +89,8 @@ class MetaViewer:
         for key in self._filt:
             if key not in meta:
                 warnings.warn(
-                    f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}"
+                    f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}",
+                    stacklevel=2,
                 )
                 return False
 

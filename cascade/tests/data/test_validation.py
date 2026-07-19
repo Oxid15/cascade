@@ -107,20 +107,28 @@ def test_pydantic_model():
         return a
 
     validate_in(identity)(
-        dict(int_=0, float_=0.0, str_="a", dict_=dict(), list_=list(), li=[0, 1], ds={"a": 1.0})
+        {
+            "int_": 0,
+            "float_": 0.0,
+            "str_": "a",
+            "dict_": {},
+            "list_": [],
+            "li": [0, 1],
+            "ds": {"a": 1.0},
+        }
     )
 
     with pytest.raises(ValidationError):
         validate_in(identity)(
-            dict(
-                int_="err",
-                float_=0.0,
-                str_="a",
-                dict_=dict(),
-                list_=list(),
-                li=[0, 1],
-                ds={"a": 1.0},
-            )
+            {
+                "int_": "err",
+                "float_": 0.0,
+                "str_": "a",
+                "dict_": {},
+                "list_": [],
+                "li": [0, 1],
+                "ds": {"a": 1.0},
+            }
         )
 
 

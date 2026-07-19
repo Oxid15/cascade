@@ -49,7 +49,7 @@ class TextClassificationFolder(Dataset[T]):
         self._paths = []
         self._labels = []
         for i, folder in enumerate(folders):
-            files = [name for name in os.listdir(os.path.join(self._root, folder))]
+            files = list(os.listdir(os.path.join(self._root, folder)))
             self._paths += [os.path.join(self._root, folder, f) for f in files]
             self._labels += [i for _ in range(len(files))]
 

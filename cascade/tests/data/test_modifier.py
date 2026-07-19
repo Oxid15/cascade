@@ -39,7 +39,7 @@ def test_iter_of_modifier():
     assert [1, 2, 3, 4, 5] == result2
 
 
-def test_iter_of_IteratorModifier():
+def test_iter_of_iterator_modifier():
     d = IteratorWrapper([1, 2, 3, 4, 5])
     m = IteratorModifier(d)
 

@@ -20,7 +20,7 @@ from .data_card import DataCard
 T = TypeVar("T", covariant=True)
 
 
-class GetItemException(Exception): ...
+class GetItemError(Exception): ...
 
 
 class GetItemHandler:
@@ -33,7 +33,7 @@ class GetItemHandler:
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         if exc_type:
-            raise GetItemException(
+            raise GetItemError(
                 f"Failed to get item from {self.dataset} at index {self.index}"
             ) from exc_value
         return False

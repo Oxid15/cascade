@@ -65,7 +65,7 @@ def test_from_meta():
 def test_composition(datasets):
     c = Composer(datasets)
 
-    assert [item for item in zip(*datasets)] == [item for item in c]
+    assert list(zip(*datasets)) == list(c)
 
 
 @pytest.mark.parametrize(

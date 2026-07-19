@@ -27,8 +27,8 @@ from .cyclic_sampler import CyclicSampler
 from .data_card import Assessor, DataCard, LabelingInfo
 from .dataset import (
     BaseDataset,
-    GetItemException,
     Dataset,
+    GetItemError,
     IteratorDataset,
     IteratorWrapper,
     T,
@@ -44,3 +44,37 @@ from .schema import SchemaModifier
 from .simple_dataloader import SimpleDataloader
 from .utils import split
 from .validation import ValidationError, validate_in
+
+__all__ = [
+    "ApplyModifier",
+    "BruteforceCacher",
+    "Composer",
+    "Concatenator",
+    "CyclicSampler",
+    "Assessor",
+    "DataCard",
+    "LabelingInfo",
+    "BaseDataset",
+    "GetItemError",
+    "Dataset",
+    "IteratorDataset",
+    "IteratorWrapper",
+    "T",
+    "Wrapper",
+    "Filter",
+    "IteratorFilter",
+    "FolderDataset",
+    "dataset",
+    "modifier",
+    "BaseModifier",
+    "IteratorModifier",
+    "Modifier",
+    "Sampler",
+    "RandomSampler",
+    "RangeSampler",
+    "SchemaModifier",
+    "SimpleDataloader",
+    "split",
+    "ValidationError",
+    "validate_in",
+]

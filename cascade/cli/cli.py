@@ -90,7 +90,7 @@ def migrate(ctx):
     Automatic migration of objects to newer cascade versions
     """
     supported_types = ["repo", "line"]
-    if not ctx.obj.get("type") in supported_types:
+    if ctx.obj.get("type") not in supported_types:
         click.echo(
             f"Cannot migrate {ctx.obj['type']}, only {supported_types} are supported"
         )

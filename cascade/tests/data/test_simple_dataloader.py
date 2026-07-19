@@ -49,7 +49,7 @@ def test_batches(arr, bs, result):
 )
 def test_illegal(arr, bs):
     with pytest.raises(ValueError):
-        dl = SimpleDataloader(arr, batch_size=bs)
+        SimpleDataloader(arr, batch_size=bs)
 
 
 @pytest.mark.parametrize(

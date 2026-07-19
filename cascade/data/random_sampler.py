@@ -47,7 +47,7 @@ class RandomSampler(Sampler[T]):
         if num_samples is None:
             num_samples = len(dataset)
         if num_samples <= len(dataset):
-            self._indices = [i for i in range(len(dataset))]
+            self._indices = list(range(len(dataset)))
             shuffle(self._indices)
             self._indices = self._indices[:num_samples]
         else:

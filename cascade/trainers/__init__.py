@@ -18,3 +18,5 @@ limitations under the License.
 """
 
 from .trainer import BasicTrainer, Trainer
+
+__all__ = ["BasicTrainer", "Trainer"]

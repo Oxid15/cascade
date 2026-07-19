@@ -36,7 +36,7 @@ from cascade.data import Filter, IteratorDataset, IteratorFilter, Wrapper
 def test_filter(arr, func, res):
     ds = Wrapper(arr)
     ds = Filter(ds, func)
-    assert [item for item in ds] == res
+    assert list(ds) == res
 
 
 def test_empty_filter():
@@ -69,7 +69,7 @@ def test_iter():
     ds = RandomDataStream()
     ds = IteratorFilter(ds, lambda x: x < 127)
 
-    assert all([item < 127 for item in ds])
+    assert all(item < 127 for item in ds)
 
 
 def test_empty_iter():
@@ -80,4 +80,4 @@ def test_empty_iter():
     ds = EmptyStream()
     ds = IteratorFilter(ds, lambda x: True)
 
-    assert [] == [item for item in ds]
+    assert [] == list(ds)

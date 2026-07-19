@@ -35,7 +35,7 @@ supported_meta_formats = (".json", ".yml", ".yaml")
 # This is for python 3.7
 # where latest deepdiff is 6.7.1
 if hasattr(deepdiff.diff, "PrettyOrderedSet"):
-    diff_set = getattr(deepdiff.diff, "PrettyOrderedSet")
+    diff_set = deepdiff.diff.PrettyOrderedSet
 else:
     diff_set = deepdiff.diff.SetOrdered
 
@@ -287,6 +287,10 @@ class MetaHandler:
         MultipleMetaError
             If the number of files filtered by the template are more than 1
         """
+        # If we don't raise FileNotFoundError here, it will not be raised if file does not exist
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
+
         meta_paths = glob.glob(os.path.join(path, meta_template))
         if len(meta_paths) == 0:
             raise ZeroMetaError(f"There is no {meta_template} file in {path}")

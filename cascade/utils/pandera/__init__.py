@@ -15,3 +15,5 @@ limitations under the License.
 """
 
 from .pa_schema_validator import PaSchemaValidator
+
+__all__ = ["PaSchemaValidator"]

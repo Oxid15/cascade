@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import os
 from typing import Any, Dict, List, Optional, Union
 
@@ -56,9 +57,7 @@ class HistoryViewer(Server):
             Update period in seconds
         """
 
-        try:
-            import plotly  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("plotly"):
             self._raise_cannot_import_plotly()
         else:
             from plotly import express as px
@@ -85,7 +84,7 @@ class HistoryViewer(Server):
             for repo in repos:
                 repo.reload()
 
-        self._edges = dict()
+        self._edges = {}
         self._repo = repo
         self._repos = {repo.get_root(): repo for repo in repos}
 
@@ -116,9 +115,11 @@ class HistoryViewer(Server):
             updated_at.append(meta[0]["updated_at"])
             valid_lines.append(line)
 
-        valid_lines = [line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])]
+        valid_lines = [
+            line for line, _ in sorted(zip(valid_lines, updated_at), key=lambda x: x[1])
+        ]
 
-        return valid_lines[-self._last_lines:]
+        return valid_lines[-self._last_lines :]
 
     def _make_table(self) -> None:
         metas = []
@@ -140,7 +141,7 @@ class HistoryViewer(Server):
                 try:
                     meta = view[i][0]
 
-                    metrics = dict()
+                    metrics = {}
                     for metric in meta["metrics"]:
                         name = metric["name"]
                         for key in ["dataset", "split"]:
@@ -168,7 +169,7 @@ class HistoryViewer(Server):
             self._table = self._table.sort_values("saved_at")
 
         # turn time into evenly spaced intervals
-        time = [i for i in range(len(self._table))]
+        time = list(range(len(self._table)))
         lines = self._table["line"].unique()
 
         cmap = self._px.colors.qualitative.Plotly
@@ -179,8 +180,10 @@ class HistoryViewer(Server):
         self._table["color"] = [line_cols[line] for line in self._table["line"]]
         # self._table = self._table.fillna("")
 
-        columns2fill = [col for col in self._table.columns if not col.startswith("metrics_")]
-        self._table = self._table.fillna({name: "" for name in columns2fill})
+        columns2fill = [
+            col for col in self._table.columns if not col.startswith("metrics_")
+        ]
+        self._table = self._table.fillna(dict.fromkeys(columns2fill, ""))
 
     @staticmethod
     def _diff(p1: Dict[Any, Any], params: Dict[Any, Any]) -> List:
@@ -209,7 +212,9 @@ class HistoryViewer(Server):
         # After flatten 'metrics_' will be added to the metric name
         if not metric.startswith("metrics_"):
             metric = "metrics_" + metric
-        assert metric in self._table, f'Metric {metric.replace("metrics_", "")} is not in the repo'
+        assert (
+            metric in self._table
+        ), f'Metric {metric.replace("metrics_", "")} is not in the repo'
 
         return metric
 
@@ -246,11 +251,13 @@ class HistoryViewer(Server):
         # with all metadata on hover
         metric = self._preprocess_metric(metric)
 
-        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        hover_cols = list(pd.DataFrame(self._params).columns)
         if "saved_at" in self._table.columns:
-            hover_cols = ["saved_at"] + hover_cols
-        hover_cols = ["model"] + hover_cols
-        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+            hover_cols = ["saved_at", *hover_cols]
+        hover_cols = ["model", *hover_cols]
+        fig = self._px.scatter(
+            self._table, x="time", y=metric, hover_data=hover_cols, color="line"
+        )
         lines = self._table["line"].unique()
 
         for line in lines:
@@ -277,18 +284,20 @@ class HistoryViewer(Server):
     def _update_plot(self, metric: str) -> Any:
         metric = self._preprocess_metric(metric)
 
-        hover_cols = [name for name in pd.DataFrame(self._params).columns]
+        hover_cols = list(pd.DataFrame(self._params).columns)
         if "saved_at" in self._table.columns:
             hover_cols = ["saved_at"] + hover_cols
         hover_cols = ["model"] + hover_cols
-        fig = self._px.scatter(self._table, x="time", y=metric, hover_data=hover_cols, color="line")
+        fig = self._px.scatter(
+            self._table, x="time", y=metric, hover_data=hover_cols, color="line"
+        )
 
         for line in sorted(self._table.line.unique()):
             t = self._table.loc[self._table.line == line]
             if (
                 line in self._edges
-                and metric in self._edges  # noqa: W503
-                and len(t) == self._edges[line][metric]["len"]  # noqa: W503
+                and metric in self._edges
+                and len(t) == self._edges[line][metric]["len"]
             ):
                 xs, ys = self._edges[line][metric]["edges"]
             else:
@@ -307,12 +316,10 @@ class HistoryViewer(Server):
         return fig
 
     def _layout(self, metric: Optional[str]):
-        try:
-            import dash  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
-            from dash import dcc, html  # noqa: F401
+            from dash import dcc, html
 
         fig = self.plot(metric) if metric is not None else self._go.Figure()
 
@@ -342,7 +349,9 @@ class HistoryViewer(Server):
                     value=metric,
                 ),
                 dcc.Graph(id="history-figure", figure=fig),
-                dcc.Interval(id="history-interval", interval=1000 * self._update_period_sec),
+                dcc.Interval(
+                    id="history-interval", interval=1000 * self._update_period_sec
+                ),
             ]
         )
 
@@ -362,17 +371,18 @@ class HistoryViewer(Server):
         This feature needs ``dash`` to be installed.
         """
         # Conditional import
-        try:
-            import dash
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
+            import dash
             from dash import Input, Output
 
         app = dash.Dash()
         app.layout = lambda: self._layout(metric)
 
-        @app.callback(Output("viewer-title", "children"), Input("history-interval", "n_intervals"))
+        @app.callback(
+            Output("viewer-title", "children"), Input("history-interval", "n_intervals")
+        )
         def update_title(n_intervals):
             return f"HistoryViewer in {self._repo}"
 
@@ -395,7 +405,9 @@ class HistoryViewer(Server):
         )
         def update_history(n_intervals, metric):
             self._update()
-            return self._update_plot(metric) if metric is not None else self._go.Figure()
+            return (
+                self._update_plot(metric) if metric is not None else self._go.Figure()
+            )
 
         @app.callback(
             Output("metric-dropwdown", "value"),

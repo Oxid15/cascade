@@ -24,7 +24,7 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, GetItemException, SchemaModifier
+from cascade.data import Dataset, GetItemError, SchemaModifier
 
 
 class FiveIdenticalImages(Dataset):
@@ -94,5 +94,5 @@ def test_wrong_schema():
     ds = FiveBrokenImageDataset()
     ds = IDoNothing(ds)
 
-    with pytest.raises(GetItemException) as e:
-        item = ds[0]
+    with pytest.raises(GetItemError):
+        ds[0]

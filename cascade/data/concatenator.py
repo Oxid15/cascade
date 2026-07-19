@@ -85,5 +85,5 @@ class Concatenator(Dataset[T]):
 
         super().from_meta(meta)
         if "data" in meta[0]:
-            for ds, meta in zip(self._datasets, meta[0]["data"]):
-                ds.from_meta(meta)
+            for ds, m in zip(self._datasets, meta[0]["data"]):
+                ds.from_meta(m)

@@ -101,7 +101,7 @@ class TableFilter(TableDataset, Modifier):
         mask: Iterable[bool]
             Binary mask to select values from table.
         """
-        super().__init__(dataset, t=dataset._table, *args, **kwargs)
+        super().__init__(dataset, *args, t=dataset._table, **kwargs)
         init_len = len(dataset)
 
         self._table = self._table[mask]
@@ -144,7 +144,7 @@ class TableIterator(IteratorWrapper):
             number of rows to return in one __next__
         """
         self.chunk_size = chunk_size
-        super().__init__(pd.read_csv(csv_file_path, iterator=True, *args, **kwargs))
+        super().__init__(pd.read_csv(csv_file_path, *args, iterator=True, **kwargs))
 
     def __next__(self):
         return self._data.get_chunk(self.chunk_size)
@@ -191,10 +191,10 @@ class FeatureTable(TableDataset):
         table: Union[TableDataset, pd.DataFrame]
             The table to wrap
         """
-        super().__init__(t=table, *args, **kwargs)
-        self._computed_features = dict()
-        self._computed_features_args = dict()
-        self._computed_features_kwargs = dict()
+        super().__init__(*args, t=table, **kwargs)
+        self._computed_features = {}
+        self._computed_features_args = {}
+        self._computed_features_kwargs = {}
         self._features = list(self._table.columns)
 
     def _validate_features(self, features: List[Union[str, Tuple[str]]]):
@@ -255,7 +255,7 @@ class FeatureTable(TableDataset):
                     continue
             else:
                 flat_features += [*feat]
-                if all([f in self._table.columns for f in feat]):
+                if all(f in self._table.columns for f in feat):
                     continue
 
             if feat in self._computed_features:

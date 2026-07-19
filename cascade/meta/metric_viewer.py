@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import os
 from typing import Any, Dict, List, Optional, Union
 
@@ -140,15 +141,11 @@ class MetricViewer:
         Uses plotly to graphically show table with metrics and parameters.
         """
 
-        try:
-            import plotly  # noqa: F401
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                """
+        if not importlib.util.find_spec("plotly"):
+            raise ModuleNotFoundError("""
                         Cannot import plotly. It is conditional
                         dependency you can install it
-                        using the instructions from plotly official documentation"""
-            )
+                        using the instructions from plotly official documentation""")
         else:
             from plotly import graph_objects as go
 
@@ -156,12 +153,16 @@ class MetricViewer:
         fig = go.Figure(
             data=[
                 go.Table(
-                    header=dict(values=list(data.columns), fill_color="#f4c9c7", align="left"),
-                    cells=dict(
-                        values=[data[col] for col in data.columns],
-                        fill_color="#bcced4",
-                        align="left",
-                    ),
+                    header={
+                        "values": list(data.columns),
+                        "fill_color": "#f4c9c7",
+                        "align": "left",
+                    },
+                    cells={
+                        "values": [data[col] for col in data.columns],
+                        "fill_color": "#bcced4",
+                        "align": "left",
+                    },
                 )
             ]
         )
@@ -186,7 +187,9 @@ class MetricViewer:
         TypeError if metric objects cannot be sorted. If only one model in repo, then
         returns it without error since no sorting involved.
         """
-        assert metric in self.table["name"].unique(), f"{metric} is not in {self.table.columns}"
+        assert (
+            metric in self.table["name"].unique()
+        ), f"{metric} is not in {self.table.columns}"
         t = self.table.loc[self.table["name"] == metric]
 
         try:
@@ -221,7 +224,9 @@ class MetricViewer:
         **kwargs:
             Arguments of dash app. Can be ip or port for example
         """
-        server = MetricServer(self, page_size=page_size, include=include, exclude=exclude)
+        server = MetricServer(
+            self, page_size=page_size, include=include, exclude=exclude
+        )
         server.serve(**kwargs)
 
 
@@ -256,7 +261,9 @@ class MetricServer(Server):
             fig = go.Figure()
             if x is not None and y is not None:
                 fig.add_trace(
-                    go.Scatter(x=self._for_plots[x], y=self._for_plots[y], mode="markers")
+                    go.Scatter(
+                        x=self._for_plots[x], y=self._for_plots[y], mode="markers"
+                    )
                 )
                 fig.update_layout(title=f"{x} to {y} relation")
             return fig
@@ -280,14 +287,15 @@ class MetricServer(Server):
             df = df[["line", "num"] + self._include]
 
         self._df_flatten = pd.DataFrame(
-            map(lambda x: flatten_dict(x, root_keys_to_ignore=["tags"]), df.to_dict("records"))
+            lambda x: flatten_dict(x, root_keys_to_ignore=["tags"])
+            for x in df.to_dict("records")
         )
         self._for_plots = self._df_flatten.copy()
         for name in self._df_flatten.name.unique():
             self._for_plots[name] = None
-            self._for_plots.loc[self._for_plots["name"] == name, name] = self._for_plots.loc[
-                self._for_plots["name"] == name, "value"
-            ]
+            self._for_plots.loc[self._for_plots["name"] == name, name] = (
+                self._for_plots.loc[self._for_plots["name"] == name, "value"]
+            )
         self._for_plots = self._for_plots.drop(["name", "value"], axis=1)
 
         if any(df["tags"].apply(lambda x: len(x) > 0)):
@@ -304,8 +312,12 @@ class MetricServer(Server):
                         "font-family": "Montserrat",
                     },
                 ),
-                dcc.Dropdown(list(self._for_plots.columns), id="dropdown-x", multi=False),
-                dcc.Dropdown(list(self._for_plots.columns), id="dropdown-y", multi=False),
+                dcc.Dropdown(
+                    list(self._for_plots.columns), id="dropdown-x", multi=False
+                ),
+                dcc.Dropdown(
+                    list(self._for_plots.columns), id="dropdown-y", multi=False
+                ),
                 dcc.Graph(id="dependence-figure", figure=dep_fig),
                 dash_table.DataTable(
                     columns=[

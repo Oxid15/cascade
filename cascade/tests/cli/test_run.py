@@ -25,7 +25,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.base import MetaHandler
 from cascade.cli.cli import cli
-from cascade.cli.run import RunFailedException
+from cascade.cli.run import RunFailedError
 
 CONFIGS_WITH_DICT = [
     ("class NewConfig(Config):\n    a=0\n    b=1\n    c=2", dict(a=0, b=1, c=2)),
@@ -187,7 +187,7 @@ def test_exception(tmp_path_str: str):
     result = run_run(path)
 
     assert result.exit_code == 1
-    assert type(result.exception) == RunFailedException  # noqa: E721
+    assert type(result.exception) == RunFailedError  # noqa: E721
 
 
 def test_to_dict(tmp_path_str: str):

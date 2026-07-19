@@ -53,5 +53,5 @@ def test():
     for i in range(len(ds)):
         ds[i]
 
-    for i in ds:
+    for _ in ds:
         pass

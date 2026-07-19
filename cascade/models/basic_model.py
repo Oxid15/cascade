@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-
 import os
 import pickle
 import warnings
@@ -78,7 +77,8 @@ class BasicModel(Model):
             else:
                 # Will not raise to not to interrupt evaluation
                 warnings.warn(
-                    f"Cannot compute metric of type {type(metric)}"
+                    f"Cannot compute metric of type {type(metric)}",
+                    stacklevel=2,
                 )
 
     @classmethod
