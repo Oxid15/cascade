@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import os
 from typing import Any, Dict, List, Optional, Union
 
@@ -140,15 +141,11 @@ class MetricViewer:
         Uses plotly to graphically show table with metrics and parameters.
         """
 
-        try:
-            import plotly  # noqa: F401
-        except ModuleNotFoundError as e:
-            raise ModuleNotFoundError(
-                """
+        if not importlib.util.find_spec("plotly"):
+            raise ModuleNotFoundError("""
                         Cannot import plotly. It is conditional
                         dependency you can install it
-                        using the instructions from plotly official documentation"""
-            ) from e
+                        using the instructions from plotly official documentation""")
         else:
             from plotly import graph_objects as go
 

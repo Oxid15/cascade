@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import os
 from typing import Any, Dict, List, Optional, Union
 
@@ -56,9 +57,7 @@ class HistoryViewer(Server):
             Update period in seconds
         """
 
-        try:
-            import plotly  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("plotly"):
             self._raise_cannot_import_plotly()
         else:
             from plotly import express as px
@@ -254,8 +253,8 @@ class HistoryViewer(Server):
 
         hover_cols = list(pd.DataFrame(self._params).columns)
         if "saved_at" in self._table.columns:
-            hover_cols = ["saved_at"] + hover_cols
-        hover_cols = ["model"] + hover_cols
+            hover_cols = ["saved_at", *hover_cols]
+        hover_cols = ["model", *hover_cols]
         fig = self._px.scatter(
             self._table, x="time", y=metric, hover_data=hover_cols, color="line"
         )
@@ -297,8 +296,8 @@ class HistoryViewer(Server):
             t = self._table.loc[self._table.line == line]
             if (
                 line in self._edges
-                and metric in self._edges  # noqa: W503
-                and len(t) == self._edges[line][metric]["len"]  # noqa: W503
+                and metric in self._edges
+                and len(t) == self._edges[line][metric]["len"]
             ):
                 xs, ys = self._edges[line][metric]["edges"]
             else:
@@ -317,12 +316,10 @@ class HistoryViewer(Server):
         return fig
 
     def _layout(self, metric: Optional[str]):
-        try:
-            import dash  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
-            from dash import dcc, html  # noqa: F401
+            from dash import dcc, html
 
         fig = self.plot(metric) if metric is not None else self._go.Figure()
 
@@ -374,11 +371,10 @@ class HistoryViewer(Server):
         This feature needs ``dash`` to be installed.
         """
         # Conditional import
-        try:
-            import dash
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
+            import dash
             from dash import Input, Output
 
         app = dash.Dash()
