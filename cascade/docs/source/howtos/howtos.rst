@@ -130,6 +130,7 @@ Experiment management
     model_training.ipynb
     model_training_trainers.ipynb
     track_a_file
+    track_dataset_errors
     cli
     queries
     sklearn
