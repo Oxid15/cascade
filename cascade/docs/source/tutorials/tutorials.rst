@@ -1018,6 +1018,6 @@ you can proceed to the :ref:`/howtos/howtos.rst` section.
 
     self
     ui
-    configuration
+    configuration_management
     advanced_experiment_management
     results_querying
