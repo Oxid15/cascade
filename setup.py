@@ -49,14 +49,16 @@ setuptools.setup(
         "tqdm>=4.64.1",
         "numpy>=1.18.5",
         "pandas>=1.1.5",
-        "deepdiff>=8.6.2",
+        "deepdiff>=6.7.1; python_version<=3.7",
+        "deepdiff>=8.4.2; python_version<=3.8",
+        "deepdiff>=8.6.2; python_version>3.8",
         "pendulum>=2.1.2",
         "pyyaml>=5.4.1",
         "coolname>=2.0.0",
         "click>=8.0.0",
         "typing-extensions>=4.1.1,<5",
         'astunparse ; python_version<"3.9"',
-        'orderly-set==5.3.2; python_version=="3.8"'
+        'orderly-set==5.3.2; python_version=="3.8"',
     ],
     extras_require=extras_require,
 )
