@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import os
 
 import pendulum
@@ -33,16 +34,12 @@ class WorkspaceDiffViewer(RepoDiffViewer):
         self._callbacks.append(self._update_table_callback)
 
     def _line_table(self):
-        try:
-            import dash  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
             from dash import html
 
-        try:
-            import dash_renderjson  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash_renderjson"):
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
                 " and can be installed via `pip install dash_renderjson`"
@@ -88,7 +85,7 @@ class WorkspaceDiffViewer(RepoDiffViewer):
                 style={"text-align": "left"},
             )
 
-        lines = dict()
+        lines = {}
         for name in self._objs:
             # /full/path/repo/line/model/file.ext
             tail, _ = os.path.split(name)
@@ -121,16 +118,12 @@ class WorkspaceDiffViewer(RepoDiffViewer):
         return line_divs
 
     def _layout(self):
-        try:
-            import dash  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
             from dash import dcc, html
 
-        try:
-            import dash_renderjson  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash_renderjson"):
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
                 " and can be installed via `pip install dash_renderjson`"

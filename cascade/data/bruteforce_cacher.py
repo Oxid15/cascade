@@ -62,7 +62,7 @@ class BruteforceCacher(Modifier[T]):
         if hasattr(self._dataset, "__len__") and hasattr(self._dataset, "__getitem__"):
             self._data = [self._dataset[i] for i in trange(len(self._dataset))]
         elif hasattr(self._dataset, "__iter__"):
-            self._data = [item for item in tqdm(self._dataset)]
+            self._data = list(tqdm(self._dataset))
         else:
             raise AttributeError(
                 "Input dataset must provide __len__ and __getitem__ or __iter__"

@@ -45,7 +45,7 @@ def test_save_load(tmp_path_str, dummy_model):
 
     repo = Repo(tmp_path_str)
     repo.add_line("0", model_cls=DummyModel)
-    model = repo["0"][0]
+    repo["0"][0]
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])

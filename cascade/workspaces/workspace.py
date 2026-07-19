@@ -54,7 +54,7 @@ class Workspace(TraceableOnDisk):
                 if meta[0].get("type") == "repo":
                     self._repo_names.append(d)
             except MetaIOError as e:
-                warnings.warn(str(e))
+                warnings.warn(str(e), stacklevel=2)
 
         self.sync_meta()
 

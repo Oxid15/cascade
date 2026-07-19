@@ -32,14 +32,16 @@ class SingleLineRepo(BaseRepo):
         **kwargs: Any,
     ) -> None:
         super().__init__(line.get_root(), *args, meta_prefix=meta_prefix, **kwargs)
-        self._lines = {os.path.split(line.get_root())[-1]: {"args": [], "kwargs": dict()}}
+        self._lines = {os.path.split(line.get_root())[-1]: {"args": [], "kwargs": {}}}
         self._line = line
 
     def __getitem__(self, key: str) -> Line:
         if key in self._lines:
             return self._line
         else:
-            raise KeyError(f"The only line is {list(self._lines.keys())[0]}, {key} does not exist")
+            raise KeyError(
+                f"The only line is {next(iter(self._lines.keys()))}, {key} does not exist"
+            )
 
     def __repr__(self) -> str:
         return f"SingleLine in {self._root}"

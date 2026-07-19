@@ -73,17 +73,15 @@ class RangeSampler(Sampler[T]):
 
         # Check if can build range
         if start is None and stop is None:
-            raise ValueError(
-                f"Either start or stop must be present\
-                Got start = {start}, stop = {stop}"
-            )
+            raise ValueError(f"Either start or stop must be present\
+                Got start = {start}, stop = {stop}")
 
         # Check if only stop was passed
         if start is not None and stop is None:
             stop = start
             start = 0
 
-        self._indices = [i for i in range(start, stop, step)]
+        self._indices = list(range(start, stop, step))
 
         if len(self._indices) == 0:
             raise ValueError(

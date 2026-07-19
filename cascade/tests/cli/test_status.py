@@ -29,7 +29,7 @@ def test(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         repo = Repo(td)
-        line = repo.add_line("line")
+        repo.add_line("line")
 
         result = runner.invoke(cli, args=["status"])
 

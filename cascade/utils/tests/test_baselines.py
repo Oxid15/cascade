@@ -37,7 +37,7 @@ def test():
     model = ConstantBaseline(constant=[[1, 0], [0, 1]])
     assert np.all(
         model.predict([0, 0, 0])
-        == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]]  # noqa: W503
+        == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]]
     )
 
     model = ConstantBaseline(constant=None)

@@ -15,3 +15,5 @@ limitations under the License.
 """
 
 from .conftest import DummyModel, OnesModel
+
+__all__ = ["DummyModel", "OnesModel"]

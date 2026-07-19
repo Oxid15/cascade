@@ -19,3 +19,11 @@ from .dataset_version_diff_viewer import DatasetVersionDiffViewer
 from .diff_viewer import DiffViewer
 from .repo_diff_viewer import RepoDiffViewer
 from .workspace_diff_viewer import WorkspaceDiffViewer
+
+__all__ = [
+    "BaseDiffViewer",
+    "DatasetVersionDiffViewer",
+    "DiffViewer",
+    "RepoDiffViewer",
+    "WorkspaceDiffViewer",
+]
