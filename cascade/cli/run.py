@@ -30,7 +30,7 @@ import pendulum
 from cascade.base import MetaHandler
 
 
-class RunFailedError(RuntimeError): ...  # noqa: E701
+class RunFailedError(RuntimeError): ...
 
 
 def cascade_config_imported(tree: ast.Module) -> bool:

@@ -27,13 +27,13 @@ from ..base.utils import get_terminal_width
 from .common import create_container
 
 
-class QueryParsingError(Exception): ...  # noqa: E701
+class QueryParsingError(Exception): ...
 
 
-class QueryExecutionError(Exception): ...  # noqa: E701
+class QueryExecutionError(Exception): ...
 
 
-class NONE: ...  # noqa: E701
+class NONE: ...
 
 
 @dataclass

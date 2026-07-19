@@ -263,7 +263,7 @@ class Repo(BaseRepo, TraceableOnDisk):
         for name in sorted(os.listdir(self._root)):
             if (
                 os.path.isdir(os.path.join(self._root, name))
-                and name not in self._lines  # noqa: W503
+                and name not in self._lines
             ):
                 self._lines[name] = {"args": [], "kwargs": {}}
 
