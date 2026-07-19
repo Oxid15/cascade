@@ -49,6 +49,9 @@ Install requirements
 pip install -r cascade/docs/requirements.txt
 ```
 
+You may also need to install `pandoc`
+https://pandoc.org/installing.html
+
 Build the docs
 
 ```bash
