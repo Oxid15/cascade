@@ -50,7 +50,7 @@ setuptools.setup(
         "numpy>=1.18.5",
         "pandas>=1.1.5",
         'deepdiff>=6.7.1; python_version<="3.7"',
-        'deepdiff>=8.4.2; python_version>"3.7",<="3.8"',
+        'deepdiff>=8.4.2; python_version>"3.7"; python_version<="3.8"',
         'deepdiff>=8.6.2; python_version>"3.8"',
         "pendulum>=2.1.2",
         "pyyaml>=5.4.1",
