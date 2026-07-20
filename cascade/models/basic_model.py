@@ -82,35 +82,13 @@ class BasicModel(Model):
                 )
 
     @classmethod
-    def _check_model_hash(cls, path: str) -> None:
-        root = os.path.dirname(path)
-        meta = MetaHandler.read_dir(root)
-        # Uses first meta in list
-        # Usually the list is of unit length
-        meta = meta[0]
-        if "md5sum" in meta:
-            with open(path, "rb") as f:
-                file_hash = md5(f.read()).hexdigest()
-            if file_hash != meta["md5sum"]:
-                raise RuntimeError(
-                    f".pkl model hash check failed "
-                    f"it may be that model's .pkl file was corrupted\n"
-                    f'hash from meta: {meta["md5sum"]}\n'
-                    f"hash of {path}: {file_hash}"
-                )
-
-    @classmethod
-    def load(cls, path: str, check_hash: bool = True) -> "BasicModel":
+    def load(cls, path: str) -> "BasicModel":
         """
         Loads the model from path provided. Path should be a folder
         """
         if not os.path.isdir(path):
             raise ValueError(f"Error when loading a model - {path} is not a folder")
         path = os.path.join(path, "model.pkl")
-
-        # TODO: enable hash check later
-        # if check_hash:
-        #     cls._check_model_hash(path)
 
         with open(path, "rb") as f:
             model = pickle.load(f)
