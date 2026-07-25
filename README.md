@@ -44,15 +44,15 @@ import numpy as np
 
 
 X, y = load_digits(return_X_y=True)
-pairs = [(x, y) for (x, y) in zip(X, y)]
+data = [{"x": x, "y": y} for x, y in zip(X, y)]
 
-ds = cdd.Wrapper(pairs)
+ds = cdd.Wrapper(data)
 ds = cdd.RandomSampler(ds)
 
 train_ds, test_ds = cdd.split(ds)
 train_ds = cdd.ApplyModifier(
     train_ds,
-    lambda pair: pair[0] + np.random.random() * 0.1 - 0.05, pair[1]
+    lambda item: {"x": item["x"] + np.random.random(), "y": item["y"]}
 )
 
 pprint(train_ds.get_meta())
@@ -113,6 +113,9 @@ from cascade.repos import Repo
 
 model = Model()
 model.add_metric('acc', random.random())
+model.tag("production")
+model.describe("I tried to do X in this experiment")
+model.params["lr"] = 1e-4
 
 repo = Repo('./repo')
 
@@ -128,29 +131,27 @@ Lines can also store data pipelines.
 
 ```json
 [
-    {
-        "name": "cascade.models.model.Model",
-        "description": null,
-        "tags": [],
-        "comments": [],
-        "links": [],
-        "type": "model",
-        "created_at": "2024-08-25T19:15:24.658259+00:00",
-        "metrics": [
-            {
-                "name": "acc",
-                "value": 0.4323295098641783,
-                "created_at": "2024-08-25T19:15:24.658356+00:00"
-            }
-        ],
-        "params": {},
-        "path": "/home/user/repo/baseline/00000",
-        "slug": "rustling_finicky_hoatzin",
-        "saved_at": "2024-08-25T19:15:25.548339+00:00",
-        "python_version": "3.10.12 (main, Jul 29 2024, 16:56:48) [GCC 11.4.0]",
-        "user": "user",
-        "host": "hostname"
-    }
+    [
+        {
+            "comments": [],
+            "created_at": "2026-07-25T21:24:39.783748+00:00",
+            "description": "I tried to do X in this experiment",
+            "host": "your-pc-name",
+            "links": [],
+            "metrics": [{"created_at": "2026-07-25T21:24:39.784872+00:00",
+                        "name": "acc",
+                        "value": 0.5284442363543276}],
+            "name": "cascade.models.model.Model",
+            "params": {"lr": 0.0001},
+            "path": "/home/your-user-name/work/project/repo/baseline/00000",
+            "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+            "saved_at": "2026-07-25T21:24:41.753499+00:00",
+            "slug": "victorious_dingo_of_will",
+            "tags": ["production"],
+            "type": "model",
+            "user": "your-user-name"
+        }
+    ]
 ]
 ```
 
@@ -195,7 +196,7 @@ The key principles of Cascade are:
 
 Pull requests and issues are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests and docs as appropriate.
+Please make sure to update tests and docs as appropriate, see CONTRIBUTING.md.
 
 ## License
 
