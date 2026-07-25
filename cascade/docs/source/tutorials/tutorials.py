@@ -13,7 +13,11 @@ class DigitsDataset(Dataset):
         super().__init__()
 
     def get(self, index):
-        return self.x[index], self.y[index]
+        item = {
+            "x": self.x[index],
+            "y": self.y[index],
+        }
+        return item
 
     def __len__(self):
         return len(self.x)
@@ -28,14 +32,12 @@ import numpy as np
 
 from cascade.data import ApplyModifier
 
-NOISE_MAGNITUDE = 1
+NOISE_RANGE = (-1, 1)
 
 
-def add_noise(x):
-    return (
-        np.clip(x[0] + np.random.randint(-NOISE_MAGNITUDE, NOISE_MAGNITUDE), 0, 15),
-        x[1],
-    )
+def add_noise(item):
+    item["x"] = item["x"] + np.random.randint(*NOISE_RANGE)
+    return item
 
 
 ds_noise = ApplyModifier(ds, add_noise)
@@ -64,14 +66,15 @@ from cascade.models import BasicModel
 
 class LR(BasicModel):
     def __init__(self, penalty):
-        self.model = LogisticRegression(penalty=penalty, solver="liblinear")
+        self.model = LogisticRegression(penalty=penalty)
         super().__init__()
 
     def fit(self, dataset):
         x, y = [], []
         for item in dataset:
-            x.append(item[0])
-            y.append(item[1])
+            x.append(item["x"])
+            y.append(item["y"])
+
         self.model.fit(x, y)
 
     def predict(self, x):
@@ -94,10 +97,10 @@ line.save(model)
 # %%
 
 model = line.load(0)
-x = [item[0] for item in ds]
+x = [item["x"] for item in ds]
 preds = model.predict(x)
 
-print(preds[0], ds[0][1])
+print(preds[0], ds[0]["y"])
 
 # %%
 from pprint import pprint
@@ -113,7 +116,7 @@ from cascade.lines import DataLine
 ds.update_meta(
     {
         "long_description": "This is digits pipeline. It was augmented with some uniform noise",
-        "noise_magnitude": NOISE_MAGNITUDE,
+        "noise_range": NOISE_RANGE,
     }
 )
 
@@ -161,8 +164,8 @@ def f1(gt, pred):
     return f1_score(gt, pred, average="macro")
 
 
-x = [item[0] for item in loaded_ds]
-y = [item[1] for item in loaded_ds]
+x = [item["x"] for item in loaded_ds]
+y = [item["y"] for item in loaded_ds]
 
 model.evaluate(x, y, [f1])
 
@@ -223,32 +226,12 @@ pprint(model.get_meta())
 line.save(model)
 
 # %%
-from cascade.meta import MetricViewer
-
-mv = MetricViewer(line)
-print(mv.table)
-
-# %%
-
-model = LR("l1")
-model.fit(ds)
-model.params["penalty"] = "l1"
-model.evaluate(x, y, [Accuracy(), f1])
-
-line.save(model)
-
-# %%
-
-mv = MetricViewer(line)
-print(mv.table)
-
-# %%
 from pydantic import BaseModel
 
 
 class LabeledImage(BaseModel):
-    image: np.ndarray
-    label: int
+    x: np.ndarray
+    y: int
 
     model_config = {"arbitrary_types_allowed": True}
 
@@ -257,35 +240,19 @@ class LabeledImage(BaseModel):
 from cascade.data import SchemaModifier
 
 
-class LabeledImageModifier(SchemaModifier):
-    def get(self, idx):
-        image, label = self._dataset[idx]
-        return LabeledImage(image=image, label=label)
-
-
-# %%
-
-
-class Pad5(SchemaModifier):
+class ValidatingModifier(SchemaModifier):
     in_schema = LabeledImage
 
     def get(self, idx):
         item = self._dataset[idx]
-        image = item.image.reshape((8, 8))
-        h, w = image.shape
-        new_image = np.zeros((h + 2 * 5, w + 2 * 5))
-        new_image[5 : 5 + h, 5 : 5 + w] = image
-        item.image = new_image.flatten()
+        # Here you can do anything
         return item
 
 
 # %%
 
+ds = ValidatingModifier(ds)
 
-ds = LabeledImageModifier(ds)
-pad = Pad5(ds)
-
-ds = Concatenator([pad, ds])
 
 # %%
 
@@ -294,19 +261,12 @@ print(ds[0])
 # %%
 
 
-class FreakyImage(BaseModel):
-    image: np.ndarray
-    label: str
-
-    model_config = {"arbitrary_types_allowed": True}
-
-
 class EvilDataset(Dataset):
     def get(self, idx):
-        return FreakyImage(image=np.zeros(18 * 18), label="hehe")
+        return dict(x=np.zeros(18 * 18), y="hehe")
 
     def __len__(self):
-        return 69
+        return 67
 
 
 # %%
@@ -314,7 +274,7 @@ class EvilDataset(Dataset):
 from cascade.data import ValidationError
 
 evil = EvilDataset()
-evil = Pad5(evil)
+evil = ValidatingModifier(evil)
 
 try:
     evil[0]
@@ -383,8 +343,8 @@ model = SkModel(blocks=[LogisticRegression()])
 
 ds = DigitsDataset()
 
-x = [item[0] for item in ds]
-y = [item[1] for item in ds]
+x = [item["x"] for item in ds]
+y = [item["y"] for item in ds]
 
 model.fit(x, y)
 
@@ -411,3 +371,5 @@ line.save(model)
 
 last_model_dir = os.path.join(line.get_root(), line.get_model_names()[-1])
 print(os.listdir(last_model_dir))
+
+# %%
