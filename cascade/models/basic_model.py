@@ -17,10 +17,9 @@ limitations under the License.
 import os
 import pickle
 import warnings
-from hashlib import md5
 from typing import Any, Callable, List, Union
 
-from ..base import MetaHandler, raise_not_implemented
+from ..base import raise_not_implemented
 from ..metrics import Metric, MetricType
 from .model import Model, ModelModifier
 

@@ -28,10 +28,10 @@ from cascade.cli.cli import cli
 from cascade.cli.run import RunFailedError
 
 CONFIGS_WITH_DICT = [
-    ("class NewConfig(Config):\n    a=0\n    b=1\n    c=2", dict(a=0, b=1, c=2)),
+    ("class NewConfig(Config):\n    a=0\n    b=1\n    c=2", {"a": 0, "b": 1, "c": 2}),
     (
         "class NewConfig(Config):\n    a='lol'\n    b=[1, 2, 3]\n    c={'d': 'e'}",
-        dict(a="lol", b=[1, 2, 3], c={"d": "e"}),
+        {"a": "lol", "b": [1, 2, 3], "c": {"d": "e"}},
     ),
 ]
 

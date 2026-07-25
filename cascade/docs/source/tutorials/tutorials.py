@@ -263,7 +263,7 @@ print(ds[0])
 
 class EvilDataset(Dataset):
     def get(self, idx):
-        return dict(x=np.zeros(18 * 18), y="hehe")
+        return {"x": np.zeros(18 * 18), "y": "hehe"}
 
     def __len__(self):
         return 67
