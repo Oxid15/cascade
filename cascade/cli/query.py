@@ -427,6 +427,9 @@ def render_results(result: Result) -> None:
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @click.pass_context
 def query(ctx, args: List[str]):
+    """
+    Get and filter experiment results
+    """
     q = QueryParser().parse(list(args))
 
     if not ctx.obj.get("meta"):

@@ -168,7 +168,7 @@ We will run the code above with:
 
 .. code-block:: bash
 
-    cascade run run_error_handling -y --log
+    cascade run run_error_handling.py -y --log
 
 Skipping the long trackeback this is what you should see:
 
@@ -189,3 +189,93 @@ This is what you should find in ``.cascade/20241117_154453_72/logs/cascade_run.l
     RuntimeError: An error occured!
 
 You will also find config and overrides in ``.cascade`` folder.
+
+
+Reruns
+======
+
+In research it is very common to run clean experiments - you change a single aspect of training and observe the effect.
+In this process changes accumulate through experiments and the need to base your current experiment on the previous one becomes apparent.
+
+This is why Cascade implements config reruns - you can pass the identifier of a previous experiment and base your new one on it.
+
+Here is the config inside the ``config_tracking.py`` file.
+
+.. code-block:: python
+
+    from cascade.base import Config
+    from cascade.lines import ModelLine
+    from cascade.models import BasicModel
+
+
+    class TrainConfig(Config):
+        lr = 1e-6
+        batch_size = 16
+        total_iterations = 10000
+        image_size = (200, 200)
+
+
+    if __name__ == "__main__":
+        cfg = TrainConfig()
+
+        line = ModelLine("line", model_cls=BasicModel)
+        model = line.create_model()
+
+        model.add_config()
+
+        line.save(model)
+
+Let's run a new experiment to create a base for our rerun. We will make changes to the config in file to
+demonstrate how overriding works.
+
+.. code-block:: bash
+
+    cascade run config_tracking.py -y --lr '1e-5' --batch_size 8
+
+Now we need to identify the experiment somehow. The easiest way is to get its slug. We use ``cascade query`` for that.
+
+
+.. code-block:: bash
+    cd line
+    cascade query slug
+
+
+.. code-block:: text
+
+    ──────────────────────────────────────────
+    slug                                                                                                                                                                            
+    ──────────────────────────────────────────
+    fabulous_active_cockatoo                                                                                                                                                        
+    ──────────────────────────────────────────
+    Finished: 2026-07-19 15:19:28.474409+03:00
+    Returned rows: 1
+    Time: 0.0009s
+
+After knowing the slug you can insert it into the path to the line like this.
+In this run base config will override the config inside the file and we are making changes to the base.
+
+.. code-block:: bash
+
+    cascade run config_tracking.py -y --base line/fabulous_active_cockatoo --batch_size 4
+
+
+To verify our results we can get the contents of the saved config.
+
+
+.. code-block:: bash
+
+    cat line/00001/files/cascade_config.json
+
+We can see that `lr` is from the base, not from the file and `batch_size` is now from our latest experiment.
+
+.. code-block:: javascript
+
+    {
+        "lr": 1e-05,
+        "batch_size": 4,
+        "total_iterations": 10000,
+        "image_size": [
+            200,
+            200
+        ]
+    }

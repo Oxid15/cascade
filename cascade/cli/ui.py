@@ -27,8 +27,13 @@ from .common import init_ctx
 @click.option("--port", default=8000)
 @click.pass_context
 def ui(ctx, path, host, port):
+    """
+    Run Cascade Web UI
+    """
     if not os.path.exists(os.path.join(path, "meta.json")):
-        click.echo("This folder is not a Cascade Workspace, would you like to create one?")
+        click.echo(
+            "This folder is not a Cascade Workspace, would you like to create one?"
+        )
         response = input("y/n: ")
         if response.lower() == "y":
             from cascade.workspaces import Workspace

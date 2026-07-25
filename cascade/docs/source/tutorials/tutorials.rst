@@ -37,23 +37,22 @@ for more specific and complex workflows.
 
 1. Pipelines basics
 ===================
-In this tutorial you will learn basic pipeline building blocks of Cascade.
+In this step you will learn basic pipeline building blocks of Cascade.
 This is the first Cascade tutorial from a series. All of the tutorials are
 meant to form a single project and can be thought of as a series of lessons.
 
-.. Each lesson will come with a list of links for further reading or advanced
-.. how-to guides on related topics.
+Some lessons come with links for further reading or advanced
+how-to guides on related topics.
 
-Cascade pipelines allow building data processing routines from interchangeable
+Cascade pipelines allow building data processing routines from
 steps called ``Datasets`` and ``Modifiers``.
 
-Datasets are the sources of data. In the first step let's make a Dataset
+``Datasets`` are the sources of data. In the first step let's make a ``Dataset``
 for ``digits`` from ``sklearn``.
 
 .. code-block:: python
 
     from cascade.data import Dataset
-    from sklearn.datasets import load_digits
 
 
     class DigitsDataset(Dataset):
@@ -62,10 +61,15 @@ for ``digits`` from ``sklearn``.
             super().__init__()
 
         def get(self, index):
-            return self.x[index], self.y[index]
+            item = {
+                "x": self.x[index],
+                "y": self.y[index],
+            }
+            return item
 
         def __len__(self):
             return len(self.x)
+
 
 Minimal setup for a Dataset is a ``get`` and ``__len__`` methods.
 Now we can do basic access.
@@ -81,11 +85,15 @@ allow using rich set of defaults for data manipulation.
 .. code-block:: python
 
     import numpy as np
+
     from cascade.data import ApplyModifier
 
+    NOISE_RANGE = (-1, 1)
 
-    def add_noise(x):
-        return np.clip(x[0] + np.random.randint(-2, 2), 0, 15), x[1]
+
+    def add_noise(item):
+        item["x"] = item["x"] + np.random.randint(*NOISE_RANGE)
+        return item
 
 
     ds_noise = ApplyModifier(ds, add_noise)
@@ -94,7 +102,7 @@ allow using rich set of defaults for data manipulation.
 
 ``Modifiers`` take datasets and transform their values.
 In previous example we added noise to digits by using ``ApplyModifier``
-and created new noisy dataset.
+and created a new noisy dataset.
 
 We can augment our data by concatenating those two datasets.
 
@@ -114,13 +122,12 @@ Further reading
 2. Metadata
 ===========
 
-Data and model training in Cascade is based on metadata. It is the main
-reason why wrappers should be created - they allow automatically capturing
-info about underlying objects that can be logged and analyzed later.
+Cascade helps to generate a lot of useful metadata. This is why we need wrappers
+- they allow capturing info about underlying objects automatically.
 
 To see what it looks like,
 you can call ``get_meta`` method on a Cascade object. In the next
-step we will try calling it on the pipeline that was made on
+step we will try calling it on a pipeline that was made on
 the Pipelines step.
 
 .. code-block:: python
@@ -160,7 +167,7 @@ the Pipelines step.
     'tags': [],
     'type': 'dataset'}]
 
-You can see all the pipeline stages in this metadata. It is a list of
+You can see all the stages of the pipeline in this metadata. It is a list of
 dicts with JSON-serializable fields, each block in this list represents a pipeline step.
 
 Datasets, Models and some other objects have metadata. It is a very flexible tool, that
@@ -182,7 +189,6 @@ for the model is not strictly defined as in Dataset case. We define ``fit`` and 
 .. code-block:: python
 
     from cascade.models import BasicModel
-    from sklearn.linear_model import LogisticRegression
 
 
     class LR(BasicModel):
@@ -193,8 +199,9 @@ for the model is not strictly defined as in Dataset case. We define ``fit`` and 
         def fit(self, dataset):
             x, y = [], []
             for item in dataset:
-                x.append(item[0])
-                y.append(item[1])
+                x.append(item["x"])
+                y.append(item["y"])
+
             self.model.fit(x, y)
 
         def predict(self, x):
@@ -239,9 +246,10 @@ to be able to restore it correctly when loading.
 .. code-block:: python
 
     model = line.load(0)
-    y = model.predict(ds)
+    x = [item["x"] for item in ds]
+    preds = model.predict(x)
 
-    print(y[0], ds[0][1])
+    print(preds[0], ds[0]["y"])
 
 Lines also enhance model's meta by recording useful environment information.
 Let's see what was saved automatically about this experiment. We load model
@@ -301,7 +309,7 @@ see the effect in our logs. Now we can fix that issue.
     ds.update_meta(
         {
             "long_description": "This is digits pipeline. It was augmented with some uniform noise",
-            "noise_magnitude": NOISE_MAGNITUDE,
+            "noise_range": NOISE_RANGE,
         }
     )
 
@@ -371,12 +379,12 @@ pipeline object from disk.
 Metrics are first-class citizens in Cascade.
 For every ML-project they should be a central aspect.
 
-Metric API is very flexible - you have a freedom to define metrics
-in several ways. First case is the regular way metrics are usually defined
+Metric API is very flexible - you have freedom to define metrics
+in different ways. First case is the regular way metrics are usually defined
 in projects - as functions.
 
 Metric function can be passed in the default ``evaluate`` method of ``BasicModel``.
-Evaluation of the model will return nothing, but fill its ``metrics`` field with a list
+Evaluation of the model will return nothing, but instead fill its ``metrics`` field with a list
 of metrics.
 
 .. code-block:: python
@@ -388,8 +396,8 @@ of metrics.
         return f1_score(gt, pred, average="macro")
 
 
-    x = [item[0] for item in loaded_ds]
-    y = [item[1] for item in loaded_ds]
+    x = [item["x"] for item in loaded_ds]
+    y = [item["y"] for item in loaded_ds]
 
     model.evaluate(x, y, [f1])
 
@@ -617,88 +625,14 @@ Further reading
 - :ref:`CLI Queries How To</howtos/queries.rst>`
 
 
-8. Viewers
-==========
-
-After logging some amount of experiments with Cascade they can
-become harder to analyze. To allow analysis of information in meta
-Cascade features viewers. In this tutorial step basic MetricViewer will be
-considered.
-
-MetricViewer allows to map parameters of the model to its metrics.
-
-.. code-block:: python
-
-    from cascade.meta import MetricViewer
-
-    mv = MetricViewer(line)
-    print(mv.table)
-
-In the output we can see all of the models we saved inside this line. Viewers usually accepts Repos, but can
-work with single lines also.
-
-This viewer reads all the metadata and build a pandas table around metric values.
-
-.. code-block:: text
-
-       line  num                       created_at                saved penalty        tags  comment_count  link_count name     value
-    0  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0   f1  0.993826
-    1  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0  acc  0.993879
-    2  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1   f1  0.993826
-    3  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1  acc  0.993879
-
-Let's use metric viewer to identify the best parameter of penalty for this dataset. We will retrain the model,
-evaluate it and save in the same way as before.
-
-.. code-block:: python
-
-    model = LR("l1")
-    model.fit(ds)
-    model.params["penalty"] = "l1"
-    model.evaluate(x, y, [Accuracy(), f1])
-
-    line.save(model)
-
-Now we display the table once again.
-
-.. code-block:: python
-
-    mv = MetricViewer(line)
-    print(mv.table)
-
-It seems like l1 penalty gave slightly better results. Metric viewer can be used to identify optimal parameters
-according to metric values. Since ``mv.table`` is a pandas DataFrame you can do your own analysis and visualizations.
-
-.. code-block:: text
-
-       line  num                       created_at                saved penalty        tags  comment_count  link_count name     value
-    0  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0   f1  0.993826
-    1  line    1 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2          []              0           0  acc  0.993879
-    2  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1   f1  0.993826
-    3  line    2 2024-08-01 20:02:31.589336+00:00  a few seconds after      l2  [tutorial]              0           1  acc  0.993879
-    4  line    3 2024-08-01 20:02:37.266971+00:00  a few seconds after      l1          []              0           0  acc  0.994992
-    5  line    3 2024-08-01 20:02:37.266971+00:00  a few seconds after      l1          []              0           0   f1  0.994946
-
-Metric viewer as other Cascade viewers has a special dash-based web interface. You can install dash and run it with
-CLI command or from the python code using ``serve()`` method.
-
-After installing dash which is an optional dependency for web-based interfaces, you can run this.
-The command will start a server on the port 8050 by default which you can open in your browser.
-Go to ``localhost:8050`` to see the table of MetricViewer.
-
-.. code-block:: text
-
-    cascade view metric
-
-
-9. Data Validation
+8. Data Validation
 ===================
 
 Data quality in ML projects is as important as the quality of the model.
 This is why Cascade focuses on integrated and effortless data validation.
 
 When the project grows, it becomes hard to control what is going on with
-different Modifiers. Some may accept on certain formats of data and it is
+different Modifiers. Some may accept certain formats of data and it is
 hard to explicitly define those requirements within Modifier API.
 
 This is where SchemaModifiers come in. They are special kind of Modifiers
@@ -707,7 +641,7 @@ that allow defining input schema for when we do ``__getitem__``.
 Schema is defined using ``pydantic`` - an established tool for data validation
 and also an optional dependency, you'll need to install it if you haven't yet.
 
-The problem with our initial setup is that we operated with tuples, making
+The problem with our initial setup is that we operated with raw dicts, making
 our schema implicit. If we were to reuse our datasets later, it would be hard
 for us or other engineers to quickly grasp the return value layout and it will
 also be easy to introduce errors in datasets that will be hard to debug.
@@ -718,57 +652,41 @@ Let's define a simple schema for our dataset from the beginning of the tutorial.
 
     from pydantic import BaseModel
 
-    class LabeledImage(BaseModel):
-        image: np.ndarray
-        label: int
 
-        # This is for numpy array
+    class LabeledImage(BaseModel):
+        x: np.ndarray
+        y: int
+
         model_config = {"arbitrary_types_allowed": True}
 
 Previous part is how we define schema in pydantic. You can use complex
 schemas and Fields to place requirements on the input of your Modifiers.
 
-Let's convert our dataset to a dataset with schema using this modifier.
-It will just wrap the input into a model.
-
 This is the entry point of data in our pipeline, so this part is important.
 However, we also can ensure data integrity inside of the pipeline.
+
+Each time ``self._dataset[idx]`` is called, it will
+automatically check the returned value against our model.
 
 .. code-block:: python
 
     from cascade.data import SchemaModifier
 
-    class LabeledImageModifier(SchemaModifier):
-        def get(self, idx):
-            image, label = self._dataset[idx]
-            return LabeledImage(image=image, label=label)
 
-Here we define a simple constant padding transform that uses our pydantic model
-as an input schema for itself. Each time ``self._dataset[idx]`` is called, it will
-automatically check the returned value against our model.
-
-.. code-block:: python
-
-    class Pad5(SchemaModifier):
+    class ValidatingModifier(SchemaModifier):
         in_schema = LabeledImage
 
         def get(self, idx):
             item = self._dataset[idx]
-            image = item.image.reshape((8, 8))
-            h, w = image.shape
-            new_image = np.zeros((h + 2 * 5, w + 2 * 5))
-            new_image[5: 5 + h, 5: 5 + w] = image
-            item.image = new_image.flatten()
+            # Here you can do anything
             return item
 
 Here we build a pipeline and augment our data using padding.
 
 .. code-block:: python
 
-    ds = LabeledImageModifier(ds)
-    pad = Pad5(ds)
+    ds = ValidatingModifier(ds)
 
-    ds = Concatenator([pad, ds])
 
 Let's see the output.
 
@@ -778,7 +696,7 @@ Let's see the output.
 
 Nothing special - validators are made to be effortless. They allow avoiding
 writing manual checks in every instance of a dataset. We just define a schema
-inside the whole class of datasets and they automatically check values that they
+inside of the whole class of datasets and they automatically check values that they
 accept. And the return values stay the same.
 
 Next example will show an actual case of input validation.
@@ -789,19 +707,12 @@ that would easily pass in our previous setup at would take some time to debug.
 
 .. code-block:: python
 
-    class FreakyImage(BaseModel):
-        image: np.array
-        label: str
-
-        model_config = {"arbitrary_types_allowed": True}
-
-
     class EvilDataset(Dataset):
         def get(self, idx):
-            return FreakyImage(image=np.zeros(18*18), label="hehe")
+            return dict(x=np.zeros(18*18), y="hehe")
 
         def __len__(self):
-            return 69
+            return 67
 
 The following code will raise ValidationError, which we will catch and
 display the latest message.
@@ -811,7 +722,7 @@ display the latest message.
     from cascade.data import ValidationError
 
     evil = EvilDataset()
-    evil = Pad5(evil)
+    evil = ValidatingModifier(evil)
 
     try:
         evil[0]
@@ -819,23 +730,10 @@ display the latest message.
         print(e)
 
 
-If we comment try/except out and see the whole traceback
-(which is very long), we will see the following lines produced for us
-by pydantic. 
-
-.. code-block:: text
-
-      Input should be a valid dictionary or instance of LabeledImage 
-      [type=model_type, input_value=FreakyImage(image=array([...     0.]), label='hehe'), input_type=FreakyImage]
-
-We can see that we didn't even get to the validation of a label. Our data was rejected
-for being freaky enough without that.
-
-
-10. Artifacts and Files
+9. Artifacts and Files
 =======================
 
-Cascade wrappers serve to provide unified interface for different ML solutions
+Cascade wrappers provide unified interface for different ML solutions
 however in deployment scenarios they may obstruct underlying models.
 
 To solve this problem artifacts were created. They are special methods that
@@ -928,7 +826,7 @@ Like previously we verify the files.
     ['dummy_predictions.json']
 
 
-11. Scikit-learn Integration
+10. Scikit-learn Integration
 ============================
 
 Many of the things we implemented in this tutorial can be reused in similar projects.
@@ -955,8 +853,8 @@ The interface of this model's ``fit`` function accepts lists of elements.
 
     ds = DigitsDataset()
 
-    x = [item[0] for item in ds]
-    y = [item[1] for item in ds]
+    x = [item["x"] for item in ds]
+    y = [item["y"] for item in ds]
 
     model.fit(x, y)
 
@@ -1018,6 +916,6 @@ you can proceed to the :ref:`/howtos/howtos.rst` section.
 
     self
     ui
-    configuration
+    configuration_management
     advanced_experiment_management
     results_querying
