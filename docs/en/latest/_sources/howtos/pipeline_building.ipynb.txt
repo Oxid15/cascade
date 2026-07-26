@@ -19,13 +19,15 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 2,
    "metadata": {},
    "outputs": [],
    "source": [
+    "import cascade.data as cdd\n",
+    "import cascade.meta as cme\n",
+    "\n",
     "import torch\n",
     "import torchvision\n",
-    "import cascade.data as cdd\n",
     "import torchvision.transforms.functional as F"
    ]
   },
@@ -59,7 +61,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 4,
    "metadata": {},
    "outputs": [
     {
@@ -157,11 +159,11 @@
     "MNIST_ROOT = 'data'\n",
     "\n",
     "train_ds = torchvision.datasets.MNIST(root=MNIST_ROOT,\n",
-    "                                     train=True,\n",
+    "                                     train=True, \n",
     "                                     transform=F.to_tensor,\n",
     "                                     download=True)\n",
-    "test_ds = torchvision.datasets.MNIST(root=MNIST_ROOT,\n",
-    "                                    train=False,\n",
+    "test_ds = torchvision.datasets.MNIST(root=MNIST_ROOT, \n",
+    "                                    train=False, \n",
     "                                    transform=F.to_tensor)"
    ]
   },
@@ -199,7 +201,7 @@
    "outputs": [],
    "source": [
     "class NoiseModifier(cdd.Modifier):\n",
-    "    def get(self, index):\n",
+    "    def __getitem__(self, index):\n",
     "        img, label = self._dataset[index]\n",
     "        img += torch.rand_like(img) * 0.1\n",
     "        img = torch.clip(img, 0, 255)\n",
@@ -261,11 +263,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": null,
+   "execution_count": 10,
    "metadata": {},
    "outputs": [],
    "source": [
-    "trainldr = torch.utils.data.DataLoader(dataset=train_ds,\n",
+    "trainldr = torch.utils.data.DataLoader(dataset=train_ds, \n",
     "                                       batch_size=BATCH_SIZE,\n",
     "                                       shuffle=True)\n",
     "testldr = torch.utils.data.DataLoader(dataset=test_ds,\n",

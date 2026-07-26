@@ -19,11 +19,8 @@ is described in detail below.
   comment   # Manage comments
   desc      # Manage descriptions
   migrate   # Automatic migration of objects to newer cascade versions
-  query     # Get and filter experiment results
-  run       # Track configurations
   status    # Short description of what is present in the current folder
   tag       # Manage tags
-  ui        # Run Cascade Web UI
   view      # Different viewers
 
 cascade artifact
@@ -100,43 +97,13 @@ The following will remove description from the current object.
 cascade migrate
 ***************
 
-Use this if your repo or line was created before version ``0.13.0``
+Use this if your repo or line was created before version `0.13.0`
 to migrate your metrics to a new format and continue using your old
 repos with new Cascade.
 
 .. code-block:: bash
 
     cascade migrate
-
-cascade query
-*************
-
-Command for Cascade query language. You can find full reference in :ref:`/howtos/queries.rst`.
-
-Navigate to any Cascade container (Workspace, Repo or Line) and run ``cascade query <query>``.
-Here is the example of a query and a result.
-
-.. code-block:: bash
-
-    cascade query slug user created_at filter 'user == "ilia"' sort saved_at desc
-
-.. code-block:: text
-
-    slug                               user         created_at                      
-    ────────────────────────────────────────────────────────────────────────────────
-    graceful_heavenly_shellfish        ilia         2026-07-19T12:21:28.433891+00:00
-    fabulous_active_cockatoo           ilia         2026-07-19T12:18:51.448109+00:00
-    ────────────────────────────────────────────────────────────────────────────────
-    Finished: 2026-07-19 15:42:50.398440+03:00
-    Returned rows: 2
-    Time: 0.0023s
-
-cascade run
-***********
-
-Run scripts and track configurations using this command. Replace ``python <script>`` with ``cascade run <script>`` to get additional functionality.
-
-See full reference in :ref:`/tutorials/configuration_management.rst`
 
 cascade status
 **************
