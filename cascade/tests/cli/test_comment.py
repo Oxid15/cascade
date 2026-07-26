@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ class DummyDataset(BaseDataset):
     def __len__(self):
         return 0
 
-    def __getitem__(self, index) -> None:
+    def get(self, index) -> None:
         return None
 
 
@@ -49,6 +49,7 @@ def create_entity(entity_type: str, root: str) -> None:
         DataLine(root)
     elif entity_type == "traceable":
         TraceableOnDisk(root, ".yaml").sync_meta()
+
 
 @pytest.mark.parametrize(
     "entity_type",

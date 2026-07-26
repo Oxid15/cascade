@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,14 +25,12 @@ from cascade.data import BruteforceCacher, Wrapper
 
 def test_ds(number_dataset):
     ds = BruteforceCacher(number_dataset)
-    assert [number_dataset[i] for i in range(len(number_dataset))] == [
-        item for item in ds
-    ]
+    assert list(number_dataset) == list(ds)
 
 
 def test_it(number_iterator):
     ds = BruteforceCacher(number_iterator)
-    assert [item for item in number_iterator] == [item for item in ds]
+    assert list(number_iterator) == list(ds)
 
 
 def test_meta():

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ class TextClassificationFolder(Dataset[T]):
         self._paths = []
         self._labels = []
         for i, folder in enumerate(folders):
-            files = [name for name in os.listdir(os.path.join(self._root, folder))]
+            files = list(os.listdir(os.path.join(self._root, folder)))
             self._paths += [os.path.join(self._root, folder, f) for f in files]
             self._labels += [i for _ in range(len(files))]
 
@@ -59,7 +59,7 @@ class TextClassificationFolder(Dataset[T]):
         ]
         print(f"Found {len(folders)} classes: {classes}")
 
-    def __getitem__(self, index: int) -> Tuple[str, int]:
+    def get(self, index: int) -> Tuple[str, int]:
         with open(self._paths[index], "r", encoding=self._encoding) as f:
             text = " ".join(f.readlines())
             label = self._labels[index]

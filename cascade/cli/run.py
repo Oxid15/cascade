@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,15 +21,25 @@ import shutil
 import subprocess
 import sys
 import warnings
+from dataclasses import dataclass
 from pprint import pformat
 from typing import Any, Dict, List, Optional
 
 import click
 import pendulum
+
 from cascade.base import MetaHandler
 
+from .common import create_container
 
-class RunFailedException(RuntimeError): ...  # noqa: E701
+
+class RunFailedError(RuntimeError): ...
+
+
+@dataclass
+class ConfigFieldCheckResult:
+    ok: bool
+    missing_fields: Optional[List[str]] = None
 
 
 def cascade_config_imported(tree: ast.Module) -> bool:
@@ -97,11 +107,15 @@ def parse_value(value: ast.expr) -> Any:
     elif isinstance(value, ast.Tuple):
         return tuple(parse_value(v) for v in value.elts)
     elif isinstance(value, ast.Set):
-        return set(parse_value(v) for v in value.elts)
+        return {parse_value(v) for v in value.elts}
     elif isinstance(value, ast.Dict):
-        return {parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)}
+        return {
+            parse_value(k): parse_value(v) for k, v in zip(value.keys, value.values)
+        }
     else:
-        raise ValueError(f"Unsupported config field type: {value} in {unparse_method(value)}")
+        raise ValueError(
+            f"Unsupported config field type: {value} in {unparse_method(value)}"
+        )
 
 
 # ast.unparse exists since python 3.9
@@ -129,10 +143,13 @@ def node2dict(cfg_node: ast.ClassDef) -> Dict[str, Any]:
     return cfg_dict
 
 
-def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]) -> str:
+def modify_assignments(
+    tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[str, Any]
+) -> str:
     """
     Overrides cascade.base.Config class definition with user-provided values
     """
+    used_keys = set()
     for node in cfg_node.body:
         if isinstance(node, ast.Assign):
             target = node.targets[0].id
@@ -141,10 +158,31 @@ def modify_assignments(tree: ast.Module, cfg_node: ast.ClassDef, kwargs: Dict[st
         else:
             continue
         if target in kwargs:
+            used_keys.add(target)
             if sys.version_info < (3, 9):
                 node.value = ast.NameConstant(kwargs[target], kind=None)
             else:
                 node.value = ast.Constant(value=kwargs[target])
+
+    # Account for fields from base that were missing in original config
+    # This will work only if a special override flag was passed
+    for key in kwargs:
+        if key in used_keys:
+            continue
+
+        if sys.version_info < (3, 9):
+            value = ast.NameConstant(kwargs[key], kind=None)
+        else:
+            value = ast.Constant(value=kwargs[key])
+
+        cfg_node.body.append(
+            ast.Assign(
+                targets=[ast.Name(id=key, ctx=ast.Store())],
+                value=value,
+            )
+        )
+
+    ast.fix_missing_locations(cfg_node)
     return unparse_method(tree)
 
 
@@ -155,7 +193,10 @@ def parse_args(args):
         try:
             kwargs[key] = ast.literal_eval(val)
         except Exception as e:
-            raise RuntimeError(f"Failed to parse the following argument: {orig_key} {val} See traceback above.") from e
+            raise RuntimeError(
+                f"Failed to parse the following argument: {orig_key} {val} "
+                "See traceback above."
+            ) from e
     return kwargs
 
 
@@ -164,22 +205,79 @@ def generate_run_id() -> str:
     return now
 
 
+def load_config(path):
+    dirname, basename = os.path.split(path)
+
+    # Check if basename is a model name
+    if len(re.findall("^[0-9][0-9][0-9][0-9][0-9]$", basename)) == 1:
+        meta = MetaHandler.read_dir(path)
+        if (
+            not isinstance(meta, list)
+            or len(meta) == 0
+            or "type" not in meta[0]
+            or meta[0]["type"] != "model"
+        ):
+            raise RuntimeError("Provided path to base is not a path to a model")
+
+        config = MetaHandler.read(os.path.join(path, "files", "cascade_config.json"))
+    else:
+        # We assume that basename is a slug then
+        container_meta = MetaHandler.read_dir(dirname)
+        container = create_container(container_meta[0]["type"], dirname)
+        if container is None:
+            raise RuntimeError("Provided path is not a path to a Cascade object")
+        meta = container.load_obj_meta(basename)
+        config = MetaHandler.read(
+            os.path.join(meta[0]["path"], "files", "cascade_config.json")
+        )
+
+    return config
+
+
+def can_safely_replace(cfg, new_cfg):
+    missing_fields = []
+    for key in new_cfg:
+        if key not in cfg:
+            missing_fields.append(key)
+
+    if missing_fields:
+        return ConfigFieldCheckResult(
+            ok=False,
+            missing_fields=missing_fields,
+        )
+    return ConfigFieldCheckResult(ok=True)
+
+
 class CascadeRun:
-    def __init__(self, log: bool, config: Dict[str, Any], overrides: Dict[str, Any]) -> None:
+    def __init__(
+        self,
+        log: bool,
+        config: Dict[str, Any],
+        overrides: Dict[str, Any],
+        base_config_path: Optional[str] = None,
+    ) -> None:
         self.log = log
         self.config = config
         self.overrides = overrides
+        self.base_config_path = base_config_path
 
-        base = os.getcwd()
-        run_id = generate_run_id()
-        self.run_dir = os.path.join(base, ".cascade", run_id)
+        cwd = os.getcwd()
+        self.run_id = generate_run_id()
+        self.run_dir = os.path.join(cwd, ".cascade", self.run_id)
         os.environ["CASCADE_RUN_DIR"] = self.run_dir
 
     def __enter__(self):
         os.makedirs(self.run_dir)
 
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_config.json"), self.config)
-        MetaHandler.write(os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides)
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_config.json"), self.config
+        )
+        MetaHandler.write(
+            os.path.join(self.run_dir, "cascade_overrides.json"), self.overrides
+        )
+
+        run_meta = {"run_id": self.run_id, "base_config_path": self.base_config_path}
+        MetaHandler.write(os.path.join(self.run_dir, "cascade_run_meta.json"), run_meta)
 
         return self
 
@@ -192,7 +290,8 @@ class CascadeRun:
             shutil.rmtree(run_path)
         except Exception as e:
             warnings.warn(
-                f"Failed to remove run folder in {run_path} with the following error: {e}"
+                f"Failed to remove run folder in {run_path} with the following error: {e}",
+                stacklevel=2,
             )
         return False
 
@@ -221,7 +320,7 @@ class CascadeRun:
 
         returncode = process.wait()
         if returncode:
-            raise RunFailedException(
+            raise RunFailedError(
                 f"Run of {script} failed. See traceback above."
                 " The config and logs"
                 f" will be kept at {self.run_dir}"
@@ -233,21 +332,61 @@ class CascadeRun:
 @click.argument("script", type=str)
 @click.option("-y", is_flag=True, expose_value=True, help="Confirm run")
 @click.option("--log", is_flag=True, default=False)
+@click.option(
+    "--base",
+    default=None,
+    help="Rerun previous experiment using slug"
+    " or path to a model with saved run configuration",
+)
+@click.option(
+    "-f",
+    is_flag=True,
+    default=False,
+    help="Ignore errors, e.g."
+    " base config has fields that do not exist in target config",
+)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
-def run(script: str, y: bool, log: Optional[str], args: List[str]):
+def run(
+    script: str,
+    y: bool,
+    log: Optional[str],
+    base: Optional[str],
+    f: bool,
+    args: List[str],
+):
     """
     Run python scripts with the ability to override Config values and record logs
     """
     click.echo(f"You are about to run {script}")
 
-    with open(script, "r") as f:
-        text = f.read()
+    with open(script, "r") as script_file:
+        text = script_file.read()
 
     tree = ast.parse(text)
     cfg_node = find_config(tree)
 
     if cfg_node:
         cfg_dict = node2dict(cfg_node)
+
+        if base:
+            base_cfg = load_config(base)
+
+            check_result = can_safely_replace(cfg_dict, base_cfg)
+            print(check_result, f)
+            if not check_result.ok and not f:
+                raise Exception(
+                    f"Cannot initialize the config in the file using base from {base}."
+                    " Base has {check_result.missing_fields} fields, which are missing in"
+                    " the file's config."
+                    " You can update the config in the file, or pass -f flag."
+                    " If -f flag is passed it will automatically add missing fields"
+                    " to the config on-the-fly."
+                )
+
+            cfg_dict = base_cfg
+
+            click.echo(f"Taking base config from {base}")
+
         click.echo("The config is:")
         click.echo(pformat(cfg_dict))
 
@@ -261,7 +400,8 @@ def run(script: str, y: bool, log: Optional[str], args: List[str]):
             else:
                 raise KeyError(f"Key `{key}` is missing in the original config")
 
-        text = modify_assignments(tree, cfg_node, kwargs)
+        cfg_dict.update(kwargs)
+        text = modify_assignments(tree, cfg_node, cfg_dict)
     else:
         cfg_dict = {}
         kwargs = {}

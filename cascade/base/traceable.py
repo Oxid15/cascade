@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,8 +27,15 @@ from typing import Any, Callable, Dict, Iterable, Optional, Union
 import pendulum
 from typing_extensions import Literal
 
-from . import (Config, Meta, MetaBlock, MetaHandler, MetaIOError,
-               default_meta_format, supported_meta_formats)
+from . import (
+    Config,
+    Meta,
+    MetaBlock,
+    MetaHandler,
+    MetaIOError,
+    default_meta_format,
+    supported_meta_formats,
+)
 
 DO_NOT_UPDATE = ["created_at"]
 
@@ -64,6 +71,7 @@ def apply_prefix(get_meta):
         else:
             self._warn_no_prefix()
         return meta
+
     return wrapper
 
 
@@ -99,8 +107,8 @@ class Traceable:
         else:
             self.tags = set()
 
-        self.comments = list()
-        self.links = list()
+        self.comments = []
+        self.links = []
 
     @apply_prefix
     def get_meta(self) -> Meta:
@@ -173,7 +181,8 @@ class Traceable:
         warnings.warn(
             "Object doesn't have _meta_prefix. "
             "This may mean super().__init__() wasn't"
-            "called somewhere"
+            "called somewhere",
+            stacklevel=2,
         )
 
     def from_meta(self, meta: Union[Meta, MetaBlock]) -> None:
@@ -421,7 +430,8 @@ class TraceableOnDisk(Traceable):
             if meta_fmt != ext and meta_fmt is not None:
                 warnings.warn(
                     f"Trying to set {meta_fmt} to the object that already has {ext} "
-                    "on path {self._root}"
+                    "on path {self._root}",
+                    stacklevel=2,
                 )
 
         # if meta exists
@@ -429,7 +439,7 @@ class TraceableOnDisk(Traceable):
             try:
                 disk_meta = MetaHandler.read_dir(self._root)
             except MetaIOError as e:
-                warnings.warn(f"File reading error ignored: {e}")
+                warnings.warn(f"File reading error ignored: {e}", stacklevel=2)
             else:
                 self.from_meta(disk_meta)
 
@@ -442,7 +452,7 @@ class TraceableOnDisk(Traceable):
             _, ext = os.path.splitext(meta_paths[0])
             return ext
         else:
-            warnings.warn(f"Multiple meta files found in {self._root}")
+            warnings.warn(f"Multiple meta files found in {self._root}", stacklevel=2)
 
     def sync_meta(self) -> None:
         """
@@ -466,7 +476,7 @@ class TraceableOnDisk(Traceable):
             try:
                 meta = MetaHandler.read_dir(self._root)
             except MetaIOError as e:
-                warnings.warn(f"File reading error ignored: {e}")
+                warnings.warn(f"File reading error ignored: {e}", stacklevel=2)
 
             self_meta = self.get_meta()
             for self_block, block in zip(self_meta, meta):
@@ -477,7 +487,7 @@ class TraceableOnDisk(Traceable):
             try:
                 MetaHandler.write_dir(self._root, meta)
             except MetaIOError as e:
-                warnings.warn(f"File writing error ignored: {e}")
+                warnings.warn(f"File writing error ignored: {e}", stacklevel=2)
         else:
             created = str(pendulum.now(tz="UTC"))
             meta = self.get_meta()
@@ -486,9 +496,11 @@ class TraceableOnDisk(Traceable):
             from . import MetaHandler
 
             try:
-                MetaHandler.write(os.path.join(self._root, "meta" + self._meta_fmt), meta)
+                MetaHandler.write(
+                    os.path.join(self._root, "meta" + self._meta_fmt), meta
+                )
             except MetaIOError as e:
-                warnings.warn(f"File writing error ignored: {e}")
+                warnings.warn(f"File writing error ignored: {e}", stacklevel=2)
 
     def get_root(self) -> str:
         return self._root

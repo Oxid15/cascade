@@ -53,12 +53,10 @@ by using different parts of the library without the need to bring everything at 
 Advanced features
 *****************
 
-.. :octicon:`zap`
-
 .. grid:: 2
 
     .. grid-item::
-        .. card::  :bdg-info:`NEW` Web-UI
+        .. card::  :octicon:`browser` Web-UI
             :link: tutorials/ui.html
 
             Just do ``cascade ui`` to get a nice dashboard for your experiments

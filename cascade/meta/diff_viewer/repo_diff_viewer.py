@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import os
 from typing import Dict, Tuple
 
@@ -71,7 +72,7 @@ class RepoDiffViewer(BaseDiffViewer):
         self._check_path(path, ("repo", "line"))
 
         mev = MetaViewer(path, filt={"type": "model"})
-        objs = [meta for meta in mev]
+        objs = list(mev)
         objs = {meta[0]["name"]: meta for meta in objs}
         return objs
 
@@ -128,16 +129,12 @@ class RepoDiffViewer(BaseDiffViewer):
                 style={"margin-bottom": "10px"},
             )
 
-        try:
-            import dash  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
             from dash import dcc, html
 
-        try:
-            import dash_renderjson  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash_renderjson"):
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
                 " and can be installed via `pip install dash_renderjson`"
@@ -147,7 +144,7 @@ class RepoDiffViewer(BaseDiffViewer):
 
         self._objs = self._read_objects(self._path)
 
-        lines = dict()
+        lines = {}
         for name in self._objs:
             # /full/path/repo/line/model/file.ext
             tail, _ = os.path.split(name)

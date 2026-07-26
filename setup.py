@@ -8,7 +8,6 @@ from cascade.version import __author__, __author_email__, __version__
 
 _extras_require = {
     "opencv": ["opencv-python"],
-    "pandera": ["pandera[io]>=0.6.5,<1"],
     "pil": ["Pillow>=8.4.0,<11"],
     "pydantic": ["pydantic>=1.9.2,<3"],
     "sklearn": ["scikit-learn>=0.24.2,<2"],
@@ -49,14 +48,16 @@ setuptools.setup(
         "tqdm>=4.64.1",
         "numpy>=1.18.5",
         "pandas>=1.1.5",
-        "deepdiff>=5.0.2,<8.4.0",
+        'deepdiff>=6.7.1; python_version<="3.7"',
+        "deepdiff>=8.4.2; python_version > '3.7' and python_version <= '3.8'",
+        'deepdiff>=8.6.2; python_version>"3.8"',
         "pendulum>=2.1.2",
         "pyyaml>=5.4.1",
         "coolname>=2.0.0",
         "click>=8.0.0",
         "typing-extensions>=4.1.1,<5",
-        'astunparse ; python_version<"3.9"',
-        'orderly-set==5.3.2; python_version=="3.8"'
+        "astunparse ; python_version<'3.9'",
+        "orderly-set==5.3.2; python_version=='3.8'",
     ],
     extras_require=extras_require,
 )

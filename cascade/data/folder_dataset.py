@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -51,8 +51,8 @@ class FolderDataset(Dataset[T]):
             ]
         )
 
-    def __getitem__(self, index: Any) -> T:
-        raise_not_implemented("cascade.data.FolderDataset", "__getitem__")
+    def get(self, index: Any) -> T:
+        raise_not_implemented("cascade.data.FolderDataset", "get")
 
     def get_names(self) -> List[str]:
         """

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -173,7 +173,7 @@ def test_from_meta():
     tr.from_meta(meta)
 
     assert tr.get_meta()[0]["a"] == 1
-    assert tr.tags == set(["tag"])
+    assert tr.tags == {"tag"}
     assert tr.description == "description"
     assert [c.message for c in tr.comments] == ["lol", "kek"]
     assert len(tr.links) == 1

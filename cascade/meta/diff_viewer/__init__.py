@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,3 +19,11 @@ from .dataset_version_diff_viewer import DatasetVersionDiffViewer
 from .diff_viewer import DiffViewer
 from .repo_diff_viewer import RepoDiffViewer
 from .workspace_diff_viewer import WorkspaceDiffViewer
+
+__all__ = [
+    "BaseDiffViewer",
+    "DatasetVersionDiffViewer",
+    "DiffViewer",
+    "RepoDiffViewer",
+    "WorkspaceDiffViewer",
+]

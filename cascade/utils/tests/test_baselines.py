@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ def test():
     model = ConstantBaseline(constant=[[1, 0], [0, 1]])
     assert np.all(
         model.predict([0, 0, 0])
-        == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]]  # noqa: W503
+        == [[[1, 0], [0, 1]], [[1, 0], [0, 1]], [[1, 0], [0, 1]]]
     )
 
     model = ConstantBaseline(constant=None)

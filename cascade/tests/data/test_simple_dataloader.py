@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ def test_batches(arr, bs, result):
 )
 def test_illegal(arr, bs):
     with pytest.raises(ValueError):
-        dl = SimpleDataloader(arr, batch_size=bs)
+        SimpleDataloader(arr, batch_size=bs)
 
 
 @pytest.mark.parametrize(

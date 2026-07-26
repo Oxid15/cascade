@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -90,10 +90,10 @@ class Metric:
             # Compare all fields without `value` and `created_at`
             if (
                 __value.name == self.name
-                and __value.dataset == self.dataset  # noqa: W503
-                and __value.split == self.split  # noqa: W503
-                and __value.direction == self.direction  # noqa: W503
-                and __value.interval == self.interval  # noqa: W503
+                and __value.dataset == self.dataset
+                and __value.split == self.split
+                and __value.direction == self.direction
+                and __value.interval == self.interval
             ):
                 return True
             return False
@@ -139,13 +139,14 @@ class Loss(Metric):
     which by default has name ``loss``
     and is always directed down
     """
+
     def __init__(
         self,
         value: Optional[MetricType] = None,
         name: str = "loss",
         dataset: Optional[str] = None,
         split: Optional[str] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """
         See also
@@ -158,5 +159,5 @@ class Loss(Metric):
             value=value,
             dataset=dataset,
             split=split,
-            **kwargs
+            **kwargs,
         )

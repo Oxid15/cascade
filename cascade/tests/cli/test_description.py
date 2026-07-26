@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ def test_add(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        repo = Repo(td)
+        Repo(td)
 
         init_meta = mh.read_dir(td)
 
@@ -53,7 +53,7 @@ def test_rm(tmp_path_str):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         mh = MetaHandler()
-        repo = Repo(td)
+        Repo(td)
 
         result = runner.invoke(cli, args=["desc", "add"], input="Hello")
 

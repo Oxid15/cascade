@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,18 +30,18 @@ def test():
 
     ds1, ds2 = cdd.split(ds)
 
-    assert [item for item in ds1] == [0, 1]
-    assert [item for item in ds2] == [2, 3, 4]
+    assert list(ds1) == [0, 1]
+    assert list(ds2) == [2, 3, 4]
 
     ds1, ds2 = cdd.split(ds, 0.6)
 
-    assert [item for item in ds1] == [0, 1, 2]
-    assert [item for item in ds2] == [3, 4]
+    assert list(ds1) == [0, 1, 2]
+    assert list(ds2) == [3, 4]
 
     ds1, ds2 = cdd.split(ds, num=4)
 
-    assert [item for item in ds1] == [0, 1, 2, 3]
-    assert [item for item in ds2] == [4]
+    assert list(ds1) == [0, 1, 2, 3]
+    assert list(ds2) == [4]
 
     # This means pipeline was made
     assert len(ds1.get_meta()) == 2
@@ -51,14 +51,14 @@ def test_wrong_usage():
     ds = cdd.Wrapper([0, 1, 2, 3])
 
     with pytest.raises(ValueError):
-        a, b = cdd.split(ds, None)
+        cdd.split(ds, None)
 
 
 def test_empty():
     ds = cdd.Wrapper([])
 
     with pytest.raises(ValueError):
-        a, b = cdd.split(ds, num=10)
+        cdd.split(ds, num=10)
 
     with pytest.raises(ValueError):
-        a, b = cdd.split(ds)
+        cdd.split(ds)

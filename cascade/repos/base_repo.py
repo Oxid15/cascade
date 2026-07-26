@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ class BaseRepo(Traceable, ABC):
         **kwargs: Any,
     ) -> None:
         self._root = path
-        self._lines = dict()
+        self._lines = {}
         super().__init__(*args, **kwargs)
 
     @abstractmethod
