@@ -128,6 +128,7 @@ Experiment management
 
     pipeline_building.ipynb
     model_training.ipynb
+    track_logs
     model_training_trainers.ipynb
     track_a_file
     track_dataset_errors
