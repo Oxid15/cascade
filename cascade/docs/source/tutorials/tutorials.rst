@@ -24,7 +24,6 @@ Cascade has a set of optional dependencies, which can be installed with the foll
 .. code-block:: bash
 
     pip install cascade-ml[opencv]   # Use opencv as image backend
-    pip install cascade-ml[pandera]  # Validate pandas dataframes with Pandera
     pip install cascade-ml[pil]      # Use Pillow as image backend
     pip install cascade-ml[pydantic] # Use data validation modifiers
     pip install cascade-ml[sklearn]  # Scikit-learn integration

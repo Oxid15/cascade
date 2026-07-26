@@ -115,8 +115,6 @@ class DataCard:
         schema: Optional[Dict[Any, Any]]
             Schema dictionary describing table datasets,
             their columns, data types, possible values, etc.
-            Panderas schema objects can be used when converted into
-            dictionaries
         """
         self.data = dict(
             name=name,
