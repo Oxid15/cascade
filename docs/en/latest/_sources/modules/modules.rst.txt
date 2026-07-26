@@ -22,7 +22,6 @@ Modules
     cascade.trainers
     cascade.utils.baselines
     cascade.utils.nlp
-    cascade.utils.pandera
     cascade.utils.sklearn
     cascade.utils.tables
     cascade.utils.time_series

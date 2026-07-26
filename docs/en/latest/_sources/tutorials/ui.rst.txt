@@ -84,7 +84,7 @@ Configs
 -------
 
 Here you can see configs produced by Cascade's :ref:`configuration management
-system</tutorials/configuration.rst>`. If your model has a config saved it will be displayed here.
+system</tutorials/configuration_management.rst>`. If your model has a config saved it will be displayed here.
 
 .. image:: ../model-config.png
   :alt: Model config page of Cascade - Small scale MLOps library
