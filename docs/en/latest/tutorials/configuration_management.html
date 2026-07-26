@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Configuration management &#8212; cascade 0.17.0 documentation</title>
+
+
+
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only {
+        display: none !important;
+      }
+    </style>
+  </noscript>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+  <link rel="stylesheet" type="text/css" href="../pygments.css?v=8f2a1f02" />
+  <link rel="stylesheet" type="text/css" href="../copybutton.css?v=76b2166b" />
+  <link rel="stylesheet" type="text/css" href="../sphinx-design.min.css?v=95c83b7e" />
+  <link rel="stylesheet" type="text/css" href="../css/custom.css?v=9cb1bd10" />
+
+  <!-- So that users can add custom icons -->
+  <script defer src="../scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+  <script src="../documentation_options.js?v=0c3dd48d"></script>
+  <script src="../doctools.js?v=9bcbadda"></script>
+  <script src="../sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../clipboard.min.js?v=a7894cd8"></script>
+  <script src="../copybutton.js?v=f281be69"></script>
+  <script src="../design-tabs.js?v=f930bc37"></script>
+  <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA="
+    src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied'
+    });
+  </script>
+  <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-KD8QDKDMD7');
+  </script>
+  <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/configuration_management';</script>
+  <script>
+    DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+    DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
+    DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
+    DOCUMENTATION_OPTIONS.show_version_warning_banner =
+      false;
+  </script>
+  <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+  <link rel="index" title="Index" href="../genindex.html" />
+  <link rel="search" title="Search" href="../search.html" />
+  <link rel="next" title="Advanced Experiment Management" href="advanced_experiment_management.html" />
+  <link rel="prev" title="Cascade UI" href="ui.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en" />
+  <meta name="docsearch:version" content="" />
+
+
+  <script src="../searchtools.js"></script>
+  <script src="../language_data.js"></script>
+  <script src="../searchindex.js"></script>
+
+</head>
+
+<body data-default-mode="">
+
+
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+
+  <div id="pst-scroll-pixel-helper"></div>
+
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+
+
+
+  <dialog id="pst-search-dialog">
+
+    <form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+        aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+      <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+    </form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+    <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+  </div>
+
+
+  <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <div class="bd-header__inner bd-page-width">
+      <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+        <span class="fa-solid fa-bars"></span>
+      </button>
+
+
+      <div class="col-lg-3 navbar-header-items__start">
+
+        <div class="navbar-item">
+
+
+
+
+
+          <a class="navbar-brand logo" href="../index.html">
+
+
+
+
+
+
+
+
+
+
+            <img src="../logo_light.svg" class="logo__image only-light" alt="cascade 0.17.0 documentation - Home" />
+            <img src="../logo_dark.svg" class="logo__image only-dark pst-js-only"
+              alt="cascade 0.17.0 documentation - Home" />
+
+
+          </a>
+        </div>
+
+        <div class="navbar-item">
+          <div class="version-switcher__container dropdown pst-js-only">
+            <button id="pst-version-switcher-button-2" type="button"
+              class="version-switcher__button btn btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+              aria-haspopup="listbox" aria-controls="pst-version-switcher-list-2" aria-label="Version switcher list">
+              Choose version <!-- this text may get changed later by javascript -->
+              <span class="caret"></span>
+            </button>
+            <div id="pst-version-switcher-list-2" class="version-switcher__menu dropdown-menu list-group-flush py-0"
+              role="listbox" aria-labelledby="pst-version-switcher-button-2">
+              <!-- dropdown will be populated by javascript on page load -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-9 navbar-header-items">
+
+        <div class="me-auto navbar-header-items__center">
+
+          <div class="navbar-item">
+            <nav>
+              <ul class="bd-navbar-elements navbar-nav">
+
+                <li class="nav-item current active">
+                  <a class="nav-link nav-internal" href="tutorials.html">
+                    Tutorial
+                  </a>
+                </li>
+
+
+                <li class="nav-item ">
+                  <a class="nav-link nav-internal" href="../howtos/howtos.html">
+                    How-to guides
+                  </a>
+                </li>
+
+
+                <li class="nav-item ">
+                  <a class="nav-link nav-internal" href="../explanations/explanations.html">
+                    Explanations
+                  </a>
+                </li>
+
+
+                <li class="nav-item ">
+                  <a class="nav-link nav-internal" href="../modules/modules.html">
+                    API reference
+                  </a>
+                </li>
+
+              </ul>
+            </nav>
+          </div>
+
+        </div>
+
+
+        <div class="navbar-header-items__end">
+
+          <div class="navbar-item navbar-persistent--container">
+
+
+            <button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search"
+              data-bs-placement="bottom" data-bs-toggle="tooltip">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span class="search-button__default-text">Search</span>
+              <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd
+                  class="kbd-shortcut__modifier">K</kbd></span>
+            </button>
+          </div>
+
+
+          <div class="navbar-item">
+
+            <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom"
+              title="Color mode">
+              <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle"
+                aria-label="Color mode" data-bs-toggle="dropdown">
+                <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+                <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+                <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto"
+                  title="System Settings"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i
+                      class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+                <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i
+                      class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+                <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i
+                      class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="navbar-item">
+            <ul class="navbar-icon-links" aria-label="Icon Links">
+              <li class="nav-item">
+
+
+
+
+
+
+
+
+                <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon"
+                  rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i
+                    class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span
+                    class="visually-hidden">GitHub</span></a>
+              </li>
+              <li class="nav-item">
+
+
+
+
+
+
+
+
+                <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener"
+                  target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i
+                    class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i><span
+                    class="visually-hidden">Twitter</span></a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="navbar-persistent--mobile">
+
+        <button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search"
+          data-bs-placement="bottom" data-bs-toggle="tooltip">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span class="search-button__default-text">Search</span>
+          <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd
+              class="kbd-shortcut__modifier">K</kbd></span>
+        </button>
+      </div>
+
+
+
+      <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+        <span class="fa-solid fa-outdent"></span>
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+
+
+
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+
+
+
+        <div class="sidebar-header-items sidebar-primary__section">
+
+
+          <div class="sidebar-header-items__center">
+
+
+
+            <div class="navbar-item">
+              <nav>
+                <ul class="bd-navbar-elements navbar-nav">
+
+                  <li class="nav-item current active">
+                    <a class="nav-link nav-internal" href="tutorials.html">
+                      Tutorial
+                    </a>
+                  </li>
+
+
+                  <li class="nav-item ">
+                    <a class="nav-link nav-internal" href="../howtos/howtos.html">
+                      How-to guides
+                    </a>
+                  </li>
+
+
+                  <li class="nav-item ">
+                    <a class="nav-link nav-internal" href="../explanations/explanations.html">
+                      Explanations
+                    </a>
+                  </li>
+
+
+                  <li class="nav-item ">
+                    <a class="nav-link nav-internal" href="../modules/modules.html">
+                      API reference
+                    </a>
+                  </li>
+
+                </ul>
+              </nav>
+            </div>
+
+
+          </div>
+
+
+
+          <div class="sidebar-header-items__end">
+
+            <div class="navbar-item">
+
+              <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" title="Color mode">
+                <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle"
+                  aria-label="Color mode" data-bs-toggle="dropdown">
+                  <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+                  <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+                  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto"
+                    title="System Settings"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i
+                        class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+                  <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i
+                        class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+                  <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i
+                        class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="navbar-item">
+              <ul class="navbar-icon-links" aria-label="Icon Links">
+                <li class="nav-item">
+
+
+
+
+
+
+
+
+                  <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link pst-navbar-icon"
+                    rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i
+                      class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span
+                      class="visually-hidden">GitHub</span></a>
+                </li>
+                <li class="nav-item">
+
+
+
+
+
+
+
+
+                  <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener"
+                    target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i
+                      class="fa-brands fa-twitter fa-lg" aria-hidden="true"></i><span
+                      class="visually-hidden">Twitter</span></a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="sidebar-primary-items__start sidebar-primary__section">
+          <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button"
+              aria-expanded="true" aria-controls="pst-primary-sidebar">
+              <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor"
+                  d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z" />
+              </svg>
+              <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+              <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+            </button></div>
+          <div class="sidebar-primary-item">
+
+            <nav class="bd-docs-nav bd-links" aria-label="Section Navigation">
+              <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+              <div class="bd-toc-item navbar-nav">
+                <ul class="current nav bd-sidenav">
+                  <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorial</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="ui.html">Cascade UI</a></li>
+                  <li class="toctree-l1 current active"><a class="current reference internal" href="#">Configuration
+                      management</a></li>
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="advanced_experiment_management.html">Advanced Experiment Management</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="results_querying.html">Experiment results
+                      querying</a></li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+
+
+        <div class="sidebar-primary-items__end sidebar-primary__section">
+          <div class="sidebar-primary-item">
+            <div id="ethical-ad-placement" class="flat" data-ea-publisher="readthedocs"
+              data-ea-type="readthedocs-sidebar" data-ea-manual="true">
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <main id="main-content" class="bd-main" role="main">
+
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+
+            <div class="bd-header-article d-print-none">
+              <div class="header-article-items header-article__inner">
+
+                <div class="header-article-items__start">
+
+                  <div class="header-article-item">
+
+                    <nav aria-label="Breadcrumb" class="d-print-none">
+                      <ul class="bd-breadcrumbs">
+
+                        <li class="breadcrumb-item breadcrumb-home">
+                          <a href="../index.html" class="nav-link" aria-label="Home">
+                            <i class="fa-solid fa-home"></i>
+                          </a>
+                        </li>
+
+                        <li class="breadcrumb-item"><a href="tutorials.html" class="nav-link">Tutorial</a></li>
+
+                        <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Configuration
+                            management</span></li>
+                      </ul>
+                    </nav>
+                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+
+
+
+
+            <div id="searchbox"></div>
+            <article class="bd-article">
+
+              <section id="configuration-management">
+                <h1>Configuration management<a class="headerlink" href="#configuration-management"
+                    title="Link to this heading">#</a></h1>
+                <p>Using <code class="docutils literal notranslate"><span class="pre">cascade.base.Config</span></code>
+                  class and <code
+                    class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">run</span></code>
+                  CLI command you can:</p>
+                <ol class="arabic simple">
+                  <li>
+                    <p>Configure your scripts in code using class definitions</p>
+                  </li>
+                  <li>
+                    <p>Override config values from CLI without modifying the code</p>
+                  </li>
+                  <li>
+                    <p>Attach configs to models as special files</p>
+                  </li>
+                  <li>
+                    <p>Capture and save script logs</p>
+                  </li>
+                </ol>
+                <section id="script-config">
+                  <h2>Script config<a class="headerlink" href="#script-config" title="Link to this heading">#</a></h2>
+                  <p>Here is a sample script featuring a Config inside a file called <code
+                      class="docutils literal notranslate"><span class="pre">config_demo.py</span></code>.</p>
+                  <p>To enable configuration you need to define a new class that inherits from <code
+                      class="docutils literal notranslate"><span class="pre">cascade.base.Config</span></code>.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TrainConfig</span><span class="p">(</span><span class="n">Config</span><span class="p">):</span>
+    <span class="n">lr</span> <span class="o">=</span> <span class="mf">1e-6</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">total_iterations</span> <span class="o">=</span> <span class="mi">10000</span>
+    <span class="n">image_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">use_as_object</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">TrainConfig</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This config is for </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">total_iterations</span><span class="si">}</span><span class="s2"> iterations&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">use_as_kwargs</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">total_iterations</span><span class="p">,</span> <span class="n">image_size</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image height is </span><span class="si">{</span><span class="n">image_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> and width is </span><span class="si">{</span><span class="n">image_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">TrainConfig</span><span class="p">()</span>
+
+    <span class="n">use_as_object</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+
+    <span class="n">use_as_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">cfg</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+</pre>
+                    </div>
+                  </div>
+                  <div class="admonition important">
+                    <p class="admonition-title">Important</p>
+                    <p>In the current implementation Cascade supports only one config object per file.
+                      However this may change in the future versions.</p>
+                  </div>
+                  <p>Now you can leverage overrides without modifying the code using:</p>
+                  <div class="highlight-bash notranslate">
+                    <div class="highlight">
+                      <pre><span></span>cascade<span class="w"> </span>run<span class="w"> </span>config_demo.py<span class="w"> </span>--total_iterations<span class="w"> </span><span class="m">100</span><span class="w"> </span>--image_size<span class="w"> </span><span class="s1">&#39;(24, 24)&#39;</span>
+</pre>
+                    </div>
+                  </div>
+                  <p>This will display the current config and your overrides like this:</p>
+                  <div class="highlight-text notranslate">
+                    <div class="highlight">
+                      <pre><span></span>You are about to run config_demo.py
+The config is:
+{&#39;batch_size&#39;: 16,
+&#39;image_size&#39;: &#39;&lt;ast.Tuple object at 0x7955885466b0&gt;&#39;,
+&#39;lr&#39;: 1e-06,
+&#39;total_iterations&#39;: 10000}
+The arguments you passed:
+{&#39;image_size&#39;: (24, 24), &#39;total_iterations&#39;: 100}
+Confirm? [y/N]:
+</pre>
+                    </div>
+                  </div>
+                  <p>After confirmation you should see:</p>
+                  <div class="highlight-text notranslate">
+                    <div class="highlight">
+                      <pre><span></span>This config is for 100 iterations
+Image height is 24 and width is 24
+</pre>
+                    </div>
+                  </div>
+                  <p>In overrides you can use any python literal expressions. In other
+                    words you can write simple things like exponentials <code
+                      class="docutils literal notranslate"><span class="pre">1e-10</span></code>,
+                    passing <code class="docutils literal notranslate"><span class="pre">None</span></code> or other
+                    constants, but nothing that requires evaluation
+                    or the use of variables.</p>
+                  <div class="admonition note">
+                    <p class="admonition-title">Note</p>
+                    <p>If you want to launch scripts without confirmation just pass <cite>-y</cite> flag.</p>
+                  </div>
+                </section>
+                <section id="configuration-tracking">
+                  <h2>Configuration tracking<a class="headerlink" href="#configuration-tracking"
+                      title="Link to this heading">#</a></h2>
+                  <p>Having the ability to override hardcoded values with CLI is great, but configs
+                    need to be attached to actual experiments they belong to.
+                    When we do <code
+                      class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">run</span></code>
+                    it actually knows nothing about what kind of experiment is
+                    inside the script. This means that you can use overrides separately even if you do not track
+                    anything in your scripts. However, at the same time it creates tracking problems because only
+                    <code class="docutils literal notranslate"><span class="pre">run</span></code> knows about overrides
+                    and logs and only the script knows about repos and lines.
+                    To address this problem special <code
+                      class="docutils literal notranslate"><span class="pre">Model</span></code> methods come into play.
+                  </p>
+                  <p>Let’s see next example, where we use special <code
+                      class="docutils literal notranslate"><span class="pre">add_config</span></code> method. Notice how
+                    even while having the actual config in code we do not pass it directly to the method.
+                    It is unnecessary since there is underlying communication between <code
+                      class="docutils literal notranslate"><span class="pre">run</span></code> and the script.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelLine</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicModel</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TrainConfig</span><span class="p">(</span><span class="n">Config</span><span class="p">):</span>
+    <span class="n">lr</span> <span class="o">=</span> <span class="mf">1e-6</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">total_iterations</span> <span class="o">=</span> <span class="mi">10000</span>
+    <span class="n">image_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">TrainConfig</span><span class="p">()</span>
+
+    <span class="n">line</span> <span class="o">=</span> <span class="n">ModelLine</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">BasicModel</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">add_config</span><span class="p">()</span>
+
+    <span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre>
+                    </div>
+                  </div>
+                  <p>You will find your configs at
+                    <code
+                      class="docutils literal notranslate"><span class="pre">line/00000/files/cascade_config.json</span></code>
+                    and overrides at <code
+                      class="docutils literal notranslate"><span class="pre">line/00000/files/cascade_overrides.json</span></code>.
+                  </p>
+                  <div class="admonition note">
+                    <p class="admonition-title">Note</p>
+                    <p><code class="docutils literal notranslate"><span class="pre">run</span></code> creates temporary
+                      folder for every launch and stores everything there,
+                      but only for the time script is executing. When you call <code
+                        class="docutils literal notranslate"><span class="pre">add_config</span></code> it remembers
+                      the location of the file and saves it when <code
+                        class="docutils literal notranslate"><span class="pre">line.save</span></code> is called. The
+                      functionality is
+                      very similar to <code
+                        class="docutils literal notranslate"><span class="pre">add_file</span></code> and under the hood
+                      it actually calls <code
+                        class="docutils literal notranslate"><span class="pre">add_file</span></code>.</p>
+                  </div>
+                </section>
+                <section id="logs-tracking">
+                  <h2>Logs tracking<a class="headerlink" href="#logs-tracking" title="Link to this heading">#</a></h2>
+                  <p>Another useful feature of <code
+                      class="docutils literal notranslate"><span class="pre">run</span></code> is log tracking. Logs are
+                    captured line by line and immediately displayed
+                    just as if you would run the script regularly. While displaying logs <code
+                      class="docutils literal notranslate"><span class="pre">cascade</span></code> also writes them
+                    into the same temporary folder as configs.</p>
+                  <p>Logs tracking is not enabled by default and can be turned on by adding <code
+                      class="docutils literal notranslate"><span class="pre">--log</span></code> anywhere after <code
+                      class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">run</span></code>
+                    command.</p>
+                </section>
+                <section id="error-handling">
+                  <h2>Error handling<a class="headerlink" href="#error-handling" title="Link to this heading">#</a></h2>
+                  <p>Logs and configs are saved when <code
+                      class="docutils literal notranslate"><span class="pre">line.save</span></code> is called, but what
+                    if an error will occur before that moment?
+                    This will almost always be the case - something may go wrong in the script and <code
+                      class="docutils literal notranslate"><span class="pre">save</span></code> will never be called.
+                    This is why <code class="docutils literal notranslate"><span class="pre">run</span></code> will not
+                    delete temporary folder if an error occurs.
+                    Let’s see an example.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestConfig</span><span class="p">(</span><span class="n">Config</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Script is running&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;An error occured!&quot;</span><span class="p">)</span>
+</pre>
+                    </div>
+                  </div>
+                  <p>We will run the code above with:</p>
+                  <div class="highlight-bash notranslate">
+                    <div class="highlight">
+                      <pre><span></span>cascade<span class="w"> </span>run<span class="w"> </span>run_error_handling.py<span class="w"> </span>-y<span class="w"> </span>--log
+</pre>
+                    </div>
+                  </div>
+                  <p>Skipping the long trackeback this is what you should see:</p>
+                  <div class="highlight-text notranslate">
+                    <div class="highlight">
+                      <pre><span></span>cascade.cli.run.RunFailedError: Run of run_error_handling.py failed.
+See traceback above. The config and logs will be kept at
+/home/ilia/local/cascade_proj/cascade_repo/cascade/docs/source/tutorials/.cascade/20241117_154453_72
+for post-mortem analysis
+</pre>
+                    </div>
+                  </div>
+                  <p>This is what you should find in <code
+                      class="docutils literal notranslate"><span class="pre">.cascade/20241117_154453_72/logs/cascade_run.log</span></code>
+                  </p>
+                  <div class="highlight-text notranslate">
+                    <div class="highlight">
+                      <pre><span></span>Script is running
+Traceback (most recent call last):
+File &quot;&lt;string&gt;&quot;, line 10, in &lt;module&gt;
+RuntimeError: An error occured!
+</pre>
+                    </div>
+                  </div>
+                  <p>You will also find config and overrides in <code
+                      class="docutils literal notranslate"><span class="pre">.cascade</span></code> folder.</p>
+                </section>
+                <section id="reruns">
+                  <h2>Reruns<a class="headerlink" href="#reruns" title="Link to this heading">#</a></h2>
+                  <p>In research it is very common to run clean experiments - you change a single aspect of training and
+                    observe the effect.
+                    In this process changes accumulate through experiments and the need to base your current experiment
+                    on the previous one becomes apparent.</p>
+                  <p>This is why Cascade implements config reruns - you can pass the identifier of a previous experiment
+                    and base your new one on it.</p>
+                  <p>Here is the config inside the <code
+                      class="docutils literal notranslate"><span class="pre">config_tracking.py</span></code> file.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelLine</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicModel</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TrainConfig</span><span class="p">(</span><span class="n">Config</span><span class="p">):</span>
+    <span class="n">lr</span> <span class="o">=</span> <span class="mf">1e-6</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">total_iterations</span> <span class="o">=</span> <span class="mi">10000</span>
+    <span class="n">image_size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">TrainConfig</span><span class="p">()</span>
+
+    <span class="n">line</span> <span class="o">=</span> <span class="n">ModelLine</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">BasicModel</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">add_config</span><span class="p">()</span>
+
+    <span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre>
+                    </div>
+                  </div>
+                  <p>Let’s run a new experiment to create a base for our rerun. We will make changes to the config in
+                    file to
+                    demonstrate how overriding works.</p>
+                  <div class="highlight-bash notranslate">
+                    <div class="highlight">
+                      <pre><span></span>cascade<span class="w"> </span>run<span class="w"> </span>config_tracking.py<span class="w"> </span>-y<span class="w"> </span>--lr<span class="w"> </span><span class="s1">&#39;1e-5&#39;</span><span class="w"> </span>--batch_size<span class="w"> </span><span class="m">8</span>
+</pre>
+                    </div>
+                  </div>
+                  <p>Now we need to identify the experiment somehow. The easiest way is to get its slug. We use <code
+                      class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">query</span></code>
+                    for that.</p>
+                  <div class="highlight-text notranslate">
+                    <div class="highlight">
+                      <pre><span></span>──────────────────────────────────────────
+slug
+──────────────────────────────────────────
+fabulous_active_cockatoo
+──────────────────────────────────────────
+Finished: 2026-07-19 15:19:28.474409+03:00
+Returned rows: 1
+Time: 0.0009s
+</pre>
+                    </div>
+                  </div>
+                  <p>After knowing the slug you can insert it into the path to the line like this.
+                    In this run base config will override the config inside the file and we are making changes to the
+                    base.</p>
+                  <div class="highlight-bash notranslate">
+                    <div class="highlight">
+                      <pre><span></span>cascade<span class="w"> </span>run<span class="w"> </span>config_tracking.py<span class="w"> </span>-y<span class="w"> </span>--base<span class="w"> </span>line/fabulous_active_cockatoo<span class="w"> </span>--batch_size<span class="w"> </span><span class="m">4</span>
+</pre>
+                    </div>
+                  </div>
+                  <p>To verify our results we can get the contents of the saved config.</p>
+                  <div class="highlight-bash notranslate">
+                    <div class="highlight">
+                      <pre><span></span>cat<span class="w"> </span>line/00001/files/cascade_config.json
+</pre>
+                    </div>
+                  </div>
+                  <p>We can see that <cite>lr</cite> is from the base, not from the file and <cite>batch_size</cite> is
+                    now from our latest experiment.</p>
+                  <div class="highlight-javascript notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;lr&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">1e-05</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;batch_size&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">4</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;total_iterations&quot;</span><span class="o">:</span><span class="w"> </span><span class="mf">10000</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;image_size&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="mf">200</span><span class="p">,</span>
+<span class="w">        </span><span class="mf">200</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</pre>
+                    </div>
+                  </div>
+                </section>
+              </section>
+
+
+            </article>
+
+
+
+
+
+            <footer class="prev-next-footer d-print-none">
+
+              <div class="prev-next-area">
+                <a class="left-prev" href="ui.html" title="previous page">
+                  <i class="fa-solid fa-angle-left"></i>
+                  <div class="prev-next-info">
+                    <p class="prev-next-subtitle">previous</p>
+                    <p class="prev-next-title">Cascade UI</p>
+                  </div>
+                </a>
+                <a class="right-next" href="advanced_experiment_management.html" title="next page">
+                  <div class="prev-next-info">
+                    <p class="prev-next-subtitle">next</p>
+                    <p class="prev-next-title">Advanced Experiment Management</p>
+                  </div>
+                  <i class="fa-solid fa-angle-right"></i>
+                </a>
+              </div>
+            </footer>
+
+          </div>
+
+
+
+          <dialog id="pst-secondary-sidebar-modal"></dialog>
+          <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc">
+            <div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+              <div class="sidebar-secondary-item">
+                <div id="pst-page-navigation-heading-2" class="page-toc tocsection onthispage">
+                  <i class="fa-solid fa-list"></i> On this page
+                </div>
+                <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+                  <ul class="pst-show_toc_level nav section-nav flex-column">
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#script-config">Script config</a></li>
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#configuration-tracking">Configuration tracking</a></li>
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#logs-tracking">Logs tracking</a></li>
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#error-handling">Error handling</a></li>
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#reruns">Reruns</a></li>
+                  </ul>
+                </nav>
+              </div>
+
+              <div class="sidebar-secondary-item">
+
+                <div class="tocsection sourcelink">
+                  <a href="../_sources/tutorials/configuration_management.rst.txt">
+                    <i class="fa-solid fa-file-lines"></i> Show Source
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+        <footer class="bd-footer-content">
+
+        </footer>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+    <div class="bd-footer__inner bd-page-width">
+
+      <div class="footer-items__start">
+
+        <div class="footer-item">
+
+          <p class="copyright">
+
+            © Copyright 2022-2026, Ilia Moiseev.
+            <br />
+
+          </p>
+        </div>
+
+        <div class="footer-item">
+
+          <p class="sphinx-version">
+            Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+            <br />
+          </p>
+        </div>
+
+      </div>
+
+
+
+      <div class="footer-items__end">
+
+        <div class="footer-item">
+          <p class="theme-version">
+            <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+            Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx
+              Theme</a> 0.20.0.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+</body>
+
+</html>
