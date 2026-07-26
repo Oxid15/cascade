@@ -49,6 +49,9 @@ Install requirements
 pip install -r cascade/docs/requirements.txt
 ```
 
+You may also need to install `pandoc`
+https://pandoc.org/installing.html
+
 Build the docs
 
 ```bash
@@ -60,7 +63,21 @@ Format of docstrings is `numpy`.
 
 ### Code
 
-Cascade uses `flake8`, `black` and `isort`. Be sure that `flake8` passes
-before pushing the code.
+Cascade uses `ruff`. Be sure that `ruff check .` passes before pushing the code.
 
 Each file should have license notice in the header - be sure it is included.
+
+### Release Checklist
+
+Use this checklist before every new release
+
+- [ ] Code quality
+	- [ ] Version is bumped
+	- [ ] Tests are passing on every supported system
+	- [ ] Linters passing
+- [ ] Documentation
+	- [ ] Builds without warnings
+	- [ ] License is up to date
+	- [ ] cascade/docs/source/_static/switcher.json is up to date
+    - [ ] README is relevant
+- [ ] Changelog

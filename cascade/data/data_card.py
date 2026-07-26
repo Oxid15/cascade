@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -76,8 +76,6 @@ class DataCard:
     ...     metrics={"quality": 100},
     ...     schema={"label": "value"},
     ...     custom_field="hello")
-    >>> dr = DataRegistrator('data_log.yml')
-    >>> dr.register(dc)
     """
 
     def __init__(
@@ -117,17 +115,15 @@ class DataCard:
         schema: Optional[Dict[Any, Any]]
             Schema dictionary describing table datasets,
             their columns, data types, possible values, etc.
-            Panderas schema objects can be used when converted into
-            dictionaries
         """
         self.data = dict(
             name=name,
             desc=desc,
             source=source,
             goal=goal,
-            labeling_info=asdict(labeling_info)
-            if labeling_info is not None
-            else labeling_info,
+            labeling_info=(
+                asdict(labeling_info) if labeling_info is not None else labeling_info
+            ),
             size=size,
             metrics=metrics,
             schema=schema,

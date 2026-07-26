@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -41,58 +41,62 @@ class RemoveResult:
     traceback: Optional[str] = None
 
 
-def remove_files(path: str) -> List[RemoveResult]:
-    if not os.path.exists(path):
-        return [RemoveResult("MISS")]
-
-    files = os.listdir(path)
-    if len(files) == 0:
-        return [RemoveResult("MISS")]
-
+def remove_files(paths: List[str]) -> List[RemoveResult]:
     results = []
-    for name in files:
-        file_path = os.path.join(path, name)
+    for path in paths:
+        if not os.path.exists(path):
+            results.append(RemoveResult("MISS"))
+
         try:
-            os.remove(file_path)
+            os.remove(path)
         except Exception:
             tb = traceback.format_exc()
-            results.append(RemoveResult("FAIL", traceback=tb, path=file_path))
+            results.append(RemoveResult("FAIL", traceback=tb, path=path))
         else:
             results.append(RemoveResult("OKAY"))
     return results
 
 
-def remove_model_artifacts(path) -> List[RemoveResult]:
-    return remove_files(os.path.join(path, "artifacts"))
+def find_model_artifacts(path) -> List[str]:
+    return [
+        os.path.join(path, "artifacts", res) for res in os.listdir(os.path.join(path, "artifacts"))
+    ]
 
 
-def remove_line_artifacts(path, type) -> List[List[RemoveResult]]:
-    line = create_container(type, path)
+def find_line_artifacts(path) -> List[str]:
+    line = create_container("model_line", path)
     line_results = []
     for name in line.get_model_names():
-        results = remove_model_artifacts(os.path.join(path, name))
-        line_results.append(results)
+        results = find_model_artifacts(os.path.join(path, name))
+        line_results.extend(results)
     return line_results
 
 
-def remove_repo_artifacts(path) -> List[List[List[RemoveResult]]]:
+def find_repo_artifacts(path) -> List[str]:
     repo = create_container("repo", path)
     repo_results = []
     for name in repo.get_line_names():
-        line_meta = repo[name].get_meta()
-        line_type = line_meta[0].get("type", "model_line")
-        results = remove_line_artifacts(os.path.join(path, name), line_type)
-        repo_results.append(results)
+        results = find_line_artifacts(os.path.join(path, name))
+        repo_results.extend(results)
     return repo_results
 
 
-def remove_wp_artifacts(path) -> List[List[List[List[RemoveResult]]]]:
+def find_workspace_artifacts(path) -> List[str]:
     wp = create_container("workspace", path)
     wp_results = []
     for name in wp.get_repo_names():
-        results = remove_repo_artifacts(os.path.join(path, name))
-        wp_results.append(results)
+        results = find_repo_artifacts(os.path.join(path, name))
+        wp_results.extend(results)
     return wp_results
+
+
+find_obj_artifacts = {
+    "model": find_model_artifacts,
+    "line": find_line_artifacts,
+    "model_line": find_line_artifacts,
+    "repo": find_repo_artifacts,
+    "workspace": find_workspace_artifacts,
+}
 
 
 @click.group("artifact")
@@ -111,50 +115,25 @@ def artifact_rm(ctx, y):
     Remove artifacts from the whole container recursively
     """
 
-    if not y:
-        click.confirm("Confirm?", abort=True)
-
-    results_list = []
-    flat_results = []
-    if ctx.obj["type"] == "model":
-        results = remove_model_artifacts(ctx.obj["cwd"])
-        results_list.append(results)
-        flat_results.extend(results)
-    elif ctx.obj["type"] == "line":
-        line_results = remove_line_artifacts(ctx.obj["cwd"], "model_line")
-        for results in line_results:
-            results_list.append(results)
-            flat_results.extend(results)
-    elif ctx.obj["type"] == "model_line":
-        line_results = remove_line_artifacts(ctx.obj["cwd"], "model_line")
-        for results in line_results:
-            results_list.append(results)
-            flat_results.extend(results)
-    elif ctx.obj["type"] == "repo":
-        repo_results = remove_repo_artifacts(ctx.obj["cwd"])
-        for line_results in repo_results:
-            for results in line_results:
-                results_list.append(results)
-                flat_results.extend(results)
-    elif ctx.obj["type"] == "workspace":
-        wp_results = remove_wp_artifacts(ctx.obj["cwd"])
-        for repo_results in wp_results:
-            for line_results in repo_results:
-                for results in line_results:
-                    results_list.append(results)
-                    flat_results.extend(results)
+    if ctx.obj["type"] in find_obj_artifacts:
+        paths = find_obj_artifacts[ctx.obj["type"]](ctx.obj["cwd"])
     else:
-        raise NotImplementedError(f"Cannot remove artifact from {ctx.obj['type']}")
+        raise NotImplementedError(f"Cannot remove artifacts from {ctx.obj['type']}")
 
-    c = Counter(res.status for res in flat_results)
+    if not y:
+        click.confirm(f"Will try to delete {len(paths)}. Confirm?", abort=True)
 
-    click.echo(f"Found {c['OKAY'] + c['FAIL']} files in {len(results_list)} models")
+    remove_results = remove_files(paths)
+
+    c = Counter(res.status for res in remove_results)
+
+    click.echo(f"Found {c['OKAY'] + c['FAIL']} files inside")
     click.echo(f"Removed: {c['OKAY']}")
     click.echo(f"Missing files: {c['MISS']}")
     click.echo(f"Failed: {c['FAIL']}")
 
     if c["FAIL"] != 0:
-        for res in flat_results:
+        for res in remove_results:
             if res.status == "FAIL":
                 click.echo(f"Failed to remove {res.path}")
                 click.echo(res.traceback)

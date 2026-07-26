@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,8 +42,8 @@ def test_save_load(tmp_path_str):
     ds01 = line.load("0.1")
     ds10 = line.load("1.0")
 
-    assert [1, 2, 3] == [i for i in ds01]
-    assert [2, 3, 4] == [i for i in ds10]
+    assert [1, 2, 3] == list(ds01)
+    assert [2, 3, 4] == list(ds10)
 
 
 def test_get_version(tmp_path_str):

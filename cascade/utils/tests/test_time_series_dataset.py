@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,8 +28,7 @@ MODULE_PATH = os.path.dirname(
 )
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.utils.time_series import (Align, Average, Interpolate,
-                                       TimeSeriesDataset)
+from cascade.utils.time_series import Align, Average, Interpolate, TimeSeriesDataset
 
 
 @pytest.mark.parametrize(
@@ -38,7 +37,7 @@ from cascade.utils.time_series import (Align, Average, Interpolate,
         [
             d.to_pydatetime()
             for d in pd.date_range(
-                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1d"
+                datetime(2000, 1, 1), datetime(2000, 1, 10), freq="1D"
             )
         ],
         [datetime(1922, 1, 2), datetime(2022, 1, 5), datetime(2045, 1, 10)],
@@ -48,8 +47,8 @@ from cascade.utils.time_series import (Align, Average, Interpolate,
 def test_create_lists(arr):
     # Lists of datetime
     time = arr
-    data = [i for i in range(len(time))]
-    ts = TimeSeriesDataset(time=time, data=data)
+    data = list(range(len(time)))
+    TimeSeriesDataset(time=time, data=data)
 
 
 @pytest.mark.parametrize(
@@ -70,8 +69,8 @@ def test_create_lists(arr):
 def test_create_arrays(arr):
     # Arrays of datetime
     time = arr
-    data = np.array([i for i in range(len(arr))])
-    ts = TimeSeriesDataset(time=time, data=data)
+    data = np.array(list(range(len(arr))))
+    TimeSeriesDataset(time=time, data=data)
 
 
 @pytest.mark.parametrize(
@@ -90,8 +89,8 @@ def test_create_arrays(arr):
 def test_unsorted_time(arr):
     # Unsorted datetime
     time = arr
-    data = np.array([i for i in range(len(time))])
-    indices = np.array([i for i in range(len(time))])
+    data = np.array(list(range(len(time))))
+    indices = np.array(list(range(len(time))))
     np.random.shuffle(indices)
     data = data[indices]
     time = np.array(time)[indices]
@@ -104,26 +103,26 @@ def test_unsorted_time(arr):
 
 
 def test_no_datetime():
-    time = [i for i in range(10)]
-    data = [i for i in range(len(time))]
+    time = list(range(10))
+    data = list(time)
 
     # Only datetime instances in time
     with pytest.raises(AssertionError):
-        ts = TimeSeriesDataset(time=time, data=data)
+        TimeSeriesDataset(time=time, data=data)
 
 
 def test_length_check():
     time = np.array([datetime(2000, 1, 1), datetime(2000, 1, 2), datetime(2000, 1, 3)])
     data = np.array([1, 2])
     with pytest.raises(AssertionError):
-        ts = TimeSeriesDataset(time=time, data=data)
+        TimeSeriesDataset(time=time, data=data)
 
 
 def test_shape_check():
     time = np.array([datetime(2000, 1, 1), datetime(2000, 1, 2), datetime(2000, 1, 3)])
     data = np.array([[1, 2], [1, 2], [1, 2]])
     with pytest.raises(AssertionError):
-        ts = TimeSeriesDataset(time=time, data=data)
+        TimeSeriesDataset(time=time, data=data)
 
 
 def test_get_int():
@@ -193,7 +192,7 @@ def test_slice_datetime():
     data = np.array([1, 2, 3, 4, 5])
     ts = TimeSeriesDataset(time=time, data=data)
 
-    sl = ts[datetime(2001, 1, 2): datetime(2001, 1, 4)]
+    sl = ts[datetime(2001, 1, 2) : datetime(2001, 1, 4)]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])
@@ -205,7 +204,7 @@ def test_slice_datetime():
         items.append(sl[i])
     assert items == [1, 2]
 
-    sl = ts[datetime(2001, 1, 3):]
+    sl = ts[datetime(2001, 1, 3) :]
     items = []
     for i in range(len(sl)):
         items.append(sl[i])

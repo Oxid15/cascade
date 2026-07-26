@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -61,9 +61,9 @@ class OverSampler(Sampler[T]):
         ln = len(dataset) + len(self._add_indices)
         print(f"Original length was {len(dataset)} and new is {ln}")
 
-        super().__init__(dataset, num_samples=ln, *args, **kwargs)
+        super().__init__(dataset, *args, num_samples=ln, **kwargs)
 
-    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+    def get(self, index: int) -> Tuple[Any, Any]:
         if index < len(self._dataset):
             return self._dataset[index]
         else:
@@ -112,7 +112,7 @@ class UnderSampler(Sampler[T]):
         print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln, *args, **kwargs)
 
-    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+    def get(self, index: int) -> Tuple[Any, Any]:
         idx = self._rem_indices[index]
         return self._dataset[idx]
 
@@ -192,7 +192,7 @@ class WeighedSampler(Sampler[T]):
         print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln)
 
-    def __getitem__(self, index: int) -> Tuple[Any, Any]:
+    def get(self, index: int) -> Tuple[Any, Any]:
         idx = self._indices[index]
         return self._dataset[idx]
 

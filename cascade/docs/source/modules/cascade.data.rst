@@ -59,11 +59,6 @@ cascade.data
 .. autoclass:: cascade.data.IteratorWrapper
     :members:
 
-
-
-.. autoclass:: cascade.data.SizedDataset
-    :members:
-
  
 
 .. autoclass:: cascade.data.Wrapper
@@ -116,11 +111,6 @@ cascade.data
 .. autoclass:: cascade.data.Sampler
     :members:
 
- 
-
-.. autoclass:: cascade.data.Pickler
-    :members:
-
 
 
 .. autoclass:: cascade.data.RandomSampler
@@ -133,10 +123,6 @@ cascade.data
  
 
 .. autoclass:: cascade.data.SchemaModifier
-    :members:
-
-
-.. autoclass:: cascade.data.SequentialCacher
     :members:
 
 
@@ -153,11 +139,3 @@ cascade.data
  
 
 .. autofunction:: cascade.data.validate_in
-
- 
-
-.. autoclass:: cascade.data.VersionAssigner
-    :members:
- 
-
-.. autofunction:: cascade.data.version

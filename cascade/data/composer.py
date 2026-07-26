@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -50,13 +50,13 @@ class Composer(Dataset[T]):
     def _validate_input(self, datasets: List[Dataset[T]]) -> None:
         lengths = [len(ds) for ds in datasets]
         first = lengths[0]
-        if not all([ln == first for ln in lengths]):
+        if not all(ln == first for ln in lengths):
             raise ValueError(
                 f"The datasets passed should be of the same length\n"
                 f"Actual lengths: {lengths}"
             )
 
-    def __getitem__(self, index: int) -> Tuple[T]:
+    def get(self, index: int) -> Tuple[T]:
         return tuple(ds[index] for ds in self._datasets)
 
     def __len__(self) -> int:
@@ -84,5 +84,5 @@ class Composer(Dataset[T]):
 
         super().from_meta(meta)
         if "data" in meta[0]:
-            for ds, meta in zip(self._datasets, meta[0]["data"]):
-                ds.from_meta(meta)
+            for ds, m in zip(self._datasets, meta[0]["data"]):
+                ds.from_meta(m)

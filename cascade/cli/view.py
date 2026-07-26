@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,14 +30,16 @@ def view_history(ctx, host, port, l, m, p):  # noqa: E741
     if ctx.obj.get("meta"):
         container = create_container(ctx.obj["type"], ctx.obj["cwd"])
         if not container:
-            click.echo(f"Cannot open History Viewer in object of type `{ctx.obj['type']}`")
+            click.echo(
+                f"Cannot open History Viewer in object of type `{ctx.obj['type']}`"
+            )
             return
 
         from ..meta import HistoryViewer
 
-        HistoryViewer(container, last_lines=l, last_models=m, update_period_sec=p).serve(
-            host=host, port=port
-        )
+        HistoryViewer(
+            container, last_lines=l, last_models=m, update_period_sec=p
+        ).serve(host=host, port=port)
 
 
 @click.command("metric")
@@ -65,7 +67,9 @@ def view_metric(ctx, host, port, p, i, x):
 
     i = None if len(i) == 0 else list(i)
     x = None if len(x) == 0 else list(x)
-    MetricViewer(container).serve(page_size=p, include=i, exclude=x, host=host, port=port)
+    MetricViewer(container).serve(
+        page_size=p, include=i, exclude=x, host=host, port=port
+    )
 
 
 @click.command("diff")

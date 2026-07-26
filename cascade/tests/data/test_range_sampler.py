@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ def test():
     ds = Wrapper(DATA)
     ds = RangeSampler(ds, 2)
 
-    sampled = [item for item in ds]
+    sampled = list(ds)
 
     assert sampled == [DATA[i] for i in range(2)]
 
@@ -40,7 +40,7 @@ def test_start_stop():
     ds = Wrapper(DATA)
     ds = RangeSampler(ds, 1, 3)
 
-    sampled = [item for item in ds]
+    sampled = list(ds)
 
     assert sampled == [DATA[i] for i in range(1, 3)]
 
@@ -49,7 +49,7 @@ def test_step():
     ds = Wrapper(DATA)
     ds = RangeSampler(ds, 0, len(ds), 2)
 
-    sampled = [item for item in ds]
+    sampled = list(ds)
 
     assert sampled == [DATA[i] for i in range(0, len(DATA), 2)]
 

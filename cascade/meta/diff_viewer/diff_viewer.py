@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ class DiffViewer(Server):
                     else:
                         raise ValueError(
                             f"No viewer found for folder with objects of type {meta[0]['type']}"
-                        )
+                        ) from None
         else:  # The given meta is a file
             raise ValueError("DiffViewer only supports folders")
 

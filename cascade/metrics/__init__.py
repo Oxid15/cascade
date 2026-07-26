@@ -2,7 +2,7 @@
 cascade.metrics
 ===============
 
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,3 +19,5 @@ limitations under the License.
 
 from .classification import Accuracy
 from .metric import Loss, Metric, MetricType
+
+__all__ = ["Accuracy", "Loss", "Metric", "MetricType"]

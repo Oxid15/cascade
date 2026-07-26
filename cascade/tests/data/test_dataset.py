@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,15 +24,21 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import (BaseDataset, Dataset, IteratorWrapper, Modifier,
-                          Sampler, Wrapper)
+from cascade.data import (
+    BaseDataset,
+    Dataset,
+    IteratorWrapper,
+    Modifier,
+    Sampler,
+    Wrapper,
+)
 
 
 class DummyDataset(BaseDataset):
     def __len__(self):
         return 0
 
-    def __getitem__(self, index) -> None:
+    def get(self, index) -> None:
         return None
 
 
@@ -71,6 +77,7 @@ def test_update_meta_list():
     assert meta[0]["a"] == 1
     assert meta[1]["a"] == 2
     assert meta[2]["a"] == 4
+
 
 # This is deprecated since 0.13.0
 @pytest.mark.skip
@@ -155,7 +162,7 @@ class EmptyDataset(Dataset):
         # there is no need to actively forbid this
         ...
 
-    def __getitem__(self, index):
+    def get(self, index):
         return None
 
     def __len__(self):

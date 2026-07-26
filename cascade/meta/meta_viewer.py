@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ import os
 import re
 import warnings
 from typing import Any, Dict, Optional
-
-from typing_extensions import deprecated
 
 from ..base import Meta, MetaHandler, MetaIOError, supported_meta_formats
 
@@ -60,11 +58,7 @@ class MetaViewer:
 
         self.names = []
         for root, _, files in os.walk(self._root):
-            self.names += [
-                os.path.join(root, name)
-                for name in files
-                if is_meta(name)
-            ]
+            self.names += [os.path.join(root, name) for name in files if is_meta(name)]
         self.names = sorted(self.names)
 
         if filt is not None:
@@ -82,31 +76,11 @@ class MetaViewer:
     def __len__(self) -> int:
         return len(self.names)
 
-    @deprecated("This method was removed in 0.14.0. Use MetaHandler.write instead")
-    def write(self, path: str, obj: Any) -> None:
-        """
-        Dumps obj to path
-        """
-        raise ValueError(
-            "This method was removed in 0.14.0. "
-            "Consider using MetaHandler.write or switching to previous versions."
-        )
-
-    @deprecated("This method was removed in 0.14.0. Use MetaHandler.read instead")
-    def read(self, path: str) -> Meta:
-        """
-        Loads object from path
-        """
-        raise ValueError(
-            "This method was removed in 0.14.0. "
-            "Consider using MetaHandler.read or switching to previous versions."
-        )
-
     def _filter(self, name: str) -> bool:
         try:
             meta = MetaHandler.read(name)
         except MetaIOError as e:
-            warnings.warn(str(e))
+            warnings.warn(str(e), stacklevel=2)
             return False
 
         if isinstance(meta, list):
@@ -115,7 +89,8 @@ class MetaViewer:
         for key in self._filt:
             if key not in meta:
                 warnings.warn(
-                    f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}"
+                    f"'{key}' key is not in keys\n{list(meta.keys())}\nof file {name}",
+                    stacklevel=2,
                 )
                 return False
 

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ def test_save_load(tmp_path_str, dummy_model):
 
     repo = Repo(tmp_path_str)
     repo.add_line("0", model_cls=DummyModel)
-    model = repo["0"][0]
+    repo["0"][0]
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])

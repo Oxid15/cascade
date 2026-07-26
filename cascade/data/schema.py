@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ class SchemaModifier(Modifier):
 
     ```python
     class IDoNothing(ImageModifier):
-        def __getitem__(self, idx):
+        def get(self, idx):
             item = self._dataset[idx]
             return item
     ```
@@ -98,8 +98,8 @@ class ValidationWrapper(Modifier):
         self.validator = SchemaValidator(schema)
         super().__init__(dataset, *args, **kwargs)
 
-    def __getitem__(self, index: Any):
-        item = super().__getitem__(index)
+    def get(self, index: Any):
+        item = super().get(index)
         try:
             self.validator(item)
         except ValidationError as e:

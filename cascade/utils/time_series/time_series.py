@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -53,14 +53,14 @@ class Average(TimeSeriesDataset, Modifier):
         time, data = dataset.get_data()
         try:
             # This is pendulum 2.x
-            reg_time = [
-                d for d in pendulum.period(time[0], time[-1]).range(unit, amount=amount)
-            ]
+            reg_time = list(
+                pendulum.period(time[0], time[-1]).range(unit, amount=amount)
+            )
         except AttributeError:
             # If it doesn't work then try pendulum 3.x
-            reg_time = [
-                d for d in pendulum.interval(time[0], time[-1]).range(unit, amount=amount)
-            ]
+            reg_time = list(
+                pendulum.interval(time[0], time[-1]).range(unit, amount=amount)
+            )
 
         reg_data = self._avg(data, time, reg_time)
         assert len(reg_data) > 1, (
@@ -70,7 +70,7 @@ class Average(TimeSeriesDataset, Modifier):
         self._unit = unit
         self._amount = amount
 
-        super().__init__(dataset, time=reg_time, data=reg_data, *args, **kwargs)
+        super().__init__(dataset, *args, time=reg_time, data=reg_data, **kwargs)
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
@@ -133,4 +133,4 @@ class Align(TimeSeriesDataset, Modifier):
         *args: Any,
         **kwargs: Any,
     ) -> None:
-        super().__init__(dataset, time=time, data=dataset[time], *args, **kwargs)
+        super().__init__(dataset, *args, time=time, data=dataset[time], **kwargs)

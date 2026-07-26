@@ -2,7 +2,7 @@
 cascade.repos
 =============
 
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,3 +20,5 @@ limitations under the License.
 from .line_factory import LineFactory
 from .repo import Repo
 from .single_line_repo import SingleLineRepo
+
+__all__ = ["LineFactory", "Repo", "SingleLineRepo"]

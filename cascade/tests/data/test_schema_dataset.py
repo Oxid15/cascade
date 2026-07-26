@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ import pytest
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import Dataset, SchemaModifier, ValidationError
+from cascade.data import Dataset, GetItemError, SchemaModifier
 
 
 class FiveIdenticalImages(Dataset):
-    def __getitem__(self, idx):
+    def get(self, idx):
         return AnnotImage(
             image=[[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
             segments=[[0, 1, 2], [0, 1, 2]],
@@ -50,7 +50,7 @@ class ImagesDataset(SchemaModifier):
 
 
 class IDoNothing(ImagesDataset):
-    def __getitem__(self, idx):
+    def get(self, idx):
         item = self._dataset[idx]
         return item
 
@@ -83,8 +83,8 @@ class BrokenImage(pydantic.BaseModel):
 
 
 class FiveBrokenImageDataset(Dataset):
-    def __getitem__(self, index: int):
-        return BrokenImage(image=[[0.]], segments=["lol"])
+    def get(self, index: int):
+        return BrokenImage(image=[[0.0]], segments=["lol"])
 
     def __len__(self) -> int:
         return 5
@@ -94,6 +94,5 @@ def test_wrong_schema():
     ds = FiveBrokenImageDataset()
     ds = IDoNothing(ds)
 
-    with pytest.raises(ValidationError) as e:
-        item = ds[0]
-    assert e.value.error_index == 0
+    with pytest.raises(GetItemError):
+        ds[0]

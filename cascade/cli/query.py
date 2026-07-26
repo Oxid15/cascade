@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,13 +27,13 @@ from ..base.utils import get_terminal_width
 from .common import create_container
 
 
-class QueryParsingError(Exception): ...  # noqa: E701
+class QueryParsingError(Exception): ...
 
 
-class QueryExecutionError(Exception): ...  # noqa: E701
+class QueryExecutionError(Exception): ...
 
 
-class NONE: ...  # noqa: E701
+class NONE: ...
 
 
 @dataclass
@@ -79,7 +79,11 @@ class QueryParser:
             "filter": {"expression": "after_filter"},
             "after_filter": {"sort": "sort", "limit": "limit", "offset": "offset"},
             "sort": {"expression": "after_sort"},
-            "after_sort": {"expression": "after_sort", "limit": "limit", "offset": "offset"},
+            "after_sort": {
+                "expression": "after_sort",
+                "limit": "limit",
+                "offset": "offset",
+            },
             "offset": {"expression": "after_offset"},
             "after_offset": {"limit": "limit"},
             "limit": {"expression": "end"},
@@ -97,7 +101,9 @@ class QueryParser:
     ):
         tokens.insert(i + 1, "<-")
         expression = " ".join(tokens)
-        expression = f"Unexpected token `{token}` at marked (<-) position: " + f"`{expression}`"
+        expression = (
+            f"Unexpected token `{token}` at marked (<-) position: " + f"`{expression}`"
+        )
         expression = " ".join((expression, postfix))
         raise QueryParsingError(expression)
 
@@ -355,20 +361,26 @@ class Executor:
                 item
                 for _, item in sorted(
                     enumerate(data),
-                    key=lambda i_item: (sorting_keys[i_item[0]] is None, sorting_keys[i_item[0]]),
+                    key=lambda i_item: (
+                        sorting_keys[i_item[0]] is None,
+                        sorting_keys[i_item[0]],
+                    ),
                     reverse=q.desc,
                 )
             ]
 
         if q.offset is not None:
-            data = data[q.offset:]
+            data = data[q.offset :]
 
         if q.limit is not None:
             data = data[: q.limit]
 
         end_time = time.time()
         return Result(
-            columns=q.columns, rows=len(data), data=data, time_s=round(end_time - start_time, 4)
+            columns=q.columns,
+            rows=len(data),
+            data=data,
+            time_s=round(end_time - start_time, 4),
         )
 
 
@@ -415,6 +427,9 @@ def render_results(result: Result) -> None:
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 @click.pass_context
 def query(ctx, args: List[str]):
+    """
+    Get and filter experiment results
+    """
     q = QueryParser().parse(list(args))
 
     if not ctx.obj.get("meta"):

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -73,17 +73,15 @@ class RangeSampler(Sampler[T]):
 
         # Check if can build range
         if start is None and stop is None:
-            raise ValueError(
-                f"Either start or stop must be present\
-                Got start = {start}, stop = {stop}"
-            )
+            raise ValueError(f"Either start or stop must be present\
+                Got start = {start}, stop = {stop}")
 
         # Check if only stop was passed
         if start is not None and stop is None:
             stop = start
             start = 0
 
-        self._indices = [i for i in range(start, stop, step)]
+        self._indices = list(range(start, stop, step))
 
         if len(self._indices) == 0:
             raise ValueError(
@@ -93,6 +91,6 @@ class RangeSampler(Sampler[T]):
 
         super().__init__(dataset, len(self._indices), *args, **kwargs)
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         internal_index = self._indices[index]
-        return super().__getitem__(internal_index)
+        return super().get(internal_index)

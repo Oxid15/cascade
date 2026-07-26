@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -83,7 +83,9 @@ class BasicTrainer(Trainer):
                 model_num -= 1
 
                 if model_num == -1:
-                    raise FileNotFoundError(f"No model files were found in line {line}")
+                    raise FileNotFoundError(
+                        f"No model files were found in line {line}"
+                    ) from None
 
     def _handle(self, error: Exception, model: Model, line: ModelLine):
         line.save(model, only_meta=True)

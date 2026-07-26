@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import json
 import os
 from typing import Any
@@ -51,16 +52,12 @@ class BaseDiffViewer(Server):
         raise NotImplementedError()
 
     def _layout(self):
-        try:
-            import dash  # noqa: F401
-        except ModuleNotFoundError:
+        if importlib.util.find_spec("dash"):
             self._raise_cannot_import_dash()
         else:
             from dash import dcc, html
 
-        try:
-            import dash_renderjson  # noqa: F401
-        except ModuleNotFoundError:
+        if not importlib.util.find_spec("dash_renderjson"):
             raise ModuleNotFoundError(
                 "Cannot import dash_renderjson. It is optional dependency for DiffViewer"
                 " and can be installed via `pip install dash_renderjson`"
@@ -127,7 +124,7 @@ class BaseDiffViewer(Server):
         app.run_server(use_reloader=False, **kwargs)
 
         mev = MetaViewer(self._path, filt={"type": "model"})
-        objs = [meta for meta in mev]
+        objs = list(mev)
         objs = {f"Model {i:0>5d}": meta for i, meta in enumerate(objs)}
         return objs
 

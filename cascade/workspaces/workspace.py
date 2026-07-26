@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ class Workspace(TraceableOnDisk):
                 if meta[0].get("type") == "repo":
                     self._repo_names.append(d)
             except MetaIOError as e:
-                warnings.warn(str(e))
+                warnings.warn(str(e), stacklevel=2)
 
         self.sync_meta()
 

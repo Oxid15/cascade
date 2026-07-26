@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -90,8 +90,10 @@ def migrate(ctx):
     Automatic migration of objects to newer cascade versions
     """
     supported_types = ["repo", "line"]
-    if not ctx.obj.get("type") in supported_types:
-        click.echo(f"Cannot migrate {ctx.obj['type']}, only {supported_types} are supported")
+    if ctx.obj.get("type") not in supported_types:
+        click.echo(
+            f"Cannot migrate {ctx.obj['type']}, only {supported_types} are supported"
+        )
         return
 
     from cascade.base.utils import migrate_repo_v0_13

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class CyclicSampler(Sampler[T]):
     >>> assert [item for item in ds] == [1, 2, 3, 1, 2, 3, 1]
     """
 
-    def __getitem__(self, index: int) -> T:
+    def get(self, index: int) -> T:
         internal_index = index % len(self._dataset)
         return self._dataset[internal_index]
 

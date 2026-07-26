@@ -214,7 +214,7 @@ Suppose for example that we need to obtain our data through very slow network
             super().__init__(*args, **kwargs)
             self._length = length
 
-        def __getitem__(self, index):
+        def get(self, index):
             time.sleep(1)
             return index
         

@@ -1,5 +1,5 @@
 """
-Copyright 2022-2025 Ilia Moiseev
+Copyright 2022-2026 Ilia Moiseev
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -23,8 +23,13 @@ from typing_extensions import Literal
 
 from ..base import Meta, MetaHandler
 from ..base.serialization import ObjectHandler
-from ..base.utils import (Version, get_latest_commit_hash, get_python_version,
-                          get_uncommitted_changes, skeleton)
+from ..base.utils import (
+    Version,
+    get_latest_commit_hash,
+    get_python_version,
+    get_uncommitted_changes,
+    skeleton,
+)
 from ..data.dataset import Dataset
 from .disk_line import DiskLine
 
@@ -40,7 +45,7 @@ class DataLine(DiskLine):
         **kwargs: Any,
     ) -> None:
         self._hashes = defaultdict(lambda: defaultdict(dict))
-        super().__init__(root, item_cls=ds_cls, meta_fmt=meta_fmt, *args, **kwargs)
+        super().__init__(root, *args, item_cls=ds_cls, meta_fmt=meta_fmt, **kwargs)
 
         self._obj_handler = ObjectHandler(obj_backend)
         for name in self._item_names:
