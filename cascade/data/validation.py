@@ -67,11 +67,7 @@ class PydanticValidator(ValidationProvider):
             self._exc_type = ValidationError
 
     def __call__(self, *args: Any, **kwargs: Any) -> None:
-        if (
-            len(args) == 1
-            and len(kwargs) == 0
-            and isinstance(args[0], self._base_model_cls)
-        ):
+        if len(args) == 1 and len(kwargs) == 0:
             try:
                 self._schema.model_validate(args[0])
             except self._exc_type as e:
