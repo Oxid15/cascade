@@ -96,3 +96,42 @@ def test_wrong_schema():
 
     with pytest.raises(GetItemError):
         ds[0]
+
+
+class CorrectImageDicts(Dataset):
+    def get(self, index: int):
+        return {
+            "image": [[[0.0]]],
+            "segments": [[0, 1, 2], [0, 1, 2]],
+            "bboxes": [(0, 1, 1, 2)],
+        }
+
+    def __len__(self):
+        return 5
+
+
+def test_correct_dict():
+    ds = CorrectImageDicts()
+    ds = IDoNothing(ds)
+
+    ds[0]
+
+
+class IncorrectImageDicts(Dataset):
+    def get(self, index: int):
+        return {
+            "image": [[[[]]]],
+            "segments": None,
+            "bboxes": [[0, 1, 2, 1]],
+        }
+
+    def __len__(self):
+        return 5
+
+
+def test_wrong_dicts():
+    ds = IncorrectImageDicts()
+    ds = IDoNothing(ds)
+
+    with pytest.raises(GetItemError):
+        ds[0]
