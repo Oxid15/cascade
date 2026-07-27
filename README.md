@@ -60,9 +60,6 @@ pprint(train_ds.get_meta())
 
 We see all the stages that we did in meta.
 
-<details>
-<summary>Click to see full pipeline metadata</summary>
-
 ```json
 [{"comments": [],
   "description": null,
@@ -94,8 +91,6 @@ We see all the stages that we did in meta.
   "tags": [],
   "type": "dataset"}]
 ```
-
-</details>
 
 See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/modules/dataset_zoo.html)  
 See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
