@@ -19,9 +19,10 @@ from typing import Any, Dict, List
 
 import pytest
 
+from cascade.data import Wrapper
 from cascade.models import BasicModel
 from cascade.repos import Repo
-from cascade.lines import ModelLine
+from cascade.lines import DataLine, ModelLine
 from cascade.workspaces import Workspace
 
 
@@ -32,16 +33,22 @@ def init_workspace(path: str, params_list: List[Dict[str, Any]]):
 
 def init_repo(path: str, params_list: List[Dict[str, Any]]):
     Repo(path)
-    init_line(os.path.join(path, "line"), params_list)
+    init_model_line(os.path.join(path, "model_line"), params_list)
+    init_data_line(os.path.join(path, "data_line"))
 
 
-def init_line(path: str, params_list: List[Dict[str, Any]]):
+def init_model_line(path: str, params_list: List[Dict[str, Any]]):
     line = ModelLine(path)
 
     for p in params_list:
         model = BasicModel()
         model.params.update(p)
         line.save(model)
+
+
+def init_data_line(path: str):
+    line = DataLine(path)
+    line.save(Wrapper([]))
 
 
 @pytest.mark.parametrize("container_type", ["workspace", "repo", "model_line"])
@@ -53,6 +60,6 @@ def init_container(
     elif container_type == "repo":
         init_repo(temp_dir, params_list)
     elif container_type == "model_line":
-        init_line(temp_dir, params_list)
+        init_model_line(temp_dir, params_list)
     else:
         raise ValueError(f"Cannot init {container_type} container")

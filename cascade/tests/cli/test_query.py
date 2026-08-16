@@ -186,19 +186,21 @@ def test_columns(tmp_path_str, container_type):
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         init_container(td, PARAMS, container_type)
 
+        results_line_idx = 3 if container_type == "model_line" else 4
+
         result = runner.invoke(cli, args=["query", "params"])
-        assert result.stdout.split("\n")[3].strip() == str(
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[results_line_idx].strip() == str(
             {"a": {"b": 0}, "l": [0, 1, 2, 3], "ord": 0}
         )
-        assert result.exit_code == 0
 
         result = runner.invoke(cli, args=["query", "params.a.b"])
         assert result.exit_code == 0
-        assert result.stdout.split("\n")[3].strip() == "0"
+        assert result.stdout.split("\n")[results_line_idx].strip() == "0"
 
         result = runner.invoke(cli, args=["query", "params.c.d.e"])
         assert result.exit_code == 0
-        assert result.stdout.split("\n")[3].strip() == "None"
+        assert result.stdout.split("\n")[results_line_idx].strip() == "None"
 
 
 @pytest.mark.parametrize("container_type", CONTAINER_TYPES)
@@ -207,17 +209,19 @@ def test_lists(tmp_path_str, container_type):
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         init_container(td, PARAMS, container_type)
 
+        results_line_idx = 3 if container_type == "model_line" else 4
+
         result = runner.invoke(cli, args=["query", "params.l[0]"])
         assert result.exit_code == 0
-        assert result.stdout.split("\n")[3].strip() == "0"
+        assert result.stdout.split("\n")[results_line_idx].strip() == "0"
 
         result = runner.invoke(cli, args=["query", "params.ll[0][0]"])
         assert result.exit_code == 0
-        assert result.stdout.split("\n")[8].strip() == "0"
+        assert result.stdout.split("\n")[results_line_idx + 5].strip() == "0"
 
         result = runner.invoke(cli, args=["query", "params.l[0]", "params.l[1]"])
         assert result.exit_code == 0
-        result_line = result.stdout.split("\n")[3]
+        result_line = result.stdout.split("\n")[results_line_idx]
         result_line = re.sub(r"\s+", " ", result_line).strip()
         values = result_line.split(" ")
         assert values == ["0", "1"]
@@ -229,9 +233,11 @@ def test_list_of_dicts(tmp_path_str, container_type):
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
         init_container(td, PARAMS, container_type)
 
+        results_line_idx = 7 if container_type == "model_line" else 8
+
         result = runner.invoke(cli, args=["query", "params.ld[0].e"])
         assert result.exit_code == 0
-        assert result.stdout.split("\n")[7].strip() == "f"
+        assert result.stdout.split("\n")[results_line_idx].strip() == "f"
 
 
 @pytest.mark.parametrize("container_type", CONTAINER_TYPES)

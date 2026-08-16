@@ -58,7 +58,7 @@ class Result:
     columns: List[str]
     rows: int
     data: List[Dict[str, Any]]
-    time_s: int
+    time_s: float
 
 
 class QueryParser:
@@ -373,21 +373,12 @@ class Executor:
 
         if q.sort_expr is not None:
             # This one sorts the data by the order of sorting_keys
-            # First we make tuples of items and their indices
-            # then we use indices to make sortable elements
-            # we push values containing None to the end by
-            # placing boolean `is None` first
-            data = [
-                item
-                for _, item in sorted(
-                    enumerate(data),
-                    key=lambda i_item: (
-                        sorting_keys[i_item[0]] is None,
-                        sorting_keys[i_item[0]],
-                    ),
-                    reverse=q.desc,
-                )
-            ]
+            # we push values containing None to the end
+
+            present = [i for i in range(len(data)) if sorting_keys[i] is not None]
+            missing = [i for i in range(len(data)) if sorting_keys[i] is None]
+            present.sort(key=lambda i: sorting_keys[i], reverse=q.desc)
+            data = [data[i] for i in present + missing]
 
         if q.offset is not None:
             data = data[q.offset :]
