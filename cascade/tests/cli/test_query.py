@@ -18,14 +18,16 @@ import os
 import re
 import sys
 
+import pytest
 from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.cli.cli import cli
 from cascade.cli.query import Field, QueryParsingError, QueryExecutionError, empty_field
-from cascade.tests.cli.common import init_repo
+from cascade.tests.cli.common import init_container
 
+CONTAINER_TYPES = ["workspace", "repo", "model_line"]
 PARAMS = [
     {"a": {"b": 0}, "l": [0, 1, 2, 3], "ord": 0},
     {"l": [0, 1, 2, 3], "ord": 1},
@@ -37,15 +39,25 @@ PARAMS = [
 ]
 
 
-def corrupt_model_meta(repo_root):
-    with open(os.path.join(repo_root, "00000", "00000", "meta.json"), "w") as f:
+def corrupt_model_meta(root, container_type):
+    if container_type == "model_line":
+        path = os.path.join(root, "00000", "meta.json")
+    elif container_type == "repo":
+        path = os.path.join(root, "line", "00000", "meta.json")
+    elif container_type == "workspace":
+        path = os.path.join(root, "repo", "line", "00000", "meta.json")
+    else:
+        raise ValueError(f"Unknown container type: {container_type}")
+
+    with open(path, "w") as f:
         f.write("{i am broken json")
 
 
-def test_parsing(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_parsing(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(cli, args=["query", "params"])
         assert result.exit_code == 0
@@ -147,10 +159,11 @@ def test_parsing(tmp_path_str):
         assert result.exit_code == 0
 
 
-def test_parsing_error(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_parsing_error(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(cli, args=["query"])
         assert result.exit_code == 1
@@ -167,10 +180,11 @@ def test_parsing_error(tmp_path_str):
         assert type(result.exception) is QueryParsingError
 
 
-def test_columns(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_columns(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(cli, args=["query", "params"])
         assert result.stdout.split("\n")[3].strip() == str(
@@ -187,10 +201,11 @@ def test_columns(tmp_path_str):
         assert result.stdout.split("\n")[3].strip() == "None"
 
 
-def test_lists(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_lists(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(cli, args=["query", "params.l[0]"])
         assert result.exit_code == 0
@@ -208,20 +223,22 @@ def test_lists(tmp_path_str):
         assert values == ["0", "1"]
 
 
-def test_list_of_dicts(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_list_of_dicts(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(cli, args=["query", "params.ld[0].e"])
         assert result.exit_code == 0
         assert result.stdout.split("\n")[7].strip() == "f"
 
 
-def test_filter(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_filter(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(
             cli, args=["query", "params.a.b", "filter", "params.a.b is not None"]
@@ -236,10 +253,11 @@ def test_filter(tmp_path_str):
         assert result.exit_code == 0
 
 
-def test_sort(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_sort(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(cli, args=["query", "params.ord", "sort", "params.ord"])
         assert result.exit_code == 0
@@ -252,10 +270,11 @@ def test_sort(tmp_path_str):
         assert result.stdout.split("\n")[3].strip() == "6"
 
 
-def test_advanced_sort(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_advanced_sort(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         result = runner.invoke(cli, args=["query", "params.a.b", "sort", "params.a.b"])
         assert result.exit_code == 0
@@ -269,18 +288,20 @@ def test_advanced_sort(tmp_path_str):
         assert result.exit_code == 0
 
 
-def test_corrupted_model_meta(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_corrupted_model_meta(tmp_path_str, container_type):
     runner = CliRunner()
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
-        corrupt_model_meta(td)
+        init_container(td, PARAMS, container_type)
+        corrupt_model_meta(td, container_type)
 
         result = runner.invoke(cli, args=["query", "params.a.b"])
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "None"
 
 
-def test_will_not_execute_dangerous_op(tmp_path_str):
+@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
+def test_will_not_execute_dangerous_op(tmp_path_str, container_type):
     runner = CliRunner()
 
     def assert_will_not_execute(query_list, message):
@@ -293,7 +314,7 @@ def test_will_not_execute_dangerous_op(tmp_path_str):
         assert message in result.exc_info[1].args[0]
 
     with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_repo(td, PARAMS)
+        init_container(td, PARAMS, container_type)
 
         assert_will_not_execute(
             [

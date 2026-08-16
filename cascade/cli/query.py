@@ -291,6 +291,11 @@ class Executor:
                 line = container.add_line(name)
                 for meta in self.iterate_over_container(line, "line"):
                     yield meta
+        elif container_type == "workspace":
+            for repo_name in container.get_repo_names():
+                repo = container.add_repo(repo_name)
+                for meta in self.iterate_over_container(repo, "repo"):
+                    yield meta
 
     def _validate_module(self, tree: ast.AST):
         for node in ast.walk(tree):
