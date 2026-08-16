@@ -288,7 +288,7 @@ class Executor:
                     yield [{}]
         elif container_type == "repo":
             for name in container.get_line_names():
-                line = container.add_line(name)
+                line = container.add_line(name, line_type=None)
                 for meta in self.iterate_over_container(line, "line"):
                     yield meta
         elif container_type == "workspace":

@@ -43,9 +43,9 @@ def corrupt_model_meta(root, container_type):
     if container_type == "model_line":
         path = os.path.join(root, "00000", "meta.json")
     elif container_type == "repo":
-        path = os.path.join(root, "line", "00000", "meta.json")
+        path = os.path.join(root, "model_line", "00000", "meta.json")
     elif container_type == "workspace":
-        path = os.path.join(root, "repo", "line", "00000", "meta.json")
+        path = os.path.join(root, "repo", "model_line", "00000", "meta.json")
     else:
         raise ValueError(f"Unknown container type: {container_type}")
 
