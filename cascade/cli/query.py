@@ -300,8 +300,8 @@ class Executor:
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
                 if isinstance(node.func.value, ast.Name):
                     if node.func.value.id in ["subprocess", "socket"]:
-                        self.dangerous_calls.append(
-                            f"Found dangerous method call: {node.func.attr}"
+                        raise QueryExecutionError(
+                            f"Found potentially dangerous method call: {node.func.attr}"
                         )
 
             if isinstance(node, ast.FunctionDef):
