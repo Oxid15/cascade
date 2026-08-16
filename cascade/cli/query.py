@@ -26,6 +26,13 @@ from ..base import MetaIOError
 from ..base.utils import get_terminal_width
 from .common import create_container
 
+OP_STOP_LIST = [
+    "subprocess",
+    "__import__",
+    "open",
+    "socket",
+]
+
 
 class QueryParsingError(Exception): ...
 
@@ -285,23 +292,27 @@ class Executor:
                 for meta in self.iterate_over_container(line, "line"):
                     yield meta
 
-    def validate_eval(self, expr: str) -> None:
-        tree = ast.parse(expr)
+    def _validate_module(self, tree: ast.AST):
         for node in ast.walk(tree):
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
                 if node.func.id in ("eval", "exec"):
                     raise QueryExecutionError("Nested eval/exec calls are not allowed")
 
-                if node.func.id in ("open", "socket", "subprocess"):
+                if node.func.id in (OP_STOP_LIST):
                     raise QueryExecutionError(
-                        "File system or network related builtins are not allowed"
+                        f"Found potentially dangerous method call, {node.func.id}"
                     )
 
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
                 if isinstance(node.func.value, ast.Name):
-                    if node.func.value.id in ["subprocess", "socket"]:
+                    if node.func.value.id in OP_STOP_LIST:
                         raise QueryExecutionError(
                             f"Found potentially dangerous method call: {node.func.attr}"
+                        )
+                if isinstance(node.func.value, ast.Call):
+                    if getattr(node.func.value.func, "id") in OP_STOP_LIST:
+                        raise QueryExecutionError(
+                            f"Found potentially dangerous method call: {node.func.value.func.id}"
                         )
 
             if isinstance(node, ast.FunctionDef):
@@ -309,6 +320,10 @@ class Executor:
 
             if isinstance(node, (ast.Import, ast.ImportFrom)):
                 raise QueryExecutionError("Imports are not allowed")
+
+    def validate_eval(self, expr: str) -> None:
+        tree = ast.parse(expr)
+        self._validate_module(tree)
 
     def eval_or_none(self, expr: str, context: Dict[str, Any]) -> Optional[Any]:
         try:
@@ -328,8 +343,8 @@ class Executor:
         data = []
         sorting_keys = []
 
+        # Small optimization
         # Validate once, then execute many times
-        # little optimization
         if q.filter_expr:
             self.validate_eval(q.filter_expr)
         if q.sort_expr:

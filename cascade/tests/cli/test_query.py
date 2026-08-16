@@ -23,7 +23,7 @@ from click.testing import CliRunner
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.cli.cli import cli
-from cascade.cli.query import Field, QueryParsingError, empty_field
+from cascade.cli.query import Field, QueryParsingError, QueryExecutionError, empty_field
 from cascade.tests.cli.common import init_repo
 
 PARAMS = [
@@ -50,7 +50,9 @@ def test_parsing(tmp_path_str):
         result = runner.invoke(cli, args=["query", "params"])
         assert result.exit_code == 0
 
-        result = runner.invoke(cli, args=["query", "params", "filter", "params is not None"])
+        result = runner.invoke(
+            cli, args=["query", "params", "filter", "params is not None"]
+        )
         assert result.exit_code == 0
 
         result = runner.invoke(
@@ -158,7 +160,9 @@ def test_parsing_error(tmp_path_str):
         assert result.exit_code == 1
         assert type(result.exception) is QueryParsingError
 
-        result = runner.invoke(cli, args=["query", "metrics", "sort", "metrics[0]", "filter"])
+        result = runner.invoke(
+            cli, args=["query", "metrics", "sort", "metrics[0]", "filter"]
+        )
         assert result.exit_code == 1
         assert type(result.exception) is QueryParsingError
 
@@ -225,7 +229,9 @@ def test_filter(tmp_path_str):
         assert result.stdout.split("\n")[3].strip() == "0"
         assert result.exit_code == 0
 
-        result = runner.invoke(cli, args=["query", "params.l[0]", "filter", "params.l[0] > 0"])
+        result = runner.invoke(
+            cli, args=["query", "params.l[0]", "filter", "params.l[0] > 0"]
+        )
         assert result.stdout.split("\n")[3].strip() == "1"
         assert result.exit_code == 0
 
@@ -239,7 +245,9 @@ def test_sort(tmp_path_str):
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "0"
 
-        result = runner.invoke(cli, args=["query", "params.ord", "sort", "params.ord", "desc"])
+        result = runner.invoke(
+            cli, args=["query", "params.ord", "sort", "params.ord", "desc"]
+        )
         assert result.exit_code == 0
         assert result.stdout.split("\n")[3].strip() == "6"
 
@@ -255,7 +263,9 @@ def test_advanced_sort(tmp_path_str):
         result = runner.invoke(cli, args=["query", "params.l", "sort", "params.l[0]"])
         assert result.exit_code == 0
 
-        result = runner.invoke(cli, args=["query", "params.l[1]", "sort", "params.l[1]"])
+        result = runner.invoke(
+            cli, args=["query", "params.l[1]", "sort", "params.l[1]"]
+        )
         assert result.exit_code == 0
 
 
@@ -270,6 +280,56 @@ def test_corrupted_model_meta(tmp_path_str):
         assert result.stdout.split("\n")[3].strip() == "None"
 
 
+def test_will_not_execute_dangerous_op(tmp_path_str):
+    runner = CliRunner()
+
+    def assert_will_not_execute(query_list, message):
+        result = runner.invoke(
+            cli,
+            args=query_list,
+        )
+        assert result.exit_code == 1
+        assert result.exc_info[0] == QueryExecutionError
+        assert message in result.exc_info[1].args[0]
+
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        init_repo(td, PARAMS)
+
+        assert_will_not_execute(
+            [
+                "query",
+                "__import__('subprocess').Popen('ls')",
+            ],
+            "dangerous method",
+        )
+
+        assert_will_not_execute(
+            [
+                "query",
+                "a, b",
+                "filter",
+                "__import__('subprocess').Popen('ls')",
+            ],
+            "dangerous method",
+        )
+
+        assert_will_not_execute(
+            [
+                "query",
+                "[[[__import__('subprocess').Popen('ls')]]]",
+            ],
+            "dangerous method",
+        )
+
+        assert_will_not_execute(
+            [
+                "query",
+                "__import__('subprocess').Popen('ls')",
+            ],
+            "dangerous method",
+        )
+
+
 def test_empty_field():
     assert empty_field("a") == Field({"a": None})
     assert empty_field("a.b") == Field({"a": {"b": None}})
@@ -281,3 +341,4 @@ def test_field():
     assert f.params.a == 0
     assert f.l[0] == 1
     assert f.no is None
+    assert f.params.no is None
