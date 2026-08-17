@@ -24,7 +24,7 @@ from coolname import generate
 
 from . import Meta
 
-default_keys = ["data", "dataset"]
+default_keys = ["data"]
 
 
 class Version:
@@ -214,7 +214,7 @@ def skeleton(
 
         for key in keys:
             if key in meta:
-                prev = skeleton(meta["data"])
+                prev = skeleton(meta[key])
                 s[key] = prev
         skel.append(s)
     return skel
