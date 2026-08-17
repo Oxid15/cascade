@@ -223,8 +223,7 @@ class Traceable:
         Returns
         -------
         repr: str
-            Representation of a Traceable. This repr used as a name for get_meta() method
-            by default gives the name of class from basic repr
+            Representation of a Traceable
 
         See also
         --------
