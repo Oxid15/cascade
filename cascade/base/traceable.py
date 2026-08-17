@@ -125,7 +125,7 @@ class Traceable:
             Meta is a list (see Meta type alias) to allow the formation of pipelines.
         """
         meta = {}
-        meta["name"] = repr(self)
+        meta["name"] = f"{type(self).__module__}.{type(self).__qualname__}"
 
         if hasattr(self, "description"):
             meta["description"] = self.description
