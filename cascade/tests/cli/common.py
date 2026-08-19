@@ -31,10 +31,13 @@ def init_workspace(path: str, params_list: List[Dict[str, Any]]):
     init_repo(os.path.join(path, "repo"), params_list)
 
 
-def init_repo(path: str, params_list: List[Dict[str, Any]]):
+def init_repo(
+    path: str, params_list: List[Dict[str, Any]], with_data_line: bool = True
+):
     Repo(path)
     init_model_line(os.path.join(path, "model_line"), params_list)
-    init_data_line(os.path.join(path, "data_line"))
+    if with_data_line:
+        init_data_line(os.path.join(path, "data_line"))
 
 
 def init_model_line(path: str, params_list: List[Dict[str, Any]]):

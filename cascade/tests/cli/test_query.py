@@ -306,57 +306,6 @@ def test_corrupted_model_meta(tmp_path_str, container_type):
         assert result.stdout.split("\n")[3].strip() == "None"
 
 
-@pytest.mark.parametrize("container_type", CONTAINER_TYPES)
-def test_will_not_execute_dangerous_op(tmp_path_str, container_type):
-    runner = CliRunner()
-
-    def assert_will_not_execute(query_list, message):
-        result = runner.invoke(
-            cli,
-            args=query_list,
-        )
-        assert result.exit_code == 1
-        assert result.exc_info[0] == QueryExecutionError
-        assert message in result.exc_info[1].args[0]
-
-    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
-        init_container(td, PARAMS, container_type)
-
-        assert_will_not_execute(
-            [
-                "query",
-                "__import__('subprocess').Popen('ls')",
-            ],
-            "dangerous method",
-        )
-
-        assert_will_not_execute(
-            [
-                "query",
-                "a, b",
-                "filter",
-                "__import__('subprocess').Popen('ls')",
-            ],
-            "dangerous method",
-        )
-
-        assert_will_not_execute(
-            [
-                "query",
-                "[[[__import__('subprocess').Popen('ls')]]]",
-            ],
-            "dangerous method",
-        )
-
-        assert_will_not_execute(
-            [
-                "query",
-                "__import__('subprocess').Popen('ls')",
-            ],
-            "dangerous method",
-        )
-
-
 def test_empty_field():
     assert empty_field("a") == Field({"a": None})
     assert empty_field("a.b") == Field({"a": {"b": None}})

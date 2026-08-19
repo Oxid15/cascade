@@ -17,6 +17,7 @@ limitations under the License.
 import ast
 import time
 from dataclasses import dataclass
+from types import CodeType
 from typing import Any, Dict, List, Optional, Union
 
 import click
@@ -26,12 +27,85 @@ from ..base import MetaIOError
 from ..base.utils import get_terminal_width
 from .common import create_container
 
-OP_STOP_LIST = [
-    "subprocess",
-    "__import__",
-    "open",
-    "socket",
+NODE_ALLOW_LIST = [
+    ast.Expression,
+    ast.BoolOp,
+    ast.BinOp,
+    ast.UnaryOp,
+    ast.Compare,
+    ast.IfExp,
+    ast.And,
+    ast.Or,
+    ast.Not,
+    ast.Add,
+    ast.Sub,
+    ast.Mult,
+    ast.Div,
+    ast.Mod,
+    ast.Pow,
+    ast.Eq,
+    ast.NotEq,
+    ast.Store,
+    ast.Lt,
+    ast.LtE,
+    ast.Gt,
+    ast.GtE,
+    ast.In,
+    ast.NotIn,
+    ast.Is,
+    ast.IsNot,
+    ast.UAdd,
+    ast.USub,
+    ast.Name,
+    ast.Load,
+    ast.Constant,
+    ast.List,
+    ast.Tuple,
+    ast.Set,
+    ast.Dict,
+    ast.Subscript,
+    ast.Slice,
+    ast.Attribute,
+    ast.Call,
+    ast.ListComp,
+    ast.DictComp,
+    ast.SetComp,
+    ast.comprehension,
+    ast.GeneratorExp,
 ]
+
+ALLOWED_BUILTINS = {
+    "any": any,
+    "all": all,
+    "len": len,
+    "sum": sum,
+    "min": min,
+    "max": max,
+    "sorted": sorted,
+    "abs": abs,
+    "round": round,
+    "pow": pow,
+    "divmod": divmod,
+    "int": int,
+    "float": float,
+    "str": str,
+    "bool": bool,
+    "repr": repr,
+    "list": list,
+    "tuple": tuple,
+    "set": set,
+    "dict": dict,
+    "frozenset": frozenset,
+    "enumerate": enumerate,
+    "zip": zip,
+    "range": range,
+    "reversed": reversed,
+    "map": map,
+    "filter": filter,
+    "None": None,
+    "True": True,
+    "False": False,
+}
 
 
 class QueryParsingError(Exception): ...
@@ -297,50 +371,40 @@ class Executor:
                 for meta in self.iterate_over_container(repo, "repo"):
                     yield meta
 
-    def _validate_module(self, tree: ast.AST):
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
-                if node.func.id in ("eval", "exec"):
-                    raise QueryExecutionError("Nested eval/exec calls are not allowed")
-
-                if node.func.id in (OP_STOP_LIST):
-                    raise QueryExecutionError(
-                        f"Found potentially dangerous method call, {node.func.id}"
-                    )
-
-            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
-                if isinstance(node.func.value, ast.Name):
-                    if node.func.value.id in OP_STOP_LIST:
-                        raise QueryExecutionError(
-                            f"Found potentially dangerous method call: {node.func.attr}"
-                        )
-                if isinstance(node.func.value, ast.Call):
-                    if getattr(node.func.value.func, "id") in OP_STOP_LIST:
-                        raise QueryExecutionError(
-                            f"Found potentially dangerous method call: {node.func.value.func.id}"
-                        )
-
-            if isinstance(node, ast.FunctionDef):
-                raise QueryExecutionError("Function definitions are not allowed")
-
-            if isinstance(node, (ast.Import, ast.ImportFrom)):
-                raise QueryExecutionError("Imports are not allowed")
-
-    def validate_eval(self, expr: str) -> None:
-        tree = ast.parse(expr)
-        self._validate_module(tree)
-
-    def eval_or_none(self, expr: str, context: Dict[str, Any]) -> Optional[Any]:
+    def validate_and_compile(self, expr: str) -> CodeType:
         try:
-            return eval(expr, context.copy())
+            tree = ast.parse(expr, mode="eval")
+        except SyntaxError as e:
+            raise QueryExecutionError(
+                f"Failed to parse query expression: {expr}"
+            ) from e
+
+        for node in ast.walk(tree):
+            if type(node) not in NODE_ALLOW_LIST:
+                raise QueryExecutionError(
+                    f"{type(node).__name__} not allowed in a query"
+                )
+
+            if isinstance(node, ast.Attribute) and (
+                node.attr.startswith("__") or node.attr in ("format", "format_map")
+            ):
+                raise QueryExecutionError(f"attribute .{node.attr} not allowed")
+
+            if isinstance(node, ast.Name) and node.id.startswith("__"):
+                raise QueryExecutionError(f"name {node.id} not allowed")
+
+        return compile(tree, "query", "eval")
+
+    def eval_or_none(self, expr, context: Dict[str, Any]) -> Optional[Any]:
+        try:
+            return eval(expr, {"__builtins__": ALLOWED_BUILTINS}, context.copy())
         except Exception:
             return None
 
-    def select(self, ctx: Dict[str, Union[Field, Any]], columns: List[str]):
+    def select(self, ctx: Dict[str, Union[Field, Any]], columns: Dict[str, CodeType]):
         res = {}
         for col in columns:
-            self.validate_eval(col)
-            res[col] = self.eval_or_none(col, ctx)
+            res[col] = self.eval_or_none(columns[col], ctx)
         return res
 
     def execute(self, q: Query) -> Result:
@@ -350,23 +414,33 @@ class Executor:
 
         # Small optimization
         # Validate once, then execute many times
+
+        col2expr = {}
+        for col in q.columns:
+            col2expr[col] = self.validate_and_compile(col)
+
         if q.filter_expr:
-            self.validate_eval(q.filter_expr)
+            filter_expr = self.validate_and_compile(q.filter_expr)
+        else:
+            filter_expr = None
+
         if q.sort_expr:
-            self.validate_eval(q.sort_expr)
+            sort_expr = self.validate_and_compile(q.sort_expr)
+        else:
+            sort_expr = None
 
         # TODO: meta data is independent, can be highly parallel
         for meta in self.iterate_over_container(self.container, self.type):
             full_ctx = Field(meta[0]).to_dict()  # TODO: somehow deal with meta lists
-            ctx = self.select(full_ctx, q.columns)
+            ctx = self.select(full_ctx, col2expr)
 
-            if q.filter_expr:
-                result = self.eval_or_none(q.filter_expr, full_ctx)
+            if filter_expr:
+                result = self.eval_or_none(filter_expr, full_ctx)
                 if not result:
                     continue
 
-            if q.sort_expr:
-                sorting_key = self.eval_or_none(q.sort_expr, full_ctx)
+            if sort_expr:
+                sorting_key = self.eval_or_none(sort_expr, full_ctx)
                 sorting_keys.append(sorting_key)
 
             data.append(ctx)
