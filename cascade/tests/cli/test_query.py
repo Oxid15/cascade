@@ -340,3 +340,19 @@ def test_query_preserves_line_type(tmp_path_str):
 
         assert model_line_meta[0]["type"] == "model_line"
         assert data_line_meta[0]["type"] == "data_line"
+
+
+def test_query_with_data_line(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        repo = Repo(td)
+
+        ds = Wrapper([])
+        ds.update_meta({"a": 1})
+
+        repo.add_line("datasets", line_type="data").save(ds)
+
+        result = runner.invoke(cli, args=["query", "a"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[3].strip() == "1"
+        assert result.stdout.split("\n")[6] == "Returned rows: 1"
