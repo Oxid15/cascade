@@ -173,30 +173,17 @@ def update_version(path: str, version: str) -> None:
             return
 
 
-def skeleton(
-    meta: Meta, keys: Optional[List[Any]] = None
-) -> List[List[Dict[Any, Any]]]:
+def skeleton(meta: Meta) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
     meta: Meta
         Meta of the pipeline
-    keys: List[Any], optional
-        The set of keys in meta where to search for previous dataset's meta.
-        For example Concatenator when get_meta() is called stores meta of its
-        datasets in the field called 'data'.
-        If nothing given uses the default set of keys. Use this parameter only if
-        your custom modifiers have additional fields you need to cover in this.
 
     Returns
     -------
     skeleton: List[List[Dict[Any, Any]]]
     """
-
-    if keys is not None:
-        keys += default_keys
-    else:
-        keys = default_keys
 
     skel = []
     # The pipeline is given - represent each one with a new list
@@ -212,9 +199,9 @@ def skeleton(
         else:
             raise KeyError("Name not in meta")
 
-        for key in keys:
+        for key in default_keys:
             if key in meta:
-                prev = skeleton(meta["data"])
+                prev = skeleton(meta[key])
                 s[key] = prev
         skel.append(s)
     return skel

@@ -126,7 +126,9 @@ class DiskLine(TraceableOnDisk, Line):
         """
         name = self._parse_item_name(path_spec)
         if name is None:
-            raise FileNotFoundError(f"Couldn't find an object {path_spec} in the line {self._root}")
+            raise FileNotFoundError(
+                f"Couldn't find an object {path_spec} in the line {self._root}"
+            )
         return self._read_meta_by_name(name)
 
     def get_item_names(self) -> List[str]:
@@ -148,7 +150,7 @@ class DiskLine(TraceableOnDisk, Line):
         meta[0].update(
             {
                 "root": self._root,
-                "item_cls": repr(self._item_cls),
+                "item_cls": self._item_cls.__qualname__,
                 "len": len(self),
                 "cascade_version": __version__,
             }
