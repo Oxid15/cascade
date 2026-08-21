@@ -23,8 +23,12 @@ from click.testing import CliRunner
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
+from cascade.base import MetaHandler
 from cascade.cli.cli import cli
 from cascade.cli.query import Field, QueryParsingError, QueryExecutionError, empty_field
+from cascade.repos import Repo
+from cascade.models import BasicModel
+from cascade.data import Wrapper
 from cascade.tests.cli.common import init_container
 
 CONTAINER_TYPES = ["workspace", "repo", "model_line"]
@@ -318,3 +322,21 @@ def test_field():
     assert f.l[0] == 1
     assert f.no is None
     assert f.params.no is None
+
+
+def test_query_preserves_line_type(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        repo = Repo(td)
+        repo.add_line("models", line_type="model").save(BasicModel())
+        repo.add_line("datasets", line_type="data").save(Wrapper([]))
+
+        result = runner.invoke(cli, args=["query", "params.a.b"])
+        assert result.exit_code == 0
+        assert result.stdout.split("\n")[7] == "Returned rows: 2"
+
+        model_line_meta = MetaHandler.read_dir(os.path.join(td, "models"))
+        data_line_meta = MetaHandler.read_dir(os.path.join(td, "datasets"))
+
+        assert model_line_meta[0]["type"] == "model_line"
+        assert data_line_meta[0]["type"] == "data_line"
