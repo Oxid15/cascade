@@ -16,7 +16,7 @@ limitations under the License.
 
 from typing import Any
 
-from tqdm import tqdm, trange
+from tqdm import tqdm
 
 from .dataset import BaseDataset, T
 from .modifier import Modifier
@@ -60,9 +60,9 @@ class BruteforceCacher(Modifier[T]):
         super().__init__(dataset, *args, **kwargs)
         # force calling all previous datasets in the init
         if hasattr(self._dataset, "__len__") and hasattr(self._dataset, "__getitem__"):
-            self._data = [self._dataset[i] for i in trange(len(self._dataset))]
+            self._data = [self._dataset[i] for i in range(len(self._dataset))]
         elif hasattr(self._dataset, "__iter__"):
-            self._data = list(tqdm(self._dataset))
+            self._data = list(self._dataset)
         else:
             raise AttributeError(
                 "Input dataset must provide __len__ and __getitem__ or __iter__"
