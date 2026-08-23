@@ -70,10 +70,11 @@ class Repo(BaseRepo, TraceableOnDisk):
         cascade.data.DataLine
         cascade.models.ModelLine
         """
-        super().__init__(*args, path=folder, root=folder, meta_fmt=meta_fmt, **kwargs)
+        # Need to rmtree before __init__ to not load old meta
+        if overwrite and os.path.exists(folder):
+            shutil.rmtree(folder)
 
-        if overwrite and os.path.exists(self._root):
-            shutil.rmtree(self._root)
+        super().__init__(*args, path=folder, root=folder, meta_fmt=meta_fmt, **kwargs)
 
         os.makedirs(self._root, exist_ok=True)
         self._lines = {
