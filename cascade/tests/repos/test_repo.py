@@ -23,6 +23,7 @@ import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
+from cascade.base import MetaIOError, ZeroMetaError
 from cascade.lines import ModelLine
 from cascade.repos import Repo
 from cascade.tests.conftest import DummyModel
@@ -168,6 +169,8 @@ def test_missing_repo_meta(tmp_path_str, ext):
     model = repo["0"][0]
 
 
+# Updated behavior in 0.18.0
+# We cannot create line correctly without knowing its type
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_missing_line_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
@@ -183,8 +186,8 @@ def test_missing_line_meta(tmp_path_str, ext):
     os.remove(meta_path)
 
     repo = Repo(repo_path)
-    repo.add_line(name="0", model_cls=DummyModel, meta_fmt=ext)
-    model = repo["0"][0]
+    with pytest.raises(ZeroMetaError):
+        repo.add_line(name="0", model_cls=DummyModel, meta_fmt=ext)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -227,10 +230,9 @@ def test_failed_repo_meta(tmp_path_str, ext):
     model = repo["0"][0]
 
 
-# This test does not work because since 0.14.0
-# it is impossible to create a line without
-# reading its meta correctly
-# may fix this later
+# Since 0.14.0 it is impossible to create a line without
+# reading its meta correctly, updated behavior in 0.18.0
+# We cannot create line correctly without knowing its type
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
 def test_failed_line_meta(tmp_path_str, ext):
     repo_path = os.path.join(tmp_path_str, "repo")
@@ -246,9 +248,9 @@ def test_failed_line_meta(tmp_path_str, ext):
     with open(meta_path, "w") as f:
         f.write("\t{{{: 'sorry, i am broken'")
 
-    repo = Repo(repo_path)  # , meta_fmt=ext
-    repo.add_line("0", model_cls=DummyModel)
-    model = repo["0"][0]
+    repo = Repo(repo_path)
+    with pytest.raises(MetaIOError):  # , meta_fmt=ext
+        repo.add_line("0", model_cls=DummyModel)
 
 
 @pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
@@ -427,3 +429,16 @@ def test_load_model_meta(tmp_path_str, dummy_model, ext):
     assert "metrics" in meta[0]
     assert meta[0]["metrics"][0]["name"] == "acc"
     assert slug == meta[0]["slug"]
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_wrong_line_type(tmp_path_str, ext):
+    repo = Repo(tmp_path_str, meta_fmt=ext)
+    repo.add_line("data", line_type="data")
+    repo.add_line("model", line_type="model")
+
+    repo = Repo(tmp_path_str, meta_fmt=ext)
+    with pytest.raises(ValueError):
+        repo.add_line("data", line_type="model")
+    with pytest.raises(ValueError):
+        repo.add_line("model", line_type="data")

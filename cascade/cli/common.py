@@ -39,17 +39,20 @@ def create_container(type: str, cwd: str) -> Any:
         from cascade.lines import ModelLine
 
         return ModelLine(cwd)
+
     elif type == "data_line":
         from cascade.lines import DataLine
 
         return DataLine(cwd)
+
     elif type == "repo":
         from cascade.repos import Repo
 
         return Repo(cwd)
+
     elif type == "workspace":
         from cascade.workspaces import Workspace
 
         return Workspace(cwd)
     else:
-        return
+        return None
