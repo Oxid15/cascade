@@ -429,7 +429,7 @@ class TraceableOnDisk(Traceable):
             if meta_fmt != ext and meta_fmt is not None:
                 warnings.warn(
                     f"Trying to set {meta_fmt} to the object that already has {ext} "
-                    "on path {self._root}",
+                    f"on path {self._root}",
                     stacklevel=2,
                 )
 
