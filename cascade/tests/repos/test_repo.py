@@ -55,11 +55,25 @@ def test_overwrite(tmp_path_str, ext):
     repo = Repo(tmp_path_str, overwrite=True, meta_fmt=ext)
     repo.add_line("vgg16", model_cls=DummyModel)
     repo.add_line("resnet", model_cls=DummyModel)
+    assert 2 == len(repo)
 
     repo = Repo(tmp_path_str, overwrite=True)
     repo.add_line("densenet", model_cls=DummyModel)
     repo.add_line("efficientnet", model_cls=DummyModel)
     assert 2 == len(repo)
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_overwrite_with_meta(tmp_path_str, ext):
+    repo = Repo(tmp_path_str, meta_fmt=ext)
+    repo.describe("Wrong description")
+    repo.tag("bad")
+    repo.comment("This comment should not exist after overwrite")
+
+    repo = Repo(tmp_path_str, overwrite=True, meta_fmt=ext)
+    assert repo.description is None
+    assert len(repo.tags) == 0
+    assert len(repo.comments) == 0
 
 
 # This test is skipped due to its specificity
