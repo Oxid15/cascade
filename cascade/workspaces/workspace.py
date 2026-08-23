@@ -146,11 +146,6 @@ class Workspace(TraceableOnDisk):
         -------
         Repo
             Created repo
-
-        Raises
-        ------
-        ValueError
-            If the repo already exists
         """
         repo = Repo(os.path.join(self._root, name), *args, **kwargs)
         if name not in self._repo_names:

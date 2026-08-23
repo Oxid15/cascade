@@ -73,9 +73,13 @@ class ModelLine(DiskLine):
                 if slug == slug_from_file:
                     return name
 
-    def _parse_item_name(self, item: Union[int, str]) -> Optional[str]:
+    def _parse_item_name(self, item: Union[int, str]) -> str:
         if isinstance(item, str):
             name = self._find_name_by_slug(item)
+            if not name:
+                raise FileNotFoundError(
+                    f"Failed to find a model with slug={item} in line {self._root}"
+                )
             return name
         else:
             return super()._parse_item_name(item)

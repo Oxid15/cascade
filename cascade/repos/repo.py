@@ -20,10 +20,15 @@ from typing import Any, List, Optional, Union
 
 from typing_extensions import Literal
 
-from ..base import Meta, TraceableOnDisk, ZeroMetaError
+from ..base import Meta, TraceableOnDisk
 from ..lines import Line
 from .base_repo import BaseRepo
 from .line_factory import LineFactory
+
+SHORT_LINE_TYPE_TO_LINE_TYPE = {
+    "model": "model_line",
+    "data": "data_line",
+}
 
 
 class Repo(BaseRepo, TraceableOnDisk):
@@ -190,7 +195,12 @@ class Repo(BaseRepo, TraceableOnDisk):
 
             line_meta = line.get_meta()
 
-            if line_type != line_meta[0]["type"]:
+            if line_type not in SHORT_LINE_TYPE_TO_LINE_TYPE:
+                raise ValueError(
+                    f"line_type={line_type} is not supported, should be one of {list(SHORT_LINE_TYPE_TO_LINE_TYPE.keys())}"
+                )
+
+            if SHORT_LINE_TYPE_TO_LINE_TYPE[line_type] != line_meta[0]["type"]:
                 raise ValueError(
                     f"line_type={line_type} is conflicting with the type saved on disk {line_meta[0]['type']}"
                 )
