@@ -121,9 +121,6 @@ line.save(model, only_meta=True)
 `Repo` is the collection of lines and `Line` can be a bunch of experiments on one model type.
 Lines can also store data pipelines.
 
-<details>
-<summary>Click to see full model metadata</summary>
-
 ```json
 [
     [
@@ -149,8 +146,6 @@ Lines can also store data pipelines.
     ]
 ]
 ```
-
-</details>
 
 See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
