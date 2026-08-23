@@ -372,7 +372,6 @@ def run(
             base_cfg = load_config(base)
 
             check_result = can_safely_replace(cfg_dict, base_cfg)
-            print(check_result, f)
             if not check_result.ok and not f:
                 raise Exception(
                     f"Cannot initialize the config in the file using base from {base}."
