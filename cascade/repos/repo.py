@@ -155,6 +155,10 @@ class Repo(BaseRepo, TraceableOnDisk):
         ------
         AssertionError
             If name is None and line with the computed name already exists
+        FileNotFoundError
+            If line was not found even though Repo recorded it at creation time
+        ValueError
+            If provided arguments do not match the saved model's configuration on disk
         """
 
         # Line inherits meta format by default
@@ -181,6 +185,13 @@ class Repo(BaseRepo, TraceableOnDisk):
             if line is None:
                 raise FileNotFoundError(
                     f"Line was not found in {folder}, but existed in Repo object at creation"
+                )
+
+            line_meta = line.get_meta()
+
+            if line_type != line_meta[0]["type"]:
+                raise ValueError(
+                    f"line_type={line_type} is conflicting with the type saved on disk {line_meta[0]['type']}"
                 )
 
         self._lines[name] = {

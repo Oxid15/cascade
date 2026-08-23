@@ -429,3 +429,16 @@ def test_load_model_meta(tmp_path_str, dummy_model, ext):
     assert "metrics" in meta[0]
     assert meta[0]["metrics"][0]["name"] == "acc"
     assert slug == meta[0]["slug"]
+
+
+@pytest.mark.parametrize("ext", [".json", ".yml", ".yaml"])
+def test_wrong_line_type(tmp_path_str, ext):
+    repo = Repo(tmp_path_str, meta_fmt=ext)
+    repo.add_line("data", line_type="data")
+    repo.add_line("model", line_type="model")
+
+    repo = Repo(tmp_path_str, meta_fmt=ext)
+    with pytest.raises(ValueError):
+        repo.add_line("data", line_type="model")
+    with pytest.raises(ValueError):
+        repo.add_line("model", line_type="data")
