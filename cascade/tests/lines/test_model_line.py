@@ -225,7 +225,6 @@ def test_line_comment(tmp_path_str):
 
     line = ModelLine(line_dir)
     line.comment("This comment should stay")
-    line.sync_meta()
 
     # Recreate
     line = ModelLine(line_dir)
