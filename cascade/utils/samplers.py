@@ -157,7 +157,7 @@ class WeighedSampler(Sampler[T]):
             partitioning: Dict[Any, int], optional
                 A dictionary with labels as keys and the number of samples as values.
                 If some label omitted, assumes that it should be sampled the same number
-                of times it is actually appears in the dataset.
+                of times it actually appears in the dataset.
         """
         labels = np.asarray([dataset[i][1] for i in trange(len(dataset))])
         ulabels, counts = np.unique(labels, return_counts=True)
@@ -168,7 +168,8 @@ class WeighedSampler(Sampler[T]):
             partitioning = {}
 
         self._check_partitioning(ulabels, partitioning)
-        self._partitioning = partitioning
+        # Copy partitioning to preserve original as is
+        self._partitioning = dict(partitioning)
 
         # If label is omitted in partitioning, add it with true count
         for ulabel, count in zip(ulabels, counts):
@@ -187,8 +188,8 @@ class WeighedSampler(Sampler[T]):
 
         ln = len(self._indices)
         assert ln == sum(
-            partitioning.values()
-        ), "The length should be equal to the sum of partitions - something went wrong"
+            self._partitioning.values()
+        ), "The length of the dataset should be equal to the sum of all partitions - possible problem on Cascade side"
         print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln)
 
