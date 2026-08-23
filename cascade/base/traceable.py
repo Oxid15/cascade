@@ -304,7 +304,7 @@ class Traceable:
 
         self.comments.append(comment)
 
-    def remove_comment(self, id: int) -> None:
+    def remove_comment(self, id: str) -> None:
         for i, comment in enumerate(self.comments):
             if comment.id == id:
                 self.comments.pop(i)
