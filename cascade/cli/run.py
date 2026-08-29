@@ -300,7 +300,7 @@ class CascadeRun:
         text = script_globals + text
 
         process = subprocess.Popen(
-            ["python", "-u", "-c", text],
+            [sys.executable, "-u", "-c", text],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             env=os.environ,
