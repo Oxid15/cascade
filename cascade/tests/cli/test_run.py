@@ -474,3 +474,24 @@ def test_missing_field(tmp_path_str: str, force: bool):
     else:
         result = run_run(path, "--base", f"{tmp_path_str}/line/00000")
         assert result.exit_code == 1
+
+
+def test_two_names_import(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Traceable, Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 3",
+            "    b = 4",
+            "    c = 5",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path, "--a", "5")
+    assert "{'a': 5, 'b': 4, 'c': 5}" in result.stdout
