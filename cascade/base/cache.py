@@ -26,9 +26,8 @@ class Cache:
     """
     General interface for object caching
     """
+
     def __init__(self, path: str, backend: Literal["pickle"] = "pickle") -> None:
-        if not os.path.isdir(path):
-            raise ValueError(f"path should be a folder, got {path}")
         os.makedirs(path, exist_ok=True)
 
         self.path = path
