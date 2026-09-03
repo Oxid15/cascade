@@ -16,6 +16,7 @@ limitations under the License.
 
 import importlib
 import os
+import warnings
 from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
@@ -49,6 +50,10 @@ class MetricViewer:
         scope: Union[int, str, slice]
             Index or a name of line to view. Can be set using ``__getitem__``
         """
+        warnings.warn(
+            f"{self.__class__.__name__} is deprecated since 0.18.0. Please use cascade ui instead"
+        )
+
         if isinstance(repo, ModelLine):
             repo = SingleLineRepo(repo)
 

@@ -17,6 +17,7 @@ limitations under the License.
 import importlib
 import json
 import os
+import warnings
 from typing import Any
 
 from deepdiff import DeepDiff
@@ -29,6 +30,10 @@ from ..server import Server
 class BaseDiffViewer(Server):
     def __init__(self, path: str) -> None:
         super().__init__()
+
+        warnings.warn(
+            f"{self.__class__.__name__} is deprecated since 0.18.0. Please use cascade ui instead"
+        )
 
         # self._check_path(path)
         self._path = path
