@@ -46,6 +46,7 @@ def remove_files(paths: List[str]) -> List[RemoveResult]:
     for path in paths:
         if not os.path.exists(path):
             results.append(RemoveResult("MISS"))
+            continue
 
         try:
             os.remove(path)
