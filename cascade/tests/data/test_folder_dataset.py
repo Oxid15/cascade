@@ -49,3 +49,15 @@ def test_names(tmp_path_str):
     names = ds.get_names()
     assert os.path.split(names[0])[-1] == "a.txt"
     assert os.path.split(names[1])[-1] == "b.txt"
+
+
+def test_skips_subdirs(tmp_path_str):
+    with open(os.path.join(tmp_path_str, "a.txt"), "w") as w:
+        w.write("hello")
+
+    os.makedirs(os.path.join(tmp_path_str, "i_am_dir"))
+
+    ds = FolderDataset(tmp_path_str)
+    names = ds.get_names()
+    assert len(names) == 1
+    assert os.path.split(names[0])[-1] == "a.txt"
