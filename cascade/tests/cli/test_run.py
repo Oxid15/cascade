@@ -131,8 +131,27 @@ def test_different_types(tmp_path_str: str):
     assert result.exit_code == 0
     assert result.stdout.endswith(
         "[<class 'int'>, <class 'float'>, <class 'str'>, <class 'list'>,"
-        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>, <class 'tuple'>]\n"
+        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>,"
+        " <class 'tuple'>]\n"
     )
+
+
+def test_unsupported_types(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "from cascade.base import Config",
+            "class ThisConfig(Config):",
+            "    j = dict()",
+            "print([type(item) for item in ThisConfig().to_dict().values()])",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+
+    assert result.exit_code == 1
+    assert isinstance(result.exc_info[1], ValueError)
+    assert "Unsupported" in result.exc_info[1].args[0]
 
 
 def test_different_types_override(tmp_path_str: str):

@@ -104,8 +104,6 @@ def parse_value(value: ast.expr) -> Any:
 
     if isinstance(value, ast.Constant):
         return value.value
-    elif isinstance(value, ast.Call):
-        return str(value.func.id) + "()"
     elif isinstance(value, ast.List):
         return [parse_value(v) for v in value.elts]
     elif isinstance(value, ast.Tuple):
