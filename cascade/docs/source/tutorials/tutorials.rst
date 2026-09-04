@@ -28,7 +28,6 @@ Cascade has a set of optional dependencies, which can be installed with the foll
     pip install cascade-ml[pydantic] # Use data validation modifiers
     pip install cascade-ml[sklearn]  # Scikit-learn integration
     pip install cascade-ml[torch]    # PyTorch integration
-    pip install cascade-ml[view]     # Cascade viewers based on dash
     pip install cascade-ml[all]      # Installs everything
 
 If you have completed the tutorial you can see the :ref:`/howtos/howtos.rst` section
