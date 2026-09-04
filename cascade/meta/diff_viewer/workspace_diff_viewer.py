@@ -16,6 +16,7 @@ limitations under the License.
 
 import importlib
 import os
+import warnings
 
 import pendulum
 from deepdiff import DeepDiff
@@ -27,6 +28,10 @@ from .repo_diff_viewer import RepoDiffViewer
 class WorkspaceDiffViewer(RepoDiffViewer):
     def __init__(self, path: str) -> None:
         super().__init__(path)
+
+        warnings.warn(
+            f"{self.__class__.__name__} is deprecated since 0.18.0. Please use cascade ui instead"
+        )
 
         self._default_depth = 2
         self._default_diff_depth = 2

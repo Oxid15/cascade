@@ -195,12 +195,15 @@ class Repo(BaseRepo, TraceableOnDisk):
 
             line_meta = line.get_meta()
 
-            if line_type not in SHORT_LINE_TYPE_TO_LINE_TYPE:
+            if line_type is not None and line_type not in SHORT_LINE_TYPE_TO_LINE_TYPE:
                 raise ValueError(
                     f"line_type={line_type} is not supported, should be one of {list(SHORT_LINE_TYPE_TO_LINE_TYPE.keys())}"
                 )
 
-            if SHORT_LINE_TYPE_TO_LINE_TYPE[line_type] != line_meta[0]["type"]:
+            if (
+                line_type is not None
+                and SHORT_LINE_TYPE_TO_LINE_TYPE[line_type] != line_meta[0]["type"]
+            ):
                 raise ValueError(
                     f"line_type={line_type} is conflicting with the type saved on disk {line_meta[0]['type']}"
                 )

@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import Any
 
 from ...base import MetaHandler, MetaIOError, ZeroMetaError
@@ -33,6 +34,9 @@ class DiffViewer(Server):
 
     def __init__(self, path: str) -> None:
         super().__init__()
+        warnings.warn(
+            f"{self.__class__.__name__} is deprecated since 0.18.0. Please use cascade ui instead"
+        )
 
         self._diff_viewer = self._get_viewer(path)
 

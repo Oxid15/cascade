@@ -11,4 +11,3 @@ on the specifics of usage, rather on foundational details.
     traceable
     dataset
     model
-    viewer
