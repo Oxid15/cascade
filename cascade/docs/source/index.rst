@@ -62,6 +62,12 @@ Advanced features
             Just do ``cascade ui`` to get a nice dashboard for your experiments
 
     .. grid-item::
+        .. card:: :octicon:`terminal` Runs
+            :link: tutorials/configuration_management.rst
+
+            Run experiments from terminal without changing any Python code
+
+    .. grid-item::
         .. card:: :octicon:`terminal` CLI
             :link: tutorials/tutorials.html#cli
 
