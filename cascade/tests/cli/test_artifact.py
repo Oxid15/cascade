@@ -24,6 +24,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.base import MetaHandler
 from cascade.cli.cli import cli
+from cascade.cli.artifact import remove_files
 from cascade.data import Wrapper
 from cascade.lines import DataLine, ModelLine
 from cascade.models import BasicModel
@@ -244,3 +245,21 @@ def test_idempotency(tmp_path_str):
             assert not os.path.exists(
                 os.path.join(td, f"{i:0>5d}", "artifacts", "artifact.txt")
             )
+
+
+def test_missing_file(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        line = ModelLine(td)
+        model = TestModel()
+        line.save(model)
+
+        p = os.path.join(td, "00000", "artifacts", "artifact.txt")
+
+        assert os.path.exists(p)
+
+        os.remove(p)
+
+        remove_results = remove_files([p])
+        assert len(remove_results) == 1
+        assert remove_results[0].status == "MISS"
