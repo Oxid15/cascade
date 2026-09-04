@@ -213,7 +213,7 @@ def migrate_repo_v0_13(path: str) -> None:
     versions to be compatible with 0.13.X
 
     Changes:
-    - Metric formatting for compatibility with viewers of new version
+    - Metric formatting for compatibility with new versions
     - If metrics are not scalar, saves them in ``old_metrics`` dict in meta
     - Sets the cascade_version key to the current version in repos, lines and models
     - Skips meta files if fails to read them

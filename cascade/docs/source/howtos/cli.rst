@@ -2,9 +2,9 @@ Use Cascade CLI
 ###############
 
 Cascade has convenient command line interface to help
-user perform some operations without writing Python for them.
+user perform some operations without writing Python code for them.
 Commands can be used to explore metadata, describe, tag and comment objects.
-You can also run viewers and manage artifacts from CLI.
+You can also run experiments and manage artifacts from CLI.
 
 ClI Commands
 ============
@@ -24,7 +24,7 @@ is described in detail below.
   status    # Short description of what is present in the current folder
   tag       # Manage tags
   ui        # Run Cascade Web UI
-  view      # Different viewers
+  view      # Different viewers, deprecated since 0.18.0
 
 cascade artifact
 ****************
@@ -170,6 +170,10 @@ This will remove given tags.
 
 cascade view
 ************
+
+.. warning::
+
+    Viewers are deprecated since 0.18.0 in favor of Cascade UI
 
 To use this feature install ``dash`` separately or by using ``pip install cascade[view]``.
 Locate the workspace, repo or line (not every viewer can work in all of those) and run
