@@ -85,14 +85,19 @@ Cascade to track an ``sklearn`` classifier.
 
 .. code-block:: python
 
+    import random
     from sklearn.linear_model import LogisticRegression
     from cascade.utils.sklearn import SkModel
 
     model = SkModel(
         blocks = [
-            LogisticRegression()
+            LogisticRegression(solver="newton-cg")
         ]
     )
+    model.tag("training")
+    model.describe("Regression model for index page demo")
+    model.add_metric('acc', random.random())
+
 
 2. Save it in Line
 ==================
@@ -101,7 +106,7 @@ Cascade to track an ``sklearn`` classifier.
 
     from cascade.lines import ModelLine
 
-    line = ModelLine("line", model_cls=SkModel)
+    line = ModelLine("index_demo_line")
     line.save(model)
 
 3. Get rich metadata
@@ -112,26 +117,33 @@ Cascade to track an ``sklearn`` classifier.
     [
         {
             "name": "cascade.utils.sklearn.sk_model.SkModel",
-            "description": None,
-            "tags": [],
+            "description": "Regression model for index page demo",
+            "tags": [
+                "training"
+            ],
             "comments": [],
             "links": [],
             "type": "model",
-            "created_at": "2024-09-03T19:36:49.346994+00:00",
-            "metrics": [],
+            "created_at": "2026-09-04T13:54:28.273927+00:00",
+            "metrics": [
+                {
+                    "name": "acc",
+                    "value": 0.20003771067823384,
+                    "created_at": "2026-09-04T13:58:28.868433+00:00"
+                }
+            ],
             "params": {},
             "pipeline": "Pipeline(steps=[('0', LogisticRegression())])",
-            "path": "/home/ilia/local/cascade_proj/cascade_repo/cascade/docs/line/00000",
-            "slug": "kickass_mayfly_of_pleasure",
-            "saved_at": "2024-09-03T19:37:17.143040+00:00",
-            "python_version": "3.11.0rc1 (main, Aug 12 2022, 10:02:14) [GCC 11.2.0]",
-            "user": "ilia",
-            "host": "my-pc-name",
-            "cwd": "/home/ilia/local/cascade_proj/cascade_repo/cascade/docs",
-            "git_commit": "07188653071cb73f8ede52ca09eea423b3ff2c0f",
+            "path": "/home/ilia/work/cascade/line/00000",
+            "slug": "dramatic_gibbon_of_swiftness",
+            "saved_at": "2026-09-04T13:59:05.717339+00:00",
+            "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+            "user": "your-username",
+            "host": "your-pc-name",
+            "cwd": "/home/your-username/cascade",
+            "git_commit": "ddcb2f700d64592c3e433209dff5c6c5d544906f",
             "git_uncommitted_changes": [
-                "M cascade/docs/source/index.rst",
-                "M cascade/docs/source/tutorials/tutorials.rst\n?? cascade/docs/line/"
+                "M cascade/docs/source/index.rst\n?? line/"
             ]
         }
     ]
