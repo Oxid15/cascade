@@ -34,6 +34,7 @@ release = cascade.__version__
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
@@ -43,6 +44,8 @@ extensions = [
     "nbsphinx",
     "sphinx_design",
 ]
+
+highlight_language = "python"
 
 autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
 
