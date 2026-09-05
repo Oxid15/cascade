@@ -164,32 +164,40 @@ class FeatureTable(TableDataset):
 
         Example
         -------
-        ```python
-        >>> import pandas as pd
-        >>> from cascade.utils.tables import FeatureTable
-        >>> df = pd.read_csv(r'data\t.csv', index_col=0)
-        >>> df
-        id  count  name
-        0   0      1   aaa
-        1   1      5   bbb
-        2   2      0   ccc
-        >>> ft = FeatureTable(df)
-        >>> ft.get_features()
-        ['id', 'count', ' name']
-        >>> ft.add_feature('square', lambda df: df['count'] * df['count'])
-        >>> def counts(df):
-        >>>     return df['count'] * 2, df['count'] * 3
+        .. code-block:: python
 
-        >>> ft.add_feature(('count_2', 'count_3'), counts)
-        >>> ft.get_features()
-        ['id', 'count', ' name', 'square', ('count_2', 'count_3')]
-        >>> ft.get_table(['count', ('count_2', 'count_3')])
-           count  count_2  count_3
-        0      1        2        3
-        1      5       10       15
-        2      0        0        0
+            import pandas as pd
+            from cascade.utils.tables import FeatureTable
+            df = pd.read_csv(r'data\t.csv', index_col=0)
+            df
 
-        ```
+            # id  count  name
+            # 0   0      1   aaa
+            # 1   1      5   bbb
+            # 2   2      0   ccc
+
+            ft = FeatureTable(df)
+            ft.get_features()
+
+            # ['id', 'count', ' name']
+
+            ft.add_feature('square', lambda df: df['count'] * df['count'])
+
+            def counts(df):
+                return df['count'] * 2, df['count'] * 3
+
+            ft.add_feature(('count_2', 'count_3'), counts)
+            ft.get_features()
+
+            # ['id', 'count', ' name', 'square', ('count_2', 'count_3')]
+
+            ft.get_table(['count', ('count_2', 'count_3')])
+
+            # count  count_2  count_3
+            # 0      1        2        3
+            # 1      5       10       15
+            # 2      0        0        0
+
 
         Parameters
         ----------
