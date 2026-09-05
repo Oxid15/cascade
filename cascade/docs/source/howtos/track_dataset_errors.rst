@@ -33,7 +33,7 @@ Consider the following pipeline:
    ds = RaiseModifierOverridingGetItem(ds)
    ds = ModifierOverridingGetItem(ds)
 
-.. skip: next
+.. skip: start
 
 .. code-block:: python
 
@@ -41,8 +41,6 @@ for i in range(len(ds)):
    ds[i]
 
 Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` method. When we execute the code we see only the error message and will require additional runs to trace where exactly the error occured. In case of large datasets and long trainings it can be very costly to run second time to check where the error occurs.
-
-.. skip: next
 
 .. code-block:: text
 
@@ -53,7 +51,6 @@ Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` 
      File "<stdin>", line 4, in __getitem__
    RuntimeError: on no!
 
-.. skip: next
 
 Let's try a simple update - replace all ``__getitem__`` with ``get`` methods:
 
@@ -62,7 +59,7 @@ Let's try a simple update - replace all ``__getitem__`` with ``get`` methods:
    for i in range(len(ds)):
       ds.get(i)
 
-.. skip: next
+.. skip: end
 
 .. code-block:: text
 
