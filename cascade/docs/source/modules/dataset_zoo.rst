@@ -29,7 +29,7 @@ Iterators
 ********
 
 If data source doesn't have length - you cannot use ``Wrapper``s, but it is not a problem,
-you can use ``Iterator``s instead! It is basically the same dataset, but using different interface.
+you can use ``IteratorWrapper``s instead! It is basically the same dataset, but using different interface.
 
 .. code-block:: python
 
@@ -39,7 +39,7 @@ you can use ``Iterator``s instead! It is basically the same dataset, but using d
         for number in range(5):
             yield number
 
-    ds = cdd.Iterator(gen())
+    ds = cdd.IteratorWrapper(gen())
 
     for item in ds:
         print(item, end=' ')
@@ -56,12 +56,12 @@ In Cascade this is done by using ``ApplyModifier``.
     from cascade import data as cdd
 
 
-    The function that will be applied
+    # The function that will be applied
     def square(x):
         return x ** 2
 
     ds = cdd.Wrapper([0, 1, 2, 3, 4])
-    ds = cdd.ApplyModifier(ds, square) ds now a pipeline of two stages
+    ds = cdd.ApplyModifier(ds, square) # ds now a pipeline of two stages
 
     for item in ds:
         print(item, end=' ')
@@ -152,10 +152,9 @@ RandomSampler
 
 Undeterministic counterpart of CyclicSampler. Ideal solution for shuffling the data in lazy way.
 
-import numpy as np
-
 .. code-block:: python
 
+    import numpy as np
     from cascade import data as cdd
 
     np.random.seed(0)
@@ -227,31 +226,6 @@ Suppose for example that we need to obtain our data through very slow network
 
 Now we waited all loading process and cached everything. Since that all data is in memory and the loading is no problem.
 But what if we have a script that should be executed every time and then caching has no sense?
-
-
-Pickler
-*******
-
-For these purposes ``Pickler`` was implemented. You can cache and then pickle previous pipeline on the disk,
-then load it and use without problems. 
-
-.. code-block:: python
-
-    ds = LongLoadingDataSource(10)
-    ds = cdd.BruteforceCacher(ds)
-    ds = cdd.Pickler('ds.pkl', ds)
-
-.. code-block:: python
-
-    from tqdm import tqdm
-
-    ds = cdd.Pickler('ds.pkl')
-
-    for item in tqdm(ds):
-        print(item, end=' ')
-
-
-Note that after unpickling we don't need to wait for loading again.
 
 
 OverSampler and UnderSampler
@@ -391,11 +365,11 @@ The slices are also available.
 
 .. code-block:: python
 
-    ds[1:].to_pandas() Using integers
+    ds[1:].to_pandas() # Using integers
 
 .. code-block:: python
 
-    ds[datetime.datetime(2022, 11, 6):].to_pandas() Or using time
+    ds[datetime.datetime(2022, 11, 6):].to_pandas() # Or using time
 
 
 Note that every slice returns new ``TimeSerisDataset`` instance.
@@ -411,9 +385,11 @@ There is always a general way to extract all data, which is most useful for plot
 
 Install matplotlib if required
 
-.. code-block:: python
+.. code-block:: bash
 
     pip3 install matplotlib
+
+.. skip: next
 
 .. code-block:: python
 
@@ -449,7 +425,7 @@ First - dataset is initialized with nan-value. Nan-value is ``numpy.nan`` becaus
 
     from cascade.utils.time_series import Interpolate
 
-    Interpolate(ds, method='linear', limit_direction='both').to_pandas() These arguments are defaults
+    Interpolate(ds, method='linear', limit_direction='both').to_pandas() # These arguments are defaults
 
 
 Averaging over some time-window is also a frequent task in work with time-series. Here in ``Average`` you
