@@ -89,7 +89,7 @@ def find_repo_artifacts(path) -> List[str]:
     repo = create_container("repo", path)
     repo_results = []
     for name in repo.get_line_names():
-        line_type = repo.add_line(name).get_meta()[0]["type"]
+        line_type = repo.add_line(name, line_type=None).get_meta()[0]["type"]
         if line_type in ("line", "model_line"):
             results = find_model_line_artifacts(os.path.join(path, name))
         elif line_type == "data_line":
