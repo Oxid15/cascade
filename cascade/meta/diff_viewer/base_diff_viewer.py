@@ -32,7 +32,8 @@ class BaseDiffViewer(Server):
         super().__init__()
 
         warnings.warn(
-            f"{self.__class__.__name__} is deprecated since 0.18.0. Please use cascade ui instead"
+            f"{self.__class__.__name__} is deprecated since 0.18.0. Please use cascade ui instead",
+            stacklevel=2,
         )
 
         # self._check_path(path)
