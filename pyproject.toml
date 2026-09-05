@@ -15,6 +15,9 @@ exclude = [".git", "__pycache__", "build"]
 "cascade/base/__init__.py" = [
     "E402",
 ] # imports are arranged to avoid going circular in base
+"cascade/data/__init__.py" = [
+    "I001",
+] # imports should have custom order to avoid name collisions
 "cascade/tests/**/*.py" = ["E402"] # tests use different imports
 "cascade/tests/cli/test_query_executor.py" = [
     "E501",
