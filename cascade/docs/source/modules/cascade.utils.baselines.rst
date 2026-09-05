@@ -1,7 +1,2 @@
-cascade.utils.baselines
-#######################
-
-.. autoclass:: cascade.utils.baselines.ConstantBaseline
+.. automodule:: cascade.utils.baselines
     :members:
-
-

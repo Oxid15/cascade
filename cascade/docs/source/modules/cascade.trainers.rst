@@ -1,12 +1,2 @@
-cascade.trainers
-################
-
-.. autoclass:: cascade.trainers.BasicTrainer
+.. automodule:: cascade.trainers
     :members:
-
-
-
-.. autoclass:: cascade.trainers.Trainer
-    :members:
-
-

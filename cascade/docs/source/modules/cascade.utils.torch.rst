@@ -1,7 +1,2 @@
-cascade.utils.torch
-###################
-
-.. autoclass:: cascade.utils.torch.TorchModel
+.. automodule:: cascade.utils.torch
     :members:
-
-
