@@ -704,14 +704,13 @@ Let's define a simple schema for our dataset from the beginning of the tutorial.
 
 .. code-block:: python
 
+    from typing import Any
     from pydantic import BaseModel
 
 
     class LabeledImage(BaseModel):
-        x: np.ndarray
+        x: Any
         y: int
-
-        model_config = {"arbitrary_types_allowed": True}
 
 Previous part is how we define schema in pydantic. You can use complex
 schemas and Fields to place requirements on the input of your Modifiers.
@@ -736,8 +735,6 @@ automatically check the returned value against our model.
             return item
 
 Here we build a pipeline.
-
-.. skip: next
 
 .. code-block:: python
 
@@ -770,20 +767,16 @@ that would easily pass in our previous setup at would take some time to debug.
         def __len__(self):
             return 67
 
-The following code will raise ValidationError, which we will catch and
-display the latest message.
+The following code will raise ``GetItemError`` from ``ValidationError``.
+
+.. skip: next
 
 .. code-block:: python
-
-    from cascade.data import ValidationError
 
     evil = EvilDataset()
     evil = ValidatingModifier(evil)
 
-    try:
-        evil[0]
-    except ValidationError as e:
-        print(e)
+    evil[0]
 
 
 9. Artifacts and Files
