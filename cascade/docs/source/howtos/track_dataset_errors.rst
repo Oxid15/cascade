@@ -44,14 +44,14 @@ Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` 
 
 .. skip: next
 
-.. code-block:: python
+.. code-block:: text
 
-0
-Traceback (most recent call last):
-  File "<stdin>", line 2, in <module>
-  File "<stdin>", line 3, in __getitem__
-  File "<stdin>", line 4, in __getitem__
-RuntimeError: on no!
+   0
+   Traceback (most recent call last):
+     File "<stdin>", line 2, in <module>
+     File "<stdin>", line 3, in __getitem__
+     File "<stdin>", line 4, in __getitem__
+   RuntimeError: on no!
 
 .. skip: next
 
@@ -64,7 +64,7 @@ Let's try a simple update - replace all ``__getitem__`` with ``get`` methods:
 
 .. skip: next
 
-.. code-block:: python
+.. code-block:: text
 
    Traceback (most recent call last):
    File "/home/ilia/work/cascade/cascade/data/dataset.py", line 107, in __getitem__
