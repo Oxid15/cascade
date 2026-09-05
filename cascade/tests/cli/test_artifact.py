@@ -23,8 +23,8 @@ from click.testing import CliRunner
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.base import MetaHandler
-from cascade.cli.cli import cli
 from cascade.cli.artifact import remove_files
+from cascade.cli.cli import cli
 from cascade.data import Wrapper
 from cascade.lines import DataLine, ModelLine
 from cascade.models import BasicModel

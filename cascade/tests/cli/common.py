@@ -20,9 +20,9 @@ from typing import Any, Dict, List
 import pytest
 
 from cascade.data import Wrapper
+from cascade.lines import DataLine, ModelLine
 from cascade.models import BasicModel
 from cascade.repos import Repo
-from cascade.lines import DataLine, ModelLine
 from cascade.workspaces import Workspace
 
 

@@ -184,9 +184,10 @@ class WeighedSampler(Sampler[T]):
                 count += 1
 
         ln = len(self._indices)
-        assert ln == sum(
-            self._partitioning.values()
-        ), "The length of the dataset should be equal to the sum of all partitions - possible problem on Cascade side"
+        assert ln == sum(self._partitioning.values()), (
+            "The length of the dataset should be equal to the sum of all partitions - possible"
+            " problem on Cascade side"
+        )
         super().__init__(dataset, ln)
 
     def get(self, index: int) -> Tuple[Any, Any]:

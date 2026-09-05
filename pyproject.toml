@@ -16,6 +16,9 @@ exclude = [".git", "__pycache__", "build"]
     "E402",
 ] # imports are arranged to avoid going circular in base
 "cascade/tests/**/*.py" = ["E402"] # tests use different imports
+"cascade/tests/cli/test_query_executor.py" = [
+    "E501",
+] # this test is using long queries
 "cascade/utils/tests/**/*.py" = ["E402"]
 "cascade/docs/source/tutorials/*.py" = [
     "E402",

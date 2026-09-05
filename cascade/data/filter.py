@@ -79,7 +79,7 @@ class IteratorFilter(IteratorModifier):
             try:
                 result = self._filter_fn(item)
             except Exception as e:
-                raise RuntimeError(f"Error when filtering dataset on index: {i}") from e
+                raise RuntimeError("Error when filtering dataset") from e
 
             if result:
                 yield item

@@ -25,10 +25,10 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 from cascade.base import MetaHandler
 from cascade.cli.cli import cli
-from cascade.cli.query import Field, QueryParsingError, QueryExecutionError, empty_field
-from cascade.repos import Repo
-from cascade.models import BasicModel
+from cascade.cli.query import Field, QueryParsingError, empty_field
 from cascade.data import Wrapper
+from cascade.models import BasicModel
+from cascade.repos import Repo
 from cascade.tests.cli.common import init_container
 
 CONTAINER_TYPES = ["workspace", "repo", "model_line"]
