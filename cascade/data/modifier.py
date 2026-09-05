@@ -62,7 +62,7 @@ class IteratorModifier(BaseModifier[T], IteratorDataset[T]):
     See also
     --------
     cascade.data.Modifier
-    cascade.data.Iterator
+    cascade.data.IteratorModifier
     """
 
     def __init__(self, dataset: IteratorDataset[T], *args: Any, **kwargs: Any) -> None:

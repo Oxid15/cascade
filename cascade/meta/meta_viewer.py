@@ -48,7 +48,7 @@ class MetaViewer:
 
         See also
         --------
-        cascade.meta.MetaHandler
+        cascade.base.MetaHandler
         """
         if not os.path.exists(root):
             raise FileNotFoundError(root)

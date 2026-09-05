@@ -51,7 +51,7 @@ class Trainer(Traceable):
         super().__init__(*args, **kwargs)
 
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
-        raise_not_implemented("cascade.models.Trainer", "train")
+        raise_not_implemented("cascade.trainers.Trainer", "train")
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()

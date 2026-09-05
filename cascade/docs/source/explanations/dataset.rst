@@ -18,8 +18,7 @@ any other pipeline block should.
 Manually written documentation for Dataset is the best thing that
 can be done and should be enforced.
 
-Cascade has default builtin ways to write dataset doc. It is called
-Data Card and it can be used with DataRegistrator
+Cascade has default builtin ways to write dataset doc. It is called DataCard.
 
 
 Modifier

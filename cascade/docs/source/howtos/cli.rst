@@ -154,7 +154,7 @@ You can add one of multiple tags by passing them after add command.
 
 .. code-block:: bash
 
-    cascade tag add TAG1, TAG2, ...
+    cascade tag add TAG1 TAG2 ...
 
 This will display a list of tags. The order may not be preserved.
 
@@ -166,7 +166,7 @@ This will remove given tags.
 
 .. code-block:: bash
 
-    cascade tag rm TAG1, TAG2, ...
+    cascade tag rm TAG1 TAG2 ...
 
 cascade view
 ************
@@ -175,7 +175,7 @@ cascade view
 
     Viewers are deprecated since 0.18.0 in favor of Cascade UI
 
-To use this feature install ``dash`` separately or by using ``pip install cascade[view]``.
+To use this feature install ``dash`` separately or by using ``pip install cascade-ml[view]``.
 Locate the workspace, repo or line (not every viewer can work in all of those) and run
 the following commands.
 

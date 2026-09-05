@@ -9,9 +9,9 @@ file artifacts easily using ``Model`` API.
 
 .. code-block:: python
 
-    from cascade.models import Model
+    from cascade.utils.baselines import ConstantBaseline
 
-    model = Model()
+    model = ConstantBaseline(constant=1)
 
     with open("file.txt", "w") as f:
         f.write("hello")
@@ -27,6 +27,11 @@ by ``ModelLine``.
 
     line = ModelLine("file_test")
     line.save(model)
+
+.. invisible-code-block: python
+
+    import os
+    assert os.path.exists("file_test/00000/files/file.txt")
 
 You can check the folder ``file_test/00000/files`` to see ``file.txt`` copied there.
 

@@ -205,7 +205,7 @@ class Model(Traceable):
 
         See also
         --------
-        cascade.models.Model.log_metrics
+        cascade.models.Model.log
         """
         self._log_callbacks.append(callback)
 
@@ -297,12 +297,12 @@ class Model(Traceable):
         Use this if you want to make a checkpoint of a model
         from inside the model. Callback should be a function that
         given the model saves it. For example ModelLine.save method.
-        ModelLine.add_model registers callback with only_meta=True automatically
+        ModelLine.create_model registers callback with only_meta=True automatically
         when creating a new model using ``create_model``.
 
         See also
         --------
-        cascade.models.ModelLine.add_model
+        cascade.models.ModelLine.create_model
         cascade.models.Model.add_log_callback
         """
         for callback in self._log_callbacks:

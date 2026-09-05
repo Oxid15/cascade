@@ -92,11 +92,11 @@ class Dataset(BaseDataset[T], Sized):
     this class should mean the presence of length.
 
     If your dataset does not have length defined
-    you can use Iterator
+    you can use IteratorModifier
 
     See also
     --------
-    cascade.data.Iterator
+    cascade.data.IteratorModifier
     """
 
     @abstractmethod
