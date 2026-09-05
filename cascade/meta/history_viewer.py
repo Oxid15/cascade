@@ -16,6 +16,7 @@ limitations under the License.
 
 import importlib
 import os
+import warnings
 from typing import Any, Dict, List, Optional, Union
 
 import pandas as pd
@@ -56,6 +57,10 @@ class HistoryViewer(Server):
         update_period_sec: int, default is 3
             Update period in seconds
         """
+
+        warnings.warn(
+            f"{self.__class__.__name__} is deprecated since 0.18.0. Please use cascade ui instead"
+        )
 
         if not importlib.util.find_spec("plotly"):
             self._raise_cannot_import_plotly()

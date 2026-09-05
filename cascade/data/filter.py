@@ -26,7 +26,9 @@ class Filter(Sampler):
     to create a mask of items that will remain
     """
 
-    def __init__(self, dataset: Dataset, filter_fn: Callable, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self, dataset: Dataset, filter_fn: Callable, *args: Any, **kwargs: Any
+    ) -> None:
         """
         Filter a dataset using a filter function.
         Does not accumulate items in memory, will store only an index mask.
@@ -48,10 +50,11 @@ class Filter(Sampler):
         for i in range(len(dataset)):
             try:
                 result = filter_fn(dataset[i])
-                if result:
-                    self._mask.append(i)
             except Exception as e:
                 raise RuntimeError(f"Error when filtering dataset on index: {i}") from e
+
+            if result:
+                self._mask.append(i)
         super().__init__(dataset, len(self._mask), *args, **kwargs)
 
     def get(self, index: Any):
@@ -64,18 +67,19 @@ class IteratorFilter(IteratorModifier):
 
     Does not filter on init, returns only items that pass the filter
     """
+
     def __init__(
         self, dataset: IteratorDataset, filter_fn: Callable, *args: Any, **kwargs: Any
     ) -> None:
         self._filter_fn = filter_fn
         super().__init__(dataset, *args, **kwargs)
 
-    def __next__(self):
-        while True:
-            item = next(self._dataset)
+    def __iter__(self):
+        for item in self._dataset:
             try:
                 result = self._filter_fn(item)
-                if result:
-                    return item
             except Exception as e:
-                raise RuntimeError("Error when filtering iterator") from e
+                raise RuntimeError(f"Error when filtering dataset on index: {i}") from e
+
+            if result:
+                yield item

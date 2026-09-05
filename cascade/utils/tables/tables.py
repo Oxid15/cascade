@@ -113,17 +113,22 @@ class CSVDataset(TableDataset):
     Wrapper for .csv files.
     """
 
-    def __init__(self, csv_file_path: str, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self, csv_file_path: str, read_csv_kwargs=None, *args: Any, **kwargs: Any
+    ) -> None:
         """
-        Passes all args and kwargs to ``pd.read_csv``
+        Passes all `read_csv_kwargs` to ``pd.read_csv``
 
         Parameters
         ----------
         csv_file_path:
             path to the .csv file
         """
+
+        read_csv_kwargs = read_csv_kwargs or {}
+
         self._path = csv_file_path
-        t = pd.read_csv(self._path, *args, **kwargs)
+        t = pd.read_csv(self._path, **read_csv_kwargs)
         super().__init__(t=t, **kwargs)
 
 

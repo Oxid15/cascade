@@ -53,6 +53,18 @@ class DataLine(DiskLine):
                 skel_hash, meta_hash = f.read().split("\n")
                 self._hashes[skel_hash][meta_hash] = Version(name)
 
+    def _load_item_names(self):
+        if not os.path.isdir(self._root):
+            raise ValueError(f"folder should be directory, got `{self._root}`")
+
+        names = [
+            item_folder
+            for item_folder in os.listdir(self._root)
+            if os.path.isdir(os.path.join(self._root, item_folder))
+        ]
+
+        self._item_names = sorted(names, key=Version)
+
     def _get_hashes(self, meta: Meta) -> Tuple[str, str]:
         skel = skeleton(meta)
 

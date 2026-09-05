@@ -91,12 +91,3 @@ for model, line in zip(models, lines):
     model.link(test_ds)
 
     line.save(model)
-
-# %%
-
-from cascade.meta import MetricViewer
-
-mv = MetricViewer(repo)
-mv.table[mv.table["name"] == "F1"]
-best_model = mv.table[mv.table["name"] == "F1"].sort_values("value").iloc[0].to_dict()
-print(best_model)

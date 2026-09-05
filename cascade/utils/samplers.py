@@ -18,7 +18,6 @@ from itertools import cycle
 from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
-from tqdm import trange
 
 from ..base import Meta
 from ..data.dataset import Dataset, T
@@ -46,7 +45,7 @@ class OverSampler(Sampler[T]):
     def __init__(
         self, dataset: Dataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
     ) -> None:
-        labels = [int(dataset[i][1]) for i in trange(len(dataset))]
+        labels = [int(dataset[i][1]) for i in range(len(dataset))]
         ulabels, counts = np.unique(labels, return_counts=True)
         how_much_add = np.max(counts) - counts
 
@@ -59,7 +58,6 @@ class OverSampler(Sampler[T]):
                 self._add_indices.append(k)
 
         ln = len(dataset) + len(self._add_indices)
-        print(f"Original length was {len(dataset)} and new is {ln}")
 
         super().__init__(dataset, *args, num_samples=ln, **kwargs)
 
@@ -95,7 +93,7 @@ class UnderSampler(Sampler[T]):
     def __init__(
         self, dataset: Dataset[Tuple[Any, Any]], *args: Any, **kwargs: Any
     ) -> None:
-        labels = [int(dataset[i][1]) for i in trange(len(dataset))]
+        labels = [int(dataset[i][1]) for i in range(len(dataset))]
         ulabels, counts = np.unique(labels, return_counts=True)
         min_count = np.min(counts)
 
@@ -109,7 +107,6 @@ class UnderSampler(Sampler[T]):
                 k += 1
 
         ln = len(self._rem_indices)
-        print(f"Original length was {len(dataset)} and new is {ln}")
         super().__init__(dataset, ln, *args, **kwargs)
 
     def get(self, index: int) -> Tuple[Any, Any]:
@@ -157,9 +154,9 @@ class WeighedSampler(Sampler[T]):
             partitioning: Dict[Any, int], optional
                 A dictionary with labels as keys and the number of samples as values.
                 If some label omitted, assumes that it should be sampled the same number
-                of times it is actually appears in the dataset.
+                of times it actually appears in the dataset.
         """
-        labels = np.asarray([dataset[i][1] for i in trange(len(dataset))])
+        labels = np.asarray([dataset[i][1] for i in range(len(dataset))])
         ulabels, counts = np.unique(labels, return_counts=True)
         # Convert to lists to prevent serialization problems with metadata
         ulabels, counts = ulabels.tolist(), counts.tolist()
@@ -168,7 +165,8 @@ class WeighedSampler(Sampler[T]):
             partitioning = {}
 
         self._check_partitioning(ulabels, partitioning)
-        self._partitioning = partitioning
+        # Copy partitioning to preserve original as is
+        self._partitioning = dict(partitioning)
 
         # If label is omitted in partitioning, add it with true count
         for ulabel, count in zip(ulabels, counts):
@@ -187,9 +185,8 @@ class WeighedSampler(Sampler[T]):
 
         ln = len(self._indices)
         assert ln == sum(
-            partitioning.values()
-        ), "The length should be equal to the sum of partitions - something went wrong"
-        print(f"Original length was {len(dataset)} and new is {ln}")
+            self._partitioning.values()
+        ), "The length of the dataset should be equal to the sum of all partitions - possible problem on Cascade side"
         super().__init__(dataset, ln)
 
     def get(self, index: int) -> Tuple[Any, Any]:
