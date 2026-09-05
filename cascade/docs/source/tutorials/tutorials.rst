@@ -329,10 +329,18 @@ DataLines are the same thing as ModelLine but for data pipelines. You can use
 them to track only metadata of your pipelines or even save and load whole pipelines
 to reproduce an experiment.
 
+.. skip: next
+
 .. code-block:: python
 
     dataline = DataLine("dataline")
     dataline.save(ds)
+
+.. invisible-code-block: python
+
+    # Keeping this block to keep tests running without pickling errors
+    dataline = DataLine("dataline")
+    dataline.save(ds, only_meta=True)
 
 Unlike models, data pipelines are not numbered, but versioned.
 Versions are derived from metadata of a pipeline and consist of two
@@ -345,10 +353,16 @@ Let's see how it works.
     version = dataline.get_version(ds)
     print(version) # 0.1
 
+.. invisible-code-block: python
+
+    assert version == "0.1"
+
 The starting version is ``0.1`` and then, when metadata changes,
 parts of the version are bumped automatically. When saving
 the version of a dataset that already exists, line will
 notice that and overwrite older record with a new object.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -358,11 +372,21 @@ notice that and overwrite older record with a new object.
 
     dataline.save(ds)
 
+.. invisible-code-block: python
+
+    ds.update_meta({"detail_i_almost_forgot": "Changes in meta bump minor version"})
+    version = dataline.get_version(ds)
+    assert version == "0.2"
+
+    dataline.save(ds, only_meta=True)
+
 In previous example minor version was bumped by changing the part of the
 pipeline's meta.
 
 In the next one we add a new pipeline stage, which is what will bump
 a major part of the version and we will see ``1.0``.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -371,9 +395,19 @@ a major part of the version and we will see ``1.0``.
     version = dataline.get_version(changed_ds)
     print(version) # 1.0
 
+.. invisible-code-block: python
+
+    changed_ds = ApplyModifier(ds, add_noise)
+    dataline.save(changed_ds, only_meta=True)
+    version = dataline.get_version(changed_ds)
+    assert version == "1.0"
+
+
 If we plug in an old dataset it will still get us the same version.
 As long as meta is the same. Using version string we can load saved 
 pipeline object from disk.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -384,6 +418,10 @@ pipeline object from disk.
     version = dataline.get_version(loaded_ds)
     print(version) # 0.2
 
+.. invisible-code-block: python
+
+    version = dataline.get_version(ds)
+    assert version == "0.2"
 
 5. Metrics and Evaluation
 =========================
@@ -408,8 +446,8 @@ of metrics.
         return f1_score(gt, pred, average="macro")
 
 
-    x = [item["x"] for item in loaded_ds]
-    y = [item["y"] for item in loaded_ds]
+    x = [item["x"] for item in ds]
+    y = [item["y"] for item in ds]
 
     model.evaluate(x, y, [f1])
 
@@ -544,7 +582,7 @@ Go to the directory of previously created ``line`` and execute the following.
     cascade status
 
 This is basic utility now just serves as a check that everything is okay with
-you installation and directory. Cascade will look for ``meta.json`` file in the folder
+your installation and directory. Cascade will look for ``meta.json`` file in the folder
 you are running a command and if found, output short description of what is in this folder.
 
 If everything is ok, previous command should output the following. If not, do not
@@ -697,7 +735,9 @@ automatically check the returned value against our model.
             # Here you can do anything
             return item
 
-Here we build a pipeline and augment our data using padding.
+Here we build a pipeline.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -725,7 +765,7 @@ that would easily pass in our previous setup at would take some time to debug.
 
     class EvilDataset(Dataset):
         def get(self, idx):
-            return dict(x=np.zeros(18*18), y="hehe")
+            return dict(x=np.zeros(18 * 18), y="hehe")
 
         def __len__(self):
             return 67
