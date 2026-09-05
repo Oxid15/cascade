@@ -42,6 +42,7 @@ class SchemaModifier(Modifier):
 
     .. code-block:: python
 
+        from typing import List, Tuple
         import pydantic
 
         class AnnotImage(pydantic.BaseModel):

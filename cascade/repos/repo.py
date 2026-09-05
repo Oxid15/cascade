@@ -38,13 +38,13 @@ class Repo(BaseRepo, TraceableOnDisk):
 
     Example
     -------
-    >>> from cascade.base import Repo
+    >>> from cascade.repos import Repo
     >>> from cascade.utils.baselines import ConstantBaseline
     >>> repo = Repo("repo")
     >>> repo.describe("This is a repo with one line for the example.")
     >>> line = repo.add_line("const", model_cls=ConstantBaseline)
-    >>> model = line.add_model()
-    >>> model.fit()
+    >>> model = line.create_model(constant=1)
+    >>> model.fit([0], [1])
     >>> line.save(model)
     """
 

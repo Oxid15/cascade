@@ -26,8 +26,8 @@ pytest_collect_file = Sybil(
         SkipParser(),
     ],
     patterns=[
-        "cascade/docs/source/*.rst",
-        "cascade/docs/source/**/*.rst",
+        "*.rst",
+        "*.py",
     ],
     fixtures=["sybil_cwd"],
 ).pytest()

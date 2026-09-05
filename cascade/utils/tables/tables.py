@@ -163,6 +163,8 @@ class FeatureTable(TableDataset):
 
         Example
         -------
+        .. skip: next
+
         .. code-block:: python
 
             import pandas as pd
