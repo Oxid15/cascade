@@ -15,9 +15,17 @@ Installation
 
 Install the latest version using pip
 
+.. skip: start
+
 .. code-block:: bash
 
     pip install cascade-ml
+
+For this tutorial you will also need sklearn
+
+.. code-block:: bash
+
+    pip install scikit-learn
 
 Cascade has a set of optional dependencies, which can be installed with the following commands
 
@@ -29,6 +37,8 @@ Cascade has a set of optional dependencies, which can be installed with the foll
     pip install cascade-ml[sklearn]  # Scikit-learn integration
     pip install cascade-ml[torch]    # PyTorch integration
     pip install cascade-ml[all]      # Installs everything
+
+.. skip: end
 
 If you have completed the tutorial you can see the :ref:`/howtos/howtos.rst` section
 for more specific and complex workflows.
@@ -50,6 +60,7 @@ for ``digits`` from ``sklearn``.
 
 .. code-block:: python
 
+    from sklearn.datasets import load_digits
     from cascade.data import Dataset
 
 
@@ -184,8 +195,11 @@ In this step we create a wrapper around logistic regression model. Minimal setup
 for the model is not strictly defined as in Dataset case. We define ``fit`` and ``predict``.
 ``BasicModel`` will handle everything else for us - like saving and loading for example.
 
+We can create and fit the model now using the dataset from the Pipelines step.
+
 .. code-block:: python
 
+    from sklearn.linear_model import LogisticRegression
     from cascade.models import BasicModel
 
 
@@ -204,10 +218,6 @@ for the model is not strictly defined as in Dataset case. We define ``fit`` and 
 
         def predict(self, x):
             return self.model.predict(x)
-
-We can create and fit the model now using the dataset from the Pipelines step.
-
-.. code-block:: python
 
     model = LR("l2")
     model.fit(ds)
@@ -240,6 +250,8 @@ In the next step we load the model and infer it on a dataset.
 
 The line knows little about models it manages - we provided a class of our model
 to be able to restore it correctly when loading.
+
+.. skip: start
 
 .. code-block:: python
 
@@ -282,6 +294,8 @@ meta with a default line method.
     'tags': [],
     'type': 'model',
     'user': 'ilia'}]
+
+.. skip: end
 
 Further reading
 ***************
@@ -401,7 +415,7 @@ of metrics.
 
     pprint(model.metrics)
 
-.. code-block:: python
+.. code-block:: json
 
     [Metric(name=f1, value=1.0, created_at="2024-07-29 19:41:09.344039+00:00")]
 
@@ -429,7 +443,7 @@ After that ``evaluate`` can be called with a list of ``Metric`` objects.
 
     pprint(model.metrics)
 
-.. code-block:: python
+.. code-block:: json
 
     [Metric(name=f1, value=1.0, created_at=2024-07-29 19:47:33.435828+00:00),
      Accuracy(name=acc, value=1.0, created_at=2024-07-29 19:47:33.437724+00:00)]
@@ -441,7 +455,7 @@ Metrics are saved and written in metadata automatically after calling ``evaluate
     line.save(model)
     pprint(line.load_model_meta(1))
 
-.. code-block:: python
+.. code-block:: json
 
     [{'comments': [],
     'created_at': '2024-07-28T14:47:30.451860+00:00',
@@ -486,6 +500,10 @@ Tags can be used to identify certain models, or filter them.
 Links allow connecting a model to any relevant external media.
 You can link a file using its URI, or a Cascade object like training data
 or some other related model.
+
+.. invisible-code-block: python
+
+    __file__ = "tutorials.rst"
 
 .. code-block:: python
 

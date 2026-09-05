@@ -13,18 +13,15 @@ Consider the following pipeline:
 
 .. code-block:: python
 
-   from cascade.data import Dataset, Modifier
+   from cascade.data import Dataset, Modifier, Wrapper
 
 
-   class RaiseDatasetOverridingGetItem(Dataset):
+   class RaiseModifierOverridingGetItem(Modifier):
       def __getitem__(self, index):
          if index == 1:
                raise RuntimeError("on no!")
          else:
-               return 0
-
-      def __len__(self):
-         return 2
+               return self._dataset[index]
 
 
    class ModifierOverridingGetItem(Modifier):
@@ -32,29 +29,40 @@ Consider the following pipeline:
          return self._dataset[index]
 
 
-   ds = RaiseDatasetOverridingGetItem()
+   ds = Wrapper([1, 2, 3])
+   ds = RaiseModifierOverridingGetItem(ds)
    ds = ModifierOverridingGetItem(ds)
 
-   for i in range(len(ds)):
-      ds[i]
-
-Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` method. When we execute the code we see only the error message and will require additional runs to trace where exactly the error occured. In case of large datasets and long trainings it can be very costly to run second time to check where the error occurs.
+.. skip: next
 
 .. code-block:: python
 
-   Traceback (most recent call last):
-   File "/home/user/example.py", line 24, in <module>
-      ds[i]
-      ~~^^^
-   File "/home/user/example.py", line 17, in __getitem__
-      return self._dataset[index]
-            ~~~~~~~~~~~~~^^^^^^^
-   File "/home/user/example.py", line 7, in __getitem__
-      raise RuntimeError("on no!")
-   RuntimeError: on no!
+for i in range(len(ds)):
+   ds[i]
 
+Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` method. When we execute the code we see only the error message and will require additional runs to trace where exactly the error occured. In case of large datasets and long trainings it can be very costly to run second time to check where the error occurs.
+
+.. skip: next
+
+.. code-block:: python
+
+0
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "<stdin>", line 3, in __getitem__
+  File "<stdin>", line 4, in __getitem__
+RuntimeError: on no!
+
+.. skip: next
 
 Let's try a simple update - replace all ``__getitem__`` with ``get`` methods:
+
+.. code-block:: python
+
+   for i in range(len(ds)):
+      ds.get(i)
+
+.. skip: next
 
 .. code-block:: python
 

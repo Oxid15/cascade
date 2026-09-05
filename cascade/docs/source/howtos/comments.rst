@@ -15,13 +15,13 @@ they are automatically synced to disk after creation.
 
 .. code-block:: python
 
-    from cascade.models import ModelLine
+    from cascade.lines import ModelLine
 
     line = ModelLine("line")
     model = line.create_model()
 
 Notice how you can comment not only on models. Models will save
-comments to disk only when saved, when lines and repos will
+comments to disk only when saved, but lines and repos will
 sync meta with disk automatically.
 
 .. code-block:: python
@@ -37,7 +37,7 @@ delete the comment.
 
 .. code-block:: python
 
-    model.remove_comment(1)
+    model.remove_comment("1")
 
 
 Using Cascade CLI
