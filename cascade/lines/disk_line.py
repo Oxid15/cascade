@@ -113,7 +113,7 @@ class DiskLine(TraceableOnDisk, Line):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises

@@ -268,7 +268,7 @@ class ModelLine(DiskLine):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model's meta
 
         Raises
