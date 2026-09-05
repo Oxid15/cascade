@@ -26,8 +26,7 @@ from ...data.modifier import Modifier
 
 class TableDataset(Dataset[T]):
     """
-    Wrapper for ``pd.DataFrame``s which allows to manage metadata and perform
-    validation.
+    Wrapper for ``DataFrame`` which allows to manage metadata and perform validation
     """
 
     def __init__(
@@ -117,7 +116,7 @@ class CSVDataset(TableDataset):
         self, csv_file_path: str, read_csv_kwargs=None, *args: Any, **kwargs: Any
     ) -> None:
         """
-        Passes all `read_csv_kwargs` to ``pd.read_csv``
+        Passes all ``read_csv_kwargs`` to ``pd.read_csv``
 
         Parameters
         ----------
@@ -228,7 +227,7 @@ class FeatureTable(TableDataset):
 
         Returns
         -------
-        List[str]
+        List[Union[str, Tuple[str]]]
             List of feature names
         """
         return list(self._features) + list(self._computed_features.keys())
