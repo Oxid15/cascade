@@ -453,7 +453,9 @@ of metrics.
 
     pprint(model.metrics)
 
-.. code-block:: json
+.. skip: next
+
+.. code-block:: python
 
     [Metric(name=f1, value=1.0, created_at="2024-07-29 19:41:09.344039+00:00")]
 
@@ -481,7 +483,9 @@ After that ``evaluate`` can be called with a list of ``Metric`` objects.
 
     pprint(model.metrics)
 
-.. code-block:: json
+.. skip: next
+
+.. code-block:: python
 
     [Metric(name=f1, value=1.0, created_at=2024-07-29 19:47:33.435828+00:00),
      Accuracy(name=acc, value=1.0, created_at=2024-07-29 19:47:33.437724+00:00)]
@@ -493,7 +497,9 @@ Metrics are saved and written in metadata automatically after calling ``evaluate
     line.save(model)
     pprint(line.load_model_meta(1))
 
-.. code-block:: json
+.. skip: next
+
+.. code-block:: python
 
     [{'comments': [],
     'created_at': '2024-07-28T14:47:30.451860+00:00',
@@ -934,10 +940,14 @@ Let's save the model and see how everything is handled automatically.
 
     line.save(model)
 
-.. code-block:: text
+.. skip: next
 
-    [SkMetric(name=f1_score, value=1.0, created_at=2024-08-14 19:37:46.556587+00:00),
-    SkMetric(name=acc, value=1.0, created_at=2024-08-14 19:37:46.556701+00:00)]
+.. code-block:: python
+
+    [
+        SkMetric(name=f1_score, value=1.0, created_at=2024-08-14 19:37:46.556587+00:00),
+        SkMetric(name=acc, value=1.0, created_at=2024-08-14 19:37:46.556701+00:00)
+    ]
 
 Notice how an artifact and a model are saved using the default implementation of ``save``
 and ``save_artifact``.

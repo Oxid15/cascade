@@ -67,37 +67,37 @@ Let's try a simple update - replace all ``__getitem__`` with ``get`` methods:
 .. code-block:: python
 
    Traceback (most recent call last):
-   File "/home/user/cascade/cascade/data/dataset.py", line 107, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 107, in __getitem__
       return self.get(index)
             ^^^^^^^^^^^^^^^
-   File "/home/user/example.py", line 33, in get
+   File "/home/ilia/work/example.py", line 33, in get
       raise RuntimeError("on no!")
    RuntimeError: on no!
 
    The above exception was the direct cause of the following exception:
 
    Traceback (most recent call last):
-   File "/home/user/cascade/cascade/data/dataset.py", line 107, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 107, in __getitem__
       return self.get(index)
             ^^^^^^^^^^^^^^^
-   File "/home/user/example.py", line 43, in get
+   File "/home/ilia/work/example.py", line 43, in get
       return self._dataset[index]
             ~~~~~~~~~~~~~^^^^^^^
-   File "/home/user/cascade/cascade/data/dataset.py", line 106, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 106, in __getitem__
       with GetItemHandler(self, index):
-   File "/home/user/cascade/cascade/data/dataset.py", line 36, in __exit__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 36, in __exit__
       raise GetItemError(
    cascade.data.dataset.GetItemError: Failed to get item from <class '__main__.RaiseDataset'> at index 1
 
    The above exception was the direct cause of the following exception:
 
    Traceback (most recent call last):
-   File "/home/user/example.py", line 50, in <module>
+   File "/home/ilia/work/example.py", line 50, in <module>
       ds[i]
       ~~^^^
-   File "/home/user/cascade/cascade/data/dataset.py", line 106, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 106, in __getitem__
       with GetItemHandler(self, index):
-   File "/home/user/cascade/cascade/data/dataset.py", line 36, in __exit__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 36, in __exit__
       raise GetItemError(
    cascade.data.dataset.GetItemError: Failed to get item from <class '__main__.ModifierWithGet'> at index 1
 

@@ -135,13 +135,13 @@ Lines can also store data pipelines.
                         "value": 0.5284442363543276}],
             "name": "cascade.models.model.Model",
             "params": {"lr": 0.0001},
-            "path": "/home/your-user-name/work/project/repo/baseline/00000",
+            "path": "/home/ilia/work/cascade/repo/baseline/00000",
             "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
             "saved_at": "2026-07-25T21:24:41.753499+00:00",
             "slug": "victorious_dingo_of_will",
             "tags": ["production"],
             "type": "model",
-            "user": "your-user-name"
+            "user": "ilia"
         }
     ]
 ]

@@ -144,9 +144,9 @@ Cascade to track an ``sklearn`` classifier.
             "slug": "dramatic_gibbon_of_swiftness",
             "saved_at": "2026-09-04T13:59:05.717339+00:00",
             "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
-            "user": "your-username",
+            "user": "ilia",
             "host": "your-pc-name",
-            "cwd": "/home/your-username/cascade",
+            "cwd": "/home/ilia/cascade",
             "git_commit": "ddcb2f700d64592c3e433209dff5c6c5d544906f",
             "git_uncommitted_changes": [
                 "M cascade/docs/source/index.rst\n?? line/"
