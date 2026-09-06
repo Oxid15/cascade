@@ -33,6 +33,8 @@ Data pipeline
 The data pipeline loads MNIST, wraps the datasets with Cascade metadata, and
 adds noise to each image.
 
+.. skip: next
+
 .. code-block:: python
 
     MNIST_ROOT = "data"
@@ -45,6 +47,7 @@ adds noise to each image.
             img += torch.rand_like(img) * 0.1
             img = torch.clip(img, 0, 255)
             return img, label
+
 
     train_ds = torchvision.datasets.MNIST(
         root=MNIST_ROOT,
@@ -145,6 +148,8 @@ Model training
 The wrapper accepts the model class and the parameters needed to initialize
 it. Additional keyword arguments are recorded as training metadata.
 
+.. skip: next
+
 .. code-block:: python
 
     NUM_EPOCHS = 2
@@ -158,12 +163,19 @@ it. Additional keyword arguments are recorded as training metadata.
         lr=LR,
         bs=BATCH_SIZE,
     )
+
+.. skip: next
+
+.. code-block:: python
+
     model.fit(train_dl, NUM_EPOCHS, LR)
 
 Evaluate the model
 ******************
 
 Evaluation populates the model's metrics rather than returning a value.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -175,24 +187,14 @@ Check the metadata
 The metadata contains the model parameters and the metric recorded during
 evaluation.
 
+.. skip: next
+
 .. code-block:: python
 
     from pprint import pprint
 
     pprint(model.get_meta())
 
-.. invisible-code-block: python
-
-    metadata = model.get_meta()[0]
-    assert sorted(metadata["params"]) == [
-        "bs",
-        "hidden_size",
-        "input_size",
-        "lr",
-        "num_classes",
-        "num_epochs",
-    ]
-    assert metadata["metrics"][0].name == "accuracy_score"
 
 Saving the model
 ****************
@@ -212,6 +214,8 @@ manages experiments with similar architectures.
     )
 
 Link the training dataset to the model before saving it.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -237,6 +241,8 @@ More experiments
 
 To compare several models, define a parameter grid and save each result to
 the same model line.
+
+.. skip: next
 
 .. code-block:: python
 

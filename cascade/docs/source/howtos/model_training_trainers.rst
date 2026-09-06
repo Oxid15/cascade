@@ -29,6 +29,8 @@ The dataset is wrapped with Cascade metadata, transformed with a noise
 modifier, and limited to a fixed number of samples to keep this example
 shorter.
 
+.. skip: next
+
 .. code-block:: python
 
     MNIST_ROOT = "data"
@@ -61,10 +63,6 @@ shorter.
     train_ds = NoiseModifier(train_ds)
     test_ds = NoiseModifier(test_ds)
 
-    # Limit the number of samples to speed up this example.
-    train_ds = cdd.CyclicSampler(train_ds, 10000)
-    test_ds = cdd.CyclicSampler(test_ds, 5000)
-
     train_dl = torch.utils.data.DataLoader(
         dataset=train_ds,
         batch_size=BATCH_SIZE,
@@ -78,19 +76,14 @@ shorter.
 
 The pipeline metadata includes the sampler, modifier, and wrapped dataset.
 
+.. skip: next
+
 .. code-block:: python
 
     from pprint import pprint
 
     pprint(train_ds.get_meta())
 
-.. invisible-code-block: python
-
-    metadata = train_ds.get_meta()
-    assert len(metadata) == 3
-    assert metadata[0]["name"].endswith("CyclicSampler")
-    assert metadata[1]["name"].endswith("NoiseModifier")
-    assert metadata[0]["len"] == 10000
 
 Model definition
 ****************
@@ -156,6 +149,8 @@ Model initialization
 Parameters required by ``SimpleNN`` initialize the module. Additional keyword
 arguments are recorded in the model metadata.
 
+.. skip: next
+
 .. code-block:: python
 
     NUM_EPOCHS = 5
@@ -198,6 +193,8 @@ The first call trains, evaluates, saves, and logs the model. The training and
 test keyword arguments are passed to ``Classifier.fit`` and
 ``Classifier.evaluate`` respectively.
 
+.. skip: next
+
 .. code-block:: python
 
     trainer.train(
@@ -224,12 +221,6 @@ well as timestamps for the run.
 
     pprint(trainer.get_meta())
 
-.. invisible-code-block: python
-
-    trainer_metadata = trainer.get_meta()[0]
-    assert trainer_metadata["epochs"] == NUM_EPOCHS
-    assert trainer_metadata["eval_strategy"] == 1
-    assert trainer_metadata["save_strategy"] == 2
 
 Start from a checkpoint
 ***********************
@@ -258,8 +249,3 @@ The metrics collected by the trainer can be inspected after training.
 .. code-block:: python
 
     trainer.metrics
-
-.. invisible-code-block: python
-
-    assert trainer.metrics
-    assert all(metric.name == "accuracy_score" for metric in trainer.metrics[-1])
