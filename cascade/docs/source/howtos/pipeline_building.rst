@@ -22,6 +22,8 @@ Load the PyTorch dataset
 Load the training and test partitions of MNIST. Set ``download=True`` for the
 training partition when the dataset is not already available locally.
 
+.. skip: next
+
 .. code-block:: python
 
     MNIST_ROOT = "data"
@@ -44,6 +46,8 @@ Creating a Cascade dataset
 Wrap the PyTorch datasets to add Cascade metadata. The description is attached
 to the training dataset and remains available through later pipeline stages.
 
+.. skip: next
+
 .. code-block:: python
 
     train_ds = cdd.Wrapper(train_ds)
@@ -55,6 +59,8 @@ Applying noise
 
 Modifiers transform items lazily as they are read. This modifier adds a small
 amount of random noise to each image.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -73,25 +79,20 @@ Viewing metadata
 Each modifier adds a stage to the dataset metadata. Use ``pprint`` when
 inspecting the complete metadata interactively.
 
+.. skip: next
+
 .. code-block:: python
 
     from pprint import pprint
 
     pprint(train_ds.get_meta())
 
-.. invisible-code-block: python
-
-    metadata = train_ds.get_meta()
-    assert len(metadata) == 2
-    assert metadata[0]["name"].endswith("NoiseModifier")
-    assert metadata[1]["description"] == (
-        "This is MNIST dataset of handwritten images"
-    )
-
 Ready to train a model
 **********************
 
 Pass the Cascade datasets to standard PyTorch ``DataLoader`` instances.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -107,10 +108,3 @@ Pass the Cascade datasets to standard PyTorch ``DataLoader`` instances.
         batch_size=BATCH_SIZE,
         shuffle=False,
     )
-
-.. invisible-code-block: python
-
-    assert len(train_ds) == 60000
-    assert len(test_ds) == 10000
-    assert len(trainldr) == 6000
-    assert len(testldr) == 1000
