@@ -25,6 +25,7 @@ Modules
     cascade.utils.sklearn
     cascade.utils.tables
     cascade.utils.time_series
+    cascade.utils.samplers
     cascade.utils.torch
     cascade.utils.vision
     dataset_zoo
