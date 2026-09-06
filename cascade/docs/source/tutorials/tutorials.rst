@@ -124,7 +124,7 @@ We can augment our data by concatenating those two datasets.
 
 Further reading
 ***************
-- :ref:`How to build a Pipeline</howtos/pipeline_building.ipynb>`
+- :doc:`How to build a Pipeline </howtos/pipeline_building>`
 - :ref:`Dataset Zoo</modules/dataset_zoo.rst>`
 
 
@@ -300,8 +300,8 @@ meta with a default line method.
 Further reading
 ***************
 
-- :ref:`How to train a model</howtos/model_training.ipynb>`
-- :ref:`How to train a model with Trainer</howtos/model_training_trainers.ipynb>`
+- :doc:`How to train a model </howtos/model_training>`
+- :doc:`How to train a model with Trainer </howtos/model_training_trainers>`
 
 
 4. Custom Meta and Versioning
