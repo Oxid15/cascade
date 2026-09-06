@@ -168,6 +168,12 @@ This will remove given tags.
 
     cascade tag rm TAG1 TAG2 ...
 
+cascade ui
+**********
+
+:ref:`/tutorials/ui.rst` is a separate package you can install to run web-based interface over your Workspace.
+It allows to view meta data, compare experiments, draw plots and other things that can be difficult in CLI.
+
 cascade view
 ************
 
