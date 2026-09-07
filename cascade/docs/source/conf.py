@@ -51,6 +51,10 @@ intersphinx_mapping = {
     "pandas": ("https://pandas.pydata.org/docs/", None),
     "torch": ("https://pytorch.org/docs/stable/", None),
     "python": ("https://docs.python.org/3/", None),
+    "sklearn": (
+        "https://scikit-learn.org/stable/",
+        "https://scikit-learn.org/stable/objects.inv",
+    ),
 }
 
 highlight_language = "python"
