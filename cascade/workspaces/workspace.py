@@ -26,6 +26,10 @@ from ..repos.repo import Repo
 
 
 class Workspace(TraceableOnDisk):
+    """
+    The topmost container in Cascade, a collection of Repos
+    """
+
     def __init__(
         self,
         path: str,
@@ -82,6 +86,19 @@ class Workspace(TraceableOnDisk):
         return self._repo_names
 
     def get_default(self) -> Repo:
+        """
+        Workspaces feature the default repo and return it using this method
+
+        Returns
+        -------
+        Repo
+            Default repo
+
+        Raises
+        ------
+        RuntimeError
+            When trying to use this method on an empty Workspace
+        """
         if self._default is not None:
             return self[self._default]
         else:
@@ -93,6 +110,19 @@ class Workspace(TraceableOnDisk):
                 )
 
     def set_default(self, repo: str) -> None:
+        """
+        Set Repo as default using the name
+
+        Parameters
+        ----------
+        repo : str
+            Name of the Repo, it should exist
+
+        Raises
+        ------
+        KeyError
+            If the provided repo does not exist
+        """
         if repo in self._repo_names:
             self._default = repo
         else:

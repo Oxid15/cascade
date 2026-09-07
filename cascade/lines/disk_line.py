@@ -22,6 +22,10 @@ from .line import Line
 
 
 class DiskLine(TraceableOnDisk, Line):
+    """
+    Base class for Lines storing objects on disk
+    """
+
     def __init__(
         self,
         root: str,
@@ -43,7 +47,9 @@ class DiskLine(TraceableOnDisk, Line):
         self.sync_meta()
 
     def reload(self) -> None:
-        # Here update slugs in ModelLine
+        """
+        Reads object names from the disk
+        """
         self._load_item_names()
 
     def _load_item_names(self):

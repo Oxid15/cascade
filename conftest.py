@@ -1,8 +1,10 @@
 import os
+from doctest import ELLIPSIS
 
 import pytest
 from sybil import Sybil
 from sybil.parsers.codeblock import PythonCodeBlockParser
+from sybil.evaluators.doctest import NUMBER
 from sybil.parsers.doctest import DocTestParser
 from sybil.parsers.rest import SkipParser
 
@@ -21,7 +23,7 @@ def sybil_cwd(request, tmp_path):
 
 pytest_collect_file = Sybil(
     parsers=[
-        DocTestParser(),
+        DocTestParser(optionflags=NUMBER | ELLIPSIS),
         PythonCodeBlockParser(),
         SkipParser(),
     ],

@@ -28,6 +28,14 @@ class Cache:
     """
 
     def __init__(self, path: str, backend: Literal["pickle"] = "pickle") -> None:
+        """
+        Parameters
+        ----------
+        path : str
+            Path to cache, if the folder does not exist, will create it
+        backend : Literal["pickle"], optional
+            caching backend, by default "pickle"
+        """
         os.makedirs(path, exist_ok=True)
 
         self.path = path
@@ -35,13 +43,31 @@ class Cache:
 
     def exists(self) -> bool:
         """
-        Returns:
-            bool: True if the object was already cached in this path
+        Returns
+        -------
+        bool
+            True if the object was already cached in this path
         """
         return len(os.listdir(self.path)) > 0
 
     def save(self, obj: Any) -> None:
+        """
+        Caches object
+
+        Parameters
+        ----------
+        obj : Any
+            Object to be cached
+        """
         return self._handler.save(obj, self.path)
 
     def load(self) -> Any:
+        """
+        Return object from cache
+
+        Returns
+        -------
+        Any
+            Loaded object
+        """
         return self._handler.load(self.path)

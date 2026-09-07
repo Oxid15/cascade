@@ -242,6 +242,31 @@ class BasicTrainer(Trainer):
             logger.info(metric)
 
     def get_meta(self) -> Meta:
+        """
+        Includes `training_started_at` and `training_ended_at` into default meta
+
+        Returns
+        -------
+        Meta
+
+        Example
+        -------
+
+        .. doctest::
+
+            >>> from pprint import pprint
+            >>> from cascade.trainers import BasicTrainer
+            >>> trainer = BasicTrainer("trainer_repo")
+            >>> pprint(trainer.get_meta())
+            [{'comments': [],
+              'description': None,
+              'links': [],
+              'name': 'cascade.trainers.trainer.BasicTrainer',
+              'tags': [],
+              'training_ended_at': None,
+              'training_started_at': None,
+              'type': 'trainer'}]
+        """
         meta = super().get_meta()
         meta[0]["training_started_at"] = self.train_start_at
         meta[0]["training_ended_at"] = self.train_end_at

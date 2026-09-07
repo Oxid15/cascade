@@ -71,7 +71,7 @@ class SchemaModifier(Modifier):
 
     4. That's all. Schema check will be held
     automatically every time ``self._dataset[idx]`` is
-    accessed. If it is not ``AnnotImage``, cascade.data.ValidationError
+    accessed. If it is not like ``AnnotImage``, cascade.data.ValidationError
     will be raised.
 
     """

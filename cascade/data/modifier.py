@@ -5,6 +5,10 @@ from .dataset import BaseDataset, Dataset, IteratorDataset, T
 
 
 class BaseModifier(BaseDataset[T]):
+    """
+    Base class for Modifiers, mostly unifies metadata management
+    """
+
     def __init__(self, dataset: BaseDataset[T], *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Modifier. Modifier represents a step in a pipeline -

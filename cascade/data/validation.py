@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import inspect
+from abc import ABC, abstractmethod
 from collections import defaultdict
 from functools import wraps
 from typing import Any, Callable, Dict, Optional, Tuple
@@ -44,16 +45,35 @@ class ValidationError(Exception):
         super().__init__(message)
 
 
-class ValidationProvider:
+class ValidationProvider(ABC):
+    """
+    Abstract class for any validation provider
+    """
+
     def __init__(self, schema: Any) -> None:
         self._schema = schema
 
-    def __call__(self, *args: Any, **kwargs: Any) -> Any:
-        raise NotImplementedError()
+    @abstractmethod
+    def __call__(self, *args: Any, **kwargs: Any) -> Any: ...
 
 
 class PydanticValidator(ValidationProvider):
+    """
+    Pydantic based validation provider. Needs pydantic installed.
+    """
+
     def __init__(self, schema: Any) -> None:
+        """
+        Parameters
+        ----------
+        schema : Any
+            Schema specification
+
+        Raises
+        ------
+        ImportError
+            If pydantic is not installed
+        """
         super().__init__(schema)
 
         try:
@@ -105,6 +125,10 @@ class SchemaValidator(Validator):
 
 
 class SchemaFactory:
+    """
+    Builds schema for specific provider from TypeDict
+    """
+
     @classmethod
     def build(cls, types: TypeDict, provider: SupportedProviders) -> Any:
         if provider == "pydantic":
@@ -125,6 +149,10 @@ class SchemaFactory:
 
 
 class TypesValidator(Validator):
+    """
+    Validator for function types
+    """
+
     def __init__(self, types: TypeDict) -> None:
         super().__init__()
         provider_to_args = defaultdict(dict)
@@ -156,6 +184,36 @@ def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
     -------
     Callable[[Any], Any]
         Decorated function
+
+
+    Example
+    -------
+
+    .. code-block:: python
+
+        from cascade.data import validate_in
+
+        @validate_in
+        def repeat(a: str, b: int):
+            return a * b
+
+        repeat("a", 2)
+
+    Will raise ValidationError:
+
+    .. skip: next
+
+    .. code-block:: python
+
+        repeat(2, 2)
+
+    .. invisible-code-block: python
+
+        import pytest
+        from cascade.data import ValidationError
+
+        with pytest.raises(ValidationError):
+            repeat(2, 2)
     """
 
     @wraps(f)

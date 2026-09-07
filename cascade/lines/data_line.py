@@ -35,6 +35,12 @@ from .disk_line import DiskLine
 
 
 class DataLine(DiskLine):
+    """
+    Container for tracking Datasets. Can pickle data pipelines completely or
+    just used to store metadata. Uses versioning system and meta hashing to tell
+    datasets apart and assign versions.
+    """
+
     def __init__(
         self,
         root: str,

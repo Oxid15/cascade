@@ -20,15 +20,21 @@ Meta = List[MetaBlock]
 
 
 class MetaIOError(IOError):
-    pass
+    """
+    Exception class for errors when reading or writing meta
+    """
 
 
 class ZeroMetaError(MetaIOError):
-    pass
+    """
+    Raised when there is no meta inside the folder
+    """
 
 
 class MultipleMetaError(MetaIOError):
-    pass
+    """
+    Raised when multiple meta files found inside the folder
+    """
 
 
 def raise_not_implemented(class_name: str, name: str) -> NoReturn:
