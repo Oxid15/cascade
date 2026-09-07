@@ -23,7 +23,22 @@ from .modifier import IteratorModifier, Sampler
 class Filter(Sampler):
     """
     Filter for Datasets with length. Uses a function
-    to create a mask of items that will remain
+    to create a mask of items that will be stored once and applied
+    for each access.
+
+    Example
+    -------
+
+    Here we select only even numbers from a dataset
+
+    .. doctest::
+
+        >>> from cascade.data import Filter, Wrapper
+
+        >>> ds = Wrapper([0, 1, 2, 3])
+        >>> ds = Filter(ds, lambda x: x % 2 == 0)
+        >>> list(ds)
+        [0, 2]
     """
 
     def __init__(
@@ -66,6 +81,20 @@ class IteratorFilter(IteratorModifier):
     Filter for datasets without length
 
     Does not filter on init, returns only items that pass the filter
+
+    Example
+    -------
+
+    Here we select only even numbers from a dataset
+
+    .. doctest::
+
+        >>> from cascade.data import IteratorFilter, IteratorWrapper
+
+        >>> ds = IteratorWrapper([0, 1, 2, 3])
+        >>> ds = IteratorFilter(ds, lambda x: x % 2 == 0)
+        >>> list(ds)
+        [0, 2]
     """
 
     def __init__(
