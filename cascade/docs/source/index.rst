@@ -1,71 +1,78 @@
 Small-scale MLOps library
 #########################
 
-Cascade is a lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
+Cascade is MLOps for projects that don't need a MLOps platform.
+
+Track experiments, datasets, models and artifacts locally with Python and your filesystem. No tracking server, cloud account or complex infrastructure required.
+
 
 .. meta::
-   :description: Open-source MLOps library for lightweight experiment tracking. Configuration management, ML pipeline building and data validation tools for small-scale development.
-   :keywords: cascade, mlops, ml, experiment tracking, pipelines, data validation
+   :description: Open-source Python MLOps library for lightweight experiment tracking. Configuration management, ML pipeline building and data validation tools for small-scale development.
+   :keywords: cascade, mlops, small-scale mlops, local experiment tracking, pipelines, data validation
 
 .. code-block:: bash
 
     pip install cascade-ml
 
-Who could find it useful
-************************
-The slope of adopting MLOps platforms can sometimes be too steep for small-scale teams.
-However, they can still benefit from some MLOps practices integrated into the workflow.
+No need for a platform
+**********************
 
-MLOps for everyone
-******************
+What you get without tracking server, cloud or complex setup
 
-Cascade offers the solution that enables these features for small projects while demanding little.
-There is usually no need for the full MLOps setups in most of the small-scale ML-projects.
-Taking this in mind, Cascade is built modular to enable users to tailor the solution to their specific needs
-by using different parts of the library without the need to bring everything at once.
+* Local UI
+* Experiment tracking
+* Configuration management
+* Data lineage and validation
+* Experiment results querying
 
-.. grid:: 2
+
+Local UI
+********
+
+.. code-block:: bash
+
+    pip install cascade-ui
+
+Just do ``cascade ui`` to get a nice dashboard for your experiments
+
+.. image:: _static/cascade_ui_screens.gif
+  :alt: UI demo of Cascade - Small scale MLOps library
+
+See more docs on :ref:`/tutorials/ui.rst`
+
+Experiment tracking
+*******************
+
+.. grid:: 1
 
     .. grid-item::
-        .. card:: :octicon:`stack` Pipeline building
-            :link: tutorials/tutorials.html#pipelines-basics
-
-            Build traceable data transformations from modular blocks
-
-    .. grid-item::
-        .. card:: :octicon:`repo` Experiment management
+        .. card:: :octicon:`repo` Track what parameters influcenced your metrics
             :link: tutorials/tutorials.html#experiments-basics
 
-            Write your parameters and metrics in a structured way
+            Effortless parameter and metric tracking
 
     .. grid-item::
-        .. card:: :octicon:`file-binary` Artifact and file storage
+        .. card:: :octicon:`file-binary` Store everything locally
             :link: tutorials/tutorials.html#artifacts-and-files
 
-            Store your models and files locally
+            Structured artifact storage without the need for cloud
 
     .. grid-item::
-        .. card:: :octicon:`codescan-checkmark` Data validation
-            :link: tutorials/tutorials.html#data-validation
+        .. card:: :octicon:`telescope` Query results
+            :link: tutorials/results_querying.html
 
-            Be sure that your data is clean
+            Use CLI to access your experiments
 
-Advanced features
-*****************
+Configuration management
+************************
 
-.. grid:: 2
-
-    .. grid-item::
-        .. card::  :octicon:`browser` Web-UI
-            :link: tutorials/ui.html
-
-            Just do ``cascade ui`` to get a nice dashboard for your experiments
+.. grid:: 1
 
     .. grid-item::
-        .. card:: :octicon:`terminal` Runs
+        .. card:: :octicon:`terminal` Experiment quickly without boilerplate
             :link: tutorials/configuration_management.rst
 
-            Run experiments from terminal without changing any Python code
+            Run experiments from terminal without writing code for flags or reading configs
 
     .. grid-item::
         .. card:: :octicon:`terminal` CLI
@@ -73,50 +80,132 @@ Advanced features
 
             Comment, tag and write experiment descriptions from command line
 
+
+Dataset versioning
+******************
+
+.. grid:: 1
+
     .. grid-item::
-        .. card:: :octicon:`telescope` Query results
-            :link: tutorials/results_querying.html
+        .. card:: :octicon:`stack` Know the lineage of your training data
+            :link: tutorials/tutorials.html#pipelines-basics
 
-            Use CLI to access your experiments (if you have too many of them)
+            Traceable data transformations from modular blocks
+
+    .. grid-item::
+        .. card:: :octicon:`codescan-checkmark` Train only with clean data
+            :link: tutorials/tutorials.html#data-validation
+
+            Data validation tools
+
+Comparison with other MLOps tools
+*********************************
+
+Cascade is designed for local-first ML development and small teams. Here is how it compares to other popular MLOps tools.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 18 18 18 18 18
+   :align: center
+
+   * - Feature
+     - Cascade
+     - Aim
+     - MLflow
+     - W&B
+     - ClearML
+   * - Local-first
+     - **Yes**
+     - **Yes**
+     - Partial
+     - No
+     - No
+   * - Configuration management
+     - **Yes**
+     - No
+     - No
+     - **Yes**
+     - No
+   * - Data lineage
+     - **Yes**
+     - No
+     - Partial
+     - Partial
+     - **Yes**
+   * - Data validation
+     - **Yes**
+     - No
+     - Partial
+     - No
+     - No
+   * - Experiment results querying
+     - **Yes** 
+     - **Yes**
+     - **Yes**
+     - **Yes**
+     - **Yes**
+   * - Local Web UI
+     - **Yes**
+     - **Yes**
+     - **Yes**
+     - No
+     - No
+   * - Target scale
+     - **Individuals → small teams**
+     - **Individuals → small teams**
+     - Small teams → Enterprise scale
+     - Larger teams → Enterprise scale
+     - Larger teams → Enterprise scale
+   * - Setup complexity
+     - **Low**
+     - **Low**
+     - Medium
+     - Hard
+     - Hard
 
 
-Experiment management
-*********************
+Quickstart
+**********
 
 Here is a simple example of how you can use
 Cascade to track an ``sklearn`` classifier.
 
-1. Define a Model
-=================
+0. Install Cascade
+==================
+
+.. code-block:: bash
+
+    pip install cascade-ml
+
+1. Track an experiment
+======================
+
+You can integrate Cascade into an existing project without making many changes.
+Everything is tracked and stored locally using the filesystem you can manage.
 
 .. code-block:: python
 
     import random
     from sklearn.linear_model import LogisticRegression
+    from cascade.lines import ModelLine
     from cascade.utils.sklearn import SkModel
 
     model = SkModel(
         blocks = [
-            LogisticRegression(solver="newton-cg")
+            LogisticRegression()
         ]
     )
     model.tag("training")
     model.describe("Regression model for index page demo")
     model.add_metric('acc', random.random())
 
-
-2. Save it in Line
-==================
-
-.. code-block:: python
-
-    from cascade.lines import ModelLine
-
     line = ModelLine("index_demo_line")
     line.save(model)
 
-3. Get rich metadata
+2. Get rich metadata
 ====================
+
+You can find information about the model you have tracked in ``index_demo_line/00000/meta.json``
 
 .. code-block:: python
 
@@ -190,7 +279,7 @@ Documentation
 
 Key Principles
 **************
-* Elegancy - ML code should be about ML with minimum meta-code
+* Elegance - ML code should be about ML with minimum meta-code
 * Agility - it should be easy to build prototypes and integrate existing project with Cascade
 * Reusability - code should have an ability to be reused in similar projects
 * Traceability - everything should have meta data
