@@ -29,3 +29,13 @@ h5,
 h6 {
     font-weight: 700;
 }
+
+html[data-theme="light"] .highlight .gd,
+html[data-theme="dark"] .highlight .gd {
+    color: #DB504A;
+}
+
+html[data-theme="light"] .highlight .gi,
+html[data-theme="dark"] .highlight .gi {
+    color: #006B39;
+}

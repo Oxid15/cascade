@@ -243,6 +243,199 @@ You can find information about the model you have tracked in ``index_demo_line/0
         }
     ]
 
+Migrating to Cascade
+********************
+
+Cascade can be introduced into an existing ML project without requiring a
+complete rewrite of the training code. The following examples show how common
+experiment-tracking frameworks can be replaced by Cascade.
+
+Aim
+===
+
+Aim experiment typically creates a ``Run`` which can be replaced with ``ModelLine``, stores hyperparameters
+in ``run["hparams"]`` and records metrics with ``run.track()`` which in our case will be ``model.params`` and ``model.metrics``.
+
+With Cascade you will also get:
+
+* Artifact storage
+* Dataset versioning
+* Configuration management
+
+.. code-block:: diff
+
+   - import aim
+   + from cascade.lines import ModelLine
+   + from cascade.models import BasicModel
+
+   - run = aim.Run()
+   + line = ModelLine("line")
+
+   - run.add_tag("demo")
+   - run["hparams"] = {
+   -     "learning_rate": 1e-5,
+   -     "batch_size": 32,
+   -     "epochs": 10,
+   - }
+
+   for epoch in range(10):
+   +     model = BasicModel()
+   +     model.params.update({
+   +            "learning_rate": 1e-5,
+   +            "batch_size": 32,
+   +            "epochs": 10,
+   +        })
+   +
+   -     run.track(0.90, name="acc", epoch=epoch)
+   +     model.add_metric("acc", 0.90)
+   +     model.tag("demo")
+   +
+   +     line.save(model)
+
+
+MLflow
+======
+
+MLflow uses a run context manager which can be replaced with just ``line.save`` call.
+
+With Cascade you will also get:
+
+* Lower setup cost
+* Configuration management
+* Data validation
+
+.. code-block:: diff
+
+   - import mlflow
+   + from cascade.lines import ModelLine
+   + from cascade.models import BasicModel
+
+   - with mlflow.start_run():
+   -     mlflow.log_params({
+   -         "learning_rate": 1e-5,
+   -         "batch_size": 32,
+   -         "epochs": 10,
+   -     })
+   -
+   -     mlflow.set_tag("example", "demo")
+   -
+   + line = ModelLine("line")
+   for epoch in range(10):
+   +     model = BasicModel()
+   +     model.params.update({
+   +            "learning_rate": 1e-5,
+   +            "batch_size": 32,
+   +            "epochs": 10,
+   +        })
+   +
+   -     mlflow.log_metric("acc", 0.90, step=epoch)
+   +     model.add_metric("acc", 0.90)
+   +     model.tag("demo")
+   +
+   +     line.save(model)
+
+
+Weights & Biases
+================
+
+W&B initializes a ``Run``, accepts configuration through ``config``, and logs
+metrics with ``run.log()``. You can pass ``config`` straight to ``model.params``
+and log metrics using ``add_metric``.
+
+With Cascade you will also get:
+
+* Lower setup cost
+* Locally saved meta and artifacts
+* Data validation
+
+.. code-block:: diff
+
+   - import wandb
+   + from cascade.lines import ModelLine
+   + from cascade.models import BasicModel
+
+   config = {
+       "learning_rate": 1e-5,
+       "batch_size": 32,
+       "epochs": 10,
+   }
+
+   - with wandb.init(
+   -     project="project",
+   -     config=config,
+   -     tags=["demo"],
+   - ) as run:
+
+   + line = ModelLine("line")
+   for epoch in range(10):
+   +     model = BasicModel()
+   +     model.params.update(config)
+   +
+   -     run.log({"acc": 0.90, "epoch": epoch})
+   +     model.add_metric("acc", 0.90)
+   +     model.tag("demo")
+   +
+   +     line.save(model)
+
+
+ClearML
+=======
+
+ClearML represents an experiment as a ``Task`` which we will replace with ``ModelLine`` and metrics can
+be reported through the task's logger, but in Cascade they are tied to the ``Model``.
+
+With Cascade you will also get:
+
+* Lower setup cost
+* Configuration management
+* Data validation
+
+.. code-block:: diff
+
+   - from clearml import Task
+   + from cascade.lines import ModelLine
+   + from cascade.models import BasicModel
+
+   config = {
+       "learning_rate": 1e-5,
+       "batch_size": 32,
+       "epochs": 10,
+   }
+
+   - task = Task.init(
+   -     project_name="project",
+   -     task_name="training",
+   - )
+   - task.connect(config)
+   - task.add_tags(["demo"])
+   - logger = task.get_logger()
+
+   + line = ModelLine("line")
+   for epoch in range(10):
+   +     model = BasicModel()
+   +     model.params.update(config)
+
+   -     logger.report_scalar(
+   -         title="metrics",
+   -         series="acc",
+   -         value=0.90,
+   -         iteration=epoch,
+   -     )
+
+   +     model.add_metric("acc", 0.90)
+   +     model.tag("demo")
+   +
+   +     line.save(model)
+
+How to do a thing with Cascade
+******************************
+
+* :ref:`/howtos/pipeline_building.rst`
+* :ref:`/howtos/model_training.rst`
+* :ref:`/howtos/track_a_file.rst`
+* :ref:`/howtos/track_dataset_errors.rst`
+* :ref:`/howtos/track_logs.rst`
+* :ref:`/howtos/sklearn.rst`
 
 Documentation
 *************
