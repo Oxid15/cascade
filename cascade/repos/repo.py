@@ -88,11 +88,6 @@ class Repo(BaseRepo, TraceableOnDisk):
             if os.path.isdir(os.path.join(self._root, name))
         }
 
-        if "lines" in kwargs:
-            raise ValueError(
-                "lines was removed in 0.14.0, consider using add_line method instead"
-            )
-
         self.sync_meta()
 
     def _new_line_name(self):
