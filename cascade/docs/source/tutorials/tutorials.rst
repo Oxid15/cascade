@@ -15,9 +15,17 @@ Installation
 
 Install the latest version using pip
 
+.. skip: start
+
 .. code-block:: bash
 
     pip install cascade-ml
+
+For this tutorial you will also need sklearn
+
+.. code-block:: bash
+
+    pip install scikit-learn
 
 Cascade has a set of optional dependencies, which can be installed with the following commands
 
@@ -29,6 +37,8 @@ Cascade has a set of optional dependencies, which can be installed with the foll
     pip install cascade-ml[sklearn]  # Scikit-learn integration
     pip install cascade-ml[torch]    # PyTorch integration
     pip install cascade-ml[all]      # Installs everything
+
+.. skip: end
 
 If you have completed the tutorial you can see the :ref:`/howtos/howtos.rst` section
 for more specific and complex workflows.
@@ -50,6 +60,7 @@ for ``digits`` from ``sklearn``.
 
 .. code-block:: python
 
+    from sklearn.datasets import load_digits
     from cascade.data import Dataset
 
 
@@ -113,7 +124,7 @@ We can augment our data by concatenating those two datasets.
 
 Further reading
 ***************
-- :ref:`How to build a Pipeline</howtos/pipeline_building.ipynb>`
+- :doc:`How to build a Pipeline </howtos/pipeline_building>`
 - :ref:`Dataset Zoo</modules/dataset_zoo.rst>`
 
 
@@ -184,8 +195,11 @@ In this step we create a wrapper around logistic regression model. Minimal setup
 for the model is not strictly defined as in Dataset case. We define ``fit`` and ``predict``.
 ``BasicModel`` will handle everything else for us - like saving and loading for example.
 
+We can create and fit the model now using the dataset from the Pipelines step.
+
 .. code-block:: python
 
+    from sklearn.linear_model import LogisticRegression
     from cascade.models import BasicModel
 
 
@@ -204,10 +218,6 @@ for the model is not strictly defined as in Dataset case. We define ``fit`` and 
 
         def predict(self, x):
             return self.model.predict(x)
-
-We can create and fit the model now using the dataset from the Pipelines step.
-
-.. code-block:: python
 
     model = LR("l2")
     model.fit(ds)
@@ -240,6 +250,8 @@ In the next step we load the model and infer it on a dataset.
 
 The line knows little about models it manages - we provided a class of our model
 to be able to restore it correctly when loading.
+
+.. skip: start
 
 .. code-block:: python
 
@@ -283,11 +295,13 @@ meta with a default line method.
     'type': 'model',
     'user': 'ilia'}]
 
+.. skip: end
+
 Further reading
 ***************
 
-- :ref:`How to train a model</howtos/model_training.ipynb>`
-- :ref:`How to train a model with Trainer</howtos/model_training_trainers.ipynb>`
+- :doc:`How to train a model </howtos/model_training>`
+- :doc:`How to train a model with Trainer </howtos/model_training_trainers>`
 
 
 4. Custom Meta and Versioning
@@ -315,10 +329,18 @@ DataLines are the same thing as ModelLine but for data pipelines. You can use
 them to track only metadata of your pipelines or even save and load whole pipelines
 to reproduce an experiment.
 
+.. skip: next
+
 .. code-block:: python
 
     dataline = DataLine("dataline")
     dataline.save(ds)
+
+.. invisible-code-block: python
+
+    # Keeping this block to keep tests running without pickling errors
+    dataline = DataLine("dataline")
+    dataline.save(ds, only_meta=True)
 
 Unlike models, data pipelines are not numbered, but versioned.
 Versions are derived from metadata of a pipeline and consist of two
@@ -331,10 +353,16 @@ Let's see how it works.
     version = dataline.get_version(ds)
     print(version) # 0.1
 
+.. invisible-code-block: python
+
+    assert version == "0.1"
+
 The starting version is ``0.1`` and then, when metadata changes,
 parts of the version are bumped automatically. When saving
 the version of a dataset that already exists, line will
 notice that and overwrite older record with a new object.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -344,11 +372,21 @@ notice that and overwrite older record with a new object.
 
     dataline.save(ds)
 
+.. invisible-code-block: python
+
+    ds.update_meta({"detail_i_almost_forgot": "Changes in meta bump minor version"})
+    version = dataline.get_version(ds)
+    assert version == "0.2"
+
+    dataline.save(ds, only_meta=True)
+
 In previous example minor version was bumped by changing the part of the
 pipeline's meta.
 
 In the next one we add a new pipeline stage, which is what will bump
 a major part of the version and we will see ``1.0``.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -357,9 +395,19 @@ a major part of the version and we will see ``1.0``.
     version = dataline.get_version(changed_ds)
     print(version) # 1.0
 
+.. invisible-code-block: python
+
+    changed_ds = ApplyModifier(ds, add_noise)
+    dataline.save(changed_ds, only_meta=True)
+    version = dataline.get_version(changed_ds)
+    assert version == "1.0"
+
+
 If we plug in an old dataset it will still get us the same version.
 As long as meta is the same. Using version string we can load saved 
 pipeline object from disk.
+
+.. skip: next
 
 .. code-block:: python
 
@@ -370,6 +418,10 @@ pipeline object from disk.
     version = dataline.get_version(loaded_ds)
     print(version) # 0.2
 
+.. invisible-code-block: python
+
+    version = dataline.get_version(ds)
+    assert version == "0.2"
 
 5. Metrics and Evaluation
 =========================
@@ -394,12 +446,14 @@ of metrics.
         return f1_score(gt, pred, average="macro")
 
 
-    x = [item["x"] for item in loaded_ds]
-    y = [item["y"] for item in loaded_ds]
+    x = [item["x"] for item in ds]
+    y = [item["y"] for item in ds]
 
     model.evaluate(x, y, [f1])
 
     pprint(model.metrics)
+
+.. skip: next
 
 .. code-block:: python
 
@@ -429,6 +483,8 @@ After that ``evaluate`` can be called with a list of ``Metric`` objects.
 
     pprint(model.metrics)
 
+.. skip: next
+
 .. code-block:: python
 
     [Metric(name=f1, value=1.0, created_at=2024-07-29 19:47:33.435828+00:00),
@@ -440,6 +496,8 @@ Metrics are saved and written in metadata automatically after calling ``evaluate
 
     line.save(model)
     pprint(line.load_model_meta(1))
+
+.. skip: next
 
 .. code-block:: python
 
@@ -487,6 +545,10 @@ Links allow connecting a model to any relevant external media.
 You can link a file using its URI, or a Cascade object like training data
 or some other related model.
 
+.. invisible-code-block: python
+
+    __file__ = "tutorials.rst"
+
 .. code-block:: python
 
     model.link(ds)
@@ -526,7 +588,7 @@ Go to the directory of previously created ``line`` and execute the following.
     cascade status
 
 This is basic utility now just serves as a check that everything is okay with
-you installation and directory. Cascade will look for ``meta.json`` file in the folder
+your installation and directory. Cascade will look for ``meta.json`` file in the folder
 you are running a command and if found, output short description of what is in this folder.
 
 If everything is ok, previous command should output the following. If not, do not
@@ -648,14 +710,13 @@ Let's define a simple schema for our dataset from the beginning of the tutorial.
 
 .. code-block:: python
 
+    from typing import Any
     from pydantic import BaseModel
 
 
     class LabeledImage(BaseModel):
-        x: np.ndarray
+        x: Any
         y: int
-
-        model_config = {"arbitrary_types_allowed": True}
 
 Previous part is how we define schema in pydantic. You can use complex
 schemas and Fields to place requirements on the input of your Modifiers.
@@ -679,7 +740,7 @@ automatically check the returned value against our model.
             # Here you can do anything
             return item
 
-Here we build a pipeline and augment our data using padding.
+Here we build a pipeline.
 
 .. code-block:: python
 
@@ -707,25 +768,21 @@ that would easily pass in our previous setup at would take some time to debug.
 
     class EvilDataset(Dataset):
         def get(self, idx):
-            return dict(x=np.zeros(18*18), y="hehe")
+            return dict(x=np.zeros(18 * 18), y="hehe")
 
         def __len__(self):
             return 67
 
-The following code will raise ValidationError, which we will catch and
-display the latest message.
+The following code will raise ``GetItemError`` from ``ValidationError``.
+
+.. skip: next
 
 .. code-block:: python
-
-    from cascade.data import ValidationError
 
     evil = EvilDataset()
     evil = ValidatingModifier(evil)
 
-    try:
-        evil[0]
-    except ValidationError as e:
-        print(e)
+    evil[0]
 
 
 9. Artifacts and Files
@@ -883,10 +940,14 @@ Let's save the model and see how everything is handled automatically.
 
     line.save(model)
 
-.. code-block:: text
+.. skip: next
 
-    [SkMetric(name=f1_score, value=1.0, created_at=2024-08-14 19:37:46.556587+00:00),
-    SkMetric(name=acc, value=1.0, created_at=2024-08-14 19:37:46.556701+00:00)]
+.. code-block:: python
+
+    [
+        SkMetric(name=f1_score, value=1.0, created_at=2024-08-14 19:37:46.556587+00:00),
+        SkMetric(name=acc, value=1.0, created_at=2024-08-14 19:37:46.556701+00:00)
+    ]
 
 Notice how an artifact and a model are saved using the default implementation of ``save``
 and ``save_artifact``.

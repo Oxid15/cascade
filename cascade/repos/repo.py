@@ -38,13 +38,13 @@ class Repo(BaseRepo, TraceableOnDisk):
 
     Example
     -------
-    >>> from cascade.base import Repo
+    >>> from cascade.repos import Repo
     >>> from cascade.utils.baselines import ConstantBaseline
     >>> repo = Repo("repo")
     >>> repo.describe("This is a repo with one line for the example.")
     >>> line = repo.add_line("const", model_cls=ConstantBaseline)
-    >>> model = line.add_model()
-    >>> model.fit()
+    >>> model = line.create_model(constant=1)
+    >>> model.fit([0], [1])
     >>> line.save(model)
     """
 
@@ -197,7 +197,8 @@ class Repo(BaseRepo, TraceableOnDisk):
 
             if line_type is not None and line_type not in SHORT_LINE_TYPE_TO_LINE_TYPE:
                 raise ValueError(
-                    f"line_type={line_type} is not supported, should be one of {list(SHORT_LINE_TYPE_TO_LINE_TYPE.keys())}"
+                    f"line_type={line_type} is not supported, should be one"
+                    f" of {list(SHORT_LINE_TYPE_TO_LINE_TYPE.keys())}"
                 )
 
             if (
@@ -205,7 +206,8 @@ class Repo(BaseRepo, TraceableOnDisk):
                 and SHORT_LINE_TYPE_TO_LINE_TYPE[line_type] != line_meta[0]["type"]
             ):
                 raise ValueError(
-                    f"line_type={line_type} is conflicting with the type saved on disk {line_meta[0]['type']}"
+                    f"line_type={line_type} is conflicting with "
+                    f"the type saved on disk {line_meta[0]['type']}"
                 )
 
         self._lines[name] = {

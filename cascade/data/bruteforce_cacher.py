@@ -16,8 +16,6 @@ limitations under the License.
 
 from typing import Any
 
-from tqdm import tqdm
-
 from .dataset import BaseDataset, T
 from .modifier import Modifier
 
@@ -35,22 +33,10 @@ class BruteforceCacher(Modifier[T]):
     >>> ds = cdd.ApplyModifier(ds, lambda x: x + 1)
     >>> ds = cdd.ApplyModifier(ds, lambda x: x + 1)
 
-    Cache heavy upstream part once
+    Cache heavy upstream part
 
     >>> ds = cdd.BruteforceCacher(ds)
 
-    Then pickle it
-
-    >>> ds = cdd.Pickler('ds', ds)
-
-    Unpickle and use further
-
-    >>> ds = cdd.Pickler('ds')
-    >>> ds = cdd.RandomSampler(ds, 1000)
-
-    See also
-    --------
-    cascade.data.Pickler
     """
 
     def __init__(self, dataset: BaseDataset[T], *args: Any, **kwargs: Any) -> None:

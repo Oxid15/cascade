@@ -1,6 +1,6 @@
 # Cascade - Small-scale MLOps Library
 
-Lightweight and modular MLOps library with the aim to make ML development more efficient targeted at small teams or individuals.
+Cascade is MLOps for projects that don't need an MLOps platform
 
 ![header](cascade/docs/imgs/header.png)
 
@@ -9,7 +9,8 @@ Lightweight and modular MLOps library with the aim to make ML development more e
 [![Downloads](https://pepy.tech/badge/cascade-ml)](https://pepy.tech/project/cascade-ml)
 [![DOI](https://zenodo.org/badge/460920693.svg)](https://zenodo.org/badge/latestdoi/460920693)
 
-Cascade offers the solution that enables MLOps features for small projects while demanding little. There is usually no need for the full MLOps setups in most of the small-scale ML-projects.
+
+Track experiments, datasets, models and artifacts locally with Python and your filesystem. No tracking server, cloud account or complex infrastructure required.
 
 **Included in [Model Lifecycle](https://github.com/kelvins/awesome-mlops#model-lifecycle) section of Awesome MLOps list**
 
@@ -20,6 +21,19 @@ pip install cascade-ml
 ```
 
 More info on installation can be found in [documentation](https://oxid15.github.io/cascade/en/latest/)
+
+## Local UI
+
+```bash
+pip install cascade-ui
+```
+
+Just do ``cascade ui`` to get a nice dashboard for your experiments.
+
+![Cascade UI Screens](cascade/docs/source/_static/cascade_ui_screens.gif)
+
+[Cascade UI](https://github.com/Laiserk/cascade_ui) is a separate project, that provides visual interface for Cascade experiments. For more detailed explanation you can visit [UI docs](https://oxid15.github.io/cascade/en/latest/tutorials/ui.html).
+
 
 ## Docs
 
@@ -107,12 +121,12 @@ from cascade.models import Model
 from cascade.repos import Repo
 
 model = Model()
-model.add_metric('acc', random.random())
+model.add_metric("acc", random.random())
 model.tag("production")
 model.describe("I tried to do X in this experiment")
 model.params["lr"] = 1e-4
 
-repo = Repo('./repo')
+repo = Repo("./repo")
 
 line = repo.add_line('baseline')
 line.save(model, only_meta=True)
@@ -135,37 +149,19 @@ Lines can also store data pipelines.
                         "value": 0.5284442363543276}],
             "name": "cascade.models.model.Model",
             "params": {"lr": 0.0001},
-            "path": "/home/your-user-name/work/project/repo/baseline/00000",
+            "path": "/home/ilia/work/cascade/repo/baseline/00000",
             "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
             "saved_at": "2026-07-25T21:24:41.753499+00:00",
             "slug": "victorious_dingo_of_will",
             "tags": ["production"],
             "type": "model",
-            "user": "your-user-name"
+            "user": "ilia"
         }
     ]
 ]
 ```
 
 See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
-
-## Cascade UI
-
-Cascade features web-based experiment dashboard. You can install it with:
-
-```bash
-pip install cascade-ui
-```
-
-Then locate your Cascade Workspace and run:
-
-```bash
-cascade ui
-```
-
-[Cascade UI](https://github.com/Laiserk/cascade_ui) is a separate project, that provides visual interface for Cascade experiments. For more detailed explanation you can visit [UI docs](https://oxid15.github.io/cascade/en/latest/tutorials/ui.html).
-
-![Cascade UI Model Page](cascade/docs/source/_static/model-page.png)
 
 ## Who could find Cascade useful
 
@@ -177,7 +173,7 @@ Cascade is to bridge this gap for everyone.
 
 The key principles of Cascade are:
 
-* **Elegancy** - ML code should be about ML with minimum meta-code
+* **Elegance** - ML code should be about ML with minimum meta-code
 * **Flexibility** - to easily build prototypes and integrate existing projects with Cascade *(don't pay for what you don't use)*
 * **Reusability** - code to be reused in similar projects with no effort
 * **Traceability** - everything should have meta-data
@@ -186,7 +182,7 @@ The key principles of Cascade are:
 
 Pull requests and issues are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests and docs as appropriate, see CONTRIBUTING.md.
+Please make sure to update tests and docs as appropriate, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
@@ -195,6 +191,10 @@ Please make sure to update tests and docs as appropriate, see CONTRIBUTING.md.
 ## Versions
 
 This project uses Semantic Versioning - <https://semver.org/>
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md)
 
 ## Cite the code
 

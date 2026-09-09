@@ -297,6 +297,15 @@ class Traceable:
         return self.comments[-1].id
 
     def comment(self, message: str) -> None:
+        """
+        Leave a comment on a Traceable, will assign each comment sequential ID
+        Each comment is signed with user and host name
+
+        Parameters
+        ----------
+        message : str
+            Text of a comment
+        """
         comment_id = str(int(self._find_latest_comment_id()) + 1)
         comment = Comment(
             comment_id, getuser(), socket.gethostname(), pendulum.now(tz="UTC"), message
@@ -305,6 +314,19 @@ class Traceable:
         self.comments.append(comment)
 
     def remove_comment(self, id: str) -> None:
+        """
+        Removes a comment using sequential ID
+
+        Parameters
+        ----------
+        id : str
+            Comment ID
+
+        Raises
+        ------
+        ValueError
+            If the comment with provided ID was not found
+        """
         for i, comment in enumerate(self.comments):
             if comment.id == id:
                 self.comments.pop(i)
@@ -505,6 +527,13 @@ class TraceableOnDisk(Traceable):
         return self._root
 
     def get_meta(self) -> Meta:
+        """
+        Being on disk adds `updated_at` field to the Meta
+
+        Returns
+        -------
+        Meta
+        """
         meta = super().get_meta()
         meta[0]["updated_at"] = str(pendulum.now(tz="UTC"))
         return meta

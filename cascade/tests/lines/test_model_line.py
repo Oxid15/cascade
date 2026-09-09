@@ -28,7 +28,6 @@ from cascade.base import MetaHandler, default_meta_format
 from cascade.lines import ModelLine
 from cascade.models import BasicModel
 from cascade.repos import Repo
-from cascade.tests.conftest import DummyModel
 
 
 def test_save_load(model_line, dummy_model):

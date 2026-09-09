@@ -1,17 +1,2 @@
-cascade.repos
-#############
-
-.. autoclass:: cascade.repos.LineFactory
+.. automodule:: cascade.repos
     :members:
-
-
-
-.. autoclass:: cascade.repos.Repo
-    :members:
-
-
-
-.. autoclass:: cascade.repos.SingleLineRepo
-    :members:
-
-

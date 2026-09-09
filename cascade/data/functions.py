@@ -76,6 +76,24 @@ def dataset(
     -------
     Callable[..., FunctionDataset]
         Call this to get a dataset
+
+    Example
+    -------
+
+    .. code-block:: python
+
+        from cascade.data import dataset
+        from cascade.data.functions import FunctionDataset
+
+        @dataset
+        def read_data():
+            return [0, 1, 2]
+
+        x = read_data()
+
+        assert isinstance(x, FunctionDataset)
+        assert x.result == [0, 1, 2]
+
     """
     if do_validate_in:
         f = validate_in(f)
@@ -106,6 +124,28 @@ def modifier(
     -------
     Callable[..., FunctionModifier]
         Call this to get a modifier
+
+    Example
+    -------
+
+    .. code-block:: python
+
+        from cascade.data import dataset, modifier
+        from cascade.data.functions import FunctionModifier
+
+        @dataset
+        def read_data():
+            return [0, 1, 2]
+
+        @modifier
+        def mul(inp_data, n):
+            return list(x * n for x in inp_data)
+
+        x = read_data()
+        x = mul(x, 3)
+
+        assert isinstance(x, FunctionModifier)
+        assert x.result == [0, 3, 6]
     """
     if do_validate_in:
         f = validate_in(f)

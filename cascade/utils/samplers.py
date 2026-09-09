@@ -1,17 +1,6 @@
 """
-Copyright 2022-2026 Ilia Moiseev
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+cascade.utils.samplers
+======================
 """
 
 from itertools import cycle
@@ -184,9 +173,10 @@ class WeighedSampler(Sampler[T]):
                 count += 1
 
         ln = len(self._indices)
-        assert ln == sum(
-            self._partitioning.values()
-        ), "The length of the dataset should be equal to the sum of all partitions - possible problem on Cascade side"
+        assert ln == sum(self._partitioning.values()), (
+            "The length of the dataset should be equal to the sum of all partitions - possible"
+            " problem on Cascade side"
+        )
         super().__init__(dataset, ln)
 
     def get(self, index: int) -> Tuple[Any, Any]:

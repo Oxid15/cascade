@@ -45,6 +45,61 @@ class SkMetric(Metric):
         extra: Optional[Dict[str, MetricType]] = None,
         **kwargs: Any,
     ) -> None:
+        """
+        Cascade Metric wrapper for sklearn.metrics
+
+        Parameters
+        ----------
+        name : str
+            name of the metric, should be an exact match of the members of
+            sklearn.metrics, but you can also use the aliases from the example
+        value : Optional[MetricType], optional
+            Can assign value to the metric if already computed, by default None
+        dataset : Optional[str], optional
+            Name of the dataset metric was computed on, by default None
+        split : Optional[str], optional
+            Name of the dataset split like train, test or eval, by default None
+        direction : Optional[Literal["up", "down"]], optional
+            Select up if greater the better or down if worse the better, by default None
+        interval : Optional[Tuple[MetricType, MetricType]], optional
+            Confidence interval, by default None
+        extra : Optional[Dict[str, MetricType]], optional
+            Extra metadata for a metric, by default None
+
+        Example
+        -------
+
+        Here the aliases are demonstrated. You can also use any names from sklearn.metrics
+
+        .. code-block:: python
+
+            from cascade.utils.sklearn import SkMetric
+
+            acc = SkMetric("acc")
+            precision = SkMetric("precision")
+            recall = SkMetric("recall")
+            mse = SkMetric("mse")
+
+            gt_pred = ([0, 0], [0, 1])
+
+            acc.compute(*gt_pred)
+            precision.compute(*gt_pred)
+            recall.compute(*gt_pred)
+            mse.compute(*gt_pred)
+
+        .. doctest::
+
+            >>> from pprint import pprint
+            >>> from cascade.utils.sklearn.sk_metric import METRIC_ALIASES
+            >>> pprint(METRIC_ALIASES)
+            {'acc': 'accuracy_score',
+             'accuracy': 'accuracy_score',
+             'f1': 'f1_score',
+             'mae': 'mean_absolute_error',
+             'mse': 'mean_squared_error',
+             'precision': 'precision_score',
+             'recall': 'recall_score'}
+        """
         self._args = args
         self._kwargs = kwargs
         super().__init__(
@@ -66,7 +121,7 @@ class SkMetric(Metric):
         except AttributeError as e:
             raise AttributeError(
                 f"SkMetric accepts only names defined in module sklearn.metrics "
-                f"as the list of aliases: {METRIC_ALIASES}"
+                f"or the list of aliases: {METRIC_ALIASES}"
             ) from e
 
         value = metric(*self._args, *args, **self._kwargs, **kwargs)

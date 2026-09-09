@@ -5,6 +5,10 @@ from .dataset import BaseDataset, Dataset, IteratorDataset, T
 
 
 class BaseModifier(BaseDataset[T]):
+    """
+    Base class for Modifiers, mostly unifies metadata management
+    """
+
     def __init__(self, dataset: BaseDataset[T], *args: Any, **kwargs: Any) -> None:
         """
         Constructs a Modifier. Modifier represents a step in a pipeline -
@@ -62,7 +66,7 @@ class IteratorModifier(BaseModifier[T], IteratorDataset[T]):
     See also
     --------
     cascade.data.Modifier
-    cascade.data.Iterator
+    cascade.data.IteratorModifier
     """
 
     def __init__(self, dataset: IteratorDataset[T], *args: Any, **kwargs: Any) -> None:
@@ -96,9 +100,45 @@ class Modifier(BaseModifier[T], Dataset[T]):
     Applies no transformation if ``__getitem__`` is not overridden
 
     Does not change the length of a dataset. See Sampler for this functionality
+
+    Example
+    -------
+
+    .. code-block:: python
+
+        from cascade.data import Modifier, Wrapper
+
+        class PowModifier(Modifier):
+            def __init__(self, ds, p, *args, **kwargs):
+                super().__init__(ds, *args, **kwargs)
+
+                self.p = p
+
+            def get(self, index):
+                number = self._dataset[index]
+                return number ** self.p
+
+
+        ds = Wrapper([0, 1, 2, 3, 4])
+        ds = PowModifier(ds, 2)
+
+        assert list(ds) == [0, 1, 4, 9, 16]
     """
 
     def get(self, index: Any) -> T:
+        """
+        Returns previous Dataset's item without changes if not overridden
+
+        Parameters
+        ----------
+        index : Any
+            Item's index
+
+        Returns
+        -------
+        T
+            Item
+        """
         return self._dataset[index]
 
     def __len__(self) -> int:

@@ -26,8 +26,7 @@ from ...data.modifier import Modifier
 
 class TableDataset(Dataset[T]):
     """
-    Wrapper for ``pd.DataFrame``s which allows to manage metadata and perform
-    validation.
+    Wrapper for ``DataFrame`` which allows to manage metadata and perform validation
     """
 
     def __init__(
@@ -117,7 +116,7 @@ class CSVDataset(TableDataset):
         self, csv_file_path: str, read_csv_kwargs=None, *args: Any, **kwargs: Any
     ) -> None:
         """
-        Passes all `read_csv_kwargs` to ``pd.read_csv``
+        Passes all ``read_csv_kwargs`` to ``pd.read_csv``
 
         Parameters
         ----------
@@ -156,41 +155,52 @@ class TableIterator(IteratorWrapper):
 
 
 class FeatureTable(TableDataset):
+    """
+    Table dataset which allows to easily define and compute features
+
+    Example
+    -------
+    .. skip: next
+
+    .. code-block:: python
+
+        import pandas as pd
+        from cascade.utils.tables import FeatureTable
+        df = pd.read_csv(r'data\t.csv', index_col=0)
+        df
+
+        # id  count  name
+        # 0   0      1   aaa
+        # 1   1      5   bbb
+        # 2   2      0   ccc
+
+        ft = FeatureTable(df)
+        ft.get_features()
+
+        # ['id', 'count', ' name']
+
+        ft.add_feature('square', lambda df: df['count'] * df['count'])
+
+        def counts(df):
+            return df['count'] * 2, df['count'] * 3
+
+        ft.add_feature(('count_2', 'count_3'), counts)
+        ft.get_features()
+
+        # ['id', 'count', ' name', 'square', ('count_2', 'count_3')]
+
+        ft.get_table(['count', ('count_2', 'count_3')])
+
+        # count  count_2  count_3
+        # 0      1        2        3
+        # 1      5       10       15
+        # 2      0        0        0
+    """
+
     def __init__(
         self, table: Union[TableDataset, pd.DataFrame], *args: Any, **kwargs: Any
     ) -> None:
         """
-        Table dataset which allows to easily define and compute features
-
-        Example
-        -------
-        ```python
-        >>> import pandas as pd
-        >>> from cascade.utils.tables import FeatureTable
-        >>> df = pd.read_csv(r'data\t.csv', index_col=0)
-        >>> df
-        id  count  name
-        0   0      1   aaa
-        1   1      5   bbb
-        2   2      0   ccc
-        >>> ft = FeatureTable(df)
-        >>> ft.get_features()
-        ['id', 'count', ' name']
-        >>> ft.add_feature('square', lambda df: df['count'] * df['count'])
-        >>> def counts(df):
-        >>>     return df['count'] * 2, df['count'] * 3
-
-        >>> ft.add_feature(('count_2', 'count_3'), counts)
-        >>> ft.get_features()
-        ['id', 'count', ' name', 'square', ('count_2', 'count_3')]
-        >>> ft.get_table(['count', ('count_2', 'count_3')])
-           count  count_2  count_3
-        0      1        2        3
-        1      5       10       15
-        2      0        0        0
-
-        ```
-
         Parameters
         ----------
         table: Union[TableDataset, pd.DataFrame]
@@ -220,7 +230,7 @@ class FeatureTable(TableDataset):
 
         Returns
         -------
-        List[str]
+        List[Union[str, Tuple[str]]]
             List of feature names
         """
         return list(self._features) + list(self._computed_features.keys())
@@ -245,6 +255,21 @@ class FeatureTable(TableDataset):
         features: Union[str, List[Union[Tuple[str], str]], None] = None,
         dropna: bool = False,
     ) -> pd.DataFrame:
+        """
+        Returns internal pd.DataFrame
+
+        Parameters
+        ----------
+        features : Union[str, List[Union[Tuple[str], str]], None], optional
+            List of features to select, by default None
+        dropna : bool, optional
+            Whether to drop NaN values, by default False
+
+        Returns
+        -------
+        pd.DataFrame
+            _description_
+        """
         if isinstance(features, str):
             features = [features]
         elif features is None:
@@ -278,6 +303,16 @@ class FeatureTable(TableDataset):
         *args: Any,
         **kwargs: Any,
     ) -> None:  # What if feature already exists?
+        """
+        Adds computable feature to the table in a lazy manner
+
+        Parameters
+        ----------
+        name : Union[str, Tuple[str]]
+            Feature name
+        func : Callable[[pd.DataFrame], Union[pd.Series, Tuple[str]]]
+            Function that accepts pd.DataFrame and returns a new column
+        """
         self._computed_features[name] = func
         self._computed_features_args[name] = args
         self._computed_features_kwargs[name] = kwargs
