@@ -1,7 +1,7 @@
 Small-scale MLOps library
 #########################
 
-Cascade is MLOps for projects that don't need a MLOps platform.
+Cascade is MLOps for projects that don't need an MLOps platform.
 
 Track experiments, datasets, models and artifacts locally with Python and your filesystem. No tracking server, cloud account or complex infrastructure required.
 
