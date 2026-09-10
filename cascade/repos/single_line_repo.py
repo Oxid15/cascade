@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import warnings
 from typing import Any, Dict, List, Optional
 
 from typing_extensions import Literal
@@ -35,7 +36,15 @@ class SingleLineRepo(BaseRepo):
         meta_prefix: Optional[Dict[Any, Any]] = None,
         **kwargs: Any,
     ) -> None:
-        super().__init__(line.get_root(), *args, meta_prefix=meta_prefix, **kwargs)
+        super().__init__(line.get_root(), *args, **kwargs)
+
+        if meta_prefix is not None:
+            warnings.warn(
+                "Use of `meta_prefix` in `__init__` is deprecated since 0.18.0."
+                " Consider using update_meta()",
+                stacklevel=2,
+            )
+
         self._lines = {os.path.split(line.get_root())[-1]: {"args": [], "kwargs": {}}}
         self._line = line
 
