@@ -18,6 +18,8 @@ import os
 import random
 import sys
 
+import pytest
+
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
@@ -188,3 +190,38 @@ def test_data_order_after_reload(tmp_path_str):
     version_2_after_reload = line.get_version(line.load(2))
 
     assert version_2 == version_2_after_reload
+
+
+def test_broken_folder(tmp_path_str):
+    dl = DataLine(tmp_path_str)
+
+    ds = Wrapper([0])
+    dl.save(ds)
+
+    ds = Wrapper(ds)
+    dl.save(ds)
+
+    version = dl.get_version(ds)
+
+    os.remove(os.path.join(tmp_path_str, str(version), "HASHES"))
+
+    with pytest.raises(RuntimeError):
+        dl = DataLine(tmp_path_str)
+
+
+def test_broken_hashes(tmp_path_str):
+    dl = DataLine(tmp_path_str)
+
+    ds = Wrapper([0])
+    dl.save(ds)
+
+    ds = Wrapper(ds)
+    dl.save(ds)
+
+    version = dl.get_version(ds)
+
+    with open(os.path.join(tmp_path_str, str(version), "HASHES"), "w") as f:
+        f.write("broken")
+
+    with pytest.raises(RuntimeError):
+        dl = DataLine(tmp_path_str)

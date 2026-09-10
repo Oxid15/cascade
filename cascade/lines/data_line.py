@@ -13,6 +13,7 @@ limitations under the License.
 
 import os
 import socket
+import warnings
 from collections import defaultdict
 from getpass import getuser
 from hashlib import md5
@@ -55,8 +56,19 @@ class DataLine(DiskLine):
 
         self._obj_handler = ObjectHandler(obj_backend)
         for name in self._item_names:
-            with open(os.path.join(self._root, name, "HASHES"), "r") as f:
-                skel_hash, meta_hash = f.read().split("\n")
+            hashes_path = os.path.join(self._root, name, "HASHES")
+
+            if not os.path.exists(hashes_path):
+                raise RuntimeError(f"Failed to find hashes file at: {hashes_path}")
+
+            with open(hashes_path, "r") as f:
+                components = f.read().split("\n")
+                if len(components) != 2:
+                    raise RuntimeError(
+                        f"Got {len(components)} != 2 lines inside {hashes_path}"
+                    )
+
+                skel_hash, meta_hash = components
                 self._hashes[skel_hash][meta_hash] = Version(name)
 
     def _load_item_names(self):
@@ -182,10 +194,11 @@ class DataLine(DiskLine):
             meta[0]["git_uncommitted_changes"] = git_uncommitted
 
         os.makedirs(full_path, exist_ok=True)
-        MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
 
         with open(os.path.join(self._root, version_str, "HASHES"), "w") as f:
             f.write("\n".join([skel_hash, meta_hash]))
+
+        MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
 
         if not only_meta:
             self._obj_handler.save(ds, os.path.join(self._root, version_str))
