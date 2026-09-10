@@ -61,6 +61,29 @@ def test_default_types():
         validate_in(add_int)(1.2, 3.4)
 
 
+def test_defaults():
+    def add_int(a=2, b=5):
+        return a + b
+
+    validate_in(add_int)()
+
+
+def test_annotated_defaults():
+    def add_int(a: int = 2, b: int = 5):
+        return a + b
+
+    validate_in(add_int)()
+
+
+def test_partially_annotated_with_defaults():
+    def add_int(a: int, b=5):
+        return a + b
+
+    validate_in(add_int)(1, 2)
+
+    validate_in(add_int)(1)
+
+
 def test_lists():
     def sum_list(a: List[float]):
         return sum(a)

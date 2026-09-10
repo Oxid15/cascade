@@ -220,7 +220,7 @@ def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
             ),
             (
                 sig.parameters[key].default
-                if sig.parameters[key].annotation is not sig.empty
+                if sig.parameters[key].default is not sig.empty
                 else ...
             ),
         )
