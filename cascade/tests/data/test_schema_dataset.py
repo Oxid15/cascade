@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import sys
-from typing import List, Tuple
+from typing import Any, List, Tuple
 
 import pydantic
 import pytest
@@ -168,3 +168,31 @@ def test_get_meta_does_not_show_wrapper_when_no_schema():
     assert len(meta) == 2
     assert meta[0]["name"] == "test_schema_dataset.IHaveNoSchemaButIMustValidate"
     assert meta[1]["name"] == "test_schema_dataset.IncorrectImageDicts"
+
+
+class IDoNothingButChangeMeta(ImagesDataset):
+    def __init__(self, dataset: Dataset, what, *args: Any, **kwargs: Any) -> None:
+        self.what = what
+        super().__init__(dataset, *args, **kwargs)
+
+    def get(self, idx):
+        item = self._dataset[idx]
+        return item
+
+    def get_meta(self):
+        meta = super().get_meta()
+        meta[0]["custom_field"] = self.what
+        return meta
+
+
+def test_custom_meta():
+    ds = IncorrectImageDicts()
+    ds = IDoNothingButChangeMeta(ds, "hello")
+    ds = IDoNothingButChangeMeta(ds, "how")
+    ds = IDoNothingButChangeMeta(ds, "are you")
+
+    meta = ds.get_meta()
+
+    assert meta[2]["custom_field"] == "hello"
+    assert meta[1]["custom_field"] == "how"
+    assert meta[0]["custom_field"] == "are you"
