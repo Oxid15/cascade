@@ -27,9 +27,18 @@ from cascade.data import RangeSampler, Wrapper
 DATA = [0, 1, 2, 3, 4]
 
 
-def test():
+def test_stop():
     ds = Wrapper(DATA)
     ds = RangeSampler(ds, 2)
+
+    sampled = list(ds)
+
+    assert sampled == [DATA[i] for i in range(2)]
+
+
+def test_stop_kw():
+    ds = Wrapper(DATA)
+    ds = RangeSampler(ds, stop=2)
 
     sampled = list(ds)
 
@@ -45,9 +54,27 @@ def test_start_stop():
     assert sampled == [DATA[i] for i in range(1, 3)]
 
 
+def test_start_stop_kw():
+    ds = Wrapper(DATA)
+    ds = RangeSampler(ds, start=1, stop=3)
+
+    sampled = list(ds)
+
+    assert sampled == [DATA[i] for i in range(1, 3)]
+
+
 def test_step():
     ds = Wrapper(DATA)
     ds = RangeSampler(ds, 0, len(ds), 2)
+
+    sampled = list(ds)
+
+    assert sampled == [DATA[i] for i in range(0, len(DATA), 2)]
+
+
+def test_step_kw():
+    ds = Wrapper(DATA)
+    ds = RangeSampler(ds, start=0, stop=len(ds), step=2)
 
     sampled = list(ds)
 
