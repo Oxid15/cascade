@@ -210,25 +210,26 @@ def validate_in(f: Callable[..., Any]) -> Callable[..., Any]:
             repeat(2, 2)
     """
 
+    sig = inspect.signature(f)
+    sig_args = {
+        key: (
+            (
+                sig.parameters[key].annotation
+                if sig.parameters[key].annotation is not sig.empty
+                else Any
+            ),
+            (
+                sig.parameters[key].default
+                if sig.parameters[key].annotation is not sig.empty
+                else ...
+            ),
+        )
+        for key in sig.parameters
+    }
+    v = TypesValidator(sig_args)
+
     @wraps(f)
     def wrapper(*args: Any, **kwargs: Any):
-        sig = inspect.signature(f)
-        sig_args = {
-            key: (
-                (
-                    sig.parameters[key].annotation
-                    if sig.parameters[key].annotation is not sig.empty
-                    else Any
-                ),
-                (
-                    sig.parameters[key].default
-                    if sig.parameters[key].annotation is not sig.empty
-                    else ...
-                ),
-            )
-            for key in sig.parameters
-        }
-        v = TypesValidator(sig_args)
         v(*args, **kwargs)
         return f(*args, **kwargs)
 
