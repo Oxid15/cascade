@@ -16,6 +16,8 @@ limitations under the License.
 
 from typing import Any, Optional
 
+from cascade.base import Meta
+
 from .dataset import Dataset
 from .modifier import Modifier
 from .validation import SchemaValidator, ValidationError
@@ -78,20 +80,34 @@ class SchemaModifier(Modifier):
 
     in_schema: Optional[Any] = None
 
+    def __init__(self, dataset: Dataset, *args: Any, **kwargs: Any) -> None:
+        super().__init__(dataset, *args, **kwargs)
+
+        if self.in_schema is not None:
+            self._validation_wrapper = ValidationWrapper(dataset, self.in_schema)
+
     def __getattribute__(self, __name: str) -> Any:
         if __name == "_dataset" and self.in_schema is not None:
-            return ValidationWrapper(super().__getattribute__(__name), self.in_schema)
-        if __name == "get_meta":
-
-            def get_meta(self):
-                meta = super().get_meta()
-                if self.in_schema:
-                    meta[0]["in_schema"] = self.in_schema.model_json_schema()
-                return meta
-
-            return lambda: get_meta(self)
-
+            return self._validation_wrapper
         return super().__getattribute__(__name)
+
+    def get_meta(self) -> Meta:
+        """
+        Since SchemaModifier will add ValidationWrapper dynamically to _dataset
+        it will be used in meta.
+        This call will clean meta and remove wrappers
+
+        Returns
+        -------
+        Meta
+        """
+        meta = super().get_meta()
+        if meta[1]["name"] == "cascade.data.schema.ValidationWrapper":
+            meta.pop(1)
+
+        if self.in_schema:
+            meta[0]["in_schema"] = self.in_schema.model_json_schema()
+        return meta
 
 
 class ValidationWrapper(Modifier):

@@ -61,10 +61,9 @@ def test_wrapper():
 
     meta = ds.get_meta()
 
-    assert len(meta) == 3
+    assert len(meta) == 2
     assert "in_schema" in meta[0]
     assert isinstance(meta[0]["in_schema"], dict)
-    assert meta[1]["name"].split(".")[-1] == "ValidationWrapper"
 
 
 def test_correct_schema():
@@ -135,3 +134,37 @@ def test_wrong_dicts():
 
     with pytest.raises(GetItemError):
         ds[0]
+
+
+def test_get_meta_shows_no_validation_wrapper():
+    ds = IncorrectImageDicts()
+    ds = IDoNothing(ds)
+    ds = IDoNothing(ds)
+    ds = IDoNothing(ds)
+    ds = IDoNothing(ds)
+
+    meta = ds.get_meta()
+
+    assert len(meta) == 5
+    assert meta[0]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[1]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[2]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[3]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[4]["name"] == "test_schema_dataset.IncorrectImageDicts"
+
+
+class IHaveNoSchemaButIMustValidate(SchemaModifier):
+    def get(self, idx):
+        item = self._dataset[idx]
+        return item
+
+
+def test_get_meta_does_not_show_wrapper_when_no_schema():
+    ds = IncorrectImageDicts()
+    ds = IHaveNoSchemaButIMustValidate(ds)
+
+    meta = ds.get_meta()
+
+    assert len(meta) == 2
+    assert meta[0]["name"] == "test_schema_dataset.IHaveNoSchemaButIMustValidate"
+    assert meta[1]["name"] == "test_schema_dataset.IncorrectImageDicts"
