@@ -45,9 +45,13 @@ class ConfigFieldCheckResult:
 def cascade_config_imported(tree: ast.Module) -> bool:
     for node in tree.body:
         if isinstance(node, ast.ImportFrom):
-            if node.module == "cascade.base.config" and node.names[0].name == "Config":
+            if node.module == "cascade.base.config" and any(
+                alias.name == "Config" for alias in node.names
+            ):
                 return True
-            if node.module == "cascade.base" and node.names[0].name == "Config":
+            if node.module == "cascade.base" and any(
+                alias.name == "Config" for alias in node.names
+            ):
                 return True
     return False
 
@@ -100,8 +104,6 @@ def parse_value(value: ast.expr) -> Any:
 
     if isinstance(value, ast.Constant):
         return value.value
-    elif isinstance(value, ast.Call):
-        return str(value.func.id) + "()"
     elif isinstance(value, ast.List):
         return [parse_value(v) for v in value.elts]
     elif isinstance(value, ast.Tuple):

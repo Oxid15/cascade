@@ -131,8 +131,27 @@ def test_different_types(tmp_path_str: str):
     assert result.exit_code == 0
     assert result.stdout.endswith(
         "[<class 'int'>, <class 'float'>, <class 'str'>, <class 'list'>,"
-        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>, <class 'tuple'>]\n"
+        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>,"
+        " <class 'tuple'>]\n"
     )
+
+
+def test_unsupported_types(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "from cascade.base import Config",
+            "class ThisConfig(Config):",
+            "    j = dict()",
+            "print([type(item) for item in ThisConfig().to_dict().values()])",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+
+    assert result.exit_code == 1
+    assert isinstance(result.exc_info[1], ValueError)
+    assert "Unsupported" in result.exc_info[1].args[0]
 
 
 def test_different_types_override(tmp_path_str: str):
@@ -474,3 +493,24 @@ def test_missing_field(tmp_path_str: str, force: bool):
     else:
         result = run_run(path, "--base", f"{tmp_path_str}/line/00000")
         assert result.exit_code == 1
+
+
+def test_two_names_import(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Traceable, Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 3",
+            "    b = 4",
+            "    c = 5",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path, "--a", "5")
+    assert "{'a': 5, 'b': 4, 'c': 5}" in result.stdout
