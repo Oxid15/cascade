@@ -27,6 +27,7 @@ sys.path.append(os.path.dirname(MODULE_PATH))
 from cascade.data import (
     BaseDataset,
     Dataset,
+    GetItemError,
     IteratorWrapper,
     Modifier,
     Sampler,
@@ -177,3 +178,31 @@ def test_no_init_call():
     meta = ds.get_meta()
 
     assert len(meta) == 1
+
+
+def test_keyboard_interrupt():
+    class InterruptDataset(Dataset):
+        def get(self, index):
+            raise KeyboardInterrupt()
+
+        def __len__(self):
+            return 1
+
+    ds = InterruptDataset()
+
+    with pytest.raises(KeyboardInterrupt):
+        ds[0]
+
+
+def test_exceptions():
+    class ErrorDataset(Dataset):
+        def get(self, index):
+            raise RuntimeError()
+
+        def __len__(self):
+            return 1
+
+    ds = ErrorDataset()
+
+    with pytest.raises(GetItemError):
+        ds[0]
