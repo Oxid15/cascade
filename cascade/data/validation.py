@@ -87,20 +87,14 @@ class PydanticValidator(ValidationProvider):
             self._exc_type = ValidationError
 
     def __call__(self, *args: Any, **kwargs: Any) -> None:
-        if len(args) == 1 and len(kwargs) == 0:
-            try:
-                self._schema.model_validate(args[0])
-            except self._exc_type as e:
-                raise ValidationError("Validation failed, see traceback above") from e
-        else:
-            from_args = {}
-            for name, arg in zip(self._schema.model_fields, args):
-                from_args[name] = arg
+        from_args = {}
+        for name, arg in zip(self._schema.model_fields, args):
+            from_args[name] = arg
 
-            try:
-                self._schema(**from_args, **kwargs)
-            except self._exc_type as e:
-                raise ValidationError("Validation failed, see traceback above") from e
+        try:
+            self._schema(**from_args, **kwargs)
+        except self._exc_type as e:
+            raise ValidationError("Validation failed, see traceback above") from e
 
 
 class Validator:
