@@ -18,6 +18,7 @@ import os
 import re
 import subprocess
 import sys
+from functools import total_ordering
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from coolname import generate
@@ -27,6 +28,7 @@ from . import Meta
 default_keys = ["data", "dataset"]
 
 
+@total_ordering
 class Version:
     def __init__(self, version: str):
         components = version.split(".")
@@ -48,6 +50,9 @@ class Version:
             raise TypeError(
                 f"Can only compare Version with Version or string, got {type(other)}"
             )
+
+    def __hash__(self) -> int:
+        return hash((self.major, self.minor))
 
     def __eq__(self, other: Union["Version", str]) -> bool:
         if isinstance(other, str):
@@ -77,12 +82,6 @@ class Version:
         elif self.major == other.major:
             return self.minor > other.minor
         return False
-
-    def __le__(self, other: Union["Version", str]) -> bool:
-        return self < other or self == other
-
-    def __ge__(self, other: Union["Version", str]) -> bool:
-        return self > other or self == other
 
     def __repr__(self):
         return f"Version({self.major}.{self.minor})"
