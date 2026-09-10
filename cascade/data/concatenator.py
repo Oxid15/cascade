@@ -50,6 +50,12 @@ class Concatenator(Dataset[T]):
         super().__init__(*args, **kwargs)
 
     def get(self, index: int) -> T:
+        if index < 0 and abs(index) > len(self):
+            raise IndexError(f"Index {index} ")
+
+        if index < 0:
+            index += len(self)
+
         ds_index = 0
         for sh in self._shifts[1:]:
             if index >= sh:

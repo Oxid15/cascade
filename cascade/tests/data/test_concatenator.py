@@ -73,3 +73,27 @@ def test_concatenation(arrs):
         res += arr
 
     assert [c[i] for i in range(len(c))] == res
+
+
+def test_negative_indices():
+    c = Concatenator(
+        [
+            Wrapper([0, 1, 2]),
+            Wrapper([3, 4]),
+        ]
+    )
+
+    assert c[-1] == 4
+    assert c[-2] == 3
+    assert c[-3] == 2
+    assert c[-4] == 1
+    assert c[-5] == 0
+
+    with pytest.raises(IndexError):
+        c.get(-6)
+
+    with pytest.raises(IndexError):
+        c.get(-120)
+
+    with pytest.raises(IndexError):
+        c.get(120)
