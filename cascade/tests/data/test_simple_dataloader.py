@@ -39,6 +39,7 @@ from cascade.data import SimpleDataloader
 def test_batches(arr, bs, result):
     dl = SimpleDataloader(arr, batch_size=bs)
     assert list(dl) == result
+    assert len(dl) == len(result)
 
 
 @pytest.mark.parametrize(
@@ -62,3 +63,10 @@ def test_illegal(arr, bs):
 def test_larger_than_sequence(arr, bs):
     dl = SimpleDataloader(arr, batch_size=bs)
     assert list(dl) == [arr]
+    assert len(dl) == 1
+
+
+def test_empty_sequence():
+    dl = SimpleDataloader([], 2)
+
+    assert len(dl) == 0
