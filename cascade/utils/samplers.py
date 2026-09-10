@@ -42,9 +42,15 @@ class OverSampler(Sampler[T]):
         for label_idx, label in enumerate(ulabels):
             k = 0
             for _ in range(how_much_add[label_idx]):
+                # Cycle through labels when reaching end with %
+
                 while labels[k] != label:
                     k += 1
+                    k = k % len(dataset)
+
                 self._add_indices.append(k)
+                k += 1
+                k = k % len(dataset)
 
         ln = len(dataset) + len(self._add_indices)
 
