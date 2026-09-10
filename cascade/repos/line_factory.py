@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
 from typing import Any
 
-from typing_extensions import Literal
+from typing_extensions import Literal, Optional
 
 from ..base import MetaHandler
 from ..lines import DataLine, Line, ModelLine
@@ -48,7 +49,10 @@ class LineFactory:
         return line
 
     @classmethod
-    def read(cls, path: str, *args: Any, **kwargs: Any) -> Line:
+    def read(cls, path: str, *args: Any, **kwargs: Any) -> Optional[Line]:
+        if not os.path.exists(path):
+            return None
+
         meta = MetaHandler.read_dir(path)
         obj_type = meta[0]["type"]
 

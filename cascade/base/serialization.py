@@ -23,21 +23,46 @@ from typing_extensions import Literal
 
 
 class BaseObjectHandler(ABC):
-    @abstractmethod
-    def save(self, obj: Any, path: str) -> None:
-        ...
+    """
+    Abstract class to represent any backend for saving and loading objects
+    """
 
     @abstractmethod
-    def load(self, path: str) -> Any:
-        ...
+    def save(self, obj: Any, path: str) -> None: ...
+
+    @abstractmethod
+    def load(self, path: str) -> Any: ...
 
 
 class Pickler(BaseObjectHandler):
     def load(self, path: str) -> Any:
+        """
+        Unpickles an object.pkl file inside a folder
+
+        Parameters
+        ----------
+        path : str
+            Folder with object.pkl file
+
+        Returns
+        -------
+        Any
+            Loaded object
+        """
         with open(os.path.join(path, "object.pkl"), "rb") as f:
             return pickle.load(f)
 
     def save(self, obj: Any, path: str) -> None:
+        """
+        Pickles an object into object.pkl file inside a folder
+
+        Parameters
+        ----------
+        obj : Any
+            Object to pickle
+        path : str
+            Folder to pickle an object
+        """
         with open(os.path.join(path, "object.pkl"), "wb") as f:
             pickle.dump(obj, f)
 
@@ -47,6 +72,7 @@ class ObjectHandler(BaseObjectHandler):
     Universal serializer interface. Can be supported by
     interchangeable backends.
     """
+
     def __init__(self, backend: Literal["pickle"] = "pickle") -> None:
         if backend == "pickle":
             self._handler = Pickler()

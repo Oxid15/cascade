@@ -19,6 +19,10 @@ from typing import Any, Callable, Dict, List, Union
 
 
 class Config:
+    """
+    Cascade config class, container for configuration to be used in CLI runs
+    """
+
     def __init__(self, cfg: Union[Dict[str, Any], Namespace, None] = None):
         if isinstance(cfg, Namespace):
             cfg = vars(cfg)
@@ -45,7 +49,15 @@ class Config:
         fields_str = ", ".join(fields)
         return f"{prefix}({fields_str})"
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Converts config to dict
+
+        Returns
+        -------
+        Dict[str, Any]
+            dict version of config
+        """
         d = {}
         for name in dir(self):
             if not name.startswith("_"):

@@ -107,3 +107,26 @@ def test_missing_class():
     # Raise if class is missing in dataset
     with pytest.raises(ValueError):
         ds = WeighedSampler(ds, {"bar": 3, "foo": 2, "spam": 20})
+
+
+def test_weighed_sampler_does_not_mutate_partitioning():
+    # label 0 appears once, label 1 twice; caller specifies only label 0
+    ds = cdd.Wrapper([("a", 0), ("b", 1), ("c", 1)])
+    partitioning = {0: 2}
+
+    WeighedSampler(ds, partitioning)
+
+    # the caller's dict must be left exactly as it was passed
+    assert partitioning == {0: 2}
+
+
+def test_weighed_sampler_partitioning_is_reusable():
+    # the same config applied to two datasets must not leak labels between them
+    cfg = {0: 1}
+
+    ds_a = cdd.Wrapper([("a", 0), ("b", 1)])  # labels 0, 1
+    ds_b = cdd.Wrapper([("x", 0), ("y", 2)])  # labels 0, 2
+
+    WeighedSampler(ds_a, cfg)
+    # today this raises "Label 1 was not found" because cfg was polluted by ds_a
+    WeighedSampler(ds_b, cfg)

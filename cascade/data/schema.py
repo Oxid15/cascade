@@ -40,37 +40,38 @@ class SchemaModifier(Modifier):
     How to use it:
     1. Define pydantic schema of input
 
-    ```python
-    import pydantic
+    .. code-block:: python
 
-    class AnnotImage(pydantic.BaseModel):
-        image: List[List[List[float]]]
-        segments: List[List[int]]
-        bboxes: List[Tuple[int, int, int, int]]
-    ```
+        from typing import List, Tuple
+        import pydantic
+
+        class AnnotImage(pydantic.BaseModel):
+            image: List[List[List[float]]]
+            segments: List[List[int]]
+            bboxes: List[Tuple[int, int, int, int]]
 
     2. Use schema as ``in_schema``
 
-    ```python
-    from cascade.data import SchemaModifier
+    .. code-block:: python
 
-    class ImageModifier(SchemaModifier):
-        in_schema = AnnotImage
-    ```
+        from cascade.data import SchemaModifier
+
+        class ImageModifier(SchemaModifier):
+            in_schema = AnnotImage
 
     3. Create a regular ``Modifier`` by
     subclassing ImageModifier.
 
-    ```python
-    class IDoNothing(ImageModifier):
-        def get(self, idx):
-            item = self._dataset[idx]
-            return item
-    ```
+    .. code-block:: python
+
+        class IDoNothing(ImageModifier):
+            def get(self, idx):
+                item = self._dataset[idx]
+                return item
 
     4. That's all. Schema check will be held
     automatically every time ``self._dataset[idx]`` is
-    accessed. If it is not ``AnnotImage``, cascade.data.ValidationError
+    accessed. If it is not like ``AnnotImage``, cascade.data.ValidationError
     will be raised.
 
     """
@@ -94,7 +95,9 @@ class SchemaModifier(Modifier):
 
 
 class ValidationWrapper(Modifier):
-    def __init__(self, dataset: Dataset, schema: Any, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self, dataset: Dataset, schema: Any, *args: Any, **kwargs: Any
+    ) -> None:
         self.validator = SchemaValidator(schema)
         super().__init__(dataset, *args, **kwargs)
 
@@ -104,7 +107,6 @@ class ValidationWrapper(Modifier):
             self.validator(item)
         except ValidationError as e:
             raise ValidationError(
-                f"Got incorrect input data from {self._dataset}",
-                error_index=index
+                f"Got incorrect input data from {self._dataset}", error_index=index
             ) from e
         return item

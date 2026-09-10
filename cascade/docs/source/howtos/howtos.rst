@@ -13,7 +13,7 @@ Pipelines
 
     .. grid-item::
         .. card:: Build a pipeline
-            :link: /howtos/pipeline_building.ipynb
+            :link: /howtos/pipeline_building.rst
             :link-type: ref
 
             How to build data processing pipelines with cascade.data module
@@ -32,7 +32,7 @@ Experiment tracking
 
     .. grid-item::
         .. card:: Track model training experiment
-            :link: /howtos/model_training.ipynb
+            :link: /howtos/model_training.rst
             :link-type: ref
 
             How to conduct experiments with Cascade
@@ -46,7 +46,7 @@ Experiment tracking
 
     .. grid-item::
         .. card:: Use a Trainer
-            :link: /howtos/model_training_trainers.ipynb
+            :link: /howtos/model_training_trainers.rst
             :link-type: ref
 
             How to make model training even easier with Trainers
@@ -126,10 +126,10 @@ Experiment management
     :maxdepth: 1
     :hidden:
 
-    pipeline_building.ipynb
-    model_training.ipynb
+    pipeline_building
+    model_training
     track_logs
-    model_training_trainers.ipynb
+    model_training_trainers
     track_a_file
     track_dataset_errors
     cli

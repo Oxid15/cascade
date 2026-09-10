@@ -24,6 +24,10 @@ from .base_repo import BaseRepo
 
 
 class SingleLineRepo(BaseRepo):
+    """
+    Virtual Repo to represent a single line with Repo interface in code
+    """
+
     def __init__(
         self,
         line: Line,
@@ -47,9 +51,25 @@ class SingleLineRepo(BaseRepo):
         return f"SingleLine in {self._root}"
 
     def get_root(self) -> str:
+        """
+        Returns line's own root
+
+        Returns
+        -------
+        str
+            Path to the root
+        """
         return self._root
 
     def reload(self) -> None:
+        """
+        Calls line's reload
+
+        See also
+        --------
+        cascade.lines.ModelLine
+        cascade.lines.DataLine
+        """
         self._line.reload()
 
     def __len__(self) -> Literal[1]:

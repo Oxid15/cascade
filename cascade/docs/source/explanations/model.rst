@@ -20,7 +20,7 @@ abstract way.
 
 ModelLine
 *********
-:py:class:`cascade.models.ModelLine`
+:py:class:`cascade.lines.ModelLine`
 
 ModelLine is the entity that helps to track model's history in metrics and parameters.
 This is a collection of models, which has its own meta, that describes the

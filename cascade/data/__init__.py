@@ -3,20 +3,6 @@ cascade.data
 ============
 
 The home for Cascade pipeline building tools
-
-Copyright 2022-2026 Ilia Moiseev
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
 """
 
 from .apply_modifier import ApplyModifier
@@ -36,7 +22,6 @@ from .dataset import (
 )
 from .filter import Filter, IteratorFilter
 from .folder_dataset import FolderDataset
-from .functions import dataset, modifier
 from .modifier import BaseModifier, IteratorModifier, Modifier, Sampler
 from .random_sampler import RandomSampler
 from .range_sampler import RangeSampler
@@ -44,6 +29,8 @@ from .schema import SchemaModifier
 from .simple_dataloader import SimpleDataloader
 from .utils import split
 from .validation import ValidationError, validate_in
+
+from .functions import dataset, modifier
 
 __all__ = [
     "ApplyModifier",

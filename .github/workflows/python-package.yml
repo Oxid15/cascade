@@ -20,6 +20,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -37,16 +38,12 @@ jobs:
       run: |
         ruff check .
 
+    - name: Test docstring coverage
+      run: |
+        interrogate -Ppmns cascade -e cascade/docs/ -e cascade/cli/ -e cascade/utils/tests/ -e cascade/tests/ -f 60
+
     - name: Test
       run: |
         pwd
         ls
-        python --version
-        cd ./cascade/tests
-        pytest --cov=cascade .
-    - name: Test utils
-      run: |
-        pwd
-        ls
-        cd ./cascade/utils/tests
-        pytest
+        pytest --cov=cascade

@@ -12,7 +12,7 @@ Tags are a list, but guaranteed to be unique when added using ``add_tag`` method
 
 .. code-block:: python
 
-    from cascade.models import ModelLine
+    from cascade.lines import ModelLine
 
     line = ModelLine("line")
     model = line.create_model()

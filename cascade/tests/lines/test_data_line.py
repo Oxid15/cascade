@@ -139,3 +139,52 @@ def test_load_obj_meta(tmp_path_str, dataset):
 
     meta = line.load_obj_meta(str(version))
     assert meta[0]["test_param"] == 1
+
+
+def test_data_order_after_reload(tmp_path_str):
+    line = DataLine(tmp_path_str)
+
+    dataset = Wrapper([])
+
+    for i in range(11):
+        # Should bump minor
+        dataset.update_meta({"test_param": i})
+        line.save(dataset)
+
+    # Should bump major
+    dataset = ApplyModifier(dataset, add1)
+
+    for i in range(5):
+        dataset.update_meta({"test_param": i})
+        line.save(dataset)
+
+    version_2 = line.get_version(line.load(2))
+
+    versions = line.get_item_names()
+    assert versions == [
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "0.10",
+        "0.11",
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+    ]
+
+    line = DataLine(tmp_path_str)
+    versions_after_reload = line.get_item_names()
+
+    assert versions == versions_after_reload
+
+    version_2_after_reload = line.get_version(line.load(2))
+
+    assert version_2 == version_2_after_reload
