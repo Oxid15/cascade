@@ -74,7 +74,7 @@ class BasicTrainer(Trainer):
     @staticmethod
     def _load_last_model(line: ModelLine) -> Tuple[Model, int]:
         model_num = len(line) - 1
-        while True:
+        while model_num >= 0:
             try:
                 model = line.load(model_num)
                 return model, model_num
@@ -82,10 +82,7 @@ class BasicTrainer(Trainer):
                 logger.warning(f"Model {model_num} files were not found\n{e}")
                 model_num -= 1
 
-                if model_num == -1:
-                    raise FileNotFoundError(
-                        f"No model files were found in line {line}"
-                    ) from None
+        raise FileNotFoundError(f"No model files were found in line {line}") from None
 
     def _handle(self, error: Exception, model: Model, line: ModelLine):
         line.save(model, only_meta=True)
