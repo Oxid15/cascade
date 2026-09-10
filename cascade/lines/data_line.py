@@ -13,7 +13,6 @@ limitations under the License.
 
 import os
 import socket
-import warnings
 from collections import defaultdict
 from getpass import getuser
 from hashlib import md5
