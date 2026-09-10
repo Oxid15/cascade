@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
 from abc import ABC, abstractmethod
 from typing import Any, List
 
@@ -38,7 +39,7 @@ class BaseRepo(Traceable, ABC):
         *args: Any,
         **kwargs: Any,
     ) -> None:
-        self._root = path
+        self._root = os.path.abspath(path)
         self._lines = {}
         super().__init__(*args, **kwargs)
 
