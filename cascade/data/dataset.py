@@ -33,7 +33,7 @@ class GetItemHandler:
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         if exc_type:
-            if exc_type != KeyboardInterrupt:
+            if exc_type is not KeyboardInterrupt:
                 raise GetItemError(
                     f"Failed to get item from {self.dataset} at index {self.index}"
                 ) from exc_value
