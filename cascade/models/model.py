@@ -17,7 +17,7 @@ limitations under the License.
 import os
 import warnings
 from shutil import copyfile
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Iterable, Optional, Union
 
 import pendulum
 
@@ -33,14 +33,26 @@ class Model(Traceable):
     """
 
     def __init__(
-        self, *args: Any, meta_prefix: Union[Meta, str, None] = None, **kwargs: Any
+        self,
+        *args: Any,
+        meta_prefix: Union[Meta, str, None] = None,
+        description: Optional[str] = None,
+        tags: Optional[Iterable[str]] = None,
+        **kwargs: Any,
     ) -> None:
         """
         Should be called in any successor - initializes default meta needed.
 
         Successors may pass all of their parameters to superclass for it to be able to
-        log them in meta. Everything that is worth to document about the model
-        can be put either in params or meta_prefix
+        log them in meta. Everything that is worth to track about the model
+        can be put in params using this constructor or put in meta directly using update_meta().
+
+        Parameters
+        ----------
+        description : Optional[str], optional
+            by default None
+        tags : Optional[Iterable[str]], optional
+            by default None
         """
         self.metrics = []
         self.params = kwargs
@@ -48,8 +60,15 @@ class Model(Traceable):
         self._file_artifacts_paths = []
         self._file_artifact_missing_oks = []
         self._log_callbacks = []
-        # Model accepts meta_prefix explicitly to not to record it in 'params'
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+
+        if meta_prefix is not None:
+            warnings.warn(
+                "Use of `meta_prefix` in `__init__` is deprecated since 0.18.0."
+                " Consider using update_meta()",
+                stacklevel=2,
+            )
+
+        super().__init__(*args, description=description, tags=tags, **kwargs)
 
     def fit(self, *args: Any, **kwargs: Any) -> None:
         """

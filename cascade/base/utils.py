@@ -116,7 +116,7 @@ def get_uncommitted_changes() -> Optional[List[str]]:
         )
         result = result.stdout.strip()
         if result != "":
-            return result.split("\n ")
+            return result.splitlines()
         return None
     except Exception:
         return None

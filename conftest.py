@@ -3,8 +3,8 @@ from doctest import ELLIPSIS
 
 import pytest
 from sybil import Sybil
-from sybil.parsers.codeblock import PythonCodeBlockParser
 from sybil.evaluators.doctest import NUMBER
+from sybil.parsers.codeblock import PythonCodeBlockParser
 from sybil.parsers.doctest import DocTestParser
 from sybil.parsers.rest import SkipParser
 

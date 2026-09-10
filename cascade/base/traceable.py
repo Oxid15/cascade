@@ -83,7 +83,7 @@ class Traceable:
 
     def __init__(
         self,
-        *args: Any,  # TODO: why?
+        *args: Any,
         description: Optional[str] = None,
         tags: Optional[Iterable[str]] = None,
         **kwargs: Any,
