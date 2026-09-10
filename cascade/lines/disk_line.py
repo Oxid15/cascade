@@ -42,8 +42,8 @@ class DiskLine(TraceableOnDisk, Line):
 
         if os.path.exists(self._root):
             self._load_item_names()
-        else:
-            os.mkdir(self._root)
+        os.makedirs(self._root, exist_ok=True)
+
         self.sync_meta()
 
     def reload(self) -> None:
