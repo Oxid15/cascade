@@ -34,8 +34,8 @@ class SimpleDataloader:
     """
 
     def __init__(self, data: Sequence[T], batch_size: int = 1) -> None:
-        if batch_size == 0:
-            raise ValueError("Batch size cannot be 0")
+        if batch_size <= 0:
+            raise ValueError(f"Batch size cannot be 0 or negative, got {batch_size}")
         if batch_size > len(data):
             batch_size = len(data)
 
@@ -57,4 +57,7 @@ class SimpleDataloader:
             yield self[i]
 
     def __len__(self) -> int:
+        if len(self.data) == 0:
+            return 0
+
         return int(np.ceil(len(self.data) / self._bs))
