@@ -72,6 +72,7 @@ NODE_ALLOW_LIST = [
     ast.SetComp,
     ast.comprehension,
     ast.GeneratorExp,
+    ast.Index, # Python<3.9 compatibility
 ]
 
 ALLOWED_BUILTINS = {
