@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import ast
+import sys
 import time
 from dataclasses import dataclass
 from types import CodeType
@@ -72,8 +73,17 @@ NODE_ALLOW_LIST = [
     ast.SetComp,
     ast.comprehension,
     ast.GeneratorExp,
-    ast.Index, # Python<3.9 compatibility
 ]
+
+if sys.version_info < (3, 9):
+    NODE_ALLOW_LIST.extend(
+        [
+            ast.Index,
+            ast.Num,
+            ast.Str,
+            ast.NameConstant,
+        ]
+    )
 
 ALLOWED_BUILTINS = {
     "any": any,
