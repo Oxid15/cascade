@@ -171,6 +171,13 @@ class QueryParser:
             "end": {"end of query": "error"},
         }
 
+        self._keywords = (
+            "filter",
+            "sort",
+            "offset",
+            "limit",
+        )
+
         self.expected = {"_", ".", "[", "]"}
 
     def _report_error(
@@ -207,7 +214,7 @@ class QueryParser:
             )
 
         for i, token in enumerate(tokens):
-            if token in self._states:
+            if token in self._keywords:
                 new_state = self._states[state].get(token, "error")
 
                 if new_state == "error":
@@ -222,7 +229,6 @@ class QueryParser:
                 continue
 
             if state == "start" or state == "columns":
-                # self._validate_column(token)
                 columns.append(token)
             elif state == "filter":
                 filter_expr = token
