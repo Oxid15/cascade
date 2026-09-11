@@ -1,12 +1,2 @@
-cascade.utils.sklearn
-#####################
-
-.. autoclass:: cascade.utils.sklearn.SkMetric
+.. automodule:: cascade.utils.sklearn
     :members:
-
-
-
-.. autoclass:: cascade.utils.sklearn.SkModel
-    :members:
-
-

@@ -33,9 +33,12 @@ class GetItemHandler:
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         if exc_type:
-            raise GetItemError(
-                f"Failed to get item from {self.dataset} at index {self.index}"
-            ) from exc_value
+            if exc_type is not KeyboardInterrupt:
+                raise GetItemError(
+                    f"Failed to get item from {self.dataset} at index {self.index}"
+                ) from exc_value
+            else:
+                raise exc_value
         return False
 
 
@@ -92,11 +95,11 @@ class Dataset(BaseDataset[T], Sized):
     this class should mean the presence of length.
 
     If your dataset does not have length defined
-    you can use Iterator
+    you can use IteratorModifier
 
     See also
     --------
-    cascade.data.Iterator
+    cascade.data.IteratorModifier
     """
 
     @abstractmethod
@@ -140,7 +143,7 @@ class IteratorWrapper(IteratorDataset[T]):
 
 class Wrapper(Dataset):
     """
-    Wraps Dataset around any list-like object.
+    Wraps Dataset around any list-like object
     """
 
     def __init__(self, obj: Sequence[T], *args: Any, **kwargs: Any) -> None:
@@ -148,12 +151,45 @@ class Wrapper(Dataset):
         super().__init__(*args, **kwargs)
 
     def get(self, index: Any) -> T:
+        """
+        Return an item from wrapped container
+
+        Parameters
+        ----------
+        index : Any
+
+        Returns
+        -------
+        T
+            Item from a container
+
+        Example
+        -------
+        >>> from cascade.data import Wrapper
+        >>> ds = Wrapper([1, 2, 3])
+        >>> print(ds.get(0))
+        1
+        """
         return self._data[index]
 
     def __len__(self) -> int:
         return len(self._data)
 
     def get_meta(self) -> Meta:
+        """
+        Wrapper's meta adds obj_type field to the default meta of a Modifier
+
+        Returns
+        -------
+        Meta
+
+        Example
+        -------
+        >>> from cascade.data import Wrapper
+        >>> ds = Wrapper([1, 2, 3])
+        >>> print(ds.get_meta())
+        [{'name': 'cascade.data.dataset.Wrapper', ..., 'len': 3, 'obj_type': "<class 'list'>"}]
+        """
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))
         return meta

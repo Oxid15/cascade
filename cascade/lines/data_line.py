@@ -35,6 +35,12 @@ from .disk_line import DiskLine
 
 
 class DataLine(DiskLine):
+    """
+    Container for tracking Datasets. Can pickle data pipelines completely or
+    just used to store metadata. Uses versioning system and meta hashing to tell
+    datasets apart and assign versions.
+    """
+
     def __init__(
         self,
         root: str,
@@ -49,9 +55,32 @@ class DataLine(DiskLine):
 
         self._obj_handler = ObjectHandler(obj_backend)
         for name in self._item_names:
-            with open(os.path.join(self._root, name, "HASHES"), "r") as f:
-                skel_hash, meta_hash = f.read().split("\n")
+            hashes_path = os.path.join(self._root, name, "HASHES")
+
+            if not os.path.exists(hashes_path):
+                raise RuntimeError(f"Failed to find hashes file at: {hashes_path}")
+
+            with open(hashes_path, "r") as f:
+                components = f.read().split("\n")
+                if len(components) != 2:
+                    raise RuntimeError(
+                        f"Got {len(components)} != 2 lines inside {hashes_path}"
+                    )
+
+                skel_hash, meta_hash = components
                 self._hashes[skel_hash][meta_hash] = Version(name)
+
+    def _load_item_names(self):
+        if not os.path.isdir(self._root):
+            raise ValueError(f"folder should be directory, got `{self._root}`")
+
+        names = [
+            item_folder
+            for item_folder in os.listdir(self._root)
+            if os.path.isdir(os.path.join(self._root, item_folder))
+        ]
+
+        self._item_names = sorted(names, key=Version)
 
     def _get_hashes(self, meta: Meta) -> Tuple[str, str]:
         skel = skeleton(meta)
@@ -164,10 +193,11 @@ class DataLine(DiskLine):
             meta[0]["git_uncommitted_changes"] = git_uncommitted
 
         os.makedirs(full_path, exist_ok=True)
-        MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
 
         with open(os.path.join(self._root, version_str, "HASHES"), "w") as f:
             f.write("\n".join([skel_hash, meta_hash]))
+
+        MetaHandler.write(os.path.join(full_path, "meta" + self._meta_fmt), meta)
 
         if not only_meta:
             self._obj_handler.save(ds, os.path.join(self._root, version_str))

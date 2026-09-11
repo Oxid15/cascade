@@ -22,7 +22,7 @@ from .modifier import Sampler
 
 class RangeSampler(Sampler[T]):
     """
-    Implements an interface of standard range in a dataset.
+    Implements Python range as a Dataset
 
     Example
     -------
@@ -79,6 +79,10 @@ class RangeSampler(Sampler[T]):
         # Check if only stop was passed
         if start is not None and stop is None:
             stop = start
+            start = 0
+
+        # In this case stop was passed using kwarg and start omitted
+        if start is None:
             start = 0
 
         self._indices = list(range(start, stop, step))

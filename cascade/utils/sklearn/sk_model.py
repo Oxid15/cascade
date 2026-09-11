@@ -80,9 +80,13 @@ class SkModel(BasicModel):
 
         pipeline = self._pipeline
         del self._pipeline
-        with open(model_path, "wb") as f:
-            pickle.dump(self, f)
-        self._pipeline = pipeline
+        try:
+            with open(model_path, "wb") as f:
+                pickle.dump(self, f)
+        except Exception as e:
+            raise e
+        finally:
+            self._pipeline = pipeline
 
     def save_artifact(self, path: str, *args: Any, **kwargs: Any) -> None:
         """
@@ -127,5 +131,7 @@ class SkModel(BasicModel):
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
-        meta[0].update({"pipeline": repr(self._pipeline)})
+        pipeline = getattr(self, "_pipeline", None)
+        pipeline = repr(pipeline) if pipeline else pipeline
+        meta[0].update({"pipeline": pipeline})
         return meta

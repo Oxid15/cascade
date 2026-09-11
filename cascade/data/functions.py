@@ -52,15 +52,14 @@ class FunctionModifier(FunctionDataset):
         super().__init__(*converted_args, f=f, **kwargs)
 
     def get_meta(self) -> Meta:
-        meta = super().get_meta()
-        if len(self._datasets) == 1:
-            meta += self._datasets[0].get_meta()
-        elif len(self._datasets) != 0:
-            meta += [[ds.get_meta() for ds in self._datasets]]
-        return meta
+        self_meta = super().get_meta()
+        self_meta[0]["data"] = [ds.get_meta() for ds in self._datasets]
+        return self_meta
 
 
-def dataset(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[..., FunctionDataset]:
+def dataset(
+    f: Callable[..., Any], do_validate_in: bool = True
+) -> Callable[..., FunctionDataset]:
     """
     Thin wrapper to turn any function into a Cascade's Dataset.
     Use this if the function is the data source
@@ -77,6 +76,24 @@ def dataset(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[...,
     -------
     Callable[..., FunctionDataset]
         Call this to get a dataset
+
+    Example
+    -------
+
+    .. code-block:: python
+
+        from cascade.data import dataset
+        from cascade.data.functions import FunctionDataset
+
+        @dataset
+        def read_data():
+            return [0, 1, 2]
+
+        x = read_data()
+
+        assert isinstance(x, FunctionDataset)
+        assert x.result == [0, 1, 2]
+
     """
     if do_validate_in:
         f = validate_in(f)
@@ -88,7 +105,9 @@ def dataset(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[...,
     return wrapper
 
 
-def modifier(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[..., FunctionModifier]:
+def modifier(
+    f: Callable[..., Any], do_validate_in: bool = True
+) -> Callable[..., FunctionModifier]:
     """
     Thin wrapper to turn any function into Cascade's Modifier
     Pass the returning value of a function
@@ -105,6 +124,28 @@ def modifier(f: Callable[..., Any], do_validate_in: bool = True) -> Callable[...
     -------
     Callable[..., FunctionModifier]
         Call this to get a modifier
+
+    Example
+    -------
+
+    .. code-block:: python
+
+        from cascade.data import dataset, modifier
+        from cascade.data.functions import FunctionModifier
+
+        @dataset
+        def read_data():
+            return [0, 1, 2]
+
+        @modifier
+        def mul(inp_data, n):
+            return list(x * n for x in inp_data)
+
+        x = read_data()
+        x = mul(x, 3)
+
+        assert isinstance(x, FunctionModifier)
+        assert x.result == [0, 3, 6]
     """
     if do_validate_in:
         f = validate_in(f)

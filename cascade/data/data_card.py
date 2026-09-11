@@ -63,7 +63,7 @@ class DataCard:
 
     Example
     -------
-    >>> from cascade.data import DataCard, Assessor, LabelingInfo, DataRegistrator
+    >>> from cascade.data import DataCard, Assessor, LabelingInfo
     >>> person = Assessor(id=0, position="Assessor")
     >>> info = LabelingInfo(who=[person], process_desc="Labeling description")
     >>> dc = DataCard(

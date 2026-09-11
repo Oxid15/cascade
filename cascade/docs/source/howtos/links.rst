@@ -21,9 +21,9 @@ Given a Traceable one can link to it:
 .. code-block:: python
 
     from cascade.models import Model
-    from cascade.data import Dataset
+    from cascade.data import Wrapper
 
-    ds = Dataset()
+    ds = Wrapper([])
     model = Model()
 
     # Will create a Link in model to the ds
@@ -38,9 +38,9 @@ If you link a Traceable, you may choose to include its full meta or just use ess
 .. code-block:: python
 
     from cascade.models import Model
-    from cascade.data import Dataset
+    from cascade.data import Wrapper
 
-    ds = Dataset()
+    ds = Wrapper([])
     model = Model()
 
     model.link(ds, include=False)

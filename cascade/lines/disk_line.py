@@ -22,6 +22,10 @@ from .line import Line
 
 
 class DiskLine(TraceableOnDisk, Line):
+    """
+    Base class for Lines storing objects on disk
+    """
+
     def __init__(
         self,
         root: str,
@@ -38,12 +42,14 @@ class DiskLine(TraceableOnDisk, Line):
 
         if os.path.exists(self._root):
             self._load_item_names()
-        else:
-            os.mkdir(self._root)
+        os.makedirs(self._root, exist_ok=True)
+
         self.sync_meta()
 
     def reload(self) -> None:
-        # Here update slugs in ModelLine
+        """
+        Reads object names from the disk
+        """
         self._load_item_names()
 
     def _load_item_names(self):
@@ -113,7 +119,7 @@ class DiskLine(TraceableOnDisk, Line):
 
         Returns
         -------
-        MetaFromFile
+        Meta
             Model metadata
 
         Raises
@@ -126,7 +132,9 @@ class DiskLine(TraceableOnDisk, Line):
         """
         name = self._parse_item_name(path_spec)
         if name is None:
-            raise FileNotFoundError(f"Couldn't find an object {path_spec} in the line {self._root}")
+            raise FileNotFoundError(
+                f"Couldn't find an object {path_spec} in the line {self._root}"
+            )
         return self._read_meta_by_name(name)
 
     def get_item_names(self) -> List[str]:
@@ -148,7 +156,7 @@ class DiskLine(TraceableOnDisk, Line):
         meta[0].update(
             {
                 "root": self._root,
-                "item_cls": repr(self._item_cls),
+                "item_cls": self._item_cls.__qualname__,
                 "len": len(self),
                 "cascade_version": __version__,
             }

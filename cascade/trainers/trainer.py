@@ -51,7 +51,7 @@ class Trainer(Traceable):
         super().__init__(*args, **kwargs)
 
     def train(self, model: Model, *args: Any, **kwargs: Any) -> None:
-        raise_not_implemented("cascade.models.Trainer", "train")
+        raise_not_implemented("cascade.trainers.Trainer", "train")
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()
@@ -74,7 +74,7 @@ class BasicTrainer(Trainer):
     @staticmethod
     def _load_last_model(line: ModelLine) -> Tuple[Model, int]:
         model_num = len(line) - 1
-        while True:
+        while model_num >= 0:
             try:
                 model = line.load(model_num)
                 return model, model_num
@@ -82,10 +82,7 @@ class BasicTrainer(Trainer):
                 logger.warning(f"Model {model_num} files were not found\n{e}")
                 model_num -= 1
 
-                if model_num == -1:
-                    raise FileNotFoundError(
-                        f"No model files were found in line {line}"
-                    ) from None
+        raise FileNotFoundError(f"No model files were found in line {line}") from None
 
     def _handle(self, error: Exception, model: Model, line: ModelLine):
         line.save(model, only_meta=True)
@@ -242,6 +239,31 @@ class BasicTrainer(Trainer):
             logger.info(metric)
 
     def get_meta(self) -> Meta:
+        """
+        Includes `training_started_at` and `training_ended_at` into default meta
+
+        Returns
+        -------
+        Meta
+
+        Example
+        -------
+
+        .. doctest::
+
+            >>> from pprint import pprint
+            >>> from cascade.trainers import BasicTrainer
+            >>> trainer = BasicTrainer("trainer_repo")
+            >>> pprint(trainer.get_meta())
+            [{'comments': [],
+              'description': None,
+              'links': [],
+              'name': 'cascade.trainers.trainer.BasicTrainer',
+              'tags': [],
+              'training_ended_at': None,
+              'training_started_at': None,
+              'type': 'trainer'}]
+        """
         meta = super().get_meta()
         meta[0]["training_started_at"] = self.train_start_at
         meta[0]["training_ended_at"] = self.train_end_at

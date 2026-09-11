@@ -41,6 +41,7 @@ def split(
 
     Example
     -------
+    >>> from cascade import data as cdd
     >>> ds = cdd.Wrapper([0, 1, 2, 3, 4])
 
     >>> ds1, ds2 = cdd.split(ds)
