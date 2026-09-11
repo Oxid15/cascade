@@ -328,11 +328,17 @@ class Model(Traceable):
             callback(self)
 
     def add_log(self):
+        """
+        If called inside cascade run <script> command will add log file
+        of the run to this model and save it when the model is saved to line
+
+        Will warn if called outside of cascade run
+        """
         run_dir = os.getenv("CASCADE_RUN_DIR")
         if run_dir is None:
             warnings.warn(
                 "model.add_log called while not inside a run."
-                "Call a script with cascade run script.py and then use add_log inside",
+                "Call a script with cascade run <script> and then use add_log inside",
                 stacklevel=2,
             )
             return
@@ -341,11 +347,17 @@ class Model(Traceable):
         self.add_file(log_path)
 
     def add_config(self):
+        """
+        If called inside cascade run <script> command will add config files
+        of the run to this model and save it when the model is saved to line
+
+        Will warn if called outside of cascade run
+        """
         run_dir = os.getenv("CASCADE_RUN_DIR")
         if run_dir is None:
             warnings.warn(
                 "model.add_config called while not inside a run."
-                "Call a script with cascade run script.py and then use add_config inside",
+                "Call a script with cascade run <script> and then use add_config inside",
                 stacklevel=2,
             )
             return
@@ -360,6 +372,27 @@ class Model(Traceable):
 
         overrides_path = os.path.join(run_dir, "cascade_overrides.json")
         self.add_file(overrides_path)
+
+    def add_run_script(self):
+        """
+        If called inside cascade run <script> command will add actual script
+        after overrides to this model and save it when the model is saved to line
+
+        Will warn if called outside of cascade run
+        """
+        run_dir = os.getenv("CASCADE_RUN_DIR")
+        if run_dir is None:
+            warnings.warn(
+                "model.add_run_script called while not inside a run."
+                "Call a script with cascade run <script> and then use add_run_script inside",
+                stacklevel=2,
+            )
+            return
+
+        # Saving script to disk was introduced in 0.18.0
+        script_path = os.path.join(run_dir, "cascade_run_script.py")
+        if os.path.exists(script_path):
+            self.add_file(script_path)
 
 
 class ModelModifier(Model):
