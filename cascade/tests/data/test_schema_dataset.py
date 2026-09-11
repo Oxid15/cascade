@@ -29,7 +29,7 @@ from cascade.data import Dataset, GetItemError, SchemaModifier
 
 class FiveIdenticalImages(Dataset):
     def get(self, idx):
-        return AnnotImage(
+        return dict(
             image=[[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
             segments=[[0, 1, 2], [0, 1, 2]],
             bboxes=[(0, 0, 1, 1)],
@@ -71,9 +71,9 @@ def test_correct_schema():
     ds = IDoNothing(ds)
 
     item = ds[0]
-    assert isinstance(item.image, list)
-    assert isinstance(item.segments, list)
-    assert isinstance(item.bboxes, list)
+    assert isinstance(item["image"], list)
+    assert isinstance(item["segments"], list)
+    assert isinstance(item["bboxes"], list)
 
 
 class BrokenImage(pydantic.BaseModel):

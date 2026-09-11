@@ -120,7 +120,7 @@ class ValidationWrapper(Modifier):
     def get(self, index: Any):
         item = super().get(index)
         try:
-            self.validator(item)
+            self.validator(**item)
         except ValidationError as e:
             raise ValidationError(
                 f"Got incorrect input data from {self._dataset}", error_index=index
