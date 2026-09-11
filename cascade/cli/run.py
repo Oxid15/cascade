@@ -253,11 +253,17 @@ def can_safely_replace(cfg, new_cfg):
 class CascadeRun:
     def __init__(
         self,
+        script: str,
+        text: str,
         log: bool,
         config: Dict[str, Any],
         overrides: Dict[str, Any],
         base_config_path: Optional[str] = None,
     ) -> None:
+        self.original_script_path = script
+        self.updated_script_text = (
+            f"__file__ = {script!r}\n__name__ = '__main__'\n" + text
+        )
         self.log = log
         self.config = config
         self.overrides = overrides
@@ -281,6 +287,9 @@ class CascadeRun:
         run_meta = {"run_id": self.run_id, "base_config_path": self.base_config_path}
         MetaHandler.write(os.path.join(self.run_dir, "cascade_run_meta.json"), run_meta)
 
+        with open(os.path.join(self.run_dir, "cascade_run_script.py"), "w") as f:
+            f.write(self.updated_script_text)
+
         return self
 
     def __exit__(self, exc_type, exc_value, exc_tb):
@@ -297,12 +306,11 @@ class CascadeRun:
             )
         return False
 
-    def run_script(self, script: str, text: str) -> None:
-        script_globals = f'__file__ = "{script}"\n__name__ = "__main__"\n'
-        text = script_globals + text
+    def run_script(self) -> None:
+        script_path = os.path.join(self.run_dir, "cascade_run_script.py")
 
         process = subprocess.Popen(
-            [sys.executable, "-u", "-c", text],
+            [sys.executable, "-u", script_path],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             env=os.environ,
@@ -323,8 +331,8 @@ class CascadeRun:
         returncode = process.wait()
         if returncode:
             raise RunFailedError(
-                f"Run of {script} failed. See traceback above."
-                " The config and logs"
+                f"Run of {self.original_script_path} failed. See traceback above."
+                " The config, logs and actual script"
                 f" will be kept at {self.run_dir}"
                 " for post-mortem analysis"
             )
@@ -410,5 +418,5 @@ def run(
     if not y:
         click.confirm("Confirm?", abort=True)
 
-    with CascadeRun(log, cfg_dict, kwargs) as run:
-        run.run_script(script, text)
+    with CascadeRun(script, text, log, cfg_dict, kwargs) as run:
+        run.run_script()
