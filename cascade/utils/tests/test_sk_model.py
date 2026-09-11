@@ -82,3 +82,10 @@ def test_model_artifacts(tmp_path_str):
     model = SkModel()
     model.load_artifact(tmp_path_str)
     assert model._pipeline[0].n_estimators == 2
+
+
+def test_meta_on_empty_pipeline():
+    model = SkModel()
+    meta = model.get_meta()
+
+    assert meta[0]["pipeline"] is None
