@@ -3,3 +3,4 @@ pytest-cov>=3.0.0
 ruff>=0.15.21
 interrogate
 sybil>=6.1.1
+torchvision
