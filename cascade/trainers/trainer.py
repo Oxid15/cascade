@@ -263,7 +263,9 @@ class BasicTrainer(Trainer):
               'training_ended_at': None,
               'training_started_at': None,
               'type': 'trainer'}]
+
         """
+
         meta = super().get_meta()
         meta[0]["training_started_at"] = self.train_start_at
         meta[0]["training_ended_at"] = self.train_end_at

@@ -46,6 +46,7 @@ class Repo(BaseRepo, TraceableOnDisk):
     >>> model = line.create_model(constant=1)
     >>> model.fit([0], [1])
     >>> line.save(model)
+
     """
 
     def __init__(

@@ -43,6 +43,7 @@ class RangeSampler(Sampler[T]):
     1
     2
     3
+
     """
 
     def __init__(

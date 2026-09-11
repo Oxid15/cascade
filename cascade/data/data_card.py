@@ -76,6 +76,7 @@ class DataCard:
     ...     metrics={"quality": 100},
     ...     schema={"label": "value"},
     ...     custom_field="hello")
+
     """
 
     def __init__(

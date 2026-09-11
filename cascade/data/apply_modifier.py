@@ -60,6 +60,7 @@ class ApplyModifier(Modifier[T]):
         Now function will only be applied when items are retrieved
 
         >>> assert [item for item in ds] == [0, 1, 4, 9, 16]
+
         """
         super().__init__(dataset, *args, **kwargs)
         self._func = func

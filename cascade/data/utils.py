@@ -64,6 +64,7 @@ def split(
     [0, 1, 2, 3]
     >>> print([item for item in ds2])
     [4]
+
     """
     if num is None and frac is None:
         raise ValueError("Either num or frac must be specified. Got both None")

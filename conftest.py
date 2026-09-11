@@ -24,6 +24,7 @@ from sybil.parsers.codeblock import PythonCodeBlockParser
 from sybil.parsers.doctest import DocTestParser
 from sybil.parsers.rest import SkipParser
 
+# Doing this manually to be compatible with Python<3.9
 NUMBER = doctest.register_optionflag("NUMBER")
 
 @pytest.fixture

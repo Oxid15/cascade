@@ -99,6 +99,7 @@ class SkMetric(Metric):
              'mse': 'mean_squared_error',
              'precision': 'precision_score',
              'recall': 'recall_score'}
+
         """
         self._args = args
         self._kwargs = kwargs

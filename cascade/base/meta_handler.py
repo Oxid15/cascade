@@ -262,6 +262,7 @@ class MetaHandler:
     >>> obj = MetaHandler.read('meta.json')
     >>> MetaHandler.write('meta.yml', {'hello': 'world'})
     >>> obj = MetaHandler.read('meta.yml')
+
     """
 
     @classmethod

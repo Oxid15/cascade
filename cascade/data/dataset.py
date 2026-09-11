@@ -169,6 +169,7 @@ class Wrapper(Dataset):
         >>> ds = Wrapper([1, 2, 3])
         >>> print(ds.get(0))
         1
+
         """
         return self._data[index]
 
@@ -189,6 +190,7 @@ class Wrapper(Dataset):
         >>> ds = Wrapper([1, 2, 3])
         >>> print(ds.get_meta())
         [{'name': 'cascade.data.dataset.Wrapper', ..., 'len': 3, 'obj_type': "<class 'list'>"}]
+
         """
         meta = super().get_meta()
         meta[0]["obj_type"] = str(type(self._data))

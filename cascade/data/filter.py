@@ -39,7 +39,8 @@ class Filter(Sampler):
         >>> ds = Filter(ds, lambda x: x % 2 == 0)
         >>> list(ds)
         [0, 2]
-    """
+
+        """
 
     def __init__(
         self, dataset: Dataset, filter_fn: Callable, *args: Any, **kwargs: Any
@@ -95,6 +96,7 @@ class IteratorFilter(IteratorModifier):
         >>> ds = IteratorFilter(ds, lambda x: x % 2 == 0)
         >>> list(ds)
         [0, 2]
+
     """
 
     def __init__(
