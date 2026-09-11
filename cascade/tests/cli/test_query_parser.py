@@ -21,7 +21,7 @@ import pytest
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from cascade.cli.query import QueryParser, Query
+from cascade.cli.query import Query, QueryParser
 
 
 @pytest.mark.parametrize(

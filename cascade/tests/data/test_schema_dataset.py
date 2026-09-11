@@ -29,11 +29,11 @@ from cascade.data import Dataset, GetItemError, SchemaModifier
 
 class FiveIdenticalImages(Dataset):
     def get(self, idx):
-        return dict(
-            image=[[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
-            segments=[[0, 1, 2], [0, 1, 2]],
-            bboxes=[(0, 0, 1, 1)],
-        )
+        return {
+            "image": [[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
+            "segments": [[0, 1, 2], [0, 1, 2]],
+            "bboxes": [(0, 0, 1, 1)],
+        }
 
     def __len__(self):
         return 5
