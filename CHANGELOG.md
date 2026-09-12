@@ -1,35 +1,122 @@
 # Changelog
 
+## 0.18.0 - Major stability update
+
+2026-09-12
+
+This release is mostly fixes of bugs, polishing and other housekeeping.
+It greatly improves the stability of Cascade fixing some critical bugs, improving documentation and making testing more thorough.
+
+### Adds
+
+* Ability to query against a Workspace and work properly with DataLines [286](https://github.com/Oxid15/cascade/pull/)
+* Make Version objects hashable and test them more thoroughly [303](https://github.com/Oxid15/cascade/pull/)
+* Raise meaningful messages when DataLine encounters broken HASHES file [310](https://github.com/Oxid15/cascade/pull/)
+* Model.add_run_script can track script from cascade run in files [312](https://github.com/Oxid15/cascade/pull/)
+
+### Changes
+
+* cascade query is now safer since permitted operations changed from blocklist to allowlist by @Oxid15 [286](https://github.com/Oxid15/cascade/pull/286)
+* Removed unneeded check from Cache by @Oxid15 [296](https://github.com/Oxid15/cascade/pull/296)
+* Improves SchemaModifier, @dataset and @modifier performance by creating schema only once instead of on each call by @Oxid15 [304](https://github.com/Oxid15/cascade/pull/304)
+* Makes Concatenator work with negative indices correctly by @Oxid15 [306](https://github.com/Oxid15/cascade/pull/306)
+* Do not catch KeyboardInterrupts in Datasets by @Oxid15 [307](https://github.com/Oxid15/cascade/pull/307)
+* cascade run now writes the actual script to disk before running it by @Oxid15 [312](https://github.com/Oxid15/cascade/pull/312)
+* Make SimpleDataloader work with empty sequences by @Oxid15 [314](https://github.com/Oxid15/cascade/pull/314)
+
+### Breaking
+
+* FunctionModifier was pushing the bare list in get_meta which violated the schema by @Oxid15 [287](https://github.com/Oxid15/cascade/pull/287)
+* Do not use repr as name in Traceable since it can be user-defined by @Oxid15 [287](https://github.com/Oxid15/cascade/pull/287)
+* Replaces repr methods with name of the class by @Oxid15 [287](https://github.com/Oxid15/cascade/pull/287)
+* Stop supporting ast.Call in Configs for now by @Oxid15 [309](https://github.com/Oxid15/cascade/pull/309)
+* SimpleDataloader now actively rejects negative and empty batches by @Oxid15 [314](https://github.com/Oxid15/cascade/pull/314)
+
+### Fixes
+
+* cascade query changed DataLines into ModelLines after running by @Oxid15 [286](https://github.com/Oxid15/cascade/pull/286)
+* the same with artifact rm command by @Oxid15 [288](https://github.com/Oxid15/cascade/pull/288)
+* skeleton function bug by @Oxid15 [287](https://github.com/Oxid15/cascade/pull/287)
+* Repo with overwrite reads the old meta by @Oxid15 [289](https://github.com/Oxid15/cascade/pull/289)
+* DataLine presented names in different order before and after reload from disk by @Oxid15 [290](https://github.com/Oxid15/cascade/pull/290)
+* removed debug prints, missing format strings, ModelLine didn't raise error when no model with such slug existed, CSVDataset, WeighedSampler fixes by @Oxid15 [291](https://github.com/Oxid15/cascade/pull/291)
+* if Python is not on PATH query didn't work by @Oxid15 [292](https://github.com/Oxid15/cascade/pull/292)
+* IteratorFilter failed to work by @Oxid15 [293](https://github.com/Oxid15/cascade/pull/293)
+* FolderDataset listed subdirectories by @Oxid15 [295](https://github.com/Oxid15/cascade/pull/295)
+* missing files didn't count in artifact rm by @Oxid15 [297](https://github.com/Oxid15/cascade/pull/297)
+* OverSampler repeating the same element by @Oxid15 [301](https://github.com/Oxid15/cascade/pull/301)
+* Writing relative paths into Repo's meta by @Oxid15 [302](https://github.com/Oxid15/cascade/pull/302)
+* Inability to use dicts in SchemaModifier by @Oxid15 [304](https://github.com/Oxid15/cascade/pull/304)
+* Inability to create validated function with defaults without annotations by @Oxid15 [304](https://github.com/Oxid15/cascade/pull/304)
+* Inability to use custom meta with SchemaModifier by @Oxid15 [304](https://github.com/Oxid15/cascade/pull/304)
+* Models did not pass description and tags to Traceable by @Oxid15 [305](https://github.com/Oxid15/cascade/pull/305)
+* How git_uncommitted_changes is formatted in meta by @Oxid15 [305](https://github.com/Oxid15/cascade/pull/305)
+* RangeSampler didn't work when passing only stop=N without start kw by @Oxid15 [308](https://github.com/Oxid15/cascade/pull/308)
+* cascade run was unable to detect Config when something else was also imported from base by @Oxid15 [309](https://github.com/Oxid15/cascade/pull/309)
+* failed get_meta on empty skmodel by @Oxid15 [311](https://github.com/Oxid15/cascade/pull/311)
+* unable to parse some internal states as column names in query by @Oxid15 [313](https://github.com/Oxid15/cascade/pull/313)
+
+### Deprecates
+
+* Views in favor of Cascade UI by @Oxid15 [298](https://github.com/Oxid15/cascade/pull/298)
+* meta_prefix in Model and SingleLineRepo by @Oxid15 [305](https://github.com/Oxid15/cascade/pull/305)
+
+### Removes
+
+* `lines` keyword check in Repo (deprecated since 0.14.0) by @Oxid15 [300](https://github.com/Oxid15/cascade/pull/300)
+* DatasetClient and DatasetServer (deprecated since 0.14.0) by @Oxid15 [300](https://github.com/Oxid15/cascade/pull/300)
+* NumpyWrapper (deprecated since 0.14.0) by @Oxid15 [300](https://github.com/Oxid15/cascade/pull/300)
+* PartedTableLoader and LargeCSVDataset (deprecated since 0.12.0) by @Oxid15 [300](https://github.com/Oxid15/cascade/pull/300)
+
+### Docs
+
+Adds documentation tests using Sybil by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+Updates stale code examples by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+Adds autobuild module docs by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+Rewrites index page by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+Rewrites README by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+Adds other libraries references using intersphinx by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+Adds more examples and missing docstrings by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+
 ## 0.17.0 - Reruns, pipeline error tracing, ruff
+
 2026-07-26
 
 New release is finally out!
 
 ### Adds
+
 * Reruns by @Oxid15 in [282](https://github.com/Oxid15/cascade/pull/282)
 
 ### Changes
+
 * Rm artifact by @Oxid15 in [280](https://github.com/Oxid15/cascade/pull/280)
 * Ruff migration by @Oxid15 in [283](https://github.com/Oxid15/cascade/pull/283)
 
 ### Removes
+
 pandera integration is now dropped
 
-## 0.16.0 - Cascade UI is out!
+## 0.16.0 - Cascade UI is out
+
 2025-06-08
 
 This release features Cascade UI support - new web-based dashboard that is native to Cascade. Learn more in the [docs](https://oxid15.github.io/cascade/en/latest/tutorials/ui.html).
 
 ### Changes
+
 * UI by @Oxid15 in [276](https://github.com/Oxid15/cascade/pull/276)
 
 ### Fixes
+
 * Meta prefix fixes by @Oxid15 in [277](https://github.com/Oxid15/cascade/pull/277)
 
 ### Docs
+
 * UI docs by @Oxid15 in [278](https://github.com/Oxid15/cascade/pull/278)
 
 ## 0.15.1
+
 2025-05-06
 
 ### Fixes
@@ -41,16 +128,18 @@ This release features Cascade UI support - new web-based dashboard that is nativ
 
 * Update index page docs by @Oxid15 in [275](https://github.com/Oxid15/cascade/pull/275)
 
-
 ## 0.15.0 - CLI Queries and Configuration Management
+
 2025-04-06
 
 ### Adds
+
 * Configs by @Oxid15 in [266](https://github.com/Oxid15/cascade/pull/266)
 * CLI queries by @Oxid15 in [268](https://github.com/Oxid15/cascade/pull/268)
 * Add simple confirmation before removing artifacts by @Oxid15 in [269](https://github.com/Oxid15/cascade/pull/269)
 
 ### Changes
+
 * Replaced flatten_dict by own implementation and added tests for flatten_dict by @SlideForSlice in [265](https://github.com/Oxid15/cascade/pull/265) and @Oxid15 in [267](https://github.com/Oxid15/cascade/pull/267)
 * Handle missing init calls for Dataset by @Oxid15 in [270](https://github.com/Oxid15/cascade/pull/270)
 * Handle external removes by @Oxid15 in [272](https://github.com/Oxid15/cascade/pull/272)
@@ -60,32 +149,40 @@ This release features Cascade UI support - new web-based dashboard that is nativ
 Thank you, @SlideForSlice for contributing to Cascade!
 
 ## 0.14.2
+
 2024-08-28
 
 ### Fixes
+
 * Fixed ApplyModifier returning Nones after v0.14.1 by @Oxid15 in [262](https://github.com/Oxid15/cascade/pull/262)
 
 ### Changes
+
 * Adjust the library for new deepdiff 8  by @Oxid15 in [263](https://github.com/Oxid15/cascade/pull/263)
 
 ### Removes
+
 * Remove types removed from numpy 2, releasing the version constraint by @Oxid15 in [263](https://github.com/Oxid15/cascade/pull/263)
 
 ## 0.14.1
+
 2024-08-27
 
 ### Fixes
+
 * Fix check for input type in ApplyModifier by @Oxid15 in [262](https://github.com/Oxid15/cascade/pull/262)
 * Fix infinite iterations in CyclicSampler by @Oxid15 in [262](https://github.com/Oxid15/cascade/pull/262)
 
 ### Changes
+
 * Remove Python 3.6 from supported versions by @Oxid15 in [262](https://github.com/Oxid15/cascade/pull/262)
 
-
 ## 0.14.0
+
 2024-08-26
 
 ### Adds
+
 * Validation system by @Oxid15 in [241](https://github.com/Oxid15/cascade/pull/241)
 * Filter by @Oxid15 in [243](https://github.com/Oxid15/cascade/pull/243)
 * Artifact management by @Oxid15 in [249](https://github.com/Oxid15/cascade/pull/249)
@@ -96,6 +193,7 @@ Thank you, @SlideForSlice for contributing to Cascade!
 * Sync meta by @Oxid15 in [247](https://github.com/Oxid15/cascade/pull/247)
 
 ### Changes
+
 * Update CLI by @Oxid15 in [235](https://github.com/Oxid15/cascade/pull/235)
 * Raise exceptions in data registrator as warnings by default by @Oxid15 in [236](https://github.com/Oxid15/cascade/pull/236)
 * Allow batch size being bigger than sequence by @Oxid15 in [239](https://github.com/Oxid15/cascade/pull/239)
@@ -109,31 +207,39 @@ Thank you, @SlideForSlice for contributing to Cascade!
 * Meta fields of training time changed names to `training_started_at` and `training_ended_at` by @Oxid15 in [244](https://github.com/Oxid15/cascade/pull/244)
 
 ### Fixes
+
 * Viewer fixes by @Oxid15 in [240](https://github.com/Oxid15/cascade/pull/240)
 * Traceable bug with sync_meta idempotence is fixed by @Oxid15 in [244](https://github.com/Oxid15/cascade/pull/244)
 
 ### Removes
+
 * Remove deprecated methods and classes by @Oxid15 in [238](https://github.com/Oxid15/cascade/pull/238)
 
 ### Deprecates
+
 * Deprecations by @Oxid15 in [245](https://github.com/Oxid15/cascade/pull/245)
 * Pickler update by @Oxid15 in [251](https://github.com/Oxid15/cascade/pull/251)
 
 ### Docs
+
 * Docs update by @Oxid15 in [258](https://github.com/Oxid15/cascade/pull/258)
 
 ## 0.13.1 - CLI fixes
+
 2023-12-04
 
 ### Fixes
+
 * Fix missing CLI module by @Oxid15 in [234](https://github.com/Oxid15/cascade/pull/234)
 
 ## 0.13.0 - Large release, lots of new features
+
 2023-11-26
 
 This version introduces a lot of great changes including rich metadata of experiments like descriptions, comments and tags, Metrics as value and meta containers and also descriptions of computing those values, links between objects, file and model artifacts, slugs for models as well as lots of other improvements.
 
 ### Adds
+
 * Basic CLI by @Oxid15 in [195](https://github.com/Oxid15/cascade/pull/195)
 * Cli access meta by @Oxid15 in [198](https://github.com/Oxid15/cascade/pull/198)
 * CLI commands by @Oxid15 in [224](https://github.com/Oxid15/cascade/pull/224)
@@ -158,6 +264,7 @@ Metrics are new entity that helps to organize metric values, build metadata arou
 * File artifacts by @Oxid15 in [194](https://github.com/Oxid15/cascade/pull/194)
 
 ### Changes
+
 * Version to py file by @Oxid15 in [201](https://github.com/Oxid15/cascade/pull/201)
 * Handle fit eval errors in trainer by @Oxid15 in [204](https://github.com/Oxid15/cascade/pull/204)
 * Lazy Repo by @Oxid15 in [206](https://github.com/Oxid15/cascade/pull/206)
@@ -176,21 +283,25 @@ Metrics are new entity that helps to organize metric values, build metadata arou
 * Make absolute paths in links if possible by @Oxid15 in [229](https://github.com/Oxid15/cascade/pull/229)
 
 ### Fixes
+
 * Meta writing fixes by @Oxid15 in [221](https://github.com/Oxid15/cascade/pull/221)
 * Fix type diffs by @Oxid15 in [225](https://github.com/Oxid15/cascade/pull/225)
 
-
 ### Removes
+
 * Do not store all file names in meta of folder dataset by @Oxid15 in [191](https://github.com/Oxid15/cascade/pull/191)
 * `meta_prefix` was removed from constructors and update_meta no longer accepts path to files, to migrate use `link`s
 
 ## 0.12.1 - Security release
+
 2023-11-06
 
 ### Changes
+
 * Optimize HV by @Oxid15 in [205](https://github.com/Oxid15/cascade/pull/205)
 
 ### Fixes
+
 * Handle fit eval errors in trainer by @Oxid15 in [204](https://github.com/Oxid15/cascade/pull/204)
 * v0.12.1 - Security fixes and minor improvements by @Oxid15 in [222](https://github.com/Oxid15/cascade/pull/222)
 
@@ -198,7 +309,8 @@ Metrics are new entity that helps to organize metric values, build metadata arou
 
 Thank you, @zer0h-bb for contribution in finding security issues!
 
-## 0.12.0 - Major update!
+## 0.12.0 - Major update
+
 2023-07-14
 
 Version 0.12.0 brings a lot of improvements and new functionality, restructures `utils` even more than 0.11.0 and becomes a last milestone before even bigger changes!
@@ -206,6 +318,7 @@ Version 0.12.0 brings a lot of improvements and new functionality, restructures 
 Attention! Some changes are breaking when switching from 0.11.1
 
 ### Adds
+
 * Unify repos and lines by @Oxid15 in [166](https://github.com/Oxid15/cascade/pull/166)
 * Unify line and repo by @Oxid15 in [176](https://github.com/Oxid15/cascade/pull/176)
 * Feature table by @Oxid15 in [173](https://github.com/Oxid15/cascade/pull/173)
@@ -216,6 +329,7 @@ Attention! Some changes are breaking when switching from 0.11.1
 * Do not create MetaHandler to use it by @Oxid15 in [169](https://github.com/Oxid15/cascade/pull/169)
 
 ### Changes
+
 * Folder improv by @Oxid15 in [156](https://github.com/Oxid15/cascade/pull/156)
 * Update HistoryViewer by @Oxid15 in [161](https://github.com/Oxid15/cascade/pull/161)
 * Unify repos and lines by @Oxid15 in [166](https://github.com/Oxid15/cascade/pull/166)
@@ -230,24 +344,29 @@ Attention! Some changes are breaking when switching from 0.11.1
 * Move Dataset's repr up to the Traceable by @Oxid15 in [162](https://github.com/Oxid15/cascade/pull/162)
 
 ### Fixes
+
 * Check if model already exists to not overwrite in line by @Oxid15 in [179](https://github.com/Oxid15/cascade/pull/179)
 * Line ordering hv by @Oxid15 in [167](https://github.com/Oxid15/cascade/pull/167)
 * Fix HistoryViewer by @Oxid15 in [160](https://github.com/Oxid15/cascade/pull/160)
 * Do not duplicate repo's meta prefix in line meta by @Oxid15 in [163](https://github.com/Oxid15/cascade/pull/163)
 
 ### Removes
+
 * Remove logging in repo by @Oxid15 in [184](https://github.com/Oxid15/cascade/pull/184)
 * Utils restructure by @Oxid15 in [181](https://github.com/Oxid15/cascade/pull/181)
 
 ### Docs
+
 * Docs update by @Oxid15 in [182](https://github.com/Oxid15/cascade/pull/182)
 
 ## 0.11.2-alpha - Utility release
+
 2023-06-05
 
 This is the release to get the badge
 
 ## 0.11.1 - Update with bugfixes
+
 2023-04-23
 
 ### Changes
@@ -255,10 +374,12 @@ This is the release to get the badge
 * Improve errors by @Oxid15 in [159](https://github.com/Oxid15/cascade/pull/159)
 
 ### Fixes
+
 * Fix last_models showing order was reversed by @Oxid15 in [157](https://github.com/Oxid15/cascade/pull/157)
 * Fix history logging when no logging setting is set by @Oxid15 in [158](https://github.com/Oxid15/cascade/pull/158)
 
-## 0.11.0 - Goodbye, cdu!
+## 0.11.0 - Goodbye, cdu
+
 2023-03-30
 
 This version separates cascade.utils into several submodules which are now to be used individually.
@@ -267,17 +388,20 @@ This changes the API of utils, but given the wide range of tools and their depen
 No other changes introduced in this release intentionally to make it a transfer point - users can stay at 0.10.0 until they will adapt to the new API and still use the same new features.
 
 ### Removes
+
 * v0.11.0 - Goodbye cdu! by @Oxid15 in [155](https://github.com/Oxid15/cascade/pull/155)
 
 ## 0.10.0 - Update
+
 2023-03-01
 
 New Cascade version is here! New metadata viewing tools are now available, tools for logging object states and more
 
-- Important - version log format in `VersionAssigner` changed and old logs are now not supported
-- Important - plotly is now an optional dependency
+* Important - version log format in `VersionAssigner` changed and old logs are now not supported
+* Important - plotly is now an optional dependency
 
 ### Adds
+
 * Dataset history by @Oxid15 in [148](https://github.com/Oxid15/cascade/pull/148)
 * View history by @Oxid15 in [149](https://github.com/Oxid15/cascade/pull/149)
 * View diffs in version logs by @Oxid15 in [151](https://github.com/Oxid15/cascade/pull/151)
@@ -285,6 +409,7 @@ New Cascade version is here! New metadata viewing tools are now available, tools
 * Add .yaml as format that also supported since it is another name of YAML by @Oxid15 in [143](https://github.com/Oxid15/cascade/pull/143)
 
 ### Changes
+
 * More thorough typing, especially with meta by @Oxid15
 * Optional plotly by @Oxid15 in [142](https://github.com/Oxid15/cascade/pull/142)
 * Meta typing by @Oxid15 in [144](https://github.com/Oxid15/cascade/pull/144)
@@ -296,21 +421,27 @@ New Cascade version is here! New metadata viewing tools are now available, tools
 * View diffs in version logs by @Oxid15 in [151](https://github.com/Oxid15/cascade/pull/151)
 
 ### Fixes
+
 * Fix weighed sampler by @Oxid15 in [147](https://github.com/Oxid15/cascade/pull/147)
 
 ### Docs
+
 * Update README by @Oxid15 in [140](https://github.com/Oxid15/cascade/pull/140)
 * Documentation update by @Oxid15 in [141](https://github.com/Oxid15/cascade/pull/141)
 
 ## 0.9.0 - Stability update
+
 2022-12-16
 
 New Cascade version is here - now it is an update that enhances stability and reliability of the package. New bugfixes, improved error messages, dataset versioning, more thorough testing.
 
 ### Adds
+
 * Pipeline structure by @Oxid15 in [137](https://github.com/Oxid15/cascade/pull/137)
 * Write pipeline as object in log and not string by @Oxid15 in [138](https://github.com/Oxid15/cascade/pull/138)
+
 - The notion of `SizedDataset` which should solve the inconsistencies with Dataset interface that has no `__len__` method
+
 * More useful constant by @Oxid15 in [135](https://github.com/Oxid15/cascade/pull/135)
 * Time series meta by @Oxid15 in [136](https://github.com/Oxid15/cascade/pull/136)
 
@@ -326,17 +457,20 @@ New Cascade version is here - now it is an update that enhances stability and re
 * `YAMLHandler` now raises an error if reading an empty file
 
 ### Fixes
+
 * Copyright notices added where missing
 * The problem in `UnderSampler` with repeating elements
 * The problem in `WeighedSampler` with string labels
 
 ## 0.8.0
+
 2022-11-15
 
 New Cascade version at last!
 0.8.0 brings some useful changes and improvements
 
 ### Adds
+
 * Improve repo by @Oxid15 in [104](https://github.com/Oxid15/cascade/pull/104)
 * Improve trainer by @Oxid15 in [107](https://github.com/Oxid15/cascade/pull/107)
 * SkModel hash check  by @Oxid15 in [111](https://github.com/Oxid15/cascade/pull/111)
@@ -348,51 +482,66 @@ New Cascade version at last!
 * Add DataleakValidator by @Oxid15 in [126](https://github.com/Oxid15/cascade/pull/126)
 
 ### Changes
+
 * Improve trainer by @Oxid15 in [107](https://github.com/Oxid15/cascade/pull/107)
 * Improve repo performace by @Oxid15 in [109](https://github.com/Oxid15/cascade/pull/109)
 * Refactor and update docs by @Oxid15 in [116](https://github.com/Oxid15/cascade/pull/116)
+
 - Under- and OverSampler
 
 ### Removes
+
 * Improve repo performace by @Oxid15 in [109](https://github.com/Oxid15/cascade/pull/109)
 * Improve repo by @Oxid15 in [104](https://github.com/Oxid15/cascade/pull/104)
 * Drop deprecated by @Oxid15 in [110](https://github.com/Oxid15/cascade/pull/110)
 
 ### Docs
+
 * Refactor and update docs by @Oxid15 in [116](https://github.com/Oxid15/cascade/pull/116)
 
 ## 0.7.3 - Patch and new docs
+
 2022-10-06
 
 ### Changes
+
 * Update versions of requirements, make them more compatible by @Oxid15 in [117](https://github.com/Oxid15/cascade/pull/117)
 
 ### Fixes
+
 * Patch Concatenator's meta by @Oxid15 in [119](https://github.com/Oxid15/cascade/pull/119)
 
 ### Docs
+
 * Update docs by @Oxid15 in [118](https://github.com/Oxid15/cascade/pull/118)
 
 ## 0.7.2 - Patch and docs update
+
 2022-09-29
 
 ### Docs
+
 * Add trainers example by @Oxid15 in [115](https://github.com/Oxid15/cascade/pull/115)
 * Refactor and update docs by @Oxid15 in [116](https://github.com/Oxid15/cascade/pull/116)
 
 ## 0.7.1 - Patch
+
 2022-09-23
 
 ### Adds
+
 * Add message in HistoryViewer by @Oxid15 in [106](https://github.com/Oxid15/cascade/pull/106)
 
 ### Docs
+
 * Docs update by @Oxid15 in [105](https://github.com/Oxid15/cascade/pull/105)
 
 ## 0.7.0
+
 2022-09-05
 
 ### Adds
+
 * Model line only meta by @Oxid15 in [83](https://github.com/Oxid15/cascade/pull/83)
 * Add lines and models constraints by @Oxid15 in [85](https://github.com/Oxid15/cascade/pull/85)
 * Split dataset by @Oxid15 in [86](https://github.com/Oxid15/cascade/pull/86)
@@ -402,6 +551,7 @@ New Cascade version at last!
 * Improve validators by @Oxid15 in [99](https://github.com/Oxid15/cascade/pull/99)
 
 ### Changes
+
 * Refactor - make some fields protected by @Oxid15 in [84](https://github.com/Oxid15/cascade/pull/84)
 * More reliable repos by @Oxid15 in [90](https://github.com/Oxid15/cascade/pull/90)
 * Optimize ModelLine
@@ -410,35 +560,45 @@ New Cascade version at last!
 * Error robustness by @Oxid15 in [100](https://github.com/Oxid15/cascade/pull/100)
 
 ### Fixes
+
 * More reliable repos by @Oxid15 in [90](https://github.com/Oxid15/cascade/pull/90)
 * Fix MetricVIewer by @Oxid15 in [94](https://github.com/Oxid15/cascade/pull/94)
 
 ### Removes
+
 * Model line only meta by @Oxid15 in [83](https://github.com/Oxid15/cascade/pull/83)
 * Drop model agg by @Oxid15 in [97](https://github.com/Oxid15/cascade/pull/97)
 
 ### Docs
+
 * Update docs by @Oxid15 in [98](https://github.com/Oxid15/cascade/pull/98)
 
 ## 0.6.2 - Patch release
+
 2022-08-05
 
 ### Fixes
+
 * Patch by @Oxid15 in [89](https://github.com/Oxid15/cascade/pull/89)
 
 ## 0.6.1 - Patch
+
 2022-08-01
 
 ### Fixes
+
 * Bug when all columns missing except num and line in MetricViewer's serve by @Oxid15 in [82](https://github.com/Oxid15/cascade/pull/82)
 
 ## 0.6.0
+
 2022-07-31
 
 ### Adds
+
 * Add TorchModel by @Oxid15 in [68](https://github.com/Oxid15/cascade/pull/68)
 
 ### Changes
+
 * Dates are now dates and not just strings by @Oxid15 in [62](https://github.com/Oxid15/cascade/pull/62)
 * Update meta from file by @Oxid15 in [63](https://github.com/Oxid15/cascade/pull/63)
 * Update tests by @Oxid15 in [64](https://github.com/Oxid15/cascade/pull/64)
@@ -453,39 +613,48 @@ New Cascade version at last!
 * Use fixtures by @Oxid15 in [65](https://github.com/Oxid15/cascade/pull/65)
 
 ### Fixes
+
 * Debug num in mv by @Oxid15 in [73](https://github.com/Oxid15/cascade/pull/73)
 
 ### Removes
+
 * Drop skclassifier by @Oxid15 in [67](https://github.com/Oxid15/cascade/pull/67)
 
 ### Docs
+
 * Update docs by @Oxid15 in [69](https://github.com/Oxid15/cascade/pull/69)
 * Docs update by @Oxid15 in [79](https://github.com/Oxid15/cascade/pull/79)
 
 ## 0.5.2 - Patch release
+
 2022-06-29
 
 ### Adds
+
 * Adds sorting of model names in ModelLine (which was needed to be noticed and added long ago...) by @Oxid15 in [61](https://github.com/Oxid15/cascade/pull/61)
 
 ### Changes
+
 * Refreshes SkModel interface by @Oxid15 in [61](https://github.com/Oxid15/cascade/pull/61)
 
 ### Fixes
+
 * Fixes the bug in legacy repos handling in MetricViewer by @Oxid15 in [61](https://github.com/Oxid15/cascade/pull/61)
 * Fixes the behavior of RandomSampler by @Oxid15 in [61](https://github.com/Oxid15/cascade/pull/61)
 * Prevents the recording of meta_prefix in parameters of Model by @Oxid15 in [61](https://github.com/Oxid15/cascade/pull/61)
 
-
 ## 0.5.1
+
 2022-06-25
 
 Hotfix of forgotten ModelModifier
 
 ### Fixes
+
 * Patch typo by @Oxid15 in [60](https://github.com/Oxid15/cascade/pull/60)
 
 ## 0.5.0
+
 2022-06-25
 
 * Dash is now conditional dependency
@@ -494,6 +663,7 @@ Hotfix of forgotten ModelModifier
 * HistoryViewer now also flattens params
 
 ### Adds
+
 * History logging for ModelRepo
 * RandomSampler
 * Table Validation
@@ -503,6 +673,7 @@ Hotfix of forgotten ModelModifier
 * ModelModifier by @Oxid15 in [59](https://github.com/Oxid15/cascade/pull/59)
 
 ### Changes
+
 * Random sampler by @Oxid15 in [47](https://github.com/Oxid15/cascade/pull/47)
 * Refine meta by @Oxid15 in [48](https://github.com/Oxid15/cascade/pull/48)
 * Dash conditional by @Oxid15 in [49](https://github.com/Oxid15/cascade/pull/49)
@@ -514,61 +685,75 @@ Hotfix of forgotten ModelModifier
 * Base classes by @Oxid15 in [56](https://github.com/Oxid15/cascade/pull/56)
 
 ### Fixes
+
 * Fix meta viewer by @Oxid15 in [54](https://github.com/Oxid15/cascade/pull/54)
 * Prefix from file by @Oxid15 in [57](https://github.com/Oxid15/cascade/pull/57)
 
 ## 0.4.2 - Patch
+
 2022-06-23
 
 ### Fixes
+
 * Fix samplers inheritance error by @Oxid15 in [43](https://github.com/Oxid15/cascade/pull/43)
 * Fix Wrappers meta by @Oxid15 in [44](https://github.com/Oxid15/cascade/pull/44)
 * Missing super calls and args by @Oxid15 in [45](https://github.com/Oxid15/cascade/pull/45)
 
 ## 0.4.1
+
 2022-06-18
 
 * Fixed bug when call get_meta of Concatenator
 * Unified Validator's Inteface with Dataset's
 
 ### Fixes
+
 * 0.4.1 by @Oxid15 in [42](https://github.com/Oxid15/cascade/pull/42)
 
 ## 0.4.0 - 0.4.0
+
 2022-06-10
 
-- MetricViewer now has dash-based web-interface!
-- MetaHandler now writes human-readable meta and can be set to not overwrite it
-- ModelRepo now does not overwrite previously written on disk meta, only updates it
-- Adds data validation by means of pandera's schema API
-- Adds NullValidator with very detailed report on where NaNs occured in your dataset, when you didn't want them to be there
-- Extends documentation
+* MetricViewer now has dash-based web-interface!
+* MetaHandler now writes human-readable meta and can be set to not overwrite it
+* ModelRepo now does not overwrite previously written on disk meta, only updates it
+* Adds data validation by means of pandera's schema API
+* Adds NullValidator with very detailed report on where NaNs occured in your dataset, when you didn't want them to be there
+* Extends documentation
 
 ### Changes
+
 * Metric viewer update by @Oxid15 in [37](https://github.com/Oxid15/cascade/pull/37)
 * Update repos meta by @Oxid15 in [39](https://github.com/Oxid15/cascade/pull/39)
 * Meta handler update by @Oxid15 in [38](https://github.com/Oxid15/cascade/pull/38)
 * Table validation by @Oxid15 in [41](https://github.com/Oxid15/cascade/pull/41)
 
 ## 0.3.3
+
 2022-05-23
 
 ### Changes
+
 * 0.3.3 by @Oxid15 in [36](https://github.com/Oxid15/cascade/pull/36)
 
 ## 0.3.2 - PyPI publication and json backend fixed
+
 2022-05-23
 
 ### Changes
+
 * 0.3.2 by @Oxid15 in [35](https://github.com/Oxid15/cascade/pull/35)
 
 ## 0.3.1 - Patch
+
 2022-05-19
 
 ### Fixes
+
 * Bugfixes by @Oxid15 in [33](https://github.com/Oxid15/cascade/pull/33)
 
 ## 0.3.0
+
 2022-05-18
 
 * Extended documentation that is still WIP, but already exists!
@@ -581,9 +766,11 @@ Hotfix of forgotten ModelModifier
 * Adds to_pandas to TimeSeriesDataset
 
 ### Adds
+
 * Make pip-installable package by @Oxid15 in [21](https://github.com/Oxid15/cascade/pull/21)
 
 ### Changes
+
 * Cascade utils setup by @Oxid15 in [24](https://github.com/Oxid15/cascade/pull/24)
 * SkModel by @Oxid15 in [25](https://github.com/Oxid15/cascade/pull/25)
 * Time series to pd by @Oxid15 in [26](https://github.com/Oxid15/cascade/pull/26)
@@ -593,26 +780,33 @@ Hotfix of forgotten ModelModifier
 * 0.3.0 by @Oxid15 in [32](https://github.com/Oxid15/cascade/pull/32)
 
 ### Fixes
+
 * Root prefix by @Oxid15 in [23](https://github.com/Oxid15/cascade/pull/23)
 
 ### Docs
+
 * Extend docs by @Oxid15 in [28](https://github.com/Oxid15/cascade/pull/28)
 * Extend docs by @Oxid15 in [31](https://github.com/Oxid15/cascade/pull/31)
 
 ## 0.2.1 - First patch
+
 2022-05-03
 
 ### Changes
+
 * 0.2.1 by @Oxid15 in [19](https://github.com/Oxid15/cascade/pull/19)
 
 ## 0.2.0 - 0.2.0
+
 2022-05-02
 
 ### Adds
+
 * Model repo accepts cls only in add_line by @Oxid15 in [8](https://github.com/Oxid15/cascade/pull/8)
 * Tables new interface by @Oxid15 in [15](https://github.com/Oxid15/cascade/pull/15)
 
 ### Changes
+
 * Meta validation by @Oxid15 in [4](https://github.com/Oxid15/cascade/pull/4)
 * Time series dataset by @Oxid15 in [5](https://github.com/Oxid15/cascade/pull/5)
 * Log model's params by @Oxid15 in [6](https://github.com/Oxid15/cascade/pull/6)
@@ -625,9 +819,11 @@ Hotfix of forgotten ModelModifier
 * 0.2.0 by @Oxid15 in [18](https://github.com/Oxid15/cascade/pull/18)
 
 ### Fixes
+
 * Add meta prefix to Dataset and Model by @Oxid15 in [9](https://github.com/Oxid15/cascade/pull/9)
 * Patch by @Oxid15 in [13](https://github.com/Oxid15/cascade/pull/13)
 * Patch by @Oxid15 in [17](https://github.com/Oxid15/cascade/pull/17)
 
 ## 0.1.0 - 0.1.0 - First release
+
 2022-04-06
