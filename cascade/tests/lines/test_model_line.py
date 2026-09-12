@@ -28,7 +28,6 @@ from cascade.base import MetaHandler, default_meta_format
 from cascade.lines import ModelLine
 from cascade.models import BasicModel
 from cascade.repos import Repo
-from cascade.tests.conftest import DummyModel
 
 
 def test_save_load(model_line, dummy_model):
@@ -47,7 +46,7 @@ def test_meta(model_line, dummy_model):
     model_line.save(dummy_model)
     meta = model_line.get_meta()
 
-    assert meta[0]["item_cls"] == repr(DummyModel)
+    assert meta[0]["item_cls"] == "DummyModel"
     assert meta[0]["len"] == 1
 
 
@@ -141,8 +140,12 @@ def test_load_artifact_paths(tmp_path_str, model_line, dummy_model):
     assert "files" in res
     assert len(res["artifacts"]) == 1
     assert len(res["files"]) == 1
-    assert res["artifacts"][0] == os.path.join(model_line.get_root(), "00000", "artifacts", "model")
-    assert res["files"][0] == os.path.join(model_line.get_root(), "00000", "files", "file.txt")
+    assert res["artifacts"][0] == os.path.join(
+        model_line.get_root(), "00000", "artifacts", "model"
+    )
+    assert res["files"][0] == os.path.join(
+        model_line.get_root(), "00000", "files", "file.txt"
+    )
 
 
 def test_create_model(tmp_path_str):
@@ -169,7 +172,9 @@ def test_handle_save_error(tmp_path_str):
     model = Fail2SaveModel()
     line.save(model)
 
-    meta = MetaHandler.read(os.path.join(tmp_path_str, "00000", "meta" + default_meta_format))
+    meta = MetaHandler.read(
+        os.path.join(tmp_path_str, "00000", "meta" + default_meta_format)
+    )
     assert "errors" in meta[0]
     assert "save" in meta[0]["errors"]
 
@@ -188,7 +193,9 @@ def test_handle_save_artifact_error(tmp_path_str):
     model = Fail2SaveArtModel()
     line.save(model)
 
-    meta = MetaHandler.read(os.path.join(tmp_path_str, "00000", "meta" + default_meta_format))
+    meta = MetaHandler.read(
+        os.path.join(tmp_path_str, "00000", "meta" + default_meta_format)
+    )
     assert "errors" in meta[0]
     assert "save_artifact" in meta[0]["errors"]
 
@@ -217,7 +224,6 @@ def test_line_comment(tmp_path_str):
 
     line = ModelLine(line_dir)
     line.comment("This comment should stay")
-    line.sync_meta()
 
     # Recreate
     line = ModelLine(line_dir)

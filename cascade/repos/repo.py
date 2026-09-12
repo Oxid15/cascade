@@ -20,27 +20,33 @@ from typing import Any, List, Optional, Union
 
 from typing_extensions import Literal
 
-from ..base import Meta, TraceableOnDisk, ZeroMetaError
+from ..base import Meta, TraceableOnDisk
 from ..lines import Line
 from .base_repo import BaseRepo
 from .line_factory import LineFactory
 
+SHORT_LINE_TYPE_TO_LINE_TYPE = {
+    "model": "model_line",
+    "data": "data_line",
+}
+
 
 class Repo(BaseRepo, TraceableOnDisk):
     """
-    An interface to manage series of experiments called lines.
+    An interface to manage series of experiments called Lines.
     When created, initializes an empty folder constituting a repository of lines.
 
     Example
     -------
-    >>> from cascade.base import Repo
+    >>> from cascade.repos import Repo
     >>> from cascade.utils.baselines import ConstantBaseline
     >>> repo = Repo("repo")
     >>> repo.describe("This is a repo with one line for the example.")
     >>> line = repo.add_line("const", model_cls=ConstantBaseline)
-    >>> model = line.add_model()
-    >>> model.fit()
+    >>> model = line.create_model(constant=1)
+    >>> model.fit([0], [1])
     >>> line.save(model)
+
     """
 
     def __init__(
@@ -70,10 +76,11 @@ class Repo(BaseRepo, TraceableOnDisk):
         cascade.data.DataLine
         cascade.models.ModelLine
         """
-        super().__init__(*args, path=folder, root=folder, meta_fmt=meta_fmt, **kwargs)
+        # Need to rmtree before __init__ to not load old meta
+        if overwrite and os.path.exists(folder):
+            shutil.rmtree(folder)
 
-        if overwrite and os.path.exists(self._root):
-            shutil.rmtree(self._root)
+        super().__init__(*args, path=folder, root=folder, meta_fmt=meta_fmt, **kwargs)
 
         os.makedirs(self._root, exist_ok=True)
         self._lines = {
@@ -81,11 +88,6 @@ class Repo(BaseRepo, TraceableOnDisk):
             for name in sorted(os.listdir(self._root))
             if os.path.isdir(os.path.join(self._root, name))
         }
-
-        if "lines" in kwargs:
-            raise ValueError(
-                "lines was removed in 0.14.0, consider using add_line method instead"
-            )
 
         self.sync_meta()
 
@@ -140,8 +142,8 @@ class Repo(BaseRepo, TraceableOnDisk):
             Repo prepends it with ``self._root`` before creating.
             Optional argument. If omitted - names new line automatically
             using f'{len(self):0>5d}', by default None
-        line_type : Literal["data", "model"]], by default "model"
-            The type of model line to create, by default None
+        line_type : Literal["data", "model"]], by default model
+            The type of model line to create, by default model
         meta_fmt : Literal[".json", ".yml", ".yaml", None], by default None
             Format of meta files. Supported values are the same as for repo.
             If omitted, inherits format from repo., by default None
@@ -149,47 +151,67 @@ class Repo(BaseRepo, TraceableOnDisk):
         Returns
         -------
         Line
-            Created or recreated model line
+            Created or re-created model line
 
         Raises
         ------
-        RuntimeError
-            If line with the computed name already exists
-        TypeError
-            If type passed is not compatible with line
-        IOError
-            If no meta was found and no line_type was passed
+        AssertionError
+            If name is None and line with the computed name already exists
+        FileNotFoundError
+            If line was not found even though Repo recorded it at creation time
+        ValueError
+            If provided arguments do not match the saved model's configuration on disk
         """
-        if name is None:
-            name = self._new_line_name()
-            assert name not in self._lines, (
-                f"Tried creating line name `{name}` that is already in repo."
-                " This is unexpected, if you see this, please fill a GitHub issue"
-            )
 
-        folder = os.path.join(self._root, name)
+        # Line inherits meta format by default
         if meta_fmt is None:
             meta_fmt = self._meta_fmt
 
-        self._lines[name] = {"args": args, "kwargs": {"meta_fmt": meta_fmt, **kwargs}}
-        self.sync_meta()
+        # Line does not exist in this case -> create it
+        if name not in self._lines:
+            if name is None:
+                name = self._new_line_name()
+                assert name not in self._lines, (
+                    f"Tried creating line name `{name}` that is already in repo."
+                    " This is unexpected, if you see this, please fill a GitHub issue"
+                )
 
-        if line_type is None:
-            try:
-                line = LineFactory.read(folder)
-            except TypeError as e:
-                raise TypeError(
-                    f"line_type was {line_type}, which is incompatible with line {name}"
-                ) from e
-            except ZeroMetaError as e:
-                raise IOError(
-                    f"Did not found meta in {folder}, pass `line_cls`"
-                    " if you want to create a line"
-                ) from e
-        else:
+            folder = os.path.join(self._root, name)
             line = LineFactory.create(
                 folder, *args, line_type=line_type, meta_fmt=meta_fmt, **kwargs
             )
+        else:  # Line already exists -> read it and check arguments
+            folder = os.path.join(self._root, name)
+            line = LineFactory.read(folder)
+
+            if line is None:
+                raise FileNotFoundError(
+                    f"Line was not found in {folder}, but existed in Repo object at creation"
+                )
+
+            line_meta = line.get_meta()
+
+            if line_type is not None and line_type not in SHORT_LINE_TYPE_TO_LINE_TYPE:
+                raise ValueError(
+                    f"line_type={line_type} is not supported, should be one"
+                    f" of {list(SHORT_LINE_TYPE_TO_LINE_TYPE.keys())}"
+                )
+
+            if (
+                line_type is not None
+                and SHORT_LINE_TYPE_TO_LINE_TYPE[line_type] != line_meta[0]["type"]
+            ):
+                raise ValueError(
+                    f"line_type={line_type} is conflicting with "
+                    f"the type saved on disk {line_meta[0]['type']}"
+                )
+
+        self._lines[name] = {
+            "args": args,
+            "kwargs": {"meta_fmt": meta_fmt, **kwargs},
+        }
+        self.sync_meta()
+
         return line
 
     def __getitem__(self, key: Union[str, int]):

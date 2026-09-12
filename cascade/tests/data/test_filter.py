@@ -23,7 +23,13 @@ import pytest
 SCRIPT_DIR = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from cascade.data import Filter, IteratorDataset, IteratorFilter, Wrapper
+from cascade.data import (
+    Filter,
+    IteratorDataset,
+    IteratorFilter,
+    IteratorWrapper,
+    Wrapper,
+)
 
 
 @pytest.mark.parametrize(
@@ -70,6 +76,12 @@ def test_iter():
     ds = IteratorFilter(ds, lambda x: x < 127)
 
     assert all(item < 127 for item in ds)
+
+
+def test_filter_values():
+    ds = IteratorWrapper([0, 1, 2, 3])
+    ds = IteratorFilter(ds, lambda x: x % 2)
+    assert list(ds) == [1, 3]
 
 
 def test_empty_iter():

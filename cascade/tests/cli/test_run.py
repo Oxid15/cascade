@@ -45,7 +45,7 @@ def write_script(script: str, d: str):
 
 def run_run(*args) -> Result:
     runner = CliRunner()
-    result = runner.invoke(cli, args=["run", "-y", *args])
+    result = runner.invoke(cli, args=["run", "-y", "--log", *args])
     return result
 
 
@@ -131,8 +131,27 @@ def test_different_types(tmp_path_str: str):
     assert result.exit_code == 0
     assert result.stdout.endswith(
         "[<class 'int'>, <class 'float'>, <class 'str'>, <class 'list'>,"
-        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>, <class 'tuple'>]\n"
+        " <class 'dict'>, <class 'set'>, <class 'str'>, <class 'list'>,"
+        " <class 'tuple'>]\n"
     )
+
+
+def test_unsupported_types(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "from cascade.base import Config",
+            "class ThisConfig(Config):",
+            "    j = dict()",
+            "print([type(item) for item in ThisConfig().to_dict().values()])",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path)
+
+    assert result.exit_code == 1
+    assert isinstance(result.exc_info[1], ValueError)
+    assert "Unsupported" in result.exc_info[1].args[0]
 
 
 def test_different_types_override(tmp_path_str: str):
@@ -474,3 +493,85 @@ def test_missing_field(tmp_path_str: str, force: bool):
     else:
         result = run_run(path, "--base", f"{tmp_path_str}/line/00000")
         assert result.exit_code == 1
+
+
+def test_two_names_import(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Traceable, Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 3",
+            "    b = 4",
+            "    c = 5",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path, "--a", "5")
+    assert "{'a': 5, 'b': 4, 'c': 5}" in result.stdout
+
+
+def test_add_methods(tmp_path_str: str):
+    script = "\n".join(
+        [
+            "import os",
+            "from cascade.base import Config",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "class NewConfig(Config):",
+            "    a = 3",
+            "    b = 4",
+            "    c = 5",
+            "cfg = NewConfig()",
+            "print(cfg.to_dict())",
+            "line = ModelLine(os.path.join(os.path.dirname(__file__), 'line'))",
+            "model = BasicModel()",
+            "model.add_config()",
+            "model.add_log()",
+            "model.add_run_script()",
+            "line.save(model)",
+        ]
+    )
+
+    path = write_script(script, tmp_path_str)
+    result = run_run(path, "--a", "5")
+
+    assert result.exit_code == 0
+    config_path = os.path.join(
+        tmp_path_str, "line", "00000", "files", "cascade_config.json"
+    )
+    run_meta_path = os.path.join(
+        tmp_path_str, "line", "00000", "files", "cascade_run_meta.json"
+    )
+    overrides_path = os.path.join(
+        tmp_path_str, "line", "00000", "files", "cascade_overrides.json"
+    )
+    run_path = os.path.join(tmp_path_str, "line", "00000", "files", "cascade_run.log")
+    run_script_path = os.path.join(
+        tmp_path_str, "line", "00000", "files", "cascade_run_script.py"
+    )
+
+    assert os.path.exists(config_path)
+    assert os.path.exists(run_meta_path)
+    assert os.path.exists(overrides_path)
+    assert os.path.exists(run_path)
+    assert os.path.exists(run_script_path)
+
+    with open(config_path, "r") as f:
+        config = json.load(f)
+
+    assert config["a"] == 5
+    assert config["b"] == 4
+    assert config["c"] == 5
+    assert len(config) == 3
+
+    with open(overrides_path, "r") as f:
+        overrides = json.load(f)
+
+    assert overrides["a"] == 5
+    assert len(overrides) == 1

@@ -47,7 +47,7 @@ class ApplyModifier(Modifier[T]):
             A function to be applied to every item of a dataset -
             each ``__getitem__`` calls ``func`` on an item obtained from a previous dataset
         p: Optional[float], by default None
-            The probability [0, 1] with which to apply `func`
+            The probability [0, 1] with which to apply ``func``
         seed: Optional[int], by default None
             Random seed is used when p is not None
 
@@ -60,6 +60,7 @@ class ApplyModifier(Modifier[T]):
         Now function will only be applied when items are retrieved
 
         >>> assert [item for item in ds] == [0, 1, 4, 9, 16]
+
         """
         super().__init__(dataset, *args, **kwargs)
         self._func = func

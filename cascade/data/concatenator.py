@@ -33,6 +33,7 @@ class Concatenator(Dataset[T]):
     >>> ds_2 = Wrapper([2, 1, 0])
     >>> ds = Concatenator((ds_1, ds_2))
     >>> assert [item for item in ds] == [0, 1, 2, 2, 1, 0]
+
     """
 
     def __init__(self, datasets: List[Dataset[T]], *args: Any, **kwargs: Any) -> None:
@@ -50,6 +51,12 @@ class Concatenator(Dataset[T]):
         super().__init__(*args, **kwargs)
 
     def get(self, index: int) -> T:
+        if index < 0 and abs(index) > len(self):
+            raise IndexError(f"Index {index} ")
+
+        if index < 0:
+            index += len(self)
+
         ds_index = 0
         for sh in self._shifts[1:]:
             if index >= sh:

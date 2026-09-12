@@ -18,6 +18,7 @@ import os
 import re
 import subprocess
 import sys
+from functools import total_ordering
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from coolname import generate
@@ -27,6 +28,7 @@ from . import Meta
 default_keys = ["data", "dataset"]
 
 
+@total_ordering
 class Version:
     def __init__(self, version: str):
         components = version.split(".")
@@ -48,6 +50,9 @@ class Version:
             raise TypeError(
                 f"Can only compare Version with Version or string, got {type(other)}"
             )
+
+    def __hash__(self) -> int:
+        return hash((self.major, self.minor))
 
     def __eq__(self, other: Union["Version", str]) -> bool:
         if isinstance(other, str):
@@ -77,12 +82,6 @@ class Version:
         elif self.major == other.major:
             return self.minor > other.minor
         return False
-
-    def __le__(self, other: Union["Version", str]) -> bool:
-        return self < other or self == other
-
-    def __ge__(self, other: Union["Version", str]) -> bool:
-        return self > other or self == other
 
     def __repr__(self):
         return f"Version({self.major}.{self.minor})"
@@ -117,7 +116,7 @@ def get_uncommitted_changes() -> Optional[List[str]]:
         )
         result = result.stdout.strip()
         if result != "":
-            return result.split("\n ")
+            return result.splitlines()
         return None
     except Exception:
         return None
@@ -165,7 +164,7 @@ def update_version(path: str, version: str) -> None:
         return
 
     old_parts = parse_version(ver)
-    new_parts = parse_version(ver)
+    new_parts = parse_version(version)
 
     for new, old in zip(new_parts, old_parts):
         if new > old:
@@ -173,30 +172,17 @@ def update_version(path: str, version: str) -> None:
             return
 
 
-def skeleton(
-    meta: Meta, keys: Optional[List[Any]] = None
-) -> List[List[Dict[Any, Any]]]:
+def skeleton(meta: Meta) -> List[List[Dict[Any, Any]]]:
     """
     Parameters
     ----------
     meta: Meta
         Meta of the pipeline
-    keys: List[Any], optional
-        The set of keys in meta where to search for previous dataset's meta.
-        For example Concatenator when get_meta() is called stores meta of its
-        datasets in the field called 'data'.
-        If nothing given uses the default set of keys. Use this parameter only if
-        your custom modifiers have additional fields you need to cover in this.
 
     Returns
     -------
     skeleton: List[List[Dict[Any, Any]]]
     """
-
-    if keys is not None:
-        keys += default_keys
-    else:
-        keys = default_keys
 
     skel = []
     # The pipeline is given - represent each one with a new list
@@ -212,9 +198,9 @@ def skeleton(
         else:
             raise KeyError("Name not in meta")
 
-        for key in keys:
+        for key in default_keys:
             if key in meta:
-                prev = skeleton(meta["data"])
+                prev = skeleton(meta[key])
                 s[key] = prev
         skel.append(s)
     return skel
@@ -226,7 +212,7 @@ def migrate_repo_v0_13(path: str) -> None:
     versions to be compatible with 0.13.X
 
     Changes:
-    - Metric formatting for compatibility with viewers of new version
+    - Metric formatting for compatibility with new versions
     - If metrics are not scalar, saves them in ``old_metrics`` dict in meta
     - Sets the cascade_version key to the current version in repos, lines and models
     - Skips meta files if fails to read them

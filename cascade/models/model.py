@@ -17,7 +17,7 @@ limitations under the License.
 import os
 import warnings
 from shutil import copyfile
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Iterable, Optional, Union
 
 import pendulum
 
@@ -33,14 +33,26 @@ class Model(Traceable):
     """
 
     def __init__(
-        self, *args: Any, meta_prefix: Union[Meta, str, None] = None, **kwargs: Any
+        self,
+        *args: Any,
+        meta_prefix: Union[Meta, str, None] = None,
+        description: Optional[str] = None,
+        tags: Optional[Iterable[str]] = None,
+        **kwargs: Any,
     ) -> None:
         """
         Should be called in any successor - initializes default meta needed.
 
         Successors may pass all of their parameters to superclass for it to be able to
-        log them in meta. Everything that is worth to document about the model
-        can be put either in params or meta_prefix
+        log them in meta. Everything that is worth to track about the model
+        can be put in params using this constructor or put in meta directly using update_meta().
+
+        Parameters
+        ----------
+        description : Optional[str], optional
+            by default None
+        tags : Optional[Iterable[str]], optional
+            by default None
         """
         self.metrics = []
         self.params = kwargs
@@ -48,8 +60,15 @@ class Model(Traceable):
         self._file_artifacts_paths = []
         self._file_artifact_missing_oks = []
         self._log_callbacks = []
-        # Model accepts meta_prefix explicitly to not to record it in 'params'
-        super().__init__(*args, meta_prefix=meta_prefix, **kwargs)
+
+        if meta_prefix is not None:
+            warnings.warn(
+                "Use of `meta_prefix` in `__init__` is deprecated since 0.18.0."
+                " Consider using update_meta()",
+                stacklevel=2,
+            )
+
+        super().__init__(*args, description=description, tags=tags, **kwargs)
 
     def fit(self, *args: Any, **kwargs: Any) -> None:
         """
@@ -205,7 +224,7 @@ class Model(Traceable):
 
         See also
         --------
-        cascade.models.Model.log_metrics
+        cascade.models.Model.log
         """
         self._log_callbacks.append(callback)
 
@@ -297,23 +316,29 @@ class Model(Traceable):
         Use this if you want to make a checkpoint of a model
         from inside the model. Callback should be a function that
         given the model saves it. For example ModelLine.save method.
-        ModelLine.add_model registers callback with only_meta=True automatically
+        ModelLine.create_model registers callback with only_meta=True automatically
         when creating a new model using ``create_model``.
 
         See also
         --------
-        cascade.models.ModelLine.add_model
+        cascade.models.ModelLine.create_model
         cascade.models.Model.add_log_callback
         """
         for callback in self._log_callbacks:
             callback(self)
 
     def add_log(self):
+        """
+        If called inside cascade run <script> command will add log file
+        of the run to this model and save it when the model is saved to line
+
+        Will warn if called outside of cascade run
+        """
         run_dir = os.getenv("CASCADE_RUN_DIR")
         if run_dir is None:
             warnings.warn(
                 "model.add_log called while not inside a run."
-                "Call a script with cascade run script.py and then use add_log inside",
+                "Call a script with cascade run <script> and then use add_log inside",
                 stacklevel=2,
             )
             return
@@ -322,11 +347,17 @@ class Model(Traceable):
         self.add_file(log_path)
 
     def add_config(self):
+        """
+        If called inside cascade run <script> command will add config files
+        of the run to this model and save it when the model is saved to line
+
+        Will warn if called outside of cascade run
+        """
         run_dir = os.getenv("CASCADE_RUN_DIR")
         if run_dir is None:
             warnings.warn(
                 "model.add_config called while not inside a run."
-                "Call a script with cascade run script.py and then use add_config inside",
+                "Call a script with cascade run <script> and then use add_config inside",
                 stacklevel=2,
             )
             return
@@ -341,6 +372,27 @@ class Model(Traceable):
 
         overrides_path = os.path.join(run_dir, "cascade_overrides.json")
         self.add_file(overrides_path)
+
+    def add_run_script(self):
+        """
+        If called inside cascade run <script> command will add actual script
+        after overrides to this model and save it when the model is saved to line
+
+        Will warn if called outside of cascade run
+        """
+        run_dir = os.getenv("CASCADE_RUN_DIR")
+        if run_dir is None:
+            warnings.warn(
+                "model.add_run_script called while not inside a run."
+                "Call a script with cascade run <script> and then use add_run_script inside",
+                stacklevel=2,
+            )
+            return
+
+        # Saving script to disk was introduced in 0.18.0
+        script_path = os.path.join(run_dir, "cascade_run_script.py")
+        if os.path.exists(script_path):
+            self.add_file(script_path)
 
 
 class ModelModifier(Model):

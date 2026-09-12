@@ -94,7 +94,7 @@ Logs
 
 If you used ``cascade run`` with :ref:`log tracking</howtos/track_logs.rst>`, you will be able to see your logs here.
 
-.. image:: imgs/model-logs.png
+.. image:: ../_static/model-logs.png
   :alt: Model logs page of Cascade - Small scale MLOps library
 
 Comments
@@ -102,5 +102,5 @@ Comments
 
 You can comment on each container using UI.
 
-.. image:: imgs/model-comments.png
+.. image:: ../_static/model-comments.png
   :alt: Model comments page of Cascade - Small scale MLOps library

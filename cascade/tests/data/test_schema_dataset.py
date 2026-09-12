@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import sys
-from typing import List, Tuple
+from typing import Any, List, Tuple
 
 import pydantic
 import pytest
@@ -29,11 +29,11 @@ from cascade.data import Dataset, GetItemError, SchemaModifier
 
 class FiveIdenticalImages(Dataset):
     def get(self, idx):
-        return AnnotImage(
-            image=[[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
-            segments=[[0, 1, 2], [0, 1, 2]],
-            bboxes=[(0, 0, 1, 1)],
-        )
+        return {
+            "image": [[[0.1, 0.2, 0.3], [0.1, 0.2, 0.3]]],
+            "segments": [[0, 1, 2], [0, 1, 2]],
+            "bboxes": [(0, 0, 1, 1)],
+        }
 
     def __len__(self):
         return 5
@@ -61,10 +61,9 @@ def test_wrapper():
 
     meta = ds.get_meta()
 
-    assert len(meta) == 3
+    assert len(meta) == 2
     assert "in_schema" in meta[0]
     assert isinstance(meta[0]["in_schema"], dict)
-    assert meta[1]["name"].split(".")[-1] == "ValidationWrapper"
 
 
 def test_correct_schema():
@@ -72,9 +71,9 @@ def test_correct_schema():
     ds = IDoNothing(ds)
 
     item = ds[0]
-    assert isinstance(item.image, list)
-    assert isinstance(item.segments, list)
-    assert isinstance(item.bboxes, list)
+    assert isinstance(item["image"], list)
+    assert isinstance(item["segments"], list)
+    assert isinstance(item["bboxes"], list)
 
 
 class BrokenImage(pydantic.BaseModel):
@@ -96,3 +95,104 @@ def test_wrong_schema():
 
     with pytest.raises(GetItemError):
         ds[0]
+
+
+class CorrectImageDicts(Dataset):
+    def get(self, index: int):
+        return {
+            "image": [[[0.0]]],
+            "segments": [[0, 1, 2], [0, 1, 2]],
+            "bboxes": [(0, 1, 1, 2)],
+        }
+
+    def __len__(self):
+        return 5
+
+
+def test_correct_dict():
+    ds = CorrectImageDicts()
+    ds = IDoNothing(ds)
+
+    ds[0]
+
+
+class IncorrectImageDicts(Dataset):
+    def get(self, index: int):
+        return {
+            "image": [[[[]]]],
+            "segments": None,
+            "bboxes": [[0, 1, 2, 1]],
+        }
+
+    def __len__(self):
+        return 5
+
+
+def test_wrong_dicts():
+    ds = IncorrectImageDicts()
+    ds = IDoNothing(ds)
+
+    with pytest.raises(GetItemError):
+        ds[0]
+
+
+def test_get_meta_shows_no_validation_wrapper():
+    ds = IncorrectImageDicts()
+    ds = IDoNothing(ds)
+    ds = IDoNothing(ds)
+    ds = IDoNothing(ds)
+    ds = IDoNothing(ds)
+
+    meta = ds.get_meta()
+
+    assert len(meta) == 5
+    assert meta[0]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[1]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[2]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[3]["name"] == "test_schema_dataset.IDoNothing"
+    assert meta[4]["name"] == "test_schema_dataset.IncorrectImageDicts"
+
+
+class IHaveNoSchemaButIMustValidate(SchemaModifier):
+    def get(self, idx):
+        item = self._dataset[idx]
+        return item
+
+
+def test_get_meta_does_not_show_wrapper_when_no_schema():
+    ds = IncorrectImageDicts()
+    ds = IHaveNoSchemaButIMustValidate(ds)
+
+    meta = ds.get_meta()
+
+    assert len(meta) == 2
+    assert meta[0]["name"] == "test_schema_dataset.IHaveNoSchemaButIMustValidate"
+    assert meta[1]["name"] == "test_schema_dataset.IncorrectImageDicts"
+
+
+class IDoNothingButChangeMeta(ImagesDataset):
+    def __init__(self, dataset: Dataset, what, *args: Any, **kwargs: Any) -> None:
+        self.what = what
+        super().__init__(dataset, *args, **kwargs)
+
+    def get(self, idx):
+        item = self._dataset[idx]
+        return item
+
+    def get_meta(self):
+        meta = super().get_meta()
+        meta[0]["custom_field"] = self.what
+        return meta
+
+
+def test_custom_meta():
+    ds = IncorrectImageDicts()
+    ds = IDoNothingButChangeMeta(ds, "hello")
+    ds = IDoNothingButChangeMeta(ds, "how")
+    ds = IDoNothingButChangeMeta(ds, "are you")
+
+    meta = ds.get_meta()
+
+    assert meta[2]["custom_field"] == "hello"
+    assert meta[1]["custom_field"] == "how"
+    assert meta[0]["custom_field"] == "are you"

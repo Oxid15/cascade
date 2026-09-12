@@ -1,7 +1,2 @@
-cascade.utils.vision
-####################
-
-.. autoclass:: cascade.utils.vision.FolderImageDataset
+.. automodule:: cascade.utils.vision
     :members:
-
-

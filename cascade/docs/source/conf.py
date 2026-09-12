@@ -34,15 +34,30 @@ release = cascade.__version__
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.mathjax",
     "sphinx.ext.extlinks",
+    "sphinx.ext.intersphinx",
     "sphinx_copybutton",
     "nbsphinx",
     "sphinx_design",
 ]
+
+intersphinx_mapping = {
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "torch": ("https://pytorch.org/docs/stable/", None),
+    "python": ("https://docs.python.org/3/", None),
+    "sklearn": (
+        "https://scikit-learn.org/stable/",
+        "https://scikit-learn.org/stable/objects.inv",
+    ),
+}
+
+highlight_language = "python"
 
 autodoc_default_options = {"special-members": "__init__", "undoc-members": False}
 
@@ -68,7 +83,7 @@ html_favicon = "logo_sq.svg"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 html_css_files = [
-    'css/custom.css',
+    "css/custom.css",
 ]
 
 html_theme_options = {
@@ -85,7 +100,7 @@ html_theme_options = {
             "url": "https://x.com/cascade_mlops",
             "icon": "fa-brands fa-twitter",
             "type": "fontawesome",
-        }
+        },
     ],
     "switcher": {
         "json_url": "https://oxid15.github.io/cascade/en/latest/switcher.json",
@@ -93,10 +108,8 @@ html_theme_options = {
     },
     "navbar_start": ["navbar-logo", "version-switcher"],
     "logo": {
-        "image_light": "logo_light.svg",
-        "image_dark": "logo_dark.svg",
-   },
-    "analytics": {
-        "google_analytics_id": "G-KD8QDKDMD7"
-    }
+        "image_light": "_static/logo_light.svg",
+        "image_dark": "_static/logo_dark.svg",
+    },
+    "analytics": {"google_analytics_id": "G-KD8QDKDMD7"},
 }

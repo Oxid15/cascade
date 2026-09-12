@@ -47,7 +47,9 @@ def test_modifier():
     assert isinstance(x, FunctionModifier)
     assert x.result == [0, 1, 4]
     meta = x.get_meta()
-    assert len(meta) == 2
+    assert len(meta) == 1
+    assert "data" in meta[0]
+    assert len(meta[0]["data"]) == 1
 
 
 def test_multiple_inputs():
@@ -63,5 +65,6 @@ def test_multiple_inputs():
     assert isinstance(x, FunctionModifier)
     assert x.result == [0, 2, 4]
     meta = x.get_meta()
-    assert len(meta) == 2
-    assert len(meta[1]) == 2  # This means two inputs at the first stage
+    assert len(meta) == 1
+    assert "data" in meta[0]
+    assert len(meta[0]["data"]) == 2
