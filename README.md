@@ -177,7 +177,7 @@ Examples of projects:
 
 > "Model 00003 regressed. Was it the code, or did the dataset change under me?"
 
-See more in [Cascade Recipes repo]((https://github.com/Oxid15/cascade_recipes))
+See more in [Cascade Recipes repo](https://github.com/Oxid15/cascade_recipes)
 
 ## No need for a platform
 
