@@ -83,7 +83,7 @@ html_favicon = "logo_sq.svg"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 html_css_files = [
-    "css/custom.css",
+    "_static/css/custom.css",
 ]
 
 html_theme_options = {
