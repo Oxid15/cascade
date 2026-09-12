@@ -1,0 +1,42 @@
+html {
+    --pst-color-inline-code: #DB504A;
+    --pst-font-size-base: 1.1rem;
+}
+
+/* anything related to the light theme */
+html[data-theme="light"] {
+
+    --pst-color-primary: #053543;
+    --pst-color-inline-code: #DB504A;
+}
+
+/* anything related to the dark theme */
+html[data-theme="dark"] {
+
+    --pst-color-primary: #528190;
+    --pst-color-inline-code: #DB504A;
+}
+
+code.literal {
+    color: #DB504A;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #084C61;
+    font-weight: 700;
+}
+
+html[data-theme="light"] .highlight .gd,
+html[data-theme="dark"] .highlight .gd {
+    color: #DB504A;
+}
+
+html[data-theme="light"] .highlight .gi,
+html[data-theme="dark"] .highlight .gi {
+    color: #006B39;
+}
