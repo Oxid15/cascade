@@ -29,7 +29,7 @@ setuptools.setup(
     author=__author__,
     author_email=__author_email__,
     license="Apache License 2.0",
-    description="ML-Engineering library",
+    description="Small-scale MLOps library",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/oxid15/cascade",
