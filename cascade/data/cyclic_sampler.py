@@ -30,6 +30,7 @@ class CyclicSampler(Sampler[T]):
     >>> ds = Wrapper([1,2,3])
     >>> ds = CyclicSampler(ds, 7)
     >>> assert [item for item in ds] == [1, 2, 3, 1, 2, 3, 1]
+
     """
 
     def get(self, index: int) -> T:

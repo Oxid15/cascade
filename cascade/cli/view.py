@@ -19,7 +19,7 @@ import click
 from .common import create_container
 
 
-@click.command("history")
+@click.command("history", deprecated="Deprecated since 0.18.0, please use cascade ui")
 @click.pass_context
 @click.option("--host", type=str, default="localhost")
 @click.option("--port", type=int, default=8050)
@@ -42,7 +42,7 @@ def view_history(ctx, host, port, l, m, p):  # noqa: E741
         ).serve(host=host, port=port)
 
 
-@click.command("metric")
+@click.command("metric", deprecated="Deprecated since 0.18.0, please use cascade ui")
 @click.pass_context
 @click.option("--host", type=str, default="localhost")
 @click.option("--port", type=int, default=8050)
@@ -72,7 +72,7 @@ def view_metric(ctx, host, port, p, i, x):
     )
 
 
-@click.command("diff")
+@click.command("diff", deprecated="Deprecated since 0.18.0, please use cascade ui")
 @click.pass_context
 @click.option("--host", type=str, default="localhost")
 @click.option("--port", type=int, default=8050)
@@ -86,7 +86,7 @@ def view_diff(ctx, host, port):
 @click.pass_context
 def view(ctx):
     """
-    Different viewers
+    Different viewers, deprecated since 0.18.0. Please use cascade ui instead
     """
     pass
 

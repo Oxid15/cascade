@@ -46,6 +46,7 @@ def remove_files(paths: List[str]) -> List[RemoveResult]:
     for path in paths:
         if not os.path.exists(path):
             results.append(RemoveResult("MISS"))
+            continue
 
         try:
             os.remove(path)
@@ -58,12 +59,24 @@ def remove_files(paths: List[str]) -> List[RemoveResult]:
 
 
 def find_model_artifacts(path) -> List[str]:
-    return [
-        os.path.join(path, "artifacts", res) for res in os.listdir(os.path.join(path, "artifacts"))
-    ]
+    artifacts_folder = os.path.join(path, "artifacts")
+    if os.path.exists(artifacts_folder):
+        return [
+            os.path.join(artifacts_folder, res)
+            for res in os.listdir(os.path.join(path, "artifacts"))
+        ]
+    else:
+        return []
 
 
-def find_line_artifacts(path) -> List[str]:
+def find_data_line_artifacts(path) -> List[str]:
+    """
+    Currently DataLines do not have any
+    """
+    return []
+
+
+def find_model_line_artifacts(path) -> List[str]:
     line = create_container("model_line", path)
     line_results = []
     for name in line.get_model_names():
@@ -76,7 +89,14 @@ def find_repo_artifacts(path) -> List[str]:
     repo = create_container("repo", path)
     repo_results = []
     for name in repo.get_line_names():
-        results = find_line_artifacts(os.path.join(path, name))
+        line_type = repo.add_line(name, line_type=None).get_meta()[0]["type"]
+        if line_type in ("line", "model_line"):
+            results = find_model_line_artifacts(os.path.join(path, name))
+        elif line_type == "data_line":
+            results = find_data_line_artifacts(os.path.join(path, name))
+        else:
+            raise ValueError(f"Unknown line type {line_type}")
+
         repo_results.extend(results)
     return repo_results
 
@@ -92,8 +112,9 @@ def find_workspace_artifacts(path) -> List[str]:
 
 find_obj_artifacts = {
     "model": find_model_artifacts,
-    "line": find_line_artifacts,
-    "model_line": find_line_artifacts,
+    "line": find_model_line_artifacts,
+    "model_line": find_model_line_artifacts,
+    "data_line": find_data_line_artifacts,
     "repo": find_repo_artifacts,
     "workspace": find_workspace_artifacts,
 }

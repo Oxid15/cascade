@@ -94,3 +94,12 @@ def test_add_config(tmp_path_str):
     assert os.path.exists(os.path.join(files_dir, "cascade_run_meta.json"))
     assert os.path.exists(os.path.join(files_dir, "cascade_config.json"))
     assert os.path.exists(os.path.join(files_dir, "cascade_overrides.json"))
+
+
+def test_description_tags():
+    description = "this and tags should not go into params"
+    model = BasicModel(description=description, tags=["hello"])
+
+    assert model.params == {}
+    assert model.tags == {"hello"}
+    assert model.description == description

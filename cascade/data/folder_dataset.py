@@ -43,13 +43,11 @@ class FolderDataset(Dataset[T]):
         if not os.path.exists(self._root):
             raise FileNotFoundError(self._root)
 
-        self._names = sorted(
-            [
-                os.path.join(self._root, name)
-                for name in sorted(os.listdir(self._root))
-                if not os.path.isdir(name)
-            ]
-        )
+        self._names = [
+            os.path.join(self._root, name)
+            for name in sorted(os.listdir(self._root))
+            if not os.path.isdir(os.path.join(self._root, name))
+        ]
 
     def get(self, index: Any) -> T:
         raise_not_implemented("cascade.data.FolderDataset", "get")
@@ -65,11 +63,7 @@ class FolderDataset(Dataset[T]):
         Returns meta containing root folder
         """
         meta = super().get_meta()
-        meta[0].update(
-            {
-                "root": self._root
-            }
-        )
+        meta[0].update({"root": self._root})
         return meta
 
     def __len__(self) -> int:

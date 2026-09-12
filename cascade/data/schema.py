@@ -16,6 +16,8 @@ limitations under the License.
 
 from typing import Any, Optional
 
+from cascade.base import Meta
+
 from .dataset import Dataset
 from .modifier import Modifier
 from .validation import SchemaValidator, ValidationError
@@ -40,71 +42,87 @@ class SchemaModifier(Modifier):
     How to use it:
     1. Define pydantic schema of input
 
-    ```python
-    import pydantic
+    .. code-block:: python
 
-    class AnnotImage(pydantic.BaseModel):
-        image: List[List[List[float]]]
-        segments: List[List[int]]
-        bboxes: List[Tuple[int, int, int, int]]
-    ```
+        from typing import List, Tuple
+        import pydantic
+
+        class AnnotImage(pydantic.BaseModel):
+            image: List[List[List[float]]]
+            segments: List[List[int]]
+            bboxes: List[Tuple[int, int, int, int]]
 
     2. Use schema as ``in_schema``
 
-    ```python
-    from cascade.data import SchemaModifier
+    .. code-block:: python
 
-    class ImageModifier(SchemaModifier):
-        in_schema = AnnotImage
-    ```
+        from cascade.data import SchemaModifier
+
+        class ImageModifier(SchemaModifier):
+            in_schema = AnnotImage
 
     3. Create a regular ``Modifier`` by
     subclassing ImageModifier.
 
-    ```python
-    class IDoNothing(ImageModifier):
-        def get(self, idx):
-            item = self._dataset[idx]
-            return item
-    ```
+    .. code-block:: python
+
+        class IDoNothing(ImageModifier):
+            def get(self, idx):
+                item = self._dataset[idx]
+                return item
 
     4. That's all. Schema check will be held
     automatically every time ``self._dataset[idx]`` is
-    accessed. If it is not ``AnnotImage``, cascade.data.ValidationError
+    accessed. If it is not like ``AnnotImage``, cascade.data.ValidationError
     will be raised.
 
     """
 
     in_schema: Optional[Any] = None
 
+    def __init__(self, dataset: Dataset, *args: Any, **kwargs: Any) -> None:
+        super().__init__(dataset, *args, **kwargs)
+
+        if self.in_schema is not None:
+            self._validation_wrapper = ValidationWrapper(dataset, self.in_schema)
+
     def __getattribute__(self, __name: str) -> Any:
         if __name == "_dataset" and self.in_schema is not None:
-            return ValidationWrapper(super().__getattribute__(__name), self.in_schema)
-        if __name == "get_meta":
-
-            def get_meta(self):
-                meta = super().get_meta()
-                if self.in_schema:
-                    meta[0]["in_schema"] = self.in_schema.model_json_schema()
-                return meta
-
-            return lambda: get_meta(self)
-
+            return self._validation_wrapper
         return super().__getattribute__(__name)
+
+    def get_meta(self) -> Meta:
+        """
+        Since SchemaModifier will add ValidationWrapper dynamically to _dataset
+        it will be used in meta.
+        This call will clean meta and remove wrappers
+
+        Returns
+        -------
+        Meta
+        """
+        meta = super().get_meta()
+        if meta[1]["name"] == "cascade.data.schema.ValidationWrapper":
+            meta.pop(1)
+
+        if self.in_schema:
+            meta[0]["in_schema"] = self.in_schema.model_json_schema()
+        return meta
 
 
 class ValidationWrapper(Modifier):
-    def __init__(self, dataset: Dataset, schema: Any, *args: Any, **kwargs: Any) -> None:
+    def __init__(
+        self, dataset: Dataset, schema: Any, *args: Any, **kwargs: Any
+    ) -> None:
         self.validator = SchemaValidator(schema)
         super().__init__(dataset, *args, **kwargs)
 
     def get(self, index: Any):
         item = super().get(index)
         try:
-            self.validator(item)
+            self.validator(**item)
         except ValidationError as e:
             raise ValidationError(
-                f"Got incorrect input data from {self._dataset}",
-                error_index=index
+                f"Got incorrect input data from {self._dataset}", error_index=index
             ) from e
         return item

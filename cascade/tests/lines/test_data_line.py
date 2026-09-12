@@ -18,6 +18,8 @@ import os
 import random
 import sys
 
+import pytest
+
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
@@ -139,3 +141,87 @@ def test_load_obj_meta(tmp_path_str, dataset):
 
     meta = line.load_obj_meta(str(version))
     assert meta[0]["test_param"] == 1
+
+
+def test_data_order_after_reload(tmp_path_str):
+    line = DataLine(tmp_path_str)
+
+    dataset = Wrapper([])
+
+    for i in range(11):
+        # Should bump minor
+        dataset.update_meta({"test_param": i})
+        line.save(dataset)
+
+    # Should bump major
+    dataset = ApplyModifier(dataset, add1)
+
+    for i in range(5):
+        dataset.update_meta({"test_param": i})
+        line.save(dataset)
+
+    version_2 = line.get_version(line.load(2))
+
+    versions = line.get_item_names()
+    assert versions == [
+        "0.1",
+        "0.2",
+        "0.3",
+        "0.4",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "0.10",
+        "0.11",
+        "1.0",
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+    ]
+
+    line = DataLine(tmp_path_str)
+    versions_after_reload = line.get_item_names()
+
+    assert versions == versions_after_reload
+
+    version_2_after_reload = line.get_version(line.load(2))
+
+    assert version_2 == version_2_after_reload
+
+
+def test_broken_folder(tmp_path_str):
+    dl = DataLine(tmp_path_str)
+
+    ds = Wrapper([0])
+    dl.save(ds)
+
+    ds = Wrapper(ds)
+    dl.save(ds)
+
+    version = dl.get_version(ds)
+
+    os.remove(os.path.join(tmp_path_str, str(version), "HASHES"))
+
+    with pytest.raises(RuntimeError):
+        dl = DataLine(tmp_path_str)
+
+
+def test_broken_hashes(tmp_path_str):
+    dl = DataLine(tmp_path_str)
+
+    ds = Wrapper([0])
+    dl.save(ds)
+
+    ds = Wrapper(ds)
+    dl.save(ds)
+
+    version = dl.get_version(ds)
+
+    with open(os.path.join(tmp_path_str, str(version), "HASHES"), "w") as f:
+        f.write("broken")
+
+    with pytest.raises(RuntimeError):
+        dl = DataLine(tmp_path_str)

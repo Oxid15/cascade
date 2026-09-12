@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+from abc import ABC, abstractmethod
 from typing import Any
 
 from typing_extensions import Literal
@@ -21,12 +22,38 @@ from typing_extensions import Literal
 from ...data import FolderDataset
 
 
-class ImageBackend:
+class ImageBackend(ABC):
+    """
+    Abstract class for image reading backends
+    """
+
+    @abstractmethod
     def read(self, path: str) -> Any:
-        raise NotImplementedError()
+        """
+        Read an image from disk
+
+        Parameters
+        ----------
+        path : str
+            Path to the image
+
+        Returns
+        -------
+        Any
+            Image in a backend-dependent format
+
+        Raises
+        ------
+        IOError
+            If failed to read an image for some reason
+        """
 
 
 class CV2Backend(ImageBackend):
+    """
+    opencv based image reading backend
+    """
+
     def __init__(self) -> None:
         super().__init__()
         try:
@@ -44,6 +71,10 @@ class CV2Backend(ImageBackend):
 
 
 class PILBackend(ImageBackend):
+    """
+    PIL based image reading backend
+    """
+
     def __init__(self) -> None:
         super().__init__()
         try:
@@ -95,7 +126,20 @@ class FolderImageDataset(FolderDataset):
         else:
             raise ValueError(f"Only cv2 or PIL backends are supported, got: {backend}")
 
-    def get(self, index: int):
+    def get(self, index: int) -> Any:
+        """
+        Read single image using previously selected backend
+
+        Parameters
+        ----------
+        index : int
+            Image index
+
+        Returns
+        -------
+        Any
+            Image, can be numpy array or PIL Image depending on the backend
+        """
         name = self._names[index]
         img = self._backend.read(name)
         return img

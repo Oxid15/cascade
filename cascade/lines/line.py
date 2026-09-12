@@ -18,11 +18,21 @@ from ..base import Meta, Traceable
 
 
 class Line(ABC, Traceable):
-    @abstractmethod
-    def __len__(self) -> int: ...
+    """
+    Abstract Line
+    """
 
     @abstractmethod
-    def __getitem__(self, num: int) -> Any: ...
+    def __len__(self) -> int:
+        """
+        Should return the number of object inside
+        """
+
+    @abstractmethod
+    def __getitem__(self, num: int) -> Any:
+        """
+        Should return the object using numerical index
+        """
 
     @abstractmethod
     def reload(self): ...
@@ -34,10 +44,16 @@ class Line(ABC, Traceable):
     def save(self, obj: Any, only_meta: bool = False) -> None: ...
 
     @abstractmethod
-    def load_obj_meta(self, pathspec: str) -> Meta: ...
+    def load_obj_meta(self, pathspec: str) -> Meta:
+        """
+        Should read and return object meta using its path specification
+        """
 
     @abstractmethod
-    def get_root(self) -> str: ...
+    def get_root(self) -> str:
+        """
+        Should return root folder of Line
+        """
 
     def __repr__(self) -> str:
         return f"Line of {len(self)} of {self._item_cls}"

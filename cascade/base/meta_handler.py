@@ -41,6 +41,13 @@ else:
 
 
 class CustomEncoder(JSONEncoder):
+    """
+    Cascade's own custom encoder for JSON.
+
+    Supports numpy constants, arrays, datetimes, types, deepdiff, dataclasses and
+    some internal objects.
+    """
+
     def default(self, obj: Any) -> Any:
         if isinstance(obj, type):
             return str(obj)
@@ -124,6 +131,19 @@ class BaseHandler:
 
 class JSONHandler(BaseHandler):
     def read(self, path: str) -> Meta:
+        """
+        Read meta from .json
+
+        Parameters
+        ----------
+        path : str
+            Path to .json file
+
+        Returns
+        -------
+        Meta
+            Loaded meta
+        """
         _, ext = os.path.splitext(path)
         if ext == "":
             path += ".json"
@@ -138,6 +158,18 @@ class JSONHandler(BaseHandler):
             return meta
 
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
+        """
+        Write meta to json
+
+        Parameters
+        ----------
+        path : str
+            Path to .json file
+        obj : Any
+            Meta to write
+        overwrite : bool, optional
+            Will not write if set to False and already exists, by default True
+        """
         if not overwrite and os.path.exists(path):
             return
 
@@ -147,6 +179,19 @@ class JSONHandler(BaseHandler):
 
 class YAMLHandler(BaseHandler):
     def read(self, path: str) -> Meta:
+        """
+        Read meta from .yaml
+
+        Parameters
+        ----------
+        path : str
+            Path to .yaml file
+
+        Returns
+        -------
+        Meta
+            Loaded meta
+        """
         _, ext = os.path.splitext(path)
         if ext == "":
             path += ".yml"
@@ -163,6 +208,18 @@ class YAMLHandler(BaseHandler):
             return meta
 
     def write(self, path: str, obj: Any, overwrite: bool = True) -> None:
+        """
+        Write meta to yaml
+
+        Parameters
+        ----------
+        path : str
+            Path to .yaml file
+        obj : Any
+            Meta to write
+        overwrite : bool, optional
+            Will not write if set to False and already exists, by default True
+        """
         if not overwrite and os.path.exists(path):
             return
 
@@ -205,6 +262,7 @@ class MetaHandler:
     >>> obj = MetaHandler.read('meta.json')
     >>> MetaHandler.write('meta.yml', {'hello': 'world'})
     >>> obj = MetaHandler.read('meta.yml')
+
     """
 
     @classmethod
@@ -232,7 +290,7 @@ class MetaHandler:
     @classmethod
     def write(cls, path: str, obj: Any, overwrite: bool = True) -> None:
         """
-        Writes object to path.
+        Writes object to path
 
         Parameters
         ----------
@@ -301,6 +359,19 @@ class MetaHandler:
 
     @classmethod
     def determine_meta_fmt(cls, path: str, template: str) -> Optional[str]:
+        """
+        Parameters
+        ----------
+        path : str
+            Path to a folder
+        template : str
+            Glob pattern to find meta file
+
+        Returns
+        -------
+        Optional[str]
+            Returns extension of meta file if there is only a single meta
+        """
         meta_paths = glob.glob(os.path.join(path, template))
         if len(meta_paths) == 1:
             _, ext = os.path.splitext(meta_paths[0])

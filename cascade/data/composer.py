@@ -31,6 +31,7 @@ class Composer(Dataset[T]):
     >>> labels = cdd.Wrapper([1, 0, 0, 1, 1])
     >>> ds = cdd.Composer((items, labels))
     >>> assert ds[0] == (0, 1)
+
     """
 
     def __init__(self, datasets: List[Dataset[Any]], *args: Any, **kwargs: Any) -> None:
