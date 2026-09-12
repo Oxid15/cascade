@@ -63,13 +63,6 @@ You can select columns from the list and request them from model's meta.
 .. image:: ../_static/line-custom-table.png
   :alt: Table customization page of Cascade - Small scale MLOps library
 
-Plots
------
-
-Inside each line you can visualize the change of metrics.
-
-.. image:: ../_static/line-plots.png
-  :alt: Line plots page of Cascade - Small scale MLOps library
 
 Models
 ======
