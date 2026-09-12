@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>Track Dataset Errors &#8212; cascade 0.17.0 documentation</title>
+  <title>Track Dataset Errors &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Use Cascade CLI" href="cli.html" />
@@ -479,18 +480,15 @@
                 <p>Consider the following pipeline:</p>
                 <div class="highlight-python notranslate">
                   <div class="highlight">
-                    <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Modifier</span>
+                    <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Modifier</span><span class="p">,</span> <span class="n">Wrapper</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">RaiseDatasetOverridingGetItem</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RaiseModifierOverridingGetItem</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
       <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;on no!&quot;</span><span class="p">)</span>
       <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-
-   <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-      <span class="k">return</span> <span class="mi">2</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">ModifierOverridingGetItem</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
@@ -498,30 +496,36 @@
       <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 
 
-<span class="n">ds</span> <span class="o">=</span> <span class="n">RaiseDatasetOverridingGetItem</span><span class="p">()</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">Wrapper</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">RaiseModifierOverridingGetItem</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 <span class="n">ds</span> <span class="o">=</span> <span class="n">ModifierOverridingGetItem</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)):</span>
-   <span class="n">ds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 </pre>
                   </div>
                 </div>
+                <div class="highlight-python notranslate">
+                  <div class="highlight">
+                    <pre><span></span>
+</pre>
+                  </div>
+                </div>
+                <dl class="simple">
+                  <dt>for i in range(len(ds)):</dt>
+                  <dd>
+                    <p>ds[i]</p>
+                  </dd>
+                </dl>
                 <p>Here we have dummy Dataset and Modifier both overriding default <code
                     class="docutils literal notranslate"><span class="pre">__getitem__</span></code> method. When we
                   execute the code we see only the error message and will require additional runs to trace where exactly
                   the error occured. In case of large datasets and long trainings it can be very costly to run second
                   time to check where the error occurs.</p>
-                <div class="highlight-python notranslate">
+                <div class="highlight-text notranslate">
                   <div class="highlight">
-                    <pre><span></span>Traceback (most recent call last):
-File &quot;/home/user/example.py&quot;, line 24, in &lt;module&gt;
-   ds[i]
-   ~~^^^
-File &quot;/home/user/example.py&quot;, line 17, in __getitem__
-   return self._dataset[index]
-         ~~~~~~~~~~~~~^^^^^^^
-File &quot;/home/user/example.py&quot;, line 7, in __getitem__
-   raise RuntimeError(&quot;on no!&quot;)
+                    <pre><span></span>0
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 2, in &lt;module&gt;
+  File &quot;&lt;stdin&gt;&quot;, line 3, in __getitem__
+  File &quot;&lt;stdin&gt;&quot;, line 4, in __getitem__
 RuntimeError: on no!
 </pre>
                   </div>
@@ -531,38 +535,45 @@ RuntimeError: on no!
                     class="docutils literal notranslate"><span class="pre">get</span></code> methods:</p>
                 <div class="highlight-python notranslate">
                   <div class="highlight">
+                    <pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)):</span>
+   <span class="n">ds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre>
+                  </div>
+                </div>
+                <div class="highlight-text notranslate">
+                  <div class="highlight">
                     <pre><span></span>Traceback (most recent call last):
-File &quot;/home/user/cascade/cascade/data/dataset.py&quot;, line 107, in __getitem__
+File &quot;/home/ilia/work/cascade/cascade/data/dataset.py&quot;, line 107, in __getitem__
    return self.get(index)
          ^^^^^^^^^^^^^^^
-File &quot;/home/user/example.py&quot;, line 33, in get
+File &quot;/home/ilia/work/example.py&quot;, line 33, in get
    raise RuntimeError(&quot;on no!&quot;)
 RuntimeError: on no!
 
 The above exception was the direct cause of the following exception:
 
 Traceback (most recent call last):
-File &quot;/home/user/cascade/cascade/data/dataset.py&quot;, line 107, in __getitem__
+File &quot;/home/ilia/work/cascade/cascade/data/dataset.py&quot;, line 107, in __getitem__
    return self.get(index)
          ^^^^^^^^^^^^^^^
-File &quot;/home/user/example.py&quot;, line 43, in get
+File &quot;/home/ilia/work/example.py&quot;, line 43, in get
    return self._dataset[index]
          ~~~~~~~~~~~~~^^^^^^^
-File &quot;/home/user/cascade/cascade/data/dataset.py&quot;, line 106, in __getitem__
+File &quot;/home/ilia/work/cascade/cascade/data/dataset.py&quot;, line 106, in __getitem__
    with GetItemHandler(self, index):
-File &quot;/home/user/cascade/cascade/data/dataset.py&quot;, line 36, in __exit__
+File &quot;/home/ilia/work/cascade/cascade/data/dataset.py&quot;, line 36, in __exit__
    raise GetItemError(
 cascade.data.dataset.GetItemError: Failed to get item from &lt;class &#39;__main__.RaiseDataset&#39;&gt; at index 1
 
 The above exception was the direct cause of the following exception:
 
 Traceback (most recent call last):
-File &quot;/home/user/example.py&quot;, line 50, in &lt;module&gt;
+File &quot;/home/ilia/work/example.py&quot;, line 50, in &lt;module&gt;
    ds[i]
    ~~^^^
-File &quot;/home/user/cascade/cascade/data/dataset.py&quot;, line 106, in __getitem__
+File &quot;/home/ilia/work/cascade/cascade/data/dataset.py&quot;, line 106, in __getitem__
    with GetItemHandler(self, index):
-File &quot;/home/user/cascade/cascade/data/dataset.py&quot;, line 36, in __exit__
+File &quot;/home/ilia/work/cascade/cascade/data/dataset.py&quot;, line 36, in __exit__
    raise GetItemError(
 cascade.data.dataset.GetItemError: Failed to get item from &lt;class &#39;__main__.ModifierWithGet&#39;&gt; at index 1
 </pre>

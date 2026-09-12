@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>Use Cascade CLI &#8212; cascade 0.17.0 documentation</title>
+  <title>Use Cascade CLI &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Common query use cases" href="queries.html" />
@@ -467,9 +468,9 @@
                 <h1>Use Cascade CLI<a class="headerlink" href="#use-cascade-cli" title="Permalink to this heading">#</a>
                 </h1>
                 <p>Cascade has convenient command line interface to help
-                  user perform some operations without writing Python for them.
+                  user perform some operations without writing Python code for them.
                   Commands can be used to explore metadata, describe, tag and comment objects.
-                  You can also run viewers and manage artifacts from CLI.</p>
+                  You can also run experiments and manage artifacts from CLI.</p>
                 <section id="cli-commands">
                   <h2>ClI Commands<a class="headerlink" href="#cli-commands" title="Permalink to this heading">#</a>
                   </h2>
@@ -487,7 +488,7 @@ run<span class="w">       </span><span class="c1"># Track configurations</span>
 status<span class="w">    </span><span class="c1"># Short description of what is present in the current folder</span>
 tag<span class="w">       </span><span class="c1"># Manage tags</span>
 ui<span class="w">        </span><span class="c1"># Run Cascade Web UI</span>
-view<span class="w">      </span><span class="c1"># Different viewers</span>
+view<span class="w">      </span><span class="c1"># Different viewers, deprecated since 0.18.0</span>
 </pre>
                     </div>
                   </div>
@@ -649,7 +650,7 @@ Time: 0.0023s
                     <p>You can add one of multiple tags by passing them after add command.</p>
                     <div class="highlight-bash notranslate">
                       <div class="highlight">
-                        <pre><span></span>cascade<span class="w"> </span>tag<span class="w"> </span>add<span class="w"> </span>TAG1,<span class="w"> </span>TAG2,<span class="w"> </span>...
+                        <pre><span></span>cascade<span class="w"> </span>tag<span class="w"> </span>add<span class="w"> </span>TAG1<span class="w"> </span>TAG2<span class="w"> </span>...
 </pre>
                       </div>
                     </div>
@@ -663,18 +664,30 @@ Time: 0.0023s
                     <p>This will remove given tags.</p>
                     <div class="highlight-bash notranslate">
                       <div class="highlight">
-                        <pre><span></span>cascade<span class="w"> </span>tag<span class="w"> </span>rm<span class="w"> </span>TAG1,<span class="w"> </span>TAG2,<span class="w"> </span>...
+                        <pre><span></span>cascade<span class="w"> </span>tag<span class="w"> </span>rm<span class="w"> </span>TAG1<span class="w"> </span>TAG2<span class="w"> </span>...
 </pre>
                       </div>
                     </div>
                   </section>
+                  <section id="cascade-ui">
+                    <h3>cascade ui<a class="headerlink" href="#cascade-ui" title="Permalink to this heading">#</a></h3>
+                    <p><a class="reference internal" href="../tutorials/ui.html"><span class="std std-ref">Cascade
+                          UI</span></a> is a separate package you can install to run web-based interface over your
+                      Workspace.
+                      It allows to view meta data, compare experiments, draw plots and other things that can be
+                      difficult in CLI.</p>
+                  </section>
                   <section id="cascade-view">
                     <h3>cascade view<a class="headerlink" href="#cascade-view" title="Permalink to this heading">#</a>
                     </h3>
+                    <div class="admonition warning">
+                      <p class="admonition-title">Warning</p>
+                      <p>Viewers are deprecated since 0.18.0 in favor of Cascade UI</p>
+                    </div>
                     <p>To use this feature install <code
                         class="docutils literal notranslate"><span class="pre">dash</span></code> separately or by using
                       <code
-                        class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cascade[view]</span></code>.
+                        class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">cascade-ml[view]</span></code>.
                       Locate the workspace, repo or line (not every viewer can work in all of those) and run
                       the following commands.</p>
                     <p>This will run diff viewer, which can be used to display diffs between two meta files.</p>
@@ -769,6 +782,8 @@ Time: 0.0023s
                             href="#cascade-status">cascade status</a></li>
                         <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade-tag">cascade tag</a></li>
+                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                            href="#cascade-ui">cascade ui</a></li>
                         <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade-view">cascade view</a></li>
                       </ul>

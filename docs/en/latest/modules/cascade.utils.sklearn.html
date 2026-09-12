@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>cascade.utils.sklearn &#8212; cascade 0.17.0 documentation</title>
+  <title>cascade.utils.sklearn &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="cascade.utils.tables" href="cascade.utils.tables.html" />
@@ -385,30 +386,115 @@
               <div class="bd-toc-item navbar-nav">
                 <ul class="current nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.lines.html">cascade.lines</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.repos.html">cascade.repos</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.trainers.html">cascade.trainers</a>
                   </li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.baselines.html">cascade.utils.baselines</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.nlp.html">cascade.utils.nlp</a></li>
+
                   <li class="toctree-l1 current active"><a class="current reference internal"
                       href="#">cascade.utils.sklearn</a></li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.tables.html">cascade.utils.tables</a></li>
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.time_series.html">cascade.utils.time_series</a></li>
+
+
+
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.utils.samplers.html">cascade.utils.samplers</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.torch.html">cascade.utils.torch</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.vision.html">cascade.utils.vision</a></li>
+
                   <li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
                 </ul>
               </div>
@@ -471,450 +557,636 @@
               <section id="cascade-utils-sklearn">
                 <h1>cascade.utils.sklearn<a class="headerlink" href="#cascade-utils-sklearn"
                     title="Permalink to this heading">#</a></h1>
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.sklearn.SkMetric">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.sklearn.</span></span><span
-                      class="sig-name descname"><span class="pre">SkMetric</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                          class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                      class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">SupportsFloat</span><span class="p"><span class="pre">]</span></span></span><span
-                        class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">dataset</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w">
-                      </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">split</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w">
-                      </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">direction</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span
-                          class="s"><span class="pre">'up'</span></span><span class="p"><span
-                            class="pre">,</span></span><span class="w"> </span><span class="s"><span
-                            class="pre">'down'</span></span><span class="p"><span class="pre">]</span></span><span
-                          class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
-                        class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">interval</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">SupportsFloat</span><span class="p"><span class="pre">,</span></span><span
-                          class="w"> </span><span class="pre">SupportsFloat</span><span class="p"><span
-                            class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                        class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">extra</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w">
-                        </span><span class="pre">SupportsFloat</span><span class="p"><span
-                            class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                        class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/sklearn/sk_metric.html#SkMetric"><span class="viewcode-link"><span
-                          class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.sklearn.SkMetric" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkMetric.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">SupportsFloat</span><span class="p"><span
-                                class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">str</span><span class="p"><span
-                                class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">str</span><span class="p"><span
-                                class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">Literal</span><span class="p"><span
-                                class="pre">[</span></span><span class="s"><span class="pre">'up'</span></span><span
-                              class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span
-                                class="pre">'down'</span></span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
-                            class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                            class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                            class="n"><span class="pre">interval</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">SupportsFloat</span><span class="p"><span class="pre">,</span></span><span
-                              class="w"> </span><span class="pre">SupportsFloat</span><span class="p"><span
-                                class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                            class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
-                          </span><span class="default_value"><span class="pre">None</span></span></em>, <em
-                          class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">SupportsFloat</span><span class="p"><span
-                                class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                            class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
-                          </span><span class="default_value"><span class="pre">None</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_metric.html#SkMetric.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkMetric.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Creates Metric</p>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>name</strong> (<em>str</em>) – Name of the metric</p>
-                              </li>
-                              <li>
-                                <p><strong>value</strong> (<em>Optional</em><em>[</em><em>MetricType</em><em>]</em>) –
-                                  Scalar value of the metric, by default None</p>
-                              </li>
-                              <li>
-                                <p><strong>dataset</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) –
-                                  Dataset on which metric was computed, by default None</p>
-                              </li>
-                              <li>
-                                <p><strong>split</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The
-                                  split of the dataset for example train or test, by default None</p>
-                              </li>
-                              <li>
-                                <p><strong>direction</strong> (<em>Literal</em><em>[</em><em>&quot;up&quot;</em><em>,
-                                  </em><em>&quot;down&quot;</em><em>, </em><em>None</em><em>]</em>) – Is metric better
-                                  when it is greater or less, by default None</p>
-                              </li>
-                              <li>
-                                <p><strong>interval</strong>
-                                  (<em>Optional</em><em>[</em><em>Tuple</em><em>[</em><em>MetricType</em><em>,
-                                  </em><em>MetricType</em><em>]</em><em>]</em>) – Upper and lower boundaries of value,
-                                  by default None</p>
-                              </li>
-                              <li>
-                                <p><strong>extra</strong>
-                                  (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>,
-                                  </em><em>Any</em><em>]</em><em>]</em>) – Extra values that needs to be stored with
-                                  metric, by default None</p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkMetric.compute">
-                        <span class="sig-name descname"><span class="pre">compute</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">SupportsFloat</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_metric.html#SkMetric.compute"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkMetric.compute" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>The method to compute metric’s value. Should always populate
-                          the internal <code
-                            class="docutils literal notranslate"><span class="pre">self.value</span></code> field and
-                          return it.</p>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.sklearn.</span></span><span
-                      class="sig-name descname"><span class="pre">SkModel</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                            class="pre">[</span></span><span class="pre">List</span><span class="p"><span
-                            class="pre">[</span></span><span class="pre">Any</span><span class="p"><span
-                            class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                        class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel"><span class="viewcode-link"><span
-                          class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.sklearn.SkModel" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Wrapper for sklearn models.
-                      Accepts the name and block to form pipeline.
-                      Can fit, evaluate, predict save and load out of the box.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">List</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">Any</span><span class="p"><span
-                                class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                            class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
-                          </span><span class="default_value"><span class="pre">None</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkModel.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>blocks</strong> (<em>list</em><em>, </em><em>optional</em>) – List of sklearn
-                              transformers to make a pipeline from</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.fit">
-                        <span class="sig-name descname"><span class="pre">fit</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">None</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.fit"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkModel.fit" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Wrapper for pipeline.fit</p>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkModel.get_meta" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p>
-                            <p><strong>meta</strong> – A list where first element is this object’s metadata.
-                              All other elements represent the other stages of pipeline if present.</p>
-                            <p>Meta can be anything that is worth to document about
-                              the object and its properties.</p>
-                            <p>Meta is a list (see Meta type alias) to allow the formation of pipelines.</p>
-                            </p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>Meta</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.load_artifact">
-                        <span class="sig-name descname"><span class="pre">load_artifact</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.load_artifact"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkModel.load_artifact" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Loads sklearn pipeline</p>
-                        <p>Args and kwargs are passed into pickle.load</p>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>path</strong> (<em>str</em>) – the folder from which to load pipeline.pkl</p>
-                          </dd>
-                          <dt class="field-even">Raises<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p><strong>ValueError</strong> – if the path is not a valid directory</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.predict">
-                        <span class="sig-name descname"><span class="pre">predict</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">Any</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.predict"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkModel.predict" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Wrapper for pipeline.predict</p>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.save">
-                        <span class="sig-name descname"><span class="pre">save</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">str</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.save"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkModel.save" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Saves model to the path provided.
-                          Path should be a folder. Creates
-                          it if not exists and saves there as
-                          model.pkl</p>
-                        <p>When saving using this method only wrapper is saved
-                          if you want to save sklearn model use save_artifact</p>
-                        <div class="admonition seealso">
-                          <p class="admonition-title">See also</p>
-                          <p><a class="reference internal" href="#cascade.utils.sklearn.SkModel.save_artifact"
-                              title="cascade.utils.sklearn.SkModel.save_artifact"><code
-                                class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.utils.sklearn.SkModel.save_artifact</span></code></a>
-                          </p>
-                        </div>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.save_artifact">
-                        <span class="sig-name descname"><span class="pre">save_artifact</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.save_artifact"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.sklearn.SkModel.save_artifact" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Saves sklearn pipeline</p>
-                        <p>Args and kwargs are passed into pickle.dump</p>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>path</strong> (<em>str</em>) – the folder in which to save pipeline.pkl</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
               </section>
+              <span class="target" id="module-cascade.utils.sklearn"></span>
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.sklearn.SkMetric">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.sklearn.</span></span><span
+                    class="sig-name descname"><span class="pre">SkMetric</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                    </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                        title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                          class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span
+                      class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                      class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                      class="n"><span class="pre">split</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span
+                      class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                      class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                      class="n"><span class="pre">direction</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Literal"
+                        title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span
+                          class="pre">[</span></span><span class="s"><span class="pre">'up'</span></span><span
+                        class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span
+                          class="pre">'down'</span></span><span class="p"><span class="pre">]</span></span><span
+                        class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                        title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                        title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                          class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                        title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                          class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                      class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                      class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                      class="n"><span class="pre">extra</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span
+                          class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a
+                        class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                        title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span
+                          class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                        title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                          class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                      class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                      class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                      class="o"><span class="pre">**</span></span><span class="n"><span
+                        class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
+                    class="reference internal" href="../_modules/cascade/utils/sklearn/sk_metric.html#SkMetric"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.sklearn.SkMetric" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkMetric.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                            title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                              class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
+                            class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                            class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span
+                            class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span
+                          class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
+                        </span><span class="default_value"><span class="pre">None</span></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span
+                          class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
+                        </span><span class="default_value"><span class="pre">None</span></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Literal"
+                            title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span
+                              class="pre">[</span></span><span class="s"><span class="pre">'up'</span></span><span
+                            class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span
+                              class="pre">'down'</span></span><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
+                          class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                          class="n"><span class="pre">interval</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                            title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                            title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                          class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
+                        </span><span class="default_value"><span class="pre">None</span></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                            title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                          class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
+                        </span><span class="default_value"><span class="pre">None</span></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_metric.html#SkMetric.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkMetric.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Cascade Metric wrapper for sklearn.metrics</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>name</strong> (<a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a>) – name of the metric, should be an exact
+                                match of the members of
+                                sklearn.metrics, but you can also use the aliases from the example</p>
+                            </li>
+                            <li>
+                              <p><strong>value</strong> (<em>Optional</em><em>[</em><em>MetricType</em><em>]</em><em>,
+                                </em><em>optional</em>) – Can assign value to the metric if already computed, by default
+                                None</p>
+                            </li>
+                            <li>
+                              <p><strong>dataset</strong> (<em>Optional</em><em>[</em><a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) –
+                                Name of the dataset metric was computed on, by default None</p>
+                            </li>
+                            <li>
+                              <p><strong>split</strong> (<em>Optional</em><em>[</em><a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) –
+                                Name of the dataset split like train, test or eval, by default None</p>
+                            </li>
+                            <li>
+                              <p><strong>direction</strong>
+                                (<em>Optional</em><em>[</em><em>Literal</em><em>[</em><em>&quot;up&quot;</em><em>,
+                                </em><em>&quot;down&quot;</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Select
+                                up if greater the better or down if worse the better, by default None</p>
+                            </li>
+                            <li>
+                              <p><strong>interval</strong>
+                                (<em>Optional</em><em>[</em><em>Tuple</em><em>[</em><em>MetricType</em><em>,
+                                </em><em>MetricType</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Confidence
+                                interval, by default None</p>
+                            </li>
+                            <li>
+                              <p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a
+                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>,
+                                </em><em>MetricType</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Extra
+                                metadata for a metric, by default None</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                      <p class="rubric">Example</p>
+                      <p>Here the aliases are demonstrated. You can also use any names from sklearn.metrics</p>
+                      <div class="highlight-python notranslate">
+                        <div class="highlight">
+                          <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">SkMetric</span>
+
+<span class="n">acc</span> <span class="o">=</span> <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;acc&quot;</span><span class="p">)</span>
+<span class="n">precision</span> <span class="o">=</span> <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;precision&quot;</span><span class="p">)</span>
+<span class="n">recall</span> <span class="o">=</span> <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;recall&quot;</span><span class="p">)</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;mse&quot;</span><span class="p">)</span>
+
+<span class="n">gt_pred</span> <span class="o">=</span> <span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">acc</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">gt_pred</span><span class="p">)</span>
+<span class="n">precision</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">gt_pred</span><span class="p">)</span>
+<span class="n">recall</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">gt_pred</span><span class="p">)</span>
+<span class="n">mse</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">gt_pred</span><span class="p">)</span>
+</pre>
+                        </div>
+                      </div>
+                      <div class="highlight-pycon notranslate">
+                        <div class="highlight">
+                          <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.sklearn.sk_metric</span><span class="w"> </span><span class="kn">import</span> <span class="n">METRIC_ALIASES</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">METRIC_ALIASES</span><span class="p">)</span>
+<span class="go">{&#39;acc&#39;: &#39;accuracy_score&#39;,</span>
+<span class="go"> &#39;accuracy&#39;: &#39;accuracy_score&#39;,</span>
+<span class="go"> &#39;f1&#39;: &#39;f1_score&#39;,</span>
+<span class="go"> &#39;mae&#39;: &#39;mean_absolute_error&#39;,</span>
+<span class="go"> &#39;mse&#39;: &#39;mean_squared_error&#39;,</span>
+<span class="go"> &#39;precision&#39;: &#39;precision_score&#39;,</span>
+<span class="go"> &#39;recall&#39;: &#39;recall_score&#39;}</span>
+</pre>
+                        </div>
+                      </div>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkMetric.compute">
+                      <span class="sig-name descname"><span class="pre">compute</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat"
+                            title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_metric.html#SkMetric.compute"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkMetric.compute" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>The method to compute metric’s value. Should always populate
+                        the internal <code
+                          class="docutils literal notranslate"><span class="pre">self.value</span></code> field and
+                        return it.</p>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.sklearn.</span></span><span
+                    class="sig-name descname"><span class="pre">SkModel</span></span><span class="sig-paren">(</span><em
+                    class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
+                        class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                    </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span
+                          class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                          class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                      class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                      class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                      class="o"><span class="pre">**</span></span><span class="n"><span
+                        class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
+                    class="reference internal" href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.sklearn.SkModel" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Wrapper for sklearn models.
+                    Accepts the name and block to form pipeline.
+                    Can fit, evaluate, predict save and load out of the box.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                          class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
+                        </span><span class="default_value"><span class="pre">None</span></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkModel.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>blocks</strong> (<a class="reference external"
+                              href="https://docs.python.org/3/library/stdtypes.html#list"
+                              title="(in Python v3.14)"><em>list</em></a><em>, </em><em>optional</em>) – List of sklearn
+                            transformers to make a pipeline from</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.fit">
+                      <span class="sig-name descname"><span class="pre">fit</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.fit"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkModel.fit" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Wrapper for pipeline.fit</p>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkModel.get_meta" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p>
+                          <p><strong>meta</strong> – A list where first element is this object’s metadata.
+                            All other elements represent the other stages of pipeline if present.</p>
+                          <p>Meta can be anything that is worth to document about
+                            the object and its properties.</p>
+                          <p>Meta is a list (see Meta type alias) to allow the formation of pipelines.</p>
+                          </p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>Meta</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.load_artifact">
+                      <span class="sig-name descname"><span class="pre">load_artifact</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.load_artifact"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkModel.load_artifact" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Loads sklearn pipeline</p>
+                      <p>Args and kwargs are passed into pickle.load</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>path</strong> (<a class="reference external"
+                              href="https://docs.python.org/3/library/stdtypes.html#str"
+                              title="(in Python v3.14)"><em>str</em></a>) – the folder from which to load pipeline.pkl
+                          </p>
+                        </dd>
+                        <dt class="field-even">Raises<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p><a class="reference external"
+                              href="https://docs.python.org/3/library/exceptions.html#ValueError"
+                              title="(in Python v3.14)"><strong>ValueError</strong></a> – if the path is not a valid
+                            directory</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.predict">
+                      <span class="sig-name descname"><span class="pre">predict</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.predict"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkModel.predict" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Wrapper for pipeline.predict</p>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.save">
+                      <span class="sig-name descname"><span class="pre">save</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span
+                        class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
+                          class="sig-return-typehint"><a class="reference external"
+                            href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span
+                              class="pre">None</span></a></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.save"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkModel.save" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Saves model to the path provided.
+                        Path should be a folder. Creates
+                        it if not exists and saves there as
+                        model.pkl</p>
+                      <p>When saving using this method only wrapper is saved
+                        if you want to save sklearn model use save_artifact</p>
+                      <div class="admonition seealso">
+                        <p class="admonition-title">See also</p>
+                        <p><a class="reference internal" href="#cascade.utils.sklearn.SkModel.save_artifact"
+                            title="cascade.utils.sklearn.SkModel.save_artifact"><code
+                              class="xref py py-obj docutils literal notranslate"><span class="pre">cascade.utils.sklearn.SkModel.save_artifact</span></code></a>
+                        </p>
+                      </div>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.sklearn.SkModel.save_artifact">
+                      <span class="sig-name descname"><span class="pre">save_artifact</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/sklearn/sk_model.html#SkModel.save_artifact"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.sklearn.SkModel.save_artifact" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Saves sklearn pipeline</p>
+                      <p>Args and kwargs are passed into pickle.dump</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>path</strong> (<a class="reference external"
+                              href="https://docs.python.org/3/library/stdtypes.html#str"
+                              title="(in Python v3.14)"><em>str</em></a>) – the folder in which to save pipeline.pkl</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
 
 
             </article>
@@ -961,55 +1233,58 @@
                 </div>
                 <nav class="bd-toc-nav page-toc">
                   <ul class="visible nav section-nav flex-column">
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#">cascade.utils.sklearn</a></li>
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.sklearn.SkMetric"><code
                           class="docutils literal notranslate"><span class="pre">SkMetric</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkMetric.__init__"><code
                               class="docutils literal notranslate"><span class="pre">SkMetric.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkMetric.compute"><code
                               class="docutils literal notranslate"><span class="pre">SkMetric.compute()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.sklearn.SkModel"><code
                           class="docutils literal notranslate"><span class="pre">SkModel</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkModel.__init__"><code
                               class="docutils literal notranslate"><span class="pre">SkModel.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkModel.fit"><code
                               class="docutils literal notranslate"><span class="pre">SkModel.fit()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkModel.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">SkModel.get_meta()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkModel.load_artifact"><code
                               class="docutils literal notranslate"><span class="pre">SkModel.load_artifact()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkModel.predict"><code
                               class="docutils literal notranslate"><span class="pre">SkModel.predict()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkModel.save"><code
                               class="docutils literal notranslate"><span class="pre">SkModel.save()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.sklearn.SkModel.save_artifact"><code
                               class="docutils literal notranslate"><span class="pre">SkModel.save_artifact()</span></code></a>
                         </li>
                       </ul>
                     </li>
                   </ul>
+
                 </nav>
               </div>
 

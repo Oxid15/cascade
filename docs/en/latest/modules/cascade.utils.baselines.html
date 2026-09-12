@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>cascade.utils.baselines &#8212; cascade 0.17.0 documentation</title>
+  <title>cascade.utils.baselines &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="cascade.utils.nlp" href="cascade.utils.nlp.html" />
@@ -385,30 +386,115 @@
               <div class="bd-toc-item navbar-nav">
                 <ul class="current nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.lines.html">cascade.lines</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.repos.html">cascade.repos</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.trainers.html">cascade.trainers</a>
                   </li>
+
+
                   <li class="toctree-l1 current active"><a class="current reference internal"
                       href="#">cascade.utils.baselines</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.nlp.html">cascade.utils.nlp</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.sklearn.html">cascade.utils.sklearn</a></li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.tables.html">cascade.utils.tables</a></li>
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.time_series.html">cascade.utils.time_series</a></li>
+
+
+
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.utils.samplers.html">cascade.utils.samplers</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.torch.html">cascade.utils.torch</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.vision.html">cascade.utils.vision</a></li>
+
                   <li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
                 </ul>
               </div>
@@ -471,147 +557,201 @@
               <section id="cascade-utils-baselines">
                 <h1>cascade.utils.baselines<a class="headerlink" href="#cascade-utils-baselines"
                     title="Permalink to this heading">#</a></h1>
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.baselines.</span></span><span
-                      class="sig-name descname"><span class="pre">ConstantBaseline</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">constant</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.baselines.ConstantBaseline" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Constant function. This baseline can be used for
-                      any classification task. It returns only one class
-                      (for example it can be majority class)</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">constant</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.baselines.ConstantBaseline.__init__"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Should be called in any successor - initializes default meta needed.</p>
-                        <p>Successors may pass all of their parameters to superclass for it to be able to
-                          log them in meta. Everything that is worth to document about the model
-                          can be put either in params or meta_prefix</p>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.fit">
-                        <span class="sig-name descname"><span class="pre">fit</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">None</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.fit"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.baselines.ConstantBaseline.fit"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Method to encapsulate training loops.
-                          May be provided with any training-related arguments.</p>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.baselines.ConstantBaseline.get_meta"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p>
-                            <p><strong>meta</strong> – A list where first element is this object’s metadata.
-                              All other elements represent the other stages of pipeline if present.</p>
-                            <p>Meta can be anything that is worth to document about
-                              the object and its properties.</p>
-                            <p>Meta is a list (see Meta type alias) to allow the formation of pipelines.</p>
-                            </p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>Meta</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.predict">
-                        <span class="sig-name descname"><span class="pre">predict</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.predict"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.baselines.ConstantBaseline.predict"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Returns the array of the same shape as input full of
-                          given constant.</p>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
               </section>
+              <span class="target" id="module-cascade.utils.baselines"></span>
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.baselines.</span></span><span
+                    class="sig-name descname"><span class="pre">ConstantBaseline</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">constant</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                    class="sig-paren">)</span><a class="reference internal"
+                    href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.baselines.ConstantBaseline" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Constant function. This baseline can be used for
+                    any classification task. It returns only one class
+                    (for example it can be majority class)</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">constant</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.baselines.ConstantBaseline.__init__"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Should be called in any successor - initializes default meta needed.</p>
+                      <p>Successors may pass all of their parameters to superclass for it to be able to
+                        log them in meta. Everything that is worth to track about the model
+                        can be put in params using this constructor or put in meta directly using update_meta().</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>description</strong> (<em>Optional</em><em>[</em><a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – by
+                                default None</p>
+                            </li>
+                            <li>
+                              <p><strong>tags</strong> (<em>Optional</em><em>[</em><em>Iterable</em><em>[</em><a
+                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>,
+                                </em><em>optional</em>) – by default None</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.fit">
+                      <span class="sig-name descname"><span class="pre">fit</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                        </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
+                            class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.fit"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.baselines.ConstantBaseline.fit" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Method to encapsulate training loops.
+                        May be provided with any training-related arguments.</p>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.baselines.ConstantBaseline.get_meta"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p>
+                          <p><strong>meta</strong> – A list where first element is this object’s metadata.
+                            All other elements represent the other stages of pipeline if present.</p>
+                          <p>Meta can be anything that is worth to document about
+                            the object and its properties.</p>
+                          <p>Meta is a list (see Meta type alias) to allow the formation of pipelines.</p>
+                          </p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>Meta</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.baselines.ConstantBaseline.predict">
+                      <span class="sig-name descname"><span class="pre">predict</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                        </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
+                            class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/baselines/constant_baseline.html#ConstantBaseline.predict"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.baselines.ConstantBaseline.predict"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Returns the array of the same shape as input full of
+                        given constant.</p>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
 
 
             </article>
@@ -658,29 +798,32 @@
                 </div>
                 <nav class="bd-toc-nav page-toc">
                   <ul class="visible nav section-nav flex-column">
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#">cascade.utils.baselines</a></li>
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.baselines.ConstantBaseline"><code
                           class="docutils literal notranslate"><span class="pre">ConstantBaseline</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.baselines.ConstantBaseline.__init__"><code
                               class="docutils literal notranslate"><span class="pre">ConstantBaseline.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.baselines.ConstantBaseline.fit"><code
                               class="docutils literal notranslate"><span class="pre">ConstantBaseline.fit()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.baselines.ConstantBaseline.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">ConstantBaseline.get_meta()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.baselines.ConstantBaseline.predict"><code
                               class="docutils literal notranslate"><span class="pre">ConstantBaseline.predict()</span></code></a>
                         </li>
                       </ul>
                     </li>
                   </ul>
+
                 </nav>
               </div>
 

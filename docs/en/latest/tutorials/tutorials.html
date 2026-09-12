@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>Tutorial &#8212; cascade 0.17.0 documentation</title>
+  <title>Tutorial &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Cascade UI" href="ui.html" />
@@ -532,6 +533,13 @@
 </pre>
                     </div>
                   </div>
+                  <p>For this tutorial you will also need sklearn</p>
+                  <div class="highlight-bash notranslate">
+                    <div class="highlight">
+                      <pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>scikit-learn
+</pre>
+                    </div>
+                  </div>
                   <p>Cascade has a set of optional dependencies, which can be installed with the following commands</p>
                   <div class="highlight-bash notranslate">
                     <div class="highlight">
@@ -540,7 +548,6 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
 pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>pydantic<span class="o">]</span><span class="w"> </span><span class="c1"># Use data validation modifiers</span>
 pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>sklearn<span class="o">]</span><span class="w">  </span><span class="c1"># Scikit-learn integration</span>
 pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>torch<span class="o">]</span><span class="w">    </span><span class="c1"># PyTorch integration</span>
-pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>view<span class="o">]</span><span class="w">     </span><span class="c1"># Cascade viewers based on dash</span>
 pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class="o">[</span>all<span class="o">]</span><span class="w">      </span><span class="c1"># Installs everything</span>
 </pre>
                     </div>
@@ -567,7 +574,8 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                       class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
-                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_digits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DigitsDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
@@ -640,8 +648,8 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                         href="#further-reading" title="Permalink to this heading">#</a></h3>
                     <ul class="simple">
                       <li>
-                        <p><a class="reference internal" href="../howtos/pipeline_building.html"><span
-                              class="std std-ref">How to build a Pipeline</span></a></p>
+                        <p><a class="reference internal" href="../howtos/pipeline_building.html"><span class="doc">How
+                              to build a Pipeline</span></a></p>
                       </li>
                       <li>
                         <p><a class="reference internal" href="../modules/dataset_zoo.html"><span
@@ -720,9 +728,11 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                     <code class="docutils literal notranslate"><span class="pre">BasicModel</span></code> will handle
                     everything else for us - like saving and loading for example.
                   </p>
+                  <p>We can create and fit the model now using the dataset from the Pipelines step.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
-                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicModel</span>
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicModel</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LR</span><span class="p">(</span><span class="n">BasicModel</span><span class="p">):</span>
@@ -740,13 +750,8 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
 
     <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-</pre>
-                    </div>
-                  </div>
-                  <p>We can create and fit the model now using the dataset from the Pipelines step.</p>
-                  <div class="highlight-python notranslate">
-                    <div class="highlight">
-                      <pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">LR</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">LR</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 </pre>
                     </div>
@@ -832,12 +837,12 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                         href="#id1" title="Permalink to this heading">#</a></h3>
                     <ul class="simple">
                       <li>
-                        <p><a class="reference internal" href="../howtos/model_training.html"><span
-                              class="std std-ref">How to train a model</span></a></p>
+                        <p><a class="reference internal" href="../howtos/model_training.html"><span class="doc">How to
+                              train a model</span></a></p>
                       </li>
                       <li>
                         <p><a class="reference internal" href="../howtos/model_training_trainers.html"><span
-                              class="std std-ref">How to train a model with Trainer</span></a></p>
+                              class="doc">How to train a model with Trainer</span></a></p>
                       </li>
                     </ul>
                   </section>
@@ -952,8 +957,8 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
     <span class="k">return</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">gt</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">)</span>
 
 
-<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">loaded_ds</span><span class="p">]</span>
-<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">loaded_ds</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="n">f1</span><span class="p">])</span>
 
@@ -1110,7 +1115,7 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                     </div>
                   </div>
                   <p>This is basic utility now just serves as a check that everything is okay with
-                    you installation and directory. Cascade will look for <code
+                    your installation and directory. Cascade will look for <code
                       class="docutils literal notranslate"><span class="pre">meta.json</span></code> file in the folder
                     you are running a command and if found, output short description of what is in this folder.</p>
                   <p>If everything is ok, previous command should output the following. If not, do not
@@ -1172,7 +1177,7 @@ cascade<span class="w"> </span>tag<span class="w"> </span>ls
 </pre>
                     </div>
                   </div>
-                  <div class="highlight-default notranslate">
+                  <div class="highlight-python notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">]</span>
 </pre>
@@ -1260,14 +1265,13 @@ a few seconds before
                   <p>Let’s define a simple schema for our dataset from the beginning of the tutorial.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
-                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LabeledImage</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Any</span>
     <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
-
-    <span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;arbitrary_types_allowed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 </pre>
                     </div>
                   </div>
@@ -1294,7 +1298,7 @@ a few seconds before
 </pre>
                     </div>
                   </div>
-                  <p>Here we build a pipeline and augment our data using padding.</p>
+                  <p>Here we build a pipeline.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">ValidatingModifier</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
@@ -1320,26 +1324,22 @@ a few seconds before
                     <div class="highlight">
                       <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">EvilDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">18</span><span class="o">*</span><span class="mi">18</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;hehe&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">18</span> <span class="o">*</span> <span class="mi">18</span><span class="p">),</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;hehe&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">67</span>
 </pre>
                     </div>
                   </div>
-                  <p>The following code will raise ValidationError, which we will catch and
-                    display the latest message.</p>
+                  <p>The following code will raise <code
+                      class="docutils literal notranslate"><span class="pre">GetItemError</span></code> from <code
+                      class="docutils literal notranslate"><span class="pre">ValidationError</span></code>.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
-                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
-
-<span class="n">evil</span> <span class="o">=</span> <span class="n">EvilDataset</span><span class="p">()</span>
+                      <pre><span></span><span class="n">evil</span> <span class="o">=</span> <span class="n">EvilDataset</span><span class="p">()</span>
 <span class="n">evil</span> <span class="o">=</span> <span class="n">ValidatingModifier</span><span class="p">(</span><span class="n">evil</span><span class="p">)</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">evil</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">evil</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre>
                     </div>
                   </div>
@@ -1528,10 +1528,12 @@ a few seconds before
 </pre>
                     </div>
                   </div>
-                  <div class="highlight-text notranslate">
+                  <div class="highlight-python notranslate">
                     <div class="highlight">
-                      <pre><span></span>[SkMetric(name=f1_score, value=1.0, created_at=2024-08-14 19:37:46.556587+00:00),
-SkMetric(name=acc, value=1.0, created_at=2024-08-14 19:37:46.556701+00:00)]
+                      <pre><span></span><span class="p">[</span>
+    <span class="n">SkMetric</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">f1_score</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">created_at</span><span class="o">=</span><span class="mi">2024</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">14</span> <span class="mi">19</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mf">46.556587</span><span class="o">+</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">),</span>
+    <span class="n">SkMetric</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">acc</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">created_at</span><span class="o">=</span><span class="mi">2024</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">14</span> <span class="mi">19</span><span class="p">:</span><span class="mi">37</span><span class="p">:</span><span class="mf">46.556701</span><span class="o">+</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">)</span>
+<span class="p">]</span>
 </pre>
                     </div>
                   </div>

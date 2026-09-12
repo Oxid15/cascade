@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>cascade.utils.tables &#8212; cascade 0.17.0 documentation</title>
+  <title>cascade.utils.tables &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="cascade.utils.time_series" href="cascade.utils.time_series.html" />
@@ -385,30 +386,115 @@
               <div class="bd-toc-item navbar-nav">
                 <ul class="current nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.lines.html">cascade.lines</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.repos.html">cascade.repos</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.trainers.html">cascade.trainers</a>
                   </li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.baselines.html">cascade.utils.baselines</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.nlp.html">cascade.utils.nlp</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.sklearn.html">cascade.utils.sklearn</a></li>
+
+
                   <li class="toctree-l1 current active"><a class="current reference internal"
                       href="#">cascade.utils.tables</a></li>
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.time_series.html">cascade.utils.time_series</a></li>
+
+
+
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.utils.samplers.html">cascade.utils.samplers</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.torch.html">cascade.utils.torch</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.vision.html">cascade.utils.vision</a></li>
+
                   <li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
                 </ul>
               </div>
@@ -471,714 +557,838 @@
               <section id="cascade-utils-tables">
                 <h1>cascade.utils.tables<a class="headerlink" href="#cascade-utils-tables"
                     title="Permalink to this heading">#</a></h1>
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.tables.CSVDataset">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
-                      class="sig-name descname"><span class="pre">CSVDataset</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">csv_file_path</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                          class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/tables/tables.html#CSVDataset"><span class="viewcode-link"><span
-                          class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.tables.CSVDataset" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Wrapper for .csv files.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.CSVDataset.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">csv_file_path</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">None</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#CSVDataset.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.CSVDataset.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Passes all args and kwargs to <code
-                            class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code></p>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>csv_file_path</strong> – path to the .csv file</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
-                      class="sig-name descname"><span class="pre">FeatureTable</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span
-                            class="pre">[</span></span><a class="reference internal"
-                          href="#cascade.utils.tables.TableDataset"
-                          title="cascade.utils.tables.tables.TableDataset"><span
-                            class="pre">TableDataset</span></a><span class="p"><span class="pre">,</span></span><span
-                          class="w"> </span><span class="pre">DataFrame</span><span class="p"><span
-                            class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em><span class="sig-paren">)</span><a
-                      class="reference internal" href="../_modules/cascade/utils/tables/tables.html#FeatureTable"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.tables.FeatureTable" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span
-                                class="pre">[</span></span><a class="reference internal"
-                              href="#cascade.utils.tables.TableDataset"
-                              title="cascade.utils.tables.tables.TableDataset"><span
-                                class="pre">TableDataset</span></a><span class="p"><span
-                                class="pre">,</span></span><span class="w"> </span><span
-                              class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em>,
-                        <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#FeatureTable.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.FeatureTable.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Table dataset which allows to easily define and compute features</p>
-                        <p class="rubric">Example</p>
-                        <p><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span
-                              class="problematic" id="id4">`</span></a>python
-                          &gt;&gt;&gt; import pandas as pd
-                          &gt;&gt;&gt; from cascade.utils.tables import FeatureTable
-                          &gt;&gt;&gt; df = pd.read_csv(r’data .csv’, index_col=0)
-                          &gt;&gt;&gt; df
-                          id count name
-                          0 0 1 aaa
-                          1 1 5 bbb
-                          2 2 0 ccc
-                          &gt;&gt;&gt; ft = FeatureTable(df)
-                          &gt;&gt;&gt; ft.get_features()
-                          [‘id’, ‘count’, ‘ name’]
-                          &gt;&gt;&gt; ft.add_feature(‘square’, lambda df: df[‘count’] * df[‘count’])
-                          &gt;&gt;&gt; def counts(df):
-                          &gt;&gt;&gt; return df[‘count’] * 2, df[‘count’] * 3</p>
-                        <div class="doctest highlight-default notranslate">
-                          <div class="highlight">
-                            <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ft</span><span class="o">.</span><span class="n">add_feature</span><span class="p">((</span><span class="s1">&#39;count_2&#39;</span><span class="p">,</span> <span class="s1">&#39;count_3&#39;</span><span class="p">),</span> <span class="n">counts</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ft</span><span class="o">.</span><span class="n">get_features</span><span class="p">()</span>
-<span class="go">[&#39;id&#39;, &#39;count&#39;, &#39; name&#39;, &#39;square&#39;, (&#39;count_2&#39;, &#39;count_3&#39;)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ft</span><span class="o">.</span><span class="n">get_table</span><span class="p">([</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;count_2&#39;</span><span class="p">,</span> <span class="s1">&#39;count_3&#39;</span><span class="p">)])</span>
-<span class="go">   count  count_2  count_3</span>
-<span class="go">0      1        2        3</span>
-<span class="go">1      5       10       15</span>
-<span class="go">2      0        0        0</span>
-</pre>
-                          </div>
-                        </div>
-                        <p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span
-                              class="problematic" id="id8">`</span></a></p>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>table</strong> (<em>Union</em><em>[</em><a class="reference internal"
-                                href="#cascade.utils.tables.TableDataset"
-                                title="cascade.utils.tables.TableDataset"><em>TableDataset</em></a><em>,
-                              </em><em>pd.DataFrame</em><em>]</em>) – The table to wrap</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.add_feature">
-                        <span class="sig-name descname"><span class="pre">add_feature</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">str</span><span class="p"><span
-                                class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span
-                              class="p"><span class="pre">[</span></span><span class="pre">str</span><span
-                              class="p"><span class="pre">]</span></span><span class="p"><span
-                                class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span
-                                class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">,</span></span><span class="w"> </span><span
-                              class="pre">Union</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">str</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span><span class="p"><span
-                                class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">None</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#FeatureTable.add_feature"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.FeatureTable.add_feature"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd></dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.get_features">
-                        <span class="sig-name descname"><span class="pre">get_features</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Union</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">str</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span><span class="p"><span
-                                class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_features"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.FeatureTable.get_features"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Returns the list of feature names with all computed
-                          features added before</p>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p>List of feature names</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>List[str]</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.FeatureTable.get_meta" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
-                              Meta can be anything that is worth to document about the dataset and its data.
-                              This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>Meta</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.get_table">
-                        <span class="sig-name descname"><span class="pre">get_table</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">Union</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">str</span><span class="p"><span
-                                class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span
-                              class="p"><span class="pre">[</span></span><span class="pre">Union</span><span
-                              class="p"><span class="pre">[</span></span><span class="pre">str</span><span
-                              class="p"><span class="pre">,</span></span><span class="w"> </span><span
-                              class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">str</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span><span class="p"><span
-                                class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
-                            class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                            class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                            class="n"><span class="pre">dropna</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">bool</span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">False</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_table"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.FeatureTable.get_table" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd></dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.tables.LargeCSVDataset">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
-                      class="sig-name descname"><span class="pre">LargeCSVDataset</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/tables/tables.html#LargeCSVDataset"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.tables.LargeCSVDataset" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.LargeCSVDataset.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span
-                            class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                            class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#LargeCSVDataset.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.LargeCSVDataset.__init__"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>t</strong> (<em>optional</em>) – pd.DataFrame or TableDataset to be set as table
-                            </p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.tables.PartedTableLoader">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
-                      class="sig-name descname"><span class="pre">PartedTableLoader</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/tables/tables.html#PartedTableLoader"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.tables.PartedTableLoader" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.PartedTableLoader.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span
-                            class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                            class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#PartedTableLoader.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.PartedTableLoader.__init__"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>t</strong> (<em>optional</em>) – pd.DataFrame or TableDataset to be set as table
-                            </p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
-                      class="sig-name descname"><span class="pre">TableDataset</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w">
-                      </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                            class="pre">[</span></span><span class="pre">Union</span><span class="p"><span
-                            class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span
-                            class="pre">,</span></span><span class="w"> </span><a class="reference internal"
-                          href="#cascade.utils.tables.TableDataset"
-                          title="cascade.utils.tables.tables.TableDataset"><span
-                            class="pre">TableDataset</span></a><span class="p"><span class="pre">]</span></span><span
-                          class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
-                        class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/tables/tables.html#TableDataset"><span class="viewcode-link"><span
-                          class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.tables.TableDataset" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Wrapper for <a href="#id9"><span class="problematic" id="id10">``</span></a>pd.DataFrame``s which
-                      allows to manage metadata and perform
-                      validation.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">Union</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span
-                                class="pre">,</span></span><span class="w"> </span><a class="reference internal"
-                              href="#cascade.utils.tables.TableDataset"
-                              title="cascade.utils.tables.tables.TableDataset"><span
-                                class="pre">TableDataset</span></a><span class="p"><span
-                                class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                            class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
-                          </span><span class="default_value"><span class="pre">None</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#TableDataset.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.TableDataset.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>t</strong> (<em>optional</em>) – pd.DataFrame or TableDataset to be set as table
-                            </p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.__len__">
-                        <span class="sig-name descname"><span class="pre">__len__</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">int</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#TableDataset.__len__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.TableDataset.__len__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Returns length of the table</p>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.get">
-                        <span class="sig-name descname"><span class="pre">get</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">int</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">Series</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#TableDataset.get"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.TableDataset.get" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Returns a row from table by index</p>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#TableDataset.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.TableDataset.get_meta" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
-                              Meta can be anything that is worth to document about the dataset and its data.
-                              This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>Meta</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.to_csv">
-                        <span class="sig-name descname"><span class="pre">to_csv</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#TableDataset.to_csv"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.TableDataset.to_csv" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Saves the table to .csv file. Any kwargs are sent to
-                          <code
-                            class="docutils literal notranslate"><span class="pre">pd.DataFrame.to_csv</span></code>.
-                        </p>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.tables.TableFilter">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
-                      class="sig-name descname"><span class="pre">TableFilter</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><a class="reference internal"
-                          href="#cascade.utils.tables.TableDataset"
-                          title="cascade.utils.tables.tables.TableDataset"><span
-                            class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span
-                            class="pre">[</span></span><span class="pre">bool</span><span class="p"><span
-                            class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em><span class="sig-paren">)</span><a
-                      class="reference internal" href="../_modules/cascade/utils/tables/tables.html#TableFilter"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.tables.TableFilter" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Filter for table values</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.TableFilter.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><a class="reference internal"
-                              href="#cascade.utils.tables.TableDataset"
-                              title="cascade.utils.tables.tables.TableDataset"><span
-                                class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span
-                            class="n"><span class="pre">mask</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#TableFilter.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.TableFilter.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>dataset</strong> (<a class="reference internal"
-                                    href="#cascade.utils.tables.TableDataset"
-                                    title="cascade.utils.tables.TableDataset"><em>TableDataset</em></a>) – Dataset to be
-                                  filtered.</p>
-                              </li>
-                              <li>
-                                <p><strong>mask</strong> (<em>Iterable</em><em>[</em><em>bool</em><em>]</em>) – Binary
-                                  mask to select values from table.</p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.tables.TableIterator">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
-                      class="sig-name descname"><span class="pre">TableIterator</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">csv_file_path</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                          class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                      class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">int</span></span><span class="w"> </span><span class="o"><span
-                          class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                          class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em><span class="sig-paren">)</span><a
-                      class="reference internal" href="../_modules/cascade/utils/tables/tables.html#TableIterator"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.tables.TableIterator" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Iterates over the table from path by the chunks.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.tables.TableIterator.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">csv_file_path</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w">
-                          </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                            class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span
-                            class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/tables/tables.html#TableIterator.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.tables.TableIterator.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>csv_file_path</strong> (<em>str</em>) – Path to the .csv file</p>
-                              </li>
-                              <li>
-                                <p><strong>chunk_size</strong> (<em>int</em><em>, </em><em>optional</em>) – number of
-                                  rows to return in one __next__</p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
               </section>
+              <span class="target" id="module-cascade.utils.tables"></span>
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.tables.CSVDataset">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
+                    class="sig-name descname"><span class="pre">CSVDataset</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">csv_file_path</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">read_csv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span
+                      class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                      class="o"><span class="pre">*</span></span><span class="n"><span
+                        class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                    </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                    class="sig-paren">)</span><a class="reference internal"
+                    href="../_modules/cascade/utils/tables/tables.html#CSVDataset"><span class="viewcode-link"><span
+                        class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.tables.CSVDataset" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Wrapper for .csv files.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.CSVDataset.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">csv_file_path</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                            title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">read_csv_kwargs</span></span><span
+                          class="o"><span class="pre">=</span></span><span class="default_value"><span
+                            class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#CSVDataset.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.CSVDataset.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Passes all <code
+                          class="docutils literal notranslate"><span class="pre">read_csv_kwargs</span></code> to <code
+                          class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code></p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>csv_file_path</strong> – path to the .csv file</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
+                    class="sig-name descname"><span class="pre">FeatureTable</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                    </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Union"
+                        title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference internal"
+                        href="#cascade.utils.tables.TableDataset" title="cascade.utils.tables.tables.TableDataset"><span
+                          class="pre">TableDataset</span></a><span class="p"><span class="pre">,</span></span><span
+                        class="w"> </span><a class="reference external"
+                        href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
+                        title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                          class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                        class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
+                    class="reference internal" href="../_modules/cascade/utils/tables/tables.html#FeatureTable"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.tables.FeatureTable" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Table dataset which allows to easily define and compute features</p>
+                  <p class="rubric">Example</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeatureTable</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;data .csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span>
+
+<span class="c1"># id  count  name</span>
+<span class="c1"># 0   0      1   aaa</span>
+<span class="c1"># 1   1      5   bbb</span>
+<span class="c1"># 2   2      0   ccc</span>
+
+<span class="n">ft</span> <span class="o">=</span> <span class="n">FeatureTable</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">ft</span><span class="o">.</span><span class="n">get_features</span><span class="p">()</span>
+
+<span class="c1"># [&#39;id&#39;, &#39;count&#39;, &#39; name&#39;]</span>
+
+<span class="n">ft</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">counts</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+
+<span class="n">ft</span><span class="o">.</span><span class="n">add_feature</span><span class="p">((</span><span class="s1">&#39;count_2&#39;</span><span class="p">,</span> <span class="s1">&#39;count_3&#39;</span><span class="p">),</span> <span class="n">counts</span><span class="p">)</span>
+<span class="n">ft</span><span class="o">.</span><span class="n">get_features</span><span class="p">()</span>
+
+<span class="c1"># [&#39;id&#39;, &#39;count&#39;, &#39; name&#39;, &#39;square&#39;, (&#39;count_2&#39;, &#39;count_3&#39;)]</span>
+
+<span class="n">ft</span><span class="o">.</span><span class="n">get_table</span><span class="p">([</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;count_2&#39;</span><span class="p">,</span> <span class="s1">&#39;count_3&#39;</span><span class="p">)])</span>
+
+<span class="c1"># count  count_2  count_3</span>
+<span class="c1"># 0      1        2        3</span>
+<span class="c1"># 1      5       10       15</span>
+<span class="c1"># 2      0        0        0</span>
+</pre>
+                    </div>
+                  </div>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference internal"
+                            href="#cascade.utils.tables.TableDataset"
+                            title="cascade.utils.tables.tables.TableDataset"><span
+                              class="pre">TableDataset</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
+                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                              class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#FeatureTable.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.FeatureTable.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>table</strong> (<em>Union</em><em>[</em><a class="reference internal"
+                              href="#cascade.utils.tables.TableDataset"
+                              title="cascade.utils.tables.TableDataset"><em>TableDataset</em></a><em>,
+                            </em><em>pd.DataFrame</em><em>]</em>) – The table to wrap</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.add_feature">
+                      <span class="sig-name descname"><span class="pre">add_feature</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span
+                          class="n"><span class="pre">func</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Callable"
+                            title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span
+                              class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a
+                            class="reference external"
+                            href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
+                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series"
+                            title="(in pandas v3.0.5)"><span class="pre">Series</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#FeatureTable.add_feature"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.FeatureTable.add_feature" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Adds computable feature to the table in a lazy manner</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>name</strong> (<em>Union</em><em>[</em><a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Tuple</em><em>[</em><a
+                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Feature name</p>
+                            </li>
+                            <li>
+                              <p><strong>func</strong>
+                                (<em>Callable</em><em>[</em><em>[</em><em>pd.DataFrame</em><em>]</em><em>,
+                                </em><em>Union</em><em>[</em><em>pd.Series</em><em>, </em><em>Tuple</em><em>[</em><a
+                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>]</em>) – Function
+                                that accepts pd.DataFrame and returns a new column</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.get_features">
+                      <span class="sig-name descname"><span class="pre">get_features</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_features"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.FeatureTable.get_features"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Returns the list of feature names with all computed
+                        features added before</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p>List of feature names</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>List[Union[<a class="reference external"
+                              href="https://docs.python.org/3/library/stdtypes.html#str"
+                              title="(in Python v3.14)">str</a>, Tuple[<a class="reference external"
+                              href="https://docs.python.org/3/library/stdtypes.html#str"
+                              title="(in Python v3.14)">str</a>]]]</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.FeatureTable.get_meta" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
+                            Meta can be anything that is worth to document about the dataset and its data.
+                            This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>Meta</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.FeatureTable.get_table">
+                      <span class="sig-name descname"><span class="pre">get_table</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
+                          class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                          class="n"><span class="pre">dropna</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/functions.html#bool"
+                            title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w">
+                        </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">False</span></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external"
+                            href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
+                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_table"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.FeatureTable.get_table" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Returns internal pd.DataFrame</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>features</strong> (<em>Union</em><em>[</em><a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>,
+                                </em><em>List</em><em>[</em><em>Union</em><em>[</em><em>Tuple</em><em>[</em><a
+                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><a
+                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>,
+                                </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – List of features to select,
+                                by default None</p>
+                            </li>
+                            <li>
+                              <p><strong>dropna</strong> (<a class="reference external"
+                                  href="https://docs.python.org/3/library/functions.html#bool"
+                                  title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to
+                                drop NaN values, by default False</p>
+                            </li>
+                          </ul>
+                        </dd>
+                        <dt class="field-even">Returns<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>_description_</p>
+                        </dd>
+                        <dt class="field-odd">Return type<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p>pd.DataFrame</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
+                    class="sig-name descname"><span class="pre">TableDataset</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Union"
+                        title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
+                        title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                          class="pre">,</span></span><span class="w"> </span><a class="reference internal"
+                        href="#cascade.utils.tables.TableDataset" title="cascade.utils.tables.tables.TableDataset"><span
+                          class="pre">TableDataset</span></a><span class="p"><span class="pre">]</span></span><span
+                        class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                    class="sig-paren">)</span><a class="reference internal"
+                    href="../_modules/cascade/utils/tables/tables.html#TableDataset"><span class="viewcode-link"><span
+                        class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.tables.TableDataset" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Wrapper for <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>
+                    which allows to manage metadata and perform validation</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
+                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference internal"
+                            href="#cascade.utils.tables.TableDataset"
+                            title="cascade.utils.tables.tables.TableDataset"><span
+                              class="pre">TableDataset</span></a><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
+                          class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                          class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#TableDataset.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.TableDataset.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>t</strong> (<em>optional</em>) – pd.DataFrame or TableDataset to be set as table
+                          </p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.__len__">
+                      <span class="sig-name descname"><span class="pre">__len__</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/functions.html#int"
+                            title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#TableDataset.__len__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.TableDataset.__len__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Returns length of the table</p>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.get">
+                      <span class="sig-name descname"><span class="pre">get</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                              class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span
+                        class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
+                          class="sig-return-typehint"><a class="reference external"
+                            href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series"
+                            title="(in pandas v3.0.5)"><span class="pre">Series</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#TableDataset.get"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.TableDataset.get" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Returns a row from table by index</p>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#TableDataset.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.TableDataset.get_meta" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
+                            Meta can be anything that is worth to document about the dataset and its data.
+                            This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>Meta</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.TableDataset.to_csv">
+                      <span class="sig-name descname"><span class="pre">to_csv</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#TableDataset.to_csv"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.TableDataset.to_csv" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Saves the table to .csv file. Any kwargs are sent to
+                        <code class="docutils literal notranslate"><span class="pre">pd.DataFrame.to_csv</span></code>.
+                      </p>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.tables.TableFilter">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
+                    class="sig-name descname"><span class="pre">TableFilter</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference internal"
+                        href="#cascade.utils.tables.TableDataset" title="cascade.utils.tables.tables.TableDataset"><span
+                          class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                    </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span
+                          class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a
+                        class="reference external" href="https://docs.python.org/3/library/functions.html#bool"
+                        title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span
+                          class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                        class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
+                    class="reference internal" href="../_modules/cascade/utils/tables/tables.html#TableFilter"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.tables.TableFilter" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Filter for table values</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.TableFilter.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference internal"
+                            href="#cascade.utils.tables.TableDataset"
+                            title="cascade.utils.tables.tables.TableDataset"><span
+                              class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span
+                          class="n"><span class="pre">mask</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span
+                              class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span></em>,
+                      <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
+                            class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#TableFilter.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.TableFilter.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>dataset</strong> (<a class="reference internal"
+                                  href="#cascade.utils.tables.TableDataset"
+                                  title="cascade.utils.tables.TableDataset"><em>TableDataset</em></a>) – Dataset to be
+                                filtered.</p>
+                            </li>
+                            <li>
+                              <p><strong>mask</strong> (<em>Iterable</em><em>[</em><a class="reference external"
+                                  href="https://docs.python.org/3/library/functions.html#bool"
+                                  title="(in Python v3.14)"><em>bool</em></a><em>]</em>) – Binary mask to select values
+                                from table.</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.tables.TableIterator">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.tables.</span></span><span
+                    class="sig-name descname"><span class="pre">TableIterator</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">csv_file_path</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                          class="pre">int</span></a></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                    class="sig-paren">)</span><a class="reference internal"
+                    href="../_modules/cascade/utils/tables/tables.html#TableIterator"><span class="viewcode-link"><span
+                        class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.tables.TableIterator" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Iterates over the table from path by the chunks.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.tables.TableIterator.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">csv_file_path</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                            title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
+                            class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/functions.html#int"
+                            title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w">
+                        </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span
+                          class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/tables/tables.html#TableIterator.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.tables.TableIterator.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>csv_file_path</strong> (<a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a>) – Path to the .csv file</p>
+                            </li>
+                            <li>
+                              <p><strong>chunk_size</strong> (<a class="reference external"
+                                  href="https://docs.python.org/3/library/functions.html#int"
+                                  title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – number of
+                                rows to return in one __next__</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
 
 
             </article>
@@ -1225,109 +1435,92 @@
                 </div>
                 <nav class="bd-toc-nav page-toc">
                   <ul class="visible nav section-nav flex-column">
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#">cascade.utils.tables</a></li>
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.tables.CSVDataset"><code
                           class="docutils literal notranslate"><span class="pre">CSVDataset</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.CSVDataset.__init__"><code
                               class="docutils literal notranslate"><span class="pre">CSVDataset.__init__()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.tables.FeatureTable"><code
                           class="docutils literal notranslate"><span class="pre">FeatureTable</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.FeatureTable.__init__"><code
                               class="docutils literal notranslate"><span class="pre">FeatureTable.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.FeatureTable.add_feature"><code
                               class="docutils literal notranslate"><span class="pre">FeatureTable.add_feature()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.FeatureTable.get_features"><code
                               class="docutils literal notranslate"><span class="pre">FeatureTable.get_features()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.FeatureTable.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">FeatureTable.get_meta()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.FeatureTable.get_table"><code
                               class="docutils literal notranslate"><span class="pre">FeatureTable.get_table()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
-                        href="#cascade.utils.tables.LargeCSVDataset"><code
-                          class="docutils literal notranslate"><span class="pre">LargeCSVDataset</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
-                            href="#cascade.utils.tables.LargeCSVDataset.__init__"><code
-                              class="docutils literal notranslate"><span class="pre">LargeCSVDataset.__init__()</span></code></a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
-                        href="#cascade.utils.tables.PartedTableLoader"><code
-                          class="docutils literal notranslate"><span class="pre">PartedTableLoader</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
-                            href="#cascade.utils.tables.PartedTableLoader.__init__"><code
-                              class="docutils literal notranslate"><span class="pre">PartedTableLoader.__init__()</span></code></a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.tables.TableDataset"><code
                           class="docutils literal notranslate"><span class="pre">TableDataset</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.TableDataset.__init__"><code
                               class="docutils literal notranslate"><span class="pre">TableDataset.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.TableDataset.__len__"><code
                               class="docutils literal notranslate"><span class="pre">TableDataset.__len__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.TableDataset.get"><code
                               class="docutils literal notranslate"><span class="pre">TableDataset.get()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.TableDataset.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">TableDataset.get_meta()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.TableDataset.to_csv"><code
                               class="docutils literal notranslate"><span class="pre">TableDataset.to_csv()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.tables.TableFilter"><code
                           class="docutils literal notranslate"><span class="pre">TableFilter</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.TableFilter.__init__"><code
                               class="docutils literal notranslate"><span class="pre">TableFilter.__init__()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.tables.TableIterator"><code
                           class="docutils literal notranslate"><span class="pre">TableIterator</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.tables.TableIterator.__init__"><code
                               class="docutils literal notranslate"><span class="pre">TableIterator.__init__()</span></code></a>
                         </li>
                       </ul>
                     </li>
                   </ul>
+
                 </nav>
               </div>
 

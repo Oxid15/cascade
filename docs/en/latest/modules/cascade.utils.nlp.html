@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>cascade.utils.nlp &#8212; cascade 0.17.0 documentation</title>
+  <title>cascade.utils.nlp &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="cascade.utils.sklearn" href="cascade.utils.sklearn.html" />
@@ -385,30 +386,115 @@
               <div class="bd-toc-item navbar-nav">
                 <ul class="current nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.lines.html">cascade.lines</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.repos.html">cascade.repos</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.trainers.html">cascade.trainers</a>
                   </li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.baselines.html">cascade.utils.baselines</a></li>
+
                   <li class="toctree-l1 current active"><a class="current reference internal"
                       href="#">cascade.utils.nlp</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.sklearn.html">cascade.utils.sklearn</a></li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.tables.html">cascade.utils.tables</a></li>
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.time_series.html">cascade.utils.time_series</a></li>
+
+
+
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.utils.samplers.html">cascade.utils.samplers</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.torch.html">cascade.utils.torch</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.vision.html">cascade.utils.vision</a></li>
+
                   <li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
                 </ul>
               </div>
@@ -471,148 +557,185 @@
               <section id="cascade-utils-nlp">
                 <h1>cascade.utils.nlp<a class="headerlink" href="#cascade-utils-nlp"
                     title="Permalink to this heading">#</a></h1>
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.nlp.</span></span><span
-                      class="sig-name descname"><span class="pre">TextClassificationFolder</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                      class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                          class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                          class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em><span class="sig-paren">)</span><a
-                      class="reference internal"
-                      href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.nlp.TextClassificationFolder" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Dataset to simplify loading of data for text classification.
-                      Texts of different classes should be placed in different folders.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em
-                          class="sig-param"><span class="n"><span class="pre">encoding</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">None</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.nlp.TextClassificationFolder.__init__"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>path</strong> (<em>str</em>) – Path to the folder with folders of text files.
-                                  In each folder should be only one class of texts.</p>
-                              </li>
-                              <li>
-                                <p><strong>encoding</strong> (<em>str</em><em>, </em><em>optional</em>) – Encoding that
-                                  is used to open files.</p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.__len__">
-                        <span class="sig-name descname"><span class="pre">__len__</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">int</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.__len__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.nlp.TextClassificationFolder.__len__"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Total number of files.</p>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.get">
-                        <span class="sig-name descname"><span class="pre">get</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">int</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">int</span><span class="p"><span
-                                class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.get"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.nlp.TextClassificationFolder.get"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd></dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.nlp.TextClassificationFolder.get_meta"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
-                              Meta can be anything that is worth to document about the dataset and its data.
-                              This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>Meta</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
               </section>
+              <span class="target" id="module-cascade.utils.nlp"></span>
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.nlp.</span></span><span
+                    class="sig-name descname"><span class="pre">TextClassificationFolder</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w">
+                    </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                        class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
+                    class="reference internal"
+                    href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.nlp.TextClassificationFolder" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Dataset to simplify loading of data for text classification.
+                    Texts of different classes should be placed in different folders.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span
+                            class="pre">encoding</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a></span><span class="w"> </span><span class="o"><span
+                            class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                            class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.nlp.TextClassificationFolder.__init__"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>path</strong> (<a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a>) – Path to the folder with folders of text
+                                files.
+                                In each folder should be only one class of texts.</p>
+                            </li>
+                            <li>
+                              <p><strong>encoding</strong> (<a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Encoding
+                                that is used to open files.</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.__len__">
+                      <span class="sig-name descname"><span class="pre">__len__</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/functions.html#int"
+                            title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.__len__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.nlp.TextClassificationFolder.__len__"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Total number of files.</p>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.get">
+                      <span class="sig-name descname"><span class="pre">get</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                              class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span
+                        class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
+                          class="sig-return-typehint"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                              class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                              class="pre">int</span></a><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.get"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.nlp.TextClassificationFolder.get"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd></dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.nlp.TextClassificationFolder.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/nlp/text_classification_folder.html#TextClassificationFolder.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.nlp.TextClassificationFolder.get_meta"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
+                            Meta can be anything that is worth to document about the dataset and its data.
+                            This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>Meta</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
 
 
             </article>
@@ -659,29 +782,32 @@
                 </div>
                 <nav class="bd-toc-nav page-toc">
                   <ul class="visible nav section-nav flex-column">
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#">cascade.utils.nlp</a></li>
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.nlp.TextClassificationFolder"><code
                           class="docutils literal notranslate"><span class="pre">TextClassificationFolder</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.nlp.TextClassificationFolder.__init__"><code
                               class="docutils literal notranslate"><span class="pre">TextClassificationFolder.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.nlp.TextClassificationFolder.__len__"><code
                               class="docutils literal notranslate"><span class="pre">TextClassificationFolder.__len__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.nlp.TextClassificationFolder.get"><code
                               class="docutils literal notranslate"><span class="pre">TextClassificationFolder.get()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.nlp.TextClassificationFolder.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">TextClassificationFolder.get_meta()</span></code></a>
                         </li>
                       </ul>
                     </li>
                   </ul>
+
                 </nav>
               </div>
 

@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>Link anything &#8212; cascade 0.17.0 documentation</title>
+  <title>Link anything &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Comment on results of an experiment" href="comments.html" />
@@ -493,9 +494,9 @@
                 <div class="highlight-python notranslate">
                   <div class="highlight">
                     <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Wrapper</span>
 
-<span class="n">ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">()</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">Wrapper</span><span class="p">([])</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
 
 <span class="c1"># Will create a Link in model to the ds</span>
@@ -511,9 +512,9 @@
                 <div class="highlight-python notranslate">
                   <div class="highlight">
                     <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Wrapper</span>
 
-<span class="n">ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">()</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">Wrapper</span><span class="p">([])</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

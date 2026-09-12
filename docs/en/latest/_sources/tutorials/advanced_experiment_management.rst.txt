@@ -3,7 +3,7 @@ Advanced Experiment Management
 
 Lines are not the only tool to organize experiments. They themselves can be unified using ``Repo``.
 Repos can include both ``Data``- and ``ModelLines``. In Cascade you cannot store models and
-datasets in the same ``Line``, since each of the objects has its own .
+datasets in the same ``Line``, since each of the objects has its own versioning system.
 
 
 Repos

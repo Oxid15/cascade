@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>Comment on results of an experiment &#8212; cascade 0.17.0 documentation</title>
+  <title>Comment on results of an experiment &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,6 +63,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Add Tags" href="tags.html" />
@@ -477,7 +478,7 @@
                     they are automatically synced to disk after creation.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
-                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelLine</span>
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelLine</span>
 
 <span class="n">line</span> <span class="o">=</span> <span class="n">ModelLine</span><span class="p">(</span><span class="s2">&quot;line&quot;</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">create_model</span><span class="p">()</span>
@@ -485,7 +486,7 @@
                     </div>
                   </div>
                   <p>Notice how you can comment not only on models. Models will save
-                    comments to disk only when saved, when lines and repos will
+                    comments to disk only when saved, but lines and repos will
                     sync meta with disk automatically.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
@@ -504,7 +505,7 @@
                     delete the comment.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
-                      <pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">remove_comment</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                      <pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">remove_comment</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
 </pre>
                     </div>
                   </div>

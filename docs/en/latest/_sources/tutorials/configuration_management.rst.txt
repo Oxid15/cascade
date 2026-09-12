@@ -236,7 +236,7 @@ Now we need to identify the experiment somehow. The easiest way is to get its sl
 
 
 .. code-block:: bash
-    
+
     cd line
     cascade query slug
 
@@ -267,7 +267,7 @@ To verify our results we can get the contents of the saved config.
 
     cat line/00001/files/cascade_config.json
 
-We can see that `lr` is from the base, not from the file and `batch_size` is now from our latest experiment.
+We can see that ``lr`` is from the base, not from the file and ``batch_size`` is now from our latest experiment.
 
 .. code-block:: javascript
 

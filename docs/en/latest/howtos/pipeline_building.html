@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>Pipeline building &#8212; cascade 0.17.0 documentation</title>
+  <title>Pipeline building &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -34,7 +34,6 @@
   <link rel="stylesheet" type="text/css" href="../pygments.css" />
   <link rel="stylesheet" type="text/css" href="../copybutton.css" />
   <link rel="stylesheet" type="text/css" href="../design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-  <link rel="stylesheet" type="text/css" href="../nbsphinx-code-cells.css" />
   <link rel="stylesheet" type="text/css" href="../css/custom.css" />
 
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -59,13 +58,12 @@
     gtag('js', new Date());
     gtag('config', 'G-KD8QDKDMD7');
   </script>
-  <script>window.MathJax = { "tex": { "inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true }, "options": { "ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area" } }</script>
-  <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script>DOCUMENTATION_OPTIONS.pagename = 'howtos/pipeline_building';</script>
   <script>
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Model training" href="model_training.html" />
@@ -465,33 +463,16 @@
             <div id="searchbox"></div>
             <article class="bd-article" role="main">
 
-              <section id="Pipeline-building">
-                <h1>Pipeline building<a class="headerlink" href="#Pipeline-building"
+              <section id="pipeline-building">
+                <h1>Pipeline building<a class="headerlink" href="#pipeline-building"
                     title="Permalink to this heading">#</a></h1>
-                <p>This use-case is pipeline building. We will prepare a MNIST digits dataset for training a classifier.
-                </p>
-                <div class="nbinput nblast docutils container">
-                  <div class="prompt highlight-none notranslate">
-                    <div class="highlight">
-                      <pre><span></span>[1]:
-</pre>
-                    </div>
-                  </div>
-                  <div class="input_area highlight-ipython3 notranslate">
-                    <div class="highlight">
-                      <pre><span></span><span class="ch">#!pip3 install torchvision</span>
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nbinput nblast docutils container">
-                  <div class="prompt highlight-none notranslate">
-                    <div class="highlight">
-                      <pre><span></span>[ ]:
-</pre>
-                    </div>
-                  </div>
-                  <div class="input_area highlight-ipython3 notranslate">
+                <p>This use case shows how to prepare an MNIST dataset for training a classifier
+                  with Cascade’s data pipeline components.</p>
+                <section id="imports">
+                  <h2>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
+                  <p>The example uses PyTorch, torchvision, and <code
+                      class="docutils literal notranslate"><span class="pre">cascade.data</span></code>.</p>
+                  <div class="highlight-python notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torchvision</span>
@@ -500,315 +481,100 @@
 </pre>
                     </div>
                   </div>
-                </div>
-                <div class="nbinput docutils container">
-                  <div class="prompt highlight-none notranslate">
-                    <div class="highlight">
-                      <pre><span></span>[3]:
-</pre>
-                    </div>
-                  </div>
-                  <div class="input_area highlight-ipython3 notranslate">
-                    <div class="highlight">
-                      <pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cascade</span>
-<span class="n">cascade</span><span class="o">.</span><span class="n">__version__</span>
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput nblast docutils container">
-                  <div class="prompt highlight-none notranslate">
-                    <div class="highlight">
-                      <pre><span></span>[3]:
-</pre>
-                    </div>
-                  </div>
-                  <div class="output_area docutils container">
-                    <div class="highlight">
-                      <pre>
-&#39;0.14.0-alpha&#39;
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <p>Let’s load torch dataset</p>
-                <div class="nbinput docutils container">
-                  <div class="prompt highlight-none notranslate">
-                    <div class="highlight">
-                      <pre><span></span>[ ]:
-</pre>
-                    </div>
-                  </div>
-                  <div class="input_area highlight-ipython3 notranslate">
-                    <div class="highlight">
-                      <pre><span></span><span class="n">MNIST_ROOT</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
-
-<span class="n">train_ds</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">MNIST_ROOT</span><span class="p">,</span>
-                                     <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                     <span class="n">transform</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">,</span>
-                                     <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">test_ds</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">MNIST_ROOT</span><span class="p">,</span>
-                                    <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                    <span class="n">transform</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">)</span>
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area docutils container">
-                    <div class="highlight">
-                      <pre>
-Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
-Failed to download (trying next):
-HTTP Error 403: Forbidden
-
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-images-idx3-ubyte.gz
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-images-idx3-ubyte.gz to data/MNIST/raw/train-images-idx3-ubyte.gz
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area stderr docutils container">
-                    <div class="highlight">
-                      <pre>
-100%|██████████| 9912422/9912422 [00:52&lt;00:00, 190022.28it/s]
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area docutils container">
-                    <div class="highlight">
-                      <pre>
-Extracting data/MNIST/raw/train-images-idx3-ubyte.gz to data/MNIST/raw
-
-Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
-Failed to download (trying next):
-HTTP Error 403: Forbidden
-
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-labels-idx1-ubyte.gz
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-labels-idx1-ubyte.gz to data/MNIST/raw/train-labels-idx1-ubyte.gz
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area stderr docutils container">
-                    <div class="highlight">
-                      <pre>
-100%|██████████| 28881/28881 [00:00&lt;00:00, 72451.92it/s]
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area docutils container">
-                    <div class="highlight">
-                      <pre>
-Extracting data/MNIST/raw/train-labels-idx1-ubyte.gz to data/MNIST/raw
-
-Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
-Failed to download (trying next):
-HTTP Error 403: Forbidden
-
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz to data/MNIST/raw/t10k-images-idx3-ubyte.gz
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area stderr docutils container">
-                    <div class="highlight">
-                      <pre>
-100%|██████████| 1648877/1648877 [00:03&lt;00:00, 528276.00it/s]
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area docutils container">
-                    <div class="highlight">
-                      <pre>
-Extracting data/MNIST/raw/t10k-images-idx3-ubyte.gz to data/MNIST/raw
-
-Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
-Failed to download (trying next):
-HTTP Error 403: Forbidden
-
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz
-Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz to data/MNIST/raw/t10k-labels-idx1-ubyte.gz
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area stderr docutils container">
-                    <div class="highlight">
-                      <pre>
-100%|██████████| 4542/4542 [00:00&lt;00:00, 2330054.89it/s]
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <div class="nboutput nblast docutils container">
-                  <div class="prompt empty docutils container">
-                  </div>
-                  <div class="output_area docutils container">
-                    <div class="highlight">
-                      <pre>
-Extracting data/MNIST/raw/t10k-labels-idx1-ubyte.gz to data/MNIST/raw
-
-</pre>
-                    </div>
-                  </div>
-                </div>
-                <section id="Creating-Cascade-Dataset">
-                  <h2>Creating Cascade Dataset<a class="headerlink" href="#Creating-Cascade-Dataset"
+                </section>
+                <section id="load-the-pytorch-dataset">
+                  <h2>Load the PyTorch dataset<a class="headerlink" href="#load-the-pytorch-dataset"
                       title="Permalink to this heading">#</a></h2>
-                  <div class="nbinput nblast docutils container">
-                    <div class="prompt highlight-none notranslate">
-                      <div class="highlight">
-                        <pre><span></span>[5]:
+                  <p>Load the training and test partitions of MNIST. Set <code
+                      class="docutils literal notranslate"><span class="pre">download=True</span></code> for the
+                    training partition when the dataset is not already available locally.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="n">MNIST_ROOT</span> <span class="o">=</span> <span class="s2">&quot;data&quot;</span>
+
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="n">MNIST_ROOT</span><span class="p">,</span>
+    <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">,</span>
+    <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="n">MNIST_ROOT</span><span class="p">,</span>
+    <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">,</span>
+<span class="p">)</span>
 </pre>
-                      </div>
-                    </div>
-                    <div class="input_area highlight-ipython3 notranslate">
-                      <div class="highlight">
-                        <pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
-<span class="n">train_ds</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">&quot;This is MNIST dataset of handwritten images&quot;</span><span class="p">)</span>
-<span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">(</span><span class="n">test_ds</span><span class="p">)</span>
-</pre>
-                      </div>
                     </div>
                   </div>
                 </section>
-                <section id="Applying-noise">
-                  <h2>Applying noise<a class="headerlink" href="#Applying-noise" title="Permalink to this heading">#</a>
-                  </h2>
-                  <div class="line-block">
-                    <div class="line">Let’s say we want to apply noise to an image.</div>
-                    <div class="line"><em>We will use hardcoded magnitude to simplify an example.</em></div>
-                  </div>
-                  <div class="nbinput nblast docutils container">
-                    <div class="prompt highlight-none notranslate">
-                      <div class="highlight">
-                        <pre><span></span>[6]:
+                <section id="creating-a-cascade-dataset">
+                  <h2>Creating a Cascade dataset<a class="headerlink" href="#creating-a-cascade-dataset"
+                      title="Permalink to this heading">#</a></h2>
+                  <p>Wrap the PyTorch datasets to add Cascade metadata. The description is attached
+                    to the training dataset and remains available through later pipeline stages.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
+<span class="n">train_ds</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">&quot;This is MNIST dataset of handwritten images&quot;</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">cdd</span><span class="o">.</span><span class="n">Wrapper</span><span class="p">(</span><span class="n">test_ds</span><span class="p">)</span>
 </pre>
-                      </div>
                     </div>
-                    <div class="input_area highlight-ipython3 notranslate">
-                      <div class="highlight">
-                        <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NoiseModifier</span><span class="p">(</span><span class="n">cdd</span><span class="o">.</span><span class="n">Modifier</span><span class="p">):</span>
+                  </div>
+                </section>
+                <section id="applying-noise">
+                  <h2>Applying noise<a class="headerlink" href="#applying-noise" title="Permalink to this heading">#</a>
+                  </h2>
+                  <p>Modifiers transform items lazily as they are read. This modifier adds a small
+                    amount of random noise to each image.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NoiseModifier</span><span class="p">(</span><span class="n">cdd</span><span class="o">.</span><span class="n">Modifier</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="n">img</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="n">img</span> <span class="o">+=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand_like</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">img</span><span class="p">,</span> <span class="n">label</span>
+
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">NoiseModifier</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
 </pre>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="nbinput nblast docutils container">
-                    <div class="prompt highlight-none notranslate">
-                      <div class="highlight">
-                        <pre><span></span>[7]:
-</pre>
-                      </div>
-                    </div>
-                    <div class="input_area highlight-ipython3 notranslate">
-                      <div class="highlight">
-                        <pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">NoiseModifier</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
-</pre>
-                      </div>
                     </div>
                   </div>
                 </section>
-                <section id="Viewing-metadata">
-                  <h2>Viewing metadata<a class="headerlink" href="#Viewing-metadata"
+                <section id="viewing-metadata">
+                  <h2>Viewing metadata<a class="headerlink" href="#viewing-metadata"
                       title="Permalink to this heading">#</a></h2>
-                  <div class="nbinput docutils container">
-                    <div class="prompt highlight-none notranslate">
-                      <div class="highlight">
-                        <pre><span></span>[8]:
+                  <p>Each modifier adds a stage to the dataset metadata. Use <code
+                      class="docutils literal notranslate"><span class="pre">pprint</span></code> when
+                    inspecting the complete metadata interactively.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">())</span>
 </pre>
-                      </div>
-                    </div>
-                    <div class="input_area highlight-ipython3 notranslate">
-                      <div class="highlight">
-                        <pre><span></span><span class="n">train_ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-</pre>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="nboutput nblast docutils container">
-                    <div class="prompt highlight-none notranslate">
-                      <div class="highlight">
-                        <pre><span></span>[8]:
-</pre>
-                      </div>
-                    </div>
-                    <div class="output_area docutils container">
-                      <div class="highlight">
-                        <pre>
-[{&#39;name&#39;: &#39;__main__.NoiseModifier&#39;, &#39;description&#39;: None, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000}, {&#39;name&#39;: &#39;cascade.data.dataset.Wrapper&#39;, &#39;description&#39;: &#39;This is MNIST dataset of handwritten images&#39;, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;len&#39;: 60000, &#39;obj_type&#39;: &#34;&lt;class &#39;torchvision.datasets.mnist.MNIST&#39;&gt;&#34;}]
-</pre>
-                      </div>
                     </div>
                   </div>
                 </section>
-                <section id="Ready-to-train-model">
-                  <h2>Ready to train model<a class="headerlink" href="#Ready-to-train-model"
+                <section id="ready-to-train-a-model">
+                  <h2>Ready to train a model<a class="headerlink" href="#ready-to-train-a-model"
                       title="Permalink to this heading">#</a></h2>
-                  <p>Now we can set the batch size and pass our pipeline to the DataLoaders.</p>
-                  <div class="nbinput nblast docutils container">
-                    <div class="prompt highlight-none notranslate">
-                      <div class="highlight">
-                        <pre><span></span>[9]:
+                  <p>Pass the Cascade datasets to standard PyTorch <code
+                      class="docutils literal notranslate"><span class="pre">DataLoader</span></code> instances.</p>
+                  <div class="highlight-python notranslate">
+                    <div class="highlight">
+                      <pre><span></span><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">trainldr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">train_ds</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">testldr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="o">=</span><span class="n">test_ds</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+    <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
 </pre>
-                      </div>
-                    </div>
-                    <div class="input_area highlight-ipython3 notranslate">
-                      <div class="highlight">
-                        <pre><span></span><span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
-</pre>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="nbinput nblast docutils container">
-                    <div class="prompt highlight-none notranslate">
-                      <div class="highlight">
-                        <pre><span></span>[ ]:
-</pre>
-                      </div>
-                    </div>
-                    <div class="input_area highlight-ipython3 notranslate">
-                      <div class="highlight">
-                        <pre><span></span><span class="n">trainldr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">train_ds</span><span class="p">,</span>
-                                       <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
-                                       <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">testldr</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">test_ds</span><span class="p">,</span>
-                                      <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
-                                      <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre>
-                      </div>
                     </div>
                   </div>
                 </section>
@@ -860,20 +626,24 @@ Extracting data/MNIST/raw/t10k-labels-idx1-ubyte.gz to data/MNIST/raw
                 <nav class="bd-toc-nav page-toc">
                   <ul class="visible nav section-nav flex-column">
                     <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
-                        href="#Creating-Cascade-Dataset">Creating Cascade Dataset</a></li>
+                        href="#imports">Imports</a></li>
                     <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
-                        href="#Applying-noise">Applying noise</a></li>
+                        href="#load-the-pytorch-dataset">Load the PyTorch dataset</a></li>
                     <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
-                        href="#Viewing-metadata">Viewing metadata</a></li>
+                        href="#creating-a-cascade-dataset">Creating a Cascade dataset</a></li>
                     <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
-                        href="#Ready-to-train-model">Ready to train model</a></li>
+                        href="#applying-noise">Applying noise</a></li>
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#viewing-metadata">Viewing metadata</a></li>
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#ready-to-train-a-model">Ready to train a model</a></li>
                   </ul>
                 </nav>
               </div>
 
               <div class="sidebar-secondary-item">
                 <div class="tocsection sourcelink">
-                  <a href="../_sources/howtos/pipeline_building.ipynb.txt">
+                  <a href="../_sources/howtos/pipeline_building.rst.txt">
                     <i class="fa-solid fa-file-lines"></i> Show Source
                   </a>
                 </div>

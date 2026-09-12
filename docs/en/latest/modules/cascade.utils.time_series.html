@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-  <title>cascade.utils.time_series &#8212; cascade 0.17.0 documentation</title>
+  <title>cascade.utils.time_series &#8212; cascade 0.18.0 documentation</title>
 
 
 
@@ -63,9 +63,10 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
-  <link rel="next" title="cascade.utils.torch" href="cascade.utils.torch.html" />
+  <link rel="next" title="cascade.utils.samplers" href="cascade.utils.samplers.html" />
   <link rel="prev" title="cascade.utils.tables" href="cascade.utils.tables.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en" />
@@ -385,30 +386,115 @@
               <div class="bd-toc-item navbar-nav">
                 <ul class="current nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="cascade.base.html">cascade.base</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.data.html">cascade.data</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.lines.html">cascade.lines</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
+
+
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.models.html">cascade.models</a>
                   </li>
+
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.repos.html">cascade.repos</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal" href="cascade.trainers.html">cascade.trainers</a>
                   </li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.baselines.html">cascade.utils.baselines</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.nlp.html">cascade.utils.nlp</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.sklearn.html">cascade.utils.sklearn</a></li>
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.tables.html">cascade.utils.tables</a></li>
+
+
+
+
+
                   <li class="toctree-l1 current active"><a class="current reference internal"
                       href="#">cascade.utils.time_series</a></li>
+
+
+
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.utils.samplers.html">cascade.utils.samplers</a></li>
+
+
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.torch.html">cascade.utils.torch</a></li>
+
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.vision.html">cascade.utils.vision</a></li>
+
                   <li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
                 </ul>
               </div>
@@ -471,540 +557,657 @@
               <section id="cascade-utils-time-series">
                 <h1>cascade.utils.time_series<a class="headerlink" href="#cascade-utils-time-series"
                     title="Permalink to this heading">#</a></h1>
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.time_series.Align">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
-                      class="sig-name descname"><span class="pre">Align</span></span><span class="sig-paren">(</span><em
-                      class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><a
-                          class="reference internal" href="#cascade.utils.time_series.TimeSeriesDataset"
-                          title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
-                            class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">time</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">datetime</span><span class="p"><span class="pre">]</span></span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                          class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/time_series/time_series.html#Align"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.time_series.Align" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Given dataset and some time scale selects
-                      data from dataset using time scale. Works
-                      only if dataset has data in given points
-                      in time.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.Align.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><a class="reference internal"
-                              href="#cascade.utils.time_series.TimeSeriesDataset"
-                              title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
-                                class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
-                            class="n"><span class="pre">time</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">datetime</span><span class="p"><span class="pre">]</span></span></span></em>,
-                        <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series.html#Align.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.Align.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>time</strong> (<em>Iterable</em><em>[</em><em>datetime</em><em>]</em><em>,
-                                  </em><em>optional</em>) – The time dimension. Should be represented subclasses of
-                                  datetime</p>
-                              </li>
-                              <li>
-                                <p><strong>data</strong> (<em>Iterable</em><em>, </em><em>optional</em>) – The data
-                                  dimension. Should be 1D array or list.</p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.time_series.Average">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
-                      class="sig-name descname"><span class="pre">Average</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><a class="reference internal"
-                          href="#cascade.utils.time_series.TimeSeriesDataset"
-                          title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
-                            class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">unit</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                          class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                          class="pre">'years'</span></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w">
-                      </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span
-                        class="o"><span class="pre">*</span></span><span class="n"><span
-                          class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                      class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                          class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                      class="sig-paren">)</span><a class="reference internal"
-                      href="../_modules/cascade/utils/time_series/time_series.html#Average"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.time_series.Average" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Averages values over some time step.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.Average.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><a class="reference internal"
-                              href="#cascade.utils.time_series.TimeSeriesDataset"
-                              title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
-                                class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
-                            class="n"><span class="pre">unit</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">'years'</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w">
-                          </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                            class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span
-                            class="o"><span class="pre">*</span></span><span class="n"><span
-                              class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em
-                          class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series.html#Average.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.Average.__init__" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>dataset</strong> (<a class="reference internal"
-                                    href="#cascade.utils.time_series.TimeSeriesDataset"
-                                    title="cascade.utils.time_series.TimeSeriesDataset"><em>TimeSeriesDataset</em></a><em>,</em>)
-                                  – A dataset to average</p>
-                              </li>
-                              <li>
-                                <p><strong>unit</strong> (<em>str</em><em>, </em><em>optional</em>) – Time unit over
-                                  which to average - years, month, etc.</p>
-                              </li>
-                              <li>
-                                <p><strong>amount</strong> – The amount of units over which to average. For example for
-                                  six month periods use
-                                  <code
-                                    class="docutils literal notranslate"><span class="pre">unit='months'</span></code>
-                                  and <code
-                                    class="docutils literal notranslate"><span class="pre">amount=6</span></code>.
-                                </p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.Average.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series.html#Average.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.Average.get_meta" title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Overrides base method enabling cascade-like calls to previous datasets.
-                          The metadata of a pipeline that consist of several modifiers can be easily
-                          obtained with <code
-                            class="docutils literal notranslate"><span class="pre">get_meta</span></code> of the last
-                          block.</p>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.time_series.Interpolate">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
-                      class="sig-name descname"><span class="pre">Interpolate</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                          class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><a class="reference internal"
-                          href="#cascade.utils.time_series.TimeSeriesDataset"
-                          title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
-                            class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">method</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                          class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                          class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">limit_direction</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                          class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                          class="pre">'both'</span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em><span class="sig-paren">)</span><a
-                      class="reference internal"
-                      href="../_modules/cascade/utils/time_series/time_series.html#Interpolate"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.time_series.Interpolate" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>The wrapper around pd.Series.interpolate.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.Interpolate.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><a class="reference internal"
-                              href="#cascade.utils.time_series.TimeSeriesDataset"
-                              title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
-                                class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
-                            class="n"><span class="pre">method</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">limit_direction</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">str</span></span><span class="w"> </span><span class="o"><span
-                              class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                              class="pre">'both'</span></span></em>, <em class="sig-param"><span class="o"><span
-                              class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em><span class="sig-paren">)</span> <span
-                          class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
-                            class="sig-return-typehint"><span class="pre">None</span></span></span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series.html#Interpolate.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.Interpolate.__init__"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>time</strong> (<em>Iterable</em><em>[</em><em>datetime</em><em>]</em><em>,
-                                  </em><em>optional</em>) – The time dimension. Should be represented subclasses of
-                                  datetime</p>
-                              </li>
-                              <li>
-                                <p><strong>data</strong> (<em>Iterable</em><em>, </em><em>optional</em>) – The data
-                                  dimension. Should be 1D array or list.</p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.Interpolate.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series.html#Interpolate.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.Interpolate.get_meta"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Overrides base method enabling cascade-like calls to previous datasets.
-                          The metadata of a pipeline that consist of several modifiers can be easily
-                          obtained with <code
-                            class="docutils literal notranslate"><span class="pre">get_meta</span></code> of the last
-                          block.</p>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
-                <dl class="py class">
-                  <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset">
-                    <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
-                      class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
-                      class="sig-name descname"><span class="pre">TimeSeriesDataset</span></span><span
-                      class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                          class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                          class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span
-                        class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                            class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span
-                            class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span
-                            class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                        class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                        class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                        class="n"><span class="pre">data</span></span><span class="p"><span
-                          class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span
-                          class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span
-                            class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
-                          class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
-                          class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span
-                          class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
-                        class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                          class="pre">Any</span></span></em><span class="sig-paren">)</span><a
-                      class="reference internal"
-                      href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset"><span
-                        class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                      href="#cascade.utils.time_series.TimeSeriesDataset" title="Permalink to this definition">#</a>
-                  </dt>
-                  <dd>
-                    <p>Dataset to simplify the work with time series.
-                      Manages the time and data. Reflects the list API
-                      and implements access by index and by datetime also.
-                      More than that, slices with indices and with datetimes can also be used.</p>
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.__init__">
-                        <span class="sig-name descname"><span class="pre">__init__</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="o"><span
-                              class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
-                            class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span
-                              class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span
-                                class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
-                            class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
-                          </span><span class="default_value"><span class="pre">None</span></span></em>, <em
-                          class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span
-                              class="pre">:</span></span><span class="w"> </span><span class="n"><span
-                              class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span><span class="w"> </span><span
-                            class="o"><span class="pre">=</span></span><span class="w"> </span><span
-                            class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
-                            class="o"><span class="pre">**</span></span><span class="n"><span
-                              class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span
-                          class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">None</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.__init__"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.TimeSeriesDataset.__init__"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <ul class="simple">
-                              <li>
-                                <p><strong>time</strong> (<em>Iterable</em><em>[</em><em>datetime</em><em>]</em><em>,
-                                  </em><em>optional</em>) – The time dimension. Should be represented subclasses of
-                                  datetime</p>
-                              </li>
-                              <li>
-                                <p><strong>data</strong> (<em>Iterable</em><em>, </em><em>optional</em>) – The data
-                                  dimension. Should be 1D array or list.</p>
-                              </li>
-                            </ul>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.get">
-                        <span class="sig-name descname"><span class="pre">get</span></span><span
-                          class="sig-paren">(</span><em class="sig-param"><span class="n"><span
-                              class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
-                            class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">int</span><span class="p"><span
-                                class="pre">,</span></span><span class="w"> </span><span class="pre">slice</span><span
-                              class="p"><span class="pre">,</span></span><span class="w"> </span><span
-                              class="pre">datetime</span><span class="p"><span class="pre">,</span></span><span
-                              class="w"> </span><span class="pre">Iterable</span><span class="p"><span
-                                class="pre">[</span></span><span class="pre">int</span><span class="p"><span
-                                class="pre">]</span></span><span class="p"><span
-                                class="pre">]</span></span></span></em><span class="sig-paren">)</span><a
-                          class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.get"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.TimeSeriesDataset.get"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd></dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.get_data">
-                        <span class="sig-name descname"><span class="pre">get_data</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span
-                              class="w"> </span><span class="pre">ndarray</span><span class="p"><span
-                                class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.get_data"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.TimeSeriesDataset.get_data"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>data</strong> – Time and data as np.array</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>tuple</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.get_meta">
-                        <span class="sig-name descname"><span class="pre">get_meta</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">List</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span
-                              class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w">
-                            </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span
-                              class="p"><span class="pre">]</span></span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.get_meta"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.TimeSeriesDataset.get_meta"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
-                              Meta can be anything that is worth to document about the dataset and its data.
-                              This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>Meta</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.to_numpy">
-                        <span class="sig-name descname"><span class="pre">to_numpy</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">ndarray</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.to_numpy"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.TimeSeriesDataset.to_numpy"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <p>Returns only data without time in numpy array format.</p>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>data</strong> – np.array of data.</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>np.ndarray</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                    <dl class="py method">
-                      <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.to_pandas">
-                        <span class="sig-name descname"><span class="pre">to_pandas</span></span><span
-                          class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
-                            class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span
-                              class="pre">DataFrame</span></span></span><a class="reference internal"
-                          href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.to_pandas"><span
-                            class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
-                          href="#cascade.utils.time_series.TimeSeriesDataset.to_pandas"
-                          title="Permalink to this definition">#</a>
-                      </dt>
-                      <dd>
-                        <dl class="field-list simple">
-                          <dt class="field-odd">Returns<span class="colon">:</span></dt>
-                          <dd class="field-odd">
-                            <p><strong>data</strong> – table with time as index</p>
-                          </dd>
-                          <dt class="field-even">Return type<span class="colon">:</span></dt>
-                          <dd class="field-even">
-                            <p>pd.DataFrame</p>
-                          </dd>
-                        </dl>
-                      </dd>
-                    </dl>
-
-                  </dd>
-                </dl>
-
               </section>
+              <span class="target" id="module-cascade.utils.time_series"></span>
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.time_series.Align">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
+                    class="sig-name descname"><span class="pre">Align</span></span><span class="sig-paren">(</span><em
+                    class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal"
+                        href="#cascade.utils.time_series.TimeSeriesDataset"
+                        title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
+                          class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
+                      class="n"><span class="pre">time</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Iterable"
+                        title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/datetime.html#datetime.datetime"
+                        title="(in Python v3.14)"><span class="pre">datetime</span></a><span class="p"><span
+                          class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                        class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
+                    class="reference internal" href="../_modules/cascade/utils/time_series/time_series.html#Align"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.time_series.Align" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Given dataset and some time scale selects
+                    data from dataset using time scale. Works
+                    only if dataset has data in given points
+                    in time.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.Align.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference internal"
+                            href="#cascade.utils.time_series.TimeSeriesDataset"
+                            title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
+                              class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
+                          class="n"><span class="pre">time</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Iterable"
+                            title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/datetime.html#datetime.datetime"
+                            title="(in Python v3.14)"><span class="pre">datetime</span></a><span class="p"><span
+                              class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series.html#Align.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.Align.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>time</strong> (<em>Iterable</em><em>[</em><em>datetime</em><em>]</em><em>,
+                                </em><em>optional</em>) – The time dimension. Should be represented subclasses of
+                                datetime</p>
+                            </li>
+                            <li>
+                              <p><strong>data</strong> (<em>Iterable</em><em>, </em><em>optional</em>) – The data
+                                dimension. Should be 1D array or list.</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.time_series.Average">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
+                    class="sig-name descname"><span class="pre">Average</span></span><span class="sig-paren">(</span><em
+                    class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal"
+                        href="#cascade.utils.time_series.TimeSeriesDataset"
+                        title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
+                          class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
+                      class="n"><span class="pre">unit</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">'years'</span></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                          class="pre">int</span></a></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                        class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
+                    class="reference internal"
+                    href="../_modules/cascade/utils/time_series/time_series.html#Average"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.time_series.Average" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Averages values over some time step.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.Average.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference internal"
+                            href="#cascade.utils.time_series.TimeSeriesDataset"
+                            title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
+                              class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
+                          class="n"><span class="pre">unit</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                            title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w">
+                        </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">'years'</span></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/functions.html#int"
+                            title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w">
+                        </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span
+                          class="o"><span class="pre">*</span></span><span class="n"><span
+                            class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series.html#Average.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.Average.__init__" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>dataset</strong> (<a class="reference internal"
+                                  href="#cascade.utils.time_series.TimeSeriesDataset"
+                                  title="cascade.utils.time_series.TimeSeriesDataset"><em>TimeSeriesDataset</em></a><em>,</em>)
+                                – A dataset to average</p>
+                            </li>
+                            <li>
+                              <p><strong>unit</strong> (<a class="reference external"
+                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                  title="(in Python v3.14)"><em>str</em></a><em>, </em><em>optional</em>) – Time unit
+                                over which to average - years, month, etc.</p>
+                            </li>
+                            <li>
+                              <p><strong>amount</strong> – The amount of units over which to average. For example for
+                                six month periods use
+                                <code class="docutils literal notranslate"><span class="pre">unit='months'</span></code>
+                                and <code class="docutils literal notranslate"><span class="pre">amount=6</span></code>.
+                              </p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.Average.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series.html#Average.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.Average.get_meta" title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Overrides base method enabling cascade-like calls to previous datasets.
+                        The metadata of a pipeline that consist of several modifiers can be easily
+                        obtained with <code
+                          class="docutils literal notranslate"><span class="pre">get_meta</span></code> of the last
+                        block.</p>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.time_series.Interpolate">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
+                    class="sig-name descname"><span class="pre">Interpolate</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                        class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference internal"
+                        href="#cascade.utils.time_series.TimeSeriesDataset"
+                        title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
+                          class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
+                      class="n"><span class="pre">method</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span
+                        class="pre">limit_direction</span></span><span class="p"><span class="pre">:</span></span><span
+                      class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                          class="pre">str</span></a></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">'both'</span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                    class="sig-paren">)</span><a class="reference internal"
+                    href="../_modules/cascade/utils/time_series/time_series.html#Interpolate"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.time_series.Interpolate" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>The wrapper around pd.Series.interpolate.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.Interpolate.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference internal"
+                            href="#cascade.utils.time_series.TimeSeriesDataset"
+                            title="cascade.utils.time_series.time_series_dataset.TimeSeriesDataset"><span
+                              class="pre">TimeSeriesDataset</span></a></span></em>, <em class="sig-param"><span
+                          class="n"><span class="pre">method</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                            title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w">
+                        </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">'linear'</span></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">limit_direction</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
+                            title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w">
+                        </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                          class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span
+                          class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series.html#Interpolate.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.Interpolate.__init__"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>time</strong> (<em>Iterable</em><em>[</em><em>datetime</em><em>]</em><em>,
+                                </em><em>optional</em>) – The time dimension. Should be represented subclasses of
+                                datetime</p>
+                            </li>
+                            <li>
+                              <p><strong>data</strong> (<em>Iterable</em><em>, </em><em>optional</em>) – The data
+                                dimension. Should be 1D array or list.</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.Interpolate.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series.html#Interpolate.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.Interpolate.get_meta"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Overrides base method enabling cascade-like calls to previous datasets.
+                        The metadata of a pipeline that consist of several modifiers can be easily
+                        obtained with <code
+                          class="docutils literal notranslate"><span class="pre">get_meta</span></code> of the last
+                        block.</p>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
+              <dl class="py class">
+                <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset">
+                  <em class="property"><span class="pre">class</span><span class="w"> </span></em><span
+                    class="sig-prename descclassname"><span class="pre">cascade.utils.time_series.</span></span><span
+                    class="sig-name descname"><span class="pre">TimeSeriesDataset</span></span><span
+                    class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                        class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                    class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Iterable"
+                        title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/datetime.html#datetime.datetime"
+                        title="(in Python v3.14)"><span class="pre">datetime</span></a><span class="p"><span
+                          class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                      class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
+                      class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
+                      class="n"><span class="pre">data</span></span><span class="p"><span
+                        class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Iterable"
+                        title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span
+                          class="pre">[</span></span><a class="reference external"
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                          class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span
+                        class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span
+                        class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
+                        class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span
+                        class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
+                      class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                        class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                    class="sig-paren">)</span><a class="reference internal"
+                    href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset"><span
+                      class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                    href="#cascade.utils.time_series.TimeSeriesDataset" title="Permalink to this definition">#</a>
+                </dt>
+                <dd>
+                  <p>Dataset to simplify the work with time series.
+                    Manages the time and data. Reflects the list API
+                    and implements access by index and by datetime also.
+                    More than that, slices with indices and with datetimes can also be used.</p>
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.__init__">
+                      <span class="sig-name descname"><span class="pre">__init__</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Iterable"
+                            title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/datetime.html#datetime.datetime"
+                            title="(in Python v3.14)"><span class="pre">datetime</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                          class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
+                        </span><span class="default_value"><span class="pre">None</span></span></em>, <em
+                        class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span
+                            class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Optional"
+                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Iterable"
+                            title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span
+                          class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w">
+                        </span><span class="default_value"><span class="pre">None</span></span></em>, <em
+                        class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
+                            class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
+                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.__init__"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.TimeSeriesDataset.__init__"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Parameters<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <ul class="simple">
+                            <li>
+                              <p><strong>time</strong> (<em>Iterable</em><em>[</em><em>datetime</em><em>]</em><em>,
+                                </em><em>optional</em>) – The time dimension. Should be represented subclasses of
+                                datetime</p>
+                            </li>
+                            <li>
+                              <p><strong>data</strong> (<em>Iterable</em><em>, </em><em>optional</em>) – The data
+                                dimension. Should be 1D array or list.</p>
+                            </li>
+                          </ul>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.get">
+                      <span class="sig-name descname"><span class="pre">get</span></span><span
+                        class="sig-paren">(</span><em class="sig-param"><span class="n"><span
+                            class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
+                          class="w"> </span><span class="n"><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Union"
+                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                              class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span
+                            class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/functions.html#slice"
+                            title="(in Python v3.14)"><span class="pre">slice</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/datetime.html#datetime.datetime"
+                            title="(in Python v3.14)"><span class="pre">datetime</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Iterable"
+                            title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                              class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span
+                            class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.get"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.TimeSeriesDataset.get"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd></dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.get_data">
+                      <span class="sig-name descname"><span class="pre">get_data</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple"
+                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray"
+                            title="(in NumPy v2.5)"><span class="pre">ndarray</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray"
+                            title="(in NumPy v2.5)"><span class="pre">ndarray</span></a><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.get_data"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.TimeSeriesDataset.get_data"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>data</strong> – Time and data as np.array</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                              title="(in Python v3.14)">tuple</a></p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.get_meta">
+                      <span class="sig-name descname"><span class="pre">get_meta</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
+                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Dict"
+                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                              class="pre">[</span></span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">,</span></span><span class="w"> </span><a class="reference external"
+                            href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                              class="pre">]</span></span><span class="p"><span
+                              class="pre">]</span></span></span></span><a class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.get_meta"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.TimeSeriesDataset.get_meta"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>meta</strong> – A list where last element is this dataset’s metadata.
+                            Meta can be anything that is worth to document about the dataset and its data.
+                            This is done in form of list to enable cascade-like calls in Modifiers and Samplers.</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>Meta</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.to_numpy">
+                      <span class="sig-name descname"><span class="pre">to_numpy</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external"
+                            href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray"
+                            title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.to_numpy"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.TimeSeriesDataset.to_numpy"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <p>Returns only data without time in numpy array format.</p>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>data</strong> – np.array of data.</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>np.ndarray</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                  <dl class="py method">
+                    <dt class="sig sig-object py" id="cascade.utils.time_series.TimeSeriesDataset.to_pandas">
+                      <span class="sig-name descname"><span class="pre">to_pandas</span></span><span
+                        class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
+                          class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
+                            class="reference external"
+                            href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
+                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a></span></span><a
+                        class="reference internal"
+                        href="../_modules/cascade/utils/time_series/time_series_dataset.html#TimeSeriesDataset.to_pandas"><span
+                          class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
+                        href="#cascade.utils.time_series.TimeSeriesDataset.to_pandas"
+                        title="Permalink to this definition">#</a>
+                    </dt>
+                    <dd>
+                      <dl class="field-list simple">
+                        <dt class="field-odd">Returns<span class="colon">:</span></dt>
+                        <dd class="field-odd">
+                          <p><strong>data</strong> – table with time as index</p>
+                        </dd>
+                        <dt class="field-even">Return type<span class="colon">:</span></dt>
+                        <dd class="field-even">
+                          <p>pd.DataFrame</p>
+                        </dd>
+                      </dl>
+                    </dd>
+                  </dl>
+
+                </dd>
+              </dl>
+
 
 
             </article>
@@ -1024,10 +1227,10 @@
                         <p class="prev-next-title">cascade.utils.tables</p>
                       </div>
                     </a>
-                    <a class="right-next" href="cascade.utils.torch.html" title="next page">
+                    <a class="right-next" href="cascade.utils.samplers.html" title="next page">
                       <div class="prev-next-info">
                         <p class="prev-next-subtitle">next</p>
-                        <p class="prev-next-title">cascade.utils.torch</p>
+                        <p class="prev-next-title">cascade.utils.samplers</p>
                       </div>
                       <i class="fa-solid fa-angle-right"></i>
                     </a>
@@ -1051,75 +1254,78 @@
                 </div>
                 <nav class="bd-toc-nav page-toc">
                   <ul class="visible nav section-nav flex-column">
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#">cascade.utils.time_series</a></li>
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.time_series.Align"><code
                           class="docutils literal notranslate"><span class="pre">Align</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.Align.__init__"><code
                               class="docutils literal notranslate"><span class="pre">Align.__init__()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.time_series.Average"><code
                           class="docutils literal notranslate"><span class="pre">Average</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.Average.__init__"><code
                               class="docutils literal notranslate"><span class="pre">Average.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.Average.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">Average.get_meta()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.time_series.Interpolate"><code
                           class="docutils literal notranslate"><span class="pre">Interpolate</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.Interpolate.__init__"><code
                               class="docutils literal notranslate"><span class="pre">Interpolate.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.Interpolate.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">Interpolate.get_meta()</span></code></a>
                         </li>
                       </ul>
                     </li>
-                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                    <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#cascade.utils.time_series.TimeSeriesDataset"><code
                           class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code></a>
-                      <ul class="nav section-nav flex-column">
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                      <ul class="visible nav section-nav flex-column">
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.TimeSeriesDataset.__init__"><code
                               class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.__init__()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.TimeSeriesDataset.get"><code
                               class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.get()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.TimeSeriesDataset.get_data"><code
                               class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.get_data()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.TimeSeriesDataset.get_meta"><code
                               class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.get_meta()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.TimeSeriesDataset.to_numpy"><code
                               class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.to_numpy()</span></code></a>
                         </li>
-                        <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link"
+                        <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                             href="#cascade.utils.time_series.TimeSeriesDataset.to_pandas"><code
                               class="docutils literal notranslate"><span class="pre">TimeSeriesDataset.to_pandas()</span></code></a>
                         </li>
                       </ul>
                     </li>
                   </ul>
+
                 </nav>
               </div>
 

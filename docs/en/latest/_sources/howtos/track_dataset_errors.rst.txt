@@ -13,18 +13,15 @@ Consider the following pipeline:
 
 .. code-block:: python
 
-   from cascade.data import Dataset, Modifier
+   from cascade.data import Dataset, Modifier, Wrapper
 
 
-   class RaiseDatasetOverridingGetItem(Dataset):
+   class RaiseModifierOverridingGetItem(Modifier):
       def __getitem__(self, index):
          if index == 1:
                raise RuntimeError("on no!")
          else:
-               return 0
-
-      def __len__(self):
-         return 2
+               return self._dataset[index]
 
 
    class ModifierOverridingGetItem(Modifier):
@@ -32,25 +29,26 @@ Consider the following pipeline:
          return self._dataset[index]
 
 
-   ds = RaiseDatasetOverridingGetItem()
+   ds = Wrapper([1, 2, 3])
+   ds = RaiseModifierOverridingGetItem(ds)
    ds = ModifierOverridingGetItem(ds)
 
-   for i in range(len(ds)):
-      ds[i]
-
-Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` method. When we execute the code we see only the error message and will require additional runs to trace where exactly the error occured. In case of large datasets and long trainings it can be very costly to run second time to check where the error occurs.
+.. skip: start
 
 .. code-block:: python
 
+for i in range(len(ds)):
+   ds[i]
+
+Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` method. When we execute the code we see only the error message and will require additional runs to trace where exactly the error occured. In case of large datasets and long trainings it can be very costly to run second time to check where the error occurs.
+
+.. code-block:: text
+
+   0
    Traceback (most recent call last):
-   File "/home/user/example.py", line 24, in <module>
-      ds[i]
-      ~~^^^
-   File "/home/user/example.py", line 17, in __getitem__
-      return self._dataset[index]
-            ~~~~~~~~~~~~~^^^^^^^
-   File "/home/user/example.py", line 7, in __getitem__
-      raise RuntimeError("on no!")
+     File "<stdin>", line 2, in <module>
+     File "<stdin>", line 3, in __getitem__
+     File "<stdin>", line 4, in __getitem__
    RuntimeError: on no!
 
 
@@ -58,38 +56,45 @@ Let's try a simple update - replace all ``__getitem__`` with ``get`` methods:
 
 .. code-block:: python
 
+   for i in range(len(ds)):
+      ds.get(i)
+
+.. skip: end
+
+.. code-block:: text
+
    Traceback (most recent call last):
-   File "/home/user/cascade/cascade/data/dataset.py", line 107, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 107, in __getitem__
       return self.get(index)
             ^^^^^^^^^^^^^^^
-   File "/home/user/example.py", line 33, in get
+   File "/home/ilia/work/example.py", line 33, in get
       raise RuntimeError("on no!")
    RuntimeError: on no!
 
    The above exception was the direct cause of the following exception:
 
    Traceback (most recent call last):
-   File "/home/user/cascade/cascade/data/dataset.py", line 107, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 107, in __getitem__
       return self.get(index)
             ^^^^^^^^^^^^^^^
-   File "/home/user/example.py", line 43, in get
+   File "/home/ilia/work/example.py", line 43, in get
       return self._dataset[index]
             ~~~~~~~~~~~~~^^^^^^^
-   File "/home/user/cascade/cascade/data/dataset.py", line 106, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 106, in __getitem__
       with GetItemHandler(self, index):
-   File "/home/user/cascade/cascade/data/dataset.py", line 36, in __exit__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 36, in __exit__
       raise GetItemError(
    cascade.data.dataset.GetItemError: Failed to get item from <class '__main__.RaiseDataset'> at index 1
 
    The above exception was the direct cause of the following exception:
 
    Traceback (most recent call last):
-   File "/home/user/example.py", line 50, in <module>
+   File "/home/ilia/work/example.py", line 50, in <module>
       ds[i]
       ~~^^^
-   File "/home/user/cascade/cascade/data/dataset.py", line 106, in __getitem__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 106, in __getitem__
       with GetItemHandler(self, index):
-   File "/home/user/cascade/cascade/data/dataset.py", line 36, in __exit__
+   File "/home/ilia/work/cascade/cascade/data/dataset.py", line 36, in __exit__
       raise GetItemError(
    cascade.data.dataset.GetItemError: Failed to get item from <class '__main__.ModifierWithGet'> at index 1
 
