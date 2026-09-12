@@ -22,7 +22,7 @@ pip install cascade-ml
 
 More info on installation can be found in [documentation](https://oxid15.github.io/cascade/en/latest/)
 
-## Local UI
+## Local-first UI
 
 ```bash
 pip install cascade-ui
@@ -44,7 +44,7 @@ Just do ``cascade ui`` to get a nice dashboard for your experiments.
 This section is divided into blocks based on what problem you can solve using Cascade. These are the simplest examples
 of what the library is capable of. See more in documentation.
 
-### ETL pipeline tracking
+### Track data transforms
 
 Data processing pipelines need to be versioned and tracked as a part of model experiments.  
 To track changes and version everything about data Cascade has `Datasets` - special wrappers
@@ -109,7 +109,7 @@ We see all the stages that we did in meta.
 See all datasets in [zoo](https://oxid15.github.io/cascade/en/latest/modules/dataset_zoo.html)  
 See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
-### Experiment tracking
+### Track experiments and artifacts locally
 
 Cascade provides a rich set of ML-experiment tracking tools.
 You can easily track history of model changes, save and restore models
@@ -161,13 +161,37 @@ Lines can also store data pipelines.
 ]
 ```
 
-See tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
+See full tutorial in [documentation](https://oxid15.github.io/cascade/en/latest/tutorials/tutorials.html)
 
-## Who could find Cascade useful
+## Cascade Recipes
 
-ML engineers and researchers in small teams or working individually.
-The price of integrating with large-scale MLOps solutions can be too high and the aim of
-Cascade is to bridge this gap for everyone.
+[Cascade Recipes](https://github.com/Oxid15/cascade_recipes) is a growing collection of useful project templates built using all Cascade features. With close to real-life cases you can see how Cascade may fit in your specific project.
+
+Examples of projects:
+
+### [01 - Baseline sweep](https://github.com/Oxid15/cascade_recipes/tree/master/01_baseline_sweep)
+
+> "I ran six experiments last week - which one won, with which settings, and on which version of the features?"
+
+### [02 - Data lineage](https://github.com/Oxid15/cascade_recipes/tree/master/02_data_lineage)
+
+> "Model 00003 regressed. Was it the code, or did the dataset change under me?"
+
+See more in [Cascade Recipes repo]((https://github.com/Oxid15/cascade_recipes))
+
+## No need for a platform
+
+What you get without tracking server, cloud or complex setup
+
+* Local UI
+* Experiment tracking
+* Configuration management
+* Data lineage and validation
+* Experiment results querying
+
+## Migrating to Cascade
+
+You can find migration instructions for popular MLOps solutions in the [docs](https://oxid15.github.io/cascade/en/latest/index.html). See how you can convert Aim, MLflow, Weights & Biases or ClearML tracking code into Cascade tracking and get additional benefits.
 
 ## Principles
 
