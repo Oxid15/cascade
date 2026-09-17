@@ -114,9 +114,9 @@ def get_uncommitted_changes() -> Optional[List[str]]:
         result = subprocess.run(
             ["git", "status", "--porcelain"], capture_output=True, text=True
         )
-        result = result.stdout.strip()
+        result = result.stdout
         if result != "":
-            return result.splitlines()
+            return [s.strip() for s in result.splitlines()]
         return None
     except Exception:
         return None
