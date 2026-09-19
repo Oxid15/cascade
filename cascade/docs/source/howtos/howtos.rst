@@ -58,6 +58,13 @@ Experiment tracking
 
             How to log files along with saved model
 
+    .. grid-item::
+        .. card:: Track an existing functional pipeline
+            :link: /howtos/track_existing_functional_pipeline.rst
+            :link-type: ref
+
+            If you already have your Python functions and want to track them
+
 CLI
 ***
 
@@ -131,6 +138,7 @@ Experiment management
     track_logs
     model_training_trainers
     track_a_file
+    track_existing_functional_pipeline
     track_dataset_errors
     cli
     queries
