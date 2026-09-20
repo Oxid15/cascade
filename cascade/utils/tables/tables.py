@@ -101,8 +101,6 @@ class TableFilter(TableDataset, Modifier):
             Binary mask to select values from table.
         """
         super().__init__(dataset, *args, t=dataset._table, **kwargs)
-        init_len = len(dataset)
-
         self._table = self._table[mask]
 
 
