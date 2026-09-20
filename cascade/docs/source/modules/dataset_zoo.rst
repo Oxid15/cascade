@@ -484,7 +484,6 @@ Filtering is common when using tables. This modifier accepts binary mask and rec
 
     >>> from cascade.utils.tables import TableFilter
     >>> ds = TableFilter(ds, ds._table[0] == 1)
-    Length before filtering: 3, length after: 2
 
 .. doctest::
 
