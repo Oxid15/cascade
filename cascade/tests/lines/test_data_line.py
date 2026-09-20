@@ -293,6 +293,25 @@ def test_declared_volatiles_do_not_bump_version(tmp_path_str):
     assert str(dl.get_version(ds)) == "0.1"
 
 
+def test_changing_declared_volatiles_bumps_minor_version(tmp_path_str):
+    class StableDataset(Dataset):
+        def get(self, index):
+            return index
+
+        def __len__(self):
+            return 10
+
+    dl = DataLine(tmp_path_str)
+    ds = StableDataset()
+
+    dl.save(ds, only_meta=True)
+    assert str(dl.get_version(ds)) == "0.1"
+
+    ds.declare_volatiles("timestamp")
+    dl.save(ds, only_meta=True)
+    assert str(dl.get_version(ds)) == "0.2"
+
+
 def test_mask_volatiles_masks_only_declared_fields(tmp_path_str):
     class VolatileDataset(Dataset):
         def __init__(self, label: str, *args: Any, **kwargs: Any) -> None:
