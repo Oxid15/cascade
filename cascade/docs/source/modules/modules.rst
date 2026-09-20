@@ -28,4 +28,5 @@ Modules
     cascade.utils.samplers
     cascade.utils.torch
     cascade.utils.vision
+    cascade.workspaces
     dataset_zoo

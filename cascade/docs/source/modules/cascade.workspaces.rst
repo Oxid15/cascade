@@ -1,0 +1,2 @@
+.. automodule:: cascade.workspaces
+    :members:
