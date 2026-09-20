@@ -1,7 +1,7 @@
 Configuration management
 ########################
 
-Using ``cascade.base.Config`` class and ``cascade run`` CLI command you can:
+Using :class:`~cascade.base.Config` class and ``cascade run`` CLI command you can:
 
 1. Configure your scripts in code using class definitions
 2. Override config values from CLI without modifying the code
@@ -14,7 +14,7 @@ Script config
 
 Here is a sample script featuring a Config inside a file called ``config_demo.py``.
 
-To enable configuration you need to define a new class that inherits from ``cascade.base.Config``.
+To enable configuration you need to define a new class that inherits from :class:`~cascade.base.Config`.
 
 .. code-block:: python
 
@@ -92,7 +92,7 @@ When we do ``cascade run`` it actually knows nothing about what kind of experime
 inside the script. This means that you can use overrides separately even if you do not track
 anything in your scripts. However, at the same time it creates tracking problems because only
 ``run`` knows about overrides and logs and only the script knows about repos and lines.
-To address this problem special ``Model`` methods come into play.
+To address this problem special :class:`~cascade.models.Model` methods come into play.
 
 Let's see next example, where we use special ``add_config`` method. Notice how
 even while having the actual config in code we do not pass it directly to the method.

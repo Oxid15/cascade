@@ -200,7 +200,7 @@ Saving the model
 ****************
 
 Model containers are organized hierarchically as
-``Workspace`` -> ``Repo`` -> (``ModelLine``/``DataLine``). A model line
+:class:`~cascade.workspaces.Workspace` -> :class:`~cascade.repos.Repo` -> (:class:`~cascade.lines.ModelLine`/:class:`~cascade.lines.DataLine`). A model line
 manages experiments with similar architectures.
 
 .. code-block:: python

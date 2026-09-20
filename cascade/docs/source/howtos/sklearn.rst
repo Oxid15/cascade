@@ -17,7 +17,7 @@ Everything is located in ``cascade.utils.sklearn``.
     from sklearn.feature_selection import SelectKBest
     from sklearn.svm import SVC
 
-``SkModel`` class accepts a list of ``Pipeline`` blocks from ``scikit-learn``.
+:class:`~cascade.utils.sklearn.SkModel` class accepts a list of ``Pipeline`` blocks from ``scikit-learn``.
 Everything you can put into a pipeline, you can pass as a list to the Cascade
 wrapper.
 
@@ -37,7 +37,7 @@ wrapper.
     )
 
 Notice how ``k_best`` was passed both into a transform and wrapper.
-This is how ``SkModel`` gets the parameters to track. You can pass
+This is how :class:`~cascade.utils.sklearn.SkModel` gets the parameters to track. You can pass
 anything else you want to be tracked as parameters. This may change to
 an automatic parameters tacking in future versions.
 

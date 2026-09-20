@@ -5,7 +5,7 @@ This article is about saving an arbitrary file along with a
 model in Cascade.
 
 Every experiment can generate some files that need to be tracked. Cascade allows you to manage
-file artifacts easily using ``Model`` API.
+file artifacts easily using :class:`~cascade.models.Model` API.
 
 .. code-block:: python
 
@@ -19,7 +19,7 @@ file artifacts easily using ``Model`` API.
     model.add_file("file.txt")
 
 This will copy ``file.txt`` into ``files`` folder within model's directory when a model is saved
-by ``ModelLine``.
+by :class:`~cascade.lines.ModelLine`.
 
 .. code-block:: python
 

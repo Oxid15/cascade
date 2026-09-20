@@ -1,7 +1,7 @@
 Track Existing Functional Pipeline
 ##################################
 
-Cascade offers tools for :ref:`/howtos/pipeline_building.rst` that are based on ``Dataset`` classes, but if you already have a pipeline written with
+Cascade offers tools for :ref:`/howtos/pipeline_building.rst` that are based on :class:`~cascade.data.Dataset` classes, but if you already have a pipeline written with
 Python functions it can be hard to migrate without rewriting everything with classes.
 
 After reading this you will learn how to:
@@ -80,7 +80,7 @@ In the following example we are adding ``@dataset`` and ``@modifier`` decorators
 .. important::
     
     Decorators assume that your functions accept a dataset as a first argument. This is the change that is required to
-    turn your functions into Cascade ``Datasets``.
+    turn your functions into Cascade :class:`~cascade.data.Dataset`\ s.
 
 .. code-block:: python
 

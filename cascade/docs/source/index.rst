@@ -253,7 +253,7 @@ experiment-tracking frameworks can be replaced by Cascade.
 Aim
 ===
 
-Aim experiment typically creates a ``Run`` which can be replaced with ``ModelLine``, stores hyperparameters
+Aim experiment typically creates a ``Run`` which can be replaced with :class:`~cascade.lines.ModelLine`, stores hyperparameters
 in ``run["hparams"]`` and records metrics with ``run.track()`` which in our case will be ``model.params`` and ``model.metrics``.
 
 With Cascade you will also get:
@@ -381,8 +381,8 @@ With Cascade you will also get:
 ClearML
 =======
 
-ClearML represents an experiment as a ``Task`` which we will replace with ``ModelLine`` and metrics can
-be reported through the task's logger, but in Cascade they are tied to the ``Model``.
+ClearML represents an experiment as a ``Task`` which we will replace with :class:`~cascade.lines.ModelLine` and metrics can
+be reported through the task's logger, but in Cascade they are tied to the :class:`~cascade.models.Model`.
 
 With Cascade you will also get:
 

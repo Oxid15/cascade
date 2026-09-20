@@ -1,9 +1,9 @@
 Advanced Experiment Management
 ##############################
 
-Lines are not the only tool to organize experiments. They themselves can be unified using ``Repo``.
-Repos can include both ``Data``- and ``ModelLines``. In Cascade you cannot store models and
-datasets in the same ``Line``, since each of the objects has its own versioning system.
+Lines are not the only tool to organize experiments. They themselves can be unified using :class:`~cascade.repos.Repo`.
+Repos can include both ``Data``- and :class:`~cascade.lines.ModelLine`\ s. In Cascade you cannot store models and
+datasets in the same :class:`~cascade.lines.Line`, since each of the objects has its own versioning system.
 
 
 Repos
@@ -22,12 +22,12 @@ The following will give you ``demo_repo/00000`` folder structure.
 Workspaces
 ==========
 
-Sometimes Repos are piling up and to organize them effectively the ``Workspace`` was created. This is the highest unit
+Sometimes Repos are piling up and to organize them effectively the :class:`~cascade.workspaces.Workspace` was created. This is the highest unit
 of experiment organization. 
 
 .. note::
 
-    Having one ``Workspace`` per ML-project can be considered the best practice.
+    Having one :class:`~cascade.workspaces.Workspace` per ML-project can be considered the best practice.
 
 All containers share similar API. Using ``add_<something>`` methods you can create or just load an object if it already exists.
 
