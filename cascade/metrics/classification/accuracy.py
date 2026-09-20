@@ -40,6 +40,24 @@ class Accuracy(Metric):
         extra: Optional[Dict[str, MetricType]] = None,
         **kwargs: Any,
     ) -> None:
+        """
+        Create Accuracy
+
+        Parameters
+        ----------
+        value : Optional[MetricType], optional
+            Metric value, can be ommitted if you want to compute it later, by default None
+        name : str, optional
+            Metric name, by default "accuracy"
+        dataset : Optional[str], optional
+            Name of the dataset, by default None
+        split : Optional[str], optional
+            Split of the data, for example train or validation, by default None
+        interval : Optional[Tuple[MetricType, MetricType]], optional
+            Confidence intervals, by default None
+        extra : Optional[Dict[str, MetricType]], optional
+            Additional metadata, by default None
+        """
         super().__init__(
             name,
             value=value,
@@ -54,6 +72,26 @@ class Accuracy(Metric):
         self._running_count = 0
 
     def compute(self, gt: Sequence[Any], pred: Sequence[Any]) -> MetricType:
+        """
+        Computes Accuracy
+
+        Parameters
+        ----------
+        gt : Sequence[Any]
+            True classes
+        pred : Sequence[Any]
+            Predicted classes
+
+        Returns
+        -------
+        MetricType
+            Accuracy value
+
+        Raises
+        ------
+        ValueError
+            If the length of gt does not match lenght of pred
+        """
         if len(gt) != len(pred):
             raise ValueError(
                 f"Length of gt and pred should match, got {len(gt)} and {len(pred)}"
@@ -62,6 +100,21 @@ class Accuracy(Metric):
         return self.value
 
     def compute_add(self, gt: Sequence[Any], pred: Sequence[Any]) -> MetricType:
+        """
+        Incrementally compute Accuracy
+
+        Parameters
+        ----------
+        gt : Sequence[Any]
+            True classes
+        pred : Sequence[Any]
+            Predicted classes
+
+        Returns
+        -------
+        MetricType
+            Current Accuracy value
+        """
         self._running_sum += sum([g == p for g, p in zip(gt, pred)])
         self._running_count += len(gt)
         self.value = self._running_sum / self._running_count

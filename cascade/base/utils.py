@@ -94,12 +94,28 @@ class Version:
 
 
 def generate_slug() -> str:
+    """
+    Generate 3-word random slug
+
+    Returns
+    -------
+    str
+        slug
+    """
     words = generate(3)
     slug = "_".join(words)
     return slug
 
 
 def get_latest_commit_hash() -> Optional[str]:
+    """
+    git rev-parse HEAD or None if any error occurs
+
+    Returns
+    -------
+    Optional[str]
+        Latest git commit hash or None
+    """
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"], capture_output=True, text=True
@@ -110,6 +126,14 @@ def get_latest_commit_hash() -> Optional[str]:
 
 
 def get_uncommitted_changes() -> Optional[List[str]]:
+    """
+    git status --porcelain results as a list or None if any error occurs
+
+    Returns
+    -------
+    Optional[List[str]]
+        List of uncommitted changes if currently inside a git repo or None
+    """
     try:
         result = subprocess.run(
             ["git", "status", "--porcelain"], capture_output=True, text=True
@@ -150,6 +174,17 @@ def get_terminal_width() -> int:
 
 
 def update_version(path: str, version: str) -> None:
+    """
+    Update cascade_version field of meta file on path
+
+    Parameters
+    ----------
+    path : str
+        Path to the folder with meta file
+    version : str
+        Version to write there
+    """
+
     def write_version(path: str, version: str) -> None:
         meta[0]["cascade_version"] = version
         MetaHandler.write_dir(path, meta)
