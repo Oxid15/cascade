@@ -449,9 +449,34 @@ The most important thing here is the extensive metadata that this wrapper holds.
 
 .. doctest::
 
-    >>> ds.get_meta()
-    [{'name': 'cascade.utils.tables.tables.TableDataset', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'data_card': None, 'len': 3, 'columns': [0, 1], 'info': {0: {'count': 3.0, 'mean': 1.3333333333333333, 'std': 0.5773502691896257, 'min': 1.0, '25%': 1.0, '50%': 1.0, '75%': 1.5, 'max': 2.0}, 1: {'count': 3.0, 'mean': 0.0, 'std': 0.0, 'min': 0.0, '25%': 0.0, '50%': 0.0, '75%': 0.0, 'max': 0.0}}}]
-
+    >>> from pprint import pprint
+    >>> pprint(ds.get_meta())
+    [{'cascade_volatiles': [],
+      'columns': [0, 1],
+      'comments': [],
+      'data_card': None,
+      'description': None,
+      'info': {0: {'25%': 1.0,
+                   '50%': 1.0,
+                   '75%': 1.5,
+                   'count': 3.0,
+                   'max': 2.0,
+                   'mean': 1.3333333333333333,
+                   'min': 1.0,
+                   'std': 0.5773502691896257},
+               1: {'25%': 0.0,
+                   '50%': 0.0,
+                   '75%': 0.0,
+                   'count': 3.0,
+                   'max': 0.0,
+                   'mean': 0.0,
+                   'min': 0.0,
+                   'std': 0.0}},
+      'len': 3,
+      'links': [],
+      'name': 'cascade.utils.tables.tables.TableDataset',
+      'tags': [],
+      'type': 'dataset'}]
 
 Filtering is common when using tables. This modifier accepts binary mask and records new stage in the pipeline's metadata.
 
@@ -463,9 +488,60 @@ Filtering is common when using tables. This modifier accepts binary mask and rec
 
 .. doctest::
 
-    >>> ds.get_meta()
-    [{'name': 'cascade.utils.tables.tables.TableFilter', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'data_card': None, 'len': 2, 'columns': [0, 1], 'info': {0: {'count': 2.0, 'mean': 1.0, 'std': 0.0, 'min': 1.0, '25%': 1.0, '50%': 1.0, '75%': 1.0, 'max': 1.0}, 1: {'count': 2.0, 'mean': 0.0, 'std': 0.0, 'min': 0.0, '25%': 0.0, '50%': 0.0, '75%': 0.0, 'max': 0.0}}}, {'name': 'cascade.utils.tables.tables.TableDataset', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'data_card': None, 'len': 3, 'columns': [0, 1], 'info': {0: {'count': 3.0, 'mean': 1.3333333333333333, 'std': 0.5773502691896257, 'min': 1.0, '25%': 1.0, '50%': 1.0, '75%': 1.5, 'max': 2.0}, 1: {'count': 3.0, 'mean': 0.0, 'std': 0.0, 'min': 0.0, '25%': 0.0, '50%': 0.0, '75%': 0.0, 'max': 0.0}}}]
-
+    >>> from pprint import pprint
+    >>> pprint(ds.get_meta())
+    [{'cascade_volatiles': [],
+      'columns': [0, 1],
+      'comments': [],
+      'data_card': None,
+      'description': None,
+      'info': {0: {'25%': 1.0,
+                   '50%': 1.0,
+                   '75%': 1.0,
+                   'count': 2.0,
+                   'max': 1.0,
+                   'mean': 1.0,
+                   'min': 1.0,
+                   'std': 0.0},
+               1: {'25%': 0.0,
+                   '50%': 0.0,
+                   '75%': 0.0,
+                   'count': 2.0,
+                   'max': 0.0,
+                   'mean': 0.0,
+                   'min': 0.0,
+                   'std': 0.0}},
+      'len': 2,
+      'links': [],
+      'name': 'cascade.utils.tables.tables.TableFilter',
+      'tags': [],
+      'type': 'dataset'},
+     {'cascade_volatiles': [],
+      'columns': [0, 1],
+      'comments': [],
+      'data_card': None,
+      'description': None,
+      'info': {0: {'25%': 1.0,
+                   '50%': 1.0,
+                   '75%': 1.5,
+                   'count': 3.0,
+                   'max': 2.0,
+                   'mean': 1.3333333333333333,
+                   'min': 1.0,
+                   'std': 0.5773502691896257},
+               1: {'25%': 0.0,
+                   '50%': 0.0,
+                   '75%': 0.0,
+                   'count': 3.0,
+                   'max': 0.0,
+                   'mean': 0.0,
+                   'min': 0.0,
+                   'std': 0.0}},
+      'len': 3,
+      'links': [],
+      'name': 'cascade.utils.tables.tables.TableDataset',
+      'tags': [],
+      'type': 'dataset'}]
 
 More to come
 ************

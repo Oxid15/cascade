@@ -25,6 +25,13 @@ Pipelines
 
             How to find the source of and exception deep inside a pipeline
 
+    .. grid-item::
+        .. card:: Version data pipeline
+            :link: /howtos/version_data_pipeline.rst
+            :link-type: ref
+
+            How to track pipeline changes, add metadata and avoid version explosions
+
 Experiment tracking
 *******************
 
@@ -134,12 +141,13 @@ Experiment management
     :hidden:
 
     pipeline_building
+    track_dataset_errors
+    version_data_pipeline
     model_training
     track_logs
     model_training_trainers
     track_a_file
     track_existing_functional_pipeline
-    track_dataset_errors
     cli
     queries
     sklearn
