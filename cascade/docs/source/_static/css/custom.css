@@ -31,6 +31,15 @@ h6 {
     font-weight: 700;
 }
 
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6 {
+    color: #ffffff;
+}
+
 html[data-theme="light"] .highlight .gd,
 html[data-theme="dark"] .highlight .gd {
     color: #DB504A;
