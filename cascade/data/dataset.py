@@ -143,7 +143,7 @@ class BaseDataset(ABC, Generic[T], Traceable):
         if data_card:
             data_card = data_card.to_dict()
         meta[0]["data_card"] = data_card
-        meta[0]["cascade_volatiles"] = sorted(list(self.volatiles))
+        meta[0]["cascade_volatiles"] = sorted(self.volatiles)
         return meta
 
 
