@@ -35,7 +35,6 @@ class Model(Traceable):
     def __init__(
         self,
         *args: Any,
-        meta_prefix: Union[Meta, str, None] = None,
         description: Optional[str] = None,
         tags: Optional[Iterable[str]] = None,
         **kwargs: Any,
@@ -53,15 +52,14 @@ class Model(Traceable):
             by default None
         tags : Optional[Iterable[str]], optional
             by default None
+        **kwargs: Any
+            All other kwargs will be tracked as params
         """
-        self.metrics = []
         self.params = kwargs
         self.created_at = pendulum.now(tz="UTC")
-        self._file_artifacts_paths = []
-        self._file_artifact_missing_oks = []
         self._log_callbacks = []
 
-        if meta_prefix is not None:
+        if "meta_prefix" in kwargs:
             warnings.warn(
                 "Use of `meta_prefix` in `__init__` is deprecated since 0.18.0."
                 " Consider using update_meta()",
@@ -69,6 +67,56 @@ class Model(Traceable):
             )
 
         super().__init__(*args, description=description, tags=tags, **kwargs)
+
+    @property
+    def file_artifacts_paths(self):
+        if not hasattr(self, "_file_artifacts_paths"):
+            self._file_artifacts_paths = []
+        return self._file_artifacts_paths
+
+    @file_artifacts_paths.setter
+    def file_artifacts_paths(self, value):
+        self._file_artifacts_paths = value
+
+    @property
+    def file_artifact_missing_oks(self):
+        if not hasattr(self, "_file_artifact_missing_oks"):
+            self._file_artifact_missing_oks = []
+        return self._file_artifact_missing_oks
+
+    @file_artifact_missing_oks.setter
+    def file_artifact_missing_oks(self, value):
+        self._file_artifact_missing_oks = value
+
+    @property
+    def metrics(self):
+        if not hasattr(self, "_metrics"):
+            self._metrics = []
+        return self._metrics
+
+    @metrics.setter
+    def metrics(self, value):
+        self._metrics = value
+
+    @property
+    def params(self):
+        if not hasattr(self, "_params"):
+            self._params = {}
+        return self._params
+
+    @params.setter
+    def params(self, value):
+        self._params = value
+
+    @property
+    def created_at(self):
+        if not hasattr(self, "_created_at"):
+            self._created_at = pendulum.now(tz="UTC")
+        return self._created_at
+
+    @created_at.setter
+    def created_at(self, value):
+        self._created_at = value
 
     def fit(self, *args: Any, **kwargs: Any) -> None:
         """
@@ -125,17 +173,9 @@ class Model(Traceable):
         """
         os.makedirs(path, exist_ok=True)
 
-        if not hasattr(self, "_file_artifacts_paths"):
-            warnings.warn(
-                "Failed to perform basic Model.save since some attributes are missing"
-                "maybe you haven't call super().__init__ in Model's subclass?",
-                stacklevel=2,
-            )
-            return
-
         for filepath, but_its_ok in zip(
-            self._file_artifacts_paths,
-            self._file_artifact_missing_oks,
+            self.file_artifacts_paths,
+            self.file_artifact_missing_oks,
         ):
             if not os.path.exists(filepath):
                 if but_its_ok:
@@ -172,25 +212,11 @@ class Model(Traceable):
         raise_not_implemented("cascade.models.Model", "save_artifact")
 
     def get_meta(self) -> Meta:
-        # Successors may not call super().__init__
-        # they may not have these default fields
-
         meta = super().get_meta()
         meta[0]["type"] = "model"
-
-        all_default_exist = True
-        for attr in ("created_at", "metrics", "params"):
-            if hasattr(self, attr):
-                meta[0][attr] = self.__getattribute__(attr)
-            else:
-                all_default_exist = False
-
-        if not all_default_exist:
-            warnings.warn(
-                "Model's meta is incomplete, "
-                "maybe you haven't call super().__init__ in subclass?",
-                stacklevel=2,
-            )
+        meta[0]["created_at"] = self.created_at
+        meta[0]["metrics"] = self.metrics
+        meta[0]["params"] = self.params
 
         return meta
 
@@ -226,6 +252,9 @@ class Model(Traceable):
         --------
         cascade.models.Model.log
         """
+        if not hasattr(self, "_log_callbacks"):
+            self._log_callbacks = [callback]
+
         self._log_callbacks.append(callback)
 
     def add_metric(
@@ -259,10 +288,6 @@ class Model(Traceable):
             raise TypeError(
                 f"Metric can be either str or Metric type, not {type(metric)}"
             )
-
-        # Model be initialized not properly
-        if not hasattr(self, "metrics"):
-            self.metrics = []
 
         # Overwrites metric if it is the same, but
         # value is different
@@ -321,9 +346,11 @@ class Model(Traceable):
 
         See also
         --------
-        cascade.models.ModelLine.create_model
         cascade.models.Model.add_log_callback
         """
+        if not hasattr(self, "_log_callbacks"):
+            self._log_callbacks = []
+
         for callback in self._log_callbacks:
             callback(self)
 

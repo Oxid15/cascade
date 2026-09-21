@@ -33,12 +33,11 @@ class SingleLineRepo(BaseRepo):
         self,
         line: Line,
         *args: Any,
-        meta_prefix: Optional[Dict[Any, Any]] = None,
         **kwargs: Any,
     ) -> None:
         super().__init__(line.get_root(), *args, **kwargs)
 
-        if meta_prefix is not None:
+        if "meta_prefix" in kwargs:
             warnings.warn(
                 "Use of `meta_prefix` in `__init__` is deprecated since 0.18.0."
                 " Consider using update_meta()",
