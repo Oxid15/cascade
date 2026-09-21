@@ -72,9 +72,9 @@ class Repo(BaseRepo, TraceableOnDisk):
 
         See also
         --------
-        cascade.base.Line
-        cascade.data.DataLine
-        cascade.models.ModelLine
+        cascade.lines.Line
+        cascade.lines.DataLine
+        cascade.lines.ModelLine
         """
         # Need to rmtree before __init__ to not load old meta
         if overwrite and os.path.exists(folder):
