@@ -234,8 +234,8 @@ class Model(Traceable):
         missing_ok : bool, optional
             If it is okay when the file does not exist. Raises an error if False, by default False
         """
-        self._file_artifacts_paths.append(path)
-        self._file_artifact_missing_oks.append(missing_ok)
+        self.file_artifacts_paths.append(path)
+        self.file_artifact_missing_oks.append(missing_ok)
 
     def add_log_callback(self, callback: Callable[["Model"], None]) -> None:
         """
