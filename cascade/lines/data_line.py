@@ -247,7 +247,10 @@ class DataLine(DiskLine):
 
     def _parse_item_name(self, item: Union[int, str]) -> str:
         if isinstance(item, str):
-            name = Version(item)
+            try:
+                name = Version(item)
+            except ValueError:
+                raise FileNotFoundError() from None  # raised to capture in Repo.load_obj_meta
             return str(name)
         else:
             return super()._parse_item_name(item)
