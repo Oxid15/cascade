@@ -69,6 +69,16 @@ class BaseDataset(ABC, Generic[T], Traceable):
             "volatiles are read-only. To update it please use declare_volatiles method"
         )
 
+    @property
+    def data_card(self):
+        if not hasattr(self, "_data_card"):
+            self._data_card = None
+        return self._data_card
+
+    @data_card.setter
+    def data_card(self, value):
+        self._data_card = value
+
     def declare_volatiles(self, *fields):
         """
         Volatiles are metadata fields that should not be used for
@@ -137,12 +147,7 @@ class BaseDataset(ABC, Generic[T], Traceable):
         meta = super().get_meta()
         meta[0]["type"] = "dataset"
 
-        # Someone may've missed the __init__ call and there
-        # will be no self._data_card
-        data_card = getattr(self, "_data_card", None)
-        if data_card:
-            data_card = data_card.to_dict()
-        meta[0]["data_card"] = data_card
+        meta[0]["data_card"] = self.data_card.to_dict() if self.data_card else None
         meta[0]["cascade_volatiles"] = sorted(self.volatiles)
         return meta
 
