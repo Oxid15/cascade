@@ -16,7 +16,7 @@ limitations under the License.
 
 import os
 import warnings
-from typing import Any, Dict, List, Optional
+from typing import Any, List
 
 from typing_extensions import Literal
 
