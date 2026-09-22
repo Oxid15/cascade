@@ -1,6 +1,10 @@
 Advanced Experiment Management
 ##############################
 
+.. meta::
+   :description: Organize related Cascade experiments with repositories and workspaces for scalable experiment management.
+   :keywords: cascade, small-scale MLOps, experiment management, repositories, workspaces, ModelLine, DataLine
+
 Lines are not the only tool to organize experiments. They themselves can be unified using :class:`~cascade.repos.Repo`.
 Repos can include both ``Data``- and :class:`~cascade.lines.ModelLine`\ s. In Cascade you cannot store models and
 datasets in the same :class:`~cascade.lines.Line`, since each of the objects has its own versioning system.

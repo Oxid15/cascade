@@ -1,6 +1,10 @@
 API reference
 #############
 
+.. meta::
+   :description: Browse the Cascade Python API reference and dataset zoo for building and tracking machine learning workflows.
+   :keywords: cascade, small-scale MLOps, Python API, API reference, dataset zoo, MLOps
+
 Dataset Zoo
 ===========
 

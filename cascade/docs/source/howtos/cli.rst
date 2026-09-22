@@ -1,6 +1,10 @@
 Use Cascade CLI
 ###############
 
+.. meta::
+   :description: Use the Cascade command-line interface to inspect metadata, run experiments, query results, and manage artifacts.
+   :keywords: cascade CLI, command line, experiment tracking, metadata, artifacts, queries
+
 Cascade has convenient command line interface to help
 user perform some operations without writing Python code for them.
 Commands can be used to explore metadata, describe, tag and comment objects.

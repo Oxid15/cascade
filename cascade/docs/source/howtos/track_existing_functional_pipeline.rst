@@ -1,6 +1,10 @@
 Track Existing Functional Pipeline
 ##################################
 
+.. meta::
+   :description: Make an existing function-based data pipeline reproducible and validate its transformations with Cascade.
+   :keywords: cascade, functional pipelines, data validation, reproducibility, data transformations, cascade migration
+
 Cascade offers tools for :ref:`/howtos/pipeline_building.rst` that are based on :class:`~cascade.data.Dataset` classes, but if you already have a pipeline written with
 Python functions it can be hard to migrate without rewriting everything with classes.
 
@@ -228,5 +232,5 @@ For example here we can add a description, tag, track which category we have use
 See also
 ********
 
-* :ref:`howtos/tags.rst`
-* :ref:`howtos/links.rst`
+* :doc:`/howtos/tags`
+* :doc:`/howtos/links`

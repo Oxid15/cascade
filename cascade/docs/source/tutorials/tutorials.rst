@@ -1,6 +1,10 @@
 Tutorial
 ########
 
+.. meta::
+   :description: Learn Cascade fundamentals through guided tutorials covering installation, pipelines, models, and experiment tracking.
+   :keywords: cascade, small-scale MLOps, tutorials, data pipelines, models, experiment tracking
+
 The main tutorial is a set of lessons that will teach you
 basics of Cascade. Lessons are connected in a single project
 and depend on each other.

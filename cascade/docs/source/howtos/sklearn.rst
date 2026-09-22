@@ -1,6 +1,10 @@
 Track scikit-learn experiment
 #############################
 
+.. meta::
+   :description: Track scikit-learn experiments with Cascade using reusable model wrappers and pipeline components.
+   :keywords: cascade, scikit-learn, sklearn, experiment tracking, machine learning pipelines
+
 With Cascade you can track any ML experiment.
 And the workflow is usually the same for a single library.
 

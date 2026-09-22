@@ -1,6 +1,10 @@
 Track experiment logs with Cascade
 ##################################
 
+.. meta::
+   :description: Capture and track machine learning experiment logs with Cascade model lines and log files.
+   :keywords: cascade, experiment logs, logging, model lines, experiment tracking
+
 Here we will discuss how to track your machine learning experiment logs using Cascade.
 
 Minimal setup

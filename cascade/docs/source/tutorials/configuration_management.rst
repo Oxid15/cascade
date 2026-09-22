@@ -1,6 +1,10 @@
 Configuration management
 ########################
 
+.. meta::
+   :description: Configure Cascade training scripts from Python and the command line while saving configurations and logs with experiments.
+   :keywords: cascade, small-scale MLOps, configuration management, CLI, training configuration, experiment tracking
+
 Using :class:`~cascade.base.Config` class and ``cascade run`` CLI command you can:
 
 1. Configure your scripts in code using class definitions

@@ -1,6 +1,10 @@
 Model training using trainers
 #############################
 
+.. meta::
+   :description: Train and track a PyTorch model with Cascade trainers for evaluation, saving, logging, and experiment management.
+   :keywords: cascade, PyTorch, trainers, model training, evaluation, logging, experiment tracking
+
 This use case demonstrates the same model-training workflow as
 :doc:`model_training`, using Cascade's :class:`~cascade.trainers.BasicTrainer` to handle training,
 evaluation, saving, and logging.

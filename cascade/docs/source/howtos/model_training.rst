@@ -1,6 +1,10 @@
 Model training
 ##############
 
+.. meta::
+   :description: Track a PyTorch MNIST training experiment with Cascade, including metadata, hyperparameter tuning, and model selection.
+   :keywords: cascade, PyTorch, MNIST, model training, hyperparameter tuning, experiment tracking
+
 This use case demonstrates how to use Cascade for metadata tracking,
 hyperparameter tuning, and model selection. The example uses a small PyTorch
 classifier trained on MNIST.

@@ -1,6 +1,10 @@
 Pipeline building
 #################
 
+.. meta::
+   :description: Build a Cascade data pipeline for preparing MNIST datasets and training a machine learning classifier.
+   :keywords: cascade, data pipelines, MNIST, PyTorch, datasets, machine learning
+
 This use case shows how to prepare an MNIST dataset for training a classifier
 with Cascade's data pipeline components.
 

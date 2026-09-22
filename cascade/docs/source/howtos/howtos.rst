@@ -1,6 +1,10 @@
 How-to guides
 #############
 
+.. meta::
+   :description: Practical Cascade how-to guides for building pipelines, tracking experiments, querying results, and managing metadata.
+   :keywords: cascade, how-to guides, small-scale MLOps, pipelines, experiment tracking, data validation
+
 This is a page of how-to guides. Guides are basically answers to the "How to ... with Cascade" type of questions.
 They should be practical and may require some background knowledge of Cascade.
 

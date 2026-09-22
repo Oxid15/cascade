@@ -8,7 +8,7 @@ Track experiments, datasets, models and artifacts locally with Python and your f
 
 .. meta::
    :description: Open-source Python MLOps library for lightweight experiment tracking. Configuration management, ML pipeline building and data validation tools for small-scale development.
-   :keywords: cascade, mlops, small-scale mlops, local experiment tracking, pipelines, data validation
+   :keywords: cascade, mlops, small-scale mlops, local experiment tracking, pipelines, data validation, mlflow, clearml
 
 .. code-block:: bash
 

@@ -1,6 +1,10 @@
 Common query use cases
 ######################
 
+.. meta::
+   :description: Query Cascade experiment results from the command line using filters, sorting, metrics, and experiment slugs.
+   :keywords: cascade, queries, CLI, experiment results, metrics, filtering
+
 Cascade has special query language for command line. You can ``cd`` to your repo or line and
 write ``cascade query`` to get information without manually visiting each ``meta.json`` file.
 Here you can find examples of queries, that may be adapted to frequent use cases.

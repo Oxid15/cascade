@@ -1,6 +1,10 @@
 Track a file
 ############
 
+.. meta::
+   :description: Save arbitrary files as tracked artifacts alongside Cascade models and experiments.
+   :keywords: cascade, file artifacts, file tracking, experiment tracking, reproducibility
+
 This article is about saving an arbitrary file along with a
 model in Cascade.
 

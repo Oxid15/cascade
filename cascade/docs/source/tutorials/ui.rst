@@ -1,6 +1,10 @@
 Cascade UI
 ##########
 
+.. meta::
+   :description: Use the Cascade UI dashboard to explore experiment results, metadata, parameters, metrics, and logs.
+   :keywords: cascade UI, small-scale MLOps, dashboard, experiment tracking, metrics, parameters, logs
+
 Cascade UI is a lightweight dashboard for your machine learning experiments.
 The tool provides a visual overview of your experiment results,
 metadata, parameters, metrics and more.

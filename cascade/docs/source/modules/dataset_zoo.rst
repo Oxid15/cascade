@@ -1,6 +1,10 @@
 Dataset Zoo
 ###########
 
+.. meta::
+   :description: Explore ready-made Cascade dataset components for wrappers, iterators, folders, and common machine learning workflows.
+   :keywords: cascade, small-scale MLOps, dataset zoo, datasets, data pipelines, machine learning
+
 Cascade has many solutions - basic that are added to the core and more specific
 that are in the special ``utils`` module. And if you didn't found suitable component,
 you can write it yourself.

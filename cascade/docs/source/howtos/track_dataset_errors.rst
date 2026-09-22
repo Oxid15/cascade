@@ -1,6 +1,10 @@
 Track Dataset Errors
 ####################
 
+.. meta::
+   :description: Track and diagnose errors that occur inside Cascade datasets and data transformation pipelines.
+   :keywords: cascade, dataset errors, debugging, data pipelines, exception tracking
+
 .. important::
 
    This functionality was introduced in Cascade ``0.17.0``
