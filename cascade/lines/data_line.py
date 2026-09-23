@@ -14,6 +14,7 @@ limitations under the License.
 import os
 import socket
 from collections import defaultdict
+from copy import deepcopy
 from getpass import getuser
 from hashlib import md5
 from typing import Any, Optional, Tuple, Type, Union
@@ -82,11 +83,42 @@ class DataLine(DiskLine):
 
         self._item_names = sorted(names, key=Version)
 
+    def _mask_volatiles(self, meta: Meta) -> Meta:
+        """
+        Returns a copy of the same meta where all
+        fields in cascade_volatiles are set to None
+
+        Parameters
+        ----------
+        meta : Meta
+            Original meta
+
+        Returns
+        -------
+        Meta
+            Copy with volatiles masked with Nones
+        """
+
+        # Make a copy to avoid corrupting caller's meta
+        meta_copy = deepcopy(meta)
+
+        for ds_meta in meta_copy:
+            ds_volatiles = ds_meta.get("cascade_volatiles")
+            # Can be missing in datasets created before v0.19.0
+            if not ds_volatiles:
+                continue
+
+            for key in ds_volatiles:
+                ds_meta[key] = None
+
+        return meta_copy
+
     def _get_hashes(self, meta: Meta) -> Tuple[str, str]:
         skel = skeleton(meta)
+        masked_meta = self._mask_volatiles(meta)
 
         skel_str = str(skel)
-        meta_str = str(meta)
+        meta_str = str(masked_meta)
 
         skel_hash = md5(str.encode(skel_str, "utf-8")).hexdigest()
         meta_hash = md5(str.encode(meta_str, "utf-8")).hexdigest()
@@ -138,7 +170,7 @@ class DataLine(DiskLine):
 
     def load(self, num: Union[int, str]) -> Dataset:
         """
-        Loads a dataset by using its number or version string
+        Loads a dataset using its number or version string
         """
         if isinstance(num, int):
             path = os.path.join(self._root, self._item_names[num])
@@ -215,7 +247,10 @@ class DataLine(DiskLine):
 
     def _parse_item_name(self, item: Union[int, str]) -> str:
         if isinstance(item, str):
-            name = Version(item)
+            try:
+                name = Version(item)
+            except ValueError:
+                raise FileNotFoundError() from None  # raised to capture in Repo.load_obj_meta
             return str(name)
         else:
             return super()._parse_item_name(item)

@@ -41,3 +41,20 @@ def test(tmp_path_str):
         assert result.exit_code == 0
 
         assert meta[0]["slug"] in result.output
+
+
+def test_with_data_line(tmp_path_str):
+    runner = CliRunner()
+    with runner.isolated_filesystem(temp_dir=tmp_path_str) as td:
+        repo = Repo(td)
+        repo.add_line(line_type="data")
+        line = repo.add_line(model_cls=BasicModel)
+        model = line.create_model()
+        line.save(model)
+
+        meta = MetaHandler.read_dir(os.path.join(line.get_root(), "00000"))
+
+        result = runner.invoke(cli, args=["cat", "-p", meta[0]["slug"]])
+        assert result.exit_code == 0
+
+        assert meta[0]["slug"] in result.output

@@ -22,7 +22,6 @@ from dataclasses import asdict, is_dataclass
 from json import JSONEncoder
 from typing import Any, Dict, NoReturn, Optional
 
-import deepdiff
 import numpy as np
 import yaml
 
@@ -32,19 +31,12 @@ from .utils import Version
 default_meta_format = ".json"
 supported_meta_formats = (".json", ".yml", ".yaml")
 
-# This is for python 3.7
-# where latest deepdiff is 6.7.1
-if hasattr(deepdiff.diff, "PrettyOrderedSet"):
-    diff_set = deepdiff.diff.PrettyOrderedSet
-else:
-    diff_set = deepdiff.diff.SetOrdered
-
 
 class CustomEncoder(JSONEncoder):
     """
     Cascade's own custom encoder for JSON.
 
-    Supports numpy constants, arrays, datetimes, types, deepdiff, dataclasses and
+    Supports numpy constants, arrays, datetimes, types, dataclasses and
     some internal objects.
     """
 
@@ -91,11 +83,8 @@ class CustomEncoder(JSONEncoder):
         elif isinstance(obj, np.void):
             return None
 
-        elif isinstance(obj, (set, diff_set)):
+        elif isinstance(obj, set):
             return list(obj)
-
-        elif isinstance(obj, deepdiff.DeepDiff):
-            return obj.to_dict()
 
         elif is_dataclass(obj):
             return asdict(obj)

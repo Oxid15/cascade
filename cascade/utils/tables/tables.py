@@ -101,10 +101,7 @@ class TableFilter(TableDataset, Modifier):
             Binary mask to select values from table.
         """
         super().__init__(dataset, *args, t=dataset._table, **kwargs)
-        init_len = len(dataset)
-
         self._table = self._table[mask]
-        print(f"Length before filtering: {init_len}, length after: {len(self._table)}")
 
 
 class CSVDataset(TableDataset):
