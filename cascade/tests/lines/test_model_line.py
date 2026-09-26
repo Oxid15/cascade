@@ -234,3 +234,23 @@ def test_line_comment(tmp_path_str):
     line = Repo(tmp_path_str).add_line("line")
     meta = MetaHandler.read_dir(line_dir)
     assert len(meta[0]["comments"]) > 0
+
+
+def test_simple_save_load_import_handling(tmp_path_str):
+
+    def isolated_save():
+        from cascade.tests.conftest import DummyModel
+
+        line = ModelLine(tmp_path_str)
+        model = DummyModel()
+
+        line.save(model)
+
+    isolated_save()
+
+    line = ModelLine(tmp_path_str)
+    model = line.load(0)
+
+    from cascade.tests.conftest import DummyModel
+
+    assert isinstance(model, DummyModel)

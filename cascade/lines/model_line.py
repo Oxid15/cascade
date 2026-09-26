@@ -14,10 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib.util
 import os
 import socket
+import sys
 import traceback
 from getpass import getuser
+from types import ModuleType
 from typing import Any, Dict, List, Optional, Type, Union
 
 import pendulum
@@ -84,17 +87,89 @@ class ModelLine(DiskLine):
         else:
             return super()._parse_item_name(item)
 
-    def load(self, num: int) -> Model:
+    @staticmethod
+    def _import_from_path(module_name: str, file_path: str) -> ModuleType:
         """
-        Loads a model
+        Imports a module from file
 
         Parameters
         ----------
-        num : int
-            Model number in line
-        """
+        module_name : str
+            Module name
+        file_path : str
+            Full module path
 
-        model = super().load(num)
+        Returns
+        -------
+        ModuleType
+            Imported module
+
+        Raises
+        ------
+        RuntimeError
+            Can be raised if failed to get spec from path, for example
+            when the path does not exist
+        """
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+
+        # Not sure why they could really return None
+        if spec is None:
+            raise RuntimeError(
+                f"Failed to get module spec when autoimporting {module_name} from {file_path}"
+            )
+
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+        return module
+
+    def load(self, num: Union[int, str]) -> Model:
+        """
+        Loads a model using its num or slug.
+        If model_cls was provided at creation will use it
+        to load a model. If not, it will try to autoimport
+        a class using module path from meta.
+
+        Parameters
+        ----------
+        num : Union[int, str]
+            Model number in line or model slug
+
+        Returns
+        -------
+        Model
+            Loaded model instance
+
+        Raises
+        ------
+        KeyError
+            If model_cls was not set in init and the model's meta does not have
+            ``module_file`` or ``class`` keys.
+        """
+        if self._item_cls != Model:
+            model = super().load(num)
+        else:
+            meta = self.load_obj_meta(num)
+
+            # This should work for models saved after 0.19.0
+            module_path = meta[0].get("module_file")
+            cls_name = meta[0].get("class")
+
+            # For models saved before
+            if not module_path or not cls_name:
+                raise KeyError(
+                    f"Failed to load model {num}. Tried to pull model's class and module from"
+                    " meta, but didn't find `module_file` or `class` keys which were added"
+                    " starting from cascade==0.19.0."
+                    " Consider using ModelLine(model_cls=YourModelClass) instead."
+                )
+
+            module_name, _ = os.path.splitext(os.path.basename(module_path))
+            module = self._import_from_path(module_name, module_path)
+            model_cls = getattr(module, cls_name)
+
+            model = model_cls.load(os.path.join(self._root, self._item_names[num]))
+
         model.load_artifact(
             os.path.join(self._root, self._item_names[num], "artifacts")
         )
