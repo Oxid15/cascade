@@ -123,7 +123,7 @@ class ModelLine(DiskLine):
         spec.loader.exec_module(module)
         return module
 
-    def load(self, num: Union[int, str]) -> Model:
+    def load(self, num: int) -> Model:
         """
         Loads a model using its num or slug.
         If model_cls was provided at creation will use it
@@ -132,7 +132,7 @@ class ModelLine(DiskLine):
 
         Parameters
         ----------
-        num : Union[int, str]
+        num : int
             Model number in line or model slug
 
         Returns
@@ -147,7 +147,7 @@ class ModelLine(DiskLine):
             ``module_file`` or ``class`` keys.
         """
         if self._item_cls != Model:
-            model = super().load(num)
+            model = self._item_cls.load(os.path.join(self._root, self._item_names[num]))
         else:
             meta = self.load_obj_meta(num)
 
