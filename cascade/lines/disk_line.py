@@ -66,7 +66,7 @@ class DiskLine(TraceableOnDisk, Line):
 
     def __getitem__(self, num: int) -> Any:
         """
-        Loads the item using ``load`` method of a given class
+        Loads an item
         """
         model = self.load(num)
         return model
@@ -79,9 +79,7 @@ class DiskLine(TraceableOnDisk, Line):
         """
         return len(self._item_names)
 
-    def load(self, num: int) -> Any:
-        item = self._item_cls.load(os.path.join(self._root, self._item_names[num]))
-        return item
+    def load(self, num: int) -> Any: ...
 
     def _read_meta_by_name(self, name: str) -> Meta:
         meta = MetaHandler.read_dir(os.path.join(self._root, name))
