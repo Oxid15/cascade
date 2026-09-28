@@ -123,7 +123,7 @@ class ModelLine(DiskLine):
         spec.loader.exec_module(module)
         return module
 
-    def load(self, num: int) -> Model:
+    def load(self, num: Union[int, str]) -> Model:
         """
         Loads a model using its num or slug.
         If model_cls was provided at creation will use it
@@ -132,7 +132,7 @@ class ModelLine(DiskLine):
 
         Parameters
         ----------
-        num : int
+        num : Union[int, str]
             Model number in line or model slug
 
         Returns
@@ -146,11 +146,14 @@ class ModelLine(DiskLine):
             If model_cls was not set in init and the model's meta does not have
             ``module_file`` or ``class`` keys.
         """
+        model_name = self._parse_item_name(num)
+        model_path = os.path.join(self._root, model_name)
+
         if self._item_cls != Model:
-            model = self._item_cls.load(os.path.join(self._root, self._item_names[num]))
+            model = self._item_cls.load(model_path)
         else:
             # This should work for models saved after 0.19.0
-            meta = self.load_obj_meta(num)
+            meta = self._read_meta_by_name(model_name)
 
             # For models saved before
             if "module_file" not in meta[0] or "class" not in meta[0]:
@@ -178,10 +181,10 @@ class ModelLine(DiskLine):
             module = self._import_from_path(module_name, module_path)
             model_cls = getattr(module, cls_name)
 
-            model = model_cls.load(os.path.join(self._root, self._item_names[num]))
+            model = model_cls.load(model_path)
 
         model.load_artifact(
-            os.path.join(self._root, self._item_names[num], "artifacts")
+            os.path.join(model_path, "artifacts")
         )
         return model
 

@@ -273,11 +273,56 @@ def test_simple_save_load_import_handling(tmp_path_str):
     from cascade.tests.conftest import DummyModel
 
     assert isinstance(model, DummyModel)
+    slug = line.load_model_meta(0)[0]["slug"]
+    assert isinstance(line.load(slug), DummyModel)
 
     meta = line.load_obj_meta(0)
 
     assert meta[0]["module_file"].endswith("cascade/tests/conftest.py")
     assert meta[0]["class"] == "DummyModel"
+
+
+@pytest.mark.parametrize("missing_key", ["module_file", "class"])
+def test_autoimport_requires_class_metadata(tmp_path_str, missing_key):
+    from cascade.tests.conftest import DummyModel
+
+    line = ModelLine(tmp_path_str)
+    line.save(DummyModel())
+    meta_path = os.path.join(tmp_path_str, "00000", "meta" + default_meta_format)
+    meta = MetaHandler.read(meta_path)
+    meta[0].pop(missing_key)
+    MetaHandler.write(meta_path, meta)
+
+    with pytest.raises(KeyError, match="module_file.*class"):
+        line.load(0)
+
+
+def test_autoimport_rejects_missing_module_file(tmp_path_str):
+    from cascade.tests.conftest import DummyModel
+
+    line = ModelLine(tmp_path_str)
+    line.save(DummyModel())
+    meta_path = os.path.join(tmp_path_str, "00000", "meta" + default_meta_format)
+    meta = MetaHandler.read(meta_path)
+    meta[0]["module_file"] = None
+    MetaHandler.write(meta_path, meta)
+
+    with pytest.raises(ValueError, match="module_file.*None"):
+        line.load(0)
+
+
+def test_autoimport_rejects_missing_class_in_module(tmp_path_str):
+    from cascade.tests.conftest import DummyModel
+
+    line = ModelLine(tmp_path_str)
+    line.save(DummyModel())
+    meta_path = os.path.join(tmp_path_str, "00000", "meta" + default_meta_format)
+    meta = MetaHandler.read(meta_path)
+    meta[0]["class"] = "MissingModel"
+    MetaHandler.write(meta_path, meta)
+
+    with pytest.raises(AttributeError, match="MissingModel"):
+        line.load(0)
 
 
 def test_class_defined_at_main(tmp_path_str):
