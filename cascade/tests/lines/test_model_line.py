@@ -17,7 +17,9 @@ limitations under the License.
 import glob
 import os
 import shutil
+import subprocess
 import sys
+from multiprocessing import Process
 
 import pytest
 
@@ -28,6 +30,21 @@ from cascade.base import MetaHandler, default_meta_format
 from cascade.lines import ModelLine
 from cascade.models import BasicModel
 from cascade.repos import Repo
+
+
+def run_as_subprocess(f):
+    p = Process(target=f)
+    p.start()
+    p.join()
+
+
+def run_as_script(script: str, name: str, cwd: str):
+    script_path = os.path.join(cwd, f"{name}.py")
+    with open(script_path, "w") as f:
+        f.write(script)
+
+    result = subprocess.Popen([sys.executable, script_path], cwd=cwd)
+    result.wait()
 
 
 def test_save_load(model_line, dummy_model):
@@ -246,7 +263,7 @@ def test_simple_save_load_import_handling(tmp_path_str):
 
         line.save(model)
 
-    isolated_save()
+    run_as_subprocess(isolated_save)
 
     line = ModelLine(tmp_path_str)
     model = line.load(0)
@@ -254,3 +271,52 @@ def test_simple_save_load_import_handling(tmp_path_str):
     from cascade.tests.conftest import DummyModel
 
     assert isinstance(model, DummyModel)
+
+    meta = line.load_obj_meta(0)
+
+    assert meta[0]["module_file"].endswith("cascade/tests/conftest.py")
+    assert meta[0]["class"] == "DummyModel"
+
+
+def test_class_defined_at_main(tmp_path_str):
+    script = "\n".join(
+        (
+            "from cascade.models import Model",
+            "from cascade.lines import ModelLine",
+            "class MainModel(Model):",
+            "    def save(self, *args, **kwargs):",
+            "        ...",
+            "    def save_artifact(self, *args, **kwargs):",
+            "        ...",
+            "    @classmethod",
+            "    def load(cls, *args, **kwargs):",
+            "        return cls()",
+            "    @classmethod",
+            "    def load_artifact(self, *args, **kwargs):",
+            "        ...",
+            "if __name__ == '__main__':",
+            "    line = ModelLine('line')",
+            "    line.save(MainModel())",
+        )
+    )
+
+    save_location = os.path.join(tmp_path_str, "saved")
+    os.makedirs(save_location)
+
+    run_as_script(script, "save", save_location)
+
+    assert os.path.exists(os.path.join(tmp_path_str, "saved", "line", "00000"))
+
+    load_location = os.path.join(tmp_path_str, "loaded")
+    os.makedirs(load_location)
+
+    script = "\n".join(
+        (
+            "from cascade.lines import ModelLine",
+            "line = ModelLine('../saved/line')",
+            "model = line.load(0)",
+            "assert model.__class__.__name__ == 'MainModel'",
+        )
+    )
+
+    run_as_script(script, "load", load_location)
