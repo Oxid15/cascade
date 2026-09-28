@@ -46,6 +46,8 @@ def run_as_script(script: str, name: str, cwd: str):
     result = subprocess.Popen([sys.executable, script_path], cwd=cwd)
     result.wait()
 
+    assert result.returncode == 0
+
 
 def test_save_load(model_line, dummy_model):
     dummy_model.a = 0
@@ -320,3 +322,96 @@ def test_class_defined_at_main(tmp_path_str):
     )
 
     run_as_script(script, "load", load_location)
+
+
+def test_run_with_no_source_code(tmp_path_str):
+    script = "\n".join(
+        (
+            "from cascade.models import Model",
+            "from cascade.lines import ModelLine",
+            "class MainModel(Model):",
+            "    def save(self, *args, **kwargs):",
+            "        ...",
+            "    def save_artifact(self, *args, **kwargs):",
+            "        ...",
+            "    @classmethod",
+            "    def load(cls, *args, **kwargs):",
+            "        return cls()",
+            "    @classmethod",
+            "    def load_artifact(self, *args, **kwargs):",
+            "        ...",
+            "if __name__ == '__main__':",
+            "    line = ModelLine('line')",
+            "    line.save(MainModel())",
+        )
+    )
+
+    save_location = os.path.join(tmp_path_str, "saved")
+    os.makedirs(save_location)
+
+    result = subprocess.Popen([sys.executable, "-c", script], cwd=save_location)
+    result.wait()
+
+    line = ModelLine(os.path.join(save_location, "line"))
+    assert len(line) == 1
+
+    meta = line.load_obj_meta(0)
+    assert (
+        meta[0]["module_file"] is None
+    )  # could not get module file since there was no file
+    assert meta[0]["class"] == "MainModel"
+
+
+def test_class_imported_from_file(tmp_path_str):
+    script = (
+        "from cascade.models import Model",
+        "from cascade.lines import ModelLine",
+        "class MainModel(Model):",
+        "    def save(self, *args, **kwargs):",
+        "        ...",
+        "    def save_artifact(self, *args, **kwargs):",
+        "        ...",
+        "    @classmethod",
+        "    def load(cls, *args, **kwargs):",
+        "        return cls()",
+        "    @classmethod",
+        "    def load_artifact(self, *args, **kwargs):",
+        "        ...",
+    )
+    script = "\n".join(script)
+
+    save_location = os.path.join(tmp_path_str, "saved")
+    os.makedirs(save_location)
+    script_path = os.path.join(save_location, "model.py")
+    with open(script_path, "w") as f:
+        f.write(script)
+
+    script = (
+        "from model import MainModel",
+        "from cascade.lines import ModelLine",
+        "if __name__ == '__main__':",
+        "   line = ModelLine('../saved/line')",
+        "   model = line.save(MainModel())",
+    )
+    script = "\n".join(script)
+
+    run_as_script(script, "save", save_location)
+
+    load_location = os.path.join(tmp_path_str, "loaded")
+    os.makedirs(load_location)
+
+    script = (
+        "from cascade.lines import ModelLine",
+        "line = ModelLine('../saved/line')",
+        "model = line.load(0)",
+        "assert model.__class__.__name__ == 'MainModel'",
+    )
+    script = "\n".join(script)
+
+    run_as_script(script, "load", load_location)
+
+    line = ModelLine(os.path.join(tmp_path_str, "saved", "line"))
+    assert len(line) == 1
+
+    model = line.load(0)
+    assert model.__class__.__name__ == "MainModel"
