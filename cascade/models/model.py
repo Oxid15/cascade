@@ -218,6 +218,8 @@ class Model(Traceable):
             return os.path.abspath(inspect.getfile(cls_obj))
         except TypeError:
             return None
+        except OSError:
+            return None
 
     def get_meta(self) -> Meta:
         meta = super().get_meta()

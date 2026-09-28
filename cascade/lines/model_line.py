@@ -149,19 +149,29 @@ class ModelLine(DiskLine):
         if self._item_cls != Model:
             model = self._item_cls.load(os.path.join(self._root, self._item_names[num]))
         else:
+            # This should work for models saved after 0.19.0
             meta = self.load_obj_meta(num)
 
-            # This should work for models saved after 0.19.0
-            module_path = meta[0].get("module_file")
-            cls_name = meta[0].get("class")
-
             # For models saved before
-            if not module_path or not cls_name:
+            if "module_file" not in meta[0] or "class" not in meta[0]:
                 raise KeyError(
                     f"Failed to load model {num}. Tried to pull model's class and module from"
                     " meta, but didn't find `module_file` or `class` keys which were added"
-                    " starting from cascade==0.19.0."
+                    " starting from 0.19.0."
                     " Consider using ModelLine(model_cls=YourModelClass) instead."
+                )
+
+            module_path = meta[0]["module_file"]
+            cls_name = meta[0]["class"]
+
+            # This can happen when inspect.getfile() fails inside Model
+            if module_path is None:
+                raise ValueError(
+                    f"Failed to load model {num}. Tried to pull model's module file"
+                    " from meta, but `module_file` was None. Looks like ModelLine failed to find"
+                    " the module when saving."
+                    " Consider importing your model's class manually and load the model"
+                    " using ModelLine(model_cls=YourModelClass)"
                 )
 
             module_name, _ = os.path.splitext(os.path.basename(module_path))
