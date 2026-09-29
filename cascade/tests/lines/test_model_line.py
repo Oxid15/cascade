@@ -460,3 +460,64 @@ def test_class_imported_from_file(tmp_path_str):
 
     model = line.load(0)
     assert model.__class__.__name__ == "MainModel"
+
+
+@pytest.mark.parametrize(
+    ("module_filename", "import_statement"),
+    [
+        ("model.py", "from model_package.model import RelativeImportModel"),
+        ("__init__.py", "from model_package import RelativeImportModel"),
+    ],
+)
+def test_class_with_package_relative_import(
+    tmp_path_str, module_filename, import_statement
+):
+    """
+    Check package-relative imports for model classes in modules and package initializers
+    """
+
+    save_location = os.path.join(tmp_path_str, "saved")
+    package_location = os.path.join(save_location, "model_package")
+    os.makedirs(package_location)
+
+    with open(os.path.join(package_location, "__init__.py"), "w") as f:
+        f.write("")
+
+    with open(os.path.join(package_location, "helper.py"), "w") as f:
+        f.write('MODEL_LABEL = "relative-import"\n')
+
+    with open(os.path.join(package_location, module_filename), "w") as f:
+        f.write(
+            "\n".join(
+                (
+                    "from cascade.models import BasicModel",
+                    "from .helper import MODEL_LABEL",
+                    "class RelativeImportModel(BasicModel):",
+                    "    label = MODEL_LABEL",
+                )
+            )
+        )
+
+    os.makedirs(os.path.join(save_location, "line"))
+    save_script = "\n".join(
+        (
+            import_statement,
+            "from cascade.lines import ModelLine",
+            "ModelLine('line').save(RelativeImportModel())",
+        )
+    )
+    run_as_script(save_script, "save", save_location)
+
+    load_location = os.path.join(tmp_path_str, "loaded")
+    os.makedirs(load_location)
+    load_script = "\n".join(
+        (
+            "import sys",
+            "sys.path.insert(0, '../saved')",
+            "from cascade.lines import ModelLine",
+            "model = ModelLine('../saved/line').load(0)",
+            "assert model.__class__.__name__ == 'RelativeImportModel'",
+            "assert model.label == 'relative-import'",
+        )
+    )
+    run_as_script(load_script, "load", load_location)

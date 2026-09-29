@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
 import importlib.util
 import os
 import socket
@@ -90,14 +91,17 @@ class ModelLine(DiskLine):
     @staticmethod
     def _import_from_path(module_name: str, file_path: str) -> ModuleType:
         """
-        Imports a module from file
+        Imports a module from file. If module is not part of the package
+        just imports the file by path directly.
+        If module is a part of a package with __init__.py that is on
+        sys.path, then imports the whole package.
 
         Parameters
         ----------
         module_name : str
             Module name
         file_path : str
-            Full module path
+            Absolute module path
 
         Returns
         -------
@@ -109,10 +113,55 @@ class ModelLine(DiskLine):
         RuntimeError
             Can be raised if failed to get spec from path, for example
             when the path does not exist
+        ImportError
+            When tried to import a module from a path that is different
+            from what was saved in meta
         """
+
+        for search_path in sys.path:
+            search_root = os.path.abspath(search_path or os.getcwd())
+
+            try:
+                relative_path = os.path.relpath(file_path, search_root)
+            except ValueError:
+                continue
+
+            path_parts = relative_path.split(os.sep)
+            if path_parts[0] == os.pardir or not path_parts[-1].endswith(".py"):
+                continue
+
+            package_parts = path_parts[:-1]
+            if not package_parts or not all(
+                os.path.isfile(
+                    os.path.join(search_root, *package_parts[:index], "__init__.py")
+                )
+                for index in range(1, len(package_parts) + 1)
+            ):
+                continue
+
+            module_stem, _ = os.path.splitext(path_parts[-1])
+
+            # Import package if it has __init__ or import a module
+            import_parts = (
+                package_parts
+                if module_stem == "__init__"
+                else package_parts + [module_stem]
+            )
+            import_name = ".".join(import_parts)
+
+            module = importlib.import_module(import_name)
+
+            imported_file_path = getattr(module, "__file__", None)
+            if imported_file_path and os.path.samefile(imported_file_path, file_path):
+                return module
+
+            raise ImportError(
+                f"Tried to import {import_name} from {imported_file_path}, but expected {file_path}"
+            )
+
         spec = importlib.util.spec_from_file_location(module_name, file_path)
 
-        # Not sure why they could really return None
+        # They could return None if the file does not exist
         if spec is None:
             raise RuntimeError(
                 f"Failed to get module spec when autoimporting {module_name} from {file_path}"
@@ -183,9 +232,7 @@ class ModelLine(DiskLine):
 
             model = model_cls.load(model_path)
 
-        model.load_artifact(
-            os.path.join(model_path, "artifacts")
-        )
+        model.load_artifact(os.path.join(model_path, "artifacts"))
         return model
 
     def load_artifact_paths(self, model: Union[int, str]) -> Dict[str, List[str]]:
