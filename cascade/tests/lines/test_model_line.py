@@ -23,6 +23,8 @@ from multiprocessing import Process
 
 import pytest
 
+import cascade
+
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
@@ -521,3 +523,42 @@ def test_class_with_package_relative_import(
         )
     )
     run_as_script(load_script, "load", load_location)
+
+
+def test_class_uses_cascade_base(tmp_path_str):
+    # Need cascade to be on path which should work in general
+    cascade_root = os.path.dirname(os.path.dirname(os.path.abspath(cascade.__file__)))
+    script = "\n".join(
+        (
+            "import sys",
+            f"sys.path.insert(0, {cascade_root!r})",
+            "from cascade.models import BasicModel",
+            "from cascade.lines import ModelLine",
+            "if __name__ == '__main__':",
+            "    line = ModelLine('line')",
+            "    line.save(BasicModel())",
+        )
+    )
+
+    save_location = os.path.join(tmp_path_str, "saved")
+    os.makedirs(save_location)
+
+    run_as_script(script, "save", save_location)
+
+    assert os.path.exists(os.path.join(tmp_path_str, "saved", "line", "00000"))
+
+    load_location = os.path.join(tmp_path_str, "loaded")
+    os.makedirs(load_location)
+
+    script = "\n".join(
+        (
+            "import sys",
+            f"sys.path.insert(0, {cascade_root!r})",
+            "from cascade.lines import ModelLine",
+            "line = ModelLine('../saved/line')",
+            "model = line.load(0)",
+            "assert model.__class__.__name__ == 'BasicModel'",
+        )
+    )
+
+    run_as_script(script, "load", load_location)
