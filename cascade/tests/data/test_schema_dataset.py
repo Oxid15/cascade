@@ -18,9 +18,9 @@ import os
 import sys
 from typing import Any, List, Tuple
 
+import numpy as np
 import pydantic
 import pytest
-import numpy as np
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))

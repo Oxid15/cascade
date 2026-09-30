@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import inspect
 import os
 import warnings
 from shutil import copyfile
@@ -211,12 +212,23 @@ class Model(Traceable):
         """
         raise_not_implemented("cascade.models.Model", "save_artifact")
 
+    @staticmethod
+    def _get_class_file(cls_obj):
+        try:
+            return os.path.abspath(inspect.getfile(cls_obj))
+        except TypeError:
+            return None
+        except OSError:
+            return None
+
     def get_meta(self) -> Meta:
         meta = super().get_meta()
         meta[0]["type"] = "model"
         meta[0]["created_at"] = self.created_at
         meta[0]["metrics"] = self.metrics
         meta[0]["params"] = self.params
+        meta[0]["module_file"] = self._get_class_file(self.__class__)
+        meta[0]["class"] = str(type(self).__qualname__)
 
         return meta
 

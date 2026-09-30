@@ -14,10 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import importlib
+import importlib.util
 import os
 import socket
+import sys
 import traceback
 from getpass import getuser
+from types import ModuleType
 from typing import Any, Dict, List, Optional, Type, Union
 
 import pendulum
@@ -84,20 +88,151 @@ class ModelLine(DiskLine):
         else:
             return super()._parse_item_name(item)
 
-    def load(self, num: int) -> Model:
+    @staticmethod
+    def _import_from_path(module_name: str, file_path: str) -> ModuleType:
         """
-        Loads a model
+        Imports a module from file. If module is not part of the package
+        just imports the file by path directly.
+        If module is a part of a package with __init__.py that is on
+        sys.path, then imports the whole package.
 
         Parameters
         ----------
-        num : int
-            Model number in line
+        module_name : str
+            Module name
+        file_path : str
+            Absolute module path
+
+        Returns
+        -------
+        ModuleType
+            Imported module
+
+        Raises
+        ------
+        RuntimeError
+            Can be raised if failed to get spec from path, for example
+            when the path does not exist
+        ImportError
+            When tried to import a module from a path that is different
+            from what was saved in meta
         """
 
-        model = super().load(num)
-        model.load_artifact(
-            os.path.join(self._root, self._item_names[num], "artifacts")
-        )
+        for search_path in sys.path:
+            search_root = os.path.abspath(search_path or os.getcwd())
+
+            try:
+                relative_path = os.path.relpath(file_path, search_root)
+            except ValueError:
+                continue
+
+            path_parts = relative_path.split(os.sep)
+            if path_parts[0] == os.pardir or not path_parts[-1].endswith(".py"):
+                continue
+
+            package_parts = path_parts[:-1]
+            if not package_parts or not all(
+                os.path.isfile(
+                    os.path.join(search_root, *package_parts[:index], "__init__.py")
+                )
+                for index in range(1, len(package_parts) + 1)
+            ):
+                continue
+
+            module_stem, _ = os.path.splitext(path_parts[-1])
+
+            # Import package if it has __init__ or import a module
+            import_parts = (
+                package_parts
+                if module_stem == "__init__"
+                else package_parts + [module_stem]
+            )
+            import_name = ".".join(import_parts)
+
+            module = importlib.import_module(import_name)
+
+            imported_file_path = getattr(module, "__file__", None)
+            if imported_file_path and os.path.samefile(imported_file_path, file_path):
+                return module
+
+            raise ImportError(
+                f"Tried to import {import_name} from {imported_file_path}, but expected {file_path}"
+            )
+
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+
+        # They could return None if the file does not exist
+        if spec is None:
+            raise RuntimeError(
+                f"Failed to get module spec when autoimporting {module_name} from {file_path}"
+            )
+
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[module_name] = module
+        spec.loader.exec_module(module)
+        return module
+
+    def load(self, num: Union[int, str]) -> Model:
+        """
+        Loads a model using its num or slug.
+        If model_cls was provided at creation will use it
+        to load a model. If not, it will try to autoimport
+        a class using module path from meta.
+
+        Parameters
+        ----------
+        num : Union[int, str]
+            Model number in line or model slug
+
+        Returns
+        -------
+        Model
+            Loaded model instance
+
+        Raises
+        ------
+        KeyError
+            If model_cls was not set in init and the model's meta does not have
+            ``module_file`` or ``class`` keys.
+        """
+        model_name = self._parse_item_name(num)
+        model_path = os.path.join(self._root, model_name)
+
+        if self._item_cls != Model:
+            model = self._item_cls.load(model_path)
+        else:
+            # This should work for models saved after 0.19.0
+            meta = self._read_meta_by_name(model_name)
+
+            # For models saved before
+            if "module_file" not in meta[0] or "class" not in meta[0]:
+                raise KeyError(
+                    f"Failed to load model {num}. Tried to pull model's class and module from"
+                    " meta, but didn't find `module_file` or `class` keys which were added"
+                    " starting from 0.19.0."
+                    " Consider using ModelLine(model_cls=YourModelClass) instead."
+                )
+
+            module_path = meta[0]["module_file"]
+            cls_name = meta[0]["class"]
+
+            # This can happen when inspect.getfile() fails inside Model
+            if module_path is None:
+                raise ValueError(
+                    f"Failed to load model {num}. Tried to pull model's module file"
+                    " from meta, but `module_file` was None. Looks like ModelLine failed to find"
+                    " the module when saving."
+                    " Consider importing your model's class manually and load the model"
+                    " using ModelLine(model_cls=YourModelClass)"
+                )
+
+            module_name, _ = os.path.splitext(os.path.basename(module_path))
+            module = self._import_from_path(module_name, module_path)
+            model_cls = getattr(module, cls_name)
+
+            model = model_cls.load(model_path)
+
+        model.load_artifact(os.path.join(model_path, "artifacts"))
         return model
 
     def load_artifact_paths(self, model: Union[int, str]) -> Dict[str, List[str]]:
