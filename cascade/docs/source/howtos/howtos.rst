@@ -135,9 +135,22 @@ Experiment management
 
             It is about building your own system
 
+Cascade Recipes
+***************
+
+Browse a collection of real-life small projects built with Cascade.
+Each use-case shows how Cascade can be used with full working code examples.
+
+.. grid:: 1
+
+    .. grid-item::
+        .. card:: 01 - Track ML experiments with Cascade
+            :link: /howtos/recipes/01_baseline_sweep.rst
+            :link-type: ref
+
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :hidden:
 
     pipeline_building
@@ -154,3 +167,4 @@ Experiment management
     links
     comments
     tags
+    recipes/recipes
