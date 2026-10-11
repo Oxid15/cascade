@@ -1,5 +1,8 @@
-Track ML experiments with Cascade
-#################################
+01 - Track ML experiments with Cascade
+######################################
+
+`Recipe 01_baseline_sweep on GitHub <https://github.com/Oxid15/cascade_recipes/tree/master/01_baseline_sweep>`__
+`Cascade Recipes GitHub repository <https://github.com/Oxid15/cascade_recipes/>`__
 
   I ran six experiments last week - which one won, with which settings, and on which version of the features?
 
@@ -67,7 +70,7 @@ The following script will generate simple synthetic telecom churn table for our 
             }
         )
 
-Run `make_data.py` to generate a .csv for our next steps.
+Run ``make_data.py`` to generate a .csv for our next steps.
 
 .. code-block:: python
 
