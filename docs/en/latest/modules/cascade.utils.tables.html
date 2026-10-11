@@ -7,8 +7,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta content="API reference for Cascade table utilities used to work with structured tabular data."
+    name="description" />
+  <meta content="cascade, small-scale MLOps, Python API, tables, tabular data, data pipelines" name="keywords" />
 
-  <title>cascade.utils.tables &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.utils.tables &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,7 +66,6 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="cascade.utils.time_series" href="cascade.utils.time_series.html" />
@@ -437,10 +439,6 @@
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
 
 
-
-
-
-
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
 
@@ -494,6 +492,9 @@
 
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.vision.html">cascade.utils.vision</a></li>
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.workspaces.html">cascade.workspaces</a></li>
 
                   <li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
                 </ul>
@@ -567,19 +568,19 @@
                     class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                         class="pre">csv_file_path</span></span><span class="p"><span class="pre">:</span></span><span
                       class="w"> </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                           class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span
                         class="pre">read_csv_kwargs</span></span><span class="o"><span class="pre">=</span></span><span
                       class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
                       class="o"><span class="pre">*</span></span><span class="n"><span
                         class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w">
                     </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><span
                           class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="o"><span
                         class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                     class="sig-paren">)</span><a class="reference internal"
                     href="../_modules/cascade/utils/tables/tables.html#CSVDataset"><span class="viewcode-link"><span
                         class="pre">[source]</span></span></a><a class="headerlink"
@@ -593,24 +594,24 @@
                         class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                             class="pre">csv_file_path</span></span><span class="p"><span
                             class="pre">:</span></span><span class="w"> </span><span class="n"><a
-                            class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
-                            title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em
+                            class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                            title="(in Python v3.15)"><span class="pre">str</span></a></span></em>, <em
                         class="sig-param"><span class="n"><span class="pre">read_csv_kwargs</span></span><span
                           class="o"><span class="pre">=</span></span><span class="default_value"><span
                             class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span
                             class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                           class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                         class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
                             class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#CSVDataset.__init__"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -641,22 +642,22 @@
                         class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w">
                     </span><span class="n"><a class="reference external"
                         href="https://docs.python.org/3/library/typing.html#typing.Union"
-                        title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                        title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                           class="pre">[</span></span><a class="reference internal"
                         href="#cascade.utils.tables.TableDataset" title="cascade.utils.tables.tables.TableDataset"><span
                           class="pre">TableDataset</span></a><span class="p"><span class="pre">,</span></span><span
                         class="w"> </span><a class="reference external"
                         href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
-                        title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                        title="(in pandas v3.0.6)"><span class="pre">DataFrame</span></a><span class="p"><span
                           class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
                         class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                     class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
                         class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                       class="w"> </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><span
                           class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
                     class="reference internal" href="../_modules/cascade/utils/tables/tables.html#FeatureTable"><span
                       class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -708,28 +709,28 @@
                             class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Union"
-                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference internal"
                             href="#cascade.utils.tables.TableDataset"
                             title="cascade.utils.tables.tables.TableDataset"><span
                               class="pre">TableDataset</span></a><span class="p"><span class="pre">,</span></span><span
                             class="w"> </span><a class="reference external"
                             href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
-                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                            title="(in pandas v3.0.6)"><span class="pre">DataFrame</span></a><span class="p"><span
                               class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
                             class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                           class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                         class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
                             class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#FeatureTable.__init__"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -755,54 +756,54 @@
                             class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Union"
-                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
                             class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Tuple"
-                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
                             class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span
                           class="n"><span class="pre">func</span></span><span class="p"><span
                             class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Callable"
-                            title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Callable</span></a><span class="p"><span
                               class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a
                             class="reference external"
                             href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
-                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                            title="(in pandas v3.0.6)"><span class="pre">DataFrame</span></a><span class="p"><span
                               class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span
                             class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Union"
-                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series"
-                            title="(in pandas v3.0.5)"><span class="pre">Series</span></a><span class="p"><span
+                            title="(in pandas v3.0.6)"><span class="pre">Series</span></a><span class="p"><span
                               class="pre">,</span></span><span class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Tuple"
-                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
                             class="p"><span class="pre">]</span></span><span class="p"><span
                               class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
                             class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                           class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                         class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
                             class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#FeatureTable.add_feature"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -816,17 +817,17 @@
                           <ul class="simple">
                             <li>
                               <p><strong>name</strong> (<em>Union</em><em>[</em><a class="reference external"
-                                  href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Tuple</em><em>[</em><a
-                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em>) – Feature name</p>
+                                  href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a><em>, </em><em>Tuple</em><em>[</em><a
+                                  class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a><em>]</em><em>]</em>) – Feature name</p>
                             </li>
                             <li>
                               <p><strong>func</strong>
                                 (<em>Callable</em><em>[</em><em>[</em><em>pd.DataFrame</em><em>]</em><em>,
                                 </em><em>Union</em><em>[</em><em>pd.Series</em><em>, </em><em>Tuple</em><em>[</em><a
-                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>]</em>) – Function
+                                  class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a><em>]</em><em>]</em><em>]</em>) – Function
                                 that accepts pd.DataFrame and returns a new column</p>
                             </li>
                           </ul>
@@ -841,18 +842,18 @@
                         class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
-                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">List</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Union"
-                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
                             class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Tuple"
-                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
                             class="p"><span class="pre">]</span></span><span class="p"><span
                               class="pre">]</span></span></span></span><a class="reference internal"
@@ -872,10 +873,10 @@
                         <dt class="field-even">Return type<span class="colon">:</span></dt>
                         <dd class="field-even">
                           <p>List[Union[<a class="reference external"
-                              href="https://docs.python.org/3/library/stdtypes.html#str"
-                              title="(in Python v3.14)">str</a>, Tuple[<a class="reference external"
-                              href="https://docs.python.org/3/library/stdtypes.html#str"
-                              title="(in Python v3.14)">str</a>]]]</p>
+                              href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                              title="(in Python v3.15)">str</a>, Tuple[<a class="reference external"
+                              href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                              title="(in Python v3.15)">str</a>]]]</p>
                         </dd>
                       </dl>
                     </dd>
@@ -887,16 +888,16 @@
                         class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
-                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">List</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Dict"
-                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Dict</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a><span class="p"><span
                               class="pre">,</span></span><span class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a><span class="p"><span
                               class="pre">]</span></span><span class="p"><span
                               class="pre">]</span></span></span></span><a class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_meta"><span
@@ -926,27 +927,27 @@
                             class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Optional"
-                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Optional</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Union"
-                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
                             class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.List"
-                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">List</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Union"
-                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span
                             class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Tuple"
-                            title="(in Python v3.14)"><span class="pre">Tuple</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span
                             class="p"><span class="pre">]</span></span><span class="p"><span
                               class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span
@@ -955,15 +956,15 @@
                           class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span
                           class="n"><span class="pre">dropna</span></span><span class="p"><span
                             class="pre">:</span></span><span class="w"> </span><span class="n"><a
-                            class="reference external" href="https://docs.python.org/3/library/functions.html#bool"
-                            title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w">
+                            class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool"
+                            title="(in Python v3.15)"><span class="pre">bool</span></a></span><span class="w">
                         </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
                           class="default_value"><span class="pre">False</span></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
                             class="reference external"
                             href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
-                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a></span></span><a
+                            title="(in pandas v3.0.6)"><span class="pre">DataFrame</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#FeatureTable.get_table"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -977,20 +978,20 @@
                           <ul class="simple">
                             <li>
                               <p><strong>features</strong> (<em>Union</em><em>[</em><a class="reference external"
-                                  href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a><em>,
+                                  href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a><em>,
                                 </em><em>List</em><em>[</em><em>Union</em><em>[</em><em>Tuple</em><em>[</em><a
-                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>, </em><a
-                                  class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a><em>]</em><em>]</em><em>,
+                                  class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a><em>]</em><em>, </em><a
+                                  class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a><em>]</em><em>]</em><em>,
                                 </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – List of features to select,
                                 by default None</p>
                             </li>
                             <li>
                               <p><strong>dropna</strong> (<a class="reference external"
-                                  href="https://docs.python.org/3/library/functions.html#bool"
-                                  title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to
+                                  href="https://docs.python.org/3/builtins/functions.html#bool"
+                                  title="(in Python v3.15)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to
                                 drop NaN values, by default False</p>
                             </li>
                           </ul>
@@ -1019,17 +1020,17 @@
                         class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                     class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span
                         class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
                         href="https://docs.python.org/3/library/typing.html#typing.Optional"
-                        title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                        title="(in Python v3.15)"><span class="pre">Optional</span></a><span class="p"><span
                           class="pre">[</span></span><a class="reference external"
                         href="https://docs.python.org/3/library/typing.html#typing.Union"
-                        title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                        title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                           class="pre">[</span></span><a class="reference external"
                         href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
-                        title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                        title="(in pandas v3.0.6)"><span class="pre">DataFrame</span></a><span class="p"><span
                           class="pre">,</span></span><span class="w"> </span><a class="reference internal"
                         href="#cascade.utils.tables.TableDataset" title="cascade.utils.tables.tables.TableDataset"><span
                           class="pre">TableDataset</span></a><span class="p"><span class="pre">]</span></span><span
@@ -1039,7 +1040,7 @@
                         class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                     class="sig-paren">)</span><a class="reference internal"
                     href="../_modules/cascade/utils/tables/tables.html#TableDataset"><span class="viewcode-link"><span
                         class="pre">[source]</span></span></a><a class="headerlink"
@@ -1055,18 +1056,18 @@
                             class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                           class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                         class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span
                             class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Optional"
-                            title="(in Python v3.14)"><span class="pre">Optional</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Optional</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Union"
-                            title="(in Python v3.14)"><span class="pre">Union</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Union</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame"
-                            title="(in pandas v3.0.5)"><span class="pre">DataFrame</span></a><span class="p"><span
+                            title="(in pandas v3.0.6)"><span class="pre">DataFrame</span></a><span class="p"><span
                               class="pre">,</span></span><span class="w"> </span><a class="reference internal"
                             href="#cascade.utils.tables.TableDataset"
                             title="cascade.utils.tables.tables.TableDataset"><span
@@ -1078,11 +1079,11 @@
                             class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#TableDataset.__init__"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -1104,8 +1105,8 @@
                       <span class="sig-name descname"><span class="pre">__len__</span></span><span
                         class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/functions.html#int"
-                            title="(in Python v3.14)"><span class="pre">int</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/functions.html#int"
+                            title="(in Python v3.15)"><span class="pre">int</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#TableDataset.__len__"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -1122,12 +1123,12 @@
                         class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                             class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
-                            href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span
                               class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span
                         class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
                           class="sig-return-typehint"><a class="reference external"
                             href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series"
-                            title="(in pandas v3.0.5)"><span class="pre">Series</span></a></span></span><a
+                            title="(in pandas v3.0.6)"><span class="pre">Series</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#TableDataset.get"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -1144,16 +1145,16 @@
                         class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
-                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">List</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Dict"
-                            title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Dict</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a><span class="p"><span
                               class="pre">,</span></span><span class="w"> </span><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a><span class="p"><span
                               class="pre">]</span></span><span class="p"><span
                               class="pre">]</span></span></span></span><a class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#TableDataset.get_meta"><span
@@ -1182,16 +1183,16 @@
                         class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                             class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
                             class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
                           class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#TableDataset.to_csv"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -1219,19 +1220,19 @@
                           class="pre">TableDataset</span></a></span></em>, <em class="sig-param"><span class="n"><span
                         class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w">
                     </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.15)"><span
                           class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a
-                        class="reference external" href="https://docs.python.org/3/library/functions.html#bool"
-                        title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span
+                        class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool"
+                        title="(in Python v3.15)"><span class="pre">bool</span></a><span class="p"><span
                           class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
                         class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                     class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
                         class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                       class="w"> </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><span
                           class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a
                     class="reference internal" href="../_modules/cascade/utils/tables/tables.html#TableFilter"><span
                       class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -1251,24 +1252,24 @@
                           class="n"><span class="pre">mask</span></span><span class="p"><span
                             class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List"
-                            title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">List</span></a><span class="p"><span
                               class="pre">[</span></span><a class="reference external"
-                            href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span
-                              class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span></em>,
-                      <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
-                            class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
-                          class="w"> </span><span class="n"><a class="reference external"
-                            href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                            href="https://docs.python.org/3/builtins/functions.html#bool"
+                            title="(in Python v3.15)"><span class="pre">bool</span></a><span class="p"><span
+                              class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span
+                            class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
+                          class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
+                            class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                         class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
                             class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#TableFilter.__init__"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -1287,8 +1288,8 @@
                             </li>
                             <li>
                               <p><strong>mask</strong> (<em>Iterable</em><em>[</em><a class="reference external"
-                                  href="https://docs.python.org/3/library/functions.html#bool"
-                                  title="(in Python v3.14)"><em>bool</em></a><em>]</em>) – Binary mask to select values
+                                  href="https://docs.python.org/3/builtins/functions.html#bool"
+                                  title="(in Python v3.15)"><em>bool</em></a><em>]</em>) – Binary mask to select values
                                 from table.</p>
                             </li>
                           </ul>
@@ -1308,22 +1309,22 @@
                     class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                         class="pre">csv_file_path</span></span><span class="p"><span class="pre">:</span></span><span
                       class="w"> </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                           class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span
                         class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                     class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span
                         class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span
                           class="pre">int</span></a></span><span class="w"> </span><span class="o"><span
                         class="pre">=</span></span><span class="w"> </span><span class="default_value"><span
                         class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span
                         class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                     class="sig-paren">)</span><a class="reference internal"
                     href="../_modules/cascade/utils/tables/tables.html#TableIterator"><span class="viewcode-link"><span
                         class="pre">[source]</span></span></a><a class="headerlink"
@@ -1337,28 +1338,28 @@
                         class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                             class="pre">csv_file_path</span></span><span class="p"><span
                             class="pre">:</span></span><span class="w"> </span><span class="n"><a
-                            class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str"
-                            title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em
+                            class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                            title="(in Python v3.15)"><span class="pre">str</span></a></span></em>, <em
                         class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span
                             class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                         class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span
                           class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
-                            class="reference external" href="https://docs.python.org/3/library/functions.html#int"
-                            title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w">
+                            class="reference external" href="https://docs.python.org/3/builtins/functions.html#int"
+                            title="(in Python v3.15)"><span class="pre">int</span></a></span><span class="w">
                         </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span
                           class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span
                           class="o"><span class="pre">**</span></span><span class="n"><span
                             class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/tables/tables.html#TableIterator.__init__"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -1371,13 +1372,13 @@
                           <ul class="simple">
                             <li>
                               <p><strong>csv_file_path</strong> (<a class="reference external"
-                                  href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a>) – Path to the .csv file</p>
+                                  href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a>) – Path to the .csv file</p>
                             </li>
                             <li>
                               <p><strong>chunk_size</strong> (<a class="reference external"
-                                  href="https://docs.python.org/3/library/functions.html#int"
-                                  title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – number of
+                                  href="https://docs.python.org/3/builtins/functions.html#int"
+                                  title="(in Python v3.15)"><em>int</em></a><em>, </em><em>optional</em>) – number of
                                 rows to return in one __next__</p>
                             </li>
                           </ul>

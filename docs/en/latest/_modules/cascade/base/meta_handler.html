@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cascade.base.meta_handler &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.base.meta_handler &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -452,7 +452,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">json</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONEncoder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">NoReturn</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">deepdiff</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
@@ -462,19 +461,12 @@
 <span class="n">default_meta_format</span> <span class="o">=</span> <span class="s2">&quot;.json&quot;</span>
 <span class="n">supported_meta_formats</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span> <span class="s2">&quot;.yml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yaml&quot;</span><span class="p">)</span>
 
-<span class="c1"># This is for python 3.7</span>
-<span class="c1"># where latest deepdiff is 6.7.1</span>
-<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">deepdiff</span><span class="o">.</span><span class="n">diff</span><span class="p">,</span> <span class="s2">&quot;PrettyOrderedSet&quot;</span><span class="p">):</span>
-    <span class="n">diff_set</span> <span class="o">=</span> <span class="n">deepdiff</span><span class="o">.</span><span class="n">diff</span><span class="o">.</span><span class="n">PrettyOrderedSet</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">diff_set</span> <span class="o">=</span> <span class="n">deepdiff</span><span class="o">.</span><span class="n">diff</span><span class="o">.</span><span class="n">SetOrdered</span>
-
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CustomEncoder</span><span class="p">(</span><span class="n">JSONEncoder</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cascade&#39;s own custom encoder for JSON.</span>
 
-<span class="sd">    Supports numpy constants, arrays, datetimes, types, deepdiff, dataclasses and</span>
+<span class="sd">    Supports numpy constants, arrays, datetimes, types, dataclasses and</span>
 <span class="sd">    some internal objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -521,11 +513,8 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">set</span><span class="p">,</span> <span class="n">diff_set</span><span class="p">)):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">deepdiff</span><span class="o">.</span><span class="n">DeepDiff</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 
         <span class="k">elif</span> <span class="n">is_dataclass</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">asdict</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>

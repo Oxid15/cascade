@@ -1,6 +1,10 @@
 Track Dataset Errors
 ####################
 
+.. meta::
+   :description: Track and diagnose errors that occur inside Cascade datasets and data transformation pipelines.
+   :keywords: cascade, dataset errors, debugging, data pipelines, exception tracking
+
 .. important::
 
    This functionality was introduced in Cascade ``0.17.0``
@@ -37,8 +41,8 @@ Consider the following pipeline:
 
 .. code-block:: python
 
-for i in range(len(ds)):
-   ds[i]
+   for i in range(len(ds)):
+      ds[i]
 
 Here we have dummy Dataset and Modifier both overriding default ``__getitem__`` method. When we execute the code we see only the error message and will require additional runs to trace where exactly the error occured. In case of large datasets and long trainings it can be very costly to run second time to check where the error occurs.
 

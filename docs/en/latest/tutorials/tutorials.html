@@ -7,8 +7,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta
+    content="Learn Cascade fundamentals through guided tutorials covering installation, pipelines, models, and experiment tracking."
+    name="description" />
+  <meta content="cascade, small-scale MLOps, tutorials, data pipelines, models, experiment tracking" name="keywords" />
 
-  <title>Tutorial &#8212; cascade 0.18.0 documentation</title>
+  <title>Tutorial &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,7 +67,6 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Cascade UI" href="ui.html" />
@@ -565,11 +568,19 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                   <p>Some lessons come with links for further reading or advanced
                     how-to guides on related topics.</p>
                   <p>Cascade pipelines allow building data processing routines from
-                    steps called <code class="docutils literal notranslate"><span class="pre">Datasets</span></code> and
-                    <code class="docutils literal notranslate"><span class="pre">Modifiers</span></code>.</p>
-                  <p><code class="docutils literal notranslate"><span class="pre">Datasets</span></code> are the sources
-                    of data. In the first step let’s make a <code
-                      class="docutils literal notranslate"><span class="pre">Dataset</span></code>
+                    steps called <a class="reference internal" href="../modules/cascade.data.html#cascade.data.Dataset"
+                      title="cascade.data.Dataset"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a>s
+                    and <a class="reference internal" href="../modules/cascade.data.html#cascade.data.Modifier"
+                      title="cascade.data.Modifier"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Modifier</span></code></a>s.
+                  </p>
+                  <p><a class="reference internal" href="../modules/cascade.data.html#cascade.data.Dataset"
+                      title="cascade.data.Dataset"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a>s
+                    are the sources of data. In the first step let’s make a <a class="reference internal"
+                      href="../modules/cascade.data.html#cascade.data.Dataset" title="cascade.data.Dataset"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a>
                     for <code class="docutils literal notranslate"><span class="pre">digits</span></code> from <code
                       class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
                   <div class="highlight-python notranslate">
@@ -628,10 +639,14 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
 </pre>
                     </div>
                   </div>
-                  <p><code class="docutils literal notranslate"><span class="pre">Modifiers</span></code> take datasets
-                    and transform their values.
-                    In previous example we added noise to digits by using <code
-                      class="docutils literal notranslate"><span class="pre">ApplyModifier</span></code>
+                  <p><a class="reference internal" href="../modules/cascade.data.html#cascade.data.Modifier"
+                      title="cascade.data.Modifier"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Modifier</span></code></a>s
+                    take datasets and transform their values.
+                    In previous example we added noise to digits by using <a class="reference internal"
+                      href="../modules/cascade.data.html#cascade.data.ApplyModifier"
+                      title="cascade.data.ApplyModifier"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">ApplyModifier</span></code></a>
                     and created a new noisy dataset.</p>
                   <p>We can augment our data by concatenating those two datasets.</p>
                   <div class="highlight-python notranslate">
@@ -725,8 +740,10 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                     for the model is not strictly defined as in Dataset case. We define <code
                       class="docutils literal notranslate"><span class="pre">fit</span></code> and <code
                       class="docutils literal notranslate"><span class="pre">predict</span></code>.
-                    <code class="docutils literal notranslate"><span class="pre">BasicModel</span></code> will handle
-                    everything else for us - like saving and loading for example.
+                    <a class="reference internal" href="../modules/cascade.models.html#cascade.models.BasicModel"
+                      title="cascade.models.BasicModel"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">BasicModel</span></code></a>
+                    will handle everything else for us - like saving and loading for example.
                   </p>
                   <p>We can create and fit the model now using the dataset from the Pipelines step.</p>
                   <div class="highlight-python notranslate">
@@ -943,8 +960,10 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                     in different ways. First case is the regular way metrics are usually defined
                     in projects - as functions.</p>
                   <p>Metric function can be passed in the default <code
-                      class="docutils literal notranslate"><span class="pre">evaluate</span></code> method of <code
-                      class="docutils literal notranslate"><span class="pre">BasicModel</span></code>.
+                      class="docutils literal notranslate"><span class="pre">evaluate</span></code> method of <a
+                      class="reference internal" href="../modules/cascade.models.html#cascade.models.BasicModel"
+                      title="cascade.models.BasicModel"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">BasicModel</span></code></a>.
                     Evaluation of the model will return nothing, but instead fill its <code
                       class="docutils literal notranslate"><span class="pre">metrics</span></code> field with a list
                     of metrics.</p>
@@ -973,15 +992,18 @@ pip<span class="w"> </span>install<span class="w"> </span>cascade-ml<span class=
                     </div>
                   </div>
                   <p>Let’s try defining a metric in another, more flexible way. We need to implement
-                    a descendant of <code
-                      class="docutils literal notranslate"><span class="pre">cascade.metrics.Metric</span></code> class.
-                    The one required method is <code
+                    a descendant of <a class="reference internal"
+                      href="../modules/cascade.metrics.html#cascade.metrics.Metric" title="cascade.metrics.Metric"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>
+                    class. The one required method is <code
                       class="docutils literal notranslate"><span class="pre">compute</span></code>
                     that should return value and also set <code
                       class="docutils literal notranslate"><span class="pre">self.value</span></code>.</p>
                   <p>After that <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> can
-                    be called with a list of <code
-                      class="docutils literal notranslate"><span class="pre">Metric</span></code> objects.</p>
+                    be called with a list of <a class="reference internal"
+                      href="../modules/cascade.metrics.html#cascade.metrics.Metric" title="cascade.metrics.Metric"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Metric</span></code></a>
+                    objects.</p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">Metric</span>
@@ -1331,9 +1353,14 @@ a few seconds before
 </pre>
                     </div>
                   </div>
-                  <p>The following code will raise <code
-                      class="docutils literal notranslate"><span class="pre">GetItemError</span></code> from <code
-                      class="docutils literal notranslate"><span class="pre">ValidationError</span></code>.</p>
+                  <p>The following code will raise <a class="reference internal"
+                      href="../modules/cascade.data.html#cascade.data.GetItemError"
+                      title="cascade.data.GetItemError"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">GetItemError</span></code></a>
+                    from <a class="reference internal" href="../modules/cascade.data.html#cascade.data.ValidationError"
+                      title="cascade.data.ValidationError"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">ValidationError</span></code></a>.
+                  </p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="n">evil</span> <span class="o">=</span> <span class="n">EvilDataset</span><span class="p">()</span>
@@ -1468,9 +1495,12 @@ a few seconds before
                     wrapper for <code
                       class="docutils literal notranslate"><span class="pre">sklearn.metrics</span></code> module.</p>
                   <p>Now we do not need to implement our own model wrapper or care about different methods. Everything
-                    is already implemented in <code
-                      class="docutils literal notranslate"><span class="pre">SkModel</span></code> class. Notice how we
-                    pass <code class="docutils literal notranslate"><span class="pre">blocks</span></code> as a list of
+                    is already implemented in <a class="reference internal"
+                      href="../modules/cascade.utils.sklearn.html#cascade.utils.sklearn.SkModel"
+                      title="cascade.utils.sklearn.SkModel"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">SkModel</span></code></a>
+                    class. Notice how we pass <code
+                      class="docutils literal notranslate"><span class="pre">blocks</span></code> as a list of
                     transforms.
                     The explicit use of keyword parameter here is required.</p>
                   <div class="highlight-python notranslate">
@@ -1495,9 +1525,12 @@ a few seconds before
 </pre>
                     </div>
                   </div>
-                  <p><code class="docutils literal notranslate"><span class="pre">SkMetric</span></code> class provides
-                    a wrapper around <code class="docutils literal notranslate"><span class="pre">metrics</span></code>
-                    module. You can pass
+                  <p><a class="reference internal"
+                      href="../modules/cascade.utils.sklearn.html#cascade.utils.sklearn.SkMetric"
+                      title="cascade.utils.sklearn.SkMetric"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">SkMetric</span></code></a>
+                    class provides a wrapper around <code
+                      class="docutils literal notranslate"><span class="pre">metrics</span></code> module. You can pass
                     a valid name from this module and it will be imported by Cascade for you.
                     Cascade also features some aliases for metrics. <code
                       class="docutils literal notranslate"><span class="pre">acc</span></code> will import <code

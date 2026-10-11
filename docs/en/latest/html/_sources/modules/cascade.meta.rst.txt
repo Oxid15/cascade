@@ -1,0 +1,6 @@
+.. meta::
+   :description: API reference for Cascade metadata management and metadata visualization utilities.
+   :keywords: cascade, Python API, metadata, meta management, experiment tracking
+
+.. automodule:: cascade.meta
+    :members:

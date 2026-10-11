@@ -7,8 +7,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta
+    content="Practical Cascade how-to guides for building pipelines, tracking experiments, querying results, and managing metadata."
+    name="description" />
+  <meta content="cascade, how-to guides, small-scale MLOps, pipelines, experiment tracking, data validation"
+    name="keywords" />
 
-  <title>How-to guides &#8212; cascade 0.18.0 documentation</title>
+  <title>How-to guides &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,7 +68,6 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Pipeline building" href="pipeline_building.html" />
@@ -387,6 +391,10 @@
                 <ul class="nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="pipeline_building.html">Pipeline
                       building</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="track_dataset_errors.html">Track Dataset
+                      Errors</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="version_data_pipeline.html">Version data
+                      pipeline</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="model_training.html">Model training</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="track_logs.html">Track experiment logs with
@@ -394,8 +402,8 @@
                   <li class="toctree-l1"><a class="reference internal" href="model_training_trainers.html">Model
                       training using trainers</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="track_a_file.html">Track a file</a></li>
-                  <li class="toctree-l1"><a class="reference internal" href="track_dataset_errors.html">Track Dataset
-                      Errors</a></li>
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="track_existing_functional_pipeline.html">Track Existing Functional Pipeline</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="cli.html">Use Cascade CLI</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="queries.html">Common query use cases</a>
                   </li>
@@ -405,6 +413,15 @@
                   <li class="toctree-l1"><a class="reference internal" href="comments.html">Comment on results of an
                       experiment</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="tags.html">Add Tags</a></li>
+                  <li class="toctree-l1 has-children"><a class="reference internal" href="recipes/recipes.html">Cascade
+                      Recipes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1"
+                      type="checkbox" /><label class="toctree-toggle" for="toctree-checkbox-1"><i
+                        class="fa-solid fa-chevron-down"></i></label>
+                    <ul>
+                      <li class="toctree-l2"><a class="reference internal" href="recipes/01_baseline_sweep.html">Track
+                          ML experiments with Cascade</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
             </nav>
@@ -495,6 +512,18 @@
                               class="std std-ref"></span></a>
                         </div>
                       </div>
+                      <div class="sd-col sd-d-flex-column docutils">
+                        <div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm sd-card-hover docutils">
+                          <div class="sd-card-body docutils">
+                            <div class="sd-card-title sd-font-weight-bold docutils">
+                              Version data pipeline</div>
+                            <p class="sd-card-text">How to track pipeline changes, add metadata and avoid version
+                              explosions</p>
+                          </div>
+                          <a class="sd-stretched-link reference internal" href="version_data_pipeline.html"><span
+                              class="std std-ref"></span></a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -546,6 +575,17 @@
                           </div>
                           <a class="sd-stretched-link reference internal" href="track_a_file.html"><span
                               class="std std-ref"></span></a>
+                        </div>
+                      </div>
+                      <div class="sd-col sd-d-flex-column docutils">
+                        <div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm sd-card-hover docutils">
+                          <div class="sd-card-body docutils">
+                            <div class="sd-card-title sd-font-weight-bold docutils">
+                              Track an existing functional pipeline</div>
+                            <p class="sd-card-text">If you already have your Python functions and want to track them</p>
+                          </div>
+                          <a class="sd-stretched-link reference internal"
+                            href="track_existing_functional_pipeline.html"><span class="std std-ref"></span></a>
                         </div>
                       </div>
                     </div>
@@ -653,6 +693,27 @@
                       </div>
                     </div>
                   </div>
+                </section>
+                <section id="cascade-recipes">
+                  <h2>Cascade Recipes<a class="headerlink" href="#cascade-recipes"
+                      title="Permalink to this heading">#</a></h2>
+                  <p>Browse a collection of real-life small projects built with Cascade.
+                    Each use-case shows how Cascade can be used with full working code examples.</p>
+                  <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+                    <div
+                      class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+                      <div class="sd-col sd-d-flex-column docutils">
+                        <div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm sd-card-hover docutils">
+                          <div class="sd-card-body docutils">
+                            <div class="sd-card-title sd-font-weight-bold docutils">
+                              01 - Track ML experiments with Cascade</div>
+                          </div>
+                          <a class="sd-stretched-link reference internal" href="recipes/01_baseline_sweep.html"><span
+                              class="std std-ref"></span></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div class="toctree-wrapper compound">
                   </div>
                 </section>
@@ -713,6 +774,8 @@
                         href="#integrations">Integrations</a></li>
                     <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
                         href="#experiment-management">Experiment management</a></li>
+                    <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link"
+                        href="#cascade-recipes">Cascade Recipes</a></li>
                   </ul>
                 </nav>
               </div>

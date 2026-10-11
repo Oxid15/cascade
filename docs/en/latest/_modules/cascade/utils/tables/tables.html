@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cascade.utils.tables.tables &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.utils.tables.tables &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -528,10 +528,7 @@
 <span class="sd">            Binary mask to select values from table.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">dataset</span><span class="o">.</span><span class="n">_table</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">init_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Length before filtering: </span><span class="si">{</span><span class="n">init_len</span><span class="si">}</span><span class="s2">, length after: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span></div></div>
 
 
 <div class="viewcode-block" id="CSVDataset"><a class="viewcode-back" href="../../../../modules/cascade.utils.tables.html#cascade.utils.tables.CSVDataset">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">CSVDataset</span><span class="p">(</span><span class="n">TableDataset</span><span class="p">):</span>

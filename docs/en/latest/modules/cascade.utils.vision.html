@@ -7,8 +7,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta content="API reference for Cascade computer vision datasets and image-processing utilities."
+    name="description" />
+  <meta content="cascade, small-scale MLOps, Python API, computer vision, image datasets, data pipelines"
+    name="keywords" />
 
-  <title>cascade.utils.vision &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.utils.vision &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,10 +67,9 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
-  <link rel="next" title="Dataset Zoo" href="dataset_zoo.html" />
+  <link rel="next" title="cascade.workspaces" href="cascade.workspaces.html" />
   <link rel="prev" title="cascade.utils.torch" href="cascade.utils.torch.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en" />
@@ -437,10 +440,6 @@
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
 
 
-
-
-
-
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
 
@@ -494,6 +493,9 @@
 
                   <li class="toctree-l1 current active"><a class="current reference internal"
                       href="#">cascade.utils.vision</a></li>
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.workspaces.html">cascade.workspaces</a></li>
 
                   <li class="toctree-l1"><a class="reference internal" href="dataset_zoo.html">Dataset Zoo</a></li>
                 </ul>
@@ -567,12 +569,12 @@
                     class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                         class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w">
                     </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                           class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span
                         class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span
                       class="w"> </span><span class="n"><a class="reference external"
                         href="https://docs.python.org/3/library/typing.html#typing.Literal"
-                        title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span
+                        title="(in Python v3.15)"><span class="pre">Literal</span></a><span class="p"><span
                           class="pre">[</span></span><span class="s"><span class="pre">'cv2'</span></span><span
                         class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span
                           class="pre">'PIL'</span></span><span class="p"><span class="pre">]</span></span></span><span
@@ -581,12 +583,12 @@
                       class="o"><span class="pre">*</span></span><span class="n"><span
                         class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w">
                     </span><span class="n"><a class="reference external"
-                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span
+                        href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><span
                           class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="o"><span
                         class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span
                       class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                         class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                        title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                        title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                     class="sig-paren">)</span><a class="reference internal"
                     href="../_modules/cascade/utils/vision/folder_image_dataset.html#FolderImageDataset"><span
                       class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -603,12 +605,12 @@
                         class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                             class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
-                            href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span
                               class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span
                             class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Literal"
-                            title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span
+                            title="(in Python v3.15)"><span class="pre">Literal</span></a><span class="p"><span
                               class="pre">[</span></span><span class="s"><span class="pre">'cv2'</span></span><span
                             class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span
                               class="pre">'PIL'</span></span><span class="p"><span
@@ -618,16 +620,16 @@
                             class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span
                           class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a
                             class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em>, <em
                         class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span
                             class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></em><span
                         class="sig-paren">)</span> <span class="sig-return"><span
                           class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a
-                            class="reference external" href="https://docs.python.org/3/library/constants.html#None"
-                            title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a
+                            class="reference external" href="https://docs.python.org/3/builtins/constants.html#None"
+                            title="(in Python v3.15)"><span class="pre">None</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/vision/folder_image_dataset.html#FolderImageDataset.__init__"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -641,8 +643,8 @@
                           <ul class="simple">
                             <li>
                               <p><strong>root</strong> (<a class="reference external"
-                                  href="https://docs.python.org/3/library/stdtypes.html#str"
-                                  title="(in Python v3.14)"><em>str</em></a>) – The folder with images. Should contain
+                                  href="https://docs.python.org/3/builtins/stdtypes.html#str"
+                                  title="(in Python v3.15)"><em>str</em></a>) – The folder with images. Should contain
                                 image files only</p>
                             </li>
                             <li>
@@ -662,12 +664,12 @@
                         class="sig-paren">(</span><em class="sig-param"><span class="n"><span
                             class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span
                           class="w"> </span><span class="n"><a class="reference external"
-                            href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span
+                            href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span
                               class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span
                         class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span
                           class="sig-return-typehint"><a class="reference external"
                             href="https://docs.python.org/3/library/typing.html#typing.Any"
-                            title="(in Python v3.14)"><span class="pre">Any</span></a></span></span><a
+                            title="(in Python v3.15)"><span class="pre">Any</span></a></span></span><a
                         class="reference internal"
                         href="../_modules/cascade/utils/vision/folder_image_dataset.html#FolderImageDataset.get"><span
                           class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink"
@@ -679,8 +681,8 @@
                         <dt class="field-odd">Parameters<span class="colon">:</span></dt>
                         <dd class="field-odd">
                           <p><strong>index</strong> (<a class="reference external"
-                              href="https://docs.python.org/3/library/functions.html#int"
-                              title="(in Python v3.14)"><em>int</em></a>) – Image index</p>
+                              href="https://docs.python.org/3/builtins/functions.html#int"
+                              title="(in Python v3.15)"><em>int</em></a>) – Image index</p>
                         </dd>
                         <dt class="field-even">Returns<span class="colon">:</span></dt>
                         <dd class="field-even">
@@ -716,10 +718,10 @@
                         <p class="prev-next-title">cascade.utils.torch</p>
                       </div>
                     </a>
-                    <a class="right-next" href="dataset_zoo.html" title="next page">
+                    <a class="right-next" href="cascade.workspaces.html" title="next page">
                       <div class="prev-next-info">
                         <p class="prev-next-subtitle">next</p>
-                        <p class="prev-next-title">Dataset Zoo</p>
+                        <p class="prev-next-title">cascade.workspaces</p>
                       </div>
                       <i class="fa-solid fa-angle-right"></i>
                     </a>

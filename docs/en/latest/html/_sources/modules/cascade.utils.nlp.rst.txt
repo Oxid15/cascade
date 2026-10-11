@@ -1,0 +1,6 @@
+.. meta::
+   :description: API reference for Cascade natural language processing utilities and dataset components.
+   :keywords: cascade, Python API, NLP, natural language processing, datasets
+
+.. automodule:: cascade.utils.nlp
+    :members:

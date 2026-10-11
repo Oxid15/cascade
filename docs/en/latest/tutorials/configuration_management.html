@@ -7,8 +7,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta
+    content="Configure Cascade training scripts from Python and the command line while saving configurations and logs with experiments."
+    name="description" />
+  <meta content="cascade, small-scale MLOps, configuration management, CLI, training configuration, experiment tracking"
+    name="keywords" />
 
-  <title>Configuration management &#8212; cascade 0.18.0 documentation</title>
+  <title>Configuration management &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,7 +68,6 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Advanced Experiment Management" href="advanced_experiment_management.html" />
@@ -454,7 +458,9 @@
               <section id="configuration-management">
                 <h1>Configuration management<a class="headerlink" href="#configuration-management"
                     title="Permalink to this heading">#</a></h1>
-                <p>Using <code class="docutils literal notranslate"><span class="pre">cascade.base.Config</span></code>
+                <p>Using <a class="reference internal" href="../modules/cascade.base.html#cascade.base.Config"
+                    title="cascade.base.Config"><code
+                      class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></a>
                   class and <code
                     class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">run</span></code>
                   CLI command you can:</p>
@@ -477,8 +483,11 @@
                   </h2>
                   <p>Here is a sample script featuring a Config inside a file called <code
                       class="docutils literal notranslate"><span class="pre">config_demo.py</span></code>.</p>
-                  <p>To enable configuration you need to define a new class that inherits from <code
-                      class="docutils literal notranslate"><span class="pre">cascade.base.Config</span></code>.</p>
+                  <p>To enable configuration you need to define a new class that inherits from <a
+                      class="reference internal" href="../modules/cascade.base.html#cascade.base.Config"
+                      title="cascade.base.Config"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></a>.
+                  </p>
                   <div class="highlight-python notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
@@ -566,8 +575,10 @@ Image height is 24 and width is 24
                     anything in your scripts. However, at the same time it creates tracking problems because only
                     <code class="docutils literal notranslate"><span class="pre">run</span></code> knows about overrides
                     and logs and only the script knows about repos and lines.
-                    To address this problem special <code
-                      class="docutils literal notranslate"><span class="pre">Model</span></code> methods come into play.
+                    To address this problem special <a class="reference internal"
+                      href="../modules/cascade.models.html#cascade.models.Model" title="cascade.models.Model"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>
+                    methods come into play.
                   </p>
                   <p>Let’s see next example, where we use special <code
                       class="docutils literal notranslate"><span class="pre">add_config</span></code> method. Notice how

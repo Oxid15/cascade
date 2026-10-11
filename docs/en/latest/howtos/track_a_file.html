@@ -7,8 +7,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta content="Save arbitrary files as tracked artifacts alongside Cascade models and experiments."
+    name="description" />
+  <meta content="cascade, file artifacts, file tracking, experiment tracking, reproducibility" name="keywords" />
 
-  <title>Track a file &#8212; cascade 0.18.0 documentation</title>
+  <title>Track a file &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,10 +66,9 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
-  <link rel="next" title="Track Dataset Errors" href="track_dataset_errors.html" />
+  <link rel="next" title="Track Existing Functional Pipeline" href="track_existing_functional_pipeline.html" />
   <link rel="prev" title="Model training using trainers" href="model_training_trainers.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en" />
@@ -387,6 +389,10 @@
                 <ul class="current nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="pipeline_building.html">Pipeline
                       building</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="track_dataset_errors.html">Track Dataset
+                      Errors</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="version_data_pipeline.html">Version data
+                      pipeline</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="model_training.html">Model training</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="track_logs.html">Track experiment logs with
@@ -395,8 +401,8 @@
                       training using trainers</a></li>
                   <li class="toctree-l1 current active"><a class="current reference internal" href="#">Track a file</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="track_dataset_errors.html">Track Dataset
-                      Errors</a></li>
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="track_existing_functional_pipeline.html">Track Existing Functional Pipeline</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="cli.html">Use Cascade CLI</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="queries.html">Common query use cases</a>
                   </li>
@@ -406,6 +412,15 @@
                   <li class="toctree-l1"><a class="reference internal" href="comments.html">Comment on results of an
                       experiment</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="tags.html">Add Tags</a></li>
+                  <li class="toctree-l1 has-children"><a class="reference internal" href="recipes/recipes.html">Cascade
+                      Recipes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1"
+                      type="checkbox" /><label class="toctree-toggle" for="toctree-checkbox-1"><i
+                        class="fa-solid fa-chevron-down"></i></label>
+                    <ul>
+                      <li class="toctree-l2"><a class="reference internal" href="recipes/01_baseline_sweep.html">Track
+                          ML experiments with Cascade</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
             </nav>
@@ -469,8 +484,10 @@
                 <p>This article is about saving an arbitrary file along with a
                   model in Cascade.</p>
                 <p>Every experiment can generate some files that need to be tracked. Cascade allows you to manage
-                  file artifacts easily using <code
-                    class="docutils literal notranslate"><span class="pre">Model</span></code> API.</p>
+                  file artifacts easily using <a class="reference internal"
+                    href="../modules/cascade.models.html#cascade.models.Model" title="cascade.models.Model"><code
+                      class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>
+                  API.</p>
                 <div class="highlight-python notranslate">
                   <div class="highlight">
                     <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.baselines</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConstantBaseline</span>
@@ -487,7 +504,10 @@
                 <p>This will copy <code class="docutils literal notranslate"><span class="pre">file.txt</span></code>
                   into <code class="docutils literal notranslate"><span class="pre">files</span></code> folder within
                   model’s directory when a model is saved
-                  by <code class="docutils literal notranslate"><span class="pre">ModelLine</span></code>.</p>
+                  by <a class="reference internal" href="../modules/cascade.lines.html#cascade.lines.ModelLine"
+                    title="cascade.lines.ModelLine"><code
+                      class="xref py py-class docutils literal notranslate"><span class="pre">ModelLine</span></code></a>.
+                </p>
                 <div class="highlight-python notranslate">
                   <div class="highlight">
                     <pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.lines</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelLine</span>
@@ -522,10 +542,10 @@
                         <p class="prev-next-title">Model training using trainers</p>
                       </div>
                     </a>
-                    <a class="right-next" href="track_dataset_errors.html" title="next page">
+                    <a class="right-next" href="track_existing_functional_pipeline.html" title="next page">
                       <div class="prev-next-info">
                         <p class="prev-next-subtitle">next</p>
-                        <p class="prev-next-title">Track Dataset Errors</p>
+                        <p class="prev-next-title">Track Existing Functional Pipeline</p>
                       </div>
                       <i class="fa-solid fa-angle-right"></i>
                     </a>

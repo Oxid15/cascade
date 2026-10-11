@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cascade.data.schema &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.data.schema &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -518,6 +518,27 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validation_wrapper</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">__name</span><span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_schema_to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_schema</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic.json_schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenerateJsonSchema</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot import `pydantic` - it is optional dependency for general type checking&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">class</span><span class="w"> </span><span class="nc">IgnoreErrors</span><span class="p">(</span><span class="n">GenerateJsonSchema</span><span class="p">):</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">handle_invalid_for_json_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">error_info</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">schema</span>
+
+            <span class="n">schema_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_schema</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">(</span>
+                <span class="n">schema_generator</span><span class="o">=</span><span class="n">IgnoreErrors</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">schema_json</span>
+
 <div class="viewcode-block" id="SchemaModifier.get_meta"><a class="viewcode-back" href="../../../modules/cascade.data.html#cascade.data.SchemaModifier.get_meta">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Meta</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Since SchemaModifier will add ValidationWrapper dynamically to _dataset</span>
@@ -532,8 +553,7 @@
         <span class="k">if</span> <span class="n">meta</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cascade.data.schema.ValidationWrapper&quot;</span><span class="p">:</span>
             <span class="n">meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_schema</span><span class="p">:</span>
-            <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;in_schema&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_schema</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">()</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;in_schema&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schema_to_json</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">meta</span></div></div>
 
 

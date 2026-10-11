@@ -7,8 +7,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta
+    content="Track a PyTorch MNIST training experiment with Cascade, including metadata, hyperparameter tuning, and model selection."
+    name="description" />
+  <meta content="cascade, PyTorch, MNIST, model training, hyperparameter tuning, experiment tracking" name="keywords" />
 
-  <title>Model training &#8212; cascade 0.18.0 documentation</title>
+  <title>Model training &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,11 +67,10 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Track experiment logs with Cascade" href="track_logs.html" />
-  <link rel="prev" title="Pipeline building" href="pipeline_building.html" />
+  <link rel="prev" title="Version data pipeline" href="version_data_pipeline.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en" />
 </head>
@@ -387,6 +390,10 @@
                 <ul class="current nav bd-sidenav">
                   <li class="toctree-l1"><a class="reference internal" href="pipeline_building.html">Pipeline
                       building</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="track_dataset_errors.html">Track Dataset
+                      Errors</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="version_data_pipeline.html">Version data
+                      pipeline</a></li>
                   <li class="toctree-l1 current active"><a class="current reference internal" href="#">Model
                       training</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="track_logs.html">Track experiment logs with
@@ -394,8 +401,8 @@
                   <li class="toctree-l1"><a class="reference internal" href="model_training_trainers.html">Model
                       training using trainers</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="track_a_file.html">Track a file</a></li>
-                  <li class="toctree-l1"><a class="reference internal" href="track_dataset_errors.html">Track Dataset
-                      Errors</a></li>
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="track_existing_functional_pipeline.html">Track Existing Functional Pipeline</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="cli.html">Use Cascade CLI</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="queries.html">Common query use cases</a>
                   </li>
@@ -405,6 +412,15 @@
                   <li class="toctree-l1"><a class="reference internal" href="comments.html">Comment on results of an
                       experiment</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="tags.html">Add Tags</a></li>
+                  <li class="toctree-l1 has-children"><a class="reference internal" href="recipes/recipes.html">Cascade
+                      Recipes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1"
+                      type="checkbox" /><label class="toctree-toggle" for="toctree-checkbox-1"><i
+                        class="fa-solid fa-chevron-down"></i></label>
+                    <ul>
+                      <li class="toctree-l2"><a class="reference internal" href="recipes/01_baseline_sweep.html">Track
+                          ML experiments with Cascade</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
             </nav>
@@ -668,10 +684,19 @@
                   <h2>Saving the model<a class="headerlink" href="#saving-the-model"
                       title="Permalink to this heading">#</a></h2>
                   <p>Model containers are organized hierarchically as
-                    <code class="docutils literal notranslate"><span class="pre">Workspace</span></code> -&gt; <code
-                      class="docutils literal notranslate"><span class="pre">Repo</span></code> -&gt; (<code
-                      class="docutils literal notranslate"><span class="pre">ModelLine</span></code>/<code
-                      class="docutils literal notranslate"><span class="pre">DataLine</span></code>). A model line
+                    <a class="reference internal" href="../modules/cascade.workspaces.html#cascade.workspaces.Workspace"
+                      title="cascade.workspaces.Workspace"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Workspace</span></code></a>
+                    -&gt; <a class="reference internal" href="../modules/cascade.repos.html#cascade.repos.Repo"
+                      title="cascade.repos.Repo"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Repo</span></code></a>
+                    -&gt; (<a class="reference internal" href="../modules/cascade.lines.html#cascade.lines.ModelLine"
+                      title="cascade.lines.ModelLine"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">ModelLine</span></code></a>/<a
+                      class="reference internal" href="../modules/cascade.lines.html#cascade.lines.DataLine"
+                      title="cascade.lines.DataLine"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">DataLine</span></code></a>).
+                    A model line
                     manages experiments with similar architectures.
                   </p>
                   <div class="highlight-python notranslate">
@@ -763,11 +788,11 @@ cascade<span class="w"> </span>query<span class="w"> </span>slug<span class="w">
 
                 <div class="footer-article-item"><!-- Previous / next buttons -->
                   <div class="prev-next-area">
-                    <a class="left-prev" href="pipeline_building.html" title="previous page">
+                    <a class="left-prev" href="version_data_pipeline.html" title="previous page">
                       <i class="fa-solid fa-angle-left"></i>
                       <div class="prev-next-info">
                         <p class="prev-next-subtitle">previous</p>
-                        <p class="prev-next-title">Pipeline building</p>
+                        <p class="prev-next-title">Version data pipeline</p>
                       </div>
                     </a>
                     <a class="right-next" href="track_logs.html" title="next page">

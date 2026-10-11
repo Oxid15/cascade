@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cascade.data.dataset &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.data.dataset &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -484,6 +484,84 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_card</span> <span class="o">=</span> <span class="n">data_card</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">volatiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_volatiles&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_volatiles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_volatiles</span>
+
+    <span class="nd">@volatiles</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">volatiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;volatiles are read-only. To update it please use declare_volatiles method&quot;</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_card</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_data_card&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data_card</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_card</span>
+
+    <span class="nd">@data_card</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data_card</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_card</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="BaseDataset.declare_volatiles"><a class="viewcode-back" href="../../../modules/cascade.data.html#cascade.data.BaseDataset.declare_volatiles">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">declare_volatiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Volatiles are metadata fields that should not be used for</span>
+<span class="sd">        this dataset versioning</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from datetime import datetime</span>
+<span class="sd">            from cascade.data import Dataset</span>
+<span class="sd">            from cascade.lines import DataLine</span>
+
+<span class="sd">            class ScheduledDataset(Dataset):</span>
+<span class="sd">                def __init__(self):</span>
+<span class="sd">                    self.time_of_arrival = datetime.now()</span>
+<span class="sd">                    self.declare_volatiles(&quot;time_of_arrival&quot;)</span>
+
+<span class="sd">                def get(self):</span>
+<span class="sd">                    return None</span>
+
+<span class="sd">                def __len__(self):</span>
+<span class="sd">                    return 1</span>
+
+<span class="sd">                def get_meta(self):</span>
+<span class="sd">                    meta = super().get_meta()</span>
+<span class="sd">                    meta[0][&quot;time_of_arrival&quot;] = self.time_of_arrival</span>
+<span class="sd">                    return meta</span>
+
+<span class="sd">            ds = ScheduledDataset()</span>
+<span class="sd">            meta = ds.get_meta()</span>
+
+<span class="sd">            assert &quot;time_of_arrival&quot; in meta[0]</span>
+<span class="sd">            assert meta[0][&quot;cascade_volatiles&quot;] == [&quot;time_of_arrival&quot;]</span>
+
+<span class="sd">            line = DataLine(&quot;volatile_check&quot;)</span>
+<span class="sd">            line.save(ds, only_meta=True)</span>
+
+<span class="sd">            initial_version = line.get_version(ds)</span>
+<span class="sd">            initial_time = meta[0][&quot;time_of_arrival&quot;]</span>
+
+<span class="sd">            ds = ScheduledDataset()</span>
+<span class="sd">            meta = ds.get_meta()</span>
+
+<span class="sd">            line.save(ds, only_meta=True)</span>
+
+<span class="sd">            recreated_version = line.get_version(ds)</span>
+<span class="sd">            recreated_time = meta[0][&quot;time_of_arrival&quot;]</span>
+
+<span class="sd">            assert initial_version == &quot;0.1&quot;</span>
+<span class="sd">            assert initial_time != recreated_time</span>
+<span class="sd">            assert initial_version == recreated_version</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volatiles</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="BaseDataset.get_meta"><a class="viewcode-back" href="../../../modules/cascade.data.html#cascade.data.BaseDataset.get_meta">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Meta</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
@@ -496,12 +574,8 @@
         <span class="n">meta</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
         <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;dataset&quot;</span>
 
-        <span class="c1"># Someone may&#39;ve missed the __init__ call and there</span>
-        <span class="c1"># will be no self._data_card</span>
-        <span class="n">data_card</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_data_card&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data_card</span><span class="p">:</span>
-            <span class="n">data_card</span> <span class="o">=</span> <span class="n">data_card</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;data_card&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_card</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;data_card&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_card</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_card</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;cascade_volatiles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volatiles</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">meta</span></div></div>
 
 

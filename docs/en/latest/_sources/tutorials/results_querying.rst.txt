@@ -1,6 +1,10 @@
 Experiment results querying
 ###########################
 
+.. meta::
+   :description: Use Cascade query language to filter, sort, and analyze experiment results from the command line.
+   :keywords: cascade, small-scale MLOps, query language, experiment results, CLI, metrics, filtering
+
 When you have lots of experiments it becomes harder to analyze results by looking  into ``meta.json`` files.
 One can also struggle to find some specific experiment results even knowing its slug or creation date.
 This is where Cascade queries come in.

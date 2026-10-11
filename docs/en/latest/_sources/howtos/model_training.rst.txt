@@ -1,6 +1,10 @@
 Model training
 ##############
 
+.. meta::
+   :description: Track a PyTorch MNIST training experiment with Cascade, including metadata, hyperparameter tuning, and model selection.
+   :keywords: cascade, PyTorch, MNIST, model training, hyperparameter tuning, experiment tracking
+
 This use case demonstrates how to use Cascade for metadata tracking,
 hyperparameter tuning, and model selection. The example uses a small PyTorch
 classifier trained on MNIST.
@@ -200,7 +204,7 @@ Saving the model
 ****************
 
 Model containers are organized hierarchically as
-``Workspace`` -> ``Repo`` -> (``ModelLine``/``DataLine``). A model line
+:class:`~cascade.workspaces.Workspace` -> :class:`~cascade.repos.Repo` -> (:class:`~cascade.lines.ModelLine`/:class:`~cascade.lines.DataLine`). A model line
 manages experiments with similar architectures.
 
 .. code-block:: python

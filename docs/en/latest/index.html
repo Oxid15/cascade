@@ -10,10 +10,11 @@
   <meta
     content="Open-source Python MLOps library for lightweight experiment tracking. Configuration management, ML pipeline building and data validation tools for small-scale development."
     name="description" />
-  <meta content="cascade, mlops, small-scale mlops, local experiment tracking, pipelines, data validation"
+  <meta
+    content="cascade, mlops, small-scale mlops, local experiment tracking, pipelines, data validation, mlflow, clearml"
     name="keywords" />
 
-  <title>Small-scale MLOps library &#8212; cascade 0.18.0 documentation</title>
+  <title>Small-scale MLOps library &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -68,7 +69,6 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="logo_sq.svg" />
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
   <link rel="next" title="Tutorial" href="tutorials/tutorials.html" />
@@ -451,7 +451,7 @@
                   <p>Just do <code
                       class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">ui</span></code>
                     to get a nice dashboard for your experiments</p>
-                  <img alt="UI demo of Cascade - Small scale MLOps library" src="cascade_ui_screens.gif" />
+                  <img alt="UI demo of Cascade - Small scale MLOps library" src="_images/cascade_ui_screens.gif" />
                   <p>See more docs on <a class="reference internal" href="tutorials/ui.html"><span
                         class="std std-ref">Cascade UI</span></a></p>
                 </section>
@@ -901,8 +901,10 @@
                     <h3>Aim<a class="headerlink" href="#aim" title="Permalink to this heading">#</a></h3>
                     <p>Aim experiment typically creates a <code
                         class="docutils literal notranslate"><span class="pre">Run</span></code> which can be replaced
-                      with <code class="docutils literal notranslate"><span class="pre">ModelLine</span></code>, stores
-                      hyperparameters
+                      with <a class="reference internal" href="modules/cascade.lines.html#cascade.lines.ModelLine"
+                        title="cascade.lines.ModelLine"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">ModelLine</span></code></a>,
+                      stores hyperparameters
                       in <code
                         class="docutils literal notranslate"><span class="pre">run[&quot;hparams&quot;]</span></code>
                       and records metrics with <code
@@ -1065,10 +1067,15 @@ for epoch in range(10):
                     <h3>ClearML<a class="headerlink" href="#clearml" title="Permalink to this heading">#</a></h3>
                     <p>ClearML represents an experiment as a <code
                         class="docutils literal notranslate"><span class="pre">Task</span></code> which we will replace
-                      with <code class="docutils literal notranslate"><span class="pre">ModelLine</span></code> and
-                      metrics can
-                      be reported through the task’s logger, but in Cascade they are tied to the <code
-                        class="docutils literal notranslate"><span class="pre">Model</span></code>.</p>
+                      with <a class="reference internal" href="modules/cascade.lines.html#cascade.lines.ModelLine"
+                        title="cascade.lines.ModelLine"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">ModelLine</span></code></a>
+                      and metrics can
+                      be reported through the task’s logger, but in Cascade they are tied to the <a
+                        class="reference internal" href="modules/cascade.models.html#cascade.models.Model"
+                        title="cascade.models.Model"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>.
+                    </p>
                     <p>With Cascade you will also get:</p>
                     <ul class="simple">
                       <li>

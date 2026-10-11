@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cascade.data.folder_dataset &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.data.folder_dataset &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -16,37 +16,37 @@
   </script>
 
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../heme.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link href="../../../ootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link href="../../../ydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
 
-  <link href="../../../ontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../../ontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+    href="../../../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../../ontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+    href="../../../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../../ontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+    href="../../../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-  <link rel="stylesheet" type="text/css" href="../../../.css" />
-  <link rel="stylesheet" type="text/css" href="../../../on.css" />
-  <link rel="stylesheet" type="text/css" href="../../../tyle.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-  <link rel="stylesheet" type="text/css" href="../../../om.css" />
+  <link rel="stylesheet" type="text/css" href="../../../pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../../copybutton.css" />
+  <link rel="stylesheet" type="text/css" href="../../../design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  <link rel="stylesheet" type="text/css" href="../../../css/custom.css" />
 
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../bootstrap.js?digest=e353d410970836974a52" />
-  <link rel="preload" as="script" href="../../../pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../scripts/bootstrap.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-  <script data-url_root="../../../" id="documentation_options" src="../../../ation_options.js"></script>
-  <script src="../../../s"></script>
-  <script src="../../../re.js"></script>
-  <script src="../../../javascript_frameworks_compat.js"></script>
-  <script src="../../../.js"></script>
-  <script src="../../../ighlight.js"></script>
-  <script src="../../../d.min.js"></script>
-  <script src="../../../on.js"></script>
-  <script src="../../../abs.js"></script>
+  <script data-url_root="../../../" id="documentation_options" src="../../../documentation_options.js"></script>
+  <script src="../../../jquery.js"></script>
+  <script src="../../../underscore.js"></script>
+  <script src="../../../_sphinx_javascript_frameworks_compat.js"></script>
+  <script src="../../../doctools.js"></script>
+  <script src="../../../sphinx_highlight.js"></script>
+  <script src="../../../clipboard.min.js"></script>
+  <script src="../../../copybutton.js"></script>
+  <script src="../../../design-tabs.js"></script>
   <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA="
     src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
   <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
@@ -61,6 +61,7 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
+  <link rel="shortcut icon" href="../../../logo_sq.svg" />
   <link rel="index" title="Index" href="../../../genindex.html" />
   <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -115,8 +116,8 @@
 
 
 
-            <img src="../../../ht.svg" class="logo__image only-light" alt="Logo image" />
-            <script>document.write(`<img src="../../../k.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+            <img src="../../../logo_light.svg" class="logo__image only-light" alt="Logo image" />
+            <script>document.write(`<img src="../../../logo_dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
 
 
           </a>
@@ -530,8 +531,8 @@
   </div>
 
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../bootstrap.js?digest=e353d410970836974a52"></script>
-  <script src="../../../pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+  <script src="../../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
   <footer class="bd-footer">
     <div class="bd-footer__inner bd-page-width">

@@ -7,8 +7,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta
+    content="Organize related Cascade experiments with repositories and workspaces for scalable experiment management."
+    name="description" />
+  <meta content="cascade, small-scale MLOps, experiment management, repositories, workspaces, ModelLine, DataLine"
+    name="keywords" />
 
-  <title>Advanced Experiment Management &#8212; cascade 0.18.0 documentation</title>
+  <title>Advanced Experiment Management &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,7 +68,6 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
   <link rel="next" title="Experiment results querying" href="results_querying.html" />
@@ -454,13 +458,19 @@
               <section id="advanced-experiment-management">
                 <h1>Advanced Experiment Management<a class="headerlink" href="#advanced-experiment-management"
                     title="Permalink to this heading">#</a></h1>
-                <p>Lines are not the only tool to organize experiments. They themselves can be unified using <code
-                    class="docutils literal notranslate"><span class="pre">Repo</span></code>.
+                <p>Lines are not the only tool to organize experiments. They themselves can be unified using <a
+                    class="reference internal" href="../modules/cascade.repos.html#cascade.repos.Repo"
+                    title="cascade.repos.Repo"><code
+                      class="xref py py-class docutils literal notranslate"><span class="pre">Repo</span></code></a>.
                   Repos can include both <code
-                    class="docutils literal notranslate"><span class="pre">Data</span></code>- and <code
-                    class="docutils literal notranslate"><span class="pre">ModelLines</span></code>. In Cascade you
-                  cannot store models and
-                  datasets in the same <code class="docutils literal notranslate"><span class="pre">Line</span></code>,
+                    class="docutils literal notranslate"><span class="pre">Data</span></code>- and <a
+                    class="reference internal" href="../modules/cascade.lines.html#cascade.lines.ModelLine"
+                    title="cascade.lines.ModelLine"><code
+                      class="xref py py-class docutils literal notranslate"><span class="pre">ModelLine</span></code></a>s.
+                  In Cascade you cannot store models and
+                  datasets in the same <a class="reference internal"
+                    href="../modules/cascade.lines.html#cascade.lines.Line" title="cascade.lines.Line"><code
+                      class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></a>,
                   since each of the objects has its own versioning system.</p>
                 <section id="repos">
                   <h2>Repos<a class="headerlink" href="#repos" title="Permalink to this heading">#</a></h2>
@@ -480,13 +490,18 @@
                 </section>
                 <section id="workspaces">
                   <h2>Workspaces<a class="headerlink" href="#workspaces" title="Permalink to this heading">#</a></h2>
-                  <p>Sometimes Repos are piling up and to organize them effectively the <code
-                      class="docutils literal notranslate"><span class="pre">Workspace</span></code> was created. This
-                    is the highest unit
+                  <p>Sometimes Repos are piling up and to organize them effectively the <a class="reference internal"
+                      href="../modules/cascade.workspaces.html#cascade.workspaces.Workspace"
+                      title="cascade.workspaces.Workspace"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Workspace</span></code></a>
+                    was created. This is the highest unit
                     of experiment organization.</p>
                   <div class="admonition note">
                     <p class="admonition-title">Note</p>
-                    <p>Having one <code class="docutils literal notranslate"><span class="pre">Workspace</span></code>
+                    <p>Having one <a class="reference internal"
+                        href="../modules/cascade.workspaces.html#cascade.workspaces.Workspace"
+                        title="cascade.workspaces.Workspace"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">Workspace</span></code></a>
                       per ML-project can be considered the best practice.</p>
                   </div>
                   <p>All containers share similar API. Using <code

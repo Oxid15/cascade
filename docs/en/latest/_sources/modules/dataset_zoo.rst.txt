@@ -1,11 +1,15 @@
 Dataset Zoo
 ###########
 
+.. meta::
+   :description: Explore ready-made Cascade dataset components for wrappers, iterators, folders, and common machine learning workflows.
+   :keywords: cascade, small-scale MLOps, dataset zoo, datasets, data pipelines, machine learning
+
 Cascade has many solutions - basic that are added to the core and more specific
 that are in the special ``utils`` module. And if you didn't found suitable component,
 you can write it yourself.
 
-Here some of already-made components are presented. These are ``Dataset`` objects - building
+Here some of already-made components are presented. These are :class:`~cascade.data.Dataset` objects - building
 blocks of Cascade's pipelines, their description and short examples of
 how to use them in your workflow.
 
@@ -13,7 +17,7 @@ Wrappers
 ********
 
 If your solution has some data source that is already accesible in python-code, but you
-need to plug it in Cascade's workflow it may be all you need. ``Wrapper`` gives the items
+need to plug it in Cascade's workflow it may be all you need. :class:`~cascade.data.Wrapper` gives the items
 from the source one by one, adding some info about the undelying data to its metadata.
 
 .. doctest::
@@ -26,8 +30,8 @@ from the source one by one, adding some info about the undelying data to its met
 Iterators
 *********
 
-If data source doesn't have length - you cannot use ``Wrapper`` objects, but it is not a problem,
-you can use ``IteratorWrapper`` objects instead! It is basically the same dataset, but using different interface.
+If data source doesn't have length - you cannot use :class:`~cascade.data.Wrapper` objects, but it is not a problem,
+you can use :class:`~cascade.data.IteratorWrapper` objects instead! It is basically the same dataset, but using different interface.
 
 .. doctest::
 
@@ -44,7 +48,7 @@ ApplyModifier
 *************
 
 The pipelines are frequently applying some python-functions to the items in datasets.
-In Cascade this is done by using ``ApplyModifier``.
+In Cascade this is done by using :class:`~cascade.data.ApplyModifier`.
 
 .. doctest::
 
@@ -61,7 +65,7 @@ Concatenator
 ************
 
 Concatenation is also frequent operation that is done to unify several datasets
-into one. In Cascade it is done easily using ``Concatenator``.
+into one. In Cascade it is done easily using :class:`~cascade.data.Concatenator`.
 
 .. doctest::
 
@@ -209,7 +213,7 @@ they emit tuples and the second element of each tuple is a classification label.
 Using that labels they equalize label distribution by repeating or deleting some elements. The sampler themselves
 are lazy, but to obtain label distribution, they load elements one-by-one not storing them in memory in initialization.  
   
-They are also deterministic and place elements with similar labels together. Consider using ``RandomSampler`` to
+They are also deterministic and place elements with similar labels together. Consider using :class:`~cascade.data.RandomSampler` to
 shuffle datasets before passing them to learning.
 
 .. doctest::
@@ -270,7 +274,7 @@ contain a number of useful tools and features.
 
 TimeSeriesDataset
 =================
-``TimeSeriesDataset`` contains whole time series data. They require separate time and data channels to initialize.
+:class:`~cascade.utils.time_series.TimeSeriesDataset` contains whole time series data. They require separate time and data channels to initialize.
 
 .. doctest::
 
@@ -305,7 +309,7 @@ TableDataset and its keyword ``t`` for table.
     Index: []
 
 
-This is due to unification of two interfaces in ``Modifier``s for these datasets. A ``Modifier`` should be also ``TimeSeriesDataset``. 
+This is due to unification of two interfaces in :class:`~cascade.data.Modifier`\ s for these datasets. A :class:`~cascade.data.Modifier` should be also :class:`~cascade.utils.time_series.TimeSeriesDataset`.
    
 Let's initialize ds again:
 
@@ -376,7 +380,7 @@ You can always get the data alone using ``to_numpy()``
     array([1, 0, 2, 5])
 
 
-Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in ``Modifier``.  
+Interpolation in case of any missing data is crucial when working with real-life time series. Here it is implemented in :class:`~cascade.data.Modifier`.
   
 First - dataset is initialized with nan-value. Nan-value is ``numpy.nan`` because Interpolate uses pandas under-the-hood.
 
@@ -404,7 +408,7 @@ First - dataset is initialized with nan-value. Nan-value is ``numpy.nan`` becaus
     2022-11-07  2.0
 
 
-Averaging over some time-window is also a frequent task in work with time-series. Here in ``Average`` you
+Averaging over some time-window is also a frequent task in work with time-series. Here in :class:`~cascade.utils.time_series.Average` you
 can set the time grain and a quantity to average.
 
 .. doctest::
@@ -449,9 +453,34 @@ The most important thing here is the extensive metadata that this wrapper holds.
 
 .. doctest::
 
-    >>> ds.get_meta()
-    [{'name': 'cascade.utils.tables.tables.TableDataset', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'data_card': None, 'len': 3, 'columns': [0, 1], 'info': {0: {'count': 3.0, 'mean': 1.3333333333333333, 'std': 0.5773502691896257, 'min': 1.0, '25%': 1.0, '50%': 1.0, '75%': 1.5, 'max': 2.0}, 1: {'count': 3.0, 'mean': 0.0, 'std': 0.0, 'min': 0.0, '25%': 0.0, '50%': 0.0, '75%': 0.0, 'max': 0.0}}}]
-
+    >>> from pprint import pprint
+    >>> pprint(ds.get_meta())
+    [{'cascade_volatiles': [],
+      'columns': [0, 1],
+      'comments': [],
+      'data_card': None,
+      'description': None,
+      'info': {0: {'25%': 1.0,
+                   '50%': 1.0,
+                   '75%': 1.5,
+                   'count': 3.0,
+                   'max': 2.0,
+                   'mean': 1.3333333333333333,
+                   'min': 1.0,
+                   'std': 0.5773502691896257},
+               1: {'25%': 0.0,
+                   '50%': 0.0,
+                   '75%': 0.0,
+                   'count': 3.0,
+                   'max': 0.0,
+                   'mean': 0.0,
+                   'min': 0.0,
+                   'std': 0.0}},
+      'len': 3,
+      'links': [],
+      'name': 'cascade.utils.tables.tables.TableDataset',
+      'tags': [],
+      'type': 'dataset'}]
 
 Filtering is common when using tables. This modifier accepts binary mask and records new stage in the pipeline's metadata.
 
@@ -459,13 +488,63 @@ Filtering is common when using tables. This modifier accepts binary mask and rec
 
     >>> from cascade.utils.tables import TableFilter
     >>> ds = TableFilter(ds, ds._table[0] == 1)
-    Length before filtering: 3, length after: 2
 
 .. doctest::
 
-    >>> ds.get_meta()
-    [{'name': 'cascade.utils.tables.tables.TableFilter', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'data_card': None, 'len': 2, 'columns': [0, 1], 'info': {0: {'count': 2.0, 'mean': 1.0, 'std': 0.0, 'min': 1.0, '25%': 1.0, '50%': 1.0, '75%': 1.0, 'max': 1.0}, 1: {'count': 2.0, 'mean': 0.0, 'std': 0.0, 'min': 0.0, '25%': 0.0, '50%': 0.0, '75%': 0.0, 'max': 0.0}}}, {'name': 'cascade.utils.tables.tables.TableDataset', 'description': None, 'tags': [], 'comments': [], 'links': [], 'type': 'dataset', 'data_card': None, 'len': 3, 'columns': [0, 1], 'info': {0: {'count': 3.0, 'mean': 1.3333333333333333, 'std': 0.5773502691896257, 'min': 1.0, '25%': 1.0, '50%': 1.0, '75%': 1.5, 'max': 2.0}, 1: {'count': 3.0, 'mean': 0.0, 'std': 0.0, 'min': 0.0, '25%': 0.0, '50%': 0.0, '75%': 0.0, 'max': 0.0}}}]
-
+    >>> from pprint import pprint
+    >>> pprint(ds.get_meta())
+    [{'cascade_volatiles': [],
+      'columns': [0, 1],
+      'comments': [],
+      'data_card': None,
+      'description': None,
+      'info': {0: {'25%': 1.0,
+                   '50%': 1.0,
+                   '75%': 1.0,
+                   'count': 2.0,
+                   'max': 1.0,
+                   'mean': 1.0,
+                   'min': 1.0,
+                   'std': 0.0},
+               1: {'25%': 0.0,
+                   '50%': 0.0,
+                   '75%': 0.0,
+                   'count': 2.0,
+                   'max': 0.0,
+                   'mean': 0.0,
+                   'min': 0.0,
+                   'std': 0.0}},
+      'len': 2,
+      'links': [],
+      'name': 'cascade.utils.tables.tables.TableFilter',
+      'tags': [],
+      'type': 'dataset'},
+     {'cascade_volatiles': [],
+      'columns': [0, 1],
+      'comments': [],
+      'data_card': None,
+      'description': None,
+      'info': {0: {'25%': 1.0,
+                   '50%': 1.0,
+                   '75%': 1.5,
+                   'count': 3.0,
+                   'max': 2.0,
+                   'mean': 1.3333333333333333,
+                   'min': 1.0,
+                   'std': 0.5773502691896257},
+               1: {'25%': 0.0,
+                   '50%': 0.0,
+                   '75%': 0.0,
+                   'count': 3.0,
+                   'max': 0.0,
+                   'mean': 0.0,
+                   'min': 0.0,
+                   'std': 0.0}},
+      'len': 3,
+      'links': [],
+      'name': 'cascade.utils.tables.tables.TableDataset',
+      'tags': [],
+      'type': 'dataset'}]
 
 More to come
 ************

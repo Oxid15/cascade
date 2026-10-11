@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cascade.base.traceable &#8212; cascade 0.18.0 documentation</title>
+    <title>cascade.base.traceable &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -503,10 +503,7 @@
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">get_meta</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="n">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_meta_prefix&quot;</span><span class="p">):</span>
-            <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_warn_no_prefix</span><span class="p">()</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_prefix</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">meta</span>
 
     <span class="k">return</span> <span class="n">wrapper</span>
@@ -536,7 +533,6 @@
 <span class="sd">        --------</span>
 <span class="sd">        cascade.base.MetaHandler</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
 
         <span class="k">if</span> <span class="n">tags</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -546,6 +542,16 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">comments</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">meta_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_meta_prefix&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span>
+
+    <span class="nd">@meta_prefix</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">meta_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span> <span class="o">=</span> <span class="n">value</span>
 
 <div class="viewcode-block" id="Traceable.get_meta"><a class="viewcode-back" href="../../../modules/cascade.base.html#cascade.base.Traceable.get_meta">[docs]</a>    <span class="nd">@apply_prefix</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Meta</span><span class="p">:</span>
@@ -582,7 +588,7 @@
 
 <div class="viewcode-block" id="Traceable.update_meta"><a class="viewcode-back" href="../../../modules/cascade.base.html#cascade.base.Traceable.update_meta">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">update_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Meta</span><span class="p">,</span> <span class="n">MetaBlock</span><span class="p">,</span> <span class="n">Config</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates ``_meta_prefix``, which then updates</span>
+<span class="sd">        Updates ``self.meta_prefix``, which then updates</span>
 <span class="sd">        dataset&#39;s meta when ``get_meta()`` is called</span>
 
 <span class="sd">        Parameters</span>
@@ -595,9 +601,6 @@
 <span class="sd">        ValueError</span>
 <span class="sd">            If the list passed and it is not of the unit length</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_meta_prefix&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_warn_no_prefix</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">Config</span><span class="p">):</span>
             <span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
@@ -609,18 +612,9 @@
                     <span class="sa">f</span><span class="s2">&quot; There is no clear way to update this object&#39;s meta&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; using this kind of list&quot;</span>
                 <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_prefix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_meta_prefix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span></div>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_warn_no_prefix</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Object doesn&#39;t have _meta_prefix. &quot;</span>
-            <span class="s2">&quot;This may mean super().__init__() wasn&#39;t&quot;</span>
-            <span class="s2">&quot;called somewhere&quot;</span><span class="p">,</span>
-            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_prefix</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Traceable.from_meta"><a class="viewcode-back" href="../../../modules/cascade.base.html#cascade.base.Traceable.from_meta">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Meta</span><span class="p">,</span> <span class="n">MetaBlock</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

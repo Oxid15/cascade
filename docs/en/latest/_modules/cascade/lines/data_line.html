@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>cascade.lines.data_line &#8212; cascade 0.18.0 documentation</title>
+  <title>cascade.lines.data_line &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -441,6 +441,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">getpass</span><span class="w"> </span><span class="kn">import</span> <span class="n">getuser</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hashlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">md5</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
@@ -509,11 +510,42 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_item_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">Version</span><span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_mask_volatiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="n">Meta</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Meta</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a copy of the same meta where all</span>
+<span class="sd">        fields in cascade_volatiles are set to None</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        meta : Meta</span>
+<span class="sd">            Original meta</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Meta</span>
+<span class="sd">            Copy with volatiles masked with Nones</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Make a copy to avoid corrupting caller&#39;s meta</span>
+        <span class="n">meta_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">ds_meta</span> <span class="ow">in</span> <span class="n">meta_copy</span><span class="p">:</span>
+            <span class="n">ds_volatiles</span> <span class="o">=</span> <span class="n">ds_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cascade_volatiles&quot;</span><span class="p">)</span>
+            <span class="c1"># Can be missing in datasets created before v0.19.0</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ds_volatiles</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ds_volatiles</span><span class="p">:</span>
+                <span class="n">ds_meta</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">meta_copy</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_hashes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="n">Meta</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
         <span class="n">skel</span> <span class="o">=</span> <span class="n">skeleton</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="n">masked_meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mask_volatiles</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
 
         <span class="n">skel_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">skel</span><span class="p">)</span>
-        <span class="n">meta_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="n">meta_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">masked_meta</span><span class="p">)</span>
 
         <span class="n">skel_hash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">skel_str</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
         <span class="n">meta_hash</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">meta_str</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
@@ -565,7 +597,7 @@
 
 <div class="viewcode-block" id="DataLine.load"><a class="viewcode-back" href="../../../modules/cascade.lines.html#cascade.lines.DataLine.load">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Loads a dataset by using its number or version string</span>
+<span class="sd">        Loads a dataset using its number or version string</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_item_names</span><span class="p">[</span><span class="n">num</span><span class="p">])</span>
@@ -642,7 +674,10 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_item_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">Version</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">()</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>  <span class="c1"># raised to capture in Repo.load_obj_meta</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_parse_item_name</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></div>

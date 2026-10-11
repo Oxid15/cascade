@@ -1,6 +1,10 @@
 Models
 ######
 
+.. meta::
+   :description: Learn how Cascade models and ModelLines standardize model inference, evaluation, persistence, and experiment history.
+   :keywords: cascade, machine learning models, ModelLine, model evaluation, artifact storage
+
 Models are second part of two-fold Cascade concept scheme. They allow to wrap all models in
 the same interface an treat models from different frameworks the same. It also brings the
 order in the model-writing workflow since it forces you implement all abstract methods,

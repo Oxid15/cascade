@@ -7,8 +7,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta
+    content="Explore ready-made Cascade dataset components for wrappers, iterators, folders, and common machine learning workflows."
+    name="description" />
+  <meta content="cascade, small-scale MLOps, dataset zoo, datasets, data pipelines, machine learning" name="keywords" />
 
-  <title>Dataset Zoo &#8212; cascade 0.18.0 documentation</title>
+  <title>Dataset Zoo &#8212; cascade 0.19.0 documentation</title>
 
 
 
@@ -63,10 +67,9 @@
     DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
     DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
   </script>
-  <link rel="shortcut icon" href="../logo_sq.svg" />
   <link rel="index" title="Index" href="../genindex.html" />
   <link rel="search" title="Search" href="../search.html" />
-  <link rel="prev" title="cascade.utils.vision" href="cascade.utils.vision.html" />
+  <link rel="prev" title="cascade.workspaces" href="cascade.workspaces.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en" />
 </head>
@@ -436,10 +439,6 @@
                   <li class="toctree-l1"><a class="reference internal" href="cascade.meta.html">cascade.meta</a></li>
 
 
-
-
-
-
                   <li class="toctree-l1"><a class="reference internal" href="cascade.metrics.html">cascade.metrics</a>
                   </li>
 
@@ -493,6 +492,9 @@
 
                   <li class="toctree-l1"><a class="reference internal"
                       href="cascade.utils.vision.html">cascade.utils.vision</a></li>
+
+                  <li class="toctree-l1"><a class="reference internal"
+                      href="cascade.workspaces.html">cascade.workspaces</a></li>
 
                   <li class="toctree-l1 current active"><a class="current reference internal" href="#">Dataset Zoo</a>
                   </li>
@@ -561,15 +563,19 @@
                     class="docutils literal notranslate"><span class="pre">utils</span></code> module. And if you didn’t
                   found suitable component,
                   you can write it yourself.</p>
-                <p>Here some of already-made components are presented. These are <code
-                    class="docutils literal notranslate"><span class="pre">Dataset</span></code> objects - building
+                <p>Here some of already-made components are presented. These are <a class="reference internal"
+                    href="cascade.data.html#cascade.data.Dataset" title="cascade.data.Dataset"><code
+                      class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a>
+                  objects - building
                   blocks of Cascade’s pipelines, their description and short examples of
                   how to use them in your workflow.</p>
                 <section id="wrappers">
                   <h2>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this heading">#</a></h2>
                   <p>If your solution has some data source that is already accesible in python-code, but you
-                    need to plug it in Cascade’s workflow it may be all you need. <code
-                      class="docutils literal notranslate"><span class="pre">Wrapper</span></code> gives the items
+                    need to plug it in Cascade’s workflow it may be all you need. <a class="reference internal"
+                      href="cascade.data.html#cascade.data.Wrapper" title="cascade.data.Wrapper"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Wrapper</span></code></a>
+                    gives the items
                     from the source one by one, adding some info about the undelying data to its metadata.</p>
                   <div class="highlight-pycon notranslate">
                     <div class="highlight">
@@ -583,12 +589,14 @@
                 </section>
                 <section id="iterators">
                   <h2>Iterators<a class="headerlink" href="#iterators" title="Permalink to this heading">#</a></h2>
-                  <p>If data source doesn’t have length - you cannot use <code
-                      class="docutils literal notranslate"><span class="pre">Wrapper</span></code> objects, but it is
-                    not a problem,
-                    you can use <code
-                      class="docutils literal notranslate"><span class="pre">IteratorWrapper</span></code> objects
-                    instead! It is basically the same dataset, but using different interface.</p>
+                  <p>If data source doesn’t have length - you cannot use <a class="reference internal"
+                      href="cascade.data.html#cascade.data.Wrapper" title="cascade.data.Wrapper"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Wrapper</span></code></a>
+                    objects, but it is not a problem,
+                    you can use <a class="reference internal" href="cascade.data.html#cascade.data.IteratorWrapper"
+                      title="cascade.data.IteratorWrapper"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">IteratorWrapper</span></code></a>
+                    objects instead! It is basically the same dataset, but using different interface.</p>
                   <div class="highlight-pycon notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -606,8 +614,10 @@
                   <h2>ApplyModifier<a class="headerlink" href="#applymodifier" title="Permalink to this heading">#</a>
                   </h2>
                   <p>The pipelines are frequently applying some python-functions to the items in datasets.
-                    In Cascade this is done by using <code
-                      class="docutils literal notranslate"><span class="pre">ApplyModifier</span></code>.</p>
+                    In Cascade this is done by using <a class="reference internal"
+                      href="cascade.data.html#cascade.data.ApplyModifier" title="cascade.data.ApplyModifier"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">ApplyModifier</span></code></a>.
+                  </p>
                   <div class="highlight-pycon notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -625,8 +635,10 @@
                   <h2>Concatenator<a class="headerlink" href="#concatenator" title="Permalink to this heading">#</a>
                   </h2>
                   <p>Concatenation is also frequent operation that is done to unify several datasets
-                    into one. In Cascade it is done easily using <code
-                      class="docutils literal notranslate"><span class="pre">Concatenator</span></code>.</p>
+                    into one. In Cascade it is done easily using <a class="reference internal"
+                      href="cascade.data.html#cascade.data.Concatenator" title="cascade.data.Concatenator"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">Concatenator</span></code></a>.
+                  </p>
                   <div class="highlight-pycon notranslate">
                     <div class="highlight">
                       <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade</span><span class="w"> </span><span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">cdd</span>
@@ -778,8 +790,11 @@
                     sampler themselves
                     are lazy, but to obtain label distribution, they load elements one-by-one not storing them in memory
                     in initialization.</p>
-                  <p>They are also deterministic and place elements with similar labels together. Consider using <code
-                      class="docutils literal notranslate"><span class="pre">RandomSampler</span></code> to
+                  <p>They are also deterministic and place elements with similar labels together. Consider using <a
+                      class="reference internal" href="cascade.data.html#cascade.data.RandomSampler"
+                      title="cascade.data.RandomSampler"><code
+                        class="xref py py-class docutils literal notranslate"><span class="pre">RandomSampler</span></code></a>
+                    to
                     shuffle datasets before passing them to learning.</p>
                   <div class="highlight-pycon notranslate">
                     <div class="highlight">
@@ -845,7 +860,10 @@
                   <section id="timeseriesdataset">
                     <h3>TimeSeriesDataset<a class="headerlink" href="#timeseriesdataset"
                         title="Permalink to this heading">#</a></h3>
-                    <p><code class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code>
+                    <p><a class="reference internal"
+                        href="cascade.utils.time_series.html#cascade.utils.time_series.TimeSeriesDataset"
+                        title="cascade.utils.time_series.TimeSeriesDataset"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code></a>
                       contains whole time series data. They require separate time and data channels to initialize.</p>
                     <div class="highlight-pycon notranslate">
                       <div class="highlight">
@@ -885,10 +903,17 @@
 </pre>
                       </div>
                     </div>
-                    <p>This is due to unification of two interfaces in <code
-                        class="docutils literal notranslate"><span class="pre">Modifier``s</span> <span class="pre">for</span> <span class="pre">these</span> <span class="pre">datasets.</span> <span class="pre">A</span> <span class="pre">``Modifier</span></code>
-                      should be also <code
-                        class="docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code>.</p>
+                    <p>This is due to unification of two interfaces in <a class="reference internal"
+                        href="cascade.data.html#cascade.data.Modifier" title="cascade.data.Modifier"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">Modifier</span></code></a>s
+                      for these datasets. A <a class="reference internal" href="cascade.data.html#cascade.data.Modifier"
+                        title="cascade.data.Modifier"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">Modifier</span></code></a>
+                      should be also <a class="reference internal"
+                        href="cascade.utils.time_series.html#cascade.utils.time_series.TimeSeriesDataset"
+                        title="cascade.utils.time_series.TimeSeriesDataset"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">TimeSeriesDataset</span></code></a>.
+                    </p>
                     <p>Let’s initialize ds again:</p>
                     <div class="highlight-pycon notranslate">
                       <div class="highlight">
@@ -967,8 +992,10 @@
                       </div>
                     </div>
                     <p>Interpolation in case of any missing data is crucial when working with real-life time series.
-                      Here it is implemented in <code
-                        class="docutils literal notranslate"><span class="pre">Modifier</span></code>.</p>
+                      Here it is implemented in <a class="reference internal"
+                        href="cascade.data.html#cascade.data.Modifier" title="cascade.data.Modifier"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">Modifier</span></code></a>.
+                    </p>
                     <p>First - dataset is initialized with nan-value. Nan-value is <code
                         class="docutils literal notranslate"><span class="pre">numpy.nan</span></code> because
                       Interpolate uses pandas under-the-hood.</p>
@@ -999,8 +1026,12 @@
 </pre>
                       </div>
                     </div>
-                    <p>Averaging over some time-window is also a frequent task in work with time-series. Here in <code
-                        class="docutils literal notranslate"><span class="pre">Average</span></code> you
+                    <p>Averaging over some time-window is also a frequent task in work with time-series. Here in <a
+                        class="reference internal"
+                        href="cascade.utils.time_series.html#cascade.utils.time_series.Average"
+                        title="cascade.utils.time_series.Average"><code
+                          class="xref py py-class docutils literal notranslate"><span class="pre">Average</span></code></a>
+                      you
                       can set the time grain and a quantity to average.</p>
                     <div class="highlight-pycon notranslate">
                       <div class="highlight">
@@ -1050,8 +1081,34 @@
                     <p>The most important thing here is the extensive metadata that this wrapper holds.</p>
                     <div class="highlight-pycon notranslate">
                       <div class="highlight">
-                        <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-<span class="go">[{&#39;name&#39;: &#39;cascade.utils.tables.tables.TableDataset&#39;, &#39;description&#39;: None, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;data_card&#39;: None, &#39;len&#39;: 3, &#39;columns&#39;: [0, 1], &#39;info&#39;: {0: {&#39;count&#39;: 3.0, &#39;mean&#39;: 1.3333333333333333, &#39;std&#39;: 0.5773502691896257, &#39;min&#39;: 1.0, &#39;25%&#39;: 1.0, &#39;50%&#39;: 1.0, &#39;75%&#39;: 1.5, &#39;max&#39;: 2.0}, 1: {&#39;count&#39;: 3.0, &#39;mean&#39;: 0.0, &#39;std&#39;: 0.0, &#39;min&#39;: 0.0, &#39;25%&#39;: 0.0, &#39;50%&#39;: 0.0, &#39;75%&#39;: 0.0, &#39;max&#39;: 0.0}}}]</span>
+                        <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">())</span>
+<span class="go">[{&#39;cascade_volatiles&#39;: [],</span>
+<span class="go">  &#39;columns&#39;: [0, 1],</span>
+<span class="go">  &#39;comments&#39;: [],</span>
+<span class="go">  &#39;data_card&#39;: None,</span>
+<span class="go">  &#39;description&#39;: None,</span>
+<span class="go">  &#39;info&#39;: {0: {&#39;25%&#39;: 1.0,</span>
+<span class="go">               &#39;50%&#39;: 1.0,</span>
+<span class="go">               &#39;75%&#39;: 1.5,</span>
+<span class="go">               &#39;count&#39;: 3.0,</span>
+<span class="go">               &#39;max&#39;: 2.0,</span>
+<span class="go">               &#39;mean&#39;: 1.3333333333333333,</span>
+<span class="go">               &#39;min&#39;: 1.0,</span>
+<span class="go">               &#39;std&#39;: 0.5773502691896257},</span>
+<span class="go">           1: {&#39;25%&#39;: 0.0,</span>
+<span class="go">               &#39;50%&#39;: 0.0,</span>
+<span class="go">               &#39;75%&#39;: 0.0,</span>
+<span class="go">               &#39;count&#39;: 3.0,</span>
+<span class="go">               &#39;max&#39;: 0.0,</span>
+<span class="go">               &#39;mean&#39;: 0.0,</span>
+<span class="go">               &#39;min&#39;: 0.0,</span>
+<span class="go">               &#39;std&#39;: 0.0}},</span>
+<span class="go">  &#39;len&#39;: 3,</span>
+<span class="go">  &#39;links&#39;: [],</span>
+<span class="go">  &#39;name&#39;: &#39;cascade.utils.tables.tables.TableDataset&#39;,</span>
+<span class="go">  &#39;tags&#39;: [],</span>
+<span class="go">  &#39;type&#39;: &#39;dataset&#39;}]</span>
 </pre>
                       </div>
                     </div>
@@ -1061,14 +1118,65 @@
                       <div class="highlight">
                         <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">TableFilter</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span> <span class="o">=</span> <span class="n">TableFilter</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-<span class="go">Length before filtering: 3, length after: 2</span>
 </pre>
                       </div>
                     </div>
                     <div class="highlight-pycon notranslate">
                       <div class="highlight">
-                        <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
-<span class="go">[{&#39;name&#39;: &#39;cascade.utils.tables.tables.TableFilter&#39;, &#39;description&#39;: None, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;data_card&#39;: None, &#39;len&#39;: 2, &#39;columns&#39;: [0, 1], &#39;info&#39;: {0: {&#39;count&#39;: 2.0, &#39;mean&#39;: 1.0, &#39;std&#39;: 0.0, &#39;min&#39;: 1.0, &#39;25%&#39;: 1.0, &#39;50%&#39;: 1.0, &#39;75%&#39;: 1.0, &#39;max&#39;: 1.0}, 1: {&#39;count&#39;: 2.0, &#39;mean&#39;: 0.0, &#39;std&#39;: 0.0, &#39;min&#39;: 0.0, &#39;25%&#39;: 0.0, &#39;50%&#39;: 0.0, &#39;75%&#39;: 0.0, &#39;max&#39;: 0.0}}}, {&#39;name&#39;: &#39;cascade.utils.tables.tables.TableDataset&#39;, &#39;description&#39;: None, &#39;tags&#39;: [], &#39;comments&#39;: [], &#39;links&#39;: [], &#39;type&#39;: &#39;dataset&#39;, &#39;data_card&#39;: None, &#39;len&#39;: 3, &#39;columns&#39;: [0, 1], &#39;info&#39;: {0: {&#39;count&#39;: 3.0, &#39;mean&#39;: 1.3333333333333333, &#39;std&#39;: 0.5773502691896257, &#39;min&#39;: 1.0, &#39;25%&#39;: 1.0, &#39;50%&#39;: 1.0, &#39;75%&#39;: 1.5, &#39;max&#39;: 2.0}, 1: {&#39;count&#39;: 3.0, &#39;mean&#39;: 0.0, &#39;std&#39;: 0.0, &#39;min&#39;: 0.0, &#39;25%&#39;: 0.0, &#39;50%&#39;: 0.0, &#39;75%&#39;: 0.0, &#39;max&#39;: 0.0}}}]</span>
+                        <pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">get_meta</span><span class="p">())</span>
+<span class="go">[{&#39;cascade_volatiles&#39;: [],</span>
+<span class="go">  &#39;columns&#39;: [0, 1],</span>
+<span class="go">  &#39;comments&#39;: [],</span>
+<span class="go">  &#39;data_card&#39;: None,</span>
+<span class="go">  &#39;description&#39;: None,</span>
+<span class="go">  &#39;info&#39;: {0: {&#39;25%&#39;: 1.0,</span>
+<span class="go">               &#39;50%&#39;: 1.0,</span>
+<span class="go">               &#39;75%&#39;: 1.0,</span>
+<span class="go">               &#39;count&#39;: 2.0,</span>
+<span class="go">               &#39;max&#39;: 1.0,</span>
+<span class="go">               &#39;mean&#39;: 1.0,</span>
+<span class="go">               &#39;min&#39;: 1.0,</span>
+<span class="go">               &#39;std&#39;: 0.0},</span>
+<span class="go">           1: {&#39;25%&#39;: 0.0,</span>
+<span class="go">               &#39;50%&#39;: 0.0,</span>
+<span class="go">               &#39;75%&#39;: 0.0,</span>
+<span class="go">               &#39;count&#39;: 2.0,</span>
+<span class="go">               &#39;max&#39;: 0.0,</span>
+<span class="go">               &#39;mean&#39;: 0.0,</span>
+<span class="go">               &#39;min&#39;: 0.0,</span>
+<span class="go">               &#39;std&#39;: 0.0}},</span>
+<span class="go">  &#39;len&#39;: 2,</span>
+<span class="go">  &#39;links&#39;: [],</span>
+<span class="go">  &#39;name&#39;: &#39;cascade.utils.tables.tables.TableFilter&#39;,</span>
+<span class="go">  &#39;tags&#39;: [],</span>
+<span class="go">  &#39;type&#39;: &#39;dataset&#39;},</span>
+<span class="go"> {&#39;cascade_volatiles&#39;: [],</span>
+<span class="go">  &#39;columns&#39;: [0, 1],</span>
+<span class="go">  &#39;comments&#39;: [],</span>
+<span class="go">  &#39;data_card&#39;: None,</span>
+<span class="go">  &#39;description&#39;: None,</span>
+<span class="go">  &#39;info&#39;: {0: {&#39;25%&#39;: 1.0,</span>
+<span class="go">               &#39;50%&#39;: 1.0,</span>
+<span class="go">               &#39;75%&#39;: 1.5,</span>
+<span class="go">               &#39;count&#39;: 3.0,</span>
+<span class="go">               &#39;max&#39;: 2.0,</span>
+<span class="go">               &#39;mean&#39;: 1.3333333333333333,</span>
+<span class="go">               &#39;min&#39;: 1.0,</span>
+<span class="go">               &#39;std&#39;: 0.5773502691896257},</span>
+<span class="go">           1: {&#39;25%&#39;: 0.0,</span>
+<span class="go">               &#39;50%&#39;: 0.0,</span>
+<span class="go">               &#39;75%&#39;: 0.0,</span>
+<span class="go">               &#39;count&#39;: 3.0,</span>
+<span class="go">               &#39;max&#39;: 0.0,</span>
+<span class="go">               &#39;mean&#39;: 0.0,</span>
+<span class="go">               &#39;min&#39;: 0.0,</span>
+<span class="go">               &#39;std&#39;: 0.0}},</span>
+<span class="go">  &#39;len&#39;: 3,</span>
+<span class="go">  &#39;links&#39;: [],</span>
+<span class="go">  &#39;name&#39;: &#39;cascade.utils.tables.tables.TableDataset&#39;,</span>
+<span class="go">  &#39;tags&#39;: [],</span>
+<span class="go">  &#39;type&#39;: &#39;dataset&#39;}]</span>
 </pre>
                       </div>
                     </div>
@@ -1093,11 +1201,11 @@
 
                 <div class="footer-article-item"><!-- Previous / next buttons -->
                   <div class="prev-next-area">
-                    <a class="left-prev" href="cascade.utils.vision.html" title="previous page">
+                    <a class="left-prev" href="cascade.workspaces.html" title="previous page">
                       <i class="fa-solid fa-angle-left"></i>
                       <div class="prev-next-info">
                         <p class="prev-next-subtitle">previous</p>
-                        <p class="prev-next-title">cascade.utils.vision</p>
+                        <p class="prev-next-title">cascade.workspaces</p>
                       </div>
                     </a>
                   </div>
