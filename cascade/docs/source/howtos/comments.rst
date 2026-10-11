@@ -1,6 +1,10 @@
 Comment on results of an experiment
 ###################################
 
+.. meta::
+   :description: Add and manage comments on Cascade models, lines, repos, and other experiment-tracking objects.
+   :keywords: cascade, comments, experiment tracking, collaboration, metadata
+
 Comments serve experiment tracking greatly since they allow record thoughts on
 experiment results or expectations before them. They are more flexible, expressive,
 and less formal than parameters for example. They also are a basis for collaboration

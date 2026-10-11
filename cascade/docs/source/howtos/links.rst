@@ -1,6 +1,10 @@
 Link anything
 #############
 
+.. meta::
+   :description: Link Cascade objects, files, folders, and custom references to connect datasets, models, and experiment metadata.
+   :keywords: cascade, links, data lineage, datasets, models, metadata
+
 Linking one object to an another is a mechanic that was
 introduced in ``0.13.0``.
 

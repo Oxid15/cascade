@@ -20,6 +20,7 @@ from typing import Any, List, Tuple
 
 import pydantic
 import pytest
+import numpy as np
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
@@ -64,6 +65,12 @@ def test_wrapper():
     assert len(meta) == 2
     assert "in_schema" in meta[0]
     assert isinstance(meta[0]["in_schema"], dict)
+    assert "properties" in meta[0]["in_schema"]
+    assert "required" in meta[0]["in_schema"]
+    assert "title" in meta[0]["in_schema"]
+    assert "type" in meta[0]["in_schema"]
+    assert meta[0]["in_schema"]["title"] == "AnnotImage"
+    assert meta[0]["in_schema"]["required"] == ["image", "segments", "bboxes"]
 
 
 def test_correct_schema():
@@ -190,9 +197,50 @@ def test_custom_meta():
     ds = IDoNothingButChangeMeta(ds, "hello")
     ds = IDoNothingButChangeMeta(ds, "how")
     ds = IDoNothingButChangeMeta(ds, "are you")
+    ds = IDoNothingButChangeMeta(ds, np.array([0, 1, 2]))
 
     meta = ds.get_meta()
 
-    assert meta[2]["custom_field"] == "hello"
-    assert meta[1]["custom_field"] == "how"
-    assert meta[0]["custom_field"] == "are you"
+    assert meta[3]["custom_field"] == "hello"
+    assert meta[2]["custom_field"] == "how"
+    assert meta[1]["custom_field"] == "are you"
+    assert np.all(meta[0]["custom_field"] == np.array([0, 1, 2]))
+
+
+class NumpyImage(Dataset):
+    def get(self, idx):
+        return {"label": 0, "image": np.array([[0, 1], [1, 0]])}
+
+    def __len__(self):
+        return 1
+
+
+class NpImage(pydantic.BaseModel):
+    label: int
+    image: np.ndarray
+    model_config = {"arbitrary_types_allowed": True}
+
+
+class NpImagesModifier(SchemaModifier):
+    in_schema = NpImage
+
+
+class NpChecker(NpImagesModifier):
+    def get(self, idx):
+        item = self._dataset[idx]
+        return item
+
+
+def test_numpy_dataset():
+    ds = NumpyImage()
+    ds = NpImagesModifier(ds)
+    ds[0]
+
+    meta = ds.get_meta()
+
+    assert "properties" in meta[0]["in_schema"]
+    assert "required" in meta[0]["in_schema"]
+    assert "title" in meta[0]["in_schema"]
+    assert "type" in meta[0]["in_schema"]
+    assert meta[0]["in_schema"]["title"] == "NpImage"
+    assert meta[0]["in_schema"]["required"] == ["label", "image"]

@@ -62,7 +62,13 @@ class BaseRepo(Traceable, ABC):
         return meta
 
     @abstractmethod
-    def get_line_names(self) -> List[str]: ...
+    def get_line_names(self) -> List[str]:
+        """
+        Returns
+        -------
+        List[str]
+            List of line names
+        """
 
     @abstractmethod
     def reload(self) -> None: ...

@@ -1,5 +1,10 @@
 Datasets
 ########
+
+.. meta::
+   :description: Learn how Cascade datasets define data sources, manage metadata, and support reusable data pipelines through DataCards.
+   :keywords: cascade, data lineage, data pipelines, data validation, metadata
+
 :py:class:`cascade.data.Dataset`
 
 The main focus of Cascade is data pipelines.

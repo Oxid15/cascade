@@ -1,6 +1,10 @@
 How-to guides
 #############
 
+.. meta::
+   :description: Practical Cascade how-to guides for building pipelines, tracking experiments, querying results, and managing metadata.
+   :keywords: cascade, how-to guides, small-scale MLOps, pipelines, experiment tracking, data validation
+
 This is a page of how-to guides. Guides are basically answers to the "How to ... with Cascade" type of questions.
 They should be practical and may require some background knowledge of Cascade.
 
@@ -24,6 +28,13 @@ Pipelines
             :link-type: ref
 
             How to find the source of and exception deep inside a pipeline
+
+    .. grid-item::
+        .. card:: Version data pipeline
+            :link: /howtos/version_data_pipeline.rst
+            :link-type: ref
+
+            How to track pipeline changes, add metadata and avoid version explosions
 
 Experiment tracking
 *******************
@@ -57,6 +68,13 @@ Experiment tracking
             :link-type: ref
 
             How to log files along with saved model
+
+    .. grid-item::
+        .. card:: Track an existing functional pipeline
+            :link: /howtos/track_existing_functional_pipeline.rst
+            :link-type: ref
+
+            If you already have your Python functions and want to track them
 
 CLI
 ***
@@ -121,20 +139,36 @@ Experiment management
 
             It is about building your own system
 
+Cascade Recipes
+***************
+
+Browse a collection of real-life small projects built with Cascade.
+Each use-case shows how Cascade can be used with full working code examples.
+
+.. grid:: 1
+
+    .. grid-item::
+        .. card:: 01 - Track ML experiments with Cascade
+            :link: /howtos/recipes/01_baseline_sweep.rst
+            :link-type: ref
+
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :hidden:
 
     pipeline_building
+    track_dataset_errors
+    version_data_pipeline
     model_training
     track_logs
     model_training_trainers
     track_a_file
-    track_dataset_errors
+    track_existing_functional_pipeline
     cli
     queries
     sklearn
     links
     comments
     tags
+    recipes/recipes

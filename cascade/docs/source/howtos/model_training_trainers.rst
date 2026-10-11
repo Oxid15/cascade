@@ -1,8 +1,12 @@
 Model training using trainers
 #############################
 
+.. meta::
+   :description: Train and track a PyTorch model with Cascade trainers for evaluation, saving, logging, and experiment management.
+   :keywords: cascade, PyTorch, trainers, model training, evaluation, logging, experiment tracking
+
 This use case demonstrates the same model-training workflow as
-:doc:`model_training`, using Cascade's ``BasicTrainer`` to handle training,
+:doc:`model_training`, using Cascade's :class:`~cascade.trainers.BasicTrainer` to handle training,
 evaluation, saving, and logging.
 
 Imports
@@ -108,7 +112,7 @@ Define a small neural network for classifying the flattened MNIST images.
             return out
 
 The Cascade wrapper only needs to define one training epoch and evaluation.
-``BasicTrainer`` calls these methods once per epoch and handles the surrounding
+:class:`~cascade.trainers.BasicTrainer` calls these methods once per epoch and handles the surrounding
 workflow.
 
 .. code-block:: python
@@ -169,7 +173,7 @@ arguments are recorded in the model metadata.
 Set up the trainer
 ******************
 
-Configure logging and create a ``BasicTrainer``. The trainer stores its
+Configure logging and create a :class:`~cascade.trainers.BasicTrainer`. The trainer stores its
 results in the repository named ``trainer_repo``.
 
 .. code-block:: python

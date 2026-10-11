@@ -1,6 +1,10 @@
 Tutorial
 ########
 
+.. meta::
+   :description: Learn Cascade fundamentals through guided tutorials covering installation, pipelines, models, and experiment tracking.
+   :keywords: cascade, small-scale MLOps, tutorials, data pipelines, models, experiment tracking
+
 The main tutorial is a set of lessons that will teach you
 basics of Cascade. Lessons are connected in a single project
 and depend on each other.
@@ -53,9 +57,9 @@ Some lessons come with links for further reading or advanced
 how-to guides on related topics.
 
 Cascade pipelines allow building data processing routines from
-steps called ``Datasets`` and ``Modifiers``.
+steps called :class:`~cascade.data.Dataset`\ s and :class:`~cascade.data.Modifier`\ s.
 
-``Datasets`` are the sources of data. In the first step let's make a ``Dataset``
+:class:`~cascade.data.Dataset`\ s are the sources of data. In the first step let's make a :class:`~cascade.data.Dataset`
 for ``digits`` from ``sklearn``.
 
 .. code-block:: python
@@ -109,8 +113,8 @@ allow using rich set of defaults for data manipulation.
 
     print(ds_noise[0])
 
-``Modifiers`` take datasets and transform their values.
-In previous example we added noise to digits by using ``ApplyModifier``
+:class:`~cascade.data.Modifier`\ s take datasets and transform their values.
+In previous example we added noise to digits by using :class:`~cascade.data.ApplyModifier`
 and created a new noisy dataset.
 
 We can augment our data by concatenating those two datasets.
@@ -193,7 +197,7 @@ in a structured manner along with metadata.
 
 In this step we create a wrapper around logistic regression model. Minimal setup
 for the model is not strictly defined as in Dataset case. We define ``fit`` and ``predict``.
-``BasicModel`` will handle everything else for us - like saving and loading for example.
+:class:`~cascade.models.BasicModel` will handle everything else for us - like saving and loading for example.
 
 We can create and fit the model now using the dataset from the Pipelines step.
 
@@ -433,7 +437,7 @@ Metric API is very flexible - you have freedom to define metrics
 in different ways. First case is the regular way metrics are usually defined
 in projects - as functions.
 
-Metric function can be passed in the default ``evaluate`` method of ``BasicModel``.
+Metric function can be passed in the default ``evaluate`` method of :class:`~cascade.models.BasicModel`.
 Evaluation of the model will return nothing, but instead fill its ``metrics`` field with a list
 of metrics.
 
@@ -460,10 +464,10 @@ of metrics.
     [Metric(name=f1, value=1.0, created_at="2024-07-29 19:41:09.344039+00:00")]
 
 Let's try defining a metric in another, more flexible way. We need to implement
-a descendant of ``cascade.metrics.Metric`` class. The one required method is ``compute``
+a descendant of :class:`~cascade.metrics.Metric` class. The one required method is ``compute``
 that should return value and also set ``self.value``.
 
-After that ``evaluate`` can be called with a list of ``Metric`` objects.
+After that ``evaluate`` can be called with a list of :class:`~cascade.metrics.Metric` objects.
 
 .. code-block:: python
 
@@ -773,7 +777,7 @@ that would easily pass in our previous setup at would take some time to debug.
         def __len__(self):
             return 67
 
-The following code will raise ``GetItemError`` from ``ValidationError``.
+The following code will raise :class:`~cascade.data.GetItemError` from :class:`~cascade.data.ValidationError`.
 
 .. skip: next
 
@@ -893,7 +897,7 @@ default model class that can wrap pipelines of ``sklearn`` transformers and also
 wrapper for ``sklearn.metrics`` module.
 
 Now we do not need to implement our own model wrapper or care about different methods. Everything
-is already implemented in ``SkModel`` class. Notice how we pass ``blocks`` as a list of transforms.
+is already implemented in :class:`~cascade.utils.sklearn.SkModel` class. Notice how we pass ``blocks`` as a list of transforms.
 The explicit use of keyword parameter here is required.
 
 .. code-block:: python
@@ -913,7 +917,7 @@ The interface of this model's ``fit`` function accepts lists of elements.
 
     model.fit(x, y)
 
-``SkMetric`` class provides a wrapper around ``metrics`` module. You can pass
+:class:`~cascade.utils.sklearn.SkMetric` class provides a wrapper around ``metrics`` module. You can pass
 a valid name from this module and it will be imported by Cascade for you.
 Cascade also features some aliases for metrics. ``acc`` will import ``sklearn.metrics.accuracy_score``.
 

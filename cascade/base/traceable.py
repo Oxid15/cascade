@@ -66,10 +66,7 @@ def apply_prefix(get_meta):
     @wraps(get_meta)
     def wrapper(self, *args, **kwargs):
         meta = get_meta(self, *args, **kwargs)
-        if hasattr(self, "_meta_prefix"):
-            meta[0].update(self._meta_prefix)
-        else:
-            self._warn_no_prefix()
+        meta[0].update(self.meta_prefix)
         return meta
 
     return wrapper
@@ -99,7 +96,6 @@ class Traceable:
         --------
         cascade.base.MetaHandler
         """
-        self._meta_prefix = {}
         self.description = description
 
         if tags is not None:
@@ -109,6 +105,16 @@ class Traceable:
 
         self.comments = []
         self.links = []
+
+    @property
+    def meta_prefix(self):
+        if not hasattr(self, "_meta_prefix"):
+            self._meta_prefix = {}
+        return self._meta_prefix
+
+    @meta_prefix.setter
+    def meta_prefix(self, value):
+        self._meta_prefix = value
 
     @apply_prefix
     def get_meta(self) -> Meta:
@@ -145,7 +151,7 @@ class Traceable:
 
     def update_meta(self, meta: Union[Meta, MetaBlock, Config]) -> None:
         """
-        Updates ``_meta_prefix``, which then updates
+        Updates ``self.meta_prefix``, which then updates
         dataset's meta when ``get_meta()`` is called
 
         Parameters
@@ -158,9 +164,6 @@ class Traceable:
         ValueError
             If the list passed and it is not of the unit length
         """
-        if not hasattr(self, "_meta_prefix"):
-            self._warn_no_prefix()
-            self._meta_prefix = {}
 
         if isinstance(meta, Config):
             meta = meta.to_dict()
@@ -172,18 +175,9 @@ class Traceable:
                     f" There is no clear way to update this object's meta"
                     f" using this kind of list"
                 )
-            self._meta_prefix.update(meta[0])
+            self.meta_prefix.update(meta[0])
         else:
-            self._meta_prefix.update(meta)
-
-    @staticmethod
-    def _warn_no_prefix() -> None:
-        warnings.warn(
-            "Object doesn't have _meta_prefix. "
-            "This may mean super().__init__() wasn't"
-            "called somewhere",
-            stacklevel=2,
-        )
+            self.meta_prefix.update(meta)
 
     def from_meta(self, meta: Union[Meta, MetaBlock]) -> None:
         """

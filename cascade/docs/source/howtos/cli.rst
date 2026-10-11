@@ -1,6 +1,10 @@
 Use Cascade CLI
 ###############
 
+.. meta::
+   :description: Use the Cascade command-line interface to inspect metadata, run experiments, query results, and manage artifacts.
+   :keywords: cascade CLI, command line, experiment tracking, metadata, artifacts, queries
+
 Cascade has convenient command line interface to help
 user perform some operations without writing Python code for them.
 Commands can be used to explore metadata, describe, tag and comment objects.
@@ -24,7 +28,6 @@ is described in detail below.
   status    # Short description of what is present in the current folder
   tag       # Manage tags
   ui        # Run Cascade Web UI
-  view      # Different viewers, deprecated since 0.18.0
 
 cascade artifact
 ****************
@@ -173,32 +176,3 @@ cascade ui
 
 :ref:`/tutorials/ui.rst` is a separate package you can install to run web-based interface over your Workspace.
 It allows to view meta data, compare experiments, draw plots and other things that can be difficult in CLI.
-
-cascade view
-************
-
-.. warning::
-
-    Viewers are deprecated since 0.18.0 in favor of Cascade UI
-
-To use this feature install ``dash`` separately or by using ``pip install cascade-ml[view]``.
-Locate the workspace, repo or line (not every viewer can work in all of those) and run
-the following commands.
-
-This will run diff viewer, which can be used to display diffs between two meta files.
-
-.. code-block:: bash
-
-    cascade view diff
-
-This will run history viewer with plots of metric values through time.
-
-.. code-block:: bash
-
-    cascade view history
-
-This will run basic metric viewer, which is a table view of metrics and parameters inside a repo.
-
-.. code-block:: bash
-
-    cascade view metric

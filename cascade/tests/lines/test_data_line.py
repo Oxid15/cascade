@@ -17,13 +17,14 @@ limitations under the License.
 import os
 import random
 import sys
+from typing import Any
 
 import pytest
 
 MODULE_PATH = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 sys.path.append(os.path.dirname(MODULE_PATH))
 
-from cascade.data import ApplyModifier, Concatenator, Wrapper
+from cascade.data import ApplyModifier, Concatenator, Dataset, Wrapper
 from cascade.lines import DataLine
 
 
@@ -225,3 +226,151 @@ def test_broken_hashes(tmp_path_str):
 
     with pytest.raises(RuntimeError):
         dl = DataLine(tmp_path_str)
+
+
+def test_volatiles_bump_version(tmp_path_str):
+    class VolatileDataset(Dataset):
+        def get(self, index):
+            return index
+
+        def __len__(self):
+            return 10
+
+        def get_meta(self):
+            meta = super().get_meta()
+            meta[0]["random"] = random.random()
+            return meta
+
+    dl = DataLine(tmp_path_str)
+
+    ds = VolatileDataset()
+    dl.save(ds, only_meta=True)
+
+    assert str(dl.get_version(ds)) == "0.2"
+
+    dl.save(ds, only_meta=True)
+
+    assert str(dl.get_version(ds)) == "0.3"
+
+    dl.save(ds, only_meta=True)
+
+    assert str(dl.get_version(ds)) == "0.4"
+
+
+def test_declared_volatiles_do_not_bump_version(tmp_path_str):
+    class VolatileDataset(Dataset):
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            super().__init__(*args, **kwargs)
+            self.declare_volatiles("random")
+
+        def get(self, index):
+            return index
+
+        def __len__(self):
+            return 10
+
+        def get_meta(self):
+            meta = super().get_meta()
+            meta[0]["random"] = random.random()
+            return meta
+
+    dl = DataLine(tmp_path_str)
+
+    ds = VolatileDataset()
+
+    dl.save(ds, only_meta=True)
+
+    assert str(dl.get_version(ds)) == "0.1"
+
+    dl.save(ds, only_meta=True)
+
+    assert str(dl.get_version(ds)) == "0.1"
+
+    dl.save(ds, only_meta=True)
+
+    assert str(dl.get_version(ds)) == "0.1"
+
+
+def test_changing_declared_volatiles_bumps_minor_version(tmp_path_str):
+    class StableDataset(Dataset):
+        def get(self, index):
+            return index
+
+        def __len__(self):
+            return 10
+
+    dl = DataLine(tmp_path_str)
+    ds = StableDataset()
+
+    dl.save(ds, only_meta=True)
+    assert str(dl.get_version(ds)) == "0.1"
+
+    ds.declare_volatiles("timestamp")
+    dl.save(ds, only_meta=True)
+    assert str(dl.get_version(ds)) == "0.2"
+
+
+def test_mask_volatiles_masks_only_declared_fields(tmp_path_str):
+    class VolatileDataset(Dataset):
+        def __init__(self, label: str, *args: Any, **kwargs: Any) -> None:
+            super().__init__(*args, **kwargs)
+            self.label = label
+            self.declare_volatiles("random", "timestamp")
+
+        def get(self, index):
+            return index
+
+        def __len__(self):
+            return 3
+
+        def get_meta(self):
+            meta = super().get_meta()
+            meta[0]["label"] = self.label
+            meta[0]["random"] = random.random()
+            meta[0]["timestamp"] = random.random()
+            return meta
+
+    dl = DataLine(tmp_path_str)
+    ds1 = VolatileDataset("first")
+    ds2 = VolatileDataset("second")
+
+    dl.save(ds1, only_meta=True)
+    first_version = dl.get_version(ds1)
+
+    dl.save(ds2, only_meta=True)
+    second_version = dl.get_version(ds2)
+
+    assert str(first_version) == "0.1"
+    assert str(second_version) == "0.2"
+
+    ds3 = VolatileDataset("second")
+    dl.save(ds3, only_meta=True)
+    assert str(dl.get_version(ds3)) == "0.2"
+
+
+def test_mask_volatiles_keeps_non_volatile_fields_in_versioning(tmp_path_str):
+    dl = DataLine(tmp_path_str)
+    meta = [
+        {
+            "type": "dataset",
+            "cascade_volatiles": ["random", "timestamp"],
+            "random": 1.0,
+            "timestamp": 1.0,
+            "label": "stable",
+        }
+    ]
+
+    masked = dl._mask_volatiles(meta)
+
+    assert masked == [
+        {
+            "type": "dataset",
+            "cascade_volatiles": ["random", "timestamp"],
+            "random": None,
+            "timestamp": None,
+            "label": "stable",
+        }
+    ]
+
+    meta_without_volatiles = [{"label": "stable", "other": 3}]
+    assert dl._mask_volatiles(meta_without_volatiles) == meta_without_volatiles

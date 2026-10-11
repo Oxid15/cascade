@@ -1,6 +1,10 @@
 Add Tags
 ########
 
+.. meta::
+   :description: Tag Cascade models, lines, repos, and other Traceable objects to organize and identify experiment results.
+   :keywords: cascade, tags, Traceable, experiment tracking, model organization
+
 Any Traceable object can be tagged. Tags are highly customizable. You can
 use them in any way, building you own system.
 

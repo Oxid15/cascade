@@ -1,5 +1,10 @@
 Traceable
 #########
+
+.. meta::
+   :description: Learn how Cascade Traceable objects store comments, descriptions, tags, and metadata across experiments.
+   :keywords: cascade, Traceable, metadata, comments, tags, experiment tracking
+
 :py:class:`cascade.base.Traceable`
 
 Traceables are objects with meta data. Including Datasets, Models, Lines,

@@ -91,6 +91,27 @@ class SchemaModifier(Modifier):
             return self._validation_wrapper
         return super().__getattribute__(__name)
 
+    def _schema_to_json(self):
+        if not self.in_schema:
+            return None
+
+        try:
+            from pydantic.json_schema import GenerateJsonSchema
+        except ImportError as e:
+            raise ImportError(
+                "Cannot import `pydantic` - it is optional dependency for general type checking"
+            ) from e
+        else:
+
+            class IgnoreErrors(GenerateJsonSchema):
+                def handle_invalid_for_json_schema(self, schema, error_info: str):
+                    return schema
+
+            schema_json = self.in_schema.model_json_schema(
+                schema_generator=IgnoreErrors
+            )
+            return schema_json
+
     def get_meta(self) -> Meta:
         """
         Since SchemaModifier will add ValidationWrapper dynamically to _dataset
@@ -105,8 +126,7 @@ class SchemaModifier(Modifier):
         if meta[1]["name"] == "cascade.data.schema.ValidationWrapper":
             meta.pop(1)
 
-        if self.in_schema:
-            meta[0]["in_schema"] = self.in_schema.model_json_schema()
+        meta[0]["in_schema"] = self._schema_to_json()
         return meta
 
 
