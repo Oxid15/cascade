@@ -57,6 +57,84 @@ class BaseDataset(ABC, Generic[T], Traceable):
         self._data_card = data_card
         super().__init__(*args, **kwargs)
 
+    @property
+    def volatiles(self):
+        if not hasattr(self, "_volatiles"):
+            self._volatiles = set()
+        return self._volatiles
+
+    @volatiles.setter
+    def volatiles(self, value):
+        raise RuntimeError(
+            "volatiles are read-only. To update it please use declare_volatiles method"
+        )
+
+    @property
+    def data_card(self):
+        if not hasattr(self, "_data_card"):
+            self._data_card = None
+        return self._data_card
+
+    @data_card.setter
+    def data_card(self, value):
+        self._data_card = value
+
+    def declare_volatiles(self, *fields):
+        """
+        Volatiles are metadata fields that should not be used for
+        this dataset versioning
+
+        Example
+        -------
+        .. code-block:: python
+
+            from datetime import datetime
+            from cascade.data import Dataset
+            from cascade.lines import DataLine
+
+            class ScheduledDataset(Dataset):
+                def __init__(self):
+                    self.time_of_arrival = datetime.now()
+                    self.declare_volatiles("time_of_arrival")
+
+                def get(self):
+                    return None
+
+                def __len__(self):
+                    return 1
+
+                def get_meta(self):
+                    meta = super().get_meta()
+                    meta[0]["time_of_arrival"] = self.time_of_arrival
+                    return meta
+
+            ds = ScheduledDataset()
+            meta = ds.get_meta()
+
+            assert "time_of_arrival" in meta[0]
+            assert meta[0]["cascade_volatiles"] == ["time_of_arrival"]
+
+            line = DataLine("volatile_check")
+            line.save(ds, only_meta=True)
+
+            initial_version = line.get_version(ds)
+            initial_time = meta[0]["time_of_arrival"]
+
+            ds = ScheduledDataset()
+            meta = ds.get_meta()
+
+            line.save(ds, only_meta=True)
+
+            recreated_version = line.get_version(ds)
+            recreated_time = meta[0]["time_of_arrival"]
+
+            assert initial_version == "0.1"
+            assert initial_time != recreated_time
+            assert initial_version == recreated_version
+
+        """
+        self.volatiles.update(fields)
+
     def get_meta(self) -> Meta:
         """
         Returns
@@ -69,12 +147,8 @@ class BaseDataset(ABC, Generic[T], Traceable):
         meta = super().get_meta()
         meta[0]["type"] = "dataset"
 
-        # Someone may've missed the __init__ call and there
-        # will be no self._data_card
-        data_card = getattr(self, "_data_card", None)
-        if data_card:
-            data_card = data_card.to_dict()
-        meta[0]["data_card"] = data_card
+        meta[0]["data_card"] = self.data_card.to_dict() if self.data_card else None
+        meta[0]["cascade_volatiles"] = sorted(self.volatiles)
         return meta
 
 

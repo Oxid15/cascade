@@ -29,6 +29,13 @@ Pipelines
 
             How to find the source of and exception deep inside a pipeline
 
+    .. grid-item::
+        .. card:: Version data pipeline
+            :link: /howtos/version_data_pipeline.rst
+            :link-type: ref
+
+            How to track pipeline changes, add metadata and avoid version explosions
+
 Experiment tracking
 *******************
 
@@ -132,21 +139,36 @@ Experiment management
 
             It is about building your own system
 
+Cascade Recipes
+***************
+
+Browse a collection of real-life small projects built with Cascade.
+Each use-case shows how Cascade can be used with full working code examples.
+
+.. grid:: 1
+
+    .. grid-item::
+        .. card:: 01 - Track ML experiments with Cascade
+            :link: /howtos/recipes/01_baseline_sweep.rst
+            :link-type: ref
+
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :hidden:
 
     pipeline_building
+    track_dataset_errors
+    version_data_pipeline
     model_training
     track_logs
     model_training_trainers
     track_a_file
     track_existing_functional_pipeline
-    track_dataset_errors
     cli
     queries
     sklearn
     links
     comments
     tags
+    recipes/recipes

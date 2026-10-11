@@ -9,10 +9,10 @@ It greatly improves the stability of Cascade fixing some critical bugs, improvin
 
 ### Adds
 
-* Ability to query against a Workspace and work properly with DataLines [286](https://github.com/Oxid15/cascade/pull/)
-* Make Version objects hashable and test them more thoroughly [303](https://github.com/Oxid15/cascade/pull/)
-* Raise meaningful messages when DataLine encounters broken HASHES file [310](https://github.com/Oxid15/cascade/pull/)
-* Model.add_run_script can track script from cascade run in files [312](https://github.com/Oxid15/cascade/pull/)
+* Ability to query against a Workspace and work properly with DataLines by @Oxid15 [286](https://github.com/Oxid15/cascade/pull/)
+* Make Version objects hashable and test them more thoroughly by @Oxid15 [303](https://github.com/Oxid15/cascade/pull/)
+* Raise meaningful messages when DataLine encounters broken HASHES file by @Oxid15 [310](https://github.com/Oxid15/cascade/pull/)
+* Model.add_run_script can track script from cascade run in files by @Oxid15 [312](https://github.com/Oxid15/cascade/pull/)
 
 ### Changes
 
@@ -70,13 +70,13 @@ It greatly improves the stability of Cascade fixing some critical bugs, improvin
 
 ### Docs
 
-Adds documentation tests using Sybil by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
-Updates stale code examples by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
-Adds autobuild module docs by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
-Rewrites index page by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
-Rewrites README by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
-Adds other libraries references using intersphinx by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
-Adds more examples and missing docstrings by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+* Adds documentation tests using Sybil by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+* Updates stale code examples by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+* Adds autobuild module docs by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+* Rewrites index page by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+* Rewrites README by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+* Adds other libraries references using intersphinx by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
+* Adds more examples and missing docstrings by @Oxid15 [299](https://github.com/Oxid15/cascade/pull/299)
 
 ## 0.17.0 - Reruns, pipeline error tracing, ruff
 
