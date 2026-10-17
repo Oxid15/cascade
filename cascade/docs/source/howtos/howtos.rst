@@ -148,6 +148,10 @@ Each use-case shows how Cascade can be used with full working code examples.
             :link: /howtos/recipes/01_baseline_sweep.rst
             :link-type: ref
 
+    .. grid-item::
+        .. card:: 02 - Data Lineage
+            :link: /howtos/recipes/02_data_lineage.rst
+            :link-type: ref
 
 .. toctree::
     :maxdepth: 2
