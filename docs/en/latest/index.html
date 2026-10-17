@@ -10,8 +10,7 @@
   <meta
     content="Open-source Python MLOps library for lightweight experiment tracking. Configuration management, ML pipeline building and data validation tools for small-scale development."
     name="description" />
-  <meta
-    content="cascade, mlops, small-scale mlops, local experiment tracking, pipelines, data validation, mlflow, clearml"
+  <meta content="cascade, mlops, small-scale mlops, local experiment tracking, pipelines, data validation"
     name="keywords" />
 
   <title>Small-scale MLOps library &#8212; cascade 0.19.0 documentation</title>
@@ -902,10 +901,8 @@
                     <h3>Aim<a class="headerlink" href="#aim" title="Permalink to this heading">#</a></h3>
                     <p>Aim experiment typically creates a <code
                         class="docutils literal notranslate"><span class="pre">Run</span></code> which can be replaced
-                      with <a class="reference internal" href="modules/cascade.lines.html#cascade.lines.ModelLine"
-                        title="cascade.lines.ModelLine"><code
-                          class="xref py py-class docutils literal notranslate"><span class="pre">ModelLine</span></code></a>,
-                      stores hyperparameters
+                      with <code class="docutils literal notranslate"><span class="pre">ModelLine</span></code>, stores
+                      hyperparameters
                       in <code
                         class="docutils literal notranslate"><span class="pre">run[&quot;hparams&quot;]</span></code>
                       and records metrics with <code
@@ -1068,15 +1065,10 @@ for epoch in range(10):
                     <h3>ClearML<a class="headerlink" href="#clearml" title="Permalink to this heading">#</a></h3>
                     <p>ClearML represents an experiment as a <code
                         class="docutils literal notranslate"><span class="pre">Task</span></code> which we will replace
-                      with <a class="reference internal" href="modules/cascade.lines.html#cascade.lines.ModelLine"
-                        title="cascade.lines.ModelLine"><code
-                          class="xref py py-class docutils literal notranslate"><span class="pre">ModelLine</span></code></a>
-                      and metrics can
-                      be reported through the task’s logger, but in Cascade they are tied to the <a
-                        class="reference internal" href="modules/cascade.models.html#cascade.models.Model"
-                        title="cascade.models.Model"><code
-                          class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a>.
-                    </p>
+                      with <code class="docutils literal notranslate"><span class="pre">ModelLine</span></code> and
+                      metrics can
+                      be reported through the task’s logger, but in Cascade they are tied to the <code
+                        class="docutils literal notranslate"><span class="pre">Model</span></code>.</p>
                     <p>With Cascade you will also get:</p>
                     <ul class="simple">
                       <li>

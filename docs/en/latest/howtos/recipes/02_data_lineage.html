@@ -1,0 +1,901 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>02 - Data Lineage &#8212; cascade 0.19.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../documentation_options.js"></script>
+    <script src="../../jquery.js"></script>
+    <script src="../../underscore.js"></script>
+    <script src="../../_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../doctools.js"></script>
+    <script src="../../sphinx_highlight.js"></script>
+    <script src="../../clipboard.min.js"></script>
+    <script src="../../copybutton.js"></script>
+    <script src="../../design-tabs.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-KD8QDKDMD7"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-KD8QDKDMD7');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'howtos/recipes/02_data_lineage';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://oxid15.github.io/cascade/en/latest/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
+        </script>
+    <link rel="shortcut icon" href="../../logo_sq.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Explanations" href="../../explanations/explanations.html" />
+    <link rel="prev" title="01 - Track ML experiments with Cascade" href="01_baseline_sweep.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../logo_light.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../logo_dark.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      latest  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules/modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../tutorials/tutorials.html">
+                        Tutorial
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../howtos.html">
+                        How-to guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../explanations/explanations.html">
+                        Explanations
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules/modules.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/oxid15/cascade" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://x.com/cascade_mlops" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pipeline_building.html">Pipeline building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../track_dataset_errors.html">Track Dataset Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../version_data_pipeline.html">Version data pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_training.html">Model training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../track_logs.html">Track experiment logs with Cascade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_training_trainers.html">Model training using trainers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../track_a_file.html">Track a file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../track_existing_functional_pipeline.html">Track Existing Functional Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Use Cascade CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../queries.html">Common query use cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sklearn.html">Track scikit-learn experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links.html">Link anything</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../comments.html">Comment on results of an experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tags.html">Add Tags</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="recipes.html">Cascade Recipes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_baseline_sweep.html">01 - Track ML experiments with Cascade</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">02 - Data Lineage</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../howtos.html" class="nav-link">How-to guides</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="recipes.html" class="nav-link">Cascade Recipes</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">02 - Data Lineage</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="data-lineage">
+<h1>02 - Data Lineage<a class="headerlink" href="#data-lineage" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://github.com/Oxid15/cascade_recipes/tree/master/02_data_lineage">Recipe 02_data_lineage on GitHub</a> • <a class="reference external" href="https://github.com/Oxid15/cascade_recipes/">Cascade Recipes GitHub repository</a></p>
+<blockquote>
+<div><p>Model 00003 regressed. Was it the code, or did the dataset change under me?</p>
+</div></blockquote>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>This recipe focuses on data versioning. MLOps tools for experiment tracking like MLflow or Aim focus
+on tracking models, their parameters and artifacts and most of the times they overlook tracking datasets.
+This includes both source data and data transformations.
+It can be argued that data is more important than models in machine learning and Cascade respects that opinion by
+adding support for tracking both data transformations and source datasets.
+In this recipe you will learn how to use Cascade for automatic versioning of your data pipeline.</p>
+</section>
+<section id="generate-dataset">
+<h2>Generate Dataset<a class="headerlink" href="#generate-dataset" title="Permalink to this heading">#</a></h2>
+<p>First script creates synthetic support-ticket corpus - three weekly snapshots of the same dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+<span class="n">SUBJECTS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;cannot log in after password reset&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;invoice charged twice this month&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;app crashes when opening reports&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;how do I export my data&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;refund for cancelled subscription&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SSO redirect loop on staging&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;feature request: dark mode&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;API returns 500 on bulk upload&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">LABELS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;billing&quot;</span><span class="p">,</span> <span class="s2">&quot;bug&quot;</span><span class="p">,</span> <span class="s2">&quot;account&quot;</span><span class="p">,</span> <span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="s2">&quot;feature&quot;</span><span class="p">]</span>
+<span class="n">MESSY</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;billing&quot;</span><span class="p">:</span> <span class="s2">&quot;Billing&quot;</span><span class="p">,</span> <span class="s2">&quot;bug&quot;</span><span class="p">:</span> <span class="s2">&quot;BUG&quot;</span><span class="p">,</span> <span class="s2">&quot;account&quot;</span><span class="p">:</span> <span class="s2">&quot;account &quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>This dataset will simulate inconsistent labels and duplicated rows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rows</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">messy</span><span class="p">):</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">Random</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">subj</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">SUBJECTS</span><span class="p">)</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">LABELS</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">messy</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">MESSY</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">subj</span><span class="si">}</span><span class="s2"> (ref </span><span class="si">{</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">9999</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span>
+                <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;low&quot;</span><span class="p">,</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;high&quot;</span><span class="p">]),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">messy</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">+=</span> <span class="n">rng</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>  <span class="c1"># duplicates that need de-duping</span>
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+<p>We are writing three JSON files with the following properties:</p>
+<ul class="simple">
+<li><p>Week 1: raw dump, has duplicates and inconsistent label spellings</p></li>
+<li><p>Week 2: same rows, one label taxonomy fix applied upstream</p></li>
+<li><p>Week 3: more rows arrive</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">write</span><span class="p">(</span><span class="s2">&quot;tickets_w1.jsonl&quot;</span><span class="p">,</span> <span class="n">rows</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">messy</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">write</span><span class="p">(</span><span class="s2">&quot;tickets_w2.jsonl&quot;</span><span class="p">,</span> <span class="n">rows</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">messy</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="n">write</span><span class="p">(</span><span class="s2">&quot;tickets_w3.jsonl&quot;</span><span class="p">,</span> <span class="n">rows</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">messy</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="data-transformation-pipeline">
+<h2>Data Transformation Pipeline<a class="headerlink" href="#data-transformation-pipeline" title="Permalink to this heading">#</a></h2>
+<p>Here is the pipeline definition in a separate file for the ticket dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Filter</span><span class="p">,</span> <span class="n">Modifier</span><span class="p">,</span> <span class="n">Sampler</span>
+
+<span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+<span class="n">CANONICAL</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;billing&quot;</span><span class="p">:</span> <span class="s2">&quot;billing&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bug&quot;</span><span class="p">:</span> <span class="s2">&quot;bug&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;account&quot;</span><span class="p">:</span> <span class="s2">&quot;account&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;question&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="s2">&quot;feature&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>First we inherit <code class="docutils literal notranslate"><span class="pre">cascade.data.Dataset</span></code> to create simple JSON reading custom data source.
+Main methods of a custom <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> to define are <code class="docutils literal notranslate"><span class="pre">get</span></code> and <code class="docutils literal notranslate"><span class="pre">__len__</span></code>. There is also an
+ability to customize its metadata using <code class="docutils literal notranslate"><span class="pre">get_meta</span></code> method.
+Metadata can then be tracked when we link a dataset to a model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TicketDump</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raw JSONL dump as exported by the helpdesk.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">snapshot</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span> <span class="o">=</span> <span class="n">snapshot</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">snapshot</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;snapshot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span>
+        <span class="n">meta</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">meta</span>
+</pre></div>
+</div>
+<p>We build a pipeline by stacking <code class="docutils literal notranslate"><span class="pre">Modifier``s</span> <span class="pre">on</span> <span class="pre">top</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">``Dataset</span></code>.
+Each modifier can call its dataset, perform some operations over the results
+of the previous stage and return.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NormalizeLabels</span><span class="p">(</span><span class="n">Modifier</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fold &#39;BUG&#39; / &#39;Billing&#39; / &#39;account &#39; into the canonical taxonomy.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+        <span class="n">item</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CANONICAL</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+<p>Modifiers that change dataset’s length are called <code class="docutils literal notranslate"><span class="pre">Sampler``s.</span> <span class="pre">This</span> <span class="pre">sampler</span> <span class="pre">is</span>
+<span class="pre">removing</span> <span class="pre">duplicate</span> <span class="pre">rows.</span> <span class="pre">We</span> <span class="pre">pass</span> <span class="pre">new</span> <span class="pre">length</span> <span class="pre">to</span> <span class="pre">sampler's</span> <span class="pre">parent</span> <span class="pre">constructor</span>
+<span class="pre">so</span> <span class="pre">that</span> <span class="pre">it</span> <span class="pre">will</span> <span class="pre">be</span> <span class="pre">used</span> <span class="pre">in</span> <span class="pre">``__len__</span></code> automatically.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Dedup</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Drop rows whose id was seen before</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keep</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)):</span>
+            <span class="n">tid</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">tid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tid</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_keep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_keep</span><span class="p">[</span><span class="n">index</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>We also use default cascade.data.Filter with a filter function that returns <cite>bool</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">not_low_priority</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;low&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="n">snapshot</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">drop_low_priority</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">TicketDump</span><span class="p">(</span><span class="n">snapshot</span><span class="p">)</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">NormalizeLabels</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">Dedup</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">drop_low_priority</span><span class="p">:</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">Filter</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">not_low_priority</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ds</span>
+</pre></div>
+</div>
+</section>
+<section id="version-datasets">
+<h2>Version Datasets<a class="headerlink" href="#version-datasets" title="Permalink to this heading">#</a></h2>
+<p>In the following file we simulate the process of getting the source data
+we have received, building the pipeline we defined previously and then
+saving it in <code class="docutils literal notranslate"><span class="pre">DataLine</span></code> - special container that allows to track
+and automatically version data pipelines.
+It can store dataset metadata and even pickle the
+pipeline object to be loaded elsewhere exactly as it was created.</p>
+<p>We can see an example of how automatic versioning works below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.repos</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repo</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">build</span>
+
+<span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">note</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">note</span><span class="si">:</span><span class="s2">&lt;46</span><span class="si">}</span><span class="s2"> -&gt; version </span><span class="si">{</span><span class="n">dl</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This is the first iteration
+We add description, build dataset and use <code class="docutils literal notranslate"><span class="pre">update_meta</span></code> to add
+more fields to dataset’s metadata so that they could be tracked and influence the
+automatic versioning when changed.</p>
+<p>In the following example we build a pipeline, update its meta and save it in line.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">dl</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="s2">&quot;repo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s2">&quot;dataline&quot;</span><span class="p">,</span> <span class="n">line_type</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+    <span class="n">dl</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">&quot;Support tickets, weekly snapshots from the helpdesk export&quot;</span><span class="p">)</span>
+
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="s2">&quot;tickets_w1.jsonl&quot;</span><span class="p">)</span>
+    <span class="n">ds</span><span class="o">.</span><span class="n">update_meta</span><span class="p">({</span><span class="s2">&quot;snapshot_week&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;known_issues&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;dupes&quot;</span><span class="p">,</span> <span class="s2">&quot;label spellings&quot;</span><span class="p">]})</span>
+    <span class="n">dl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;w1 raw dump&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">DataLine</span></code> will assign a version to the dataset at the moment of saving automatically.
+It uses metadata to determine if the pipeline changed. The version has two components - major
+and minor. Major component changes when the pipeline’s contents change. For example with a new
+<code class="docutils literal notranslate"><span class="pre">Modifier</span></code> or when some step is removed. Minor changes on any metadata field change.</p>
+<p>Here we just update fields in meta so when we save new dataset it will bump minor component.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">update_meta</span><span class="p">({</span><span class="s2">&quot;reviewed_by&quot;</span><span class="p">:</span> <span class="s2">&quot;data-eng&quot;</span><span class="p">,</span> <span class="s2">&quot;ticket&quot;</span><span class="p">:</span> <span class="s2">&quot;DATA-114&quot;</span><span class="p">})</span>
+<span class="n">dl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;w1 + review annotation (meta only)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This week should also get a minor bump.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds2</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="s2">&quot;tickets_w2.jsonl&quot;</span><span class="p">)</span>
+<span class="n">ds2</span><span class="o">.</span><span class="n">update_meta</span><span class="p">({</span><span class="s2">&quot;snapshot_week&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;known_issues&quot;</span><span class="p">:</span> <span class="p">[]})</span>
+<span class="n">dl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ds2</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span> <span class="n">ds2</span><span class="p">,</span> <span class="s2">&quot;w2 clean source (same pipeline shape)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This week gets a major bump since pipelie also gets <code class="docutils literal notranslate"><span class="pre">Filter</span></code> step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ds3</span> <span class="o">=</span> <span class="n">build</span><span class="p">(</span><span class="s2">&quot;tickets_w3.jsonl&quot;</span><span class="p">,</span> <span class="n">drop_low_priority</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ds3</span><span class="o">.</span><span class="n">update_meta</span><span class="p">({</span><span class="s2">&quot;snapshot_week&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;known_issues&quot;</span><span class="p">:</span> <span class="p">[]})</span>
+<span class="n">dl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ds3</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">dl</span><span class="p">,</span> <span class="n">ds3</span><span class="p">,</span> <span class="s2">&quot;w3 + Filter stage (pipeline shape changed)&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">versions on disk:&quot;</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dl</span><span class="o">.</span><span class="n">get_root</span><span class="p">())))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;latest:&quot;</span><span class="p">,</span> <span class="n">dl</span><span class="o">.</span><span class="n">get_latest_version</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="reproduce-dataset-version-exactly">
+<h2>Reproduce Dataset Version Exactly<a class="headerlink" href="#reproduce-dataset-version-exactly" title="Permalink to this heading">#</a></h2>
+<p>After saving a dataset in line, we can load it exactly
+using its version.
+Here we <code class="docutils literal notranslate"><span class="pre">load</span></code> the dataset of version <code class="docutils literal notranslate"><span class="pre">0.1</span></code> and the latest version.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">old</span> <span class="o">=</span> <span class="n">dl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;0.1&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">reloaded 0.1: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">old</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows, first label = </span><span class="si">{</span><span class="n">old</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">dl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dl</span><span class="o">.</span><span class="n">get_latest_version</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;reloaded latest: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows, first label = </span><span class="si">{</span><span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="pin-the-model-to-dataset-version">
+<h2>Pin the Model to Dataset Version<a class="headerlink" href="#pin-the-model-to-dataset-version" title="Permalink to this heading">#</a></h2>
+<p>Trains two classifiers on two different DataLine versions and records
+the link, so <code class="docutils literal notranslate"><span class="pre">cascade</span> <span class="pre">query</span></code> can answer “which data version did this model see?”.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">HashingVectorizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">SGDClassifier</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.repos</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cascade.utils.sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">SkMetric</span><span class="p">,</span> <span class="n">SkModel</span>
+
+<span class="n">HERE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here we load two dataset versions and train a classifier on each version.</p>
+<p>We can link dataset and even its line to the model using special methods.
+This will allow us to not lose track of where the data came from.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">HERE</span><span class="p">,</span> <span class="s2">&quot;repo&quot;</span><span class="p">))</span>
+    <span class="n">dl</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s2">&quot;dataline&quot;</span><span class="p">,</span> <span class="n">line_type</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="s2">&quot;ticket_router&quot;</span><span class="p">,</span> <span class="n">line_type</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;0.2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0&quot;</span><span class="p">):</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">dl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">]</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">SkModel</span><span class="p">(</span>
+            <span class="n">blocks</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">HashingVectorizer</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">2048</span><span class="p">),</span>
+                <span class="n">SGDClassifier</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s2">&quot;log_loss&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">data_version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="n">SkMetric</span><span class="p">(</span><span class="s2">&quot;accuracy_score&quot;</span><span class="p">)])</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">link_dataset</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;tickets&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="n">dl</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;dataline&quot;</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="n">dl</span><span class="o">.</span><span class="n">get_root</span><span class="p">())</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ticket router trained on dataline version </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data-</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">line</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span><span class="si">}</span><span class="s2"> rows, acc=</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
+<p>In this recipe dataset versioning in Cascade is excercised.
+It is able to automatically version and track datasets and processing pipeline.
+You can also link data to the model you are training and always go back and reproduce
+your machine learning experiment exactly.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_baseline_sweep.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">01 - Track ML experiments with Cascade</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../explanations/explanations.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Explanations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-dataset">Generate Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-transformation-pipeline">Data Transformation Pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-datasets">Version Datasets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproduce-dataset-version-exactly">Reproduce Dataset Version Exactly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pin-the-model-to-dataset-version">Pin the Model to Dataset Version</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/howtos/recipes/02_data_lineage.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2026, Ilia Moiseev.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

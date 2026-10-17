@@ -1,0 +1,12 @@
+.. grid:: 1
+
+    .. grid-item::
+        .. card:: 01 - Track ML experiments with Cascade
+            :link: /howtos/recipes/01_baseline_sweep.rst
+            :link-type: ref
+
+    .. grid-item::
+        .. card:: 02 - Data Lineage
+            :link: /howtos/recipes/02_data_lineage.rst
+            :link-type: ref
+
